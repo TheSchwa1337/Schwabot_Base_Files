@@ -1,14 +1,57 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Soulprint Registry 🧬
+
+Tracks and manages trade event 'soulprints' for:
+• Phase/drift/tensor config analytics
+• Profit vector tracking
+• Backtesting and live trade outcome logging
+• Cross-asset and strategy performance analysis
+
+Features:
+- SHA-256 hash for soulprint identity
+- Vectorized math/statistics (NumPy/CuPy, GPU fallback)
+- Hooks for CCX T-matrix, buy/sell wall, tensor math
+- File persistence for backtesting/live replay
+"""
+
+import hashlib
 import json
+import logging
 import time
+from dataclasses import dataclass, asdict, field
 from typing import Any, Dict, List, Optional
-from dataclasses import dataclass
+
+try:
+    import cupy as cp
+    USING_CUDA = True
+    xp = cp
+    _backend = 'cupy (GPU)'
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    xp = np
+    _backend = 'numpy (CPU)'
+
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ SoulprintRegistry using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 SoulprintRegistry using CPU fallback: {_backend}")
+
+
+def soulprint_hash(vector: Dict[str, Any], strategy_id: str, timestamp: float) -> str:
+    """Generate a SHA-256 hash for a soulprint entry."""
+    payload = json.dumps({"vector": vector, "strategy_id": strategy_id, "timestamp": timestamp}, sort_keys=True)
+    return hashlib.sha256(payload.encode()).hexdigest()
 
 
 @dataclass
-    class SoulprintEntry:
-    soulprint: str
-    timestamp: str
-    vector: Dict[str, float]  # DriftVector serialized
+class SoulprintEntry:
+    soulprint: str  # SHA-256 hash
+    timestamp: float
+    vector: Dict[str, float]  # e.g., {"phase": ..., "drift": ..., ...}
     strategy_id: str
     confidence: float
     is_executed: bool = False
@@ -18,134 +61,103 @@ from dataclasses import dataclass
 
 class SoulprintRegistry:
     """
-    Registry for logging
-    querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
+    Registry for logging/querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
+    Handles GPU/CPU fallback for vector operations.
     """
-
-    def __init__(self, registry_file: Optional[str] = None):
-        self.triggers: List[Dict[str, Any]] = []
+    def __init__(self, registry_file: Optional[str] = None) -> None:
+        self.entries: List[SoulprintEntry] = []
         self.registry_file = registry_file
         if registry_file:
             self._load()
 
-    def log_trigger()
-        self,
-        asset: str,
-        phase: float,
-        drift: float,
-        schwafit_info: dict,
-        trade_result: dict,
-        timestamp: Optional[float] = None,
-    ):
-        """Log a trigger event (entry/exit) with all math, phase, drift, and trade outcome."""
-        entry = {}
-            "asset": asset,
-            "phase": phase,
-            "drift": drift,
-            "schwafit_info": schwafit_info,
-            "trade_result": trade_result,
-            "timestamp": timestamp or time.time(),
-        }
-        self.triggers.append(entry)
+    def register_soulprint(self, vector: Dict[str, float], strategy_id: str, confidence: float, is_executed: bool = False, profit_result: Optional[float] = None, replayable: bool = True, timestamp: Optional[float] = None) -> SoulprintEntry:
+        """Register a new soulprint entry (trade event)."""
+        ts = timestamp or time.time()
+        sp_hash = soulprint_hash(vector, strategy_id, ts)
+        entry = SoulprintEntry(
+            soulprint=sp_hash,
+            timestamp=ts,
+            vector=vector,
+            strategy_id=strategy_id,
+            confidence=confidence,
+            is_executed=is_executed,
+            profit_result=profit_result,
+            replayable=replayable,
+        )
+        self.entries.append(entry)
+        logger.info(f"Registered soulprint: {sp_hash[:8]}... for strategy {strategy_id}")
         if self.registry_file:
             self._save()
+        return entry
 
-    def log_backtest_signal(self, signal_data: Dict[str, Any]):
-        """Logs a signal from a backtest run, capturing key performance and context indicators."""
-        entry = {}
-            "type": "backtest_signal",
-            "timestamp": signal_data.get("timestamp", time.time()),
-            "asset": signal_data.get("asset"),
-            "mode": signal_data.get("mode"),
-            "hash_id": signal_data.get("hash_id"),
-            "signal_vector": signal_data.get("signal_vector"),
-            "projected_gain": signal_data.get("projected_gain"),
-            # Store the full signal for deep analysis
-            "trade_details": signal_data.get("trade_details"),
+    def log_backtest_signal(self, signal_data: Dict[str, Any]) -> None:
+        """Log a signal from a backtest run, capturing key performance and context indicators."""
+        vector = signal_data.get("signal_vector", {})
+        strategy_id = signal_data.get("strategy_id", "unknown")
+        confidence = signal_data.get("confidence", 0.0)
+        profit_result = signal_data.get("projected_gain")
+        is_executed = signal_data.get("executed", False)
+        timestamp = signal_data.get("timestamp", time.time())
+        self.register_soulprint(
+            vector=vector,
+            strategy_id=strategy_id,
+            confidence=confidence,
+            is_executed=is_executed,
+            profit_result=profit_result,
+            replayable=True,
+            timestamp=timestamp,
+        )
+
+    def update_profit_outcome(self, soulprint: str, profit: float) -> None:
+        """Update the profit result for a given soulprint (by hash)."""
+        for entry in self.entries:
+            if entry.soulprint == soulprint:
+                entry.profit_result = profit
+                logger.info(f"Updated profit for soulprint {soulprint[:8]}...: {profit:.4f}")
+                if self.registry_file:
+                    self._save()
+                return
+
+    def get_best_phase(self, asset: str, window: int = 1000) -> Optional[Dict[str, Any]]:
+        """Return the phase/drift/tensor config with the highest profit in the last N entries for an asset."""
+        filtered = [e for e in self.entries if e.vector.get("asset") == asset][-window:]
+        if not filtered:
+            return None
+        profits = xp.array([e.profit_result if e.profit_result is not None else 0.0 for e in filtered])
+        idx = int(xp.argmax(profits))
+        best = filtered[idx]
+        return {
+            "vector": best.vector,
+            "profit_result": best.profit_result,
+            "strategy_id": best.strategy_id,
+            "confidence": best.confidence,
+            "timestamp": best.timestamp,
         }
-        self.triggers.append(entry)
-        if self.registry_file:
-            self._save()
 
-    def get_best_phase(self, asset: str, window: int = 1000) -> dict:
-        """Return the phase/drift/tensor config with the highest profit in the last N triggers."""
-        filtered = [t for t in self.triggers if t["asset"] == asset][-window:]
-        if not filtered:
-            return {}
-        best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
-        return best
+    def get_profit_vector(self, asset: str, window: int = 1000) -> xp.ndarray:
+        """Return a vector of profit results for an asset over the last N entries."""
+        filtered = [e for e in self.entries if e.vector.get("asset") == asset][-window:]
+        return xp.array([e.profit_result if e.profit_result is not None else 0.0 for e in filtered])
 
-    def get_profit_vector()
-        self, asset: str, phase: float = None, drift: float = None, window: int = 1000
-    ) -> List[float]:
-        """Return the rolling profit vector for a given asset/phase/drift."""
-        filtered = [t for t in self.triggers if t["asset"] == asset][-window:]
-        if phase is not None:
-            filtered = [t for t in filtered if abs(t["phase"] - phase) < 1e-4]
-        if drift is not None:
-            filtered = [t for t in filtered if abs(t["drift"] - drift) < 1e-4]
-        return [t["trade_result"].get("profit", 0) for t in filtered]
+    def all_soulprints(self) -> List[str]:
+        """Return all registered soulprint hashes."""
+        return [e.soulprint for e in self.entries]
 
-    def get_cross_asset_best(self, window: int = 1000) -> dict:
-        """Return the best asset/phase/drift combo for profit in the last N triggers."""
-        filtered = self.triggers[-window:]
-        if not filtered:
-            return {}
-        best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
-        return best
+    def _save(self) -> None:
+        """Persist the registry to file (JSON)."""
+        if not self.registry_file:
+            return
+        with open(self.registry_file, "w", encoding="utf-8") as f:
+            json.dump([asdict(e) for e in self.entries], f, indent=2)
 
-    def get_last_triggers(self, asset: str, n: int = 10) -> List[Dict[str, Any]]:
-        """Return the last N triggers for an asset, with all math and trade info."""
-        filtered = [t for t in self.triggers if t["asset"] == asset]
-        return filtered[-n:]
-
-    def _save(self):
-        if self.registry_file:
-            with open(self.registry_file, "w") as f:
-                json.dump(self.triggers, f, indent=2)
-
-    def _load(self):
+    def _load(self) -> None:
+        """Load the registry from file (JSON)."""
         try:
-            with open(self.registry_file, "r") as f:
-                self.triggers = json.load(f)
-        except Exception:
-            self.triggers = []
+            with open(self.registry_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self.entries = [SoulprintEntry(**e) for e in data]
+        except Exception as e:
+            logger.warning(f"Failed to load soulprint registry: {e}")
 
-
-# Example usage and testing
-    def main():
-    # You can set the registry path via env var, class method, or constructor
-    # os.environ['SOULPRINT_REGISTRY_PATH'] = 'custom/path/registry.json'
-    # SoulprintRegistry.set_default_registry_path('custom/path/registry.json')
-    # registry = SoulprintRegistry('custom/path/registry.json')
-    registry = SoulprintRegistry()
-
-    # Example: Register a soulprint from a drift vector
-    test_vector = {}
-        "pair": "BTC/USDC",
-        "entropy": 0.88,
-        "momentum": 0.4,
-        "volatility": 0.19,
-        "temporal_variance": 0.92,
-    }
-
-    soulprint = registry.register_soulprint()
-        vector=test_vector, strategy_id="momentum_breakout", confidence=0.85
-    )
-
-    print("🌀 Registered Soulprint: {0}".format(soulprint))
-
-    # Mark as executed with profit
-    registry.mark_executed(soulprint, profit_result=0.23)
-
-    # Get registry statistics
-    stats = registry.get_registry_stats()
-    print("📊 Registry Stats: {0}".format(stats))
-
-    # Find similar patterns
-    similar = registry.get_similar_soulprints(test_vector)
-    print("🔍 Found {0} similar soulprints".format(len(similar)))
-
-
-if __name__ == "__main__":
-    main()
+# Singleton instance for global use
+soulprint_registry = SoulprintRegistry()

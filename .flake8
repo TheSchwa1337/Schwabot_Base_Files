@@ -1,58 +1,68 @@
 [flake8]
-max-line-length = 100
-ignore = 
+max-line-length = 120
+extend-ignore = 
     E203,  # whitespace before ':'
-    E266,  # too many leading '#' for block comment
-    E501,  # line too long (handled by max-line-length)
     W503,  # line break before binary operator
-    W504,  # line break after binary operator
-    E402,  # module level import not at top of file (needed for conditional imports)
-    F401,  # imported but unused (some imports are for dynamic loading)
-    F841,  # local variable assigned but never used (some are for future use)
-    C901,  # too complex (some functions are intentionally complex)
-    W605,  # invalid escape sequence (some are in docstrings)
-    F541,  # f-string is missing placeholders (some are intentional)
-    E999,  # syntax error (will be fixed manually)
-    E128,  # continuation line under-indented for visual indent
-    E124,  # closing bracket does not match visual indentation
-    E131,  # continuation line unaligned for hanging indent
-    E129,  # visually indented line with same indent as next logical line
-    E127,  # continuation line over-indented for visual indent
-    E305,  # expected 2 blank lines after class or function definition
-    E261,  # at least two spaces before inline comment
-    W292,  # no newline at end of file
-    W291,  # trailing whitespace
-    W293,  # blank line contains whitespace
-    W505,  # doc line too long
-    E502,  # the backslash is redundant between brackets
-    E701,  # multiple statements on one line (colon)
-    F821,  # undefined name
-    F811,  # redefinition of an unused variable
-    I201,  # missing newline between import groups
-    I100,  # import statements are in wrong order
+    D100,  # Missing docstring in public module
+    D101,  # Missing docstring in public class
+    D102,  # Missing docstring in public method
+    D103,  # Missing docstring in public function
+    D104,  # Missing docstring in public package
+    D105,  # Missing docstring in magic method
+    D106,  # Missing docstring in public nested class
+    D107,  # Missing docstring in __init__
+    D200,  # One-line docstring should fit on one line
+    D201,  # No blank lines allowed before function docstring
+    D202,  # No blank lines allowed after function docstring
     D205,  # 1 blank line required between summary line and description
-    D400,  # first line should end with a period
-
+    D206,  # Docstring should be indented with spaces, not tabs
+    D207,  # Docstring is under-indented
+    D208,  # Docstring is over-indented
+    D209,  # Multi-line docstring closing quotes should be on a separate line
+    D210,  # No whitespaces allowed surrounding docstring text
+    D211,  # No blank lines allowed before class docstring
+    D212,  # Multi-line docstring summary should start at the first line
+    D213,  # Multi-line docstring summary should start at the second line
+    D214,  # Section is over-indented
+    D215,  # Section underline is over-indented
+    D300,  # Use """triple double quotes"""
+    D301,  # Use r""" if any backslashes in a docstring
+    D400,  # First line should end with a period
+    D401,  # First line should be in imperative mood
+    D402,  # First line should not be the function's "signature"
+    D403,  # First word of the first line should be properly capitalized
+    D404,  # First word of the first line should not be "This"
+    D405,  # Section name should be properly capitalized
+    D406,  # Section name should end with a newline
+    D407,  # Missing dashed underline after section
+    D408,  # Section underline should be in the line following the section's name
+    D409,  # Section underline should match the length of its name
+    D410,  # Missing blank line after section
+    D411,  # Missing blank line before section
+    D412,  # No blank lines allowed between a section header and its content
+    D413,  # Missing blank line after last section
+    D414,  # Section has no content
+    D415,  # First line should end with a period, question mark, or exclamation point
+    D416,  # Section name should end with a colon
+    D417,  # Missing argument descriptions in the docstring
+    D418,  # Missing docstring in public nested class
+    D419,  # Missing docstring in public nested class
 exclude = 
-    .git,
     __pycache__,
-    build,
-    dist,
+    .git,
+    .venv,
     venv,
     env,
-    *.egg-info,
-    .venv,
     .env,
-    node_modules,
+    backup_corrupted_files,
+    *.pyc,
+    *.pyo,
+    *.pyd,
     .pytest_cache,
     .coverage,
     htmlcov,
-    .tox,
-    .mypy_cache
-
+    dist,
+    build,
+    *.egg-info
 per-file-ignores =
-    # Ignore specific violations in specific files
-    __init__.py: F401
-    test_*.py: F401, F841
-    *_test.py: F401, F841
-    */test/*: F401, F841
+    __init__.py:D104

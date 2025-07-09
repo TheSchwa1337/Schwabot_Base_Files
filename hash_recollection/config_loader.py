@@ -71,9 +71,7 @@ class ConfigLoader:
             with open(file_path, "r", encoding="utf-8") as f:
                 self._config = json.load(f)
         else:
-            raise ConfigurationError(
-                f"Unsupported config file format: {file_path.suffix}"
-            )
+            raise ConfigurationError(f"Unsupported config file format: {file_path.suffix}")
 
     def _create_default_config(self) -> None:
         """Create default configuration."""
@@ -128,9 +126,7 @@ class ConfigLoader:
                     value = value_type(os.environ[env_var])
                     self._set_nested_value(config_path, value)
                 except (ValueError, TypeError) as e:
-                    raise ConfigurationError(
-                        f"Invalid environment variable {env_var}: {e}"
-                    )
+                    raise ConfigurationError(f"Invalid environment variable {env_var}: {e}")
 
     def _set_nested_value(self, path: str, value: Any) -> None:
         """Set a nested configuration value."""

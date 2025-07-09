@@ -1,0 +1,20 @@
+2025-07-09 13:06:17,002 - INFO - Starting comprehensive requirements update
+2025-07-09 13:06:17,003 - INFO - Updating requirements.txt
+2025-07-09 13:06:17,013 - INFO - Backed up requirements.txt to requirements.txt.backup
+2025-07-09 13:06:17,071 - INFO - Updated requirements.txt with 61 dependencies
+2025-07-09 13:06:17,072 - INFO - Created requirements-windows.txt
+2025-07-09 13:06:17,073 - INFO - Created requirements-linux.txt
+2025-07-09 13:06:17,074 - INFO - Created requirements-darwin.txt
+2025-07-09 13:06:17,075 - INFO - Created setup scripts: setup_windows.bat, setup_unix.sh
+2025-07-09 13:06:17,077 - INFO - Report generated: requirements_update_report.md
+2025-07-09 13:06:17,078 - INFO - Requirements update completed
+2025-07-09 13:07:37,295 - INFO - Starting comprehensive requirements update
+2025-07-09 13:07:37,295 - INFO - Updating requirements.txt
+2025-07-09 13:07:37,307 - INFO - Backed up requirements.txt to requirements.txt.backup
+2025-07-09 13:07:37,374 - INFO - Updated requirements.txt with 61 dependencies
+2025-07-09 13:07:37,375 - INFO - Created requirements-windows.txt
+2025-07-09 13:07:37,375 - INFO - Created requirements-linux.txt
+2025-07-09 13:07:37,375 - INFO - Created requirements-darwin.txt
+2025-07-09 13:07:37,376 - INFO - Created setup scripts: setup_windows.bat, setup_unix.sh
+2025-07-09 13:07:37,377 - INFO - Report generated: requirements_update_report.md
+2025-07-09 13:07:37,377 - INFO - Requirements update completed

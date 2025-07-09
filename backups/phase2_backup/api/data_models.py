@@ -1,0 +1,182 @@
+"""Module for Schwabot trading system."""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Data models for API responses.
+"""
+
+import logging
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
+from .enums import ExchangeType, OrderSide, OrderType
+
+# =====================================================================
+#  Core Data Structures for API Payloads
+# =====================================================================
+
+
+@dataclass
+    class APICredentials:
+    """Class for Schwabot trading functionality."""
+    """Class for Schwabot trading functionality."""
+    """API credentials for exchanges."""
+
+    exchange: ExchangeType
+    api_key: str
+    secret: str
+passphrase: str
+sandbox: bool = True
+testnet: bool = True
+
+
+@dataclass
+    class MarketData:
+    """Class for Schwabot trading functionality."""
+    """Class for Schwabot trading functionality."""
+    """Real-time market data."""
+
+    symbol: str
+    price: float
+    volume: float
+    bid: float
+    ask: float
+    high_24h: float
+    low_24h: float
+    change_24h: float
+    timestamp: float
+    exchange: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+    @dataclass
+        class OrderRequest:
+    """Class for Schwabot trading functionality."""
+        """Class for Schwabot trading functionality."""
+        """Order request structure."""
+
+        symbol: str
+        side: OrderSide
+        order_type: OrderType
+        amount: float
+        price: Optional[float] = None
+        stop_loss: Optional[float] = None
+        take_profit: Optional[float] = None
+        client_order_id: Optional[str] = None
+        metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+        @dataclass
+            class OrderResponse:
+    """Class for Schwabot trading functionality."""
+            """Class for Schwabot trading functionality."""
+            """Order response structure."""
+
+            order_id: str
+            client_order_id: Optional[str]
+            symbol: str
+            side: str
+            order_type: str
+            amount: float
+            price: float
+            filled: float
+            remaining: float
+            cost: float
+            status: str
+            timestamp: float
+            fee: Optional[Dict[str, Any]] = None
+            info: Dict[str, Any] = field(default_factory=dict)
+            success: bool = True
+            error_message: Optional[str] = None
+
+
+            @dataclass
+                class PortfolioPosition:
+    """Class for Schwabot trading functionality."""
+                """Class for Schwabot trading functionality."""
+                """Portfolio position."""
+
+                symbol: str
+                amount: float
+                entry_price: float
+                current_price: float
+                value_usd: float
+                pnl: float
+                pnl_percentage: float
+                timestamp: float
+                metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+                @dataclass
+                    class APIPricePoint:
+    """Class for Schwabot trading functionality."""
+                    """Class for Schwabot trading functionality."""
+                    """Represents a single price point in a time series."""
+
+                    timestamp: int
+                    price: float
+                    volume: Optional[float] = None
+
+
+                    @dataclass
+                        class APIMarketDepth:
+    """Class for Schwabot trading functionality."""
+                        """Class for Schwabot trading functionality."""
+                        """Represents the market depth for an asset."""
+
+                        last_update_id: int
+                        bids: List[tuple[float, float]]  # (price, quantity)
+                        asks: List[tuple[float, float]]  # (price, quantity)
+
+
+                        @dataclass
+                            class APITrade:
+    """Class for Schwabot trading functionality."""
+                            """Class for Schwabot trading functionality."""
+                            """Represents a single executed trade."""
+
+                            id: int
+                            price: float
+                            qty: float
+                            quote_qty: float
+                            timestamp: int
+                            is_buyer_maker: bool
+
+
+                            @dataclass
+                                class APINewsArticle:
+    """Class for Schwabot trading functionality."""
+                                """Class for Schwabot trading functionality."""
+                                """Represents a single news article."""
+
+                                id: str
+                                source: str
+                                headline: str
+                                summary: str
+                                url: str
+                                timestamp: int
+                                sentiment: Optional[float] = None  # e.g., -1.0 to 1.0
+
+
+                                @dataclass
+                                    class APIFearAndGreedIndex:
+    """Class for Schwabot trading functionality."""
+                                    """Class for Schwabot trading functionality."""
+                                    """Represents a Fear and Greed Index value."""
+
+                                    value: int  # 0-100
+                                    value_classification: str  # e.g., Extreme Fear
+                                    timestamp: int
+
+
+                                    @dataclass
+                                        class APIGenericData:
+    """Class for Schwabot trading functionality."""
+                                        """Class for Schwabot trading functionality."""
+                                        """A generic container for other data types."""
+
+                                        source: str
+                                        data_type: str
+                                        timestamp: int
+                                        content: Dict[str, Any] = field(default_factory=dict)

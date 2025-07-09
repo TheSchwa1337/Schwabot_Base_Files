@@ -50,21 +50,15 @@ class HistoricalDataManager:
 
             # Simulate price fluctuations within the interval
             # For simplicity, we'll use daily OHLCV for now, where interval_minutes is large
-            price_change_pct = Decimal(
-                str(random.uniform(-self.volatility_factor, self.volatility_factor))
-            )
+            price_change_pct = Decimal(str(random.uniform(-self.volatility_factor, self.volatility_factor)))
             close_price = current_price * (Decimal("1") + price_change_pct)
-            close_price = round(
-                close_price, 8
-            )  # Round to 8 decimal places for crypto prices
+            close_price = round(close_price, 8)  # Round to 8 decimal places for crypto prices
 
             # Simple high/low calculation
             high_price = max(open_price, close_price) * Decimal(
                 str(1 + random.uniform(0, self.volatility_factor * 0.5))
             )
-            low_price = min(open_price, close_price) * Decimal(
-                str(1 - random.uniform(0, self.volatility_factor * 0.5))
-            )
+            low_price = min(open_price, close_price) * Decimal(str(1 - random.uniform(0, self.volatility_factor * 0.5)))
             high_price = round(high_price, 8)
             low_price = round(low_price, 8)
 
@@ -72,9 +66,7 @@ class HistoricalDataManager:
             volume = random.uniform(1000.0, 5000.0)  # Example volume
 
             yield {
-                "timestamp": int(
-                    current_date.timestamp() * 1000
-                ),  # Milliseconds timestamp
+                "timestamp": int(current_date.timestamp() * 1000),  # Milliseconds timestamp
                 "datetime": current_date.isoformat(),
                 "open": float(open_price),
                 "high": float(high_price),
@@ -83,20 +75,14 @@ class HistoricalDataManager:
                 "volume": volume,
             }
             current_price = close_price  # Next interval starts from this close price
-            current_date += timedelta(
-                minutes=self.interval_minutes
-            )  # Move to next interval
+            current_date += timedelta(minutes=self.interval_minutes)  # Move to next interval
 
-    async def load_data_from_csv(
-        self, file_path: str
-    ) -> AsyncGenerator[Dict[str, Any], None]:
+    async def load_data_from_csv(self, file_path: str) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Placeholder for loading historical data from a CSV file.
         Expected CSV format: timestamp,open,high,low,close,volume
         """
-        logger.warning(
-            f"CSV data loading not yet implemented. Using mock data instead for {file_path}."
-        )
+        logger.warning(f"CSV data loading not yet implemented. Using mock data instead for {file_path}.")
         async for data_point in self.generate_mock_data():
             yield data_point
 
@@ -127,14 +113,10 @@ class HistoricalDataManager:
 
 # Example Usage (for testing purposes, not part of the main backtester run flow)
 async def _main_data_manager_test():
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
     start = datetime(2023, 1, 1)
     end = datetime(2023, 1, 5)
-    data_manager = HistoricalDataManager(
-        start_date=start, end_date=end, interval_minutes=60
-    )  # Hourly data
+    data_manager = HistoricalDataManager(start_date=start, end_date=end, interval_minutes=60)  # Hourly data
 
     logger.info("Testing mock data generation (hourly)...")
     count = 0

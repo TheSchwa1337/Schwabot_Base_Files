@@ -7,9 +7,7 @@ class ParadoxFractal(FractalBase):
         super().__init__()
         self.failed_paths = []
 
-    def run_simulation(
-        self, f_k_fn, lambda_k: float, t: float, entropy_threshold: float = 1.5
-    ) -> float:
+    def run_simulation(self, f_k_fn, lambda_k: float, t: float, entropy_threshold: float = 1.5) -> float:
         """
         Simulates hypothetical scenarios for Paradox Fractal.
         P(x,t) = sum((-1)^k * f_k(x,t) * exp(-lambda_k * t))
@@ -24,9 +22,7 @@ class ParadoxFractal(FractalBase):
             if (
                 self.entropy_anchor > entropy_threshold
             ):  # Assuming entropy_anchor is updated externally or based on internal state changes
-                self.failed_paths.append(
-                    {"k": k, "value": val, "collapsed": True, "t": t}
-                )
+                self.failed_paths.append({"k": k, "value": val, "collapsed": True, "t": t})
                 self.status = "collapsed"  # Mark fractal as collapsed
                 break  # Stop simulation on collapse
 

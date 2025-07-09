@@ -8,9 +8,7 @@ class ForeverFractal(FractalBase):
         self.gamma = gamma  # persistence constant
         self.beta = beta  # adjustment strength
 
-    def update(
-        self, omega_n: float, delta_psi_n: float, eco_factor: float = 0.0
-    ) -> float:
+    def update(self, omega_n: float, delta_psi_n: float, eco_factor: float = 0.0) -> float:
         """
         Update Forever Fractal memory shell.
         M_{n+1} = gamma * M_n + beta * Omega_n * DeltaPsi_n * (1 + xi * E_n)
@@ -18,9 +16,7 @@ class ForeverFractal(FractalBase):
         # If eco_factor is provided, it modulates the adjustment strength.
         # xi is integrated into beta for simplicity here.
         adjustment_term = self.beta * omega_n * delta_psi_n
-        if (
-            eco_factor != 0.0
-        ):  # Only apply eco modulation if a non-zero factor is provided
+        if eco_factor != 0.0:  # Only apply eco modulation if a non-zero factor is provided
             adjustment_term *= 1 + eco_factor  # xi is implicitly 1 here
 
         self.memory_shell = self.gamma * self.memory_shell + adjustment_term

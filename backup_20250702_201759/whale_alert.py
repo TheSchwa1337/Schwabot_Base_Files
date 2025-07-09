@@ -31,6 +31,7 @@ BASE_URL = "https://api.whale-alert.io/v1"
 
 class WhaleAlertHandler(BaseAPIHandler):
     """WhaleAlert API handler for tracking large cryptocurrency transactions."""
+
     NAME = "whale_alert"
     CACHE_SUBDIR = "whale_data"
     REFRESH_INTERVAL = 180  # 3-minute updates for whale tracking
@@ -124,7 +125,11 @@ class WhaleAlertHandler(BaseAPIHandler):
                 "dominant_blockchain": self._get_dominant_blockchain(processed_transactions),
             }
 
-            return {"transactions": processed_transactions, "summary": summary, "last_updated": raw.get("cursor", {}).get("last", 0),}
+            return {
+                "transactions": processed_transactions,
+                "summary": summary,
+                "last_updated": raw.get("cursor", {}).get("last", 0),
+            }
 
         except Exception as exc:
             logger.error("%s: failed to parse whale data - %s", self.NAME, exc)

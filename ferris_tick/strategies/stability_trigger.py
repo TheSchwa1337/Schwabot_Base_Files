@@ -13,9 +13,7 @@ except ImportError:
         "Could not import compute_stability_index from smart_money.zygot_shell. Please ensure the path is correct."
     )
 
-    def compute_stability_index(
-        Z: float, N: float, params: Optional[Dict[str, float]] = None
-    ) -> float:
+    def compute_stability_index(Z: float, N: float, params: Optional[Dict[str, float]] = None) -> float:
         logging.error(
             "Placeholder compute_stability_index used. Please resolve import issue for smart_money.zygot_shell."
         )
@@ -53,19 +51,13 @@ def check_shell_trade_signal(
             },
         }
     # Pass the ZygotShell parameters from the config to compute_stability_index
-    stability_index = compute_stability_index(
-        volume_signal, volatility_map, config.get("params")
-    )
+    stability_index = compute_stability_index(volume_signal, volatility_map, config.get("params"))
 
     if stability_index > config["stability_threshold_high"]:
-        logger.info(
-            f"StabilityTrigger: ENTER_AGGRESSIVE (Stability Index: {stability_index:.2f})"
-        )
+        logger.info(f"StabilityTrigger: ENTER_AGGRESSIVE (Stability Index: {stability_index:.2f})")
         return "ENTER_AGGRESSIVE"
     elif stability_index > config["stability_threshold_low"]:
-        logger.info(
-            f"StabilityTrigger: ENTER_SCALED (Stability Index: {stability_index:.2f})"
-        )
+        logger.info(f"StabilityTrigger: ENTER_SCALED (Stability Index: {stability_index:.2f})")
         return "ENTER_SCALED"
     else:
         logger.info(f"StabilityTrigger: HOLD (Stability Index: {stability_index:.2f})")
@@ -87,9 +79,7 @@ if __name__ == "__main__":
     print(f"Signal for C-like state (Z=6, N=6): {signal2}")
 
     # Scenario 3: Hold (simulated low stability)
-    signal3 = check_shell_trade_signal(
-        50.0, 40.0
-    )  # Analogous to unstable heavy nucleus
+    signal3 = check_shell_trade_signal(50.0, 40.0)  # Analogous to unstable heavy nucleus
     print(f"Signal for unstable state (Z=50, N=40): {signal3}")
 
     # Scenario 4: Custom configuration

@@ -22,7 +22,7 @@ that prevent the Schwabot system from running properly.
 
 
 
-Original file: core\\data\\historical_loader.py
+Original file: core//data//historical_loader.py
 
 
 
@@ -113,7 +113,7 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-        raise FileNotFoundError(fNo folder found for {asset.upper()}_{quote.upper()} history.)
+    raise FileNotFoundError(fNo folder found for {asset.upper()}_{quote.upper()} history.)
 
 
 
@@ -125,7 +125,7 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-    if not all_csvs:
+        if not all_csvs:
 
 
 
@@ -137,27 +137,11 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-    frames = [pd.read_csv(f) for f in all_csvs]
+        frames = [pd.read_csv(f) for f in all_csvs]
 
 
 
-    combined = pd.concat(frames, ignore_index=True)
-
-
-
-
-
-
-
-    # Optional: sort and clean
-
-
-
-    combined = combined.drop_duplicates().sort_values(timestamp)
-
-
-
-    combined.reset_index(drop = True, inplace=True)
+        combined = pd.concat(frames, ignore_index=True)
 
 
 
@@ -165,23 +149,39 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-    out_path = PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
+        # Optional: sort and clean
 
 
 
-    out_path.parent.mkdir(parents = True, exist_ok=True)  # Ensure parent directory exists
+        combined = combined.drop_duplicates().sort_values(timestamp)
 
 
 
-    combined.to_parquet(out_path)
+        combined.reset_index(drop = True, inplace=True)
 
 
 
-    print(f[] Saved {asset.upper()}_{quote.upper()} history  {out_path})
 
 
 
-    return out_path
+
+        out_path = PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
+
+
+
+        out_path.parent.mkdir(parents = True, exist_ok=True)  # Ensure parent directory exists
+
+
+
+        combined.to_parquet(out_path)
+
+
+
+        print(f[] Saved {asset.upper()}_{quote.upper()} history  {out_path})
+
+
+
+        return out_path
 
 
 
@@ -206,11 +206,11 @@ PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
 
 
 
-        print(f[!] Parquet not found, creating for {asset.upper()}...)
+    print(f[!] Parquet not found, creating for {asset.upper()}...)
 
 
 
-        concat_csv_to_parquet(asset, quote)
+    concat_csv_to_parquet(asset, quote)
 
 
 
@@ -222,4 +222,4 @@ PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
 
 
 
-"""
+    """

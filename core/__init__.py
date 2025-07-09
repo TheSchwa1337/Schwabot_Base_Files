@@ -4,291 +4,280 @@
 Core module for Schwabot trading system.
 
 This module provides clean, error-free implementations of the core
-mathematical and trading components.
+mathematical and trading components for algorithmic trading.
 """
 
-# Standard library imports
 import logging
+from typing import Any, Dict, Optional
 
-# Clean Math Foundation
+logger = logging.getLogger(__name__)
+
+# Math Infrastructure
 try:
-    from .clean_math_foundation import (
-        BitPhase,
-        CleanMathFoundation,
-        MathOperation,
-        ThermalState,
-        create_math_foundation,
-        quick_calculation,
+    from .math_cache import MathResultCache
+    from .math_config_manager import MathConfigManager
+    from .math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
+
+# Core Utilities
+try:
+    from .core_utilities import CoreUtilities
+
+    CORE_UTILITIES_AVAILABLE = True
+except ImportError:
+    CORE_UTILITIES_AVAILABLE = False
+    logger.warning("Core utilities not available")
+
+# Bio Cellular Integration
+try:
+    from .bio_cellular_integration import (
+        BioCellularIntegration,
+        create_bio_cellular_integration,
     )
 
-    CLEAN_MATH_AVAILABLE = True
+    BIO_CELLULAR_AVAILABLE = True
 except ImportError:
-    CLEAN_MATH_AVAILABLE = False
+    BIO_CELLULAR_AVAILABLE = False
+    logger.warning("Bio cellular integration not available")
 
-# Clean Profit Vectorization
+# Profit Optimization Engine
 try:
-    from .clean_profit_vectorization import (
-        CleanProfitVectorization,
-        ProfitVector,
-        VectorizationMode,
-        create_profit_vectorizer,
+    from .profit_optimization_engine import ProfitOptimizationEngine
+
+    PROFIT_OPTIMIZATION_AVAILABLE = True
+except ImportError:
+    PROFIT_OPTIMIZATION_AVAILABLE = False
+    logger.warning("Profit optimization engine not available")
+
+# Quantum Mathematical Bridge
+try:
+    from .quantum_mathematical_bridge import QuantumMathematicalBridge
+
+    QUANTUM_BRIDGE_AVAILABLE = True
+except ImportError:
+    QUANTUM_BRIDGE_AVAILABLE = False
+    logger.warning("Quantum mathematical bridge not available")
+
+# Entropy Math
+try:
+    from .entropy_math import EntropyMath
+
+    ENTROPY_MATH_AVAILABLE = True
+except ImportError:
+    ENTROPY_MATH_AVAILABLE = False
+    logger.warning("Entropy math not available")
+
+# Tensor Score Utils
+try:
+    from .tensor_score_utils import TensorScoreUtils
+
+    TENSOR_SCORE_AVAILABLE = True
+except ImportError:
+    TENSOR_SCORE_AVAILABLE = False
+    logger.warning("Tensor score utils not available")
+
+# DLT Waveform Engine
+try:
+    from .dlt_waveform_engine import DLTWaveformEngine
+
+    DLT_WAVEFORM_AVAILABLE = True
+except ImportError:
+    DLT_WAVEFORM_AVAILABLE = False
+    logger.warning("DLT waveform engine not available")
+
+# Advanced Tensor Algebra
+try:
+    from .advanced_tensor_algebra import AdvancedTensorAlgebra
+
+    ADVANCED_TENSOR_AVAILABLE = True
+except ImportError:
+    ADVANCED_TENSOR_AVAILABLE = False
+    logger.warning("Advanced tensor algebra not available")
+
+# Unified Profit Vectorization System
+try:
+    from .unified_profit_vectorization_system import (
+        UnifiedProfitVectorizationSystem,
     )
 
-    CLEAN_PROFIT_AVAILABLE = True
+    UNIFIED_PROFIT_AVAILABLE = True
 except ImportError:
-    CLEAN_PROFIT_AVAILABLE = False
+    UNIFIED_PROFIT_AVAILABLE = False
+    logger.warning("Unified profit vectorization system not available")
 
-# Orbital Brain System
+# Strategy Logic
 try:
-    from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
+    from .strategy_logic import StrategyLogic
 
-    ORBITAL_BRAIN_AVAILABLE = True
+    STRATEGY_LOGIC_AVAILABLE = True
 except ImportError:
-    ORBITAL_BRAIN_AVAILABLE = False
+    STRATEGY_LOGIC_AVAILABLE = False
+    logger.warning("Strategy logic not available")
 
-# Clean Trading Pipeline
+# Unified Mathematical Core
 try:
-    from .clean_trading_pipeline import (
-        CleanTradingPipeline,
-        MarketData,
-        StrategyBranch,
-        TradingDecision,
-        create_trading_pipeline,
-        run_trading_simulation,
+    from .unified_mathematical_core import UnifiedMathematicalCore
+
+    UNIFIED_MATH_AVAILABLE = True
+except ImportError:
+    UNIFIED_MATH_AVAILABLE = False
+    logger.warning("Unified mathematical core not available")
+
+# Vectorized Profit Orchestrator
+try:
+    from .vectorized_profit_orchestrator import VectorizedProfitOrchestrator
+
+    VECTORIZED_PROFIT_AVAILABLE = True
+except ImportError:
+    VECTORIZED_PROFIT_AVAILABLE = False
+    logger.warning("Vectorized profit orchestrator not available")
+
+# Consolidated Utilities
+try:
+    from .consolidated_math_utils import (
+        ConsolidatedMathUtils,
+        create_consolidated_math_utils,
+    )
+    from .consolidated_system_utils import (
+        ConsolidatedSystemUtils,
+        create_consolidated_system_utils,
     )
 
-    CLEAN_PIPELINE_AVAILABLE = True
+    CONSOLIDATED_UTILS_AVAILABLE = True
 except ImportError:
-    CLEAN_PIPELINE_AVAILABLE = False
+    CONSOLIDATED_UTILS_AVAILABLE = False
+    logger.warning("Consolidated utilities not available")
 
-# Algorithmic Portfolio Balancer
-try:
-    from .algorithmic_portfolio_balancer import (
-        AlgorithmicPortfolioBalancer,
-        RebalancingStrategy,
-        AssetAllocation,
-        create_portfolio_balancer,
-    )
-
-    PORTFOLIO_BALANCER_AVAILABLE = True
-except ImportError:
-    PORTFOLIO_BALANCER_AVAILABLE = False
-
-# BTC/USDC Trading Integration
-try:
-    from .btc_usdc_trading_integration import (
-        BTCUSDCTradingIntegration,
-        BTCUSDCTradingConfig,
-        create_btc_usdc_integration,
-    )
-
-    BTC_USDC_INTEGRATION_AVAILABLE = True
-except ImportError:
-    BTC_USDC_INTEGRATION_AVAILABLE = False
-
-# GPU System State Profiler Integration
-try:
-    from .system_state_profiler import (
-        SystemStateProfiler,
-        SystemProfile,
-        CPUProfile,
-        GPUProfile,
-        SystemTier,
-        CPUTier,
-        GPUTier,
-        create_system_profiler,
-        get_system_profile,
-        get_gpu_shader_config,
-    )
-
-    SYSTEM_PROFILER_AVAILABLE = True
-except ImportError:
-    SYSTEM_PROFILER_AVAILABLE = False
-
-# GPU DNA Auto-Detection
-try:
-    from .gpu_dna_autodetect import (
-        GPUDNAAutoDetect,
-        ShaderConfig,
-        create_gpu_dna_detector,
-        detect_gpu_dna,
-        get_cosine_similarity_config,
-        run_gpu_fit_test,
-    )
-
-    GPU_DNA_AVAILABLE = True
-except ImportError:
-    GPU_DNA_AVAILABLE = False
-
-# GPU Shader Integration
-try:
-    from .gpu_shader_integration import (
-        GPUShaderIntegration,
-        ShaderProgramConfig,
-        create_gpu_shader_integration,
-        compute_strategy_similarities_gpu,
-    )
-
-    GPU_SHADER_INTEGRATION_AVAILABLE = True
-except ImportError:
-    GPU_SHADER_INTEGRATION_AVAILABLE = False
-
-# Core exports - only clean implementations
 __all__ = [
-    # Clean implementations (recommended)
-    "CleanMathFoundation",
-    "MathOperation",
-    "ThermalState",
-    "BitPhase",
-    "create_math_foundation",
-    "quick_calculation",
-    "CleanProfitVectorization",
-    "VectorizationMode",
-    "ProfitVector",
-    "create_profit_vectorizer",
-    "CleanTradingPipeline",
-    "MarketData",
-    "TradingDecision",
-    "StrategyBranch",
-    "create_trading_pipeline",
-    "run_trading_simulation",
-    # New orbital brain components
-    "OrbitalBRAINSystem",
-    "OrbitalShell",
-    # Portfolio balancing components
-    "AlgorithmicPortfolioBalancer",
-    "RebalancingStrategy",
-    "AssetAllocation",
-    "create_portfolio_balancer",
-    # BTC/USDC integration components
-    "BTCUSDCTradingIntegration",
-    "BTCUSDCTradingConfig",
-    "create_btc_usdc_integration",
-    # GPU System State Profiler components
-    "SystemStateProfiler",
-    "SystemProfile",
-    "CPUProfile",
-    "GPUProfile",
-    "SystemTier",
-    "CPUTier",
-    "GPUTier",
-    "create_system_profiler",
-    "get_system_profile",
-    "get_gpu_shader_config",
-    # GPU DNA Auto-Detection components
-    "GPUDNAAutoDetect",
-    "ShaderConfig",
-    "create_gpu_dna_detector",
-    "detect_gpu_dna",
-    "get_cosine_similarity_config",
-    "run_gpu_fit_test",
-    # GPU Shader Integration components
-    "GPUShaderIntegration",
-    "ShaderProgramConfig",
-    "create_gpu_shader_integration",
-    "compute_strategy_similarities_gpu",
-    # Availability flags
-    "CLEAN_MATH_AVAILABLE",
-    "CLEAN_PROFIT_AVAILABLE",
-    "CLEAN_PIPELINE_AVAILABLE",
-    "ORBITAL_BRAIN_AVAILABLE",
-    "PORTFOLIO_BALANCER_AVAILABLE",
-    "BTC_USDC_INTEGRATION_AVAILABLE",
-    "SYSTEM_PROFILER_AVAILABLE",
-    "GPU_DNA_AVAILABLE",
-    "GPU_SHADER_INTEGRATION_AVAILABLE",
-    # Utility functions
+    "MathConfigManager",
+    "MathResultCache",
+    "MathOrchestrator",
+    "MATH_INFRASTRUCTURE_AVAILABLE",
+    "CoreUtilities",
+    "CORE_UTILITIES_AVAILABLE",
+    "BioCellularIntegration",
+    "create_bio_cellular_integration",
+    "BIO_CELLULAR_AVAILABLE",
+    "ProfitOptimizationEngine",
+    "PROFIT_OPTIMIZATION_AVAILABLE",
+    "QuantumMathematicalBridge",
+    "QUANTUM_BRIDGE_AVAILABLE",
+    "EntropyMath",
+    "ENTROPY_MATH_AVAILABLE",
+    "TensorScoreUtils",
+    "TENSOR_SCORE_AVAILABLE",
+    "DLTWaveformEngine",
+    "DLT_WAVEFORM_AVAILABLE",
+    "AdvancedTensorAlgebra",
+    "ADVANCED_TENSOR_AVAILABLE",
+    "UnifiedProfitVectorizationSystem",
+    "UNIFIED_PROFIT_AVAILABLE",
+    "StrategyLogic",
+    "STRATEGY_LOGIC_AVAILABLE",
+    "UnifiedMathematicalCore",
+    "UNIFIED_MATH_AVAILABLE",
+    "VectorizedProfitOrchestrator",
+    "VECTORIZED_PROFIT_AVAILABLE",
+    "ConsolidatedMathUtils",
+    "ConsolidatedSystemUtils",
+    "create_consolidated_math_utils",
+    "create_consolidated_system_utils",
+    "CONSOLIDATED_UTILS_AVAILABLE",
 ]
 
 
-def get_system_status():
-    """Get comprehensive system status for all components."""
-    status = {}
-    status["clean_math"] = CLEAN_MATH_AVAILABLE
-    status["clean_profit"] = CLEAN_PROFIT_AVAILABLE
-    status["clean_pipeline"] = CLEAN_PIPELINE_AVAILABLE
-    status["orbital_brain"] = ORBITAL_BRAIN_AVAILABLE
-    status["portfolio_balancer"] = PORTFOLIO_BALANCER_AVAILABLE
-    status["btc_usdc_integration"] = BTC_USDC_INTEGRATION_AVAILABLE
-    status["system_profiler"] = SYSTEM_PROFILER_AVAILABLE
-    status["gpu_dna"] = GPU_DNA_AVAILABLE
-    status["gpu_shader"] = GPU_SHADER_INTEGRATION_AVAILABLE
-    return status
+def get_system_status() -> Dict[str, Any]:
+    """Get the status of all core systems."""
+    return {
+        "math_infrastructure": MATH_INFRASTRUCTURE_AVAILABLE,
+        "core_utilities": CORE_UTILITIES_AVAILABLE,
+        "bio_cellular": BIO_CELLULAR_AVAILABLE,
+        "profit_optimization": PROFIT_OPTIMIZATION_AVAILABLE,
+        "quantum_bridge": QUANTUM_BRIDGE_AVAILABLE,
+        "entropy_math": ENTROPY_MATH_AVAILABLE,
+        "tensor_score": TENSOR_SCORE_AVAILABLE,
+        "dlt_waveform": DLT_WAVEFORM_AVAILABLE,
+        "advanced_tensor": ADVANCED_TENSOR_AVAILABLE,
+        "unified_profit": UNIFIED_PROFIT_AVAILABLE,
+        "strategy_logic": STRATEGY_LOGIC_AVAILABLE,
+        "unified_math": UNIFIED_MATH_AVAILABLE,
+        "vectorized_profit": VECTORIZED_PROFIT_AVAILABLE,
+        "consolidated_utils": CONSOLIDATED_UTILS_AVAILABLE,
+    }
 
 
-def initialize_gpu_system():
-    """Initialize GPU system with proper error handling."""
+def create_core_system(config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Create a complete core system with all available components."""
+    system = {}
+
+    if MATH_INFRASTRUCTURE_AVAILABLE:
+        system["math_config"] = MathConfigManager()
+        system["math_cache"] = MathResultCache()
+        system["math_orchestrator"] = MathOrchestrator()
+
+    if CORE_UTILITIES_AVAILABLE:
+        system["core_utilities"] = CoreUtilities()
+
+    if BIO_CELLULAR_AVAILABLE:
+        system["bio_cellular"] = create_bio_cellular_integration(config)
+
+    if PROFIT_OPTIMIZATION_AVAILABLE:
+        system["profit_optimization"] = ProfitOptimizationEngine(config)
+
+    if QUANTUM_BRIDGE_AVAILABLE:
+        system["quantum_bridge"] = QuantumMathematicalBridge()
+
+    if ENTROPY_MATH_AVAILABLE:
+        system["entropy_math"] = EntropyMath(config)
+
+    if TENSOR_SCORE_AVAILABLE:
+        system["tensor_score"] = TensorScoreUtils(config)
+
+    if DLT_WAVEFORM_AVAILABLE:
+        system["dlt_waveform"] = DLTWaveformEngine(config)
+
+    if ADVANCED_TENSOR_AVAILABLE:
+        system["advanced_tensor"] = AdvancedTensorAlgebra(config)
+
+    if UNIFIED_PROFIT_AVAILABLE:
+        system["unified_profit"] = UnifiedProfitVectorizationSystem(config)
+
+    if STRATEGY_LOGIC_AVAILABLE:
+        system["strategy_logic"] = StrategyLogic(config)
+
+    if UNIFIED_MATH_AVAILABLE:
+        system["unified_math"] = UnifiedMathematicalCore(config)
+
+    if VECTORIZED_PROFIT_AVAILABLE:
+        system["vectorized_profit"] = VectorizedProfitOrchestrator(config)
+
+    if CONSOLIDATED_UTILS_AVAILABLE:
+        system["consolidated_math"] = create_consolidated_math_utils()
+        system["consolidated_system"] = create_consolidated_system_utils()
+
+    logger.info(f"✅ Core system created with {len(system)} components")
+    return system
+
+
+def initialize_core_system(config: Optional[Dict[str, Any]] = None) -> bool:
+    """Initialize the complete core system."""
     try:
-        if SYSTEM_PROFILER_AVAILABLE:
-            _ = create_system_profiler()
-            system_profile = get_system_profile()
+        system = create_core_system(config)
 
-            if system_profile.gpu_tier != GPUTier.NONE:
-                logging.info("GPU system initialized successfully")
-                return True
-            else:
-                logging.warning("No GPU detected, using CPU fallback")
-                return False
-        else:
-            logging.warning("System profiler not available")
-            return False
+        for name, component in system.items():
+            if hasattr(component, "activate"):
+                if component.activate():
+                    logger.info(f"✅ {name} activated")
+                else:
+                    logger.warning(f"⚠️ {name} failed to activate")
+
+        logger.info("✅ Core system initialized successfully")
+        return True
 
     except Exception as e:
-        logging.error("Failed to initialize GPU system: {}".format(e))
+        logger.error(f"❌ Error initializing core system: {e}")
         return False
-
-
-def create_clean_trading_system(initial_capital=100000.0, enable_gpu_acceleration=True):
-    """Create a clean trading system with all components."""
-    try:
-        # Initialize GPU if requested
-        _ = False
-        if enable_gpu_acceleration:
-            _ = initialize_gpu_system()
-
-        # Create trading pipeline
-        if CLEAN_PIPELINE_AVAILABLE:
-            pipeline = create_trading_pipeline(initial_capital)
-
-            # Add portfolio balancer if available
-            if PORTFOLIO_BALANCER_AVAILABLE:
-                balancer = create_portfolio_balancer()
-                pipeline.add_component(balancer)
-
-            # Add BTC/USDC integration if available
-            if BTC_USDC_INTEGRATION_AVAILABLE:
-                btc_integration = create_btc_usdc_integration()
-                pipeline.add_component(btc_integration)
-
-            logging.info("Clean trading system created successfully")
-            return pipeline
-        else:
-            logging.error("Clean trading pipeline not available")
-            return None
-
-    except Exception as e:
-        logging.error("Failed to create clean trading system: {}".format(e))
-        return None
-
-
-# Initialize cross-platform compatibility
-def setup_cross_platform_compatibility():
-    """Setup cross-platform compatibility for the trading system."""
-    import platform
-    import sys
-
-    # Set platform-specific configurations
-    if platform.system() == "Windows":
-        # Windows-specific settings
-        pass
-    elif platform.system() == "Linux":
-        # Linux-specific settings
-        pass
-    elif platform.system() == "Darwin":
-        # macOS-specific settings
-        pass
-
-    logging.info(f"Cross-platform compatibility setup for {platform.system()}")
-
-
-setup_cross_platform_compatibility()

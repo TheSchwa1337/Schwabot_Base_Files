@@ -1,0 +1,5 @@
+# Requirements for windows
+# Install with: pip install -r requirements-windows.txt
+
+pywin32>=228
+wmi>=1.5.1

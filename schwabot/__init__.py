@@ -25,15 +25,18 @@ try:
     from core.matrix_math_utils import analyze_price_matrix, risk_parity_weights
     from core.profit_optimization_engine import ProfitOptimizationEngine
     from core.pure_profit_calculator import PureProfitCalculator
+
     CORE_AVAILABLE = True
 except ImportError as e:
     CORE_AVAILABLE = False
     import warnings
-    warnings.warn(f"Core mathematical modules not available: {e}")
+
+    warnings.warn(f"Core mathematical modules not available: {e}", stacklevel=2)
 
 # Configuration management
 try:
     from config.schwabot_config import SchwabotConfig
+
     CONFIG_AVAILABLE = True
 except ImportError:
     CONFIG_AVAILABLE = False
@@ -42,6 +45,7 @@ except ImportError:
 try:
     from utils.logging_setup import setup_logging
     from utils.safe_print import safe_print
+
     UTILS_AVAILABLE = True
 except ImportError:
     UTILS_AVAILABLE = False
@@ -49,15 +53,16 @@ except ImportError:
 # System status
 
 
-def get_system_status():
+def get_system_status() -> Dict[str, Any]:
     """Get the current system status and available components."""
     return {
         'version': __version__,
         'core_available': CORE_AVAILABLE,
         'config_available': CONFIG_AVAILABLE,
         'utils_available': UTILS_AVAILABLE,
-        'ready': CORE_AVAILABLE and CONFIG_AVAILABLE and UTILS_AVAILABLE
+        'ready': CORE_AVAILABLE and CONFIG_AVAILABLE and UTILS_AVAILABLE,
     }
+
 
 # Main system class for compatibility
 
@@ -65,7 +70,7 @@ def get_system_status():
 class SchwabotSystem:
     """Main Schwabot system interface."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the Schwabot system."""
         self.version = __version__
         self.status = get_system_status()
@@ -73,11 +78,11 @@ class SchwabotSystem:
         if not self.status['ready']:
             raise RuntimeError("Schwabot system is not ready - missing dependencies")
 
-    def get_version(self):
+    def get_version(self) -> str:
         """Get the system version."""
         return self.version
 
-    def get_status(self):
+    def get_status(self) -> Dict[str, Any]:
         """Get the system status."""
         return self.status
 
@@ -93,13 +98,15 @@ __all__ = [
 
 # Add conditional exports based on availability
 if CORE_AVAILABLE:
-    __all__.extend([
-        'MathLibV4',
-        'PureProfitCalculator',
-        'ProfitOptimizationEngine',
-        'analyze_price_matrix',
-        'risk_parity_weights'
-    ])
+    __all__.extend(
+        [
+            'MathLibV4',
+            'PureProfitCalculator',
+            'ProfitOptimizationEngine',
+            'analyze_price_matrix',
+            'risk_parity_weights',
+        ]
+    )
 
 if CONFIG_AVAILABLE:
     __all__.append('SchwabotConfig')

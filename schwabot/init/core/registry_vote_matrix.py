@@ -8,6 +8,7 @@ Each agent has an associated performance score (0.0-1.0) that represents its
 historical profitability.  Votes are weighted by this score so that agents with
 better track records have a stronger say.
 """
+
 from __future__ import annotations
 
 from typing import Dict, Mapping
@@ -16,8 +17,8 @@ from typing import Dict, Mapping
 class VoteRegistry:
     """Stores agent performance metrics and evaluates weighted vote outcomes."""
 
-    def __init__(self, performance_db: Mapping[str, float] | None = None,
-                 approval_threshold: float = 0.6) -> None:
+    def __init__(self, performance_db: Mapping[str, float] | None = None, approval_threshold: float = 0.6) -> None:
+        """Initialize vote registry with performance database."""
         # default every agent weight = 0.5 (neutral) if not provided
         self.performance_db: Dict[str, float] = dict(performance_db or {})
         self.approval_threshold = approval_threshold
@@ -25,11 +26,11 @@ class VoteRegistry:
     # ---------------------------------------------------------------------
     # Public helpers
     # ---------------------------------------------------------------------
-    def update_performance(self, agent_id: str, new_score: float) -> None:
+    def update_performance(self,  agent_id: str, new_score: float) -> None:
         """Persist a new performance score for *agent_id* (clamped 0-1)."""
         self.performance_db[agent_id] = max(0.0, min(1.0, new_score))
 
-    def evaluate(self, votes: Mapping[str, bool]) -> bool:
+    def evaluate(self,  votes: Mapping[str, bool]) -> bool:
         """Return *True* if the weighted approval meets *approval_threshold*.
 
         *votes* is a mapping of *agent_id* → *bool* (True for approve,
@@ -58,5 +59,5 @@ class VoteRegistry:
     # Representation helpers for logging / debugging
     # ------------------------------------------------------------------
     def __repr__(self) -> str:  # pragma: no cover
-        return (f"VoteRegistry(agents={len(self.performance_db)}, "
-                f"threshold={self.approval_threshold})") 
+        """String representation of vote registry."""
+        return f"VoteRegistry(agents={len(self.performance_db)}, " f"threshold={self.approval_threshold})"

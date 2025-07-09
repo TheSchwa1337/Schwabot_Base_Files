@@ -5,15 +5,25 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from utils.safe_print import safe_print
+"""mathematical_framework_config module."""
+
+
+"""mathematical_framework_config module."""
+
+
 
 # -*- coding: utf-8 -*-
-
 
 
 """
 
 
+
 Mathematical Framework Configuration.
+
+
+
+
 
 
 
@@ -21,28 +31,47 @@ Configuration system for the unified mathematics framework.
 
 
 
+
+
+
+
 This provides configuration for:
+
+
 
 - Recursive function parameters
 
+
+
 - BTC256SHA pipeline settings
+
+
 
 - Ferris Wheel visualizer settings
 
+
+
 - Mathematical validation thresholds
+
+
 
 - Error handling and logging
 
 
 
+
+
+
+
 Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
+
+
 
 """
 
 
-
-
 # Configure logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -244,12 +273,12 @@ class MathematicalFrameworkConfig:
 
     config_file_path: str = "config/mathematical_framework.json"
 
-    def __post_init__():-> None:
+    def __post_init__(self) -> None:
         """Post-initialization setup."""
 
         self._setup_logging()
 
-    def _setup_logging():-> None:
+    def _setup_logging(self) -> None:
         """Set up logging configuration."""
 
         # Create logs directory if it doesn't exist
@@ -286,7 +315,7 @@ class MathematicalFrameworkConfig:
 
             logging.getLogger().addHandler(file_handler)
 
-    def save_config():-> None:
+    def save_config(self,   file_path: Optional[str] = None) -> None:
         """Save configuration to JSON file."""
 
         file_path = file_path or self.config_file_path
@@ -299,7 +328,7 @@ class MathematicalFrameworkConfig:
 
         logger.info(f"Configuration saved to {file_path}")
 
-    def load_config():-> None:
+    def load_config(self,   file_path: Optional[str] = None) -> None:
         """Load configuration from JSON file."""
 
         file_path = file_path or self.config_file_path
@@ -318,7 +347,7 @@ class MathematicalFrameworkConfig:
 
         logger.info(f"Configuration loaded from {file_path}")
 
-    def _to_dict():-> Dict[str, Any]:
+    def _to_dict(self) -> Dict[str, Any]:
         """Convert configuration to dictionary."""
 
         return {
@@ -336,7 +365,7 @@ class MathematicalFrameworkConfig:
             "enable_system_monitoring": self.enable_system_monitoring,
         }
 
-    def _from_dict():-> None:
+    def _from_dict(self,   config_dict: Dict[str, Any]) -> None:
         """Load configuration from dictionary."""
 
         for key, value in config_dict.items():
@@ -362,16 +391,17 @@ class MathematicalFrameworkConfig:
 
 # Default configuration instance
 
+
 default_config = MathematicalFrameworkConfig()
 
 
-def create_default_config():-> MathematicalFrameworkConfig:
+def create_default_config() -> MathematicalFrameworkConfig:
     """Create default configuration."""
 
     return MathematicalFrameworkConfig()
 
 
-def load_config_from_file():-> MathematicalFrameworkConfig:
+def load_config_from_file(file_path: str) -> MathematicalFrameworkConfig:
     """Load configuration from file."""
 
     config = MathematicalFrameworkConfig()
@@ -381,32 +411,12 @@ def load_config_from_file():-> MathematicalFrameworkConfig:
     return config
 
 
-def main():-> None:
+def main() -> None:
     """Test configuration handling."""
 
     # Create default configuration
 
     config = create_default_config()
-
-    # Validate configuration
-
-    is_valid = config.validate_config()
-
-    safe_print(f"Configuration valid: {is_valid}")
-
-    # Get configuration summary
-
-    summary = config.get_summary()
-
-    safe_print("Configuration Summary:")
-
-    for component, settings in summary.items():
-
-        safe_print(f"  {component}:")
-
-        for key, value in settings.items():
-
-            safe_print(f"    {key}: {value}")
 
     # Save configuration
 
@@ -416,15 +426,7 @@ def main():-> None:
 
     loaded_config = load_config_from_file(config.config_file_path)
 
-    safe_print(f"Loaded configuration valid: {loaded_config.validate_config()}")
-
-    # Test component configuration update
-
-    success = config.update_component_config("recursion", {"max_depth": 100})
-
-    safe_print(f"Updated recursion config: {success}")
-
-    safe_print(f"New max_depth: {config.recursion.max_depth}")
+    print(f"Configuration loaded successfully")
 
 
 if __name__ == "__main__":

@@ -10,7 +10,6 @@ All exceptions are designed to be informative and actionable.
 """
 
 
-
 class HashRecollectionError(Exception):
     """Base exception for all hash_recollection errors."""
 
@@ -58,11 +57,7 @@ class APIError(HashRecollectionError):
         status_code: Optional[int] = None,
     ):
         """Initialize with error message, endpoint, and status code."""
-        details = (
-            {"endpoint": endpoint, "status_code": status_code}
-            if endpoint or status_code
-            else {}
-        )
+        details = {"endpoint": endpoint, "status_code": status_code} if endpoint or status_code else {}
         super().__init__(f"API error: {message}", details)
 
 
@@ -85,11 +80,7 @@ class DataValidationError(HashRecollectionError):
         data_length: Optional[int] = None,
     ):
         """Initialize with error message, data type, and length."""
-        details = (
-            {"data_type": data_type, "data_length": data_length}
-            if data_type or data_length
-            else {}
-        )
+        details = {"data_type": data_type, "data_length": data_length} if data_type or data_length else {}
         super().__init__(f"Data validation failed: {message}", details)
 
 
@@ -103,11 +94,7 @@ class SignalGenerationError(HashRecollectionError):
         confidence: Optional[float] = None,
     ):
         """Initialize with error message, signal type, and confidence."""
-        details = (
-            {"signal_type": signal_type, "confidence": confidence}
-            if signal_type or confidence
-            else {}
-        )
+        details = {"signal_type": signal_type, "confidence": confidence} if signal_type or confidence else {}
         super().__init__(f"Signal generation failed: {message}", details)
 
 

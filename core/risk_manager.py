@@ -1,50 +1,54 @@
-"""Comprehensive risk assessment and management for Schwabot trading system."""
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Risk Manager 🛡️
+
+Comprehensive risk assessment and management for Schwabot trading system:
+• Real-time risk assessment and position sizing
+• Portfolio risk monitoring and alerts
+• GPU/CPU tensor operations for risk calculations
+• Multi-dimensional risk metrics (VaR, CVaR, Sharpe ratio)
+• Dynamic risk limits and circuit breakers
+
+Features:
+- GPU-accelerated risk calculations with automatic CPU fallback
+- Real-time portfolio monitoring and risk alerts
+- Advanced risk metrics (VaR, CVaR, maximum drawdown)
+- Position sizing based on risk tolerance
+- Circuit breakers and emergency stops
+"""
 
 import logging
-import random
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
-# CUDA Integration with Fallback
 try:
+    import numpy as np
     import cupy as cp
-
     USING_CUDA = True
+    xp = cp
     _backend = 'cupy (GPU)'
-    xp = cp
 except ImportError:
-    import numpy as cp  # fallback to numpy
-
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = cp
-
-"""
-Risk Manager - Comprehensive risk assessment and management for Schwabot
-trading system.
-
-Provides real-time risk assessment, position sizing, and risk management
-    for the Schwabot trading system.
-
-CUDA Integration:
-- GPU-accelerated risk calculations with automatic CPU fallback
-- Performance monitoring and optimization
-- Cross-platform compatibility (Windows, macOS, Linux)
-- Comprehensive error handling and fallback mechanisms
-"""
+    try:
+        import numpy as np
+        USING_CUDA = False
+        xp = np
+        _backend = 'numpy (CPU)'
+    except ImportError:
+        xp = None
+        _backend = 'none'
 
 logger = logging.getLogger(__name__)
-if USING_CUDA:
-    logger.info(f"⚡ RiskManager using GPU acceleration: {_backend}")
+if xp is None:
+    logger.warning("❌ NumPy not available for risk calculations")
 else:
-    logger.info(f"🔄 RiskManager using CPU fallback: {_backend}")
+    logger.info(f"⚡ RiskManager using {_backend} for tensor operations")
 
 
 class RiskLevel(Enum):
     """Risk level enumeration."""
-
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -53,7 +57,6 @@ class RiskLevel(Enum):
 
 class ProcessingMode(Enum):
     """Processing mode for risk calculations."""
-
     GPU_ACCELERATED = "gpu_accelerated"
     CPU_FALLBACK = "cpu_fallback"
     HYBRID = "hybrid"
@@ -62,590 +65,310 @@ class ProcessingMode(Enum):
 
 @dataclass
 class RiskMetric:
-    """Represents a risk metric."""
-
-    name: str
-    value: float
-    threshold: float
-    status: str  # green, yellow, red
+    """Risk metric with tensor math integration."""
+    var_95: float  # Value at Risk (95% confidence)
+    var_99: float  # Value at Risk (99% confidence)
+    cvar_95: float  # Conditional Value at Risk (95% confidence)
+    cvar_99: float  # Conditional Value at Risk (99% confidence)
+    sharpe_ratio: float
+    sortino_ratio: float
+    max_drawdown: float
+    volatility: float
+    beta: float
+    correlation: float
+    skewness: float
+    kurtosis: float
     timestamp: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    processing_mode: ProcessingMode = ProcessingMode.HYBRID
+    tensor_confidence: float = 0.0
 
 
 @dataclass
-class RiskAssessment:
-    """Complete risk assessment result."""
-
-    overall_risk_score: float
+class PositionRisk:
+    """Position-specific risk assessment."""
+    symbol: str
+    position_size: float
+    current_value: float
+    unrealized_pnl: float
+    risk_metrics: RiskMetric
     risk_level: RiskLevel
-    metrics: Dict[str, RiskMetric]
-    recommendations: List[str]
+    max_position_size: float
+    stop_loss_level: float
+    take_profit_level: float
     timestamp: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    processing_mode: ProcessingMode = ProcessingMode.HYBRID
 
 
 @dataclass
-class RiskError:
-    """Error information for risk calculations."""
-
-    error_type: str
-    error_message: str
-    timestamp: float
-    fallback_used: bool = False
-    processing_mode: ProcessingMode = ProcessingMode.SAFE_MODE
+class PortfolioRisk:
+    """Portfolio-level risk assessment."""
+    total_value: float
+    total_pnl: float
+    risk_metrics: RiskMetric
+    risk_level: RiskLevel
+    positions: List[PositionRisk]
+    correlation_matrix: xp.ndarray
+    covariance_matrix: xp.ndarray
+    timestamp: float = field(default_factory=time.time)
 
 
 class RiskManager:
-    """Handles real-time risk assessment and management with GPU/CPU hybrid support."""
-
-    def __init__(
-        self: "RiskManager",
-        config: Optional[Dict[str, Any]] = None,
-        processing_mode: ProcessingMode = ProcessingMode.HYBRID,
-    ) -> None:
-        """Initialize the risk manager.
-
-        Args:
-            config: Configuration dictionary for risk parameters.
-            processing_mode: Processing mode preference for calculations.
-        """
-        self.config = config or self._default_config()
-        self.processing_mode = processing_mode
-        self.risk_metrics: Dict[str, RiskMetric] = {}
-        self.last_assessment_time = 0.0
-        self.error_log: List[RiskError] = []
-
-        # Performance metrics
-        self.assessment_stats = {
-            "total_assessments": 0,
-            "risk_violations": 0,
-            "position_adjustments": 0,
-            "avg_assessment_time": 0.0,
-            "gpu_operations": 0,
-            "cpu_operations": 0,
-            "fallback_operations": 0,
-            "error_count": 0,
+    """
+    Comprehensive risk management system with tensor math integration.
+    Handles real-time risk assessment, position sizing, and portfolio monitoring.
+    """
+    def __init__(self, risk_tolerance: float = 0.02, max_portfolio_risk: float = 0.05):
+        self.risk_tolerance = risk_tolerance  # 2% default
+        self.max_portfolio_risk = max_portfolio_risk  # 5% default
+        self.positions: Dict[str, PositionRisk] = {}
+        self.risk_history: List[PortfolioRisk] = []
+        self.circuit_breakers: Dict[str, bool] = {}
+        self.processing_mode = ProcessingMode.GPU_ACCELERATED if USING_CUDA else ProcessingMode.CPU_FALLBACK
+        self.alert_thresholds = {
+            RiskLevel.LOW: 0.01,
+            RiskLevel.MEDIUM: 0.03,
+            RiskLevel.HIGH: 0.05,
+            RiskLevel.CRITICAL: 0.10
         }
 
-        self._initialize_default_metrics()
-        logger.info(
-            "RiskManager initialized with processing mode: {0}".format(processing_mode.value)
-        )
-
-    def _default_config(self: "RiskManager") -> Dict[str, Any]:
-        """Return default risk manager configuration."""
-        return {
-            "max_drawdown_percent": 0.5,  # 5%
-            "max_exposure_per_asset": 0.2,  # 20%
-            "volatility_threshold": 0.3,  # 3% price change
-            "min_confidence_for_high_risk": 0.7,
-            "position_size_multiplier": 1.0,
-            "max_leverage": 2.0,
-            "stop_loss_percent": 0.2,  # 2%
-            "take_profit_percent": 0.6,  # 6%
-            "enable_gpu_acceleration": USING_CUDA,
-            "fallback_threshold": 0.1,  # 10% error rate triggers fallback
-        }
-
-    def _initialize_default_metrics(self: "RiskManager") -> None:
-        """Initialize default risk metrics."""
-        self.risk_metrics["drawdown"] = RiskMetric(
-            "drawdown",
-            0.0,
-            self.config["max_drawdown_percent"],
-            "green",
-            processing_mode=self.processing_mode,
-        )
-        self.risk_metrics["exposure_btc"] = RiskMetric(
-            "exposure_btc",
-            0.0,
-            self.config["max_exposure_per_asset"],
-            "green",
-            processing_mode=self.processing_mode,
-        )
-        self.risk_metrics["volatility"] = RiskMetric(
-            "volatility",
-            0.0,
-            self.config["volatility_threshold"],
-            "green",
-            processing_mode=self.processing_mode,
-        )
-        self.risk_metrics["leverage"] = RiskMetric(
-            "leverage",
-            1.0,
-            self.config["max_leverage"],
-            "green",
-            processing_mode=self.processing_mode,
-        )
-
-    def assess_risk(
-        self: "RiskManager",
-        portfolio_value: float,
-        asset_exposures: Dict[str, float],
-        force_cpu: bool = False,
-    ) -> RiskAssessment:
-        """Assess overall portfolio risk based on current state."
-
-        Args:
-            portfolio_value: Current total portfolio value.
-            asset_exposures: Dictionary of asset exposure (asset_name: value).
-            force_cpu: Force CPU processing for error recovery.
-
-        Returns:
-            Complete risk assessment with recommendations.
-        """
-        start_time = time.time()
-        self.assessment_stats["total_assessments"] += 1
-
+    def calculate_risk_metrics(self, returns: xp.ndarray, confidence_levels: List[float] = [0.95, 0.99]) -> RiskMetric:
+        """Calculate comprehensive risk metrics using tensor operations."""
         try:
-            # Determine processing mode
-            if force_cpu or self.processing_mode == ProcessingMode.CPU_FALLBACK:
-                current_mode = ProcessingMode.CPU_FALLBACK
-                self.assessment_stats["cpu_operations"] += 1
-            elif self.processing_mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                current_mode = ProcessingMode.GPU_ACCELERATED
-                self.assessment_stats["gpu_operations"] += 1
-            else:
-                current_mode = ProcessingMode.HYBRID
-                if USING_CUDA:
-                    self.assessment_stats["gpu_operations"] += 1
-                else:
-                    self.assessment_stats["cpu_operations"] += 1
-
-            # Calculate drawdown with fallback
-            current_drawdown = self._calculate_drawdown_safe(portfolio_value, current_mode)
-            self.risk_metrics["drawdown"].value = current_drawdown
-            self.risk_metrics["drawdown"].status = self._get_status(
-                current_drawdown, self.config["max_drawdown_percent"]
+            if xp is None:
+                raise ValueError("Tensor operations not available")
+            
+            # Basic statistics
+            mean_return = xp.mean(returns)
+            volatility = xp.std(returns)
+            
+            # Value at Risk (VaR)
+            var_95 = float(xp.percentile(returns, 5))  # 95% VaR
+            var_99 = float(xp.percentile(returns, 1))  # 99% VaR
+            
+            # Conditional Value at Risk (CVaR)
+            cvar_95 = float(xp.mean(returns[returns <= var_95]))
+            cvar_99 = float(xp.mean(returns[returns <= var_99]))
+            
+            # Sharpe and Sortino ratios
+            risk_free_rate = 0.02  # 2% annual risk-free rate
+            sharpe_ratio = (mean_return - risk_free_rate) / volatility if volatility > 0 else 0
+            
+            # Sortino ratio (downside deviation)
+            downside_returns = returns[returns < mean_return]
+            downside_deviation = xp.std(downside_returns) if len(downside_returns) > 0 else volatility
+            sortino_ratio = (mean_return - risk_free_rate) / downside_deviation if downside_deviation > 0 else 0
+            
+            # Maximum drawdown
+            cumulative_returns = xp.cumprod(1 + returns)
+            running_max = xp.maximum.accumulate(cumulative_returns)
+            drawdowns = (cumulative_returns - running_max) / running_max
+            max_drawdown = float(xp.min(drawdowns))
+            
+            # Higher moments
+            skewness = float(xp.mean(((returns - mean_return) / volatility) ** 3)) if volatility > 0 else 0
+            kurtosis = float(xp.mean(((returns - mean_return) / volatility) ** 4)) if volatility > 0 else 0
+            
+            # Beta and correlation (simplified - would need market data)
+            beta = 1.0  # Default beta
+            correlation = 0.0  # Default correlation
+            
+            # Tensor confidence based on data quality
+            tensor_confidence = min(1.0, len(returns) / 1000.0)  # More data = higher confidence
+            
+            return RiskMetric(
+                var_95=var_95,
+                var_99=var_99,
+                cvar_95=cvar_95,
+                cvar_99=cvar_99,
+                sharpe_ratio=float(sharpe_ratio),
+                sortino_ratio=float(sortino_ratio),
+                max_drawdown=max_drawdown,
+                volatility=float(volatility),
+                beta=beta,
+                correlation=correlation,
+                skewness=skewness,
+                kurtosis=kurtosis,
+                tensor_confidence=tensor_confidence
             )
-            self.risk_metrics["drawdown"].processing_mode = current_mode
-
-            # Calculate asset exposure with fallback
-            total_btc_exposure = self._calculate_exposure_safe(
-                asset_exposures, portfolio_value, current_mode
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to calculate risk metrics: {e}")
+            return RiskMetric(
+                var_95=0.0, var_99=0.0, cvar_95=0.0, cvar_99=0.0,
+                sharpe_ratio=0.0, sortino_ratio=0.0, max_drawdown=0.0,
+                volatility=0.0, beta=1.0, correlation=0.0,
+                skewness=0.0, kurtosis=0.0, tensor_confidence=0.0
             )
-            self.risk_metrics["exposure_btc"].value = total_btc_exposure
-            self.risk_metrics["exposure_btc"].status = self._get_status(
-                total_btc_exposure, self.config["max_exposure_per_asset"]
-            )
-            self.risk_metrics["exposure_btc"].processing_mode = current_mode
 
-            # Calculate volatility with fallback
-            current_volatility = self._calculate_volatility_safe(asset_exposures, current_mode)
-            self.risk_metrics["volatility"].value = current_volatility
-            self.risk_metrics["volatility"].status = self._get_status(
-                current_volatility, self.config["volatility_threshold"]
-            )
-            self.risk_metrics["volatility"].processing_mode = current_mode
-
-            # Calculate overall risk score
-            risk_score = self._calculate_overall_risk_score_safe(current_mode)
-            risk_level = self._determine_risk_level(risk_score)
-
-            # Generate recommendations
-            recommendations = self._generate_recommendations()
-
-            self.last_assessment_time = time.time()
-            assessment_time = time.time() - start_time
-            self._update_avg_assessment_time(assessment_time)
-
-            return RiskAssessment(
-                overall_risk_score=risk_score,
+    def assess_position_risk(self, symbol: str, position_size: float, current_price: float, 
+                           historical_returns: xp.ndarray, entry_price: float) -> PositionRisk:
+        """Assess risk for a specific position."""
+        try:
+            # Calculate position metrics
+            current_value = position_size * current_price
+            unrealized_pnl = position_size * (current_price - entry_price)
+            
+            # Calculate risk metrics
+            risk_metrics = self.calculate_risk_metrics(historical_returns)
+            
+            # Determine risk level
+            risk_level = self._determine_risk_level(risk_metrics)
+            
+            # Calculate position limits
+            max_position_size = self._calculate_max_position_size(risk_metrics, current_value)
+            
+            # Calculate stop loss and take profit levels
+            stop_loss_level = entry_price * (1 - self.risk_tolerance)
+            take_profit_level = entry_price * (1 + self.risk_tolerance * 2)  # 2:1 reward/risk
+            
+            position_risk = PositionRisk(
+                symbol=symbol,
+                position_size=position_size,
+                current_value=current_value,
+                unrealized_pnl=unrealized_pnl,
+                risk_metrics=risk_metrics,
                 risk_level=risk_level,
-                metrics=self.risk_metrics.copy(),
-                recommendations=recommendations,
-                processing_mode=current_mode,
-                metadata={
-                    "assessment_time": assessment_time,
-                    "processing_backend": _backend,
-                    "portfolio_value": portfolio_value,
-                    "asset_count": len(asset_exposures),
-                },
+                max_position_size=max_position_size,
+                stop_loss_level=stop_loss_level,
+                take_profit_level=take_profit_level
             )
-
-        except Exception as e:
-            error = RiskError(
-                error_type=type(e).__name__,
-                error_message=str(e),
-                timestamp=time.time(),
-                fallback_used=True,
-                processing_mode=ProcessingMode.SAFE_MODE,
-            )
-            self.error_log.append(error)
-            self.assessment_stats["error_count"] += 1
-            logger.error(f"Error in risk assessment: {e}")
-
-            # Return safe fallback assessment
-            return self._create_fallback_assessment(portfolio_value, asset_exposures)
-
-    def _calculate_drawdown_safe(
-        self: "RiskManager", portfolio_value: float, mode: ProcessingMode
-    ) -> float:
-        """Calculate current drawdown with safe fallback."""
-        try:
-            if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                # GPU-accelerated calculation
-                return self._calculate_drawdown_gpu(portfolio_value)
-            else:
-                # CPU calculation
-                return self._calculate_drawdown_cpu(portfolio_value)
-        except Exception as e:
-            logger.warning(f"Drawdown calculation failed, using fallback: {e}")
-            self.assessment_stats["fallback_operations"] += 1
-            return self._calculate_drawdown_fallback(portfolio_value)
-
-    def _calculate_drawdown_gpu(self: "RiskManager", portfolio_value: float) -> float:
-        """Calculate drawdown using GPU acceleration."""
-        try:
-            # Simulate historical portfolio values for drawdown calculation
-            historical_values = cp.random.uniform(0.9, 1.1, 100) * portfolio_value
-            peak_value = cp.max(historical_values)
-            current_drawdown = (peak_value - portfolio_value) / peak_value
-            return float(current_drawdown)
-        except Exception:
-            raise
-
-    def _calculate_drawdown_cpu(self: "RiskManager", portfolio_value: float) -> float:
-        """Calculate drawdown using CPU."""
-        try:
-            # Simulate historical portfolio values for drawdown calculation
-            historical_values = xp.random.uniform(0.9, 1.1, 100) * portfolio_value
-            peak_value = xp.max(historical_values)
-            current_drawdown = (peak_value - portfolio_value) / peak_value
-            return float(current_drawdown)
-        except Exception:
-            raise
-
-    def _calculate_drawdown_fallback(self: "RiskManager", portfolio_value: float) -> float:
-        """Fallback drawdown calculation."""
-        return random.uniform(0.0, 0.1)
-
-    def _calculate_exposure_safe(
-        self: "RiskManager",
-        asset_exposures: Dict[str, float],
-        portfolio_value: float,
-        mode: ProcessingMode,
-    ) -> float:
-        """Calculate asset exposure with safe fallback."""
-        try:
-            if portfolio_value <= 0:
-                return 0.0
-
-            btc_exposure = asset_exposures.get("BTC/USD", 0.0)
-            total_exposure = btc_exposure / portfolio_value
-
-            if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                # GPU calculation
-                exposure_array = cp.array([total_exposure])
-                return float(cp.clip(exposure_array, 0.0, 1.0)[0])
-            else:
-                # CPU calculation
-                return max(0.0, min(1.0, total_exposure))
-        except Exception as e:
-            logger.warning(f"Exposure calculation failed, using fallback: {e}")
-            self.assessment_stats["fallback_operations"] += 1
-            return 0.0
-
-    def _calculate_volatility_safe(
-        self: "RiskManager", asset_exposures: Dict[str, float], mode: ProcessingMode
-    ) -> float:
-        """Calculate portfolio volatility with safe fallback."""
-        try:
-            total_exposure = sum(asset_exposures.values())
-            if total_exposure == 0:
-                return 0.0
-
-            # Simulate volatility based on exposure concentration
-            concentration = (
-                max(asset_exposures.values()) / total_exposure if total_exposure > 0 else 0
-            )
-
-            if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                # GPU calculation
-                concentration_array = cp.array([concentration])
-                volatility = float(concentration_array * 0.5)
-                return volatility
-            else:
-                # CPU calculation
-                return concentration * 0.5
-        except Exception as e:
-            logger.warning(f"Volatility calculation failed, using fallback: {e}")
-            self.assessment_stats["fallback_operations"] += 1
-            return 0.2  # Default 2% volatility
-
-    def _calculate_overall_risk_score_safe(self: "RiskManager", mode: ProcessingMode) -> float:
-        """Calculate overall risk score with safe fallback."""
-        try:
-            scores = []
-
-            for metric in self.risk_metrics.values():
-                if metric.status == "red":
-                    scores.append(1.0)
-                elif metric.status == "yellow":
-                    scores.append(0.6)
-                else:
-                    scores.append(0.2)
-
-            if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                # GPU calculation
-                scores_array = cp.array(scores)
-                return float(cp.mean(scores_array))
-            else:
-                # CPU calculation
-                return xp.mean(scores) if scores else 0.5
-        except Exception as e:
-            logger.warning(f"Risk score calculation failed, using fallback: {e}")
-            self.assessment_stats["fallback_operations"] += 1
-            return 0.5  # Default medium risk
-
-    def _determine_risk_level(self: "RiskManager", risk_score: float) -> RiskLevel:
-        """Determine risk level from risk score."""
-        if risk_score >= 0.8:
-            return RiskLevel.CRITICAL
-        elif risk_score >= 0.6:
-            return RiskLevel.HIGH
-        elif risk_score >= 0.4:
-            return RiskLevel.MEDIUM
-        else:
-            return RiskLevel.LOW
-
-    def _create_fallback_assessment(
-        self: "RiskManager", portfolio_value: float, asset_exposures: Dict[str, float]
-    ) -> RiskAssessment:
-        """Create a safe fallback risk assessment."""
-        return RiskAssessment(
-            overall_risk_score=0.5,
-            risk_level=RiskLevel.MEDIUM,
-            metrics=self.risk_metrics.copy(),
-            recommendations=[
-                "Use conservative position sizing",
-                "Monitor market conditions closely",
-            ],
-            processing_mode=ProcessingMode.SAFE_MODE,
-            metadata={"fallback": True, "error_recovery": True},
-        )
-
-    def _generate_recommendations(self: "RiskManager") -> List[str]:
-        """Generate risk management recommendations."""
-        recommendations = []
-
-        for metric_name, metric in self.risk_metrics.items():
-            if metric.status == "red":
-                if metric_name == "drawdown":
-                    recommendations.append("Reduce position sizes immediately")
-                elif metric_name == "exposure_btc":
-                    recommendations.append("Diversify portfolio allocation")
-                elif metric_name == "volatility":
-                    recommendations.append("Implement tighter stop-losses")
-                elif metric_name == "leverage":
-                    recommendations.append("Reduce leverage exposure")
-            elif metric.status == "yellow":
-                if metric_name == "drawdown":
-                    recommendations.append("Monitor drawdown closely")
-                elif metric_name == "exposure_btc":
-                    recommendations.append("Consider rebalancing portfolio")
-                elif metric_name == "volatility":
-                    recommendations.append("Review risk management strategy")
-                elif metric_name == "leverage":
-                    recommendations.append("Monitor leverage levels")
-
-        if not recommendations:
-            recommendations.append("Current risk levels are acceptable")
-
-        return recommendations
-
-    def _get_status(self: "RiskManager", current_value: float, threshold: float) -> str:
-        """Get status color based on current value and threshold."""
-        if current_value >= threshold:
-            return "red"
-        elif current_value >= threshold * 0.8:
-            return "yellow"
-        else:
-            return "green"
-
-    def adjust_position_size(
-        self: "RiskManager",
-        proposed_size: float,
-        confidence: float,
-        current_price: float,
-        force_cpu: bool = False,
-    ) -> float:
-        """Adjust position size based on risk assessment."
-
-        Args:
-            proposed_size: Proposed position size.
-            confidence: Confidence level (0.0 to 1.0).
-            current_price: Current asset price.
-            force_cpu: Force CPU processing for error recovery.
-
-        Returns:
-            Adjusted position size.
-        """
-        try:
-            # Determine processing mode
-            if force_cpu or self.processing_mode == ProcessingMode.CPU_FALLBACK:
-                current_mode = ProcessingMode.CPU_FALLBACK
-                self.assessment_stats["cpu_operations"] += 1
-            elif self.processing_mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                current_mode = ProcessingMode.GPU_ACCELERATED
-                self.assessment_stats["gpu_operations"] += 1
-            else:
-                current_mode = ProcessingMode.HYBRID
-                if USING_CUDA:
-                    self.assessment_stats["gpu_operations"] += 1
-                else:
-                    self.assessment_stats["cpu_operations"] += 1
-
-            # Calculate risk-adjusted size
-            risk_multiplier = self._calculate_risk_multiplier_safe(confidence, current_mode)
-            adjusted_size = proposed_size * risk_multiplier
-
-            # Apply position size limits
-            max_size = self.config["position_size_multiplier"]
-            adjusted_size = min(adjusted_size, max_size)
-
-            self.assessment_stats["position_adjustments"] += 1
-            return adjusted_size
-
-        except Exception as e:
-            logger.error(f"Error adjusting position size: {e}")
-            # Return conservative fallback
-            return proposed_size * 0.5
-
-    def _calculate_risk_multiplier_safe(
-        self: "RiskManager", confidence: float, mode: ProcessingMode
-    ) -> float:
-        """Calculate risk multiplier with safe fallback."""
-        try:
-            if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
-                # GPU calculation
-                confidence_array = cp.array([confidence])
-                return float(cp.clip(confidence_array, 0.1, 1.0)[0])
-            else:
-                # CPU calculation
-                return max(0.1, min(1.0, confidence))
-        except Exception as e:
-            logger.warning(f"Risk multiplier calculation failed, using fallback: {e}")
-            self.assessment_stats["fallback_operations"] += 1
-            return 0.5  # Conservative fallback
-
-    def calculate_risk_metrics(self: "RiskManager", trade_data: Dict[str, Any]) -> Dict[str, float]:
-        """Calculate comprehensive risk metrics for trade data."""
-        try:
-            price = trade_data.get("price", 0.0)
-            volume = trade_data.get("volume", 0.0)
-            position_size = trade_data.get("position_size", 0.0)
-            asset = trade_data.get("asset", "unknown")
-
-            metrics = {
-                "price_risk": self._calculate_price_risk_safe(price, volume),
-                "volume_risk": self._calculate_volume_risk_safe(volume),
-                "position_risk": self._calculate_position_risk_safe(position_size),
-                "asset_risk": self._calculate_asset_risk_safe(asset),
-            }
-
-            return metrics
-
-        except Exception as e:
-            logger.error(f"Error calculating risk metrics: {e}")
-            return {
-                "price_risk": 0.5,
-                "volume_risk": 0.5,
-                "position_risk": 0.5,
-                "asset_risk": 0.5,
-            }
-
-    def _calculate_price_risk_safe(self: "RiskManager", price: float, volume: float) -> float:
-        """Calculate price risk with safe fallback."""
-        try:
-            if price <= 0 or volume <= 0:
-                return 0.5
-
-            # Simple price risk calculation
-            price_volatility = min(1.0, volume / (price * 1000))  # Normalize
-            return price_volatility
-        except Exception:
-            return 0.5
-
-    def _calculate_volume_risk_safe(self: "RiskManager", volume: float) -> float:
-        """Calculate volume risk with safe fallback."""
-        try:
-            if volume <= 0:
-                return 0.5
-
-            # Simple volume risk calculation
-            volume_risk = min(1.0, volume / 1000000)  # Normalize to 1M
-            return volume_risk
-        except Exception:
-            return 0.5
-
-    def _calculate_position_risk_safe(self: "RiskManager", position_size: float) -> float:
-        """Calculate position risk with safe fallback."""
-        try:
-            if position_size <= 0:
-                return 0.5
-
-            # Simple position risk calculation
-            position_risk = min(1.0, position_size / 100000)  # Normalize to 100K
+            
+            self.positions[symbol] = position_risk
             return position_risk
-        except Exception:
-            return 0.5
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to assess position risk for {symbol}: {e}")
+            return None
 
-    def _calculate_asset_risk_safe(self: "RiskManager", asset: str) -> float:
-        """Calculate asset-specific risk with safe fallback."""
+    def assess_portfolio_risk(self, portfolio_data: Dict[str, Any]) -> PortfolioRisk:
+        """Assess overall portfolio risk."""
         try:
-            # Simple asset risk mapping
-            asset_risk_map = {
-                "BTC/USD": 0.3,
-                "ETH/USD": 0.4,
-                "USDC/USD": 0.1,
+            if xp is None:
+                raise ValueError("Tensor operations not available")
+            
+            total_value = portfolio_data.get('total_value', 0.0)
+            total_pnl = portfolio_data.get('total_pnl', 0.0)
+            positions_data = portfolio_data.get('positions', [])
+            
+            # Calculate portfolio returns
+            portfolio_returns = xp.array(portfolio_data.get('returns', []))
+            if len(portfolio_returns) == 0:
+                portfolio_returns = xp.zeros(100)  # Default empty portfolio
+            
+            # Calculate portfolio risk metrics
+            risk_metrics = self.calculate_risk_metrics(portfolio_returns)
+            
+            # Determine portfolio risk level
+            risk_level = self._determine_risk_level(risk_metrics)
+            
+            # Calculate correlation and covariance matrices
+            symbols = [pos['symbol'] for pos in positions_data]
+            if len(symbols) > 1:
+                returns_matrix = xp.array([pos.get('returns', []) for pos in positions_data])
+                correlation_matrix = xp.corrcoef(returns_matrix) if returns_matrix.shape[0] > 1 else xp.eye(len(symbols))
+                covariance_matrix = xp.cov(returns_matrix) if returns_matrix.shape[0] > 1 else xp.eye(len(symbols))
+            else:
+                correlation_matrix = xp.eye(len(symbols))
+                covariance_matrix = xp.eye(len(symbols))
+            
+            # Create position risk objects
+            positions = []
+            for pos_data in positions_data:
+                symbol = pos_data['symbol']
+                if symbol in self.positions:
+                    positions.append(self.positions[symbol])
+            
+            portfolio_risk = PortfolioRisk(
+                total_value=total_value,
+                total_pnl=total_pnl,
+                risk_metrics=risk_metrics,
+                risk_level=risk_level,
+                positions=positions,
+                correlation_matrix=correlation_matrix,
+                covariance_matrix=covariance_matrix
+            )
+            
+            self.risk_history.append(portfolio_risk)
+            
+            # Check for circuit breakers
+            self._check_circuit_breakers(portfolio_risk)
+            
+            return portfolio_risk
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to assess portfolio risk: {e}")
+            return None
+
+    def _determine_risk_level(self, risk_metrics: RiskMetric) -> RiskLevel:
+        """Determine risk level based on metrics."""
+        # Simple risk level determination based on VaR
+        var_ratio = abs(risk_metrics.var_95)
+        
+        if var_ratio <= self.alert_thresholds[RiskLevel.LOW]:
+            return RiskLevel.LOW
+        elif var_ratio <= self.alert_thresholds[RiskLevel.MEDIUM]:
+            return RiskLevel.MEDIUM
+        elif var_ratio <= self.alert_thresholds[RiskLevel.HIGH]:
+            return RiskLevel.HIGH
+        else:
+            return RiskLevel.CRITICAL
+
+    def _calculate_max_position_size(self, risk_metrics: RiskMetric, current_value: float) -> float:
+        """Calculate maximum position size based on risk metrics."""
+        # Kelly Criterion inspired position sizing
+        win_rate = 0.5  # Default win rate
+        avg_win = abs(risk_metrics.var_95) * 2  # Assume 2:1 reward/risk
+        avg_loss = abs(risk_metrics.var_95)
+        
+        kelly_fraction = (win_rate * avg_win - (1 - win_rate) * avg_loss) / avg_win
+        kelly_fraction = max(0.0, min(kelly_fraction, 0.25))  # Cap at 25%
+        
+        return current_value * kelly_fraction
+
+    def _check_circuit_breakers(self, portfolio_risk: PortfolioRisk) -> None:
+        """Check and trigger circuit breakers if needed."""
+        if portfolio_risk.risk_level == RiskLevel.CRITICAL:
+            self.circuit_breakers['portfolio'] = True
+            logger.critical("🚨 CRITICAL RISK: Portfolio circuit breaker triggered!")
+            
+        if portfolio_risk.risk_metrics.max_drawdown < -0.20:  # 20% drawdown
+            self.circuit_breakers['drawdown'] = True
+            logger.critical("🚨 DRAWDOWN ALERT: 20% drawdown circuit breaker triggered!")
+
+    def get_risk_summary(self) -> Dict[str, Any]:
+        """Get comprehensive risk summary."""
+        try:
+            if not self.risk_history:
+                return {"error": "No risk history available"}
+            
+            latest_risk = self.risk_history[-1]
+            
+            return {
+                "total_positions": len(latest_risk.positions),
+                "total_value": latest_risk.total_value,
+                "total_pnl": latest_risk.total_pnl,
+                "risk_level": latest_risk.risk_level.value,
+                "var_95": latest_risk.risk_metrics.var_95,
+                "var_99": latest_risk.risk_metrics.var_99,
+                "max_drawdown": latest_risk.risk_metrics.max_drawdown,
+                "sharpe_ratio": latest_risk.risk_metrics.sharpe_ratio,
+                "volatility": latest_risk.risk_metrics.volatility,
+                "circuit_breakers_active": any(self.circuit_breakers.values()),
+                "tensor_confidence": latest_risk.risk_metrics.tensor_confidence
             }
-            return asset_risk_map.get(asset, 0.5)
-        except Exception:
-            return 0.5
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to get risk summary: {e}")
+            return {"error": str(e)}
 
-    def _update_avg_assessment_time(self: "RiskManager", assessment_time: float) -> None:
-        """Update average assessment time."""
-        total_assessments = self.assessment_stats["total_assessments"]
-        current_avg = self.assessment_stats["avg_assessment_time"]
+    def reset_circuit_breakers(self) -> None:
+        """Reset all circuit breakers."""
+        self.circuit_breakers.clear()
+        logger.info("✅ Circuit breakers reset")
 
-        self.assessment_stats["avg_assessment_time"] = (
-            current_avg * (total_assessments - 1) + assessment_time
-        ) / total_assessments
-
-    def get_risk_summary(self: "RiskManager") -> Dict[str, Any]:
-        """Get comprehensive risk management summary."""
-        return {
-            "assessment_stats": self.assessment_stats.copy(),
-            "processing_mode": self.processing_mode.value,
-            "backend": _backend,
-            "error_count": len(self.error_log),
-            "last_assessment_time": self.last_assessment_time,
-            "config": self.config.copy(),
-        }
-
-    def get_error_summary(self: "RiskManager") -> Dict[str, Any]:
-        """Get summary of errors encountered."""
-        error_counts = {}
-        for error in self.error_log:
-            error_type = error.error_type
-            error_counts[error_type] = error_counts.get(error_type, 0) + 1
-
-        return {
-            "total_errors": len(self.error_log),
-            "error_types": error_counts,
-            "fallback_usage": sum(1 for e in self.error_log if e.fallback_used),
-            "recent_errors": self.error_log[-10:],
-        }
-
-    def reset_error_log(self: "RiskManager") -> None:
-        """Reset error log."""
-        self.error_log.clear()
-        logger.info("Risk manager error log reset")
+    def set_risk_tolerance(self, tolerance: float) -> None:
+        """Set risk tolerance level."""
+        self.risk_tolerance = max(0.001, min(tolerance, 0.1))  # Between 0.1% and 10%
+        logger.info(f"🔧 Risk tolerance set to {self.risk_tolerance:.3f}")
 
 
-def create_risk_manager() -> RiskManager:
-    """Create a new risk manager instance."""
-    return RiskManager()
+# Singleton instance for global use
+risk_manager = RiskManager()

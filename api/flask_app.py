@@ -1279,6 +1279,7 @@ Enter parameters and execute trades...
 </html>
 '''
 
+
 # SocketIO Event Handlers
 @socketio.on('connect')
 def handle_connect():
@@ -1286,10 +1287,12 @@ def handle_connect():
     print(f"Client connected: {request.sid}")
     emit('connected', {'status': 'connected', 'message': 'Connected to Schwabot API'})
 
+
 @socketio.on('disconnect')
 def handle_disconnect():
     """Handle client disconnection."""
     print(f"Client disconnected: {request.sid}")
+
 
 @socketio.on('join_room')
 def handle_join_room(data):
@@ -1298,6 +1301,7 @@ def handle_join_room(data):
     join_room(room)
     emit('room_joined', {'room': room, 'message': f'Joined room: {room}'})
 
+
 @socketio.on('leave_room')
 def handle_leave_room(data):
     """Handle client leaving a room."""
@@ -1305,17 +1309,18 @@ def handle_leave_room(data):
     leave_room(room)
     emit('room_left', {'room': room, 'message': f'Left room: {room}'})
 
+
 @socketio.on('subscribe_to_updates')
 def handle_subscribe_to_updates(data):
     """Handle client subscribing to real-time updates."""
     update_types = data.get('types', ['all'])
     room = data.get('room', 'default')
     join_room(room)
-    emit('subscribed', {
-        'types': update_types,
-        'room': room,
-        'message': f'Subscribed to updates: {update_types}'
-    })
+    emit(
+        'subscribed',
+        {'types': update_types, 'room': room, 'message': f'Subscribed to updates: {update_types}'},
+    )
+
 
 # Main route with enhanced real-time dashboard
 @app.route('/')
@@ -2010,6 +2015,7 @@ def dashboard():
     '''
     return dashboard_html
 
+
 @app.route('/api/trading/signal', methods=['POST'])
 def generate_trading_signal():
     """Generate a new trading signal with soulprint registration"""
@@ -2019,11 +2025,11 @@ def generate_trading_signal():
         price = float(data.get('price', 60000))
         volume = float(data.get('volume', 1000000000))
         strategy = data.get('strategy', 'momentum_breakout')
-        
+
         # Create visual execution node
         visual_node = VisualExecutionNode(asset, price)
         result = visual_node.execute()
-        
+
         # Create vector for soulprint registration
         vector = {
             'pair': f'{asset}/USDC',
@@ -2032,31 +2038,28 @@ def generate_trading_signal():
             'volatility': 0.19,
             'temporal_variance': 0.92,
             'volume': volume,
-            'strategy': strategy
+            'strategy': strategy,
         }
-        
+
         # Register soulprint
-        soulprint = soulprint_registry.register_soulprint(
-            vector=vector,
-            strategy_id=strategy,
-            confidence=0.85
-        )
-        
+        soulprint = soulprint_registry.register_soulprint(vector=vector, strategy_id=strategy, confidence=0.85)
+
         # Enhance result with soulprint
         enhanced_result = {
             'signal': result,
             'soulprint': soulprint,
             'vector': vector,
             'timestamp': datetime.now(timezone.utc).isoformat(),
-            'status': 'registered'
+            'status': 'registered',
         }
-        
+
         return jsonify(enhanced_result)
-        
+
     except Exception as e:
         app.logger.error(f"Error generating trading signal: {str(e)}")
         app.logger.error(traceback.format_exc())
         return jsonify({'error': f'Signal generation failed: {str(e)}'}), 500
+
 
 @app.route('/api/registry/stats', methods=['GET'])
 def get_registry_stats():
@@ -2068,31 +2071,35 @@ def get_registry_stats():
         app.logger.error(f"Error getting registry stats: {str(e)}")
         return jsonify({'error': f'Failed to get stats: {str(e)}'}), 500
 
+
 @app.route('/api/registry/replayable', methods=['GET'])
 def get_replayable_signals():
     """Get replayable soulprint signals"""
     try:
         min_confidence = float(request.args.get('min_confidence', 0.8))
         replayable = soulprint_registry.find_replayable(min_confidence=min_confidence)
-        
+
         # Convert to serializable format
         serializable_replayable = []
         for entry in replayable:
-            serializable_replayable.append({
-                'soulprint': entry.soulprint,
-                'timestamp': entry.timestamp,
-                'vector': entry.vector,
-                'strategy_id': entry.strategy_id,
-                'confidence': entry.confidence,
-                'is_executed': entry.is_executed,
-                'profit_result': entry.profit_result,
-                'replayable': entry.replayable
-            })
-        
+            serializable_replayable.append(
+                {
+                    'soulprint': entry.soulprint,
+                    'timestamp': entry.timestamp,
+                    'vector': entry.vector,
+                    'strategy_id': entry.strategy_id,
+                    'confidence': entry.confidence,
+                    'is_executed': entry.is_executed,
+                    'profit_result': entry.profit_result,
+                    'replayable': entry.replayable,
+                }
+            )
+
         return jsonify(serializable_replayable)
     except Exception as e:
         app.logger.error(f"Error getting replayable signals: {str(e)}")
         return jsonify({'error': f'Failed to get replayable signals: {str(e)}'}), 500
+
 
 @app.route('/api/registry/similar', methods=['POST'])
 def find_similar_soulprints():
@@ -2101,38 +2108,44 @@ def find_similar_soulprints():
         data = request.json
         target_vector = data.get('vector', {})
         threshold = float(data.get('threshold', 0.85))
-        
+
         similar = soulprint_registry.get_similar_soulprints(target_vector, threshold)
-        
+
         # Convert to serializable format
         serializable_similar = []
         for entry in similar:
-            serializable_similar.append({
-                'soulprint': entry.soulprint,
-                'timestamp': entry.timestamp,
-                'vector': entry.vector,
-                'strategy_id': entry.strategy_id,
-                'confidence': entry.confidence
-            })
-        
+            serializable_similar.append(
+                {
+                    'soulprint': entry.soulprint,
+                    'timestamp': entry.timestamp,
+                    'vector': entry.vector,
+                    'strategy_id': entry.strategy_id,
+                    'confidence': entry.confidence,
+                }
+            )
+
         return jsonify(serializable_similar)
     except Exception as e:
         app.logger.error(f"Error finding similar soulprints: {str(e)}")
         return jsonify({'error': f'Failed to find similar soulprints: {str(e)}'}), 500
 
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({
-        'status': 'healthy',
-        'timestamp': datetime.now(timezone.utc).isoformat(),
-        'version': '1.0.0',
-        'components': {
-            'soulprint_registry': 'active',
-            'visual_execution_node': 'active',
-            'unified_math_system': 'active'
+    return jsonify(
+        {
+            'status': 'healthy',
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'version': '1.0.0',
+            'components': {
+                'soulprint_registry': 'active',
+                'visual_execution_node': 'active',
+                'unified_math_system': 'active',
+            },
         }
-    })
+    )
+
 
 @app.route("/trade", methods=["POST"])
 def trade():
@@ -2150,19 +2163,24 @@ def trade():
     # Route through strategy core (A2)
     strategy_response = activate_strategy_for_hash(signal_packet["hash"], pair)
 
-    return jsonify({
-        "input": signal_packet["visual_display"],
-        "hash": signal_packet["hash"],
-        "strategy": strategy_response
-    })
+    return jsonify(
+        {
+            "input": signal_packet["visual_display"],
+            "hash": signal_packet["hash"],
+            "strategy": strategy_response,
+        }
+    )
+
 
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Endpoint not found'}), 404
 
+
 @app.errorhandler(500)
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
+
 
 if __name__ == '__main__':
     print("🌀 Starting Schwabot Flask API Server with Real-Time SocketIO...")
@@ -2170,15 +2188,9 @@ if __name__ == '__main__':
     print("🔧 API endpoints available at: http://localhost:5000/api/")
     print("📡 Real-time WebSocket events enabled")
     print("🛑 Press Ctrl+C to stop the server")
-    
+
     # Create data directory if it doesn't exist
     os.makedirs('data', exist_ok=True)
-    
+
     # Run the Flask-SocketIO app with eventlet
-    socketio.run(
-        app,
-        debug=True, 
-        host='0.0.0.0', 
-        port=5000,
-        allow_unsafe_werkzeug=True
-    ) 
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)

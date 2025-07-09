@@ -114,7 +114,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 Zygot-Zalgo Entropy Dual Key Gate
 
-    - Advanced Entropic Gate System.Implements the dual-key entropy gate system that combines Zygot and Zalgo
+- Advanced Entropic Gate System.Implements the dual-key entropy gate system that combines Zygot and Zalgo
 
 
 
@@ -132,15 +132,15 @@ Args:
 
 
 
-            zygot_entropy_threshold: Minimum internal entropy required (0.0 to 1.0).
+zygot_entropy_threshold: Minimum internal entropy required (0.0 to 1.0).
 
 
 
-            zalgo_entropy_threshold: Minimum external entropy required (0.0 to 1.0).
+zalgo_entropy_threshold: Minimum external entropy required (0.0 to 1.0).
 
 
 
-            adaptive_thresholding: If True, thresholds adjust based on system performance.
+adaptive_thresholding: If True, thresholds adjust based on system performance.
 
 
 
@@ -194,18 +194,18 @@ initial_zalgo_key if initial_zalgo_key else self._generate_key()
 
 
 self.metrics: Dict[str, Any] = {
-    "total_evaluations": 0,
-    "gates_opened": 0,
-    "gates_closed": 0,
-    "last_evaluation_time": None,
-    "current_zygot_entropy": 0.0,
-    "current_zalgo_entropy": 0.0,
-    "current_zygot_key_hash": hashlib.sha256(
-        self._zygot_key.encode()
-    ).hexdigest(),
-    "current_zalgo_key_hash": hashlib.sha256(
-        self._zalgo_key.encode()
-    ).hexdigest(),
+"total_evaluations": 0,
+"gates_opened": 0,
+"gates_closed": 0,
+"last_evaluation_time": None,
+"current_zygot_entropy": 0.0,
+"current_zalgo_entropy": 0.0,
+"current_zygot_key_hash": hashlib.sha256(
+self._zygot_key.encode()
+).hexdigest(),
+"current_zalgo_key_hash": hashlib.sha256(
+self._zalgo_key.encode()
+).hexdigest(),
 }
 
 
@@ -214,10 +214,31 @@ self.metrics: Dict[str, Any] = {
 
 
 
-def _generate_key():-> str:
-
-
-
+    def _generate_key(self, data):
+        """Process mathematical data."""
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        return np.mean(data_array)
+        """Process mathematical data."""
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        return np.mean(data_array)
 Generates a random cryptographic key.return secrets.token_hex(length // 2)  # Each byte is 2 hex
 chars
 
@@ -227,10 +248,32 @@ chars
 
 
 
-def _generate_zygot_entropy():-> float:
-
-
-
+    def _generate_zygot_entropy(self, probabilities):
+        """Calculate entropy."""
+        if not isinstance(probabilities, (list, tuple, np.ndarray)):
+            raise ValueError("Probabilities must be array-like")
+        
+        probs = np.array(probabilities)
+        probs = probs[probs > 0]  # Remove zero probabilities
+        if len(probs) == 0:
+            return 0.0
+        
+        return -np.sum(probs * np.log2(probs))
+        """Calculate entropy."""
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        if not isinstance(probabilities, (list, tuple, np.ndarray)):
+            raise ValueError("Probabilities must be array-like")
+        
+        probs = np.array(probabilities)
+        probs = probs[probs > 0]  # Remove zero probabilities
+        if len(probs) == 0:
+            return 0.0
+        
+        return -np.sum(probs * np.log2(probs))
 Generates internal (Zygot) entropy based on system-internal data.
 
 
@@ -248,7 +291,7 @@ entropy_source = f{time.time()}-{internal_data.get('cpu_load',')}
 
 
 
-                                                            0.5)}-{internal_data.get('mem_usage',
+0.5)}-{internal_data.get('mem_usage',
 
 
 
@@ -272,7 +315,7 @@ entropy_source = f{time.time()}-{internal_data.get('cpu_load',')}
 
 
 
-        return int(hashed_entropy[:8], 16) / 0xFFFFFFFF
+return int(hashed_entropy[:8], 16) / 0xFFFFFFFF
 
 
 
@@ -281,14 +324,14 @@ entropy_source = f{time.time()}-{internal_data.get('cpu_load',')}
 
 
 def _generate_zalgo_entropy(self) -> float:
-    """
-    Generates external (Zalgo) entropy based on external market data or APIs.
-    
-    This is a placeholder. Real implementation would involve external API calls.
-    Example: based on market volatility, news sentiment, external API health
-    """
-    # This is a placeholder. Real implementation would involve external API calls.
-    # Example: based on market volatility, news sentiment, external API health
+"""
+Generates external(Zalgo) entropy based on external market data or APIs.
+
+This is a placeholder. Real implementation would involve external API calls.
+Example: based on market volatility, news sentiment, external API health
+"""
+# This is a placeholder. Real implementation would involve external API calls.
+# Example: based on market volatility, news sentiment, external API health
 
 
 
@@ -296,16 +339,37 @@ def _generate_zalgo_entropy(self) -> float:
 
 
 
-def _perform_dual_key_verification():-> bool:
-
-
-
+    def _perform_dual_key_verification(self, data):
+        """Process mathematical data."""
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        return np.mean(data_array)
+        """Process mathematical data."""
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        return np.mean(data_array)
 Performs cryptographic verification using both Zygot and Zalgo keys.
 
 
 
 This is a simplified verification. Real system would use proper HMAC/signatures.combined_hash
-    = hashlib.sha256()
+= hashlib.sha256()
 
 
 
@@ -321,7 +385,7 @@ f{signal_hash}-{zygot_key}-{zalgo_key}.encode()
 
 
 
-        return ()
+return ()
 
 
 
@@ -337,10 +401,31 @@ combined_hash.endswith(abc) or secrets.randbelow(100) < 5
 
 
 
-def _adapt_thresholds():
-
-
-
+    def _adapt_thresholds(self, data):
+        """Process mathematical data."""
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        return np.mean(data_array)
+        """Process mathematical data."""
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        return np.mean(data_array)
 Adapts the entropy thresholds based on system performance feedback.
 
 
@@ -349,47 +434,47 @@ This is a placeholder. Real adaptive logic would be more complex.if not self.ada
 
 
 
-            return  # Example: If recent trades were highly profitable, loosen thresholds slightly
+return  # Example: If recent trades were highly profitable, loosen thresholds slightly
 
 
 
-        # If there were significant losses, tighten thresholds
+# If there were significant losses, tighten thresholds
 
 
 
-        if performance_feedback.get(recent_profit, 0) > 0.5:
+    if performance_feedback.get(recent_profit, 0) > 0.5:
 
 
 
-            self.zygot_entropy_threshold = max(0.1, self.zygot_entropy_threshold - 0.1)
+    self.zygot_entropy_threshold = max(0.1, self.zygot_entropy_threshold - 0.1)
 
 
 
-            self.zalgo_entropy_threshold = max(0.1, self.zalgo_entropy_threshold - 0.1)
+    self.zalgo_entropy_threshold = max(0.1, self.zalgo_entropy_threshold - 0.1)
 
 
 
-        elif performance_feedback.get(recent_loss, 0) > 0.2:
+elif performance_feedback.get(recent_loss, 0) > 0.2:
 
 
 
-            self.zygot_entropy_threshold = min(0.9, self.zygot_entropy_threshold + 0.1)
+self.zygot_entropy_threshold = min(0.9, self.zygot_entropy_threshold + 0.1)
 
 
 
-            self.zalgo_entropy_threshold = min(0.9, self.zalgo_entropy_threshold + 0.1)
+self.zalgo_entropy_threshold = min(0.9, self.zalgo_entropy_threshold + 0.1)
 
 
 
-        # Ensure thresholds stay within reasonable bounds
+# Ensure thresholds stay within reasonable bounds
 
 
 
-        self.zygot_entropy_threshold = np.clip(self.zygot_entropy_threshold, 0.1, 0.9)
+self.zygot_entropy_threshold = np.clip(self.zygot_entropy_threshold, 0.1, 0.9)
 
 
 
-        self.zalgo_entropy_threshold = np.clip(self.zalgo_entropy_threshold, 0.1, 0.9)
+self.zalgo_entropy_threshold = np.clip(self.zalgo_entropy_threshold, 0.1, 0.9)
 
 
 
@@ -413,7 +498,7 @@ Args:
 
 
 
-            trade_signal_data: Data related to the trade signal (e.g., predicted direction, size).
+trade_signal_data: Data related to the trade signal (e.g., predicted direction, size).
 
 
 
@@ -466,12 +551,12 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-        zalgo_entropy = self._generate_zalgo_entropy(external_api_data)
+zalgo_entropy = self._generate_zalgo_entropy(external_api_data)
 
 
 
-        self.metrics[current_zygot_entropy] = zygot_entropyself.metrics[current_zalgo_entropy]
-    = zalgo_entropy
+self.metrics[current_zygot_entropy] = zygot_entropyself.metrics[current_zalgo_entropy]
+= zalgo_entropy
 
 
 
@@ -483,11 +568,11 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-        if self.adaptive_thresholding and performance_feedback:
+    if self.adaptive_thresholding and performance_feedback:
 
 
 
-            self._adapt_thresholds(performance_feedback)
+    self._adapt_thresholds(performance_feedback)
 
 
 
@@ -495,7 +580,27 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-# Step 3: Entropy Threshold Check
+    # Step 3: Entropy Threshold Check
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Mathematical calculation implementation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Convert inputs to numpy arrays for vectorized operations
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
 
 
 
@@ -503,7 +608,7 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-            self.metrics[gates_closed] += 1
+        self.metrics[gates_closed] += 1
 
 
 
@@ -515,7 +620,7 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-if zalgo_entropy < self.zalgo_entropy_threshold:
+            if zalgo_entropy < self.zalgo_entropy_threshold:
 
 
 
@@ -523,7 +628,7 @@ if zalgo_entropy < self.zalgo_entropy_threshold:
 
 
 
-        return {2} < {3}),}
+            return {2} < {3}),}
 
 
 
@@ -531,23 +636,23 @@ if zalgo_entropy < self.zalgo_entropy_threshold:
 
 
 
-# Step 4: Dual-Key Verif ication
+            # Step 4: Dual-Key Verif ication
 
 
 
-signal_hash_input = str(trade_signal_data)
+            signal_hash_input = str(trade_signal_data)
 
 
 
-        if isinstance(trade_signal_data.get(signal_id), str):
+                if isinstance(trade_signal_data.get(signal_id), str):
 
 
 
-            signal_hash_input = trade_signal_data[signal_id]
+                signal_hash_input = trade_signal_data[signal_id]
 
 
 
-else:
+            else:
 
 
 
@@ -559,27 +664,11 @@ else:
 
 
 
-                str(trade_signal_data).encode()
+            str(trade_signal_data).encode()
 
 
 
-).hexdigest()
-
-
-
-
-
-
-
-is_verified = self._perform_dual_key_verification()
-
-
-
-signal_hash_input, self._zygot_key, self._zalgo_key
-
-
-
-)
+            ).hexdigest()
 
 
 
@@ -587,15 +676,31 @@ signal_hash_input, self._zygot_key, self._zalgo_key
 
 
 
-if not is_verified:
+            is_verified = self._perform_dual_key_verification()
 
 
 
-self.metrics[gates_closed] += 1return {4}
+            signal_hash_input, self._zygot_key, self._zalgo_key
 
 
 
-self.metrics[gates_opened] += 1return {5}
+            )
+
+
+
+
+
+
+
+                if not is_verified:
+
+
+
+                self.metrics[gates_closed] += 1return {4}
+
+
+
+                self.metrics[gates_opened] += 1return {5}
 
 
 
@@ -652,7 +757,7 @@ print(Zygot and Zalgo keys rotated.)
 
 
 
-if __name__ == __main__:
+    if __name__ == __main__:
 
 
 
@@ -664,23 +769,23 @@ if __name__ == __main__:
 
 
 
-gate = ZygotZalgoEntropyDualKeyGate()
+    gate = ZygotZalgoEntropyDualKeyGate()
 
 
 
-        zygot_entropy_threshold=0.6,
+    zygot_entropy_threshold=0.6,
 
 
 
-        zalgo_entropy_threshold=0.6,
+    zalgo_entropy_threshold=0.6,
 
 
 
-        adaptive_thresholding=True,
+    adaptive_thresholding=True,
 
 
 
-)
+    )
 
 
 
@@ -688,135 +793,135 @@ gate = ZygotZalgoEntropyDualKeyGate()
 
 
 
-# Simulate data
+    # Simulate data
 
 
 
-trade_signal = {signal_id:trade_123,direction:buy".format(zygot_entropy),size": 10,confidence": 0.8,"}
+    trade_signal = {signal_id:trade_123,direction:buy".format(zygot_entropy),size": 10,confidence": 0.8,"}
 
 
 
-}internal_data = {cpu_load: 0.4,mem_usage: 0.6,data_checksum:abc123def456}
+    }internal_data = {cpu_load: 0.4,mem_usage: 0.6,data_checksum:abc123def456}
 
 
 
-external_data = {market_volatility: 0.7,news_sentiment": 0.9,api_latency": 0.5,}
+    external_data = {market_volatility: 0.7,news_sentiment": 0.9,api_latency": 0.5,}
 
 
 
-}performance_good = {recent_profit: 0.8,recent_loss: 0.0}performance_bad
+    }performance_good = {recent_profit: 0.8,recent_loss: 0.0}performance_bad
     = {recent_profit: 0.1,recent_loss: 0.5}
 
 
 
-print(\n--- Test Case 1: All conditions met (expected to, pass) ---)
+    print(\n--- Test Case 1: All conditions met (expected to, pass) ---)
 
 
 
-result1 = gate.evaluate_gate()
+    result1 = gate.evaluate_gate()
 
 
 
-trade_signal, internal_data, external_data, performance_good
+    trade_signal, internal_data, external_data, performance_good
 
 
 
-)
+    )
 
 
 
-print(fGate Result: {result1})print(fMetrics: {gate.get_metrics()})
+    print(fGate Result: {result1})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 2: Low Zygot Entropy (expected to, fail) ---)low_zygot_data
+    print(\n--- Test Case 2: Low Zygot Entropy (expected to, fail) ---)low_zygot_data
     = {cpu_load: 0.9,mem_usage: 0.9,data_checksum:error}
 
 
 
-result2 = gate.evaluate_gate(trade_signal, low_zygot_data, external_data)
+    result2 = gate.evaluate_gate(trade_signal, low_zygot_data, external_data)
 
 
 
-print(fGate Result: {result2})print(fMetrics: {gate.get_metrics()})
+    print(fGate Result: {result2})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 3: Low Zalgo Entropy (expected to, fail) ---)
+    print(\n--- Test Case 3: Low Zalgo Entropy (expected to, fail) ---)
 
 
 
-low_zalgo_data = {market_volatility: 0.9,news_sentiment": 0.1,api_latency": 0.5,}
+    low_zalgo_data = {market_volatility: 0.9,news_sentiment": 0.1,api_latency": 0.5,}
 
 
 
-}
+    }
 
 
 
-result3 = gate.evaluate_gate(trade_signal, internal_data, low_zalgo_data)
+    result3 = gate.evaluate_gate(trade_signal, internal_data, low_zalgo_data)
 
 
 
-print(fGate Result: {result3})print(fMetrics: {gate.get_metrics()})
+    print(fGate Result: {result3})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 4: Adaptive Thresholding (with bad, performance) ---)print("Initial Zygot")
-Threshold: {0})print(fInitial Zalgo Threshold:
-{1})
+    print(\n--- Test Case 4: Adaptive Thresholding (with bad, performance) ---)print("Initial Zygot")
+    Threshold: {0})print(fInitial Zalgo Threshold:
+    {1})
 
 
 
-result4 = gate.evaluate_gate()
+    result4 = gate.evaluate_gate()
 
 
 
-trade_signal, internal_data, external_data, performance_bad
+    trade_signal, internal_data, external_data, performance_bad
 
 
 
-)
+    )
 
 
 
-print(fGate Result: {2})print(fNew Zygot Threshold:)
-{0})print(fNew Zalgo Threshold:
-{1})print(fMetrics: {5})
+    print(fGate Result: {2})print(fNew Zygot Threshold:)
+    {0})print(fNew Zalgo Threshold:
+    {1})print(fMetrics: {5})
 
 
 
-print(\n--- Test Case 5: Key Rotation ---)initial_zygot_hash
+    print(\n--- Test Case 5: Key Rotation ---)initial_zygot_hash
     = gate.get_metrics()[current_zygot_key_hash]initial_zalgo_hash
     = gate.get_metrics()[current_zalgo_key_hash]
 
 
 
-gate.rotate_keys()
+    gate.rotate_keys()
 
 
 
-print(f"Old Zygot Key Hash: {initial_zygot_hash[:8]}...")
+    print(f"Old Zygot Key Hash: {initial_zygot_hash[:8]}...")
     print(f"New Zygot Key Hash: {gate.get_metrics()['current_zygot_key_hash'][:8]}...")
     print(f"Old Zalgo Key Hash: {initial_zalgo_hash[:8]}...")
     print(f"New Zalgo Key Hash: {gate.get_metrics()['current_zalgo_key_hash'][:8]}...")
 
 
 
-result5 = gate.evaluate_gate()
+    result5 = gate.evaluate_gate()
 
 
 
-trade_signal, internal_data, external_data, performance_good
+    trade_signal, internal_data, external_data, performance_good
 
 
 
-)
+    )
 
 
 
-print(fGate Result after key rotation: {result5})"'"'
+    print(fGate Result after key rotation: {result5})"'"'
 
 
 
-"""
+    """

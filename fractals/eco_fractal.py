@@ -19,9 +19,7 @@ class EcoFractal(FractalBase):
         E_n(x) = Integral(Phi(x,theta) * psi_n(theta) d(theta))
         """
         # Simulating the integral as a sum over a range for discrete application
-        response = sum(
-            phi_fn(theta) * self.sensitivity_kernel(theta) for theta in theta_range
-        )
+        response = sum(phi_fn(theta) * self.sensitivity_kernel(theta) for theta in theta_range)
         return response
 
     def update_memory(
@@ -48,9 +46,7 @@ class EcoFractal(FractalBase):
         # will be used by the FractalController to update the ForeverFractal.
 
         # Ensure eco_factor remains reasonable, e.g., for modulation it might be between -1 and 1 or 0 and 2.
-        self.eco_factor = np.clip(
-            self.eco_factor, -1.0, 1.0
-        )  # Assuming it's a modulator
+        self.eco_factor = np.clip(self.eco_factor, -1.0, 1.0)  # Assuming it's a modulator
 
         # Update own entropy and coherence based on environmental response (simplified)
         self.entropy_anchor = self.compute_entropy([self.eco_factor])

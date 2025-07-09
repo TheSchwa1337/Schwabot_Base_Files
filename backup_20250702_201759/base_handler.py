@@ -61,13 +61,13 @@ class BaseAPIHandler(ABC):
                 logger.error("%s: refresh failed - %s", self.NAME, exc, exc_info=True)
                 # Fallback to cached data if available
                 return await self._read_cache()
-        return await self._read_cache() # Return cached data if no refresh needed
+        return await self._read_cache()  # Return cached data if no refresh needed
 
     # Abstract methods --------------------------------------------------------------
     @abstractmethod
     async def _fetch_raw(self) -> Any:  # pragma: no cover – implemented by subclass
         """Fetch raw data from the remote API (network call)."""
-        pass # Must be implemented by subclass
+        pass  # Must be implemented by subclass
 
     async def _parse_raw(self, raw: Any) -> Dict[str, Any]:
         """Transform raw payload into a normalised JSON-serialisable dict.

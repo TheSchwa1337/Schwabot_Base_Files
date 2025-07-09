@@ -22,7 +22,7 @@ that prevent the Schwabot system from running properly.
 
 
 
-Original file: core\\strategy\flip_switch_logic_lattice.py
+Original file: core//strategy/flip_switch_logic_lattice.py
 
 
 
@@ -140,7 +140,7 @@ self.active_strategy_id: str = default_strategy_id
 self.metrics: Dict[str, Any]
 
 
-    {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},}
+{total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},}
 
 
 
@@ -194,11 +194,11 @@ Args:
 
 
 
-            strategy_id: A unique identifier for the strategy.
+strategy_id: A unique identifier for the strategy.
 
 
 
-            strategy_func: The callable function representing the strategy logic.
+strategy_func: The callable function representing the strategy logic.
 
 
 
@@ -206,12 +206,12 @@ It should accept a dict (input, data) and return a dict (result).if not callable
 
 
 
-            raise ValueError(fStrategy function for '{strategy_id}' must be callable.)
+raise ValueError(fStrategy function for '{strategy_id}' must be callable.)
 
 
 
-        self.strategies[strategy_id]
-    = strategy_funcself.metrics[strategy_activations][strategy_id] = 0
+self.strategies[strategy_id]
+= strategy_funcself.metrics[strategy_activations][strategy_id] = 0
 
 
 
@@ -231,7 +231,7 @@ Args:
 
 
 
-            condition_func: A callable that takes input data (dict) and returns a boolean.
+condition_func: A callable that takes input data (dict) and returns a boolean.
 
 
 
@@ -247,7 +247,7 @@ description: Optional description of the condition.if target_strategy_id not in 
 
 
 
-            raise ValueError('"Target strategy ID '{0}' is not registered.')
+raise ValueError('"Target strategy ID '{0}' is not registered.')
 
 
 
@@ -255,11 +255,11 @@ description: Optional description of the condition.if target_strategy_id not in 
 
 
 
-if not callable(condition_func):
+    if not callable(condition_func):
 
 
 
-            raise ValueError(Condition function must be callable.)
+    raise ValueError(Condition function must be callable.)
 
 
 
@@ -267,28 +267,28 @@ if not callable(condition_func):
 
 
 
-self.switch_conditions.append()
+    self.switch_conditions.append()
 
 
 
-{condition_func: condition_func,target_strategy_id: target_strategy_id,priority":"}
-priority,description": description or f"Switch to {0},"
+    {condition_func: condition_func,target_strategy_id: target_strategy_id,priority":"}
+    priority,description": description or f"Switch to {0},"
 
 
 
-}
+    }
 
 
 
-)
+    )
 
 
 
-# Sort conditions by priority(descending)
+    # Sort conditions by priority(descending)
 
 
 
-self.switch_conditions.sort(key = lambda x: x[priority], reverse = True)
+    self.switch_conditions.sort(key = lambda x: x[priority], reverse = True)
 
 
 
@@ -312,7 +312,7 @@ Args:
 
 
 
-            data: The input data for strategy evaluation and execution.
+data: The input data for strategy evaluation and execution.
 
 
 
@@ -324,7 +324,7 @@ Returns:
 
 
 
-            The result of the executed strategy.self.metrics[total_evaluations] += 1
+The result of the executed strategy.self.metrics[total_evaluations] += 1
 
 
 
@@ -344,27 +344,27 @@ next_strategy_id = self.default_strategy_id
 
 
 
-for condition in self.switch_conditions:
+    for condition in self.switch_conditions:
 
 
 
-            try:
+        try:
 
 
 
-                if condition[condition_func](data):
+            if condition[condition_func](data):
 
 
 
-                    next_strategy_id = condition[target_strategy_id]
+            next_strategy_id = condition[target_strategy_id]
 
 
 
-break  # Found a matching condition, use this strategy
+            break  # Found a matching condition, use this strategy
 
 
 
-        except Exception as e:
+                except Exception as e:
 
 
 
@@ -372,15 +372,15 @@ break  # Found a matching condition, use this strategy
 
 
 
-fError evaluating condition '{2}': {3}'
+                fError evaluating condition '{2}': {3}'
 
 
 
-)
+                )
 
 
 
-# Continue to next condition or fallback
+                # Continue to next condition or fallback
 
 
 
@@ -388,24 +388,24 @@ fError evaluating condition '{2}': {3}'
 
 
 
-# Switch if necessary
+                # Switch if necessary
 
 
 
-if next_strategy_id != self.active_strategy_id:
+                    if next_strategy_id != self.active_strategy_id:
 
 
 
-            print()
+                    print()
 
 
 
-fSwitching from {4} to {5})self.metrics[total_switches]
-    += 1self.metrics[last_switch_time] = time.time()
+                    fSwitching from {4} to {5})self.metrics[total_switches]
+                    += 1self.metrics[last_switch_time] = time.time()
 
 
 
-self.active_strategy_id = next_strategy_id
+                    self.active_strategy_id = next_strategy_id
 
 
 
@@ -413,12 +413,12 @@ self.active_strategy_id = next_strategy_id
 
 
 
-self.metrics[strategy_activations][self.active_strategy_id]
-    = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1)
+                    self.metrics[strategy_activations][self.active_strategy_id]
+                    = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1)
 
 
 
-)
+                    )
 
 
 
@@ -426,44 +426,44 @@ self.metrics[strategy_activations][self.active_strategy_id]
 
 
 
-# Execute the active strategy
+                    # Execute the active strategy
 
 
 
-        strategy_func = self.strategies.get(self.active_strategy_id)
+                    strategy_func = self.strategies.get(self.active_strategy_id)
 
 
 
-        if strategy_func is None:
+                        if strategy_func is None:
 
 
 
-            print('')
+                        print('')
 
 
 
-fError: Active strategy '{6}' not found. Falling back to default.'
+                        fError: Active strategy '{6}' not found. Falling back to default.'
 
 
 
-)
+                        )
 
 
 
-strategy_func = self.strategies[self.default_strategy_id]
+                        strategy_func = self.strategies[self.default_strategy_id]
 
 
 
-            self.active_strategy_id = self.default_strategy_id  # Reset to default
+                        self.active_strategy_id = self.default_strategy_id  # Reset to default
 
 
 
-            self.metrics[strategy_activations][self.active_strategy_id]
-    = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1)
+                        self.metrics[strategy_activations][self.active_strategy_id]
+                        = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1)
 
 
 
-)
+                        )
 
 
 
@@ -471,32 +471,34 @@ strategy_func = self.strategies[self.default_strategy_id]
 
 
 
-try: result = strategy_func(data)
+                            try: result = strategy_func(data)
 
 
 
-            result[active_strategy_after_eval] = self.active_strategy_id
+                            result[active_strategy_after_eval] = self.active_strategy_id
 
 
 
-        return result
+                            return result
 
 
 
-        except Exception as e:'
+                                except Exception as e:'
 
 
 
-            print(fError executing strategy '{4}': {3})
+                                print(fError executing strategy '{4}': {3})
 
 
 
-        return {status:error,message: str(e),executed_strategy".format(target_strategy_id, condition_func: condition_func,target_strategy_id: target_strategy_id,priority":)}
-priority,description": description or f"Switch to {target_strategy_id, 'condition[description], e, self.active_strategy_id, next_strategy_id, 'self.active_strategy_id, self.active_strategy_id, e): self.active_strategy_id,"}
+                                return {status:error,message: str(e),executed_strategy".format(target_strategy_id, condition_func: condition_func,target_strategy_id: target_strategy_id,priority":)}
+                                priority,description": description or f"Switch to {target_strategy_id, 'condition[description], e, self.active_strategy_id, next_strategy_id"
+    "
+    , 'self.active_strategy_id, self.active_strategy_id, e): self.active_strategy_id,"}
 
 
 
-}
+                                }
 
 
 
@@ -526,7 +528,7 @@ self.active_strategy_id
 
 
 
-if __name__ == __main__:
+    if __name__ == __main__:
 
 
 
@@ -538,7 +540,7 @@ if __name__ == __main__:
 
 
 
-lattice = FlipSwitchLogicLattice()
+    lattice = FlipSwitchLogicLattice()
 
 
 
@@ -546,7 +548,7 @@ lattice = FlipSwitchLogicLattice()
 
 
 
-# Define some dummy strategies
+    # Define some dummy strategies
 
 
 
@@ -554,11 +556,11 @@ def strategy_a():-> Dict[str, Any]:'
 
 
 
-        print(fExecuting Strategy A with data: {data.get('value')})
+print(fExecuting Strategy A with data: {data.get('value')})
 
 
 
-        return {strategy:A,processed_value: data.get(value, 0) * 2}
+return {strategy:A,processed_value: data.get(value, 0) * 2}
 
 
 
@@ -570,7 +572,7 @@ def strategy_b():-> Dict[str, Any]:'print("Executing Strategy B with data: {0})'
 
 
 
-        return {1}
+return {1}
 
 
 
@@ -578,12 +580,14 @@ def strategy_b():-> Dict[str, Any]:'print("Executing Strategy B with data: {0})'
 
 
 
-def strategy_c():-> Dict[str, Any]:'print(f".format(data.get('value'), strategy:B,processed_value: data.get(value", 0)'))
-    2)Executing Strategy C with data: {data.get('value')})
+def strategy_c():-> Dict[str, Any]:'print(f".format(data.get('value'), strategy:B,processed_value: data.get(value", 0)'))""
+    
+    
+2)Executing Strategy C with data: {data.get('value')})
 
 
 
-        return {strategy:C,processed_value: data.get(value", 0) + 10}"
+return {strategy:C,processed_value: data.get(value", 0) + 10}"
 
 
 
@@ -668,7 +672,7 @@ description=Value < 50","
 
 
 
-print(\n--- Test Case 1: Value = 120(should trigger, strat_A) ---)
+print(/n--- Test Case 1: Value = 120(should trigger, strat_A) ---)
 
 
 
@@ -680,7 +684,7 @@ print(fResult: {result1})print(fActive Strategy: {lattice.get_active_strategy_id
 
 
 
-print(\n--- Test Case 2: Value = 75(should trigger, strat_B) ---)
+print(/n--- Test Case 2: Value = 75(should trigger, strat_B) ---)
 
 
 
@@ -692,7 +696,7 @@ print(fResult: {result2})print(fActive Strategy: {lattice.get_active_strategy_id
 
 
 
-print(\n--- Test Case 3: Value = 20(should trigger, strat_C) ---)
+print(/n--- Test Case 3: Value = 20(should trigger, strat_C) ---)
 
 
 
@@ -704,7 +708,7 @@ print(fResult: {result3})print(fActive Strategy: {lattice.get_active_strategy_id
 
 
 
-print(\n--- Test Case 4: Value = 150(should trigger strat_A, again) ---)
+print(/n--- Test Case 4: Value = 150(should trigger strat_A, again) ---)
 
 
 
@@ -716,7 +720,7 @@ print(fResult: {result4})print(fActive Strategy: {lattice.get_active_strategy_id
 
 
 
-print(\n--- Test Case 5: No condition met (should use, default) ---)
+print(/n--- Test Case 5: No condition met (should use, default) ---)
 
 
 
@@ -752,7 +756,7 @@ lattice.switch_conditions = initial_conditions  # Restore conditions
 
 
 
-print(\n--- Metrics ---)
+print(/n--- Metrics ---)
 
 
 
@@ -760,12 +764,12 @@ metrics = lattice.get_metrics()
 
 
 
-for k, v in metrics.items():
+    for k, v in metrics.items():
 
 
 
-        print(f{k}: {v})'"'
+    print(f{k}: {v})'"'
 
 
 
-"""
+    """

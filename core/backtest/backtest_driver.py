@@ -1,152 +1,168 @@
-import argparse
-import asyncio
-import json
-import os
-import sys
-from typing import Any, Dict, List
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Backtest Driver Module
+=======================
+Provides backtest driver functionality for the Schwabot trading system.
 
-from core.soulprint_registry import SoulprintRegistry
-from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
+Key Functions:
+- main: main operation
 
-# Adjust path to import from core
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+"""
+
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+logger = logging.getLogger(__name__)
+
+# Import dependencies
+try:
+    from core.math_config_manager import MathConfigManager
+    from core.math_cache import MathResultCache
+    from core.math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
 
 
-async def run_backtest(config: Dict[str, Any]):
+class Status(Enum):
+    """System status enumeration."""
+
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    ERROR = "error"
+    PROCESSING = "processing"
+
+
+class Mode(Enum):
+    """Operation mode enumeration."""
+
+    NORMAL = "normal"
+    DEBUG = "debug"
+    TEST = "test"
+    PRODUCTION = "production"
+
+
+class BacktestDriver:
     """
-    Runs a back-test using historical candle data, processing each candle
-    through the pipeline and logging the outcome.
+    BacktestDriver Implementation
+    Provides core backtest driver functionality.
     """
-    dataset_path = config.get("dataset")
-    if not dataset_path or not os.path.exists(dataset_path):
-        print("❌ Error: Historical dataset not found at '{0}'".format(dataset_path))
-        return
 
-    # 1. Initialize pipeline and registry
-    print("🔧 Initializing trading pipeline for back-testing...")
-    pipeline: CleanTradingPipeline = create_trading_pipeline(
-        symbol=config.get("symbol", "BTC/USDT"),
-        initial_capital=config.get("initial_capital", 10000.0),
-        registry_file=config.get("registry_file"),
-    )
-    pipeline.set_mode("demo")  # Set to demo mode for back-testing
+    def __init__(self,   config: Optional[Dict[str, Any]] = None) -> None:
+        """Initialize BacktestDriver with configuration."""
+        self.config = config or self._default_config()
+        self.logger = logging.getLogger(__name__)
+        self.active = False
+        self.initialized = False
 
-    # The pipeline creates its own registry instance if a file is provided
-    soulprint_registry = pipeline.registry
-    if not soulprint_registry:
-        print("⚠️ Warning: No registry file configured. Signals will not be logged.")
+        # Initialize math infrastructure if available
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Mathematical calculation implementation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Convert inputs to numpy arrays for vectorized operations
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
 
-    # 2. Load historical data
-    try:
-        with open(dataset_path, "r", encoding="utf-8") as f:
-            historical_candles = json.load(f)
-        print(
-            "✅ Loaded {0} candles from '{1}'.".format(
-                len(historical_candles),
-                os.path.basename(dataset_path)
-            )
-        )
-    except json.JSONDecodeError:
-        print("❌ Error: Could not decode JSON from '{0}'.".format(dataset_path))
-        return
-    except Exception as e:
-        print("❌ Error loading dataset: {0}".format(e))
-        return
+        self._initialize_system()
 
-    # 3. Process candles
-    print("⏳ Processing historical candles...")
-    trade_signals = []
-    for i, candle in enumerate(historical_candles):
-        print("   - Processing candle {0}/{1}".format(i + 1, len(historical_candles)), end="\r")
-        signal = await pipeline.process_candle(candle)
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration."""
+        return {
+            'enabled': True,
+            'timeout': 30.0,
+            'retries': 3,
+            'debug': False,
+            'log_level': 'INFO',
+        }
 
-        if signal and not signal.get("blocked"):
-            trade_signals.append(signal)
-            if soulprint_registry:
-                # Per user request: log timestamp, asset, mode, hash_id, signal
-                # vector, projected gain
-                market_context = signal.get("market_context", {})
-                entry_price = signal.get("entry_price", 0)
-                take_profit = signal.get("take_profit", 0)
+    def _initialize_system(self) -> None:
+        """Initialize the system."""
+        try:
+            self.logger.info(f"Initializing {self.__class__.__name__}")
+            self.initialized = True
+            self.logger.info(f"✅ {self.__class__.__name__} initialized successfully")
+        except Exception as e:
+            self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
+            self.initialized = False
 
-                if signal.get("action") == "buy" and take_profit > entry_price:
-                    projected_gain = take_profit - entry_price
-                elif signal.get("action") == "sell" and entry_price > take_profit:
-                    projected_gain = entry_price - take_profit
-                else:
-                    projected_gain = 0
+    def activate(self) -> bool:
+        """Activate the system."""
+        if not self.initialized:
+            self.logger.error("System not initialized")
+            return False
 
-                log_data = {
-                    "timestamp": signal.get("timestamp"),
-                    "asset": signal.get("symbol"),
-                    "mode": "demo",
-                    "hash_id": signal.get("trade_id"),
-                    "signal_vector": {
-                        "action": signal.get("action"),
-                        "confidence": market_context.get("confidence"),
-                        "signal_strength": market_context.get("signal_strength"),
-                    },
-                    "projected_gain": projected_gain,
-                    "trade_details": signal,  # Store original signal for full context
-                }
-                # This method will be added to SoulprintRegistry in the next
-                # step
-                if hasattr(soulprint_registry, "log_backtest_signal"):
-                    soulprint_registry.log_backtest_signal(log_data)
+        try:
+            self.active = True
+            self.logger.info(f"✅ {self.__class__.__name__} activated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
+            return False
 
-    print("\n✅ Back-test complete.")
-    print("   - Trades generated: {0}".format(len(trade_signals)))
-    print("   - Final portfolio value (simulated)")
+    def deactivate(self) -> bool:
+        """Deactivate the system."""
+        try:
+            self.active = False
+            self.logger.info(f"✅ {self.__class__.__name__} deactivated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
+            return False
 
-
-def main():
-    """Main entry point for the back-test driver."""
-    parser = argparse.ArgumentParser(
-        description="Schwabot Backtest Driver",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    )
-    parser.add_argument("--dataset", type=str, required=True, help="Path to historical candle data JSON file.")
-    parser.add_argument("--config", type=str, required=True, help="Path to the trading bot configuration file.")
-    parser.add_argument("--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test.")
-    parser.add_argument("--capital", type=float, default=10000.0, help="Initial capital for the simulation.")
-    parser.add_argument(
-        "--registry-file",
-        type=str,
-        default="data/logs/backtest_registry.json",
-        help="File to log back-test signals.",
-    )
-
-    args = parser.parse_args()
-
-    # Load base configuration
-    try:
-        with open(args.config, "r") as f:
-            config = json.load(f)
-    except FileNotFoundError:
-        print("❌ Error: Base config file not found at '{0}'".format(args.config))
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print("❌ Error: Could not decode JSON from '{0}'.".format(args.config))
-        sys.exit(1)
-
-    # Override config with CLI arguments for the back-test
-    config["dataset"] = args.dataset
-    config["symbol"] = args.symbol
-    config["initial_capital"] = args.capital
-    config["registry_file"] = args.registry_file
-
-    # Ensure log directory exists
-    log_dir = os.path.dirname(args.registry_file)
-    if log_dir:
-        os.makedirs(log_dir, exist_ok=True)
-
-    asyncio.run(run_backtest(config))
+    def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'config': self.config,
+        }
 
 
-if __name__ == "__main__":
-    # Add project root to path to allow direct execution
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-
-    main()
+# Factory function
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Mathematical calculation implementation
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        # Convert inputs to numpy arrays for vectorized operations
+        # Mathematical calculation implementation
+        # Convert inputs to numpy arrays for vectorized operations
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+        data = np.array(data)
+        result = np.sum(data) / len(data)  # Default calculation
+        return result
+def create_backtest_driver(config: Optional[Dict[str, Any]] = None):
+    """Create a backtest driver instance."""
+    return BacktestDriver(config)

@@ -121,9 +121,7 @@ class HashRecollectionAPI:
                     "data_points": len(request.price_data),
                 }
                 if request.include_entropy:
-                    entropy_metrics = self.entropy_tracker.calculate_entropy(
-                        request.price_data
-                    )
+                    entropy_metrics = self.entropy_tracker.calculate_entropy(request.price_data)
                     result["entropy"] = {
                         "entropy_value": entropy_metrics.entropy_value,
                         "state": entropy_metrics.state.value,
@@ -135,13 +133,10 @@ class HashRecollectionAPI:
                 if request.include_bit_ops:
                     # Create bit sequence from price data
                     normalized_prices = [
-                        (p - min(request.price_data))
-                        / (max(request.price_data) - min(request.price_data))
+                        (p - min(request.price_data)) / (max(request.price_data) - min(request.price_data))
                         for p in request.price_data
                     ]
-                    bit_sequence = self.bit_operations.create_bit_sequence(
-                        normalized_prices
-                    )
+                    bit_sequence = self.bit_operations.create_bit_sequence(normalized_prices)
                     patterns = self.bit_operations.detect_patterns(bit_sequence.bits)
 
                     result["bit_operations"] = {
@@ -190,9 +185,7 @@ class HashRecollectionAPI:
             """Generate trading signal based on all analyses."""
             try:
                 # Get entropy signal
-                entropy_signal = self.entropy_tracker.generate_signal(
-                    request.price_data
-                )
+                entropy_signal = self.entropy_tracker.generate_signal(request.price_data)
 
                 # Analyze patterns
                 trend = self.pattern_utils.analyze_trend(request.price_data)
@@ -200,13 +193,10 @@ class HashRecollectionAPI:
 
                 # Create bit sequence
                 normalized_prices = [
-                    (p - min(request.price_data))
-                    / (max(request.price_data) - min(request.price_data))
+                    (p - min(request.price_data)) / (max(request.price_data) - min(request.price_data))
                     for p in request.price_data
                 ]
-                bit_sequence = self.bit_operations.create_bit_sequence(
-                    normalized_prices
-                )
+                bit_sequence = self.bit_operations.create_bit_sequence(normalized_prices)
                 bit_patterns = self.bit_operations.detect_patterns(bit_sequence.bits)
 
                 # Combine signals
@@ -215,10 +205,7 @@ class HashRecollectionAPI:
                 confidence = 0.0
 
                 # Entropy contribution
-                if (
-                    entropy_signal
-                    and entropy_signal.confidence >= request.confidence_threshold
-                ):
+                if entropy_signal and entropy_signal.confidence >= request.confidence_threshold:
                     if entropy_signal.signal_type == "buy":
                         signal_strength += entropy_signal.strength * 0.4
                     elif entropy_signal.signal_type == "sell":
@@ -235,9 +222,7 @@ class HashRecollectionAPI:
 
                 # Bit pattern contribution
                 if bit_patterns:
-                    avg_confidence = sum(p.confidence for p in bit_patterns) / len(
-                        bit_patterns
-                    )
+                    avg_confidence = sum(p.confidence for p in bit_patterns) / len(bit_patterns)
                     confidence += avg_confidence * 0.3
 
                 # Determine final signal
@@ -258,15 +243,9 @@ class HashRecollectionAPI:
                     },
                     "analysis": {
                         "entropy_signal": {
-                            "type": (
-                                entropy_signal.signal_type if entropy_signal else "none"
-                            ),
-                            "strength": (
-                                entropy_signal.strength if entropy_signal else 0.0
-                            ),
-                            "confidence": (
-                                entropy_signal.confidence if entropy_signal else 0.0
-                            ),
+                            "type": (entropy_signal.signal_type if entropy_signal else "none"),
+                            "strength": (entropy_signal.strength if entropy_signal else 0.0),
+                            "confidence": (entropy_signal.confidence if entropy_signal else 0.0),
                         },
                         "trend": {
                             "direction": trend.trend_direction,

@@ -342,3 +342,47 @@ advanced:
   # Social media sentiment
   enable_social_sentiment: false
   social_sentiment_weight: 0.05 
+
+trading_system:
+  name: Schwabot High-Frequency Crypto Trader
+
+adaptive_settings:
+  low_complexity_settings:
+    strategy_mode: aggressive
+    risk_tolerance: 0.8
+    leverage: 3.0
+    trade_frequency: high
+    position_sizing: 0.05  # 5% of total capital per trade
+    stop_loss_multiplier: 1.5
+
+  high_complexity_settings:
+    strategy_mode: conservative
+    risk_tolerance: 0.3
+    leverage: 1.0
+    trade_frequency: low
+    position_sizing: 0.02  # 2% of total capital per trade
+    stop_loss_multiplier: 0.5
+
+market_conditions:
+  entropy_threshold:
+    low: 0.3
+    high: 0.7
+
+performance_tracking:
+  metrics:
+    - profit_factor
+    - sharpe_ratio
+    - max_drawdown
+    - win_rate
+
+error_recovery:
+  retry_attempts: 3
+  fallback_strategies:
+    - hold_position
+    - reduce_position
+    - exit_market
+
+computational_resources:
+  gpu_threshold: 0.8
+  cpu_fallback_enabled: true
+  adaptive_computation: true 

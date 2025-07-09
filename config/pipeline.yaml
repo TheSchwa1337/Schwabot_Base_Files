@@ -1,0 +1,176 @@
+# Pipeline Configuration
+# =====================
+# Feature switches and pipeline coordination for Schwabot
+# Controls GPU usage, strategy mapping, and system behavior
+
+pipeline:
+  # Core Pipeline Settings
+  enabled: true
+  mode: "production"  # production, development, testing
+  version: "1.0.0"
+  
+  # Hardware Configuration
+  hardware:
+    use_gpu: true
+    default_backend: "cupy"  # cupy, torch, numpy
+    fallback_cpu_on_error: true
+    memory_limit_gb: 8
+    batch_size: 100
+    parallel_processing: true
+  
+  # Feature Switches
+  features:
+    symbolic_math_enabled: true
+    auto_strategy_mapping: true
+    enable_two_gram_logic: true
+    enable_phantom_detection: true
+    enable_entropy_cycling: true
+    enable_context_awareness: true
+    enable_hardware_optimization: true
+    enable_performance_monitoring: true
+  
+  # Strategy Configuration
+  strategy:
+    auto_mapping_enabled: true
+    hash_based_routing: true
+    similarity_threshold: 0.8
+    strategy_cache_size: 1024
+    enable_strategy_consensus: true
+    enable_strategy_validation: true
+  
+  # Two-Gram Logic
+  two_gram:
+    enabled: true
+    max_patterns: 1024
+    pattern_threshold: 0.1
+    burst_threshold: 0.5
+    similarity_threshold: 0.8
+    entropy_window: 16
+    enable_similarity_cache: true
+  
+  # Phantom Detection
+  phantom:
+    enabled: true
+    scan_interval: 5  # seconds
+    detection_threshold: 0.002
+    confirmation_cycles: 3
+    boost_multiplier: 1.2
+    enable_phantom_logging: true
+  
+  # Tick Processing
+  tick:
+    cycle_size: 16
+    processing_timeout: 30.0
+    max_retries: 3
+    enable_tick_validation: true
+    enable_tick_logging: false
+  
+  # Signal Processing
+  signal:
+    window_size: 8
+    smoothing_enabled: true
+    normalization_enabled: true
+    noise_reduction_enabled: true
+    enable_signal_validation: true
+  
+  # Entropy Processing
+  entropy:
+    cycling_enabled: true
+    window_size: 16
+    threshold_phantom: 0.002
+    threshold_normal: 0.001
+    enable_entropy_logging: false
+  
+  # Context Management
+  context:
+    enable_phantom_layer: true
+    enable_vault_state: true
+    enable_entropy_index: true
+    enable_cycle_id: true
+    enable_timestamp: true
+    context_cache_size: 512
+  
+  # Performance Settings
+  performance:
+    timeout_seconds: 30.0
+    max_retries: 3
+    cache_enabled: true
+    cache_ttl_seconds: 3600
+    max_cache_size: 1000
+    enable_profiling: false
+    enable_performance_logging: false
+  
+  # Error Handling
+  error_handling:
+    enable_exception_logging: true
+    enable_error_recovery: true
+    max_retry_attempts: 3
+    retry_delay: 1.0
+    enable_graceful_degradation: true
+    log_error_details: true
+  
+  # Logging Configuration
+  logging:
+    log_level: "INFO"
+    enable_file_logging: true
+    enable_console_logging: true
+    log_file_path: "logs/schwabot_pipeline.log"
+    max_log_file_size: 10485760  # 10 MB
+    backup_count: 5
+    log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Monitoring
+  monitoring:
+    enable_system_monitoring: true
+    enable_performance_tracking: true
+    enable_health_checks: true
+    health_check_interval: 60  # seconds
+    enable_metrics_collection: true
+  
+  # Security
+  security:
+    enable_input_validation: true
+    enable_output_validation: true
+    enable_sanitization: true
+    max_input_size: 1048576  # 1 MB
+    enable_security_logging: false
+  
+  # Development Settings
+  development:
+    enable_debug_mode: false
+    enable_profiling: false
+    enable_testing: false
+    enable_mock_data: false
+    enable_verbose_logging: false
+  
+  # Testing Configuration
+  testing:
+    enable_unit_tests: true
+    enable_integration_tests: true
+    enable_performance_tests: true
+    test_timeout: 60.0
+    enable_test_logging: false
+  
+  # Integration Settings
+  integration:
+    enable_external_apis: true
+    enable_webhooks: false
+    enable_websockets: false
+    api_timeout: 30.0
+    enable_api_logging: false
+  
+  # Backup and Recovery
+  backup:
+    enable_auto_backup: true
+    backup_interval: 3600  # 1 hour
+    max_backup_files: 10
+    backup_directory: "backups/"
+    enable_backup_compression: true
+  
+  # Optimization Settings
+  optimization:
+    enable_memory_optimization: true
+    enable_cpu_optimization: true
+    enable_gpu_optimization: true
+    enable_cache_optimization: true
+    optimization_level: 2 

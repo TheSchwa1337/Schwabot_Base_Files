@@ -170,14 +170,9 @@ class SchwabotruntimeValidator:
                 "core/",
                 "--max-line-length=88",
                 "--select=E,W,F,C,B",
-                "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s"
+                "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s",
             ]
-            process = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
+            process = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
             if process.returncode == 0:
                 safe_print("  \\u2705 All files pass Flake8 compliance")
@@ -318,9 +313,7 @@ class SchwabotruntimeValidator:
 
                         # Check if parameters have annotations
                         has_param_annotations = any(
-                            arg.annotation is not None
-                            for arg in node.args.args
-                            if arg.arg != 'self'
+                            arg.annotation is not None for arg in node.args.args if arg.arg != 'self'
                         )
 
                         if has_return_annotation and has_param_annotations:
@@ -395,7 +388,7 @@ class SchwabotruntimeValidator:
                 ["flake8", "core/", "--max-line-length=88"],
                 capture_output=True,
                 text=True,
-                timeout=15
+                timeout=15,
             )
 
             if result.returncode != 0:

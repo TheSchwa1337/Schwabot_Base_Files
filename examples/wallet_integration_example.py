@@ -23,9 +23,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -83,9 +81,7 @@ def demonstrate_wallet_tracker():
     # Show asset breakdown
     print("\n3. Asset Breakdown:")
     for asset, data in summary["asset_breakdown"].items():
-        print(
-            f"   {asset}: ${data['value']:.2f} ({data['percentage']:.1f}%) - PNL: ${data['pnl']:.2f}"
-        )
+        print(f"   {asset}: ${data['value']:.2f} ({data['percentage']:.1f}%) - PNL: ${data['pnl']:.2f}")
 
     # Generate strategy hash
     print("\n4. Strategy Hash:")
@@ -102,9 +98,7 @@ def demonstrate_wallet_tracker():
         print("   Suggestions:")
         for suggestion in suggestions:
             print(f"     - {suggestion['type']}: {suggestion['reason']}")
-            print(
-                f"       Action: {suggestion['action']} (Priority: {suggestion['priority']})"
-            )
+            print(f"       Action: {suggestion['action']} (Priority: {suggestion['priority']})")
 
     return wallet
 
@@ -152,13 +146,9 @@ def demonstrate_strategy_integration(wallet):
         print(f"   Min Confidence: {selected_strategy.min_confidence}")
 
         # Execute strategy
-        result = strategy_mapper.execute_strategy(
-            selected_strategy, market_data, portfolio_state
-        )
+        result = strategy_mapper.execute_strategy(selected_strategy, market_data, portfolio_state)
         if result:
-            print(
-                f"   Strategy Result: {result.signal_type} (confidence: {result.confidence:.2f})"
-            )
+            print(f"   Strategy Result: {result.signal_type} (confidence: {result.confidence:.2f})")
             print(f"   Position Size: {result.position_size:.4f}")
     else:
         print("   No strategy selected")
@@ -287,9 +277,7 @@ def demonstrate_api_operations(wallet):
     print("=" * 60)
 
     if not wallet.api_enabled:
-        print(
-            "\nAPI integration is disabled. Enable it in config to see live exchange data."
-        )
+        print("\nAPI integration is disabled. Enable it in config to see live exchange data.")
         return
 
     # Fetch exchange balances
