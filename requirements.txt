@@ -2,88 +2,76 @@
 # Core dependencies for the complete auto trading system
 
 # Core Python packages
-asyncio>=3.4.3
-aiohttp>=3.8.0
-websockets>=10.0
 numpy>=1.21.0
 pandas>=1.3.0
 scipy>=1.7.0
 
 # Trading and financial packages
 ccxt>=2.0.0
-ta-lib>=0.4.0
 yfinance>=0.1.70
-alpha-vantage>=2.3.1
-
-# Machine learning and AI
-scikit-learn>=1.0.0
-tensorflow>=2.8.0
-torch>=1.10.0
-transformers>=4.15.0
-
-# Quantum computing (optional)
-qiskit>=0.34.0
-cirq>=0.13.0
 
 # Data processing and analysis
 matplotlib>=3.5.0
 seaborn>=0.11.0
 plotly>=5.0.0
-bokeh>=2.4.0
-
-# Database and storage
-sqlalchemy>=1.4.0
-redis>=4.0.0
-pymongo>=4.0.0
 
 # Web framework and API
-fastapi>=0.75.0
-uvicorn>=0.17.0
-flask>=2.0.0
 requests>=2.27.0
+aiohttp>=3.8.0
+websockets>=10.0
 
 # Configuration and environment
 python-dotenv>=0.19.0
-pydantic>=1.8.0
 pyyaml>=6.0
 
 # Logging and monitoring
 structlog>=21.5.0
-prometheus-client>=0.12.0
 
 # Security and cryptography
 cryptography>=3.4.0
-pyjwt>=2.3.0
 
 # Testing and development
 pytest>=6.2.0
 pytest-asyncio>=0.18.0
 black>=21.0.0
 flake8>=4.0.0
-mypy>=0.910
 
 # System utilities
 psutil>=5.8.0
-schedule>=1.1.0
 
-# Optional: GPU acceleration
+# Optional: Advanced analytics (uncomment if needed)
+# statsmodels>=0.13.0
+# arch>=5.0.0  # For GARCH models
+
+# Optional: Machine learning (uncomment if needed)
+# scikit-learn>=1.0.0
+# tensorflow>=2.8.0
+# torch>=1.10.0
+
+# Optional: Quantum computing (uncomment if needed)
+# qiskit>=0.34.0
+# cirq>=0.13.0
+
+# Optional: Database and storage (uncomment if needed)
+# sqlalchemy>=1.4.0
+# redis>=4.0.0
+# pymongo>=4.0.0
+
+# Optional: Web framework (uncomment if needed)
+# fastapi>=0.75.0
+# uvicorn>=0.17.0
+# flask>=2.0.0
+
+# Optional: GPU acceleration (uncomment if needed)
 # cupy>=10.0.0  # For CUDA acceleration
 # cupy-cuda11x>=10.0.0  # For specific CUDA version
 
-# Optional: Advanced analytics
-# statsmodels>=0.13.0
-# arch>=5.0.0  # For GARCH models
-# pykalman>=0.9.5  # For Kalman filters
-
-# Optional: Real-time data
-# websocket-client>=1.2.0
-# sseclient-py>=1.7.0
-
-# Optional: Visualization
+# Optional: Visualization (uncomment if needed)
 # dash>=2.0.0
 # streamlit>=1.0.0
+# bokeh>=2.4.0
 
-# Optional: Cloud deployment
+# Optional: Cloud deployment (uncomment if needed)
 # boto3>=1.20.0  # AWS
 # google-cloud-storage>=2.0.0  # GCP
 # azure-storage-blob>=12.0.0  # Azure
