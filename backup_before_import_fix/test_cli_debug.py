@@ -12,7 +12,6 @@ sys.path.append(str(Path(__file__).parent))
 
 try:
     from utils.safe_print import error, info, safe_print, success, warn
-
     print("✅ Safe print imports successful")
 
     # Test safe print functions
@@ -27,7 +26,6 @@ try:
 except Exception as e:
     print(f"❌ Import error: {e}")
     import traceback
-
     traceback.print_exc()
 
-print("Test script completed")
+print("Test script completed") 

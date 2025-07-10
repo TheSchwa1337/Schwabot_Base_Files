@@ -70,21 +70,18 @@ class SecureConfigManager:
         self.cipher = Fernet(self.encryption_key)
 
     def _hash_api_key(self, api_key: str, service_name: str) -> str:
-        """Create a secure hash of the API key using Schwabot's mathematical framework."""'
+        """Create a secure hash of the API key using Schwabot's mathematical framework."""
         # Combine service name with key for unique hashing
         combined = f"{service_name}:{api_key}"
         return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
     def _encrypt_data(self, data: str) -> str:
         """Encrypt sensitive data."""
-        return base64.b64encode()
-            self.cipher.encrypt()
-                data.encode("utf-8"))).decode("utf-8")
+        return base64.b64encode(self.cipher.encrypt(data.encode("utf-8"))).decode("utf-8")
 
     def _decrypt_data(self, encrypted_data: str) -> str:
         """Decrypt sensitive data."""
-        return self.cipher.decrypt(base64.b64decode())
-            encrypted_data.encode("utf-8"))).decode("utf-8")
+        return self.cipher.decrypt(base64.b64decode(encrypted_data.encode("utf-8"))).decode("utf-8")
 
     def secure_input(self, prompt: str, service_name: str) -> Dict[str, str]:
         """
@@ -107,7 +104,7 @@ class SecureConfigManager:
         # Encrypt the actual key
         encrypted_key = self._encrypt_data(api_key)
 
-        return {}
+        return {
             "encrypted_key": encrypted_key,
             "key_hash": key_hash,
             "service": service_name,
@@ -201,7 +198,7 @@ class SecureConfigManager:
         Interactive setup for all required API keys.
         Returns status for each service.
         """
-        required_services = {}
+        required_services = {
             "NEWS_API": "NewsAPI.org (for news, headlines)",
             "COINMARKETCAP_API": "CoinMarketCap API (for price, data)",
             "CCXT_API": "CCXT Exchange API",

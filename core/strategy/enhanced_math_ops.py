@@ -2,41 +2,43 @@
 # -*- coding: utf-8 -*-
 """
 Enhanced Math Ops Module
-=========================
-Provides enhanced math ops functionality for the Schwabot trading system.
 
-Key Functions:
-- cpu_cosine_sim: cpu cosine sim operation
-- cpu_matrix_multiply: cpu matrix multiply operation
-- cpu_tensor_contraction: cpu tensor contraction operation
-- cpu_eigenvalue_decomposition: cpu eigenvalue decomposition operation
-- cpu_fft_operation: cpu fft operation operation
-
+Provides enhanced mathematical operations for Schwabot trading strategies.
 """
+
+import logging
+import logging
+
+
+import logging
+import logging
+
+
+import logging
+import logging
+
 
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Union, List, Tuple
 
-logger = logging.getLogger(__name__)
+import numpy as np
 
-# Import dependencies
+# Check for mathematical infrastructure availability
 try:
-    from core.math_cache import MathResultCache
-    from core.math_config_manager import MathConfigManager
-    from core.math_orchestrator import MathOrchestrator
-
+    from core.math.mathematical_framework_integrator import MathConfigManager, MathResultCache, MathOrchestrator
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Math infrastructure not available")
+    MathConfigManager = None
+    MathResultCache = None
+    MathOrchestrator = None
 
 
 class Status(Enum):
     """System status enumeration."""
-
     ACTIVE = "active"
     INACTIVE = "inactive"
     ERROR = "error"
@@ -45,76 +47,47 @@ class Status(Enum):
 
 class Mode(Enum):
     """Operation mode enumeration."""
-
     NORMAL = "normal"
     DEBUG = "debug"
     TEST = "test"
     PRODUCTION = "production"
 
 
+@dataclass
+class Config:
+    """Configuration data class."""
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+
+
+@dataclass
+class Result:
+    """Result data class."""
+    success: bool = False
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+    timestamp: float = field(default_factory=time.time)
+
+
 class EnhancedMathOps:
     """
     EnhancedMathOps Implementation
-    Provides core enhanced math ops functionality.
+    Provides advanced mathematical operations for trading strategies.
     """
-
-    def __init__(self,   config: Optional[Dict[str, Any]] = None) -> None:
-        """Initialize EnhancedMathOps with configuration."""
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         self.config = config or self._default_config()
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
-
-        # Initialize math infrastructure if available
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
         if MATH_INFRASTRUCTURE_AVAILABLE:
             self.math_config = MathConfigManager()
             self.math_cache = MathResultCache()
             self.math_orchestrator = MathOrchestrator()
-
         self._initialize_system()
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration."""
         return {
             'enabled': True,
             'timeout': 30.0,
@@ -124,7 +97,6 @@ class EnhancedMathOps:
         }
 
     def _initialize_system(self) -> None:
-        """Initialize the system."""
         try:
             self.logger.info(f"Initializing {self.__class__.__name__}")
             self.initialized = True
@@ -133,12 +105,86 @@ class EnhancedMathOps:
             self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
             self.initialized = False
 
+    # --- Vector Operations ---
+    def vector_sum(self, data: Union[List[float], np.ndarray]) -> float:
+        """Return the sum of a vector."""
+        arr = np.asarray(data)
+        return float(np.sum(arr))
+
+    def vector_mean(self, data: Union[List[float], np.ndarray]) -> float:
+        """Return the mean of a vector."""
+        arr = np.asarray(data)
+        return float(np.mean(arr))
+
+    def vector_std(self, data: Union[List[float], np.ndarray]) -> float:
+        """Return the standard deviation of a vector."""
+        arr = np.asarray(data)
+        return float(np.std(arr))
+
+    def vector_min(self, data: Union[List[float], np.ndarray]) -> float:
+        """Return the minimum value of a vector."""
+        arr = np.asarray(data)
+        return float(np.min(arr))
+
+    def vector_max(self, data: Union[List[float], np.ndarray]) -> float:
+        """Return the maximum value of a vector."""
+        arr = np.asarray(data)
+        return float(np.max(arr))
+
+    # --- Matrix Operations ---
+    def matrix_multiply(self, a: Union[List[List[float]], np.ndarray], b: Union[List[List[float]], np.ndarray]) -> np.ndarray:
+        """Return the matrix product of a and b."""
+        arr_a = np.asarray(a)
+        arr_b = np.asarray(b)
+        return np.matmul(arr_a, arr_b)
+
+    # --- Cosine Similarity ---
+    def cosine_similarity(self, a: Union[List[float], np.ndarray], b: Union[List[float], np.ndarray]) -> float:
+        """Return the cosine similarity between two vectors."""
+        arr_a = np.asarray(a)
+        arr_b = np.asarray(b)
+        if arr_a.shape != arr_b.shape:
+            raise ValueError("Vectors must be the same shape for cosine similarity.")
+        norm_a = np.linalg.norm(arr_a)
+        norm_b = np.linalg.norm(arr_b)
+        if norm_a == 0 or norm_b == 0:
+            return 0.0
+        return float(np.dot(arr_a, arr_b) / (norm_a * norm_b))
+
+    # --- Eigenvalue Decomposition ---
+    def eigen_decomposition(self, matrix: Union[List[List[float]], np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+        """Return the eigenvalues and eigenvectors of a matrix."""
+        arr = np.asarray(matrix)
+        return np.linalg.eig(arr)
+
+    # --- Fast Fourier Transform ---
+    def fft(self, data: Union[List[float], np.ndarray]) -> np.ndarray:
+        """Return the Fast Fourier Transform of a vector."""
+        arr = np.asarray(data)
+        return np.fft.fft(arr)
+
+    # --- Tensor Contraction (optional, for advanced use) ---
+    def tensor_contract(self, a: np.ndarray, b: np.ndarray, axes: int = 1) -> np.ndarray:
+        """Contract two tensors along specified axes (default: 1)."""
+        return np.tensordot(a, b, axes=axes)
+
+    # --- General Math Data Processor (for legacy compatibility) ---
+    def process_math_data(self, data: Union[List, Tuple, np.ndarray]) -> float:
+        """Process mathematical data (mean as default)."""
+        arr = np.asarray(data)
+        return float(np.mean(arr))
+
+    def get_status(self) -> Dict[str, Any]:
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'config': self.config,
+        }
+
     def activate(self) -> bool:
-        """Activate the system."""
         if not self.initialized:
             self.logger.error("System not initialized")
             return False
-
         try:
             self.active = True
             self.logger.info(f"✅ {self.__class__.__name__} activated")
@@ -148,7 +194,6 @@ class EnhancedMathOps:
             return False
 
     def deactivate(self) -> bool:
-        """Deactivate the system."""
         try:
             self.active = False
             self.logger.info(f"✅ {self.__class__.__name__} deactivated")
@@ -157,80 +202,7 @@ class EnhancedMathOps:
             self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
             return False
 
-    def get_status(self) -> Dict[str, Any]:
-        """Get system status."""
-        return {
-            'active': self.active,
-            'initialized': self.initialized,
-            'config': self.config,
-        }
-
-
 # Factory function
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-    def create_enhanced_math_ops(self, data):
-        """Process mathematical data."""
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        return np.mean(data_array)
-        """Process mathematical data."""
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        return np.mean(data_array)
-    """Create a enhanced math ops instance."""
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
+def create_enhanced_math_ops(config: Optional[Dict[str, Any]] = None) -> EnhancedMathOps:
+    """Create an enhanced math ops instance."""
     return EnhancedMathOps(config)

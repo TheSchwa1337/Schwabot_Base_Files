@@ -45,48 +45,71 @@ Examples:
 
   # Start with specific capital
   python start_schwabot.py --capital 50000
-        """,
+        """
     )
-
+    
     parser.add_argument(
         "--config",
         type=str,
         default="config/schwabot_config.json",
-        help="Path to configuration file (default: config/schwabot_config.json)",
+        help="Path to configuration file (default: config/schwabot_config.json)"
     )
-
+    
     parser.add_argument(
-        "--mode", choices=["paper", "live"], default="paper", help="Trading mode: paper or live (default: paper)"
+        "--mode",
+        choices=["paper", "live"],
+        default="paper",
+        help="Trading mode: paper or live (default: paper)"
     )
-
+    
     parser.add_argument(
-        "--symbols", nargs="+", default=["BTC/USDT", "ETH/USDT"], help="Trading symbols (default: BTC/USDT ETH/USDT)"
+        "--symbols",
+        nargs="+",
+        default=["BTC/USDT", "ETH/USDT"],
+        help="Trading symbols (default: BTC/USDT ETH/USDT)"
     )
-
-    parser.add_argument("--capital", type=float, default=10000.0, help="Initial capital (default: 10000.0)")
-
+    
+    parser.add_argument(
+        "--capital",
+        type=float,
+        default=10000.0,
+        help="Initial capital (default: 10000.0)"
+    )
+    
     parser.add_argument(
         "--log-level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         default="INFO",
-        help="Logging level (default: INFO)",
+        help="Logging level (default: INFO)"
     )
-
+    
     parser.add_argument(
-        "--exchanges", nargs="+", default=["binance", "coinbase"], help="Trading exchanges (default: binance coinbase)"
+        "--exchanges",
+        nargs="+",
+        default=["binance", "coinbase"],
+        help="Trading exchanges (default: binance coinbase)"
     )
-
-    parser.add_argument("--max-positions", type=int, default=5, help="Maximum concurrent positions (default: 5)")
-
+    
+    parser.add_argument(
+        "--max-positions",
+        type=int,
+        default=5,
+        help="Maximum concurrent positions (default: 5)"
+    )
+    
     parser.add_argument(
         "--risk-level",
         choices=["conservative", "moderate", "aggressive"],
         default="moderate",
-        help="Risk level (default: moderate)",
+        help="Risk level (default: moderate)"
     )
-
-    parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no actual trades)")
-
+    
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Run in dry-run mode (no actual trades)"
+    )
+    
     return parser
 
 
@@ -134,7 +157,7 @@ def create_config_from_args(args) -> dict:
             "alerting": True,
         },
     }
-
+    
     return config
 
 
@@ -143,21 +166,21 @@ def get_risk_config(risk_level: str) -> dict:
     risk_configs = {
         "conservative": {
             "max_daily_loss": 0.02,  # 2%
-            "max_drawdown": 0.10,  # 10%
+            "max_drawdown": 0.10,    # 10%
             "max_position_size": 0.05,  # 5%
         },
         "moderate": {
             "max_daily_loss": 0.05,  # 5%
-            "max_drawdown": 0.15,  # 15%
+            "max_drawdown": 0.15,    # 15%
             "max_position_size": 0.10,  # 10%
         },
         "aggressive": {
             "max_daily_loss": 0.10,  # 10%
-            "max_drawdown": 0.25,  # 25%
+            "max_drawdown": 0.25,    # 25%
             "max_position_size": 0.20,  # 20%
         },
     }
-
+    
     return risk_configs.get(risk_level, risk_configs["moderate"])
 
 
@@ -165,23 +188,23 @@ def setup_logging(log_level: str):
     """Setup logging configuration."""
     # Create logs directory
     os.makedirs("logs", exist_ok=True)
-
+    
     # Configure logging
     logging.basicConfig(
         level=getattr(logging, log_level),
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
             logging.FileHandler(f"logs/schwabot_startup_{int(time.time())}.log"),
-            logging.StreamHandler(sys.stdout),
-        ],
+            logging.StreamHandler(sys.stdout)
+        ]
     )
 
 
 def print_startup_banner(config: dict):
     """Print startup banner with system information."""
-    print("\n" + "=" * 80)
+    print("\n" + "="*80)
     print("🚀 SCHWABOT AUTO TRADING SYSTEM")
-    print("=" * 80)
+    print("="*80)
     print(f"Version: {config['system']['version']}")
     print(f"Mode: {config['system']['mode']}")
     print(f"Capital: ${config['trading']['base_capital']:,.2f}")
@@ -189,23 +212,23 @@ def print_startup_banner(config: dict):
     print(f"Exchanges: {', '.join(config['exchanges']['primary'])}")
     print(f"Max Positions: {config['trading']['max_positions']}")
     print(f"Risk Level: {config['trading']['risk_management']['max_daily_loss']*100:.1f}% daily loss limit")
-    print("=" * 80)
+    print("="*80)
     print("Starting system...\n")
 
 
 def print_safety_warnings(mode: str):
     """Print safety warnings for live trading."""
     if mode == "live_trading":
-        print("\n" + "!" * 80)
+        print("\n" + "!"*80)
         print("⚠️  LIVE TRADING MODE - REAL MONEY AT RISK ⚠️")
-        print("!" * 80)
+        print("!"*80)
         print("• You are about to start live trading with real funds")
         print("• Ensure you have tested thoroughly in paper trading mode")
         print("• Verify all risk management settings are appropriate")
         print("• Monitor the system closely during initial operation")
         print("• Press Ctrl+C to stop the system at any time")
-        print("!" * 80)
-
+        print("!"*80)
+        
         # Ask for confirmation
         response = input("\nDo you want to continue with live trading? (yes/no): ")
         if response.lower() not in ["yes", "y"]:
@@ -219,26 +242,26 @@ async def main():
         # Parse command line arguments
         parser = setup_argument_parser()
         args = parser.parse_args()
-
+        
         # Setup logging
         setup_logging(args.log_level)
-
+        
         # Create configuration
         config = create_config_from_args(args)
-
+        
         # Print startup banner
         print_startup_banner(config)
-
+        
         # Print safety warnings for live trading
         print_safety_warnings(config["system"]["mode"])
-
+        
         # Create and start the system
         system = SchwabotAutoTradingSystem()
         system.config = config  # Override with command line config
-
+        
         # Start the system
         await system.start()
-
+        
     except KeyboardInterrupt:
         logger.info("System interrupted by user")
         print("\n🛑 System stopped by user")
@@ -250,5 +273,4 @@ async def main():
 
 if __name__ == "__main__":
     import time
-
-    asyncio.run(main())
+    asyncio.run(main()) 

@@ -20,7 +20,6 @@ from schwabot.vortex_security import get_vortex_security
 # Add the project root to sys.path
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-
 def test_cli_imports():
     """Test if we can import the CLI and its dependencies."""
     print("🧪 Testing Schwabot CLI Imports")
@@ -60,7 +59,6 @@ def test_cli_imports():
         print(f"❌ Unexpected error: {e}")
         return False
 
-
 def test_cli_structure():
     """Test CLI argument parser structure."""
     print("\n🔧 Testing CLI Structure")
@@ -81,7 +79,6 @@ def test_cli_structure():
     except Exception as e:
         print(f"❌ CLI structure test failed: {e}")
         return False
-
 
 if __name__ == "__main__":
     print("🧪 Schwabot CLI Test Suite")
@@ -107,4 +104,4 @@ if __name__ == "__main__":
         else:
             print("❌ CLI structure test failed!")
     else:
-        print("❌ CLI import test failed!")
+        print("❌ CLI import test failed!") 

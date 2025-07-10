@@ -59,11 +59,11 @@ class ComprehensiveFixRunner:
             )
 
             if result.returncode == 0:
-                logger.info(f"✅ {description} completed successfully")
+                logger.info(f"[SUCCESS] {description} completed successfully")
                 self.fix_results[script_name] = {'success': True, 'stdout': result.stdout, 'stderr': result.stderr}
                 return True
             else:
-                logger.error(f"❌ {description} failed with return code {result.returncode}")
+                logger.error(f"[FAIL] {description} failed with return code {result.returncode}")
                 logger.error(f"STDOUT: {result.stdout}")
                 logger.error(f"STDERR: {result.stderr}")
                 self.fix_results[script_name] = {
@@ -75,11 +75,11 @@ class ComprehensiveFixRunner:
                 return False
 
         except subprocess.TimeoutExpired:
-            logger.error(f"❌ {description} timed out after 5 minutes")
+            logger.error(f"[FAIL] {description} timed out after 5 minutes")
             self.fix_results[script_name] = {'success': False, 'error': 'Timeout'}
             return False
         except Exception as e:
-            logger.error(f"❌ {description} failed with exception: {e}")
+            logger.error(f"[FAIL] {description} failed with exception: {e}")
             self.fix_results[script_name] = {'success': False, 'error': str(e)}
             return False
 
@@ -108,10 +108,10 @@ class ComprehensiveFixRunner:
             )
 
             if result.returncode == 0:
-                logger.info("✅ Flake8 check passed - no issues found")
+                logger.info("[SUCCESS] Flake8 check passed - no issues found")
                 return True
             else:
-                logger.warning(f"⚠️ Flake8 found {result.returncode} issues")
+                logger.warning(f"[WARNING] Flake8 found {result.returncode} issues")
                 logger.info("STDOUT: " + result.stdout)
                 logger.info("STDERR: " + result.stderr)
 
@@ -123,7 +123,7 @@ class ComprehensiveFixRunner:
                 return False
 
         except Exception as e:
-            logger.error(f"❌ Flake8 check failed: {e}")
+            logger.error(f"[FAIL] Flake8 check failed: {e}")
             return False
 
     def create_test_script(self) -> None:
@@ -155,9 +155,9 @@ def test_imports():
     for module_name in critical_modules:
         try:
             importlib.import_module(module_name)
-            print(f"✅ {module_name}")
+            print(f"[PASS] {module_name}")
         except Exception as e:
-            print(f"❌ {module_name}: {e}")
+            print(f"[FAIL] {module_name}: {e}")
             failed_imports.append(module_name)
     
     return len(failed_imports) == 0
@@ -173,9 +173,9 @@ def test_syntax():
             with open(py_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             ast.parse(content)
-            print(f"✅ {py_file}")
+            print(f"[PASS] {py_file}")
         except Exception as e:
-            print(f"❌ {py_file}: {e}")
+            print(f"[FAIL] {py_file}: {e}")
             failed_files.append(str(py_file))
     
     return len(failed_files) == 0
@@ -189,21 +189,21 @@ def main():
     syntax_success = test_syntax()
     
     print("=" * 50)
-    print(f"Import tests: {'✅ PASSED' if import_success else '❌ FAILED'}")
-    print(f"Syntax tests: {'✅ PASSED' if syntax_success else '❌ FAILED'}")
+    print(f"Import tests: {'[PASS]' if import_success else '[FAIL]'}")
+    print(f"Syntax tests: {'[PASS]' if syntax_success else '[FAIL]'}")
     
     if import_success and syntax_success:
-        print("🎉 All tests passed!")
+        print("SUCCESS: All tests passed!")
         return 0
     else:
-        print("❌ Some tests failed!")
+        print("FAILURE: Some tests failed!")
         return 1
 
 if __name__ == "__main__":
     sys.exit(main())
 '''
 
-        with open('test_comprehensive_fixes.py', 'w') as f:
+        with open('test_comprehensive_fixes.py', 'w', encoding='utf-8') as f:
             f.write(test_script)
 
         logger.info("Created test script: test_comprehensive_fixes.py")
@@ -231,7 +231,7 @@ if __name__ == "__main__":
             # Detailed results
             f.write("## Detailed Results\n\n")
             for script_name, result in self.fix_results.items():
-                status = "✅ SUCCESS" if result.get('success', False) else "❌ FAILED"
+                status = "[SUCCESS]" if result.get('success', False) else "[FAILED]"
                 f.write(f"### {script_name}: {status}\n")
 
                 if 'error' in result:
@@ -256,12 +256,12 @@ if __name__ == "__main__":
             # Recommendations
             f.write("## Recommendations\n\n")
             if successful_scripts == len(self.fix_results):
-                f.write("🎉 All fixes completed successfully!\n")
+                f.write("[SUCCESS] All fixes completed successfully!\n")
                 f.write("- The codebase should now be free of critical syntax and import errors\n")
                 f.write("- Run `python test_comprehensive_fixes.py` to verify functionality\n")
                 f.write("- Consider running `flake8` for additional code quality checks\n")
             else:
-                f.write("⚠️ Some fixes failed. Please review the detailed results above.\n")
+                f.write("[WARNING] Some fixes failed. Please review the detailed results above.\n")
                 f.write("- Check the logs in the `logs/` directory for more details\n")
                 f.write("- Manual intervention may be required for failed scripts\n")
                 f.write("- Consider running individual fix scripts to isolate issues\n")
@@ -276,39 +276,39 @@ if __name__ == "__main__":
 
     def run_all_fixes(self) -> bool:
         """Run all comprehensive fixes in sequence."""
-        logger.info("🚀 Starting comprehensive fix process...")
+        logger.info("[START] Starting comprehensive fix process...")
         logger.info("=" * 60)
 
         # Phase 1: Syntax fixes
-        logger.info("📝 PHASE 1: Syntax Error Fixes")
+        logger.info("[PHASE 1] Syntax Error Fixes")
         if not self.run_syntax_fixes():
-            logger.warning("⚠️ Syntax fixes failed, but continuing...")
+            logger.warning("[WARNING] Syntax fixes failed, but continuing...")
 
         # Phase 2: Import fixes
-        logger.info("📦 PHASE 2: Import Fixes")
+        logger.info("[PHASE 2] Import Fixes")
         if not self.run_import_fixes():
-            logger.warning("⚠️ Import fixes failed, but continuing...")
+            logger.warning("[WARNING] Import fixes failed, but continuing...")
 
         # Phase 3: Requirements update
-        logger.info("📋 PHASE 3: Requirements Update")
+        logger.info("[PHASE 3] Requirements Update")
         if not self.run_requirements_update():
-            logger.warning("⚠️ Requirements update failed, but continuing...")
+            logger.warning("[WARNING] Requirements update failed, but continuing...")
 
         # Phase 4: Create test script
-        logger.info("🧪 PHASE 4: Creating Test Script")
+        logger.info("[PHASE 4] Creating Test Script")
         self.create_test_script()
 
         # Phase 5: Run tests
-        logger.info("🧪 PHASE 5: Running Tests")
+        logger.info("[PHASE 5] Running Tests")
         if not self.run_tests():
-            logger.warning("⚠️ Tests failed, but continuing...")
+            logger.warning("[WARNING] Tests failed, but continuing...")
 
         # Phase 6: Final Flake8 check
-        logger.info("🔍 PHASE 6: Final Flake8 Check")
+        logger.info("[PHASE 6] Final Flake8 Check")
         self.run_flake8_check()
 
         # Generate final report
-        logger.info("📊 PHASE 7: Generating Final Report")
+        logger.info("[PHASE 7] Generating Final Report")
         self.generate_final_report()
 
         # Summary
@@ -316,7 +316,7 @@ if __name__ == "__main__":
         successful_scripts = sum(1 for result in self.fix_results.values() if result.get('success', False))
 
         logger.info("=" * 60)
-        logger.info("🎯 COMPREHENSIVE FIX PROCESS COMPLETED")
+        logger.info("[COMPLETE] COMPREHENSIVE FIX PROCESS COMPLETED")
         logger.info("=" * 60)
         logger.info(f"Total time: {total_time:.2f} seconds")
         logger.info(f"Scripts run: {len(self.fix_results)}")
@@ -324,10 +324,10 @@ if __name__ == "__main__":
         logger.info(f"Failed: {len(self.fix_results) - successful_scripts}")
 
         if successful_scripts == len(self.fix_results):
-            logger.info("🎉 All fixes completed successfully!")
+            logger.info("[SUCCESS] All fixes completed successfully!")
             return True
         else:
-            logger.warning("⚠️ Some fixes failed. Check the final report for details.")
+            logger.warning("[WARNING] Some fixes failed. Check the final report for details.")
             return False
 
 
@@ -342,14 +342,14 @@ def main():
     success = runner.run_all_fixes()
 
     if success:
-        print("\n🎉 Comprehensive fix process completed successfully!")
-        print("📊 Check the final report: comprehensive_fix_final_report.md")
-        print("🧪 Run tests: python test_comprehensive_fixes.py")
+        print("\n[SUCCESS] Comprehensive fix process completed successfully!")
+        print("[REPORT] Check the final report: comprehensive_fix_final_report.md")
+        print("[TEST] Run tests: python test_comprehensive_fixes.py")
         return 0
     else:
-        print("\n⚠️ Comprehensive fix process completed with some failures.")
-        print("📊 Check the final report: comprehensive_fix_final_report.md")
-        print("🔍 Review logs in the logs/ directory")
+        print("\n[WARNING] Comprehensive fix process completed with some failures.")
+        print("[REPORT] Check the final report: comprehensive_fix_final_report.md")
+        print("[LOG] Review logs in the logs/ directory")
         return 1
 
 

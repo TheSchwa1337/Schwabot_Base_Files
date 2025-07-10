@@ -109,7 +109,7 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-    if not folder.exists():
+if not folder.exists():
 
 
 
@@ -125,7 +125,7 @@ file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-        if not all_csvs:
+if not all_csvs:
 
 
 
@@ -202,7 +202,7 @@ PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
 
 
 
-    if not parquet_file.exists():
+if not parquet_file.exists():
 
 
 

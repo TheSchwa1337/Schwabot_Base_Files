@@ -172,7 +172,7 @@ def remove_unused_imports(file_path):
         # Common unused imports to remove
         unused_imports = []
             "from typing import Dict, List, Optional, Any",
-            "from numpy import np",
+            "import numpy as np",
             "import hashlib",
             "import json",
             "import logging",

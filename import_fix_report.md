@@ -1,70 +1,106 @@
 # Import Fix Report
 
 ## Summary
-- Files processed: 282
-- Files fixed: 16
-- Files failed: 266
+- Files processed: 315
+- Files fixed: 90
+- Files failed: 225
 - Backup directory: backup_before_import_fix
 
 ## Fixed Files
+- core\acceleration_enhancement.py
 - core\advanced_dualistic_trading_execution_system.py
+- core\advanced_risk_manager.py
 - core\advanced_settings_engine.py
+- core\advanced_tensor_algebra.py
+- core\api_integration_manager.py
+- core\automated_strategy_engine.py
+- core\automated_trading_engine.py
+- core\automated_trading_pipeline.py
+- core\backtesting_integration.py
+- core\bio_cellular_integration.py
+- core\bio_cellular_signaling.py
+- core\btc_usdc_trading_integration.py
+- core\ccxt_integration.py
 - core\ccxt_trading_executor.py
-- core\cli_dual_state_router.py
-- core\distributed_mathematical_processor.py
-- core\enhanced_error_recovery_system.py
-- core\entropy_enhanced_trading_executor.py
-- core\hash_match_command_injector.py
-- core\mathematical_optimization_bridge.py
-- core\real_time_execution_engine.py
-- core\trading_engine_integration.py
-- core\unified_market_data_pipeline.py
-- core\api\data_models.py
-- core\system\dual_state_router.py
-- core\distributed_mathematical_processor.py
-- core\enhanced_error_recovery_system.py
-
-## Failed Files
+- core\cellular_trade_executor.py
+- core\chrono_resonance_weather_mapper.py
+- core\clean_risk_manager.py
 - core\clean_strategy_integration_bridge.py
-- core\cli_orbital_profit_control.py
-- core\cli_system_monitor.py
-- core\cli_tensor_state_manager.py
-- core\cpu_handlers.py
-- core\crwf_crlf_integration.py
+- core\clean_trading_pipeline.py
+- core\clean_zbe_core.py
 - core\digest_time_mapper.py
+- core\dlt_waveform_engine.py
+- core\dna_strategy_encoder.py
+- core\dualistic_thought_engines.py
 - core\enhanced_ccxt_trading_engine.py
-- core\enhanced_live_execution_mapper.py
 - core\enhanced_master_cycle_engine.py
-- core\enhanced_profit_trading_strategy.py
+- core\enhanced_mathematical_core.py
+- core\entropy_math.py
 - core\error_handling_and_flake_gate_prevention.py
-- core\fill_handler.py
 - core\final_integration_launcher.py
+- core\flask_ai_agent_handler.py
 - core\flask_communication_relay.py
-- core\galileo_tensor_bridge.py
+- core\fractal_core.py
+- core\fractal_memory_tracker.py
+- core\ghost_core.py
+- core\gpu_dna_autodetect.py
+- core\gpu_shader_integration.py
 - core\hash_glyph_compression.py
+- core\hash_match_command_injector.py
+- core\internal_ai_agent_system.py
 - core\lantern_core_integration.py
+- core\live_api_backtesting.py
+- core\live_execution_mapper.py
+- core\loop_strategy_switcher.py
+- core\math_integration_bridge.py
+- core\multi_frequency_resonance_engine.py
+- core\neural_processing_engine.py
+- core\orbital_shell_brain_system.py
+- core\orbital_xi_ring_system.py
+- core\order_book_analyzer.py
+- core\order_book_manager.py
 - core\phantom_detector.py
 - core\phantom_logger.py
 - core\phantom_registry.py
-- core\phase_bit_integration.py
-- core\production_deployment_manager.py
-- core\qutrit_signal_matrix.py
+- core\phase_2_consolidation_plan.py
+- core\portfolio_tracker.py
+- core\quad_bit_strategy_array.py
 - core\real_multi_exchange_trader.py
-- core\schwafit_core.py
-- core\secure_exchange_manager.py
+- core\real_time_execution_engine.py
+- core\real_time_market_data.py
+- core\recursive_hash_echo.py
+- core\schwabot_rheology_integration.py
 - core\shell_memory_engine.py
-- core\slot_state_mapper.py
+- core\smart_order_executor.py
+- core\strategy_consensus_router.py
 - core\strategy_integration_bridge.py
 - core\strategy_logic.py
+- core\strategy_router.py
 - core\strategy_trigger_router.py
-- core\system_integration_test.py
+- core\symbolic_interpreter.py
+- core\tcell_survival_engine.py
+- core\temporal_warp_engine.py
+- core\tensor_score_utils.py
+- core\trading_engine_integration.py
+- core\trading_strategy_executor.py
+- core\two_gram_detector.py
+- core\type_defs.py
+- core\unified_btc_trading_pipeline.py
+- core\unified_component_bridge.py
+- core\unified_market_data_pipeline.py
 - core\unified_trade_router.py
-- core\vectorized_profit_orchestrator.py
-- core\vector_registry.py
-- core\visual_decision_engine.py
+- core\zbe_core.py
+- core\zpe_core.py
+- core\zpe_zbe_core.py
+- core\api\data_models.py
 - core\strategy\enhanced_math_ops.py
-- core\strategy\zygot_zalgo_entropy_dual_key_gate.py
+- core\strategy\multi_phase_strategy_weight_tensor.py
 - core\system\dual_state_router_backup.py
+- core\btc_usdc_trading_integration.py
+
+## Failed Files
+- core\api\exchange_connection.py
+- core\system\dual_state_router.py
 - analyze_missing_logic.py
 - analyze_stub_patterns.py
 - automated_component_repair.py
@@ -79,7 +115,6 @@
 - comprehensive_final_verification.py
 - comprehensive_flake8_check.py
 - comprehensive_flake8_eliminator.py
-- comprehensive_flake8_fix.py
 - comprehensive_integration_improvement_plan.py
 - comprehensive_linting.py
 - comprehensive_schwabot_cleanup.py
@@ -140,13 +175,11 @@
 - format_recent_files.py
 - fractal_command_dispatcher.py
 - fractal_containment_lock.py
-- glyph_dream_simulator.py
 - hash_trigger_system_summary.py
 - install.py
 - installer.py
 - install_schwabot.py
 - install_schwabot_windows.py
-- integrate_crlf_into_pipeline.py
 - integrate_enhanced_phase_risk.py
 - lattice_glyph_profit_engine.py
 - launcher.py

@@ -6,6 +6,9 @@ Consolidated System Utils Utilities
 Consolidated utilities from multiple small files.
 """
 
+import numpy as np
+
+
 import logging
 from typing import Any, Dict, List, Optional
 

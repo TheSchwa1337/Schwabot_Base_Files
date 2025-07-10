@@ -45,6 +45,5 @@ def main():
         print("\n🛑 Trading bot stopped")
         return 0
 
-
 if __name__ == "__main__":
-    exit(main())
+    exit(main()) 

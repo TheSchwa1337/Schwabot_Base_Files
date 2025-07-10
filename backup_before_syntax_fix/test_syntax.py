@@ -17,9 +17,12 @@ def test_file_syntax(filename):
         print(f"? {filename} - Other Error: {e}")
         return False
 
-
 # Test the files I claimed had syntax errors
-files_to_test = ['core/risk_manager.py', 'core/gpu_handlers.py', 'core/fractal_core.py']
+files_to_test = [
+    'core/risk_manager.py',
+    'core/gpu_handlers.py',
+    'core/fractal_core.py'
+]
 
 all_good = True
 for file in files_to_test:
@@ -31,4 +34,4 @@ if all_good:
 else:
     print("\n❌ Some files have syntax errors")
 
-sys.exit(0 if all_good else 1)
+sys.exit(0 if all_good else 1) 

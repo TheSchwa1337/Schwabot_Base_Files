@@ -121,7 +121,7 @@ Args:
 
 
 default_strategy_id: The ID of the strategy to use if no switch condition is met.self.strategies:
-Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
+    Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
 
 
 
@@ -255,7 +255,7 @@ raise ValueError('"Target strategy ID '{0}' is not registered.')
 
 
 
-    if not callable(condition_func):
+if not callable(condition_func):
 
 
 
@@ -344,15 +344,15 @@ next_strategy_id = self.default_strategy_id
 
 
 
-    for condition in self.switch_conditions:
+for condition in self.switch_conditions:
 
 
 
-        try:
+try:
 
 
 
-            if condition[condition_func](data):
+if condition[condition_func](data):
 
 
 
@@ -364,7 +364,7 @@ next_strategy_id = self.default_strategy_id
 
 
 
-                except Exception as e:
+except Exception as e:
 
 
 
@@ -392,7 +392,7 @@ next_strategy_id = self.default_strategy_id
 
 
 
-                    if next_strategy_id != self.active_strategy_id:
+if next_strategy_id != self.active_strategy_id:
 
 
 
@@ -434,7 +434,7 @@ next_strategy_id = self.default_strategy_id
 
 
 
-                        if strategy_func is None:
+if strategy_func is None:
 
 
 
@@ -492,9 +492,9 @@ next_strategy_id = self.default_strategy_id
 
 
                                 return {status:error,message: str(e),executed_strategy".format(target_strategy_id, condition_func: condition_func,target_strategy_id: target_strategy_id,priority":)}
-                                priority,description": description or f"Switch to {target_strategy_id, 'condition[description], e, self.active_strategy_id, next_strategy_id"
-    "
-    , 'self.active_strategy_id, self.active_strategy_id, e): self.active_strategy_id,"}
+                                priority,description": description or f"Switch to {target_strategy_id, 'condition[description], e, self.active_strategy_id, next_strategy_id"}
+                                "
+                                , 'self.active_strategy_id, self.active_strategy_id, e): self.active_strategy_id,"}
 
 
 
@@ -528,7 +528,7 @@ self.active_strategy_id
 
 
 
-    if __name__ == __main__:
+if __name__ == __main__:
 
 
 
@@ -764,7 +764,7 @@ metrics = lattice.get_metrics()
 
 
 
-    for k, v in metrics.items():
+for k, v in metrics.items():
 
 
 

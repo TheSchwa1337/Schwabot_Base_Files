@@ -21,7 +21,6 @@ from schwabot.vortex_security import get_vortex_security
 # Add the project root to sys.path
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-
 def test_cli_help():
     """Test the CLI help command."""
     print("Testing Schwabot CLI...")
@@ -66,7 +65,6 @@ def test_cli_help():
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         return False
-
 
 def test_cli_commands():
     """Test specific CLI commands."""
@@ -117,7 +115,6 @@ def test_cli_commands():
         print(f"❌ CLI command test failed: {e}")
         sys.stdout = sys.__stdout__
 
-
 if __name__ == "__main__":
     print("🧪 Testing Schwabot CLI System")
     print("=" * 50)
@@ -133,4 +130,4 @@ if __name__ == "__main__":
     if success:
         print("🎉 All CLI tests passed!")
     else:
-        print("❌ CLI tests failed!")
+        print("❌ CLI tests failed!") 

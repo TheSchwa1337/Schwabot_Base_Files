@@ -13,6 +13,9 @@ Key Functions:
 
 """
 
+import numpy as np
+
+
 import logging
 import time
 from dataclasses import dataclass, field

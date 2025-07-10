@@ -4,10 +4,9 @@
 Test script to verify comprehensive fixes.
 """
 
-import importlib
 import sys
+import importlib
 from pathlib import Path
-
 
 def test_imports():
     """Test that all critical modules can be imported."""
@@ -26,9 +25,9 @@ def test_imports():
     for module_name in critical_modules:
         try:
             importlib.import_module(module_name)
-            print(f"SUCCESS: {module_name}")
+            print(f"[PASS] {module_name}")
         except Exception as e:
-            print(f"FAILED: {module_name}: {e}")
+            print(f"[FAIL] {module_name}: {e}")
             failed_imports.append(module_name)
     
     return len(failed_imports) == 0
@@ -44,9 +43,9 @@ def test_syntax():
             with open(py_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             ast.parse(content)
-            print(f"SUCCESS: {py_file}")
+            print(f"[PASS] {py_file}")
         except Exception as e:
-            print(f"FAILED: {py_file}: {e}")
+            print(f"[FAIL] {py_file}: {e}")
             failed_files.append(str(py_file))
     
     return len(failed_files) == 0
@@ -60,14 +59,14 @@ def main():
     syntax_success = test_syntax()
     
     print("=" * 50)
-    print(f"Import tests: {'SUCCESS' if import_success else 'FAILED'}")
-    print(f"Syntax tests: {'SUCCESS' if syntax_success else 'FAILED'}")
+    print(f"Import tests: {'[PASS]' if import_success else '[FAIL]'}")
+    print(f"Syntax tests: {'[PASS]' if syntax_success else '[FAIL]'}")
     
     if import_success and syntax_success:
-        print("ALL TESTS PASSED!")
+        print("SUCCESS: All tests passed!")
         return 0
     else:
-        print("SOME TESTS FAILED!")
+        print("FAILURE: Some tests failed!")
         return 1
 
 if __name__ == "__main__":

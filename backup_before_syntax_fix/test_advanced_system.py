@@ -18,23 +18,18 @@ def test_advanced_system():
         print("Testing imports...")
 
         from core.quantum_mathematical_bridge import QuantumMathematicalBridge
-
         print("✅ Quantum Mathematical Bridge imported")
 
         from core.neural_processing_engine import NeuralProcessingEngine
-
         print("✅ Neural Processing Engine imported")
 
         from core.distributed_mathematical_processor import DistributedMathematicalProcessor
-
         print("✅ Distributed Mathematical Processor imported")
 
         from core.enhanced_error_recovery_system import EnhancedErrorRecoverySystem
-
         print("✅ Enhanced Error Recovery System imported")
 
         from core.integrated_advanced_trading_system import IntegratedAdvancedTradingSystem
-
         print("✅ Integrated Advanced Trading System imported")
 
         print()
@@ -79,7 +74,6 @@ def test_advanced_system():
         print(f"❌ Error: {e}")
         return False
 
-
 if __name__ == "__main__":
     success = test_advanced_system()
-    sys.exit(0 if success else 1)
+    sys.exit(0 if success else 1) 

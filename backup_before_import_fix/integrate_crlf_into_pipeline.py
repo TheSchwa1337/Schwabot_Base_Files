@@ -77,19 +77,19 @@ from .chrono_recursive_logic_function import ()
 '''
 
     # Insert CRLF import after existing imports
-    content = content.replace()
-        'from .zpe_zbe_core import (',)
-        'from .zpe_zbe_core import (' + crlf_import)
+    content = content.replace(
+        'from .zpe_zbe_core import (',
+        'from .zpe_zbe_core import (' + crlf_import
     )
 
     # Insert CRLF data structures after existing dataclasses
-    content = content.replace()
+    content = content.replace(
         '@dataclass\nclass ZPEZBETradingDecision:',
         crlf_dataclasses + '\n@dataclass\nclass ZPEZBETradingDecision:'
     )
 
     # Insert CRLF pipeline state after existing state
-    content = content.replace()
+    content = content.replace(
         '@dataclass\nclass ZPEZBEPipelineState:',
         '@dataclass\nclass ZPEZBEPipelineState:' + crlf_pipeline_state
     )
@@ -100,7 +100,7 @@ from .chrono_recursive_logic_function import ()
         self.crlf = create_crlf()
 
         # Enhanced pipeline state with CRLF tracking
-        self.crlf_enhanced_state = CRLFEnhancedPipelineState()
+        self.crlf_enhanced_state = CRLFEnhancedPipelineState(
             base_state=self.state,
             crlf_instance=self.crlf,
             current_crlf_output=0.0,
@@ -111,9 +111,9 @@ from .chrono_recursive_logic_function import ()
         )
 '''
 
-    content = content.replace()
-        '        self.zpe_zbe_state = ZPEZBEPipelineState(',)
-        crlf_init + '\n        self.zpe_zbe_state = ZPEZBEPipelineState(')
+    content = content.replace(
+        '        self.zpe_zbe_state = ZPEZBEPipelineState(',
+        crlf_init + '\n        self.zpe_zbe_state = ZPEZBEPipelineState('
     )
 
     # Add CRLF-enhanced market data processing
@@ -129,7 +129,7 @@ from .chrono_recursive_logic_function import ()
             Enhanced market data with CRLF analysis
         """
         # Prepare strategy vector from market data
-        strategy_vector = np.array([)]
+        strategy_vector = np.array([
             market_data.volatility,      # Momentum component
             market_data.trend_strength,  # Scalping component
             1.0 - market_data.volatility,  # Mean reversion component
@@ -138,7 +138,7 @@ from .chrono_recursive_logic_function import ()
 
         # Prepare profit curve from market data history
         if len(self.market_data_history) >= 7:
-            profit_curve = np.array([)]
+            profit_curve = np.array([
                 md.price for md in self.market_data_history[-7:]
             ])
         else:
@@ -146,7 +146,7 @@ from .chrono_recursive_logic_function import ()
             profit_curve = np.array([market_data.price] * 7)
 
         # Compute CRLF
-        crlf_response = self.crlf.compute_crlf()
+        crlf_response = self.crlf.compute_crlf(
             strategy_vector=strategy_vector,
             profit_curve=profit_curve,
             market_entropy=market_data.entropy_level / 10.0,
@@ -159,7 +159,7 @@ from .chrono_recursive_logic_function import ()
         # Calculate temporal resonance
         temporal_resonance = self._compute_temporal_resonance(crlf_response)
 
-        return CRLFEnhancedMarketData()
+        return CRLFEnhancedMarketData(
             base_market_data=market_data,
             crlf_response=crlf_response,
             strategy_alignment_score=strategy_alignment,
@@ -171,7 +171,7 @@ from .chrono_recursive_logic_function import ()
 
     # Add CRLF-enhanced decision making
     crlf_decision_making = '''
-    def _enhance_trading_decision_with_crlf()
+    def _enhance_trading_decision_with_crlf(
         self, 
         base_decision: TradingDecision, 
         crlf_market_data: CRLFEnhancedMarketData
@@ -194,7 +194,7 @@ from .chrono_recursive_logic_function import ()
         # Update CRLF state
         self._update_crlf_pipeline_state(crlf_response)
 
-        return CRLFEnhancedTradingDecision()
+        return CRLFEnhancedTradingDecision(
             base_decision=adjusted_decision,
             crlf_output=crlf_response.crlf_output,
             trigger_state=crlf_response.trigger_state,
@@ -208,7 +208,7 @@ from .chrono_recursive_logic_function import ()
 
     # Add CRLF decision adjustment
     crlf_decision_adjustment = '''
-    def _adjust_decision_with_crlf()
+    def _adjust_decision_with_crlf(
         self, 
         base_decision: TradingDecision, 
         crlf_response: CRLFResponse
@@ -258,7 +258,7 @@ from .chrono_recursive_logic_function import ()
         adjusted_decision.risk_score *= risk_adjustment
 
         # Add CRLF metadata
-        adjusted_decision.metadata.update({)}
+        adjusted_decision.metadata.update({
             'crlf_output': crlf_response.crlf_output,
             'crlf_confidence': crlf_response.confidence,
             'recursion_depth': crlf_response.recursion_depth,
@@ -282,13 +282,13 @@ from .chrono_recursive_logic_function import ()
         self.crlf_enhanced_state.current_trigger_state = crlf_response.trigger_state
 
         # Update history
-        self.crlf_enhanced_state.strategy_alignment_trend.append()
+        self.crlf_enhanced_state.strategy_alignment_trend.append(
             self._compute_strategy_alignment_score(crlf_response)
         )
-        self.crlf_enhanced_state.temporal_resonance_history.append()
+        self.crlf_enhanced_state.temporal_resonance_history.append(
             self._compute_temporal_resonance(crlf_response)
         )
-        self.crlf_enhanced_state.recursion_depth_history.append()
+        self.crlf_enhanced_state.recursion_depth_history.append(
             crlf_response.recursion_depth
         )
 
@@ -300,7 +300,7 @@ from .chrono_recursive_logic_function import ()
             self.crlf_enhanced_state.recursion_depth_history = self.crlf_enhanced_state.recursion_depth_history[-max_history:]
 
         # Store last analysis
-        self.crlf_enhanced_state.last_crlf_analysis = {}
+        self.crlf_enhanced_state.last_crlf_analysis = {
             'crlf_output': crlf_response.crlf_output,
             'trigger_state': crlf_response.trigger_state.value,
             'confidence': crlf_response.confidence,
@@ -348,9 +348,9 @@ from .chrono_recursive_logic_function import ()
         """
         crlf_summary = self.crlf.get_performance_summary()
 
-        return {}
+        return {
             'crlf_performance': crlf_summary,
-            'pipeline_crlf_state': {}
+            'pipeline_crlf_state': {
                 'current_crlf_output': self.crlf_enhanced_state.current_crlf_output,
                 'current_trigger_state': self.crlf_enhanced_state.current_trigger_state.value,
                 'strategy_alignment_trend': self.crlf_enhanced_state.strategy_alignment_trend[-10:] if self.crlf_enhanced_state.strategy_alignment_trend else [],
@@ -362,15 +362,15 @@ from .chrono_recursive_logic_function import ()
 '''
 
     # Insert all the CRLF methods
-    content = content.replace()
+    content = content.replace(
         '    def _enhance_market_data_with_zpe_zbe(self, market_data: MarketData) -> ZPEZBEMarketData:',
         crlf_market_processing + '\n    def _enhance_market_data_with_zpe_zbe(self, market_data: MarketData) -> ZPEZBEMarketData:'
     )
 
     # Add the remaining CRLF methods after the existing methods
-    content = content.replace()
+    content = content.replace(
         '    def get_zpe_zbe_pipeline_summary(self) -> Dict[str, Any]:',
-        crlf_decision_making + '\n    def _adjust_decision_with_crlf(\n        self, \n        base_decision: TradingDecision, \n        crlf_response: CRLFResponse\n    ) -> TradingDecision:\n        """\n        Adjust trading decision based on CRLF analysis.\n        \n        Args:\n            base_decision: Base trading decision\n            crlf_response: CRLF response\n            \n        Returns:\n            Adjusted trading decision\n        """\n        adjusted_decision = base_decision\n        \n        # Adjust based on trigger state\n        if crlf_response.trigger_state == CRLFTriggerState.OVERRIDE:\n            # Override - increase position size and confidence\n            adjusted_decision.quantity *= 1.5\n            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.2)\n            adjusted_decision.metadata[\'crlf_override\'] = True\n            adjusted_decision.metadata[\'override_matrix\'] = \"FastProfitOverrideΩ\"\n            \n        elif crlf_response.trigger_state == CRLFTriggerState.ESCALATE:\n            # Escalate - moderate increase\n            adjusted_decision.quantity *= 1.2\n            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.1)\n            adjusted_decision.metadata[\'crlf_escalate\'] = True\n            \n        elif crlf_response.trigger_state == CRLFTriggerState.HOLD:\n            # Hold - reduce position size\n            adjusted_decision.quantity *= 0.7\n            adjusted_decision.confidence *= 0.9\n            adjusted_decision.metadata[\'crlf_hold\'] = True\n            adjusted_decision.metadata[\'hold_duration\'] = crlf_response.recommendations.get(\'hold_duration\', 300)\n            \n        elif crlf_response.trigger_state == CRLFTriggerState.RECURSIVE_RESET:\n            # Reset - use fallback strategy\n            adjusted_decision.quantity *= 0.5\n            adjusted_decision.confidence *= 0.7\n            adjusted_decision.metadata[\'crlf_reset\'] = True\n            adjusted_decision.metadata[\'fallback_strategy\'] = \"Conservative_Mean_Reversion\"\n        \n        # Apply risk adjustment\n        risk_adjustment = crlf_response.recommendations.get(\'risk_adjustment\', 1.0)\n        adjusted_decision.risk_score *= risk_adjustment\n        \n        # Add CRLF metadata\n        adjusted_decision.metadata.update({\n            \'crlf_output\': crlf_response.crlf_output,\n            \'crlf_confidence\': crlf_response.confidence,\n            \'recursion_depth\': crlf_response.recursion_depth,\n            \'strategy_weights\': crlf_response.recommendations.get(\'strategy_weights\', {})\n        })\n        \n        return adjusted_decision\n\n    def _update_crlf_pipeline_state(self, crlf_response: CRLFResponse):\n        """\n        Update CRLF pipeline state with latest response.\n        \n        Args:\n            crlf_response: Latest CRLF response\n        """\n        # Update current state\n        self.crlf_enhanced_state.current_crlf_output = crlf_response.crlf_output\n        self.crlf_enhanced_state.current_trigger_state = crlf_response.trigger_state\n        \n        # Update history\n        self.crlf_enhanced_state.strategy_alignment_trend.append(\n            self._compute_strategy_alignment_score(crlf_response)\n        )\n        self.crlf_enhanced_state.temporal_resonance_history.append(\n            self._compute_temporal_resonance(crlf_response)\n        )\n        self.crlf_enhanced_state.recursion_depth_history.append(\n            crlf_response.recursion_depth\n        )\n        \n        # Keep history manageable\n        max_history = 100\n        if len(self.crlf_enhanced_state.strategy_alignment_trend) > max_history:\n            self.crlf_enhanced_state.strategy_alignment_trend = self.crlf_enhanced_state.strategy_alignment_trend[-max_history:]\n            self.crlf_enhanced_state.temporal_resonance_history = self.crlf_enhanced_state.temporal_resonance_history[-max_history:]\n            self.crlf_enhanced_state.recursion_depth_history = self.crlf_enhanced_state.recursion_depth_history[-max_history:]\n        \n        # Store last analysis\n        self.crlf_enhanced_state.last_crlf_analysis = {\n            \'crlf_output\': crlf_response.crlf_output,\n            \'trigger_state\': crlf_response.trigger_state.value,\n            \'confidence\': crlf_response.confidence,\n            \'recursion_depth\': crlf_response.recursion_depth,\n            \'recommendations\': crlf_response.recommendations\n        }\n\n    def _compute_strategy_alignment_score(self, crlf_response: CRLFResponse) -> float:\n        """\n        Compute strategy alignment score from CRLF response.\n        \n        Args:\n            crlf_response: CRLF response\n            \n        Returns:\n            Strategy alignment score (0.0 to 1.0)\n        """\n        # Higher confidence and lower entropy = better alignment\n        alignment = crlf_response.confidence * (1.0 - crlf_response.entropy_updated)\n        return np.clip(alignment, 0.0, 1.0)\n    \n    def _compute_temporal_resonance(self, crlf_response: CRLFResponse) -> float:\n        """\n        Compute temporal resonance from CRLF response.\n        \n        Args:\n            crlf_response: CRLF response\n            \n        Returns:\n            Temporal resonance score (0.0 to 1.0)\n        """\n        # Temporal resonance based on CRLF output magnitude and confidence\n        resonance = abs(crlf_response.crlf_output) * crlf_response.confidence\n        return np.clip(resonance, 0.0, 1.0)\n    \n    def get_crlf_performance_summary(self) -> Dict[str, Any]:\n        """\n        Get CRLF performance summary.\n        \n        Returns:\n            CRLF performance summary\n        """\n        crlf_summary = self.crlf.get_performance_summary()\n        \n        return {\n            \'crlf_performance\': crlf_summary,\n            \'pipeline_crlf_state\': {\n                \'current_crlf_output\': self.crlf_enhanced_state.current_crlf_output,\n                \'current_trigger_state\': self.crlf_enhanced_state.current_trigger_state.value,\n                \'strategy_alignment_trend\': self.crlf_enhanced_state.strategy_alignment_trend[-10:] if self.crlf_enhanced_state.strategy_alignment_trend else [],\n                \'temporal_resonance_history\': self.crlf_enhanced_state.temporal_resonance_history[-10:] if self.crlf_enhanced_state.temporal_resonance_history else [],\n                \'recursion_depth_history\': self.crlf_enhanced_state.recursion_depth_history[-10:] if self.crlf_enhanced_state.recursion_depth_history else [],\n                \'last_crlf_analysis\': self.crlf_enhanced_state.last_crlf_analysis\n            }\n        }\n\n    def get_zpe_zbe_pipeline_summary(self) -> Dict[str, Any]:'
+        crlf_decision_making + '\n' + crlf_decision_adjustment + '\n' + crlf_state_update + '\n' + crlf_helper_methods + '\n    def get_zpe_zbe_pipeline_summary(self) -> Dict[str, Any]:'
     )
 
     # Write the enhanced pipeline back

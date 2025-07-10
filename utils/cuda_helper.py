@@ -44,7 +44,7 @@ class ComputeMode(Enum):
 
 
 @dataclass
-    class FallbackMetrics:
+class FallbackMetrics:
     """Metrics for fallback performance tracking."""
 
     timestamp: float
@@ -58,7 +58,7 @@ class ComputeMode(Enum):
 
 
 @dataclass
-    class SystemFitProfile:
+class SystemFitProfile:
     """System-aware hardware profile for GPU scaling and fit testing."""
 
     gpu_tier: str
@@ -153,7 +153,7 @@ class MathematicalCore:
 
         return ops_count / (gpu_freq_ghz * 1e9)
 
-    def memory_tile_limit(self, mem_bytes: Optional[float] = None,)
+    def memory_tile_limit(self, mem_bytes: Optional[float] = None,
                          matrix_size: Optional[int] = None, 
                          dtype_bytes: int = 4) -> int:
         """
@@ -211,14 +211,14 @@ def build_system_fit_profile() -> SystemFitProfile:
     """Build system-aware hardware profile for GPU scaling."""
 
     # Default CPU profile
-    cpu_profile = {}
+    cpu_profile = {
         "cores": 4,
         "memory_gb": 8.0,
         "architecture": "x86_64"
     }
 
     # Default GPU profile
-    gpu_profile = {}
+    gpu_profile = {
         "tier": "TIER_LOW",
         "memory_gb": 2.0,
         "compute_capability": "3.5",
@@ -281,7 +281,7 @@ def build_system_fit_profile() -> SystemFitProfile:
     precision = 'half' if gpu_profile.get('use_half_precision', False) else 'float'
 
     # Create combined system data for hashing
-    combined = {}
+    combined = {
         "gpu": gpu_profile,
         "cpu": cpu_profile,
         "device_type": device_type,
@@ -296,7 +296,7 @@ def build_system_fit_profile() -> SystemFitProfile:
     # Determine if GPU logic can run
     can_run_gpu_logic = gpu_profile.get('tier') in ["TIER_MID", "TIER_HIGH", "TIER_ULTRA"]
 
-    return SystemFitProfile()
+    return SystemFitProfile(
         gpu_tier=gpu_profile['tier'],
         device_type=device_type,
         matrix_size=gpu_profile['matrix_size'],
@@ -345,10 +345,7 @@ class CUDADetector:
                 self.torch_available = True
                 self.cuda_available = True
                 self.detected_devices = [f"cuda:{i}" for i in range(torch.cuda.device_count())]
-                logger.info()
-                    f"PyTorch CUDA acceleration detected: {"}
-                        self.detected_devices}"
-                )
+                logger.info(f"PyTorch CUDA acceleration detected: {self.detected_devices}")
         except ImportError:
             logger.info("PyTorch not available")
 
@@ -375,7 +372,7 @@ class CUDADetector:
 
     def get_status(self) -> Dict[str, Any]:
         """Get current CUDA detection status."""
-        return {}
+        return {
             "cuda_available": self.cuda_available,
             "cupy_available": self.cupy_available,
             "torch_available": self.torch_available,
@@ -392,7 +389,7 @@ math_core = MathematicalCore(FIT_PROFILE)
 
 # Set up CUDA if available
 USING_CUDA = detector.cuda_available
-    if USING_CUDA and detector.cupy_available:
+if USING_CUDA and detector.cupy_available:
     try:
         import cupy as cp
         math_core.xp = cp
@@ -473,8 +470,8 @@ def safe_cuda_operation(operation: Callable, fallback_operation: Optional[Callab
 def get_cuda_status() -> Dict[str, Any]:
     """Get comprehensive CUDA and system status."""
     status = detector.get_status()
-    status.update({)}
-        "system_profile": {}
+    status.update({
+        "system_profile": {
             "gpu_tier": FIT_PROFILE.gpu_tier,
             "device_type": FIT_PROFILE.device_type,
             "matrix_size": FIT_PROFILE.matrix_size,
@@ -507,19 +504,19 @@ def report_cuda_status():
 
 
 # Mathematical operation wrappers
-    def safe_matrix_multiply(A: np.ndarray, B: np.ndarray) -> np.ndarray:
+def safe_matrix_multiply(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     """Safe matrix multiplication with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.matrix_fit(A, B),
         lambda: np.dot(A, B)
     )
 
 
-def safe_tensor_contraction()
+def safe_tensor_contraction(
     A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None
 ) -> np.ndarray:
     """Safe tensor contraction with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.tensordot(A, B, axes=axes),
         lambda: np.tensordot(A, B, axes=axes)
     )
@@ -527,7 +524,7 @@ def safe_tensor_contraction()
 
 def safe_fft(data: np.ndarray) -> np.ndarray:
     """Safe FFT with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.fft.fft(data),
         lambda: np.fft.fft(data)
     )
@@ -535,7 +532,7 @@ def safe_fft(data: np.ndarray) -> np.ndarray:
 
 def safe_convolution(data: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     """Safe convolution with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.convolve(data, kernel, mode='same'),
         lambda: np.convolve(data, kernel, mode='same')
     )
@@ -543,7 +540,7 @@ def safe_convolution(data: np.ndarray, kernel: np.ndarray) -> np.ndarray:
 
 def safe_eigenvalue_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """Safe eigenvalue decomposition with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.linalg.eigh(A),
         lambda: np.linalg.eigh(A)
     )
@@ -551,7 +548,7 @@ def safe_eigenvalue_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray
 
 def safe_matrix_inverse(A: np.ndarray) -> np.ndarray:
     """Safe matrix inverse with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.linalg.inv(A),
         lambda: np.linalg.inv(A)
     )
@@ -559,14 +556,14 @@ def safe_matrix_inverse(A: np.ndarray) -> np.ndarray:
 
 def safe_svd(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Safe SVD with GPU acceleration."""
-    return safe_cuda_operation()
+    return safe_cuda_operation(
         lambda: math_core.xp.linalg.svd(A),
         lambda: np.linalg.svd(A)
     )
 
 
 # Export mathematical functions for easy access
-    def matrix_fit(A: np.ndarray, B: np.ndarray) -> np.ndarray:
+def matrix_fit(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     """Matrix multiplication with system-aware sizing."""
     return math_core.matrix_fit(A, B)
 
@@ -591,7 +588,7 @@ def ideal_tick_time(ops_count: int, gpu_freq_ghz: Optional[float] = None) -> flo
     return math_core.ideal_tick_time(ops_count, gpu_freq_ghz)
 
 
-def memory_tile_limit(mem_bytes: Optional[float] = None,)
+def memory_tile_limit(mem_bytes: Optional[float] = None,
                      matrix_size: Optional[int] = None, 
                      dtype_bytes: int = 4) -> int:
     """Calculate memory tile limit for GPU tensor management."""
@@ -614,7 +611,7 @@ def phantom_score(tick_data: np.ndarray, threshold: float = 0.1) -> float:
 
 
 # Initialize and test the system
-    if __name__ == "__main__":
+if __name__ == "__main__":
     report_cuda_status()
 
     # Test mathematical functions

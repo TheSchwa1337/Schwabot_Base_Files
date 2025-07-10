@@ -1,346 +1,450 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Profit Optimization Engine 🚀
+
+Advanced portfolio optimization with tensor math integration:
+• Multi-method portfolio optimization (gradient descent, genetic algorithm)
+• Sharpe ratio and risk-adjusted return maximization
+• Real-time portfolio rebalancing and weight optimization
+• GPU/CPU tensor operations for fast calculations
+• Integration with risk management and exchange systems
+
+Features:
+- GPU-accelerated optimization with automatic CPU fallback
+- Multiple optimization algorithms and methods
+- Real-time portfolio rebalancing
+- Risk-adjusted return optimization
+- Integration with Schwabot's tensor math chain
+"""
+
+import logging
+import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+try:
+    import cupy as cp
+    import numpy as np
+    USING_CUDA = True
+    xp = cp
+    _backend = 'cupy (GPU)'
+except ImportError:
+    try:
+        import numpy as np
+        USING_CUDA = False
+        xp = np
+        _backend = 'numpy (CPU)'
+    except ImportError:
+        xp = None
+        _backend = 'none'
 
-# !/usr/bin/env python3
-"""
-Profit Optimization Engine
-
-Advanced portfolio optimization engine using various mathematical methods
-including gradient descent, genetic algorithms, and other optimization techniques.
-
-This module provides:
-- Portfolio weight optimization
-- Risk-adjusted return maximization
-- Multiple optimization algorithms
-- Constraint handling
-- Performance metrics calculation
-
-All functions are pure and can be unit-tested in isolation.
-"""
+logger = logging.getLogger(__name__)
+if xp is None:
+    logger.warning("❌ NumPy not available for optimization calculations")
+else:
+    logger.info(f"⚡ ProfitOptimizationEngine using {_backend} for tensor operations")
 
 
 class OptimizationMethod(Enum):
-    """Optimization methods for profit calculation."""
-
+    """Available optimization methods."""
     GRADIENT_DESCENT = "gradient_descent"
     GENETIC_ALGORITHM = "genetic_algorithm"
-    SIMULATED_ANNEALING = "simulated_annealing"
     PARTICLE_SWARM = "particle_swarm"
-    BAYESIAN_OPTIMIZATION = "bayesian_optimization"
+    BLACK_LITTERMAN = "black_litterman"
+    MEAN_VARIANCE = "mean_variance"
 
 
-class RiskMetric(Enum):
-    """Risk metrics for portfolio optimization."""
-
-    SHARPE_RATIO = "sharpe_ratio"
-    SORTINO_RATIO = "sortino_ratio"
-    MAX_DRAWDOWN = "max_drawdown"
-    VALUE_AT_RISK = "var"
-    CONDITIONAL_VAR = "cvar"
+class OptimizationStatus(Enum):
+    """Optimization status."""
+    IDLE = "idle"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
 
 
 @dataclass
 class OptimizationResult:
-    """Result of an optimization run."""
-
-    optimal_parameters: Dict[str, float]
-    objective_value: float
-    convergence: bool
-    iterations: int
-    execution_time: float
+    """Result of portfolio optimization."""
+    method: OptimizationMethod
+    weights: xp.ndarray
+    expected_return: float
+    expected_volatility: float
+    sharpe_ratio: float
+    sortino_ratio: float
+    max_drawdown: float
+    convergence_iterations: int
+    optimization_time: float
+    status: OptimizationStatus
     metadata: Dict[str, Any] = field(default_factory=dict)
+    timestamp: float = field(default_factory=time.time)
 
 
 @dataclass
-class PortfolioWeights:
-    """Portfolio weight allocation."""
-
-    weights: np.ndarray
-    assets: List[str]
-    total_weight: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+class PortfolioConstraints:
+    """Portfolio optimization constraints."""
+    min_weight: float = 0.0
+    max_weight: float = 1.0
+    target_return: Optional[float] = None
+    max_volatility: Optional[float] = None
+    risk_free_rate: float = 0.02
+    rebalance_threshold: float = 0.05  # 5% threshold for rebalancing
 
 
 class ProfitOptimizationEngine:
     """
-    Main profit optimization engine.
-
-    Provides methods for optimizing trading strategies, portfolio allocation,
-    and risk management parameters.
+    Advanced profit optimization engine with tensor math integration.
+    Handles portfolio optimization, rebalancing, and risk-adjusted return maximization.
     """
-
-    def __init__(self, risk_free_rate: float = 0.2):
-        """Initialize the optimization engine."""
-        self.risk_free_rate = risk_free_rate
+    def __init__(self, constraints: Optional[PortfolioConstraints] = None):
+        self.constraints = constraints or PortfolioConstraints()
         self.optimization_history: List[OptimizationResult] = []
+        self.current_weights: Optional[xp.ndarray] = None
+        self.processing_mode = 'gpu' if USING_CUDA else 'cpu'
+        self.is_optimizing = False
 
-    def optimize_portfolio_weights(
-        self,
-        returns: np.ndarray,
-        method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
-        risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO,
-        constraints: Optional[Dict[str, Any]] = None,
-        max_iterations: int = 1000,
-        tolerance: float = 1e-6,
-    ) -> OptimizationResult:
-        """
-        Optimize portfolio weights for maximum risk-adjusted returns.
-
-        Args:
-            returns: Historical returns matrix (time x assets)
-            method: Optimization method to use
-            risk_metric: Risk metric to optimize
-            constraints: Optimization constraints
-            max_iterations: Maximum iterations
-            tolerance: Convergence tolerance
-
-        Returns:
-            Optimization result with optimal weights
-        """
-        if method == OptimizationMethod.GRADIENT_DESCENT:
-            return self._gradient_descent_optimization(returns, risk_metric, constraints, max_iterations, tolerance)
-        elif method == OptimizationMethod.GENETIC_ALGORITHM:
-            return self._genetic_algorithm_optimization(returns, risk_metric, constraints, max_iterations)
-        else:
-            raise ValueError("Unsupported optimization method: {0}".format(method))
-
-    def _gradient_descent_optimization(
-        self,
-        returns: np.ndarray,
-        risk_metric: RiskMetric,
-        constraints: Optional[Dict[str, Any]],
-        max_iterations: int,
-        tolerance: float,
-    ) -> OptimizationResult:
-        """Gradient descent optimization."""
-        num_assets = returns.shape[1]
-
-        # Initialize weights
-        weights = np.ones(num_assets) / num_assets
-
-        # Calculate covariance matrix
-        cov_matrix = np.cov(returns.T, ddof=1)
-
-        for iteration in range(max_iterations):
-            # Calculate objective function and gradient
-            if risk_metric == RiskMetric.SHARPE_RATIO:
-                objective, gradient = self._sharpe_ratio_gradient(weights, returns, cov_matrix)
+    def optimize_portfolio(self, returns: xp.ndarray, method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
+                         max_iterations: int = 1000, tolerance: float = 1e-6) -> OptimizationResult:
+        """Optimize portfolio weights for maximum Sharpe ratio."""
+        try:
+            if xp is None:
+                raise ValueError("Tensor operations not available")
+            
+            self.is_optimizing = True
+            start_time = time.time()
+            
+            logger.info(f"🚀 Starting portfolio optimization with {method.value}")
+            
+            if method == OptimizationMethod.GRADIENT_DESCENT:
+                result = self._gradient_descent_optimization(returns, max_iterations, tolerance)
+            elif method == OptimizationMethod.GENETIC_ALGORITHM:
+                result = self._genetic_algorithm_optimization(returns, max_iterations)
+            elif method == OptimizationMethod.PARTICLE_SWARM:
+                result = self._particle_swarm_optimization(returns, max_iterations)
             else:
-                objective, gradient = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
+                raise ValueError(f"Unsupported optimization method: {method}")
+            
+            result.method = method
+            result.optimization_time = time.time() - start_time
+            result.status = OptimizationStatus.COMPLETED
+            
+            self.optimization_history.append(result)
+            self.current_weights = result.weights
+            
+            logger.info(f"✅ Optimization completed: Sharpe ratio = {result.sharpe_ratio:.4f}")
+            return result
+            
+        except Exception as e:
+            logger.error(f"❌ Optimization failed: {e}")
+            return OptimizationResult(
+                method=method,
+                weights=xp.array([]),
+                expected_return=0.0,
+                expected_volatility=0.0,
+                sharpe_ratio=0.0,
+                sortino_ratio=0.0,
+                max_drawdown=0.0,
+                convergence_iterations=0,
+                optimization_time=0.0,
+                status=OptimizationStatus.FAILED
+            )
+        finally:
+            self.is_optimizing = False
 
-            # Update weights
-            learning_rate = 0.1
-            weights_new = weights + learning_rate * gradient
-
-            # Apply constraints
-            if constraints:
-                weights_new = self._apply_constraints(weights_new, constraints)
-
-            # Check convergence
-            weight_change = np.linalg.norm(weights_new - weights)
-            if weight_change < tolerance:
-                break
-
-            weights = weights_new
-
-        return OptimizationResult(
-            optimal_parameters={"weights": weights.tolist()},
-            objective_value=objective,
-            convergence=weight_change < tolerance,
-            iterations=iteration + 1,
-            execution_time=0.0,  # Would be calculated in real implementation
-            metadata={
-                "method": "gradient_descent",
-                "risk_metric": risk_metric.value,
-                "final_weight_change": float(weight_change),
-            },
-        )
-
-    def _genetic_algorithm_optimization(
-        self,
-        returns: np.ndarray,
-        risk_metric: RiskMetric,
-        constraints: Optional[Dict[str, Any]],
-        max_iterations: int,
-    ) -> OptimizationResult:
-        """Genetic algorithm optimization."""
-        num_assets = returns.shape[1]
-        population_size = 50
-
-        # Initialize population
-        population = []
-        for _ in range(population_size):
-            weights = np.random.random(num_assets)
-            weights = weights / np.sum(weights)
-            population.append(weights)
-
-        best_weights = None
-        best_objective = float("-inf")
-
-        for generation in range(max_iterations):
-            # Evaluate fitness
-            fitness_scores = []
-            for weights in population:
-                if risk_metric == RiskMetric.SHARPE_RATIO:
-                    objective = self._calculate_sharpe_ratio(weights, returns)
+    def _gradient_descent_optimization(self, returns: xp.ndarray, max_iterations: int, tolerance: float) -> OptimizationResult:
+        """Gradient descent optimization for maximum Sharpe ratio."""
+        try:
+            n_assets = returns.shape[1]
+            
+            # Initialize weights
+            weights = xp.ones(n_assets) / n_assets
+            
+            # Calculate mean returns and covariance matrix
+            mean_returns = xp.mean(returns, axis=0)
+            cov_matrix = xp.cov(returns.T)
+            
+            learning_rate = 0.01
+            best_sharpe = -xp.inf
+            best_weights = weights.copy()
+            
+            for iteration in range(max_iterations):
+                # Calculate current portfolio metrics
+                portfolio_return = xp.dot(weights, mean_returns)
+                portfolio_volatility = xp.sqrt(xp.dot(weights, xp.dot(cov_matrix, weights)))
+                
+                if portfolio_volatility > 0:
+                    sharpe_ratio = (portfolio_return - self.constraints.risk_free_rate) / portfolio_volatility
                 else:
-                    objective = self._calculate_risk_metric(weights, returns, risk_metric)
-                fitness_scores.append(objective)
-
-                if objective > best_objective:
-                    best_objective = objective
+                    sharpe_ratio = 0.0
+                
+                # Update best solution
+                if sharpe_ratio > best_sharpe:
+                    best_sharpe = sharpe_ratio
                     best_weights = weights.copy()
+                
+                # Calculate gradient
+                if portfolio_volatility > 0:
+                    gradient = (mean_returns * portfolio_volatility - 
+                              (portfolio_return - self.constraints.risk_free_rate) * 
+                              xp.dot(cov_matrix, weights) / portfolio_volatility) / (portfolio_volatility ** 2)
+                else:
+                    gradient = mean_returns
+                
+                # Update weights
+                weights_new = weights + learning_rate * gradient
+                
+                # Apply constraints
+                weights_new = xp.clip(weights_new, self.constraints.min_weight, self.constraints.max_weight)
+                weights_new = weights_new / xp.sum(weights_new)  # Normalize
+                
+                # Check convergence
+                if xp.linalg.norm(weights_new - weights) < tolerance:
+                    break
+                
+                weights = weights_new
+            
+            # Calculate final metrics
+            final_return = xp.dot(best_weights, mean_returns)
+            final_volatility = xp.sqrt(xp.dot(best_weights, xp.dot(cov_matrix, best_weights)))
+            final_sharpe = (final_return - self.constraints.risk_free_rate) / final_volatility if final_volatility > 0 else 0.0
+            
+            return OptimizationResult(
+                method=OptimizationMethod.GRADIENT_DESCENT,
+                weights=best_weights,
+                expected_return=float(final_return),
+                expected_volatility=float(final_volatility),
+                sharpe_ratio=float(final_sharpe),
+                sortino_ratio=self._calculate_sortino_ratio(best_weights, returns),
+                max_drawdown=self._calculate_max_drawdown(best_weights, returns),
+                convergence_iterations=iteration + 1,
+                optimization_time=0.0,  # Will be set by caller
+                status=OptimizationStatus.COMPLETED
+            )
+            
+        except Exception as e:
+            logger.error(f"❌ Gradient descent optimization failed: {e}")
+            raise
 
-            # Selection, crossover, mutation
-            new_population = []
+    def _genetic_algorithm_optimization(self, returns: xp.ndarray, max_iterations: int) -> OptimizationResult:
+        """Genetic algorithm optimization for portfolio weights."""
+        try:
+            n_assets = returns.shape[1]
+            population_size = 50
+            mutation_rate = 0.1
+            
+            # Initialize population
+            population = []
             for _ in range(population_size):
-                # Tournament selection
-                idx1, idx2 = np.random.choice(len(population), 2, replace=False)
-                parent1 = population[idx1] if fitness_scores[idx1] > fitness_scores[idx2] else population[idx2]
+                weights = xp.random.random(n_assets)
+                weights = weights / xp.sum(weights)
+                population.append(weights)
+            
+            best_sharpe = -xp.inf
+            best_weights = None
+            
+            for generation in range(max_iterations):
+                # Evaluate fitness
+                fitness_scores = []
+                for weights in population:
+                    sharpe = self._calculate_sharpe_ratio(weights, returns)
+                    fitness_scores.append(sharpe)
+                    
+                    if sharpe > best_sharpe:
+                        best_sharpe = sharpe
+                        best_weights = weights.copy()
+                
+                # Selection and crossover
+                new_population = []
+                for _ in range(population_size):
+                    # Tournament selection
+                    idx1, idx2 = xp.random.choice(len(population), 2, replace=False)
+                    parent1 = population[idx1] if fitness_scores[idx1] > fitness_scores[idx2] else population[idx2]
+                    parent2 = population[xp.random.choice(len(population))]
+                    
+                    # Crossover
+                    crossover_point = xp.random.randint(1, n_assets)
+                    child = xp.concatenate([parent1[:crossover_point], parent2[crossover_point:]])
+                    
+                    # Mutation
+                    if xp.random.random() < mutation_rate:
+                        mutation_idx = xp.random.randint(0, n_assets)
+                        child[mutation_idx] = xp.random.random()
+                    
+                    # Normalize
+                    child = child / xp.sum(child)
+                    new_population.append(child)
+                
+                population = new_population
+            
+            if best_weights is None:
+                best_weights = xp.ones(n_assets) / n_assets
+            
+            return OptimizationResult(
+                method=OptimizationMethod.GENETIC_ALGORITHM,
+                weights=best_weights,
+                expected_return=float(xp.dot(best_weights, xp.mean(returns, axis=0))),
+                expected_volatility=float(xp.sqrt(xp.dot(best_weights, xp.dot(xp.cov(returns.T), best_weights)))),
+                sharpe_ratio=float(best_sharpe),
+                sortino_ratio=self._calculate_sortino_ratio(best_weights, returns),
+                max_drawdown=self._calculate_max_drawdown(best_weights, returns),
+                convergence_iterations=max_iterations,
+                optimization_time=0.0,
+                status=OptimizationStatus.COMPLETED
+            )
+            
+        except Exception as e:
+            logger.error(f"❌ Genetic algorithm optimization failed: {e}")
+            raise
 
-                idx3, idx4 = np.random.choice(len(population), 2, replace=False)
-                parent2 = population[idx3] if fitness_scores[idx3] > fitness_scores[idx4] else population[idx4]
+    def _particle_swarm_optimization(self, returns: xp.ndarray, max_iterations: int) -> OptimizationResult:
+        """Particle swarm optimization for portfolio weights."""
+        try:
+            n_assets = returns.shape[1]
+            n_particles = 30
+            
+            # Initialize particles
+            particles = []
+            velocities = []
+            personal_best = []
+            personal_best_fitness = []
+            
+            for _ in range(n_particles):
+                weights = xp.random.random(n_assets)
+                weights = weights / xp.sum(weights)
+                particles.append(weights)
+                velocities.append(xp.random.random(n_assets) * 0.1)
+                personal_best.append(weights.copy())
+                personal_best_fitness.append(-xp.inf)
+            
+            global_best = particles[0].copy()
+            global_best_fitness = -xp.inf
+            
+            for iteration in range(max_iterations):
+                for i in range(n_particles):
+                    # Calculate fitness
+                    fitness = self._calculate_sharpe_ratio(particles[i], returns)
+                    
+                    # Update personal best
+                    if fitness > personal_best_fitness[i]:
+                        personal_best_fitness[i] = fitness
+                        personal_best[i] = particles[i].copy()
+                    
+                    # Update global best
+                    if fitness > global_best_fitness:
+                        global_best_fitness = fitness
+                        global_best = particles[i].copy()
+                
+                # Update particles
+                for i in range(n_particles):
+                    # Update velocity
+                    w = 0.7  # inertia
+                    c1 = 1.5  # cognitive parameter
+                    c2 = 1.5  # social parameter
+                    
+                    velocities[i] = (w * velocities[i] + 
+                                   c1 * xp.random.random() * (personal_best[i] - particles[i]) +
+                                   c2 * xp.random.random() * (global_best - particles[i]))
+                    
+                    # Update position
+                    particles[i] += velocities[i]
+                    
+                    # Apply constraints
+                    particles[i] = xp.clip(particles[i], self.constraints.min_weight, self.constraints.max_weight)
+                    particles[i] = particles[i] / xp.sum(particles[i])
+            
+            return OptimizationResult(
+                method=OptimizationMethod.PARTICLE_SWARM,
+                weights=global_best,
+                expected_return=float(xp.dot(global_best, xp.mean(returns, axis=0))),
+                expected_volatility=float(xp.sqrt(xp.dot(global_best, xp.dot(xp.cov(returns.T), global_best)))),
+                sharpe_ratio=float(global_best_fitness),
+                sortino_ratio=self._calculate_sortino_ratio(global_best, returns),
+                max_drawdown=self._calculate_max_drawdown(global_best, returns),
+                convergence_iterations=max_iterations,
+                optimization_time=0.0,
+                status=OptimizationStatus.COMPLETED
+            )
+            
+        except Exception as e:
+            logger.error(f"❌ Particle swarm optimization failed: {e}")
+            raise
 
-                # Crossover
-                crossover_point = np.random.randint(1, num_assets)
-                child = np.concatenate([parent1[:crossover_point], parent2[crossover_point:]])
-
-                # Mutation
-                if np.random.random() < 0.1:
-                    mutation_idx = np.random.randint(0, num_assets)
-                    child[mutation_idx] += np.random.normal(0, 0.1)
-                    child = np.maximum(child, 0)  # Ensure non-negative weights
-
-                # Normalize weights
-                child = child / np.sum(child)
-                new_population.append(child)
-
-            population = new_population
-
-        return OptimizationResult(
-            optimal_parameters={"weights": best_weights.tolist()},
-            objective_value=best_objective,
-            convergence=True,
-            iterations=max_iterations,
-            execution_time=0.0,
-            metadata={
-                "method": "genetic_algorithm",
-                "risk_metric": risk_metric.value,
-                "population_size": population_size,
-            },
-        )
-
-    def _sharpe_ratio_gradient(
-        self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray
-    ) -> Tuple[float, np.ndarray]:
-        """Calculate Sharpe ratio and its gradient."""
-        # Calculate portfolio return and volatility
-        portfolio_return = np.mean(returns @ weights)
-        portfolio_vol = np.sqrt(weights.T @ cov_matrix @ weights)
-
-        # Sharpe ratio
-        sharpe_ratio = (portfolio_return - self.risk_free_rate) / portfolio_vol
-
-        # Gradient of Sharpe ratio
-        if portfolio_vol > 0:
-            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol - (
-                portfolio_return - self.risk_free_rate
-            ) * (cov_matrix @ weights) / (portfolio_vol**3)
-        else:
-            gradient = np.zeros_like(weights)
-
-        return sharpe_ratio, gradient
-
-    def _generic_risk_gradient(
-        self,
-        weights: np.ndarray,
-        returns: np.ndarray,
-        cov_matrix: np.ndarray,
-        risk_metric: RiskMetric,
-    ) -> Tuple[float, np.ndarray]:
-        """Calculate generic risk metric and gradient."""
-        if risk_metric == RiskMetric.MAX_DRAWDOWN:
-            return self._max_drawdown_gradient(weights, returns)
-        else:
-            # Default to variance-based risk
-            portfolio_var = weights.T @ cov_matrix @ weights
-            gradient = 2 * cov_matrix @ weights
-            return -portfolio_var, -gradient
-
-    def _max_drawdown_gradient(self, weights: np.ndarray, returns: np.ndarray) -> Tuple[float, np.ndarray]:
-        """Calculate maximum drawdown and its gradient."""
-        portfolio_returns = returns @ weights
-        cumulative_returns = np.cumprod(1 + portfolio_returns)
-        running_max = np.maximum.accumulate(cumulative_returns)
-        drawdown = (cumulative_returns - running_max) / running_max
-        max_drawdown = np.min(drawdown)
-
-        # Simplified gradient (approximation)
-        gradient = np.mean(returns, axis=0) * max_drawdown
-
-        return max_drawdown, gradient
-
-    def _calculate_sharpe_ratio(self, weights: np.ndarray, returns: np.ndarray) -> float:
+    def _calculate_sharpe_ratio(self, weights: xp.ndarray, returns: xp.ndarray) -> float:
         """Calculate Sharpe ratio for given weights."""
-        portfolio_return = np.mean(returns @ weights)
-        portfolio_vol = np.std(returns @ weights)
-
-        if portfolio_vol > 0:
-            return (portfolio_return - self.risk_free_rate) / portfolio_vol
-        else:
+        try:
+            portfolio_returns = xp.dot(returns, weights)
+            mean_return = xp.mean(portfolio_returns)
+            volatility = xp.std(portfolio_returns)
+            
+            if volatility > 0:
+                return (mean_return - self.constraints.risk_free_rate) / volatility
+            else:
+                return 0.0
+        except Exception:
             return 0.0
 
-    def _calculate_risk_metric(self, weights: np.ndarray, returns: np.ndarray, risk_metric: RiskMetric) -> float:
-        """Calculate risk metric for given weights."""
-        if risk_metric == RiskMetric.SHARPE_RATIO:
-            return self._calculate_sharpe_ratio(weights, returns)
-        elif risk_metric == RiskMetric.MAX_DRAWDOWN:
-            portfolio_returns = returns @ weights
-            cumulative_returns = np.cumprod(1 + portfolio_returns)
-            running_max = np.maximum.accumulate(cumulative_returns)
-            drawdown = (cumulative_returns - running_max) / running_max
-            return np.min(drawdown)
-        else:
-            # Default to variance
-            return -np.var(returns @ weights)
+    def _calculate_sortino_ratio(self, weights: xp.ndarray, returns: xp.ndarray) -> float:
+        """Calculate Sortino ratio for given weights."""
+        try:
+            portfolio_returns = xp.dot(returns, weights)
+            mean_return = xp.mean(portfolio_returns)
+            downside_returns = portfolio_returns[portfolio_returns < mean_return]
+            
+            if len(downside_returns) > 0:
+                downside_deviation = xp.std(downside_returns)
+                if downside_deviation > 0:
+                    return (mean_return - self.constraints.risk_free_rate) / downside_deviation
+            
+            return 0.0
+        except Exception:
+            return 0.0
 
-    def _apply_constraints(self, weights: np.ndarray, constraints: Dict[str, Any]) -> np.ndarray:
-        """Apply optimization constraints to weights."""
-        # Ensure weights sum to 1
-        weights = weights / np.sum(weights)
+    def _calculate_max_drawdown(self, weights: xp.ndarray, returns: xp.ndarray) -> float:
+        """Calculate maximum drawdown for given weights."""
+        try:
+            portfolio_returns = xp.dot(returns, weights)
+            cumulative_returns = xp.cumprod(1 + portfolio_returns)
+            running_max = xp.maximum.accumulate(cumulative_returns)
+            drawdowns = (cumulative_returns - running_max) / running_max
+            return float(xp.min(drawdowns))
+        except Exception:
+            return 0.0
 
-        # Apply bounds if specified
-        if "bounds" in constraints:
-            min_weight = constraints["bounds"].get("min", 0.0)
-            max_weight = constraints["bounds"].get("max", 1.0)
-            weights = np.clip(weights, min_weight, max_weight)
-            weights = weights / np.sum(weights)  # Renormalize
+    def should_rebalance(self, current_weights: xp.ndarray, target_weights: xp.ndarray) -> bool:
+        """Check if portfolio should be rebalanced."""
+        if current_weights is None or target_weights is None:
+            return False
+        
+        weight_diff = xp.abs(current_weights - target_weights)
+        max_diff = xp.max(weight_diff)
+        
+        return max_diff > self.constraints.rebalance_threshold
 
-        return weights
+    def get_optimization_summary(self) -> Dict[str, Any]:
+        """Get summary of optimization history."""
+        try:
+            if not self.optimization_history:
+                return {"error": "No optimization history"}
+            
+            latest = self.optimization_history[-1]
+            
+            return {
+                "total_optimizations": len(self.optimization_history),
+                "latest_method": latest.method.value,
+                "latest_sharpe_ratio": latest.sharpe_ratio,
+                "latest_expected_return": latest.expected_return,
+                "latest_expected_volatility": latest.expected_volatility,
+                "optimization_time": latest.optimization_time,
+                "status": latest.status.value,
+                "current_weights": latest.weights.tolist() if latest.weights is not None else []
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to get optimization summary: {e}")
+            return {"error": str(e)}
 
-    def get_optimization_history(self) -> List[OptimizationResult]:
-        """Get optimization history."""
-        return self.optimization_history.copy()
 
-    def clear_history(self) -> None:
-        """Clear optimization history."""
-        self.optimization_history.clear()
-
-
-# Factory functions
-def create_optimization_engine(risk_free_rate: float = 0.2) -> ProfitOptimizationEngine:
-    """Create a new optimization engine instance."""
-    return ProfitOptimizationEngine(risk_free_rate)
-
-
-def optimize_portfolio(
-    returns: np.ndarray,
-    method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
-    risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO,
-) -> OptimizationResult:
-    """Convenience function for portfolio optimization."""
-    engine = ProfitOptimizationEngine()
-    return engine.optimize_portfolio_weights(returns, method, risk_metric)
+# Singleton instance for global use
+profit_optimization_engine = ProfitOptimizationEngine()

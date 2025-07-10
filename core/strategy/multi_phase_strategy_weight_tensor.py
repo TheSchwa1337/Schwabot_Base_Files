@@ -1,936 +1,246 @@
 """
-
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core//strategy//multi_phase_strategy_weight_tensor.py
-
-
-
-Date commented out: 2025-7-2 19:37:6
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical, foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit, calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading, logic)
-
-
-
-- core/clean_unified_math.py (unified, mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-
-"""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Multi-Phase Strategy Weight Tensor Module
 
+Provides functionality for managing strategy weights across different market phases.
+"""
 
+import logging
+import logging
 
------------------------------------------
 
+import logging
+import logging
 
 
-Implements a multi-dimensional tensor to dynamically manage and adjust the
+import logging
+import logging
 
 
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union, Tuple
 
-weights of various trading strategies across different market phases.
+import numpy as np
 
+# Check for mathematical infrastructure availability
+try:
+    from core.math.mathematical_framework_integrator import MathConfigManager, MathResultCache, MathOrchestrator
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    MathConfigManager = None
+    MathResultCache = None
+    MathOrchestrator = None
 
 
-This module is critical for adaptive strategy orchestration, allowing
+class MarketPhase(Enum):
+    """Market phase enumeration."""
 
+    BULL = "bull"
+    BEAR = "bear"
+    SIDEWAYS = "sideways"
+    VOLATILE = "volatile"
+    TRENDING = "trending"
 
 
-the system to prioritize or de-prioritize strategies based on prevailing
+class Status(Enum):
+    """System status enumeration."""
 
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    ERROR = "error"
+    PROCESSING = "processing"
 
 
-market conditions or internal performance metrics.
+@dataclass
+class Config:
+    """Configuration data class."""
 
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+    decay_factor: float = 0.95
+    learning_rate: float = 0.01
 
 
+@dataclass
+class Result:
+    """Result data class."""
 
+    success: bool = False
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+    timestamp: float = field(default_factory=time.time)
 
 
-
-Key functionalities include:
-
-
-
-- Definition and management of strategy weights as a tensor.
-
-
-
-- Adaptive adjustment of weights based on phase indicators.
-
-
-
-- Support for dif ferent market phases (e.g., trend, consolidation, volatility).
-
-
-
-- Integration with other strategy modules for dynamic control.class MarketPhase(Enum):Defines
-different market phases.TREND = trendCONSOLIDATION =  consolidationVOLATILITY = volatilityREVERSAL =
-reversalUNKNOWN = unknownclass MultiPhaseStrategyWeightTensor:Manages a multi-dimensional tensor of
-strategy weights, adapting them
-
-
-
-based on identified market phases.def __init__():Initializes the MultiPhaseStrategyWeightTensor.
-
-
-
-
-
-
-
-Args:
-
-
-
-strategy_ids: A list of all unique strategy identifiers that this tensor will manage.
-
-
-
-initial_weights: Optional dictionary of initial weights for strategies. If None,
-
-
-
-weights are initialized equally.
-
-
-
-phase_sensitivity: How aggressively weights adapt to phase changes (0.0 to 1.0).
-
-
-
-decay_factor: Factor by which old weight influence decays (0.0 to 1.0).if not strategy_ids:
-
-
-
-raise ValueError(strategy_ids cannot be empty.)
-
-
-
-
-
-
-
-# Ensure unique and ordered
-
-
-
-self.strategy_ids = sorted(list(set(strategy_ids)))
-
-
-
-self.num_strategies = len(self.strategy_ids)
-
-
-
-self.strategy_to_index = {sid: i for _i, sid in enumerate(self.strategy_ids)}
-
-
-
-
-
-
-
-# Initialize weights tensor (strategies x, phases)
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-
-
-
-# For simplicity, we'll start with 2D: strategy_id x phase'
-
-
-
-# More complex could be strategy_id x phase x time_horizon, etc.
-
-
-
-self.phases = [phase.value for phase in MarketPhase]
-
-
-
-self.num_phases = len(self.phases)
-
-
-
-self.phase_to_index = {phase_val: i for _i, phase_val in enumerate(self.phases)}
-
-
-
-
-
-
-
-# Initialize the weight tensor. Shape: (num_strategies, num_phases)
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-
-
-
-self.weight_tensor = ()
-
-
-
-np.ones((self.num_strategies, self.num_phases)) / self.num_strategies
-
-
-
-)
-
-
-
-
-
-
-
-    if initial_weights:
-
-
-
-        for strategy, weight in initial_weights.items():
-
-
-
-            if strategy in self.strategy_to_index: idx = self.strategy_to_index[strategy]
-
-
-
-            # Apply initial weight across all phases equally if not
-
-
-
-            # phase-specific
-
-
-
-            self.weight_tensor[idx, :] = weight
-
-
-
-            # Normalize column-wise (per, phase) to ensure sum is 1.0
-
-
-
-            self._normalize_weights()
-
-
-
-
-
-
-
-            self.phase_sensitivity = phase_sensitivity
-
-
-
-            self.decay_factor = decay_factor
-
-
-
-
-
-
-
-            self.current_phase: MarketPhase = MarketPhase.UNKNOWN
-
-
-
-            self.metrics: Dict[str, Any]
-
-            = {last_update_time: None,total_updates: 0,phase_transitions: 0,active_phase": self.current_phase.value,"}
-
-
-
-            }
-
-
-
-
-
-
-
-    def _normalize_weights(self, data):
-        """Process mathematical data."""
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        return np.mean(data_array)
-        """Process mathematical data."""
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        return np.mean(data_array)
-Avoids division by zero if a column sums to 0.col_sums
-= self.weight_tensor.sum(axis=0, keepdims=True)
-
-
-
-# Prevent division by zero if a column is all zeros
-
-
-
-col_sums[col_sums == 0] = 1.0
-
-
-
-self.weight_tensor = self.weight_tensor / col_sums
-
-
-
-
-
-
-
-def get_strategy_weights_for_phase(self, phase: MarketPhase): -> Dict[str, float]:
-
-
-
-Retrieves the weights for all strategies given a specific market phase.
-
-
-
-
-
-
-
-Args:
-
-
-
-phase: The market phase for which to retrieve weights.
-
-
-
-
-
-
-
-Returns:
-
-
-
-A dictionary mapping strategy IDs to their corresponding weights.if phase.value not in
-self.phase_to_index:
-
-
-
-raise ValueError(fUnknown market phase: {phase.value})
-
-
-
-
-
-
-
-phase_idx = self.phase_to_index[phase.value]
-
-
-
-weights = self.weight_tensor[:, phase_idx]
-
-
-
-
-
-
-
-return {self.strategy_ids[i]: weights[i] for i in range(self.num_strategies)}
-
-
-
-
-
-
-
-def update_weights():
-
-
-
-Adjusts strategy weights based on the identified market phase and
-
-
-
-performance feedback for each strategy.
-
-
-
-
-
-
-
-Args:
-
-
-
-identified_phase: The currently identified market phase.
-
-
-
-performance_feedback: A dictionary where keys are strategy IDs and values
-
-
-
-are dictionaries containing performance metrics'
-
-
-
-(e.g., {'strategy_A': {'pnl': 0.5, 'volatility': 0.1}}).'
-
-
-
-Expects a 'pnl' key for profit/loss.self.metrics[total_updates]
-+= 1self.metrics[last_update_time] = time.time()
-
-
-
-
-
-
-
-    if identified_phase != self.current_phase:
-
-
-
-    self.metrics[phase_transitions] += 1
-
-
-
-    self.current_phase = identified_phase
-
-
-
-    self.metrics[active_phase] = self.current_phase.value
-
-
-
-    print("Market phase transitioned to: {0})"
-
-
-
-
-
-
-
-    phase_idx = self.phase_to_index[identified_phase.value]
-
-
-
-
-
-
-
-    # Apply decay to existing weights in the current phase
-
-
-
-    self.weight_tensor[:, phase_idx] *= self.decay_factor
-
-
-
-
-
-
-
-    # Adjust weights based on performance feedback
-
-
-
-        for strategy_id, feedback in performance_feedback.items():
-
-
-
-            if strategy_id in self.strategy_to_index: strat_idx
-            = self.strategy_to_index[strategy_id]
-
-
-
-            pnl = feedback.get(pnl, 0.0)
-
-
-
-
-
-
-
-            # Simple adaptive logic: reward positive PnL, penalize negative
-
-
-
-            adjustment = pnl * self.phase_sensitivity
-
-
-
-            self.weight_tensor[strat_idx, phase_idx] += adjustment
-
-
-
-
-
-
-
-            # Ensure weights are non-negative after adjustment
-
-
-
-            self.weight_tensor = np.maximum(self.weight_tensor, 0.0)
-
-
-
-
-
-
-
-            # Re-normalize weights for the current phase column
-
-
-
-            self._normalize_weights()
-
-
-
-
-
-
-
-def get_current_state():-> Dict[str, Any]:
-
-
-
-Returns the current state of the tensor and related metrics.return {1}
-
-
-
-
-
-
-
-def reset():Resets the tensor to initial weights and clears metrics.self.weight_tensor = () -> None
-
-
-
-np.ones((self.num_strategies, self.num_phases)) / self.num_strategies
-
-
-
-)
-
-
-
-    if initial_weights:
-
-
-
-        for strategy, weight in initial_weights.items():
-
-
-
-            if strategy in self.strategy_to_index: idx = self.strategy_to_index[strategy]
-
-
-
-            self.weight_tensor[idx, :] = weight
-
-
-
-            self._normalize_weights()
-
-
-
-            self.current_phase = MarketPhase.UNKNOWN
-
-
-
-            self.metrics
-
-
-            {last_update_time: None,total_updates: 0,phase_transitions".format(identified_phase.value,  # Convert numpy array to list")}
-                for readability
-
-
-
-                current_weight_tensor: self.weight_tensor.tolist(),strategy_ids: self.strategy_ids,phases:
-                self.phases,current_phase": self.current_phase.value,metrics": self.metrics,
-
-
-
-                ): 0,active_phase": self.current_phase.value,"
-
-
-
-                }
-
-
-
-
-
-
-
-    def get_active_phase(self, data):
-        """Process mathematical data."""
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        return np.mean(data_array)
-        """Process mathematical data."""
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        if not isinstance(data, (list, tuple, np.ndarray)):
-            raise ValueError("Data must be array-like")
-        
-        data_array = np.array(data)
-        # Default mathematical operation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        return np.mean(data_array)
-self.current_phase
-
-
-
-
-
-
-
-
-
-
-
-    if __name__ == __main__:
-
-
-
-    print(--- Multi-Phase Strategy Weight Tensor Demo ---)
-
-
-
-
-
-
-
-    # Define some dummy strategy IDs
-
-
-
-    strategies = [EMA_Cross,RSI_Divergence,Bollinger_Squeeze,Volume_Breakout]
-
-
-
-    tensor_manager = MultiPhaseStrategyWeightTensor(strategy_ids=strategies)
-
-
-
-
-
-
-
-    print(/nInitial Weights (across, all))
-    phases):)print(tensor_manager.get_current_state()[current_weight_tensor])
-
-
-
-
-
-
-
-    # Simulate phase changes and performance feedback
-
-
-
-    # Scenario 1: Trend phase, EMA_Cross performs well
-
-
-
-    print(/n--- Scenario 1: Trend Phase, EMA_Cross performs well ---)
-
-
-
-    performance_trend = {EMA_Cross: {pnl: 0.2,volatility": 0.05},RSI_Divergence": {pnl:}}
-    -0.05,volatility": 0.02},Bollinger_Squeeze": {pnl: 0.01,volatility": 0.01},Volume_Breakout":
-    {pnl: 0.08,volatility": 0.03},"
-
-
-
-    }
-
-
-
-    tensor_manager.update_weights(MarketPhase.TREND, performance_trend)
-
-
-
-    print(Weights for TREND phase after update:)
-
-
-
-    print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.TREND))
-
-
-
-    print("Current Active Phase: {0})"
-
-
-
-
-
-
-
-    # Scenario 2: Consolidation phase, Bollinger_Squeeze performs well
-
-
-
-    print(/n--- Scenario 2: Consolidation Phase, Bollinger_Squeeze performs well ---)
-
-
-
-    performance_consolidation = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl:")}
-    -0.1,volatility": 0.03): {pnl: 0.02,volatility": 0.01},Bollinger_Squeeze": {pnl:"}
-    0.3,volatility": 0.01},Volume_Breakout": {pnl: -0.02,volatility": 0.04},"
-
-
-
-    }
-
-
-
-    tensor_manager.update_weights(MarketPhase.CONSOLIDATION, performance_consolidation)
-
-
-
-    print(Weights for CONSOLIDATION phase after update:)
-
-
-
-    print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.CONSOLIDATION))
-
-
-
-    print("Current Active Phase: {0})"
-
-
-
-
-
-
-
-    # Scenario 3: Volatility phase, Volume_Breakout performs well
-
-
-
-    print(/n--- Scenario 3: Volatility Phase, Volume_Breakout performs well ---)
-
-
-
-    performance_volatility
-
-    = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl: 0.0,volatility": 0.05): {pnl: 0.1,volatility": 0.06},Bollinger_Squeeze": {pnl: -0.08,volatility": 0.02},Volume_Breakout": {pnl: 0.4,volatility": 0.1},"}
-
-
-
-    }
-
-
-
-    tensor_manager.update_weights(MarketPhase.VOLATILITY, performance_volatility)
-
-
-
-    print(Weights for VOLATILITY phase after update:)
-
-
-
-    print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.VOLATILITY))
-
-
-
-    print("Current Active Phase: {0})"
-
-
-
-    print(/n--- Current State and Metrics ---)
-
-
-
-    state = tensor_manager.get_current_state()'
-
-
-
-    print(fTotal Updates: {1})'print(f".format(tensor_manager.get_active_phase(), state['metrics']['total_updates'])Phase Transitions:'")""
-    
-    
-    {state['metrics']['phase_transitions']})'print("Active Phase:'")
-    {0})print(Full Weight Tensor:)for row in
-    state[current_weight_tensor]:
-
-
-
-    print([f{1} for x in row])
-
-
-
-    print(/n--- Resetting the tensor ---)
-
-
-
-    tensor_manager.reset()
-
-
-
-    print(Weights after reset(across all, phases):)
-
-
-
-    print(tensor_manager.get_current_state()[current_weight_tensor])".format(state['metrics']['active_phase'], x)"'"'
-
-
-
+class MultiPhaseStrategyWeightTensor:
     """
+    MultiPhaseStrategyWeightTensor Implementation
+    Manages strategy weights across different market phases.
+    """
+
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+        """Initialize MultiPhaseStrategyWeightTensor with configuration."""
+        self.config = config or self._default_config()
+        self.logger = logging.getLogger(__name__)
+        self.active = False
+        self.initialized = False
+
+        # Strategy and phase management
+        self.strategy_ids: List[str] = []
+        self.num_strategies: int = 0
+        self.num_phases: int = len(MarketPhase)
+        self.weight_tensor: Optional[np.ndarray] = None
+        self.phase_to_index: Dict[str, int] = {phase.value: i for i, phase in enumerate(MarketPhase)}
+        self.current_phase: Optional[MarketPhase] = None
+        
+        # Performance tracking
+        self.metrics: Dict[str, Any] = {
+            'total_updates': 0,
+            'phase_transitions': 0,
+            'last_update_time': time.time(),
+            'active_phase': None
+        }
+
+        # Initialize math infrastructure if available
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
+
+        self._initialize_system()
+
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration."""
+        return {
+            'enabled': True,
+            'timeout': 30.0,
+            'retries': 3,
+            'debug': False,
+            'log_level': 'INFO',
+            'decay_factor': 0.95,
+            'learning_rate': 0.01,
+        }
+
+    def _initialize_system(self) -> None:
+        """Initialize the system."""
+        try:
+            self.logger.info(f"Initializing {self.__class__.__name__}")
+            self.initialized = True
+            self.logger.info(f"✅ {self.__class__.__name__} initialized successfully")
+        except Exception as e:
+            self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
+            self.initialized = False
+
+    def activate(self) -> bool:
+        """Activate the system."""
+        if not self.initialized:
+            self.logger.error("System not initialized")
+            return False
+
+        try:
+            self.active = True
+            self.logger.info(f"✅ {self.__class__.__name__} activated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
+            return False
+
+    def deactivate(self) -> bool:
+        """Deactivate the system."""
+        try:
+            self.active = False
+            self.logger.info(f"✅ {self.__class__.__name__} deactivated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
+            return False
+
+    def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'config': self.config,
+            'metrics': self.metrics,
+            'current_phase': self.current_phase.value if self.current_phase else None,
+        }
+
+    def initialize_strategies(self, strategy_ids: List[str]) -> None:
+        """Initialize the weight tensor with strategy IDs."""
+        self.strategy_ids = strategy_ids
+        self.num_strategies = len(strategy_ids)
+        
+        # Initialize weight tensor with equal weights
+        self.weight_tensor = np.ones((self.num_strategies, self.num_phases)) / self.num_strategies
+        self._normalize_weights()
+
+    def _normalize_weights(self) -> None:
+        """Normalize weights to ensure they sum to 1 for each phase."""
+        if self.weight_tensor is None:
+            return
+            
+        # Avoid division by zero if a column sums to 0
+        col_sums = self.weight_tensor.sum(axis=0, keepdims=True)
+        
+        # Prevent division by zero if a column is all zeros
+        col_sums[col_sums == 0] = 1.0
+        
+        self.weight_tensor = self.weight_tensor / col_sums
+
+    def get_strategy_weights_for_phase(self, phase: MarketPhase) -> Dict[str, float]:
+        """Retrieves the weights for all strategies given a specific market phase."""
+        if phase.value not in self.phase_to_index:
+            raise ValueError(f"Unknown market phase: {phase.value}")
+        
+        phase_idx = self.phase_to_index[phase.value]
+        weights = self.weight_tensor[:, phase_idx]
+        
+        return {self.strategy_ids[i]: weights[i] for i in range(self.num_strategies)}
+
+    def update_weights(self, identified_phase: MarketPhase, performance_feedback: Dict[str, Dict[str, float]]) -> None:
+        """Adjusts strategy weights based on the identified market phase and performance feedback."""
+        self.metrics['total_updates'] += 1
+        self.metrics['last_update_time'] = time.time()
+
+        if identified_phase != self.current_phase:
+            self.metrics['phase_transitions'] += 1
+            self.current_phase = identified_phase
+            self.metrics['active_phase'] = self.current_phase.value
+            self.logger.info(f"Market phase transitioned to: {identified_phase.value}")
+
+        phase_idx = self.phase_to_index[identified_phase.value]
+
+        # Apply decay to existing weights in the current phase
+        self.weight_tensor[:, phase_idx] *= self.config['decay_factor']
+
+        # Update weights based on performance feedback
+        for strategy_id, metrics in performance_feedback.items():
+            if strategy_id in self.strategy_ids:
+                strategy_idx = self.strategy_ids.index(strategy_id)
+                pnl = metrics.get('pnl', 0.0)
+                
+                # Simple weight update based on PnL
+                weight_update = pnl * self.config['learning_rate']
+                self.weight_tensor[strategy_idx, phase_idx] += weight_update
+
+        # Renormalize weights
+        self._normalize_weights()
+
+    def process_strategy_data(self, data: Union[List, Tuple, np.ndarray]) -> float:
+        """Process strategy data."""
+        if not isinstance(data, (list, tuple, np.ndarray)):
+            raise ValueError("Data must be array-like")
+        
+        data_array = np.array(data)
+        # Default mathematical operation
+        return np.mean(data_array)
+
+
+# Factory function
+def create_multi_phase_strategy_weight_tensor(config: Optional[Dict[str, Any]] = None) -> MultiPhaseStrategyWeightTensor:
+    """Create a multi-phase strategy weight tensor instance."""
+    return MultiPhaseStrategyWeightTensor(config)
