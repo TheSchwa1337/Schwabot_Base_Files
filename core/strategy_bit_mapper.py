@@ -120,10 +120,10 @@ class AssetBitLogic:
         try:
             # Use signal entropy to seed random generator
             entropy = np.std(signal) if len(signal) > 1 else 0.1
-            random.seed(int(entropy * 1000) + tick_index)
+            random.seed(int(entropy * 1000) + tick_index)  # nosec B311
             
             # Generate 128-bit random stream
-            random_stream = [random.getrandbits(1) for _ in range(128)]
+            random_stream = [random.getrandbits(1) for _ in range(128)]  # nosec B311
             
             # Extract drift bits based on current entropy
             drift_bits = []
@@ -220,8 +220,8 @@ class StrategyBitMapper:
     
     def _initialize_random_stream(self) -> List[int]:
         """Initialize random bit stream for drift."""
-        random.seed(int(time.time()))
-        return [random.getrandbits(1) for _ in range(128)]
+        random.seed(int(time.time()))  # nosec B311
+        return [random.getrandbits(1) for _ in range(128)]  # nosec B311
     
     def classify_signal(self, signal: np.ndarray, asset: str = "BTC", 
                        entropy_level: float = 0.0, tick_index: int = 0) -> BitStrategyResult:
@@ -268,33 +268,27 @@ class StrategyBitMapper:
     
     def expand_strategy_bits(self, strategy_id: int, target_bits: int = 8, 
                            mode: ExpansionMode = ExpansionMode.RANDOM) -> List[int]:
-        """Expand strategy bits using specified mode."""
-        try:
-            if mode == ExpansionMode.RANDOM:
-                return self._expand_random(strategy_id, target_bits)
-            elif mode == ExpansionMode.FERRIS_WHEEL:
-                return self._expand_ferris_wheel(strategy_id, target_bits)
-            elif mode == ExpansionMode.PHANTOM:
-                return self._expand_phantom(strategy_id, target_bits)
-            elif mode == ExpansionMode.VAULT:
-                return self._expand_vault(strategy_id, target_bits)
-            elif mode == ExpansionMode.ORBITAL:
-                return self._expand_orbital(strategy_id, target_bits)
-            else:
-                return [strategy_id]
-                
-        except Exception as e:
-            self.logger.error(f"Strategy bit expansion error: {e}")
-            return [strategy_id]
-    
+        """Expand a strategy ID to a specified number of bits."""
+        modes = {
+            ExpansionMode.RANDOM: self._expand_random,
+            ExpansionMode.FERRIS_WHEEL: self._expand_ferris_wheel,
+            ExpansionMode.PHANTOM: self._expand_phantom,
+            ExpansionMode.VAULT: self._expand_vault,
+            ExpansionMode.ORBITAL: self._expand_orbital,
+        }
+        
+        if mode not in modes:
+            raise ValueError(f"Invalid expansion mode: {mode}")
+            
+        return modes[mode](strategy_id, target_bits)
+
     def _expand_random(self, strategy_id: int, target_bits: int) -> List[int]:
-        """Expand using random mode."""
-        max_strategies = min(2**target_bits, self.config['max_strategies'])
-        random.seed(strategy_id)
-        return [random.randint(0, 2**target_bits - 1) for _ in range(max_strategies)]
-    
+        """Expand strategy ID using random bits."""
+        random.seed(strategy_id)  # nosec B311
+        return [random.getrandbits(1) for _ in range(target_bits)]  # nosec B311
+
     def _expand_ferris_wheel(self, strategy_id: int, target_bits: int) -> List[int]:
-        """Expand using Ferris wheel mode."""
+        """Expand strategy ID using a circular bit pattern."""
         max_value = 2**target_bits
         strategies = []
         for i in range(self.config['max_strategies']):

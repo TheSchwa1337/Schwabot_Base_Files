@@ -136,10 +136,11 @@ class MathResultCache:
         key_data = {
             'args': args,
             'kwargs': kwargs,
-            'timestamp': time.time()
         }
-        key_str = json.dumps(key_data, sort_keys=True)
-        return hashlib.md5(key_str.encode()).hexdigest()
+        # Use json.dumps with sort_keys=True for a consistent key string
+        # and ensure tensors/numpy arrays are handled correctly.
+        key_str = json.dumps(key_data, sort_keys=True, default=str)
+        return hashlib.sha256(key_str.encode()).hexdigest()
     
     def _hash_param(self, param: Any) -> str:
         """Hash a parameter for cache key generation."""

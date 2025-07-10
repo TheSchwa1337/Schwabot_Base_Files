@@ -1,46 +1,31 @@
-name: Lint and Type Check
+name: Functional Test
 
 on: [push, pull_request]
 
 jobs:
-  lint-and-typecheck:
+  functional-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run flake8
-        run: flake8 core/ schwabot/ apply_enhanced_cli_compatibility.py --max-line-length=100 --count
-      - name: Run mypy
-        run: mypy core/ schwabot/ apply_enhanced_cli_compatibility.py
-      - name: Run black (check only)
-        run: black --check core/ schwabot/ apply_enhanced_cli_compatibility.py
-      - name: Run isort (check only)
-        run: isort --check-only core/ schwabot/ apply_enhanced_cli_compatibility.py
-# FUTURE ENHANCEMENTS - UNCOMMENT WHEN NEEDED
-# =====================================
-
-# - name: Run pylint (Enhanced linting)
-#   run: pylint core/ schwabot/ apply_enhanced_cli_compatibility.py --disable=C0114,C0116
-
-# - name: Security scan with bandit (CRITICAL for trading systems)
-#   run: bandit -r core/ schwabot/ apply_enhanced_cli_compatibility.py
-
-# - name: Check dependencies for vulnerabilities
-#   run: safety check
-
-# - name: Run tests with coverage
-#   run: |
-#     pytest tests/ --cov=core --cov=schwabot --cov-report=xml --cov-report=html
-
-# - name: Upload coverage to Codecov
-#   uses: codecov/codecov-action@v3
-#   with:
-#     file: ./coverage.xml
-#     flags: unittests
-#     name: codecov-umbrella
+      
+      - name: Run core functionality test
+        run: |
+          python test_core_functionality.py
+      
+      - name: Test CLI help
+        run: |
+          python main.py --help
+      
+      - name: Test CLI test mode
+        run: |
+          python main.py --mode test

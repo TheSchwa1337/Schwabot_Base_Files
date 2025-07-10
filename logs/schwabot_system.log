@@ -1,0 +1,82 @@
+2025-07-09 20:49:06,376 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:06,398 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:06,412 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-09 20:49:06,412 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-09 20:49:06,427 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:06,436 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-09 20:49:06,437 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-09 20:49:06,445 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:06,455 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-09 20:49:06,470 - core - WARNING - Core utilities not available
+2025-07-09 20:49:06,476 - core - WARNING - Bio cellular integration not available
+2025-07-09 20:49:06,495 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-09 20:49:06,505 - core - WARNING - Quantum mathematical bridge not available
+2025-07-09 20:49:06,515 - core - WARNING - Tensor score utils not available
+2025-07-09 20:49:06,519 - core - WARNING - DLT waveform engine not available
+2025-07-09 20:49:06,524 - core - WARNING - Unified profit vectorization system not available
+2025-07-09 20:49:06,530 - core - WARNING - Strategy logic not available
+2025-07-09 20:49:06,530 - core - WARNING - Unified mathematical core not available
+2025-07-09 20:49:06,531 - core - WARNING - Vectorized profit orchestrator not available
+2025-07-09 20:49:06,532 - core - WARNING - Consolidated utilities not available
+2025-07-09 20:49:09,518 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-09 20:49:35,216 - core.math_cache - INFO - ⚡ MathCache using numpy (CPU) for tensor operations
+2025-07-09 20:49:35,316 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:35,326 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-09 20:49:35,340 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:35,367 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-09 20:49:35,401 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-09 20:49:35,407 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-09 20:49:35,418 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-09 20:49:35,444 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:35,458 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-09 20:49:35,460 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-09 20:49:35,478 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-09 20:49:35,501 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-09 20:49:35,525 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-09 20:49:35,526 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-09 20:49:35,527 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-09 20:49:35,529 - core.math_cache - INFO - ✅ MathResultCache initialized successfully
+2025-07-09 20:49:35,540 - core - WARNING - Core utilities not available
+2025-07-09 20:49:35,565 - core - WARNING - Bio cellular integration not available
+2025-07-09 20:49:35,575 - core.profit_optimization_engine - INFO - ⚡ ProfitOptimizationEngine using numpy (CPU) for tensor operations
+2025-07-09 20:49:35,599 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-09 20:49:35,605 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-09 20:49:35,608 - core - WARNING - Quantum mathematical bridge not available
+2025-07-09 20:49:35,659 - core - WARNING - Tensor score utils not available
+2025-07-09 20:49:35,664 - core - WARNING - DLT waveform engine not available
+2025-07-09 20:49:35,670 - core - WARNING - Unified profit vectorization system not available
+2025-07-09 20:49:35,675 - core - WARNING - Strategy logic not available
+2025-07-09 20:49:35,682 - core - WARNING - Unified mathematical core not available
+2025-07-09 20:49:35,685 - core - WARNING - Vectorized profit orchestrator not available
+2025-07-09 20:49:35,686 - core - WARNING - Consolidated utilities not available
+2025-07-09 20:49:35,695 - core.btc_usdc_trading_engine - INFO - ⚡ BTCTradingEngine using numpy (CPU) for tensor operations
+2025-07-09 20:49:35,710 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 20:49:35,734 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 20:49:35,790 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 20:49:35,803 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 20:49:35,808 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 20:49:38,580 - core.secure_exchange_manager - INFO - ⚡ ExchangeManager using numpy (CPU) for tensor operations
+2025-07-09 20:49:38,587 - core.risk_manager - INFO - ⚡ RiskManager using numpy (CPU) for tensor operations
+2025-07-09 20:49:38,590 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 20:49:38,591 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 20:49:38,591 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 20:49:38,591 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 20:49:38,592 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-09 20:49:38,642 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-09 20:49:38,642 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-09 21:02:10,721 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 21:02:10,725 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 21:02:10,727 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:02:10,728 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 21:02:10,728 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 21:02:10,729 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:02:10,729 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 21:02:10,729 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-09 21:02:14,610 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 21:02:14,620 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 21:02:14,623 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:02:14,624 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 21:02:14,624 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 21:02:14,624 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:02:14,630 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 21:02:14,635 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized

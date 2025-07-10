@@ -1,54 +1,56 @@
-from core.mathematical_backlog_manager import MathematicalBacklogManager
-from core.mathematical_relay_sequencer import MathematicalRelaySequencer
-from backtesting.simple_backtester import SimpleBacktester
-from core.ccxt_trading_executor import TradingPair
-from core.system_integration import SystemIntegrationManager, initialize_and_start_system
-from datetime import datetime
-from decimal import Decimal
-import argparse
-import asyncio
-import logging
-import sys
-
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Mathematical Relay System - Main Entry Point
-===========================================
+Schwabot Trading System - Main Entry Point
+==========================================
 
-Main entry point for the complete mathematical relay trading system.
-Demonstrates full connectivity across all components including:
-- Real-time visualization dashboard
-- Backtesting with historical data
-- Mathematical sequence processing
-- Trading execution simulation
-- Persistent data logging
+Main entry point for the Schwabot trading system.
+Provides command-line interface for different trading modes.
 
 Usage:
     python main.py                    # Run demo system
     python main.py --backtest         # Run backtest only
     python main.py --visualization    # Run visualization only
     python main.py --full             # Run complete system
+    python main.py --test             # Run component tests
 """
 
-# Configure logging
+import argparse
+import asyncio
+import logging
+import sys
+import os
+from datetime import datetime
+from decimal import Decimal
+from pathlib import Path
+
+# Set console encoding for Windows
+if sys.platform == "win32":
+    os.system("chcp 65001 > nul")
+
+# Configure logging with Unicode-safe handlers
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("logs/mathematical_relay_system.log"),
+        logging.FileHandler("logs/schwabot_system.log", encoding='utf-8'),
         logging.StreamHandler(sys.stdout),
     ],
 )
 
 logger = logging.getLogger(__name__)
 
-# Import system components
+# Import available system components
 try:
-    from core.system_integration import (
-        SystemIntegrationManager,
-        initialize_and_start_system,
-    )
-
+    from core.btc_usdc_trading_engine import BTCTradingEngine, TradingMode
+    from core.unified_btc_trading_pipeline import UnifiedBTCTradingPipeline
+    from core.risk_manager import RiskManager
+    from core.secure_exchange_manager import SecureExchangeManager
+    from core.unified_pipeline_manager import UnifiedPipelineManager
+    from core.math_config_manager import MathConfigManager
+    from backtesting.simple_backtester import SimpleBacktester
+    from core.quad_bit_strategy_array import TradingPair
+    
     SYSTEM_AVAILABLE = True
 except ImportError as e:
     logger.error(f"System components not available: {e}")
@@ -64,167 +66,73 @@ async def run_backtest_demo():
     try:
         logger.info("=== Starting Backtest Demo ===")
 
-        # Initialize system with backtesting only
-        config = {
-            "sequencer_mode": "demo",
-            "log_level": "INFO",
-            "gpu_enabled": False,
-            "enable_visualization": False,
-            "enable_backtesting": True,
-            "enable_live_trading": False,
-        }
-        manager = SystemIntegrationManager(config=config)
-        await manager.initialize_system()
-
-        # Run multiple backtests with different parameters
-        backtest_scenarios = [
-            {
-                "name": "BTC/USDC - 1 Week",
-                "initial_capital": Decimal("10000"),
-                "start_date": datetime(2023, 1, 1),
-                "end_date": datetime(2023, 1, 7),
-                "trading_pair": TradingPair.BTC_USDC,
-            },
-            {
-                "name": "ETH/USDC - 2 Weeks",
-                "initial_capital": Decimal("15000"),
-                "start_date": datetime(2023, 1, 1),
-                "end_date": datetime(2023, 1, 14),
-                "trading_pair": TradingPair.ETH_USDC,
-            },
-            {
-                "name": "XRP/USDC - 1 Month",
-                "initial_capital": Decimal("5000"),
-                "start_date": datetime(2023, 1, 1),
-                "end_date": datetime(2023, 1, 31),
-                "trading_pair": TradingPair.XRP_USDC,
-            },
-        ]
-        for scenario in backtest_scenarios:
-            logger.info(f"Running backtest: {scenario['name']}")
-            result = await manager.run_backtest(
-                initial_capital=scenario["initial_capital"],
-                start_date=scenario["start_date"],
-                end_date=scenario["end_date"],
-                trading_pair=scenario["trading_pair"],
-            )
-            logger.info(f"Backtest result: {result}")
-
-        # Export system data
-        manager.export_system_data()
-        logger.info("System data exported successfully")
-
+        # Initialize backtester
+        backtester = SimpleBacktester(
+            initial_capital=Decimal("10000"),
+            start_date=datetime(2023, 1, 1),
+            end_date=datetime(2023, 1, 7),
+            trading_pair=TradingPair.BTC_USDC,
+        )
+        
+        logger.info("Backtester initialized successfully")
         logger.info("=== Backtest Demo Completed ===")
 
     except Exception as e:
         logger.error(f"Backtest demo failed: {e}")
 
 
-async def run_visualization_demo():
-    """Run visualization dashboard demonstration."""
+async def run_trading_engine_demo():
+    """Run trading engine demonstration."""
     if not SYSTEM_AVAILABLE:
         logger.error("System components not available")
         return
 
     try:
-        logger.info("=== Starting Visualization Demo ===")
+        logger.info("=== Starting Trading Engine Demo ===")
 
-        # Initialize system with visualization only
-        config = {
-            "sequencer_mode": "demo",
-            "log_level": "INFO",
-            "gpu_enabled": False,
-            "visualization_config": {
-                "host": "0.0.0.0",
-                "port": 8000,
-                "static_dir": "static",
-            },
-            "enable_visualization": True,
-            "enable_backtesting": False,
-            "enable_live_trading": False,
-        }
-        manager = await initialize_and_start_system(config)
-
-        logger.info("Visualization dashboard started at http://localhost:8000")
-        logger.info("Press Ctrl+C to stop...")
-
-        # Keep running for visualization
-        while True:
-            await asyncio.sleep(60)
-
-    except KeyboardInterrupt:
-        logger.info("Received shutdown signal...")
-        if manager:
-            await manager.stop_system()
-        logger.info("Visualization demo stopped")
-    except Exception as e:
-        logger.error(f"Visualization demo failed: {e}")
-
-
-async def run_full_system_demo():
-    """Run complete system demonstration with all components."""
-    if not SYSTEM_AVAILABLE:
-        logger.error("System components not available")
-        return
-
-    try:
-        logger.info("=== Starting Full System Demo ===")
-
-        # Configuration for full system
-        config = {
-            "sequencer_mode": "demo",
-            "log_level": "INFO",
-            "gpu_enabled": False,
-            "visualization_config": {
-                "host": "0.0.0.0",
-                "port": 8000,
-                "static_dir": "static",
-            },
-            "trading_config": {"unified_api_config": {"ccxt_config": {"timeout": 30000, "enableRateLimit": True}}},
-            "enable_visualization": True,
-            "enable_backtesting": True,
-            "enable_live_trading": False,
-        }
-        # Initialize and start complete system
-        manager = await initialize_and_start_system(config)
-
-        # Run a quick backtest to generate data
-        logger.info("Running initial backtest to generate data...")
-        backtest_result = await manager.run_backtest(
-            initial_capital=Decimal("10000"),
-            start_date=datetime(2023, 1, 1),
-            end_date=datetime(2023, 1, 7),
-            trading_pair=TradingPair.BTC_USDC,
+        # Initialize trading engine
+        engine = BTCTradingEngine(
+            api_key="demo",
+            api_secret="demo",
+            testnet=True
         )
-        logger.info(f"Initial backtest completed: {backtest_result}")
+        
+        # Initialize risk manager
+        risk_manager = RiskManager()
+        
+        # Initialize secure exchange manager
+        exchange_manager = SecureExchangeManager()
+        
+        logger.info("Trading engine components initialized successfully")
+        logger.info("=== Trading Engine Demo Completed ===")
 
-        # Display system status
-        status = manager.get_system_status()
-        logger.info("=== System Status ===")
-        logger.info(f"Initialized: {status['is_initialized']}")
-        logger.info(f"Running: {status['is_running']}")
-        logger.info(f"Components: {status['components']}")
-        logger.info(f"Performance: {status['performance_metrics']}")
-
-        logger.info("=== Full System Demo Running ===")
-        logger.info("Access dashboard at http://localhost:8000")
-        logger.info("Press Ctrl+C to stop...")
-
-        # Keep system running
-        while True:
-            await asyncio.sleep(60)
-
-            # Log periodic status
-            current_status = manager.get_system_status()
-            logger.info(f"System uptime: {current_status['performance_metrics']['system_uptime']:.0f}s")
-
-    except KeyboardInterrupt:
-        logger.info("Received shutdown signal...")
-        if manager:
-            await manager.stop_system()
-        logger.info("Full system demo stopped")
     except Exception as e:
-        logger.error(f"Full system demo failed: {e}")
+        logger.error(f"Trading engine demo failed: {e}")
+
+
+async def run_pipeline_demo():
+    """Run unified pipeline demonstration."""
+    if not SYSTEM_AVAILABLE:
+        logger.error("System components not available")
+        return
+
+    try:
+        logger.info("=== Starting Pipeline Demo ===")
+
+        # Initialize pipeline manager
+        pipeline_manager = UnifiedPipelineManager()
+        
+        # Initialize math config manager
+        math_config = MathConfigManager()
+        
+        # Initialize unified BTC trading pipeline
+        btc_pipeline = UnifiedBTCTradingPipeline()
+        
+        logger.info("Pipeline components initialized successfully")
+        logger.info("=== Pipeline Demo Completed ===")
+
+    except Exception as e:
+        logger.error(f"Pipeline demo failed: {e}")
 
 
 async def run_component_test():
@@ -236,45 +144,55 @@ async def run_component_test():
     try:
         logger.info("=== Testing Individual Components ===")
 
-        # Test MathematicalBacklogManager
-        logger.info("Testing MathematicalBacklogManager...")
-        backlog_manager = MathematicalBacklogManager()
-        backlog_manager.log_event(
-            "test_events",
-            {"test": "backlog_manager", "timestamp": datetime.now().isoformat()},
+        # Test RiskManager
+        logger.info("Testing RiskManager...")
+        risk_manager = RiskManager()
+        logger.info("RiskManager initialized successfully")
+
+        # Test MathConfigManager
+        logger.info("Testing MathConfigManager...")
+        math_config = MathConfigManager()
+        logger.info("MathConfigManager initialized successfully")
+
+        # Test SecureExchangeManager
+        logger.info("Testing SecureExchangeManager...")
+        exchange_manager = SecureExchangeManager()
+        logger.info("SecureExchangeManager initialized successfully")
+
+        # Test UnifiedPipelineManager
+        logger.info("Testing UnifiedPipelineManager...")
+        pipeline_manager = UnifiedPipelineManager()
+        logger.info("UnifiedPipelineManager initialized successfully")
+
+        # Test BTCTradingEngine
+        logger.info("Testing BTCTradingEngine...")
+        trading_engine = BTCTradingEngine(
+            api_key="demo",
+            api_secret="demo",
+            testnet=True
         )
-        events = backlog_manager.retrieve_events("test_events", limit=10)
-        logger.info(f"Backlog manager test: {len(events)} events retrieved")
+        logger.info("BTCTradingEngine initialized successfully")
 
-        # Test MathematicalRelaySequencer
-        logger.info("Testing MathematicalRelaySequencer...")
-        sequencer = MathematicalRelaySequencer(mode="demo", log_level="INFO")
-        result = sequencer.sequence_btc_price_hash(btc_price=45000.0, btc_volume=1000.0, phase=32)
-        logger.info(f"Sequencer test: {result.get('sequence_id')}")
-
-        # Test SimpleBacktester
-        logger.info("Testing SimpleBacktester...")
-        SimpleBacktester(
-            initial_capital=Decimal("1000"),
-            start_date=datetime(2023, 1, 1),
-            end_date=datetime(2023, 1, 3),
-            trading_pair=TradingPair.BTC_USDC,
-        )
-        logger.info("Backtester initialized successfully")
-
-        logger.info("=== Component Tests Completed ===")
+        logger.info("=== Component Tests Completed Successfully ===")
 
     except Exception as e:
         logger.error(f"Component test failed: {e}")
 
 
+def create_directories():
+    """Create necessary directories if they don't exist."""
+    directories = ["logs", "data", "config", "static"]
+    for directory in directories:
+        Path(directory).mkdir(exist_ok=True)
+
+
 def main():
     """Main entry point with command line argument parsing."""
-    parser = argparse.ArgumentParser(description="Mathematical Relay Trading System")
+    parser = argparse.ArgumentParser(description="Schwabot Trading System")
     parser.add_argument(
         "--mode",
-        choices=["backtest", "visualization", "full", "test"],
-        default="full",
+        choices=["backtest", "trading", "pipeline", "test", "demo"],
+        default="demo",
         help="System mode to run",
     )
     parser.add_argument(
@@ -283,27 +201,42 @@ def main():
         default="INFO",
         help="Logging level",
     )
-    parser.add_argument("--port", type=int, default=8000, help="Visualization server port")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="config/schwabot_config.yaml",
+        help="Configuration file path"
+    )
 
     args = parser.parse_args()
+
+    # Create necessary directories
+    create_directories()
 
     # Set log level
     logging.getLogger().setLevel(getattr(logging, args.log_level))
 
-    logger.info("=== Mathematical Relay Trading System ===")
+    logger.info("=== Schwabot Trading System ===")
     logger.info(f"Mode: {args.mode}")
     logger.info(f"Log Level: {args.log_level}")
-    logger.info(f"Port: {args.port}")
+    logger.info(f"Config: {args.config}")
 
     try:
         if args.mode == "backtest":
             asyncio.run(run_backtest_demo())
-        elif args.mode == "visualization":
-            asyncio.run(run_visualization_demo())
-        elif args.mode == "full":
-            asyncio.run(run_full_system_demo())
+        elif args.mode == "trading":
+            asyncio.run(run_trading_engine_demo())
+        elif args.mode == "pipeline":
+            asyncio.run(run_pipeline_demo())
         elif args.mode == "test":
             asyncio.run(run_component_test())
+        elif args.mode == "demo":
+            # Run all demos
+            logger.info("Running all demos...")
+            asyncio.run(run_component_test())
+            asyncio.run(run_backtest_demo())
+            asyncio.run(run_trading_engine_demo())
+            asyncio.run(run_pipeline_demo())
         else:
             logger.error(f"Unknown mode: {args.mode}")
             sys.exit(1)
