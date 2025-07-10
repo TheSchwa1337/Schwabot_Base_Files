@@ -1,3 +1,10 @@
+# =========================
+# CRITICAL: Pin these versions for CI compatibility!
+# These versions are known to work together and avoid the numpy/scipy ufunc error.
+numpy==1.24.4
+scipy==1.10.1
+# =========================
+
 # Schwabot Final Requirements - Core Working Dependencies
 # =====================================================
 # This file contains only the core dependencies that install without compilation issues
@@ -6,8 +13,7 @@
 # ============================================================================
 # CORE MATHEMATICAL AND SCIENTIFIC COMPUTING
 # ============================================================================
-numpy>=1.22.0,<2.0.0
-scipy>=1.8.0,<2.0.0
+# numpy and scipy are pinned above for compatibility
 pandas>=1.4.0,<3.0.0
 numba>=0.55.0,<1.0.0
 

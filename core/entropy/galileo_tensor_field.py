@@ -214,23 +214,27 @@ class GalileoTensorField:
             q = 1.5
             tsallis_entropy = (1 - np.sum(price_normalized**q)) / (q - 1)
             
-            # Tensor entropy
+            # Tensor entropy (based on volume-weighted price changes)
             price_changes = np.diff(price_cpu)
             volume_weights = volume_cpu[1:] / np.sum(volume_cpu[1:])
             tensor_entropy = -np.sum(volume_weights * np.log2(np.abs(price_changes) + 1e-12))
             
-            # Field strength
-            field_strength = np.abs(np.corrcoef(price_cpu, volume_cpu)[0, 1])
+            # Field strength (magnitude of price-volume correlation)
+            correlation_matrix = np.corrcoef(price_cpu, volume_cpu)
+            field_strength = np.abs(correlation_matrix[0, 1]) if not np.isnan(correlation_matrix[0, 1]) else 0.0
             
-            # Oscillation frequency
-            fft_data = np.fft.fft(price_cpu)
-            frequencies = np.fft.fftfreq(len(price_cpu))
+            # Oscillation frequency (FFT-based)
+            fft_data = fft(price_cpu)
+            frequencies = fftfreq(len(price_cpu))
             dominant_freq_idx = np.argmax(np.abs(fft_data))
             oscillation_frequency = np.abs(frequencies[dominant_freq_idx])
             
-            # Drift coefficient
+            # Drift coefficient (autocorrelation)
             autocorr = np.correlate(price_cpu, price_cpu, mode='full')
-            drift_coefficient = autocorr[len(autocorr)//2 + 1] / autocorr[len(autocorr)//2]
+            if len(autocorr) > 1 and autocorr[len(autocorr)//2] != 0:
+                drift_coefficient = autocorr[len(autocorr)//2 + 1] / autocorr[len(autocorr)//2]
+            else:
+                drift_coefficient = 0.0
             
             return EntropyMetrics(
                 shannon_entropy=float(shannon_entropy),
@@ -270,10 +274,16 @@ class GalileoTensorField:
             return self.xp.asnumpy(transformed) if hasattr(self.xp, 'asnumpy') else transformed
         
         def cpu_transform(d, v):
-            d_cpu = np.array(d)
-            time_coords = np.arange(len(d_cpu))
-            transformed = d_cpu - v * time_coords
-            return transformed
+            # CPU fallback for Galilean transformation
+            data_cpu = np.array(d)
+            velocity_cpu = float(v)
+            
+            # Apply Galilean transformation: x' = x - vt
+            # For market data, this represents a velocity-adjusted coordinate system
+            time_coords = np.arange(len(data_cpu))
+            transformed_data = data_cpu - velocity_cpu * time_coords
+            
+            return transformed_data
         
         return safe_array_operation(
             "galilean_transform",
@@ -305,11 +315,19 @@ class GalileoTensorField:
             return self.xp.asnumpy(oscillation) if hasattr(self.xp, 'asnumpy') else oscillation
         
         def cpu_oscillation(d, freq, amp):
-            d_cpu = np.array(d)
-            time_coords = np.arange(len(d_cpu))
-            phase = np.angle(np.fft.fft(d_cpu))[0]  # Initial phase
-            oscillation = amp * np.sin(2 * np.pi * freq * time_coords + phase)
-            return oscillation
+            # CPU fallback for tensor oscillation
+            data_cpu = np.array(d)
+            frequency_cpu = float(freq)
+            amplitude_cpu = float(amp)
+            
+            # Generate oscillatory component: A * sin(2π * f * t)
+            time_coords = np.arange(len(data_cpu))
+            oscillatory_component = amplitude_cpu * np.sin(2 * np.pi * frequency_cpu * time_coords / len(data_cpu))
+            
+            # Add oscillation to original data
+            oscillated_data = data_cpu + oscillatory_component
+            
+            return oscillated_data
         
         return safe_array_operation(
             "tensor_oscillation",
@@ -345,17 +363,33 @@ class GalileoTensorField:
             return self.xp.asnumpy(result) if hasattr(self.xp, 'asnumpy') else result
         
         def cpu_quantum_op(a, b):
-            a_cpu = np.array(a)
-            b_cpu = np.array(b)
+            # CPU fallback for quantum-inspired tensor operations
+            tensor_a = np.array(a)
+            tensor_b = np.array(b)
             
-            # Quantum-inspired tensor contraction
-            result = np.tensordot(a_cpu, b_cpu, axes=([-1], [0]))
+            # Quantum-inspired operations:
+            # 1. Superposition: linear combination of tensors
+            superposition = 0.5 * (tensor_a + tensor_b)
             
-            # Apply quantum phase factor
-            phase_factor = np.exp(1j * np.angle(np.trace(result)))
-            result = result * phase_factor
+            # 2. Entanglement: outer product for correlation
+            if tensor_a.ndim == 1 and tensor_b.ndim == 1:
+                entanglement = np.outer(tensor_a, tensor_b)
+            else:
+                # For higher dimensional tensors, use tensor product
+                entanglement = np.tensordot(tensor_a, tensor_b, axes=0)
             
-            return result
+            # 3. Quantum measurement: projection onto eigenbasis
+            # Use SVD for quantum measurement simulation
+            if tensor_a.ndim == 2:
+                U, s, Vt = linalg.svd(tensor_a)
+                measurement = U @ np.diag(s) @ Vt
+            else:
+                measurement = tensor_a
+            
+            # 4. Quantum interference: combine all operations
+            quantum_result = superposition + 0.3 * entanglement.flatten()[:len(superposition)] + 0.2 * measurement.flatten()[:len(superposition)]
+            
+            return quantum_result
         
         return safe_array_operation(
             "quantum_tensor_operation",

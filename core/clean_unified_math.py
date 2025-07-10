@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Clean Unified Math System - Advanced Mathematical Operations
+Clean Unified Math System - Advanced Mathematical Operations with Profit Vector Integration
 
 Provides a comprehensive, unified mathematical system for the Schwabot trading
 platform. This module integrates various mathematical operations into a single
-cohesive interface with GPU/CPU acceleration support.
+cohesive interface with GPU/CPU acceleration support and profit vector memory integration.
 
     Key Features:
     - Unified mathematical operations with GPU acceleration
@@ -13,15 +13,28 @@ cohesive interface with GPU/CPU acceleration support.
     - Risk management metrics
     - Portfolio optimization
     - Performance tracking and analysis
+    - Profit vector integration for enhanced decision making
+    - Entropy-corrected mathematical operations
+    - Unified signal generation with historical profit memory
     """
 
 import logging
 import math
 import time
+import numpy as np
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from core.backend_math import backend_info, get_backend
+
+# Import profit vector system
+try:
+    from core.unified_profit_vectorization_system import ProfitVector
+    PROFIT_VECTOR_AVAILABLE = True
+except ImportError:
+    PROFIT_VECTOR_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Profit vector system not available - using fallback mode")
 
 xp = get_backend()
 
@@ -32,6 +45,11 @@ if backend_status["accelerated"]:
     logger.info("⚡ Clean Unified Math using GPU acceleration: CuPy (GPU)")
 else:
     logger.info("🔄 Clean Unified Math using CPU fallback: NumPy (CPU)")
+
+if PROFIT_VECTOR_AVAILABLE:
+    logger.info("🧠 Profit vector integration: ENABLED")
+else:
+    logger.info("🧠 Profit vector integration: FALLBACK MODE")
 
 
 @dataclass
@@ -44,13 +62,34 @@ class MathResult:
     metadata: Dict[str, Any]
 
 
+@dataclass
+class UnifiedSignal:
+    """Unified trading signal combining mathematical analysis and profit vector insights."""
+    
+    signal: str  # "BUY", "SELL", "HOLD"
+    confidence: float
+    vector_confidence: float
+    mathematical_confidence: float
+    entropy_correction: float
+    profit_weight: float
+    timestamp: float = time.time()
+    metadata: Dict[str, Any] = None
+
+
 class CleanUnifiedMathSystem:
-    """Clean unified mathematical framework for trading calculations."""
+    """Clean unified mathematical framework for trading calculations with profit vector integration."""
 
     def __init__(self) -> None:
         """Initialize the unified math system."""
         self.calculation_history: List[MathResult] = []
         self.operation_cache: Dict[str, float] = {}
+        self.profit_vector_history: List[ProfitVector] = []
+        self.signal_history: List[UnifiedSignal] = []
+        
+        # Integration parameters
+        self.profit_weight_threshold = 0.7
+        self.entropy_correction_factor = 0.1
+        self.vector_confidence_decay = 0.95
 
     def multiply(self, a: float, b: float) -> float:
         """Multiply two numbers with caching."""
@@ -396,6 +435,401 @@ class CleanUnifiedMathSystem:
         except Exception as e:
             logger.error("Calculation summary error: {0}".format(e))
             return {"error": str(e)}
+
+    def integrate_profit_vectors(self, profit_vectors: List[ProfitVector]) -> Dict[str, float]:
+        """
+        Compute unified metrics (entropy, volatility, confidence) from profit vector history.
+        
+        Args:
+            profit_vectors: List of profit vectors to integrate
+            
+        Returns:
+            Dictionary containing integrated metrics
+        """
+        if not profit_vectors:
+            return {"confidence": 0.0, "volatility": 0.0, "vector_strength": 0.0}
+        
+        try:
+            total_strength = sum(v.vector_strength for v in profit_vectors)
+            if total_strength == 0:
+                return {"confidence": 0.0, "volatility": 0.0, "vector_strength": 0.0}
+
+            avg_volatility = np.mean([v.volatility for v in profit_vectors])
+            avg_drawdown = np.mean([v.drawdown for v in profit_vectors])
+            avg_profit = np.mean([v.profit for v in profit_vectors])
+
+            # Calculate confidence based on volatility and drawdown
+            confidence = (1 - avg_volatility) * (1 - avg_drawdown) * (1 + avg_profit)
+            confidence = max(0.0, min(1.0, confidence))  # Clamp to [0, 1]
+            
+            return {
+                "confidence": confidence,
+                "volatility": avg_volatility,
+                "vector_strength": total_strength / len(profit_vectors),
+                "avg_profit": avg_profit,
+                "avg_drawdown": avg_drawdown
+            }
+            
+        except Exception as e:
+            logger.error(f"Error integrating profit vectors: {e}")
+            return {"confidence": 0.0, "volatility": 0.0, "vector_strength": 0.0}
+
+    def calculate_profit_optimized_metrics(self, base_metrics: Dict[str, float], 
+                                         profit_vectors: List[ProfitVector]) -> Dict[str, float]:
+        """
+        Adjust base math metrics based on vector strength + entropy.
+        
+        Args:
+            base_metrics: Base mathematical metrics
+            profit_vectors: Profit vectors for optimization
+            
+        Returns:
+            Profit-optimized metrics
+        """
+        try:
+            vector_metrics = self.integrate_profit_vectors(profit_vectors)
+            adjusted_metrics = {}
+
+            for key, value in base_metrics.items():
+                # Apply profit vector confidence as a weight
+                adjusted = value * vector_metrics["confidence"]
+                adjusted_metrics[key] = adjusted
+
+            # Add profit vector insights
+            adjusted_metrics["profit_confidence"] = vector_metrics["confidence"]
+            adjusted_metrics["profit_volatility"] = vector_metrics["volatility"]
+            adjusted_metrics["profit_vector_strength"] = vector_metrics["vector_strength"]
+            
+            return adjusted_metrics
+            
+        except Exception as e:
+            logger.error(f"Error calculating profit optimized metrics: {e}")
+            return base_metrics
+
+    def analyze_market_data(self, market_data: Dict[str, Any]) -> Dict[str, float]:
+        """
+        Analyze market data to extract mathematical metrics.
+        
+        Args:
+            market_data: Market data dictionary
+            
+        Returns:
+            Dictionary of mathematical metrics
+        """
+        try:
+            # Extract basic metrics from market data
+            prices = market_data.get("prices", [])
+            volumes = market_data.get("volumes", [])
+            
+            if not prices:
+                return {"momentum": 0.0, "volatility": 0.0, "volume_trend": 0.0}
+            
+            # Calculate momentum (price change)
+            if len(prices) >= 2:
+                momentum = (prices[-1] - prices[0]) / prices[0]
+            else:
+                momentum = 0.0
+            
+            # Calculate volatility
+            if len(prices) >= 2:
+                returns = np.diff(prices) / prices[:-1]
+                volatility = np.std(returns) if len(returns) > 0 else 0.0
+            else:
+                volatility = 0.0
+            
+            # Calculate volume trend
+            if len(volumes) >= 2:
+                volume_trend = (volumes[-1] - volumes[0]) / max(volumes[0], 1e-8)
+            else:
+                volume_trend = 0.0
+            
+            return {
+                "momentum": momentum,
+                "volatility": volatility,
+                "volume_trend": volume_trend,
+                "price_level": prices[-1] if prices else 0.0
+            }
+            
+        except Exception as e:
+            logger.error(f"Error analyzing market data: {e}")
+            return {"momentum": 0.0, "volatility": 0.0, "volume_trend": 0.0}
+
+    def generate_unified_signal(self, market_data: Dict[str, Any], 
+                               profit_vectors: List[ProfitVector]) -> UnifiedSignal:
+        """
+        Combine market math and profit vector memory to generate a trade signal.
+        
+        Args:
+            market_data: Market data for analysis
+            profit_vectors: Historical profit vectors
+            
+        Returns:
+            UnifiedSignal with combined confidence and decision
+        """
+        try:
+            # Analyze market data
+            base_metrics = self.analyze_market_data(market_data)
+            
+            # Optimize metrics with profit vectors
+            optimized = self.calculate_profit_optimized_metrics(base_metrics, profit_vectors)
+            
+            # Get profit vector insights
+            vector_metrics = self.integrate_profit_vectors(profit_vectors)
+            
+            # Calculate mathematical confidence
+            mathematical_confidence = abs(optimized["momentum"]) * (1 - optimized["volatility"])
+            mathematical_confidence = max(0.0, min(1.0, mathematical_confidence))
+            
+            # Calculate vector confidence
+            vector_confidence = vector_metrics["confidence"]
+            
+            # Calculate entropy correction
+            entropy_correction = 1 - vector_metrics["volatility"]
+            
+            # Calculate combined confidence
+            combined_confidence = (mathematical_confidence * 0.6 + 
+                                 vector_confidence * 0.4) * entropy_correction
+            
+            # Generate signal based on thresholds
+            threshold = self.profit_weight_threshold
+            
+            if optimized["momentum"] > threshold and optimized["volatility"] < 0.15:
+                signal = "BUY"
+            elif optimized["momentum"] < -threshold:
+                signal = "SELL"
+            else:
+                signal = "HOLD"
+            
+            # Create unified signal
+            unified_signal = UnifiedSignal(
+                signal=signal,
+                confidence=combined_confidence,
+                vector_confidence=vector_confidence,
+                mathematical_confidence=mathematical_confidence,
+                entropy_correction=entropy_correction,
+                profit_weight=vector_metrics["vector_strength"],
+                metadata={
+                    "momentum": optimized["momentum"],
+                    "volatility": optimized["volatility"],
+                    "volume_trend": optimized.get("volume_trend", 0.0)
+                }
+            )
+            
+            # Store signal history
+            self.signal_history.append(unified_signal)
+            if len(self.signal_history) > 1000:  # Keep last 1000 signals
+                self.signal_history.pop(0)
+            
+            return unified_signal
+            
+        except Exception as e:
+            logger.error(f"Error generating unified signal: {e}")
+            return UnifiedSignal(
+                signal="HOLD",
+                confidence=0.0,
+                vector_confidence=0.0,
+                mathematical_confidence=0.0,
+                entropy_correction=0.0,
+                profit_weight=0.0
+            )
+
+    def profit_weighted_sharpe_ratio(self, returns: List[float], 
+                                    profit_vectors: List[ProfitVector]) -> float:
+        """
+        Calculate Sharpe ratio weighted by trade confidence.
+        
+        Args:
+            returns: List of returns
+            profit_vectors: Profit vectors for weighting
+            
+        Returns:
+            Profit-weighted Sharpe ratio
+        """
+        try:
+            if not returns or not profit_vectors:
+                return 0.0
+            
+            # Use vector strength as weights
+            vector_weights = np.array([v.vector_strength for v in profit_vectors[:len(returns)]])
+            
+            # Pad weights if needed
+            if len(vector_weights) < len(returns):
+                vector_weights = np.pad(vector_weights, (0, len(returns) - len(vector_weights)), 
+                                      mode='constant', constant_values=0.1)
+            elif len(vector_weights) > len(returns):
+                vector_weights = vector_weights[:len(returns)]
+            
+            # Normalize weights
+            if np.sum(vector_weights) > 0:
+                norm_weights = vector_weights / np.sum(vector_weights)
+            else:
+                norm_weights = np.ones(len(returns)) / len(returns)
+
+            # Calculate weighted returns
+            weighted_returns = np.average(returns, weights=norm_weights)
+            risk = np.std(returns)
+            
+            # Calculate Sharpe ratio
+            sharpe = weighted_returns / risk if risk > 0 else 0.0
+            
+            return float(sharpe)
+            
+        except Exception as e:
+            logger.error(f"Error calculating profit-weighted Sharpe ratio: {e}")
+            return 0.0
+
+    def entropy_corrected_mathematical_operations(self, data: np.ndarray, 
+                                                profit_vectors: List[ProfitVector]) -> np.ndarray:
+        """
+        Apply entropy corrections from profit vectors to mathematical operations.
+        
+        Args:
+            data: Input data array
+            profit_vectors: Profit vectors for entropy correction
+            
+        Returns:
+            Entropy-corrected data array
+        """
+        try:
+            if not profit_vectors:
+                return data
+            
+            # Calculate average entropy from profit vectors
+            avg_entropy = np.mean([v.volatility for v in profit_vectors])
+            
+            # Apply entropy correction factor
+            correction_factor = 1 - (avg_entropy * self.entropy_correction_factor)
+            correction_factor = max(0.1, min(1.0, correction_factor))  # Clamp to [0.1, 1.0]
+            
+            # Apply correction to data
+            corrected_data = data * correction_factor
+            
+            return corrected_data
+            
+        except Exception as e:
+            logger.error(f"Error applying entropy correction: {e}")
+            return data
+
+    def profit_aware_portfolio_optimization(self, assets: List[str], 
+                                          profit_vectors: List[ProfitVector]) -> Dict[str, float]:
+        """
+        Optimize portfolio weights using profit vector insights.
+        
+        Args:
+            assets: List of asset names
+            profit_vectors: Profit vectors for optimization
+            
+        Returns:
+            Dictionary of asset weights
+        """
+        try:
+            if not assets or not profit_vectors:
+                # Return equal weights if no data
+                return {asset: 1.0 / len(assets) for asset in assets}
+            
+            # Calculate profit confidence for each asset
+            asset_weights = {}
+            
+            # Use profit vector strength to weight assets
+            total_strength = sum(v.vector_strength for v in profit_vectors)
+            
+            if total_strength > 0:
+                # Weight by profit vector strength
+                for i, asset in enumerate(assets):
+                    if i < len(profit_vectors):
+                        weight = profit_vectors[i].vector_strength / total_strength
+                    else:
+                        weight = 0.1 / len(assets)  # Default weight
+                    asset_weights[asset] = weight
+            else:
+                # Equal weights if no profit data
+                for asset in assets:
+                    asset_weights[asset] = 1.0 / len(assets)
+            
+            # Normalize weights
+            total_weight = sum(asset_weights.values())
+            if total_weight > 0:
+                for asset in asset_weights:
+                    asset_weights[asset] /= total_weight
+            
+            return asset_weights
+            
+        except Exception as e:
+            logger.error(f"Error in profit-aware portfolio optimization: {e}")
+            return {asset: 1.0 / len(assets) for asset in assets}
+
+    def bridge_profit_to_math(self, profit_vectors: List[ProfitVector]) -> Dict[str, float]:
+        """
+        Translate historical profit vector signals into math-usable insights.
+        
+        Args:
+            profit_vectors: Profit vectors to bridge
+            
+        Returns:
+            Dictionary of mathematical insights
+        """
+        try:
+            if not profit_vectors:
+                return {
+                    "average_volatility": 0.0,
+                    "average_drawdown": 0.0,
+                    "total_vector_strength": 0.0,
+                    "profit_trend": 0.0
+                }
+            
+            return {
+                "average_volatility": np.mean([v.volatility for v in profit_vectors]),
+                "average_drawdown": np.mean([v.drawdown for v in profit_vectors]),
+                "total_vector_strength": sum(v.vector_strength for v in profit_vectors),
+                "profit_trend": np.mean([v.profit for v in profit_vectors])
+            }
+            
+        except Exception as e:
+            logger.error(f"Error bridging profit to math: {e}")
+            return {
+                "average_volatility": 0.0,
+                "average_drawdown": 0.0,
+                "total_vector_strength": 0.0,
+                "profit_trend": 0.0
+            }
+
+    def bridge_math_to_signals(self, math_results: Dict[str, float], 
+                              profit_vectors: List[ProfitVector]) -> Dict[str, Any]:
+        """
+        Generate signal by adjusting math output based on profit vector patterns.
+        
+        Args:
+            math_results: Mathematical analysis results
+            profit_vectors: Profit vectors for signal adjustment
+            
+        Returns:
+            Dictionary with signal and confidence
+        """
+        try:
+            if not profit_vectors:
+                return {"signal": "HOLD", "vector_confidence": 0.0}
+            
+            avg_strength = np.mean([v.vector_strength for v in profit_vectors])
+            momentum = math_results.get("momentum", 0.0)
+            
+            # Generate signal based on momentum and vector strength
+            if momentum * avg_strength > 0.5:
+                signal = "BUY"
+            elif momentum * avg_strength < -0.5:
+                signal = "SELL"
+            else:
+                signal = "HOLD"
+            
+            return {
+                "signal": signal,
+                "vector_confidence": avg_strength,
+                "momentum": momentum,
+                "combined_strength": momentum * avg_strength
+            }
+            
+        except Exception as e:
+            logger.error(f"Error bridging math to signals: {e}")
+            return {"signal": "HOLD", "vector_confidence": 0.0}
 
 
 def optimize_brain_profit(price: float, volume: float, confidence: float, enhancement_factor: float) -> float:
