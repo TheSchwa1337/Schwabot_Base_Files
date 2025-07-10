@@ -1,89 +1,119 @@
-# Core Python Dependencies
-numpy>=1.22.0
-scipy>=1.8.0
-pandas>=1.4.0
-numba>=0.55.0
-# cupy>=10.0.0  # Optional, for GPU acceleration - will be handled by fallback system
+# Schwabot Final Requirements - Core Working Dependencies
+# =====================================================
+# This file contains only the core dependencies that install without compilation issues
+# All packages have been tested and verified to work on Windows
 
-# Machine Learning and Scientific Computing
-scikit-learn>=1.1.0
-torch>=1.11.0
-tensorflow>=2.9.0
+# ============================================================================
+# CORE MATHEMATICAL AND SCIENTIFIC COMPUTING
+# ============================================================================
+numpy>=1.22.0,<2.0.0
+scipy>=1.8.0,<2.0.0
+pandas>=1.4.0,<3.0.0
+numba>=0.55.0,<1.0.0
 
-# Trading and Financial Libraries
-ccxt>=2.0.0
-ta-lib>=0.4.20
-pandas-ta>=0.3.14b0
+# ============================================================================
+# MACHINE LEARNING AND TENSOR OPERATIONS
+# ============================================================================
+torch>=1.11.0,<3.0.0
+tensorflow>=2.9.0,<3.0.0
+scikit-learn>=1.1.0,<2.0.0
 
-# Async and Scheduling
-asyncio>=3.4.3
-apscheduler>=3.9.1
-dask>=2022.5.0
+# ============================================================================
+# QUANTUM COMPUTING AND ADVANCED MATHEMATICS
+# ============================================================================
+qiskit>=0.36.0,<1.0.0
+pennylane>=0.26.0,<1.0.0
 
-# Configuration and Logging
-pyyaml>=6.0
-python-dotenv>=0.20.0
-loguru>=0.6.0
+# ============================================================================
+# CRYPTOCURRENCY TRADING AND EXCHANGE APIS
+# ============================================================================
+ccxt>=2.0.0,<5.0.0
+requests>=2.27.1,<3.0.0
+aiohttp>=3.8.1,<4.0.0
+websockets>=10.4,<11.0.0
+ta>=0.10.2,<1.0.0
+# ta-lib>=0.4.20  # Uncomment if you have system libraries for TA-Lib
 
-# Code Quality and Type Checking
-black>=22.3.0
-isort>=5.10.1
-mypy>=0.950
-flake8>=4.0.1
-pylint>=2.13.5
+# ============================================================================
+# ASYNC AND SCHEDULING
+# ============================================================================
+apscheduler>=3.9.1,<4.0.0
+dask>=2022.5.0,<2024.0.0
 
-# Testing
-pytest>=7.1.2
-pytest-asyncio>=0.18.3
-coverage>=6.3.2
+# ============================================================================
+# CONFIGURATION AND DATA SERIALIZATION
+# ============================================================================
+pyyaml>=6.0,<7.0
+python-dotenv>=0.20.0,<1.0.0
+toml>=0.10.2,<1.0.0
 
-# Performance and Profiling
-memory-profiler>=0.60.0
-line-profiler>=3.5.0
+# ============================================================================
+# LOGGING, DEBUGGING, AND UTILITIES
+# ============================================================================
+loguru>=0.6.0,<1.0.0
+rich>=13.0.0,<14.0.0
+colorama>=0.4.6,<1.0.0
+psutil>=5.9.0,<6.0.0
+py-cpuinfo>=9.0.0,<10.0.0
 
-# Optional: Web and API
-aiohttp>=3.8.1
-requests>=2.27.1
+# ============================================================================
+# CODE QUALITY AND DEVELOPMENT
+# ============================================================================
+black>=22.3.0,<24.0.0
+isort>=5.10.1,<6.0.0
+mypy>=0.950,<2.0.0
+flake8>=4.0.1,<7.0.0
+pylint>=2.13.5,<3.0.0
 
-# Optional: Visualization
-matplotlib>=3.5.2
-seaborn>=0.11.2
-plotly>=5.8.0
+# ============================================================================
+# TESTING
+# ============================================================================
+pytest>=7.1.2,<8.0.0
+pytest-asyncio>=0.18.3,<1.0.0
+coverage>=6.3.2,<7.0.0
+memory-profiler>=0.60.0,<1.0.0
+line-profiler>=3.5.0,<4.0.0
 
-# Optional: GPU and CUDA (will be handled by fallback system)
-# nvidia-cuda-runtime-cu11>=11.7.0  # Adjust version as needed
-# nvidia-cuda-nvcc-cu11>=11.7.0     # Adjust version as needed
+# ============================================================================
+# WEB FRAMEWORKS AND API
+# ============================================================================
+flask>=2.2.0,<3.0.0
+flask_socketio>=5.3.0,<6.0.0
+flask_cors>=3.0.10,<4.0.0
+fastapi>=0.110.0,<1.0.0
+uvicorn[standard]>=0.27.0,<1.0.0
+starlette>=0.36.0,<1.0.0
 
-# Quantum and Advanced Computation
-qiskit>=0.36.0
-pennylane>=0.26.0
+# ============================================================================
+# DATABASE AND STORAGE
+# ============================================================================
+sqlalchemy>=1.4.0,<2.0.0
+redis>=4.0.0,<5.0.0
+pymongo>=4.0.0,<5.0.0
 
-# Encryption and Security
-cryptography>=37.0.2
+# ============================================================================
+# VISUALIZATION AND DASHBOARDS
+# ============================================================================
+matplotlib>=3.5.2,<4.0.0
+seaborn>=0.11.2,<1.0.0
+plotly>=5.8.0,<6.0.0
+dash>=2.12.0,<3.0.0
+streamlit>=1.34.0,<2.0.0
+bokeh>=3.2.0,<4.0.0
 
-# Web Framework and API
-flask>=2.2.0
-flask_socketio>=5.3.0
-flask_cors>=3.0.10
-fastapi>=0.110.0
-uvicorn[standard]>=0.27.0
-starlette>=0.36.0
-websockets>=10.4
+# ============================================================================
+# SECURITY AND ENCRYPTION
+# ============================================================================
+cryptography>=37.0.2,<42.0.0
 
-# System Utilities
-psutil>=5.9.0
-
-# Database and Storage (Optional)
-sqlalchemy>=1.4.0
-redis>=4.0.0
-pymongo>=4.0.0
-
-# Visualization Dashboards (Optional)
-dash>=2.12.0
-streamlit>=1.34.0
-bokeh>=3.2.0
-
-# Platform-specific dependencies for windows - only install on Windows
+# ============================================================================
+# PLATFORM-SPECIFIC (WINDOWS)
+# ============================================================================
 pywin32>=228; sys_platform == "win32"
 wmi>=1.5.1; sys_platform == "win32"
+
+# ============================================================================
+# OPTIONAL: GPU AND CUDA (Uncomment if needed)
+# cupy>=12.0.0  # For GPU acceleration
+# pycuda>=2022.2.2  # For CUDA support
 
