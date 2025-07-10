@@ -18,9 +18,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Run core functionality test
+      - name: Run Unified Trading Pipeline Tests
         run: |
-          python test_core_functionality.py
+          python test_unified_trading_pipeline.py
       
       - name: Test CLI help
         run: |
