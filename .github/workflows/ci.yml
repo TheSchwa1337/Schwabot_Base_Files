@@ -16,7 +16,21 @@ jobs:
       - name: Install TA-Lib dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libta-lib-dev
+          sudo apt-get install -y build-essential wget
+          # Try installing from package manager first
+          sudo apt-get install -y libta-lib0-dev || \
+          sudo apt-get install -y libta-lib-dev || \
+          {
+            echo "Installing TA-Lib from source..."
+            wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+            tar -xzf ta-lib-0.4.0-src.tar.gz
+            cd ta-lib/
+            ./configure --prefix=/usr
+            make
+            sudo make install
+            cd ..
+            rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+          }
       
       - name: Install dependencies
         run: |
@@ -30,11 +44,6 @@ jobs:
         run: |
           echo "🧪 Running comprehensive functionality tests..."
           python test_ci_functionality.py
-      
-      - name: Run legacy unified pipeline tests
-        run: |
-          echo "🧪 Running legacy pipeline tests..."
-          timeout 60 python test_unified_trading_pipeline.py || echo "⚠️ Legacy tests may fail in CI"
       
       - name: Test CLI help
         run: |

@@ -24,7 +24,21 @@ jobs:
     - name: Install TA-Lib dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libta-lib-dev
+        sudo apt-get install -y build-essential wget
+        # Try installing from package manager first
+        sudo apt-get install -y libta-lib0-dev || \
+        sudo apt-get install -y libta-lib-dev || \
+        {
+          echo "Installing TA-Lib from source..."
+          wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+          tar -xzf ta-lib-0.4.0-src.tar.gz
+          cd ta-lib/
+          ./configure --prefix=/usr
+          make
+          sudo make install
+          cd ..
+          rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+        }
     
     - name: Install Python dependencies
       run: |
@@ -72,12 +86,6 @@ jobs:
         python main.py --help || echo "⚠️ CLI help failed"
         echo "✅ CLI help test completed"
     
-    - name: Run legacy unified pipeline tests (supplementary)
-      run: |
-        echo "🧪 Running legacy unified trading pipeline tests (supplementary)..."
-        timeout 60 python test_unified_trading_pipeline.py || echo "⚠️ Legacy pipeline tests failed or timed out (expected in CI without real trading environment)"
-        echo "✅ Legacy tests completed"
-    
     - name: Generate final CI report
       run: |
         echo ""
@@ -88,7 +96,6 @@ jobs:
         echo "✅ Code Quality: Flake8 syntax and style"  
         echo "✅ Code Format: Black formatting verified"
         echo "✅ CLI Interface: Help functionality tested"
-        echo "✅ Legacy Tests: Supplementary validation"
         echo ""
         echo "🏆 CI PASSED - All validations successful!"
         echo ""
