@@ -1,0 +1,342 @@
+# 🧮 Enhanced Math-to-Trade System Configuration
+# =============================================
+# Complete configuration for the enhanced mathematical trading system
+# This file configures all mathematical modules for optimal market entry/exit/hold decisions
+
+# ============================================================================
+# IMMUNE SYSTEM CONFIGURATION (QSC Gates)
+# ============================================================================
+immune_system:
+  # QSC Gate parameters for quantum signal collapse
+  collapse_threshold: 0.5          # Collapse detection threshold
+  phase_resolution: 100            # Phase resolution for calculations
+  decoherence_rate: 0.1            # Decoherence rate
+  measurement_strength: 1.0        # Measurement strength
+  entropy_threshold: 0.3           # Entropy threshold for collapse
+  coherence_threshold: 0.7         # Coherence threshold
+  superposition_limit: 10          # Maximum superposition states
+  
+  # Market decision parameters
+  entry_confidence_threshold: 0.7  # Confidence required for entry
+  exit_confidence_threshold: 0.6   # Confidence required for exit
+  hold_confidence_threshold: 0.5   # Confidence required for hold
+  anomaly_threshold: 0.8           # Threshold for anomaly detection
+  
+  # Risk management
+  max_risk_score: 0.8              # Maximum allowed risk score
+  min_signal_strength: 0.3         # Minimum signal strength
+  immune_boost_threshold: 0.9      # Threshold for immune boost
+
+# ============================================================================
+# ENTROPY SYSTEM CONFIGURATION (Galileo Tensor Fields)
+# ============================================================================
+entropy_system:
+  # GalileoTensorField parameters
+  field_dimension: 3               # Field dimension for calculations
+  precision: 1e-8                  # Numerical precision
+  max_iterations: 1000             # Maximum iterations for convergence
+  convergence_threshold: 1e-6      # Convergence threshold
+  use_gpu: true                    # Enable GPU acceleration
+  fallback_enabled: true           # Enable CPU fallback
+  
+  # Entropy decision parameters
+  low_entropy_threshold: 0.3       # Threshold for low entropy (predictable)
+  high_entropy_threshold: 0.7      # Threshold for high entropy (volatile)
+  extreme_entropy_threshold: 0.9   # Threshold for extreme entropy (chaotic)
+  entropy_spike_threshold: 0.2     # Threshold for entropy spike detection
+  
+  # Market decision thresholds
+  enter_low_entropy_confidence: 0.7    # Confidence for low entropy entry
+  enter_high_entropy_confidence: 0.6   # Confidence for high entropy entry
+  exit_spike_confidence: 0.8           # Confidence for spike exit
+  hold_stable_confidence: 0.5          # Confidence for stable hold
+  
+  # Risk management
+  max_risk_level: 0.8              # Maximum allowed risk level
+  min_confidence: 0.3              # Minimum confidence
+  emergency_exit_threshold: 0.95   # Emergency exit threshold
+
+# ============================================================================
+# MATH SYSTEM CONFIGURATION (Unified Mathematical Framework)
+# ============================================================================
+math_system:
+  # UnifiedTensorAlgebra parameters
+  max_rank: 3                      # Maximum tensor rank
+  collapse_threshold: 0.1           # Collapse detection threshold
+  fourier_resolution: 64            # Fourier transform resolution
+  gamma_shift: 0.1                 # Gamma shift parameter
+  eigenvalue_threshold: 1e-6        # Eigenvalue threshold
+  norm_threshold: 1e-8             # Norm threshold
+  
+  # Mathematical decision parameters
+  tensor_alignment_threshold: 0.7   # Threshold for tensor alignment
+  eigenvalue_signal_threshold: 0.6  # Threshold for eigenvalue signals
+  tensor_decomposition_threshold: 0.8  # Threshold for tensor decomposition
+  tensor_stability_threshold: 0.5   # Threshold for tensor stability
+  tensor_convergence_threshold: 0.4 # Threshold for tensor convergence
+  
+  # Consensus parameters
+  consensus_threshold: 0.6          # Threshold for mathematical consensus
+  min_agreement_count: 3            # Minimum modules in agreement
+  signal_aggregation_weight: 0.5    # Weight for signal aggregation
+  
+  # Risk management
+  max_risk_level: 0.8              # Maximum allowed risk level
+  min_confidence: 0.3              # Minimum confidence
+  emergency_collapse_threshold: 0.95  # Emergency collapse threshold
+
+# ============================================================================
+# TENSOR ALGEBRA CONFIGURATION (Advanced Tensor Operations)
+# ============================================================================
+tensor_algebra:
+  # UnifiedTensorAlgebra parameters
+  max_rank: 3                      # Maximum tensor rank
+  collapse_threshold: 0.1           # Collapse detection threshold
+  fourier_resolution: 64            # Fourier transform resolution
+  gamma_shift: 0.1                 # Gamma shift parameter
+  eigenvalue_threshold: 1e-6        # Eigenvalue threshold
+  norm_threshold: 1e-8             # Norm threshold
+  contraction_axes: null            # Default contraction axes
+  
+  # Tensor decision parameters
+  tensor_contraction_threshold: 0.7 # Threshold for tensor contraction
+  fourier_signal_threshold: 0.6     # Threshold for Fourier signals
+  tensor_decomposition_threshold: 0.8  # Threshold for tensor decomposition
+  tensor_stability_threshold: 0.5   # Threshold for tensor stability
+  tensor_convergence_threshold: 0.4 # Threshold for tensor convergence
+  
+  # Analysis parameters
+  min_tensor_size: 2               # Minimum tensor size
+  max_tensor_size: 10              # Maximum tensor size
+  eigenvalue_analysis_depth: 5     # Depth of eigenvalue analysis
+  
+  # Risk management
+  max_risk_level: 0.8              # Maximum allowed risk level
+  min_confidence: 0.3              # Minimum confidence
+  emergency_collapse_threshold: 0.95  # Emergency collapse threshold
+
+# ============================================================================
+# ENHANCED INTEGRATION CONFIGURATION
+# ============================================================================
+enhanced_integration:
+  # Signal aggregation parameters
+  signal_aggregation_method: "weighted_average"  # Method for aggregating signals
+  consensus_required: true          # Require consensus across modules
+  consensus_threshold: 0.6          # Threshold for consensus
+  min_agreement_modules: 3          # Minimum modules in agreement
+  
+  # Decision weighting
+  immune_system_weight: 0.25        # Weight for immune system decisions
+  entropy_system_weight: 0.25       # Weight for entropy system decisions
+  math_system_weight: 0.25          # Weight for math system decisions
+  tensor_algebra_weight: 0.25       # Weight for tensor algebra decisions
+  
+  # Market decision thresholds
+  strong_buy_threshold: 0.8         # Threshold for strong buy signals
+  buy_threshold: 0.6                # Threshold for buy signals
+  hold_threshold: 0.4               # Threshold for hold signals
+  sell_threshold: -0.6              # Threshold for sell signals
+  strong_sell_threshold: -0.8       # Threshold for strong sell signals
+  
+  # Risk management
+  max_position_size: 0.1            # Maximum position size
+  max_daily_loss: 0.05              # Maximum daily loss
+  max_drawdown: 0.15                # Maximum drawdown
+  emergency_stop: true              # Enable emergency stop
+  
+  # Performance monitoring
+  performance_tracking: true        # Enable performance tracking
+  signal_history_size: 1000        # Size of signal history
+  performance_metrics: true         # Enable performance metrics
+
+# ============================================================================
+# TRADING CONFIGURATION
+# ============================================================================
+trading:
+  enabled: true                     # Enable trading
+  default_pair: "BTC/USD"           # Default trading pair
+  exchanges:
+    coinbase:
+      enabled: true
+      sandbox: false                # Set to true for testing
+      api_key: "${COINBASE_API_KEY}"
+      secret: "${COINBASE_SECRET}"
+      passphrase: "${COINBASE_PASSPHRASE}"
+    binance:
+      enabled: true
+      sandbox: false
+      api_key: "${BINANCE_API_KEY}"
+      secret: "${BINANCE_SECRET}"
+    kraken:
+      enabled: true
+      sandbox: false
+      api_key: "${KRAKEN_API_KEY}"
+      secret: "${KRAKEN_SECRET}"
+  
+  # Order management
+  order_timeout: 30                 # Order timeout in seconds
+  max_retries: 3                    # Maximum order retries
+  retry_delay: 5                    # Delay between retries
+  
+  # Position management
+  position_tracking: true           # Enable position tracking
+  position_update_interval: 1.0     # Position update interval
+  max_positions: 5                  # Maximum concurrent positions
+
+# ============================================================================
+# RISK MANAGEMENT CONFIGURATION
+# ============================================================================
+risk_management:
+  # Position sizing
+  position_sizing_method: "kelly_criterion"  # Position sizing method
+  max_position_size: 0.1            # Maximum position size
+  min_position_size: 0.01           # Minimum position size
+  
+  # Loss limits
+  max_daily_loss: 0.05              # Maximum daily loss
+  max_weekly_loss: 0.15             # Maximum weekly loss
+  max_monthly_loss: 0.30            # Maximum monthly loss
+  
+  # Drawdown protection
+  max_drawdown: 0.15                # Maximum drawdown
+  drawdown_recovery_threshold: 0.10 # Drawdown recovery threshold
+  
+  # Volatility adjustment
+  volatility_adjustment: true       # Enable volatility adjustment
+  volatility_lookback: 20           # Volatility lookback period
+  
+  # Correlation limits
+  max_correlation: 0.8              # Maximum correlation between positions
+  correlation_lookback: 30          # Correlation lookback period
+
+# ============================================================================
+# MONITORING AND LOGGING CONFIGURATION
+# ============================================================================
+monitoring:
+  # Logging
+  log_level: "INFO"                 # Log level
+  log_file: "logs/enhanced_math_to_trade.log"  # Log file path
+  log_rotation: "daily"             # Log rotation
+  log_retention: 30                 # Log retention in days
+  
+  # Performance monitoring
+  performance_tracking: true        # Enable performance tracking
+  metrics_interval: 60              # Metrics collection interval
+  performance_history_size: 10000   # Performance history size
+  
+  # Alerting
+  alerts_enabled: true              # Enable alerts
+  alert_thresholds:
+    daily_loss: 0.03                # Alert on daily loss
+    drawdown: 0.10                  # Alert on drawdown
+    signal_failure: 0.8             # Alert on signal failure
+  
+  # Health checks
+  health_check_interval: 300        # Health check interval
+  health_check_timeout: 30          # Health check timeout
+
+# ============================================================================
+# MATHEMATICAL MODULE WEIGHTS
+# ============================================================================
+module_weights:
+  # Core mathematical modules
+  volume_weighted_hash_oscillator: 0.15      # VWAP + SHA oscillator
+  zygot_zalgo_entropy_dual_key_gate: 0.15    # Zygot-Zalgo entropy gate
+  qsc_quantum_signal_collapse_gate: 0.10     # QSC quantum gate
+  unified_tensor_algebra: 0.10               # Unified tensor algebra
+  galileo_tensor_field: 0.10                 # Galileo tensor field
+  advanced_tensor_algebra: 0.10              # Advanced tensor algebra
+  entropy_signal_integration: 0.10           # Entropy signal integration
+  clean_unified_math: 0.05                   # Clean unified math
+  enhanced_mathematical_core: 0.05           # Enhanced math core
+  entropy_math: 0.05                         # Entropy math
+  multi_phase_strategy_weight_tensor: 0.05   # Multi-phase strategy tensor
+  
+  # Advanced modules
+  recursive_hash_echo: 0.02                  # Recursive hash echo
+  hash_match_command_injector: 0.02          # Hash match injector
+  profit_matrix_feedback_loop: 0.02          # Profit matrix feedback
+  enhanced_math_ops: 0.02                    # Enhanced math operations
+  loss_anticipation_curve: 0.02              # Loss anticipation curve
+
+# ============================================================================
+# SIGNAL PROCESSING CONFIGURATION
+# ============================================================================
+signal_processing:
+  # Signal filtering
+  signal_filtering: true            # Enable signal filtering
+  min_signal_strength: 0.3          # Minimum signal strength
+  max_signal_age: 300               # Maximum signal age in seconds
+  
+  # Signal aggregation
+  aggregation_method: "weighted_consensus"  # Aggregation method
+  consensus_threshold: 0.6          # Consensus threshold
+  min_agreement_count: 3            # Minimum agreement count
+  
+  # Signal validation
+  signal_validation: true           # Enable signal validation
+  validation_timeout: 10            # Validation timeout
+  max_validation_retries: 3         # Maximum validation retries
+  
+  # Signal persistence
+  signal_persistence: true          # Enable signal persistence
+  persistence_interval: 60          # Persistence interval
+  max_persisted_signals: 1000       # Maximum persisted signals
+
+# ============================================================================
+# SYSTEM OPTIMIZATION CONFIGURATION
+# ============================================================================
+optimization:
+  # Performance optimization
+  gpu_acceleration: true            # Enable GPU acceleration
+  parallel_processing: true         # Enable parallel processing
+  cache_enabled: true               # Enable caching
+  cache_size: 1000                  # Cache size
+  
+  # Memory management
+  memory_limit: "8GB"               # Memory limit
+  garbage_collection: true          # Enable garbage collection
+  gc_interval: 300                  # Garbage collection interval
+  
+  # CPU optimization
+  cpu_cores: "auto"                 # Number of CPU cores to use
+  thread_pool_size: 4               # Thread pool size
+  
+  # GPU optimization
+  gpu_memory_fraction: 0.8          # GPU memory fraction
+  gpu_allow_growth: true            # Allow GPU memory growth
+
+# ============================================================================
+# BACKTESTING CONFIGURATION
+# ============================================================================
+backtesting:
+  enabled: false                    # Enable backtesting mode
+  start_date: "2024-01-01"          # Backtest start date
+  end_date: "2024-12-31"            # Backtest end date
+  initial_capital: 10000            # Initial capital
+  commission_rate: 0.001            # Commission rate
+  
+  # Performance metrics
+  calculate_sharpe_ratio: true      # Calculate Sharpe ratio
+  calculate_max_drawdown: true      # Calculate maximum drawdown
+  calculate_win_rate: true          # Calculate win rate
+  calculate_profit_factor: true     # Calculate profit factor
+
+# ============================================================================
+# DEVELOPMENT AND TESTING CONFIGURATION
+# ============================================================================
+development:
+  # Testing
+  test_mode: false                  # Enable test mode
+  mock_trading: false               # Enable mock trading
+  simulation_mode: false            # Enable simulation mode
+  
+  # Debugging
+  debug_mode: false                 # Enable debug mode
+  verbose_logging: false            # Enable verbose logging
+  performance_profiling: false      # Enable performance profiling
+  
+  # Development tools
+  hot_reload: false                 # Enable hot reload
+  auto_restart: false               # Enable auto restart
+  development_port: 8080            # Development server port 

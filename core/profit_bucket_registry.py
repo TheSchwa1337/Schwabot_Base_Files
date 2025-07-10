@@ -54,6 +54,7 @@ class ProfitBucket:
     profit_pct: float
     time_to_exit: int  # seconds
     strategy_id: str
+    canonical_hash: Optional[str] = None  # Reference to canonical trade registry
     success_count: int = 1
     failure_count: int = 0
     last_used: float = field(default_factory=time.time)
@@ -166,7 +167,8 @@ class ProfitBucketRegistry:
                            exit_price: float,
                            time_to_exit: int,
                            strategy_id: str,
-                           risk_metrics: Optional[Dict[str, float]] = None) -> None:
+                           canonical_hash: Optional[str] = None,
+                           risk_metrics: Optional[Dict[str, float]] = None) -> str:
         """
         Record a successful trade pattern.
         
@@ -176,7 +178,11 @@ class ProfitBucketRegistry:
             exit_price: Exit price
             time_to_exit: Time to exit in seconds
             strategy_id: Strategy identifier
+            canonical_hash: Reference to canonical trade registry
             risk_metrics: Optional risk metrics (drawdown, volatility, etc.)
+            
+        Returns:
+            Hash pattern string
         """
         hash_pattern = self.market_hash(tick_blob)
         profit_pct = ((exit_price - entry_price) / entry_price) * 100
@@ -215,6 +221,10 @@ class ProfitBucketRegistry:
             bucket.last_used = time.time()
             bucket.pattern_complexity = pattern_complexity
             
+            # Update canonical hash reference if provided
+            if canonical_hash:
+                bucket.canonical_hash = canonical_hash
+            
         else:
             # Create new bucket
             self.buckets[hash_pattern] = ProfitBucket(
@@ -224,6 +234,7 @@ class ProfitBucketRegistry:
                 profit_pct=profit_pct,
                 time_to_exit=time_to_exit,
                 strategy_id=strategy_id,
+                canonical_hash=canonical_hash,
                 last_used=time.time(),
                 risk_adjusted_return=risk_adjusted_return,
                 max_drawdown=max_drawdown,
@@ -238,6 +249,7 @@ class ProfitBucketRegistry:
             "hash_pattern": hash_pattern,
             "profit_pct": profit_pct,
             "strategy_id": strategy_id,
+            "canonical_hash": canonical_hash,
             "success": True
         })
         
@@ -245,7 +257,9 @@ class ProfitBucketRegistry:
         self.total_profit += profit_pct
         
         self._save()
-        logger.debug(f"Added profitable trade: {profit_pct:.2f}% profit, confidence: {self.buckets[hash_pattern].confidence:.3f}")
+        logger.info(f"💰 Added profitable pattern: {hash_pattern[:8]}... | Profit: {profit_pct:.2f}%")
+        
+        return hash_pattern
     
     def record_trade_failure(self, tick_blob: str, strategy_id: str) -> None:
         """
@@ -374,6 +388,18 @@ class ProfitBucketRegistry:
         
         return sorted_buckets[:limit]
     
+    def get_bucket(self, hash_pattern: str) -> Optional[ProfitBucket]:
+        """
+        Get a profit bucket by its hash pattern.
+        
+        Args:
+            hash_pattern: Hash pattern to look up
+            
+        Returns:
+            ProfitBucket if found, None otherwise
+        """
+        return self.buckets.get(hash_pattern)
+
     def get_bucket_stats(self) -> Dict[str, Any]:
         """Get comprehensive statistics about stored buckets."""
         if not self.buckets:

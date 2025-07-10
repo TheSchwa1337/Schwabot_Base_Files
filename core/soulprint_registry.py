@@ -54,6 +54,7 @@ class SoulprintEntry:
     vector: Dict[str, float]  # e.g., {"phase": ..., "drift": ..., ...}
     strategy_id: str
     confidence: float
+    canonical_hash: Optional[str] = None  # Reference to canonical trade registry
     is_executed: bool = False
     profit_result: Optional[float] = None
     replayable: bool = True
@@ -70,7 +71,7 @@ class SoulprintRegistry:
         if registry_file:
             self._load()
 
-    def register_soulprint(self, vector: Dict[str, float], strategy_id: str, confidence: float, is_executed: bool = False, profit_result: Optional[float] = None, replayable: bool = True, timestamp: Optional[float] = None) -> SoulprintEntry:
+    def register_soulprint(self, vector: Dict[str, float], strategy_id: str, confidence: float, canonical_hash: Optional[str] = None, is_executed: bool = False, profit_result: Optional[float] = None, replayable: bool = True, timestamp: Optional[float] = None) -> str:
         """Register a new soulprint entry (trade event)."""
         ts = timestamp or time.time()
         sp_hash = soulprint_hash(vector, strategy_id, ts)
@@ -80,15 +81,16 @@ class SoulprintRegistry:
             vector=vector,
             strategy_id=strategy_id,
             confidence=confidence,
+            canonical_hash=canonical_hash,
             is_executed=is_executed,
             profit_result=profit_result,
             replayable=replayable,
         )
         self.entries.append(entry)
-        logger.info(f"Registered soulprint: {sp_hash[:8]}... for strategy {strategy_id}")
+        logger.info(f"🧬 Registered soulprint: {sp_hash[:8]}... for strategy {strategy_id}")
         if self.registry_file:
             self._save()
-        return entry
+        return sp_hash
 
     def log_backtest_signal(self, signal_data: Dict[str, Any]) -> None:
         """Log a signal from a backtest run, capturing key performance and context indicators."""
@@ -138,6 +140,13 @@ class SoulprintRegistry:
         """Return a vector of profit results for an asset over the last N entries."""
         filtered = [e for e in self.entries if e.vector.get("asset") == asset][-window:]
         return xp.array([e.profit_result if e.profit_result is not None else 0.0 for e in filtered])
+
+    def get_soulprint(self, soulprint_hash: str) -> Optional[SoulprintEntry]:
+        """Get a soulprint entry by its hash."""
+        for entry in self.entries:
+            if entry.soulprint == soulprint_hash:
+                return entry
+        return None
 
     def all_soulprints(self) -> List[str]:
         """Return all registered soulprint hashes."""
