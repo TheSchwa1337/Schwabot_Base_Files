@@ -64,10 +64,9 @@ class UnifiedPipelineManager:
     """
     
     def __init__(self, config_path: Optional[str] = None):
-        """Initialize the unified pipeline manager."""
+        self.logger = logging.getLogger(__name__)
         self.config_path = config_path or "config/pipeline_config.yaml"
         self.config = self._load_config()
-        self.logger = logging.getLogger(__name__)
         
         # Component initialization
         self.symbolic_math_engine = None

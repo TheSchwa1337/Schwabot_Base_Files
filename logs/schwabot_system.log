@@ -80,3 +80,27 @@
 2025-07-09 21:02:14,624 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
 2025-07-09 21:02:14,630 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
 2025-07-09 21:02:14,635 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-09 21:26:44,467 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 21:26:44,473 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 21:26:44,477 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:26:44,477 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 21:26:44,478 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 21:26:44,478 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:26:44,479 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 21:26:44,479 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-09 21:27:16,867 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 21:27:16,881 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 21:27:16,975 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:27:16,984 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 21:27:16,986 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 21:27:16,995 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:27:17,002 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 21:27:17,009 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-09 21:29:09,796 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-09 21:29:09,801 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-09 21:29:09,804 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:29:09,805 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-09 21:29:09,805 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-09 21:29:09,806 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-09 21:29:09,806 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-09 21:29:09,806 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized

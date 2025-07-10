@@ -91,11 +91,11 @@ async def run_trading_engine_demo():
         logger.info("=== Starting Trading Engine Demo ===")
 
         # Initialize trading engine
-        engine = BTCTradingEngine(
-            api_key="demo",
-            api_secret="demo",
-            testnet=True
-        )
+        engine = BTCTradingEngine(config={
+            "api_key": "demo",
+            "api_secret": "demo",
+            "testnet": True
+        })
         
         # Initialize risk manager
         risk_manager = RiskManager()
@@ -166,11 +166,11 @@ async def run_component_test():
 
         # Test BTCTradingEngine
         logger.info("Testing BTCTradingEngine...")
-        trading_engine = BTCTradingEngine(
-            api_key="demo",
-            api_secret="demo",
-            testnet=True
-        )
+        trading_engine = BTCTradingEngine(config={
+            "api_key": "demo",
+            "api_secret": "demo",
+            "testnet": True
+        })
         logger.info("BTCTradingEngine initialized successfully")
 
         logger.info("=== Component Tests Completed Successfully ===")

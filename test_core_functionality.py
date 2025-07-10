@@ -36,7 +36,9 @@ def test_imports():
     
     try:
         from core.unified_pipeline_manager import UnifiedPipelineManager
-        print("✅ UnifiedPipelineManager imported successfully")
+        # Test instantiation
+        pipeline_manager = UnifiedPipelineManager()
+        print("✅ UnifiedPipelineManager imported and instantiated successfully")
     except Exception as e:
         print(f"❌ UnifiedPipelineManager import failed: {e}")
         return False
@@ -58,7 +60,7 @@ def test_config_loading():
         import yaml
         config_path = Path("config/schwabot_config.yaml")
         if config_path.exists():
-            with open(config_path, 'r') as f:
+            with open(config_path, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
             print("✅ Configuration loaded successfully")
             return True
@@ -98,7 +100,7 @@ def test_syntax_check():
     all_good = True
     for file_path in core_files:
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 compile(f.read(), file_path, 'exec')
             print(f"✅ {file_path} syntax OK")
         except Exception as e:

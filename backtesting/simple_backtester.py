@@ -1,13 +1,4 @@
-from backtesting.historical_data_manager import (
-from core.ccxt_trading_executor import (
-from datetime import datetime
-from decimal import Decimal
-from typing import Any, Dict, List, Optional
-import asyncio
-import logging
-import random
-import time
-
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Simple Backtester for Schwabot Trading System.
@@ -16,14 +7,21 @@ This module provides a basic framework for backtesting trading strategies
 using historical price data and the CCXTTradingExecutor.
 """
 
+import asyncio
+import logging
+import random
+import time
+from datetime import datetime
+from decimal import Decimal
+from typing import Any, Dict, List, Optional
 
+from backtesting.historical_data_manager import HistoricalDataManager
+from core.ccxt_trading_executor import (
     CCXTTradingExecutor,
     TradingPair,
     IntegratedTradingSignal,
     ExecutionResult,
 )
-    HistoricalDataManager,
-)  # Import the new data manager
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +29,9 @@ logger = logging.getLogger(__name__)
 class SimpleBacktester:
     """A simple backtesting engine to simulate trading strategies."""
 
-    def __init__():,
+    def __init__(
+        self,
+        initial_capital: Decimal = Decimal("10000"),
         start_date: datetime = datetime(2023, 1, 1),
         end_date: datetime = datetime(2023, 1, 31),
         trading_pair: TradingPair = TradingPair.BTC_USDC,
