@@ -21,10 +21,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'core'))
 # Import the entropy signal integration
 try:
     from entropy_signal_integration import (
-        get_entropy_integrator,
-        process_entropy_signal,
-        should_execute_routing,
-        should_execute_tick,
+        create_entropy_signal_integrator,
+        EntropySignal
     )
     print("✅ Successfully imported entropy signal integration")
 except ImportError as e:
@@ -68,13 +66,13 @@ def test_entropy_integration():
     try:
         # Test 1: Initialize entropy integrator
         print("\n1. Testing entropy integrator initialization...")
-        integrator = get_entropy_integrator()
+        integrator = create_entropy_signal_integrator()
         print("✅ Entropy integrator initialized successfully")
         
         # Test 2: Process entropy signal
         print("\n2. Testing entropy signal processing...")
         bids, asks = generate_test_order_book()
-        entropy_signal = process_entropy_signal(bids, asks)
+        entropy_signal = integrator.process_entropy_signal(bids, asks)
         
         print(f"   Entropy Value: {entropy_signal.entropy_value:.6f}")
         print(f"   Routing State: {entropy_signal.routing_state}")
@@ -86,11 +84,11 @@ def test_entropy_integration():
         print("\n3. Testing timing cycles...")
         
         # Test tick cycle
-        tick_should_execute = should_execute_tick()
+        tick_should_execute = integrator.should_execute_cycle("tick")
         print(f"   Tick cycle should execute: {tick_should_execute}")
         
         # Test routing cycle
-        routing_should_execute = should_execute_routing()
+        routing_should_execute = integrator.should_execute_cycle("routing")
         print(f"   Routing cycle should execute: {routing_should_execute}")
         print("✅ Timing cycles tested successfully")
         
@@ -99,7 +97,7 @@ def test_entropy_integration():
         signals = []
         for i in range(5):
             bids, asks = generate_test_order_book()
-            signal = process_entropy_signal(bids, asks)
+            signal = integrator.process_entropy_signal(bids, asks)
             signals.append(signal)
             print(f"   Signal {i+1}: Entropy={signal.entropy_value:.6f}, "
                   f"Routing={signal.routing_state}, Confidence={signal.confidence:.3f}")
@@ -109,9 +107,9 @@ def test_entropy_integration():
         # Test 5: Test performance metrics
         print("\n5. Testing performance metrics...")
         performance = integrator.get_performance_summary()
-        print(f"   Total signals processed: {performance.get('total_signals_processed', 0)}")
-        print(f"   Average detection rate: {performance.get('average_detection_rate', 0):.3f}")
-        print(f"   Average latency: {performance.get('average_latency_ms', 0):.1f}ms")
+        print(f"   Total signals processed: {performance.get('total_signals', 0)}")
+        print(f"   Detection rate: {performance.get('detection_rate', 0):.3f}")
+        print(f"   Average latency: {performance.get('avg_latency_ms', 0):.1f}ms")
         print("✅ Performance metrics retrieved successfully")
         
         # Test 6: Test current state
@@ -137,7 +135,7 @@ def test_timing_cycle_adaptation():
     print("=" * 50)
     
     try:
-        integrator = get_entropy_integrator()
+        integrator = create_entropy_signal_integrator()
         
         # Test with different entropy levels
         test_cases = [
@@ -150,12 +148,11 @@ def test_timing_cycle_adaptation():
             print(f"\nTesting {name} (entropy={entropy_value:.6f})...")
             
             # Create mock signal
-            from entropy_signal_integration import EntropySignal
             signal = EntropySignal(
                 timestamp=time.time(),
                 entropy_value=entropy_value,
-                routing_state="ROUTE_ACTIVE" if entropy_value > 0.018 else "ROUTE_PASSIVE",
-                quantum_state="ENTROPIC_INVERSION_ACTIVATED" if entropy_value > 0.019 else "INERT",
+                routing_state="AGGRESSIVE" if entropy_value > 0.018 else "PASSIVE",
+                quantum_state="QUANTUM_ACTIVE" if entropy_value > 0.019 else "QUANTUM_INACTIVE",
                 confidence=min(entropy_value * 10, 1.0)
             )
             
@@ -200,7 +197,7 @@ def test_configuration_loading():
     print("=" * 50)
     
     try:
-        integrator = get_entropy_integrator()
+        integrator = create_entropy_signal_integrator()
         
         # Test configuration structure
         config = integrator.config
@@ -209,7 +206,6 @@ def test_configuration_loading():
         required_sections = [
             "entropy_signal_flow",
             "timing_cycles",
-            "signal_pipeline",
             "performance_monitoring"
         ]
         

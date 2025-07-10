@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from scipy import linalg, optimize, signal
-from scipy.fft import fft, ifft, fftfreq, fftn, ifftn
+from scipy.fft import fft, ifft, fftfreq, fftn, ifftn, fft2
 from scipy.spatial.distance import cosine
 
 logger = logging.getLogger(__name__)

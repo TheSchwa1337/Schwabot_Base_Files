@@ -1,442 +1,393 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Galileo Tensor Field - Entropy Tensor Drift & Dynamic Field Oscillation
+Galileo Tensor Field - Entropy-Driven Market Dynamics
+====================================================
 
-Implements Nexus mathematics for entropy tensor fields with:
-- Recursive Drift Tensor: T_field_ψ(t,x,y) = Σᵢ₌₀ⁿ ∇⋅(ψᵢ ⋅ e^(-λt))
-- Fold Instability Function: Δ_fold = |d/dt(Σⱼ₌₀ᵏ ζⱼ ⋅ cos(φⱼx))|
-- Time-fold mathematics for Ferris-Wheel Tick Drift Oscillator
-- Phase-drift entry zone detection across volume valleys
-- Quantum Matrix Delta alignment with unified_tensor_algebra.py
+Implements Nexus mathematics for entropy-driven market dynamics:
+- Tensor drift and oscillation in market spaces
+- Entropy field calculations with GPU acceleration
+- Galilean transformations for market coordinate systems
+- Quantum-inspired tensor operations with fallback support
 """
 
 import logging
 import time
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-from scipy import linalg, optimize, signal
-from scipy.fft import fft, ifft, fftfreq
-from scipy.spatial.distance import cosine
+from scipy import linalg, optimize, stats
+from scipy.fft import fft, fftfreq, ifft
+
+# Import GPU fallback system
+try:
+    from utils.gpu_fallback_manager import get_array_library, safe_array_operation, is_gpu_available
+    GPU_FALLBACK_AVAILABLE = True
+except ImportError:
+    GPU_FALLBACK_AVAILABLE = False
+    # Fallback to direct numpy if GPU system not available
+    get_array_library = lambda: np
+    safe_array_operation = lambda name, func, fallback, *args, **kwargs: func(*args, **kwargs)
+    is_gpu_available = lambda: False
 
 logger = logging.getLogger(__name__)
 
-
-class TensorAlignment(Enum):
-    """Tensor alignment states for entropy field synchronization."""
-    MISALIGNED = "misaligned"      # Poor sync between solutions
-    PARTIAL = "partial"            # Some alignment detected
-    SYNCHRONIZED = "synchronized"  # Good sync between solutions
-    HARMONIZED = "harmonized"      # Perfect harmony between solutions
-    CONFLICTED = "conflicted"      # Active disagreement
-
-
-class FieldMode(Enum):
-    """Entropy field operation modes."""
-    DRIFT = "drift"           # Entropy drift detection
-    OSCILLATION = "oscillation"  # Field oscillation analysis
-    COLLAPSE = "collapse"     # Tensor field collapse
-    RESONANCE = "resonance"   # Chrono-resonant entropy pulse
-    QUANTUM = "quantum"       # Quantum matrix delta alignment
-
+# Get the appropriate array library (CuPy or NumPy)
+xp = get_array_library()
 
 @dataclass
-class GalileoTensorSolution:
-    """Individual Galileo tensor solution with QSC and GTS angles."""
-    solution_id: str
-    theta: float  # Solution angle (QSC)
-    phi: float    # Detection angle (GTS)
-    confidence: float  # Solution confidence
-    timestamp: float
-    source: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
+class TensorFieldConfig:
+    """Configuration for tensor field operations."""
+    dimension: int = 3
+    precision: float = 1e-8
+    max_iterations: int = 1000
+    convergence_threshold: float = 1e-6
+    use_gpu: bool = True
+    fallback_enabled: bool = True
 
 @dataclass
-class TensorSyncResult:
-    """Tensor synchronization result."""
-    sync_score: float  # Synchronization score (0.0 to 1.0)
-    alignment: TensorAlignment
-    drift_magnitude: float
+class EntropyMetrics:
+    """Entropy metrics for market analysis."""
+    shannon_entropy: float
+    renyi_entropy: float
+    tsallis_entropy: float
+    tensor_entropy: float
+    field_strength: float
     oscillation_frequency: float
-    collapse_probability: float
-    resonance_phase: float
-    timestamp: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
+    drift_coefficient: float
 
 class GalileoTensorField:
     """
-    Galileo Tensor Field - Entropy Tensor Drift & Dynamic Field Oscillation
+    Galileo Tensor Field for entropy-driven market dynamics.
     
-    Implements the Nexus mathematics for entropy tensor fields:
-    - Recursive Drift Tensor: T_field_ψ(t,x,y) = Σᵢ₌₀ⁿ ∇⋅(ψᵢ ⋅ e^(-λt))
-    - Fold Instability Function: Δ_fold = |d/dt(Σⱼ₌₀ᵏ ζⱼ ⋅ cos(φⱼx))|
-    - Time-fold mathematics for Ferris-Wheel Tick Drift Oscillator
+    Implements advanced tensor operations with GPU acceleration and CPU fallback.
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize the Galileo Tensor Field."""
-        self.config = config or self._default_config()
-        self.logger = logging.getLogger(__name__)
-        self.mode = FieldMode.DRIFT
-        self.initialized = False
-        
-        # Tensor field parameters
-        self.lambda_decay = self.config.get('lambda_decay', 0.1)
-        self.max_iterations = self.config.get('max_iterations', 100)
-        self.tolerance = self.config.get('tolerance', 1e-6)
-        self.field_resolution = self.config.get('field_resolution', 64)
-        
-        # Solution tracking
-        self.solutions: List[GalileoTensorSolution] = []
-        self.sync_history: List[TensorSyncResult] = []
-        
-        self._initialize_field()
-    
-    def _default_config(self) -> Dict[str, Any]:
-        """Default configuration for Galileo Tensor Field."""
-        return {
-            'lambda_decay': 0.1,        # Entropy decay rate
-            'max_iterations': 100,      # Maximum field iterations
-            'tolerance': 1e-6,          # Convergence tolerance
-            'field_resolution': 64,     # Field resolution
-            'drift_threshold': 0.05,    # Drift detection threshold
-            'oscillation_threshold': 0.1,  # Oscillation detection threshold
-            'collapse_threshold': 0.8,  # Collapse probability threshold
-            'resonance_threshold': 0.7, # Resonance detection threshold
-        }
-    
-    def _initialize_field(self):
-        """Initialize the tensor field."""
-        try:
-            self.logger.info("Initializing Galileo Tensor Field...")
-            
-            # Initialize field grid
-            self.x_grid = np.linspace(-1, 1, self.field_resolution)
-            self.y_grid = np.linspace(-1, 1, self.field_resolution)
-            self.X, self.Y = np.meshgrid(self.x_grid, self.y_grid)
-            
-            # Initialize time axis
-            self.t_axis = np.linspace(0, 10, 100)
-            
-            # Initialize field state
-            self.field_state = np.zeros((self.field_resolution, self.field_resolution))
-            self.drift_history = []
-            self.oscillation_history = []
-            
-            self.initialized = True
-            self.logger.info("[SUCCESS] Galileo Tensor Field initialized successfully")
-            
-        except Exception as e:
-            self.logger.error(f"[FAIL] Error initializing Galileo Tensor Field: {e}")
-            self.initialized = False
-    
-    def compute_recursive_drift_tensor(self, t: float, x: np.ndarray, y: np.ndarray, 
-                                     psi_components: List[np.ndarray]) -> np.ndarray:
+    def __init__(self, config: Optional[TensorFieldConfig] = None):
         """
-        Compute recursive drift tensor: T_field_ψ(t,x,y) = Σᵢ₌₀ⁿ ∇⋅(ψᵢ ⋅ e^(-λt))
+        Initialize the Galileo Tensor Field.
         
         Args:
-            t: Time parameter
-            x: X-coordinate array
-            y: Y-coordinate array
-            psi_components: List of ψ components for tensor field
-            
-        Returns:
-            Recursive drift tensor field
+            config: Configuration for tensor operations
         """
-        try:
-            # Initialize tensor field
-            T_field = np.zeros_like(x)
-            
-            # Compute recursive drift tensor
-            for i, psi_i in enumerate(psi_components):
-                # Compute ∇⋅(ψᵢ ⋅ e^(-λt))
-                decay_factor = np.exp(-self.lambda_decay * t)
-                psi_decayed = psi_i * decay_factor
-                
-                # Compute divergence ∇⋅ψ
-                grad_x = np.gradient(psi_decayed, axis=1)
-                grad_y = np.gradient(psi_decayed, axis=0)
-                divergence = grad_x + grad_y
-                
-                T_field += divergence
-            
-            return T_field
-            
-        except Exception as e:
-            self.logger.error(f"Error computing recursive drift tensor: {e}")
-            return np.zeros_like(x)
+        self.config = config or TensorFieldConfig()
+        self.xp = xp  # Use GPU fallback system
+        
+        # Initialize field parameters
+        self.field_dimension = self.config.dimension
+        self.precision = self.config.precision
+        self.max_iterations = self.config.max_iterations
+        self.convergence_threshold = self.config.convergence_threshold
+        
+        logger.info(f"GalileoTensorField initialized with dimension {self.field_dimension}")
+        logger.info(f"GPU acceleration: {is_gpu_available()}")
     
-    def compute_fold_instability(self, t: float, x: np.ndarray, 
-                               zeta_coeffs: List[float], phi_coeffs: List[float]) -> float:
+    def calculate_tensor_drift(self, market_data: np.ndarray, time_window: int = 100) -> np.ndarray:
         """
-        Compute fold instability function: Δ_fold = |d/dt(Σⱼ₌₀ᵏ ζⱼ ⋅ cos(φⱼx))|
+        Calculate tensor drift in market space.
+        
+        Formula: ∇T = ∂T/∂t + v·∇T where T is the tensor field
         
         Args:
-            t: Time parameter
-            x: X-coordinate array
-            zeta_coeffs: ζ coefficients
-            phi_coeffs: φ coefficients
+            market_data: Market price/volume data
+            time_window: Time window for drift calculation
             
         Returns:
-            Fold instability magnitude
+            Tensor drift array
         """
-        try:
-            # Compute the sum Σⱼ₌₀ᵏ ζⱼ ⋅ cos(φⱼx)
-            sum_cosine = np.zeros_like(x)
-            for j, (zeta_j, phi_j) in enumerate(zip(zeta_coeffs, phi_coeffs)):
-                sum_cosine += zeta_j * np.cos(phi_j * x)
+        if len(market_data) < time_window:
+            logger.warning(f"Insufficient data for drift calculation: {len(market_data)} < {time_window}")
+            return np.zeros_like(market_data)
+        
+        def gpu_drift_calculation(data, window):
+            # Convert to GPU array if available
+            data_gpu = self.xp.array(data)
             
-            # Compute time derivative d/dt
-            # For discrete time, use finite difference
-            if hasattr(self, '_prev_sum_cosine'):
-                dt = 0.01  # Small time step
-                derivative = (sum_cosine - self._prev_sum_cosine) / dt
-            else:
-                derivative = np.zeros_like(sum_cosine)
+            # Calculate temporal gradient
+            temporal_gradient = self.xp.gradient(data_gpu)
             
-            self._prev_sum_cosine = sum_cosine.copy()
+            # Calculate spatial gradient (using rolling window)
+            spatial_gradient = self.xp.zeros_like(data_gpu)
+            for i in range(window, len(data_gpu)):
+                window_data = data_gpu[i-window:i]
+                spatial_gradient[i] = self.xp.mean(self.xp.gradient(window_data))
             
-            # Compute magnitude |d/dt(...)|
-            fold_instability = np.abs(derivative)
+            # Combine gradients for drift
+            drift = temporal_gradient + spatial_gradient
+            return self.xp.asnumpy(drift) if hasattr(self.xp, 'asnumpy') else drift
+        
+        def cpu_drift_calculation(data, window):
+            # CPU fallback calculation
+            data_cpu = np.array(data)
             
-            return np.mean(fold_instability)
+            # Calculate temporal gradient
+            temporal_gradient = np.gradient(data_cpu)
             
-        except Exception as e:
-            self.logger.error(f"Error computing fold instability: {e}")
-            return 0.0
+            # Calculate spatial gradient
+            spatial_gradient = np.zeros_like(data_cpu)
+            for i in range(window, len(data_cpu)):
+                window_data = data_cpu[i-window:i]
+                spatial_gradient[i] = np.mean(np.gradient(window_data))
+            
+            # Combine gradients for drift
+            drift = temporal_gradient + spatial_gradient
+            return drift
+        
+        return safe_array_operation(
+            "tensor_drift",
+            gpu_drift_calculation,
+            cpu_drift_calculation,
+            market_data,
+            time_window
+        )
     
-    def detect_phase_drift_zones(self, volume_data: np.ndarray, 
-                               price_data: np.ndarray) -> Dict[str, Any]:
+    def calculate_entropy_field(self, price_data: np.ndarray, volume_data: np.ndarray) -> EntropyMetrics:
         """
-        Detect phase-drift entry zones across volume valleys.
+        Calculate comprehensive entropy field metrics.
         
         Args:
-            volume_data: Volume data array
-            price_data: Price data array
+            price_data: Price time series
+            volume_data: Volume time series
             
         Returns:
-            Phase drift detection results
+            Entropy metrics object
         """
-        try:
-            # Compute volume valleys (local minima)
-            volume_valleys = signal.find_peaks(-volume_data)[0]
+        def gpu_entropy_calculation(price, volume):
+            # Convert to GPU arrays
+            price_gpu = self.xp.array(price)
+            volume_gpu = self.xp.array(volume)
             
-            # Compute price gradients at volume valleys
-            price_gradients = np.gradient(price_data)
-            valley_gradients = price_gradients[volume_valleys]
+            # Shannon entropy
+            price_normalized = price_gpu / self.xp.sum(price_gpu)
+            shannon_entropy = -self.xp.sum(price_normalized * self.xp.log2(price_normalized + 1e-12))
             
-            # Detect phase drift zones
-            drift_threshold = self.config.get('drift_threshold', 0.05)
-            drift_zones = valley_gradients[np.abs(valley_gradients) > drift_threshold]
+            # Renyi entropy (α=2)
+            renyi_entropy = -self.xp.log2(self.xp.sum(price_normalized**2))
             
-            # Compute drift magnitude and direction
-            drift_magnitude = np.mean(np.abs(drift_zones))
-            drift_direction = np.sign(np.mean(drift_zones))
+            # Tsallis entropy (q=1.5)
+            q = 1.5
+            tsallis_entropy = (1 - self.xp.sum(price_normalized**q)) / (q - 1)
             
-            return {
-                'drift_zones': len(drift_zones),
-                'drift_magnitude': drift_magnitude,
-                'drift_direction': drift_direction,
-                'valley_count': len(volume_valleys),
-                'detection_confidence': min(1.0, len(drift_zones) / len(volume_valleys))
-            }
+            # Tensor entropy (based on volume-weighted price changes)
+            price_changes = self.xp.diff(price_gpu)
+            volume_weights = volume_gpu[1:] / self.xp.sum(volume_gpu[1:])
+            tensor_entropy = -self.xp.sum(volume_weights * self.xp.log2(self.xp.abs(price_changes) + 1e-12))
             
-        except Exception as e:
-            self.logger.error(f"Error detecting phase drift zones: {e}")
-            return {
-                'drift_zones': 0,
-                'drift_magnitude': 0.0,
-                'drift_direction': 0,
-                'valley_count': 0,
-                'detection_confidence': 0.0
-            }
-    
-    def compute_quantum_matrix_delta(self, tensor_field: np.ndarray) -> np.ndarray:
-        """
-        Compute quantum matrix delta for alignment with unified_tensor_algebra.py.
-        
-        Args:
-            tensor_field: Input tensor field
+            # Field strength (magnitude of price-volume correlation)
+            field_strength = self.xp.abs(self.xp.corrcoef(price_gpu, volume_gpu)[0, 1])
             
-        Returns:
-            Quantum matrix delta
-        """
-        try:
-            # Compute quantum matrix delta using tensor operations
-            # This aligns with the unified tensor algebra system
+            # Oscillation frequency (FFT-based)
+            fft_data = self.xp.fft.fft(price_gpu)
+            frequencies = self.xp.fft.fftfreq(len(price_gpu))
+            dominant_freq_idx = self.xp.argmax(self.xp.abs(fft_data))
+            oscillation_frequency = self.xp.abs(frequencies[dominant_freq_idx])
             
-            # Compute eigenvalues of tensor field
-            eigenvalues = linalg.eigvals(tensor_field)
+            # Drift coefficient (autocorrelation)
+            autocorr = self.xp.correlate(price_gpu, price_gpu, mode='full')
+            drift_coefficient = autocorr[len(autocorr)//2 + 1] / autocorr[len(autocorr)//2]
             
-            # Compute quantum delta as eigenvalue differences
-            quantum_delta = np.diff(eigenvalues)
-            
-            # Normalize quantum delta
-            if len(quantum_delta) > 0:
-                quantum_delta = quantum_delta / np.max(np.abs(quantum_delta))
-            
-            return quantum_delta
-            
-        except Exception as e:
-            self.logger.error(f"Error computing quantum matrix delta: {e}")
-            return np.array([])
-    
-    def analyze_field_oscillation(self, field_data: np.ndarray, 
-                                time_axis: np.ndarray) -> Dict[str, Any]:
-        """
-        Analyze field oscillation patterns.
-        
-        Args:
-            field_data: Field data over time
-            time_axis: Time axis
-            
-        Returns:
-            Oscillation analysis results
-        """
-        try:
-            # Compute FFT for frequency analysis
-            fft_result = fft(field_data, axis=0)
-            frequencies = fftfreq(len(time_axis), time_axis[1] - time_axis[0])
-            
-            # Find dominant frequencies
-            power_spectrum = np.abs(fft_result) ** 2
-            dominant_freq_idx = np.argmax(power_spectrum, axis=0)
-            dominant_frequencies = frequencies[dominant_freq_idx]
-            
-            # Compute oscillation amplitude
-            oscillation_amplitude = np.std(field_data, axis=0)
-            
-            # Detect oscillation patterns
-            oscillation_threshold = self.config.get('oscillation_threshold', 0.1)
-            oscillation_detected = np.any(oscillation_amplitude > oscillation_threshold)
-            
-            return {
-                'dominant_frequencies': dominant_frequencies,
-                'oscillation_amplitude': oscillation_amplitude,
-                'oscillation_detected': oscillation_detected,
-                'mean_frequency': np.mean(dominant_frequencies),
-                'frequency_std': np.std(dominant_frequencies)
-            }
-            
-        except Exception as e:
-            self.logger.error(f"Error analyzing field oscillation: {e}")
-            return {
-                'dominant_frequencies': np.array([]),
-                'oscillation_amplitude': np.array([]),
-                'oscillation_detected': False,
-                'mean_frequency': 0.0,
-                'frequency_std': 0.0
-            }
-    
-    def compute_tensor_synchronization(self, solution_a: GalileoTensorSolution,
-                                     solution_b: GalileoTensorSolution) -> TensorSyncResult:
-        """
-        Compute tensor synchronization between two solutions.
-        
-        Args:
-            solution_a: First tensor solution
-            solution_b: Second tensor solution
-            
-        Returns:
-            Tensor synchronization result
-        """
-        try:
-            # Compute synchronization score based on angle differences
-            theta_diff = abs(solution_a.theta - solution_b.theta)
-            phi_diff = abs(solution_a.phi - solution_b.phi)
-            
-            # Normalize differences to [0, 1] range
-            theta_score = 1.0 - min(theta_diff / np.pi, 1.0)
-            phi_score = 1.0 - min(phi_diff / np.pi, 1.0)
-            
-            # Compute overall sync score
-            sync_score = (theta_score + phi_score) / 2.0
-            
-            # Determine alignment state
-            if sync_score >= 0.9:
-                alignment = TensorAlignment.HARMONIZED
-            elif sync_score >= 0.7:
-                alignment = TensorAlignment.SYNCHRONIZED
-            elif sync_score >= 0.4:
-                alignment = TensorAlignment.PARTIAL
-            elif sync_score >= 0.1:
-                alignment = TensorAlignment.MISALIGNED
-            else:
-                alignment = TensorAlignment.CONFLICTED
-            
-            # Compute additional metrics
-            drift_magnitude = np.sqrt(theta_diff**2 + phi_diff**2)
-            oscillation_frequency = 1.0 / (1.0 + drift_magnitude)
-            collapse_probability = 1.0 - sync_score
-            resonance_phase = (solution_a.theta + solution_b.theta) / 2.0
-            
-            return TensorSyncResult(
-                sync_score=sync_score,
-                alignment=alignment,
-                drift_magnitude=drift_magnitude,
-                oscillation_frequency=oscillation_frequency,
-                collapse_probability=collapse_probability,
-                resonance_phase=resonance_phase,
-                timestamp=time.time()
+            # Convert to numpy for return
+            return EntropyMetrics(
+                shannon_entropy=float(shannon_entropy),
+                renyi_entropy=float(renyi_entropy),
+                tsallis_entropy=float(tsallis_entropy),
+                tensor_entropy=float(tensor_entropy),
+                field_strength=float(field_strength),
+                oscillation_frequency=float(oscillation_frequency),
+                drift_coefficient=float(drift_coefficient)
             )
+        
+        def cpu_entropy_calculation(price, volume):
+            # CPU fallback calculation
+            price_cpu = np.array(price)
+            volume_cpu = np.array(volume)
             
-        except Exception as e:
-            self.logger.error(f"Error computing tensor synchronization: {e}")
-            return TensorSyncResult(
-                sync_score=0.0,
-                alignment=TensorAlignment.CONFLICTED,
-                drift_magnitude=0.0,
-                oscillation_frequency=0.0,
-                collapse_probability=1.0,
-                resonance_phase=0.0,
-                timestamp=time.time()
+            # Shannon entropy
+            price_normalized = price_cpu / np.sum(price_cpu)
+            shannon_entropy = -np.sum(price_normalized * np.log2(price_normalized + 1e-12))
+            
+            # Renyi entropy (α=2)
+            renyi_entropy = -np.log2(np.sum(price_normalized**2))
+            
+            # Tsallis entropy (q=1.5)
+            q = 1.5
+            tsallis_entropy = (1 - np.sum(price_normalized**q)) / (q - 1)
+            
+            # Tensor entropy
+            price_changes = np.diff(price_cpu)
+            volume_weights = volume_cpu[1:] / np.sum(volume_cpu[1:])
+            tensor_entropy = -np.sum(volume_weights * np.log2(np.abs(price_changes) + 1e-12))
+            
+            # Field strength
+            field_strength = np.abs(np.corrcoef(price_cpu, volume_cpu)[0, 1])
+            
+            # Oscillation frequency
+            fft_data = np.fft.fft(price_cpu)
+            frequencies = np.fft.fftfreq(len(price_cpu))
+            dominant_freq_idx = np.argmax(np.abs(fft_data))
+            oscillation_frequency = np.abs(frequencies[dominant_freq_idx])
+            
+            # Drift coefficient
+            autocorr = np.correlate(price_cpu, price_cpu, mode='full')
+            drift_coefficient = autocorr[len(autocorr)//2 + 1] / autocorr[len(autocorr)//2]
+            
+            return EntropyMetrics(
+                shannon_entropy=float(shannon_entropy),
+                renyi_entropy=float(renyi_entropy),
+                tsallis_entropy=float(tsallis_entropy),
+                tensor_entropy=float(tensor_entropy),
+                field_strength=float(field_strength),
+                oscillation_frequency=float(oscillation_frequency),
+                drift_coefficient=float(drift_coefficient)
             )
+        
+        return safe_array_operation(
+            "entropy_field",
+            gpu_entropy_calculation,
+            cpu_entropy_calculation,
+            price_data,
+            volume_data
+        )
     
-    def add_solution(self, solution: GalileoTensorSolution):
-        """Add a new tensor solution."""
-        self.solutions.append(solution)
+    def galilean_transform(self, data: np.ndarray, velocity: float = 0.1) -> np.ndarray:
+        """
+        Apply Galilean transformation to market data.
         
-        # Keep only recent solutions
-        max_solutions = 100
-        if len(self.solutions) > max_solutions:
-            self.solutions = self.solutions[-max_solutions:]
+        Formula: x' = x - vt where v is the velocity parameter
+        
+        Args:
+            data: Input data array
+            velocity: Transformation velocity
+            
+        Returns:
+            Transformed data array
+        """
+        def gpu_transform(d, v):
+            d_gpu = self.xp.array(d)
+            time_coords = self.xp.arange(len(d_gpu))
+            transformed = d_gpu - v * time_coords
+            return self.xp.asnumpy(transformed) if hasattr(self.xp, 'asnumpy') else transformed
+        
+        def cpu_transform(d, v):
+            d_cpu = np.array(d)
+            time_coords = np.arange(len(d_cpu))
+            transformed = d_cpu - v * time_coords
+            return transformed
+        
+        return safe_array_operation(
+            "galilean_transform",
+            gpu_transform,
+            cpu_transform,
+            data,
+            velocity
+        )
     
-    def get_field_summary(self) -> Dict[str, Any]:
-        """Get comprehensive field summary."""
-        if not self.solutions:
-            return {'status': 'no_solutions'}
+    def tensor_oscillation(self, data: np.ndarray, frequency: float = 1.0, amplitude: float = 0.1) -> np.ndarray:
+        """
+        Calculate tensor oscillation patterns.
         
-        # Compute field statistics
-        thetas = [s.theta for s in self.solutions]
-        phis = [s.phi for s in self.solutions]
-        confidences = [s.confidence for s in self.solutions]
+        Formula: T(t) = A * sin(2πft + φ) where A is amplitude, f is frequency
         
+        Args:
+            data: Input data array
+            frequency: Oscillation frequency
+            amplitude: Oscillation amplitude
+            
+        Returns:
+            Oscillation pattern array
+        """
+        def gpu_oscillation(d, freq, amp):
+            d_gpu = self.xp.array(d)
+            time_coords = self.xp.arange(len(d_gpu))
+            phase = self.xp.angle(self.xp.fft.fft(d_gpu))[0]  # Initial phase
+            oscillation = amp * self.xp.sin(2 * self.xp.pi * freq * time_coords + phase)
+            return self.xp.asnumpy(oscillation) if hasattr(self.xp, 'asnumpy') else oscillation
+        
+        def cpu_oscillation(d, freq, amp):
+            d_cpu = np.array(d)
+            time_coords = np.arange(len(d_cpu))
+            phase = np.angle(np.fft.fft(d_cpu))[0]  # Initial phase
+            oscillation = amp * np.sin(2 * np.pi * freq * time_coords + phase)
+            return oscillation
+        
+        return safe_array_operation(
+            "tensor_oscillation",
+            gpu_oscillation,
+            cpu_oscillation,
+            data,
+            frequency,
+            amplitude
+        )
+    
+    def quantum_tensor_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray) -> np.ndarray:
+        """
+        Perform quantum-inspired tensor operations.
+        
+        Args:
+            tensor_a: First tensor
+            tensor_b: Second tensor
+            
+        Returns:
+            Resulting tensor
+        """
+        def gpu_quantum_op(a, b):
+            a_gpu = self.xp.array(a)
+            b_gpu = self.xp.array(b)
+            
+            # Quantum-inspired tensor contraction
+            result = self.xp.tensordot(a_gpu, b_gpu, axes=([-1], [0]))
+            
+            # Apply quantum phase factor
+            phase_factor = self.xp.exp(1j * self.xp.angle(self.xp.trace(result)))
+            result = result * phase_factor
+            
+            return self.xp.asnumpy(result) if hasattr(self.xp, 'asnumpy') else result
+        
+        def cpu_quantum_op(a, b):
+            a_cpu = np.array(a)
+            b_cpu = np.array(b)
+            
+            # Quantum-inspired tensor contraction
+            result = np.tensordot(a_cpu, b_cpu, axes=([-1], [0]))
+            
+            # Apply quantum phase factor
+            phase_factor = np.exp(1j * np.angle(np.trace(result)))
+            result = result * phase_factor
+            
+            return result
+        
+        return safe_array_operation(
+            "quantum_tensor_operation",
+            gpu_quantum_op,
+            cpu_quantum_op,
+            tensor_a,
+            tensor_b
+        )
+    
+    def get_field_status(self) -> Dict[str, Any]:
+        """Get current field status and configuration."""
         return {
-            'solution_count': len(self.solutions),
-            'mean_theta': np.mean(thetas),
-            'mean_phi': np.mean(phis),
-            'mean_confidence': np.mean(confidences),
-            'theta_std': np.std(thetas),
-            'phi_std': np.std(phis),
-            'confidence_std': np.std(confidences),
-            'field_mode': self.mode.value,
-            'initialized': self.initialized,
-            'sync_history_count': len(self.sync_history)
+            "dimension": self.field_dimension,
+            "precision": self.precision,
+            "max_iterations": self.max_iterations,
+            "convergence_threshold": self.convergence_threshold,
+            "gpu_available": is_gpu_available(),
+            "array_library": "CuPy" if is_gpu_available() else "NumPy",
+            "fallback_enabled": self.config.fallback_enabled
         }
-    
-    def set_mode(self, mode: FieldMode):
-        """Set the field operation mode."""
-        self.mode = mode
-        self.logger.info(f"Galileo Tensor Field mode set to: {mode.value}")
 
-
-# Factory function
-def create_galileo_tensor_field(config: Optional[Dict[str, Any]] = None) -> GalileoTensorField:
-    """Create a Galileo Tensor Field instance."""
+# Convenience functions for external use
+def create_galileo_field(config: Optional[TensorFieldConfig] = None) -> GalileoTensorField:
+    """Create a new Galileo Tensor Field instance."""
     return GalileoTensorField(config)
+
+def calculate_market_entropy(price_data: np.ndarray, volume_data: np.ndarray) -> EntropyMetrics:
+    """Calculate market entropy metrics using Galileo Tensor Field."""
+    field = GalileoTensorField()
+    return field.calculate_entropy_field(price_data, volume_data)
+
+def apply_tensor_drift(market_data: np.ndarray, time_window: int = 100) -> np.ndarray:
+    """Apply tensor drift calculation to market data."""
+    field = GalileoTensorField()
+    return field.calculate_tensor_drift(market_data, time_window)

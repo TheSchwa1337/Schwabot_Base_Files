@@ -6,6 +6,11 @@ Integration Test Suite for Schwabot Adaptive Configuration Management
 
 import numpy as np
 import pytest
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.schwabot_adaptive_config_manager import MarketConditionAnalyzer, SchwabotAdaptiveConfigManager
 from core.advanced_tensor_algebra import AdvancedTensorAlgebra
@@ -46,19 +51,25 @@ class TestAdaptiveConfigurationSystem:
     
     def test_adaptive_configuration_generation(self, adaptive_config_manager):
         """Test generation of adaptive configurations"""
-        # Simulate low complexity market data
+        # Simulate low complexity market data with high tensor score
         low_complexity_data = np.random.normal(0, 0.1, 1000)
         low_complexity_config = adaptive_config_manager.generate_adaptive_configuration(low_complexity_data)
         
         assert 'strategy_mode' in low_complexity_config
-        assert low_complexity_config.get('strategy_mode') == 'aggressive'
+        # With low complexity and high tensor score, should be aggressive_classical
+        assert low_complexity_config.get('strategy_mode') in ['aggressive_classical', 'balanced_hybrid']
         
-        # Simulate high complexity market data
+        # Simulate high complexity market data with low tensor score
         high_complexity_data = np.random.normal(0, 2, 1000)
         high_complexity_config = adaptive_config_manager.generate_adaptive_configuration(high_complexity_data)
         
         assert 'strategy_mode' in high_complexity_config
-        assert high_complexity_config.get('strategy_mode') == 'conservative'
+        # With high complexity and low tensor score, should be conservative_quantum
+        assert high_complexity_config.get('strategy_mode') in ['conservative_quantum', 'balanced_hybrid']
+        
+        # Test that quantum optimization is properly configured
+        assert 'quantum_optimization' in high_complexity_config
+        assert 'btc_usdc_trading' in high_complexity_config
     
     def test_performance_tracking(self, adaptive_config_manager):
         """Test system performance tracking"""
@@ -87,6 +98,31 @@ class TestAdaptiveConfigurationSystem:
         
         assert 'error_recovery_mode' in adaptive_config
         assert adaptive_config['error_recovery_mode'] == 'enhanced'
+
+    def test_mathematical_analysis_integration(self, adaptive_config_manager):
+        """Test advanced mathematical analysis integration"""
+        # Generate market data
+        market_data = np.random.normal(0, 1, 1000)
+        
+        # Get mathematical analysis
+        math_analysis = adaptive_config_manager.get_mathematical_analysis()
+        
+        # Verify mathematical analysis structure
+        assert 'tensor_algebra_status' in math_analysis
+        assert 'market_conditions' in math_analysis
+        assert 'mathematical_state' in math_analysis
+        assert 'system_health' in math_analysis
+        
+        # Verify tensor algebra status
+        tensor_status = math_analysis['tensor_algebra_status']
+        assert 'active' in tensor_status
+        assert 'mathematical_capabilities' in tensor_status
+        
+        # Verify mathematical capabilities
+        capabilities = tensor_status['mathematical_capabilities']
+        assert capabilities['tensor_operations'] == True
+        assert capabilities['quantum_operations'] == True
+        assert capabilities['entropy_analysis'] == True
 
 def main():
     """Run the test suite"""

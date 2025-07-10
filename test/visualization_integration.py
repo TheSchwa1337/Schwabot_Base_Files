@@ -1,15 +1,13 @@
+import logging
 """
 Visualization Integration Test
 Tests the integration between trading engine and visualization components.
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import asyncio
 import json
+import os
+import sys
 import time
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
@@ -17,7 +15,19 @@ from typing import Any, Dict, List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-from core.clean_unified_math import clean_unified_math
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Fix import path for running from project root
+try:
+    from core.clean_unified_math import clean_unified_math
+except ImportError:
+    # Fallback for different path structures
+    try:
+        from clean_unified_math import clean_unified_math
+    except ImportError:
+        # Create a mock if not available
+        clean_unified_math = None
+
 from core.trading_engine_integration import TradeExecution, TradeSignal, generate_trade_signal
 from core.unified_trade_router import UnifiedTradeRouter
 

@@ -18,9 +18,14 @@ This test showcases the living, breathing, recursive trading system in action.
 import asyncio
 import json
 import logging
+import os
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, List
+
+# Add parent directory to Python path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Configure logging
 logging.basicConfig(
