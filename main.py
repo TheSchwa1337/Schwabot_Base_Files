@@ -4,68 +4,117 @@
 Schwabot Trading System - Main Entry Point
 ==========================================
 
-Main entry point for the Schwabot trading system.
-Provides command-line interface for different trading modes.
-
-Usage:
-    python main.py                    # Run demo system
-    python main.py --backtest         # Run backtest only
-    python main.py --visualization    # Run visualization only
-    python main.py --full             # Run complete system
-    python main.py --test             # Run component tests
+This is the main entry point for the Schwabot trading system.
+It provides a command-line interface for running the system in different modes.
 """
 
 import argparse
 import asyncio
 import logging
+import signal
 import sys
-import os
-from datetime import datetime
-from decimal import Decimal
 from pathlib import Path
+from typing import Optional
 
-# Set console encoding for Windows
-if sys.platform == "win32":
-    os.system("chcp 65001 > nul")
+# Core system imports
+from core.schwabot_core_system import SchwabotCoreSystem, run_system, get_system_instance
+from utils.logging_setup import setup_logging
 
-# Configure logging with Unicode-safe handlers
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("logs/schwabot_system.log", encoding='utf-8'),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
-
+# Setup logging
 logger = logging.getLogger(__name__)
 
-# Import available system components
-try:
-    from core.btc_usdc_trading_engine import BTCTradingEngine, TradingMode
-    from core.unified_btc_trading_pipeline import UnifiedBTCTradingPipeline
-    from core.risk_manager import RiskManager
-    from core.secure_exchange_manager import SecureExchangeManager
-    from core.unified_pipeline_manager import UnifiedPipelineManager
-    from core.math_config_manager import MathConfigManager
-    from backtesting.simple_backtester import SimpleBacktester
-    from core.quad_bit_strategy_array import TradingPair
+
+def create_directories():
+    """Create necessary directories if they don't exist."""
+    directories = ["logs", "data", "config", "static", "backups"]
+    for directory in directories:
+        Path(directory).mkdir(exist_ok=True)
+
+
+async def run_demo_mode():
+    """Run the system in demo mode with all components."""
+    logger.info("=== Starting Schwabot Demo Mode ===")
     
-    SYSTEM_AVAILABLE = True
-except ImportError as e:
-    logger.error(f"System components not available: {e}")
-    SYSTEM_AVAILABLE = False
-
-
-async def run_backtest_demo():
-    """Run a comprehensive backtest demonstration."""
-    if not SYSTEM_AVAILABLE:
-        logger.error("System components not available")
-        return
-
     try:
-        logger.info("=== Starting Backtest Demo ===")
+        # Create and initialize the core system
+        system = SchwabotCoreSystem("config/schwabot_config.yaml")
+        
+        # Initialize the system
+        if not await system.initialize():
+            logger.error("Failed to initialize system")
+            return False
+        
+        # Get system status
+        status = system.get_system_status()
+        logger.info(f"System Status: {status}")
+        
+        # Start the system
+        if not await system.start():
+            logger.error("Failed to start system")
+            return False
+        
+        logger.info("System started successfully in demo mode")
+        logger.info("Press Ctrl+C to stop the system")
+        
+        # Run for a limited time in demo mode
+        try:
+            await asyncio.sleep(30)  # Run for 30 seconds in demo mode
+        except asyncio.CancelledError:
+            pass
+        
+        # Stop the system
+        await system.stop()
+        
+        logger.info("=== Demo Mode Completed ===")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Demo mode failed: {e}")
+        return False
 
+
+async def run_live_trading_mode():
+    """Run the system in live trading mode."""
+    logger.info("=== Starting Schwabot Live Trading Mode ===")
+    
+    try:
+        # Create and initialize the core system
+        system = SchwabotCoreSystem("config/schwabot_config.yaml")
+        
+        # Initialize the system
+        if not await system.initialize():
+            logger.error("Failed to initialize system")
+            return False
+        
+        # Start the system
+        if not await system.start():
+            logger.error("Failed to start system")
+            return False
+        
+        logger.info("System started successfully in live trading mode")
+        logger.info("Press Ctrl+C to stop the system")
+        
+        # Run the main trading loop
+        await system.run_trading_loop()
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Live trading mode failed: {e}")
+        return False
+
+
+async def run_backtest_mode():
+    """Run the system in backtest mode."""
+    logger.info("=== Starting Schwabot Backtest Mode ===")
+    
+    try:
+        # Import backtesting components
+        from test.simple_trading_test import SimpleBacktester
+        from core.type_defs import TradingPair
+        from datetime import datetime
+        from decimal import Decimal
+        
         # Initialize backtester
         backtester = SimpleBacktester(
             initial_capital=Decimal("10000"),
@@ -74,116 +123,153 @@ async def run_backtest_demo():
             trading_pair=TradingPair.BTC_USDC,
         )
         
-        logger.info("Backtester initialized successfully")
-        logger.info("=== Backtest Demo Completed ===")
-
+        # Run backtest
+        results = await backtester.run_backtest()
+        
+        logger.info("Backtest completed successfully")
+        logger.info(f"Results: {results}")
+        
+        return True
+        
     except Exception as e:
-        logger.error(f"Backtest demo failed: {e}")
+        logger.error(f"Backtest mode failed: {e}")
+        return False
 
 
-async def run_trading_engine_demo():
-    """Run trading engine demonstration."""
-    if not SYSTEM_AVAILABLE:
-        logger.error("System components not available")
-        return
-
+async def run_test_mode():
+    """Run the system in test mode."""
+    logger.info("=== Starting Schwabot Test Mode ===")
+    
     try:
-        logger.info("=== Starting Trading Engine Demo ===")
-
-        # Initialize trading engine
-        engine = BTCTradingEngine(config={
-            "api_key": "demo",
-            "api_secret": "demo",
-            "testnet": True
-        })
+        # Create and initialize the core system
+        system = SchwabotCoreSystem("config/schwabot_config.yaml")
         
-        # Initialize risk manager
-        risk_manager = RiskManager()
+        # Initialize the system
+        if not await system.initialize():
+            logger.error("Failed to initialize system")
+            return False
         
-        # Initialize secure exchange manager
-        exchange_manager = SecureExchangeManager()
+        # Test individual components
+        logger.info("Testing individual components...")
         
-        logger.info("Trading engine components initialized successfully")
-        logger.info("=== Trading Engine Demo Completed ===")
-
+        # Test trading engine
+        if system.trading_engine:
+            logger.info("✅ Trading engine initialized")
+        else:
+            logger.error("❌ Trading engine not initialized")
+        
+        # Test risk manager
+        if system.risk_manager:
+            logger.info("✅ Risk manager initialized")
+        else:
+            logger.error("❌ Risk manager not initialized")
+        
+        # Test exchange manager
+        if system.exchange_manager:
+            logger.info("✅ Exchange manager initialized")
+        else:
+            logger.error("❌ Exchange manager not initialized")
+        
+        # Test pipeline manager
+        if system.pipeline_manager:
+            logger.info("✅ Pipeline manager initialized")
+        else:
+            logger.error("❌ Pipeline manager not initialized")
+        
+        # Test math core
+        if system.math_core:
+            logger.info("✅ Math core initialized")
+        else:
+            logger.error("❌ Math core not initialized")
+        
+        # Test market data
+        if system.market_data:
+            logger.info("✅ Market data initialized")
+        else:
+            logger.error("❌ Market data not initialized")
+        
+        # Test execution engine
+        if system.execution_engine:
+            logger.info("✅ Execution engine initialized")
+        else:
+            logger.error("❌ Execution engine not initialized")
+        
+        # Test portfolio tracker
+        if system.portfolio_tracker:
+            logger.info("✅ Portfolio tracker initialized")
+        else:
+            logger.error("❌ Portfolio tracker not initialized")
+        
+        # Test strategy components
+        if system.strategy_loader:
+            logger.info("✅ Strategy loader initialized")
+        else:
+            logger.error("❌ Strategy loader not initialized")
+        
+        if system.strategy_executor:
+            logger.info("✅ Strategy executor initialized")
+        else:
+            logger.error("❌ Strategy executor not initialized")
+        
+        # Get system status
+        status = system.get_system_status()
+        logger.info(f"System Status: {status}")
+        
+        logger.info("=== Test Mode Completed ===")
+        return True
+        
     except Exception as e:
-        logger.error(f"Trading engine demo failed: {e}")
+        logger.error(f"Test mode failed: {e}")
+        return False
 
 
-async def run_pipeline_demo():
-    """Run unified pipeline demonstration."""
-    if not SYSTEM_AVAILABLE:
-        logger.error("System components not available")
-        return
-
+async def run_api_mode():
+    """Run the system in API mode."""
+    logger.info("=== Starting Schwabot API Mode ===")
+    
     try:
-        logger.info("=== Starting Pipeline Demo ===")
-
-        # Initialize pipeline manager
-        pipeline_manager = UnifiedPipelineManager()
+        # Import API components
+        from core.api.integration_manager import IntegrationManager
         
-        # Initialize math config manager
-        math_config = MathConfigManager()
+        # Create and initialize the core system
+        system = SchwabotCoreSystem("config/schwabot_config.yaml")
         
-        # Initialize unified BTC trading pipeline
-        btc_pipeline = UnifiedBTCTradingPipeline()
+        # Initialize the system
+        if not await system.initialize():
+            logger.error("Failed to initialize system")
+            return False
         
-        logger.info("Pipeline components initialized successfully")
-        logger.info("=== Pipeline Demo Completed ===")
-
+        # Initialize API manager
+        api_manager = IntegrationManager()
+        await api_manager.initialize()
+        
+        # Start the system
+        if not await system.start():
+            logger.error("Failed to start system")
+            return False
+        
+        logger.info("System started successfully in API mode")
+        logger.info("API server running on http://localhost:5000")
+        logger.info("Press Ctrl+C to stop the system")
+        
+        # Start API server
+        await api_manager.start_server()
+        
+        return True
+        
     except Exception as e:
-        logger.error(f"Pipeline demo failed: {e}")
+        logger.error(f"API mode failed: {e}")
+        return False
 
 
-async def run_component_test():
-    """Test individual components for connectivity."""
-    if not SYSTEM_AVAILABLE:
-        logger.error("System components not available")
-        return
-
-    try:
-        logger.info("=== Testing Individual Components ===")
-
-        # Test RiskManager
-        logger.info("Testing RiskManager...")
-        risk_manager = RiskManager()
-        logger.info("RiskManager initialized successfully")
-
-        # Test MathConfigManager
-        logger.info("Testing MathConfigManager...")
-        math_config = MathConfigManager()
-        logger.info("MathConfigManager initialized successfully")
-
-        # Test SecureExchangeManager
-        logger.info("Testing SecureExchangeManager...")
-        exchange_manager = SecureExchangeManager()
-        logger.info("SecureExchangeManager initialized successfully")
-
-        # Test UnifiedPipelineManager
-        logger.info("Testing UnifiedPipelineManager...")
-        pipeline_manager = UnifiedPipelineManager()
-        logger.info("UnifiedPipelineManager initialized successfully")
-
-        # Test BTCTradingEngine
-        logger.info("Testing BTCTradingEngine...")
-        trading_engine = BTCTradingEngine(config={
-            "api_key": "demo",
-            "api_secret": "demo",
-            "testnet": True
-        })
-        logger.info("BTCTradingEngine initialized successfully")
-
-        logger.info("=== Component Tests Completed Successfully ===")
-
-    except Exception as e:
-        logger.error(f"Component test failed: {e}")
-
-
-def create_directories():
-    """Create necessary directories if they don't exist."""
-    directories = ["logs", "data", "config", "static"]
-    for directory in directories:
-        Path(directory).mkdir(exist_ok=True)
+def setup_signal_handlers():
+    """Setup signal handlers for graceful shutdown."""
+    def signal_handler(signum, frame):
+        logger.info(f"Received signal {signum}, shutting down...")
+        sys.exit(0)
+    
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
 
 
 def main():
@@ -191,7 +277,7 @@ def main():
     parser = argparse.ArgumentParser(description="Schwabot Trading System")
     parser.add_argument(
         "--mode",
-        choices=["backtest", "trading", "pipeline", "test", "demo"],
+        choices=["demo", "live", "backtest", "test", "api"],
         default="demo",
         help="System mode to run",
     )
@@ -213,8 +299,14 @@ def main():
     # Create necessary directories
     create_directories()
 
-    # Set log level
-    logging.getLogger().setLevel(getattr(logging, args.log_level))
+    # Setup logging
+    setup_logging(
+        level=args.log_level,
+        log_file=f"logs/schwabot_{args.mode}.log"
+    )
+
+    # Setup signal handlers
+    setup_signal_handlers()
 
     logger.info("=== Schwabot Trading System ===")
     logger.info(f"Mode: {args.mode}")
@@ -222,27 +314,31 @@ def main():
     logger.info(f"Config: {args.config}")
 
     try:
-        if args.mode == "backtest":
-            asyncio.run(run_backtest_demo())
-        elif args.mode == "trading":
-            asyncio.run(run_trading_engine_demo())
-        elif args.mode == "pipeline":
-            asyncio.run(run_pipeline_demo())
+        # Run the appropriate mode
+        if args.mode == "demo":
+            success = asyncio.run(run_demo_mode())
+        elif args.mode == "live":
+            success = asyncio.run(run_live_trading_mode())
+        elif args.mode == "backtest":
+            success = asyncio.run(run_backtest_mode())
         elif args.mode == "test":
-            asyncio.run(run_component_test())
-        elif args.mode == "demo":
-            # Run all demos
-            logger.info("Running all demos...")
-            asyncio.run(run_component_test())
-            asyncio.run(run_backtest_demo())
-            asyncio.run(run_trading_engine_demo())
-            asyncio.run(run_pipeline_demo())
+            success = asyncio.run(run_test_mode())
+        elif args.mode == "api":
+            success = asyncio.run(run_api_mode())
         else:
             logger.error(f"Unknown mode: {args.mode}")
             sys.exit(1)
 
+        if success:
+            logger.info("System completed successfully")
+            sys.exit(0)
+        else:
+            logger.error("System failed")
+            sys.exit(1)
+
     except KeyboardInterrupt:
         logger.info("System interrupted by user")
+        sys.exit(0)
     except Exception as e:
         logger.error(f"System error: {e}")
         sys.exit(1)
