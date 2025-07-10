@@ -14,10 +14,11 @@ Tests include:
 5. Error handling and recovery
 """
 
-import time
 import logging
+import time
+from typing import Any, Dict, Tuple
+
 import numpy as np
-from typing import Dict, Any, Tuple
 
 # Configure logging for maximum paranoia
 logging.basicConfig()

@@ -13,12 +13,13 @@ This script validates the complete system for:
 - Registry storage functionality
 """
 
-import sys
-import os
 import logging
-import numpy as np
+import os
+import sys
 import time
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
+import numpy as np
 
 # Add the project root to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -112,7 +113,6 @@ def test_profit_vector_system():
     print("=" * 60)
 
     try:
-        from core.strategy.enhanced_math_ops import ()
             enhanced_profit_vectorization, enhanced_cosine_sim, get_enhancement_status
         )
 
@@ -409,7 +409,6 @@ def test_advanced_hashing_tensor():
     print("=" * 60)
 
     try:
-        from core.strategy.enhanced_math_ops import ()
             enhanced_hash_matching, enhanced_fractal_compression
         )
 

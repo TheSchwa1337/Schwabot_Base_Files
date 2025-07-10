@@ -6,10 +6,10 @@ Uses existing functional systems without removing anything
 This launcher preserves all existing functionality while fixing import issues.
 """
 
+import logging
 import os
 import sys
 import time
-import logging
 from pathlib import Path
 
 # Add core directory to path
@@ -36,11 +36,11 @@ def main():
 
     try:
         # Import existing functional components
-        from core.soulprint_registry import SoulprintRegistry
-        from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator
-        from core.profit_optimization_engine import ProfitOptimizationEngine
-        from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
         from core.automated_strategy_engine import AutomatedStrategyEngine
+        from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
+        from core.profit_optimization_engine import ProfitOptimizationEngine
+        from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator
+        from core.soulprint_registry import SoulprintRegistry
 
         print("✅ Core components imported successfully")
 

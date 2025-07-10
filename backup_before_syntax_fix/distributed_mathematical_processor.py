@@ -1,9 +1,3 @@
-import logging
-
-
-import logging
-from multiprocessing import Queue
-
 import asyncio
 import gc
 import logging
@@ -12,6 +6,7 @@ import random
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass
+from multiprocessing import Queue
 from typing import Any, Dict, List, Optional
 
 import numpy as np

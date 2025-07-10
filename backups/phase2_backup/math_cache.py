@@ -7,9 +7,11 @@ Caches mathematical operation results to avoid redundant calculations.
 import hashlib
 import json
 import time
-from typing import Any, Dict, Optional, Tuple
 from collections import OrderedDict
+from typing import Any, Dict, Optional, Tuple
+
 import numpy as np
+
 
 class MathResultsCache:
     """Cache for mathematical operation results."""

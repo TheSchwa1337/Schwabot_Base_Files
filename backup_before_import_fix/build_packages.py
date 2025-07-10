@@ -1,13 +1,12 @@
-from dual_unicore_handler import DualUnicoreHandler
-from pathlib import Path
 import argparse
 import json
 import platform
 import shutil
 import subprocess
 import sys
-import sys
+from pathlib import Path
 
+from dual_unicore_handler import DualUnicoreHandler
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

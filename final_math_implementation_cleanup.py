@@ -7,11 +7,12 @@ This script implements all missing mathematical concepts with real formulas,
 removes unnecessary stubs, and focuses only on core trading mathematics.
 """
 
+import logging
 import os
 import re
-import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 # Configure logging

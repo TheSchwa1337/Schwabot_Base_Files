@@ -15,15 +15,16 @@ Features:
 """
 
 import asyncio
-import ccxt.pro as ccxt
 import json
 import logging
+import os
 import sys
 import time
-import os
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
+from typing import Any, Dict, List, Optional, Tuple
+
+import ccxt.pro as ccxt
 import numpy as np
 
 # Add core to path
@@ -32,7 +33,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Import Schwabot core systems
     try:
     from core.clean_unified_math import clean_unified_math
-    from core.trading_engine_integration import TradeSignal, TradeExecution, generate_trade_signal
+    from core.trading_engine_integration import TradeExecution, TradeSignal, generate_trade_signal
     from core.unified_trade_router import UnifiedTradeRouter
     from schwabot_startup_orchestrator import SchwabotStartupOrchestrator
     CORE_AVAILABLE = True

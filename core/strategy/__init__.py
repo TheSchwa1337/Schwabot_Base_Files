@@ -5,8 +5,6 @@ Strategy Module Package Initializer
 
 This module contains the strategic intelligence components for Schwabot trading.
 Provides access to advanced trading strategies including:
-- Zygot-Zalgo entropy dual key gate
-- Volume weighted hash oscillator
 - Multi-phase strategy weight tensor
 - Loss anticipation curve
 - Enhanced math operations
@@ -14,7 +12,7 @@ Provides access to advanced trading strategies including:
 """
 
 import logging
-from typing import Dict, Any, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -23,22 +21,6 @@ __version__ = "1.0.0"
 __author__ = "Schwabot Development Team"
 
 # Import strategy modules with error handling
-try:
-    from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
-    ZYGOT_ZALGO_AVAILABLE = True
-except ImportError:
-    ZygotZalgoEntropyDualKeyGate = None
-    ZYGOT_ZALGO_AVAILABLE = False
-    logger.warning("Zygot-Zalgo entropy dual key gate not available")
-
-try:
-    from .volume_weighted_hash_oscillator import VolumeWeightedHashOscillator
-    VOLUME_OSCILLATOR_AVAILABLE = True
-except ImportError:
-    VolumeWeightedHashOscillator = None
-    VOLUME_OSCILLATOR_AVAILABLE = False
-    logger.warning("Volume weighted hash oscillator not available")
-
 try:
     from .multi_phase_strategy_weight_tensor import MultiPhaseStrategyWeightTensor
     MULTI_PHASE_TENSOR_AVAILABLE = True
@@ -73,10 +55,6 @@ except ImportError:
 
 # Export list
 __all__ = [
-    "ZygotZalgoEntropyDualKeyGate",
-    "ZYGOT_ZALGO_AVAILABLE",
-    "VolumeWeightedHashOscillator",
-    "VOLUME_OSCILLATOR_AVAILABLE",
     "MultiPhaseStrategyWeightTensor",
     "MULTI_PHASE_TENSOR_AVAILABLE",
     "LossAnticipationCurve",
@@ -92,8 +70,6 @@ __all__ = [
 
 def create_trading_strategy_system(
     config: Optional[Dict[str, Any]] = None,
-    enable_entropy_gate: bool = True,
-    enable_volume_oscillator: bool = True,
     enable_multi_phase: bool = True,
     enable_loss_anticipation: bool = True,
     enable_enhanced_math: bool = True,
@@ -104,8 +80,6 @@ def create_trading_strategy_system(
 
     Args:
         config: Configuration dictionary
-        enable_entropy_gate: Enable Zygot-Zalgo entropy dual key gate
-        enable_volume_oscillator: Enable volume weighted hash oscillator
         enable_multi_phase: Enable multi-phase strategy weight tensor
         enable_loss_anticipation: Enable loss anticipation curve
         enable_enhanced_math: Enable enhanced math operations
@@ -115,20 +89,6 @@ def create_trading_strategy_system(
         Dictionary containing initialized strategy components
     """
     system = {}
-    
-    if enable_entropy_gate and ZYGOT_ZALGO_AVAILABLE:
-        try:
-            system["entropy_gate"] = ZygotZalgoEntropyDualKeyGate(config)
-            logger.info("✅ Zygot-Zalgo entropy dual key gate initialized")
-        except Exception as e:
-            logger.error(f"❌ Failed to initialize entropy gate: {e}")
-
-    if enable_volume_oscillator and VOLUME_OSCILLATOR_AVAILABLE:
-        try:
-            system["volume_oscillator"] = VolumeWeightedHashOscillator(config)
-            logger.info("✅ Volume weighted hash oscillator initialized")
-        except Exception as e:
-            logger.error(f"❌ Failed to initialize volume oscillator: {e}")
 
     if enable_multi_phase and MULTI_PHASE_TENSOR_AVAILABLE:
         try:
@@ -165,8 +125,6 @@ def create_trading_strategy_system(
 def get_strategy_status() -> Dict[str, bool]:
     """Get the status of all strategy components."""
     return {
-        "zygot_zalgo": ZYGOT_ZALGO_AVAILABLE,
-        "volume_oscillator": VOLUME_OSCILLATOR_AVAILABLE,
         "multi_phase_tensor": MULTI_PHASE_TENSOR_AVAILABLE,
         "loss_anticipation": LOSS_ANTICIPATION_AVAILABLE,
         "enhanced_math": ENHANCED_MATH_AVAILABLE,

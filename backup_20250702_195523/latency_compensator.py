@@ -1,9 +1,9 @@
+import logging
 import math
+import time
 from collections import deque
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

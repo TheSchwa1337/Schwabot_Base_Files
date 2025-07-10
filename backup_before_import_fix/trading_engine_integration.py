@@ -1,5 +1,3 @@
-import logging
-
 import datetime
 import hashlib
 import logging
@@ -10,10 +8,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Union
 
-from core.clean_unified_math import (
-    CleanUnifiedMathSystem,
-    optimize_brain_profit,
-)
+from core.clean_unified_math import CleanUnifiedMathSystem, optimize_brain_profit
 
 # Initialize the unified math system
 clean_unified_math = CleanUnifiedMathSystem()

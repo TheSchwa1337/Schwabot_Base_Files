@@ -47,11 +47,7 @@ signal generation, and strategy execution with quantum mathematical integration.
         # Entropy Signal Integration
             try:
             from .entropy_signal_bridge import EntropySignalBridge
-            from .entropy_signal_integration import (
-                EntropySignal,
-                get_entropy_integrator,
-                process_entropy_signal,
-            )
+            from .entropy_signal_integration import EntropySignal, get_entropy_integrator, process_entropy_signal
             from .fractal_core import FractalCore
             from .phantom_core import PhantomCore
             from .profit_cycle_allocator import ProfitCycleAllocator

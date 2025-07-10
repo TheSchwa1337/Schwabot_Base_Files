@@ -1,8 +1,8 @@
+import logging
+import time
 from dataclasses import dataclass, field
 from decimal import Decimal, getcontext
 from typing import Any, Dict, List, Optional, Union
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

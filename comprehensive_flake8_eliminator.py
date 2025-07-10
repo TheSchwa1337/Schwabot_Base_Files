@@ -13,13 +13,13 @@ This script systematically eliminates ALL flake8 errors using a multi-stage appr
 GOAL: Zero flake8 errors across the entire codebase.
 """
 
-import sys
-import subprocess
-import logging
-from pathlib import Path
-from typing import Dict, List, Tuple, Any
-from datetime import datetime
 import json
+import logging
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 # Configure logging
 logging.basicConfig()

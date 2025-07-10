@@ -1,19 +1,19 @@
+import asyncio
+import json
+import logging
 import math
+import random
+import threading
+import time
+import tkinter as tk
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from tkinter import Canvas, ttk
 from typing import Any, Dict, List, Optional, Tuple
-from typing import Tuple
-import asyncio
-import json
-import logging
+
 import psutil
-import random
-import threading
-import time
-import tkinter as tk
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

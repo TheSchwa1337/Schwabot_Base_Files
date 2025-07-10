@@ -10,8 +10,10 @@ Provides quantum state normalization and integration for the trading system.
 """
 
 import logging
-import numpy as np
 from typing import Any, Dict, Optional
+
+import numpy as np
+
 
 class QuantumState:
     """

@@ -38,26 +38,14 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import numpy as np
 
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
-from .chrono_recursive_logic_function import (
-    ChronoRecursiveLogicFunction,
-    CRLFResponse,
-    CRLFTriggerState,
-    create_crlf,
-)
+from .chrono_recursive_logic_function import ChronoRecursiveLogicFunction, CRLFResponse, CRLFTriggerState, create_crlf
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import (
-    CleanProfitVectorization,
-    ProfitVector,
-    VectorizationMode,
-)
+from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
 from .phase_bit_integration import phase_bit_integration
 from .portfolio_tracker import PortfolioTracker
 from .soulprint_registry import SoulprintRegistry
 from .strategy_bit_mapper import StrategyBitMapper
-from .unified_market_data_pipeline import (
-    MarketDataPacket,
-    create_unified_pipeline,
-)
+from .unified_market_data_pipeline import MarketDataPacket, create_unified_pipeline
 from .unified_math_system import create_unified_math_system
 from .zpe_zbe_core import ZPEZBEPerformanceTracker  # noqa: F401 - Used in performance monitoring and optimization
 from .zpe_zbe_core import create_zpe_zbe_core  # noqa: F401 - Used in core system initialization

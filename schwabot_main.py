@@ -1,19 +1,3 @@
-import numpy as np
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-from core.brain_trading_engine import BrainTradingEngine, BrainSignal
-from core.ccxt_trading_executor import CCXTTradingExecutor
-from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
-from core.settings_manager import get_settings_manager
-from schwabot.speed_lattice_live_panel_system import SpeedLatticeLivePanelSystem
-from schwabot.trading_pipeline_integration import TradingPipelineIntegration
-from symbolic_profit_router import SymbolicProfitRouter
-from tkinter import ttk, filedialog, messagebox
-import tkinter as tk
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 import argparse
 import asyncio
 import json
@@ -22,6 +6,24 @@ import signal
 import sys
 import threading
 import time
+import tkinter as tk
+from datetime import datetime
+from pathlib import Path
+from tkinter import filedialog, messagebox, ttk
+from typing import Any, Dict, List, Optional
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+from core.brain_trading_engine import BrainSignal, BrainTradingEngine
+from core.ccxt_trading_executor import CCXTTradingExecutor
+from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+from core.settings_manager import get_settings_manager
+from schwabot.speed_lattice_live_panel_system import SpeedLatticeLivePanelSystem
+from schwabot.trading_pipeline_integration import TradingPipelineIntegration
+from symbolic_profit_router import SymbolicProfitRouter
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

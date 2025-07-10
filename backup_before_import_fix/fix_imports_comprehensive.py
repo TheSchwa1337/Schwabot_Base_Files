@@ -14,16 +14,15 @@ Usage:
 """
 
 import ast
+
+# Configure logging
+import logging
 import os
 import re
 import shutil
 import sys
 from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-
-# Configure logging
-import logging
-import sys
+from typing import Dict, List, Optional, Set, Tuple
 
 # Fix Unicode encoding issues on Windows
 if sys.platform == 'win32':

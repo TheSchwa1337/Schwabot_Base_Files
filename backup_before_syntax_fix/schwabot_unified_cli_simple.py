@@ -6,15 +6,15 @@ Simplified version for testing and debugging CLI functionality.
 """
 
 import argparse
-import sys
 import os
+import sys
 from pathlib import Path
 from typing import List
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
-from utils.safe_print import safe_print, info, warn, error, success
+from utils.safe_print import error, info, safe_print, success, warn
 
 
 class SchwabotUnifiedCLISimple:

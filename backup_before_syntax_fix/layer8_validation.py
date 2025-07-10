@@ -7,14 +7,14 @@ Focused validation for Layer 8: Hash-Glyph Memory Compression + Cross-Agent Path
 Checks the integrity and functionality of all Layer 8 components.
 """
 
-import sys
-import os
 import importlib
-import logging
 import json
+import logging
+import os
+import sys
 import traceback
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Add project root to path
 sys.path.append('.')
@@ -127,10 +127,10 @@ class Layer8Validator:
             logger.info("Testing Layer 8 integration...")
 
             # Import all components
-            from core.hash_glyph_compression import create_hash_glyph_compressor
             from core.ai_matrix_consensus import create_ai_matrix_consensus
-            from core.visual_decision_engine import create_visual_decision_engine
+            from core.hash_glyph_compression import create_hash_glyph_compressor
             from core.loop_strategy_switcher import create_strategy_loop_switcher
+            from core.visual_decision_engine import create_visual_decision_engine
 
             # Create instances
             compressor = create_hash_glyph_compressor()

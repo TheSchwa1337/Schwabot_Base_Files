@@ -4,9 +4,10 @@
 Test script to verify comprehensive fixes.
 """
 
-import sys
 import importlib
+import sys
 from pathlib import Path
+
 
 def test_imports():
     """Test that all critical modules can be imported."""

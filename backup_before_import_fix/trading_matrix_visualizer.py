@@ -1,14 +1,14 @@
-import numpy as np
-import cupy as cp
-from numba import cuda
-import cupy as cp
-import numba
-from datetime import datetime
-from typing import List, Tuple, Callable, Optional, Dict, Any
 import csv
 import logging
 import os
 import time
+from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Tuple
+
+import cupy as cp
+import numba
+import numpy as np
+from numba import cuda
 
 #!/usr/bin/env python3
 """

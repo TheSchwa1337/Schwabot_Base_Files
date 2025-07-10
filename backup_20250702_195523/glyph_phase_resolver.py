@@ -1,5 +1,19 @@
-from typing import Any, DictGlyph Phase Resolver Module.Implements the Zygot/Zalgo phase router, dynamically routing glyph logic
 import time
+from typing import (
+    Any,
+    DictGlyph,
+    Module.Implements,
+    Phase,
+    Resolver,
+    Zygot/Zalgo,
+    dynamically,
+    glyph,
+    logic,
+    phase,
+    router,
+    routing,
+    the,
+)
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

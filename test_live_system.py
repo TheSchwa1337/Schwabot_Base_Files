@@ -25,15 +25,15 @@ async def test_core_imports():
     print("🔍 Testing core imports...")
     
     try:
-        from core.live_api_backtesting import LiveAPIBacktesting, LiveAPIConfig, create_live_api_backtesting
-        from core.portfolio_tracker import PortfolioTracker, create_portfolio_tracker
         from core.ccxt_trading_executor import CCXTTradingExecutor
-        from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
+        from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
         from core.clean_math_foundation import CleanMathFoundation
         from core.clean_profit_vectorization import CleanProfitVectorization
-        from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
-        from core.quantum_mathematical_bridge import QuantumMathematicalBridge
+        from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
+        from core.live_api_backtesting import LiveAPIBacktesting, LiveAPIConfig, create_live_api_backtesting
         from core.neural_processing_engine import NeuralProcessingEngine
+        from core.portfolio_tracker import PortfolioTracker, create_portfolio_tracker
+        from core.quantum_mathematical_bridge import QuantumMathematicalBridge
         
         print("✅ All core modules imported successfully")
         return True
@@ -49,7 +49,7 @@ async def test_live_api_backtesting():
     
     try:
         from core.live_api_backtesting import LiveAPIConfig, create_live_api_backtesting
-        
+
         # Create configuration
         config = LiveAPIConfig(
             exchange="binance",
@@ -81,9 +81,10 @@ async def test_portfolio_tracker():
     print("\n🔍 Testing Portfolio Tracker...")
     
     try:
-        from core.portfolio_tracker import create_portfolio_tracker
         from decimal import Decimal
-        
+
+        from core.portfolio_tracker import create_portfolio_tracker
+
         # Create portfolio tracker
         tracker = create_portfolio_tracker()
         
@@ -108,7 +109,7 @@ async def test_trading_pipeline():
     
     try:
         from core.clean_trading_pipeline import create_trading_pipeline
-        
+
         # Create trading pipeline
         pipeline = create_trading_pipeline(
             symbol="BTCUSDC",
@@ -133,11 +134,11 @@ async def test_mathematical_components():
     print("\n🔍 Testing Mathematical Components...")
     
     try:
+        from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
         from core.clean_math_foundation import CleanMathFoundation
         from core.clean_profit_vectorization import CleanProfitVectorization
-        from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
         from core.quantum_mathematical_bridge import QuantumMathematicalBridge
-        
+
         # Test math foundation
         math_foundation = CleanMathFoundation()
         print("✅ Math Foundation created successfully")
@@ -166,9 +167,10 @@ async def test_neural_processing():
     print("\n🔍 Testing Neural Processing Engine...")
     
     try:
-        from core.neural_processing_engine import NeuralProcessingEngine
         import numpy as np
-        
+
+        from core.neural_processing_engine import NeuralProcessingEngine
+
         # Create neural processing engine
         neural_engine = NeuralProcessingEngine()
         

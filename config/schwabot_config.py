@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 from typing import Any, Optional
+
 """schwabot_config module."""
 
 

@@ -12,10 +12,12 @@ import json
 import time
 from pathlib import Path
 
-# Import core components
-from core.unified_market_data_pipeline import create_unified_pipeline
 from core.clean_trading_pipeline import CleanTradingPipeline
 from core.soulprint_registry import SoulprintRegistry
+
+# Import core components
+from core.unified_market_data_pipeline import create_unified_pipeline
+
 
 async def test_complete_trading_flow():
     """Test the complete automated trading flow."""

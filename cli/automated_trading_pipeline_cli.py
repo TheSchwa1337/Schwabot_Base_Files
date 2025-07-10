@@ -19,13 +19,13 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from core.automated_trading_pipeline import AutomatedTradingPipeline
-from core.pure_profit_calculator import StrategyParameters, ProcessingMode
+from core.pure_profit_calculator import ProcessingMode, StrategyParameters
 
 logger = logging.getLogger(__name__)
 

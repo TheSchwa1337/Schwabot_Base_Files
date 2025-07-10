@@ -4,10 +4,11 @@ Centralized Math Configuration Manager
 Manages all mathematical operations configuration for Schwabot.
 """
 
-import os
 import json
-from typing import Dict, Any, Optional
+import os
 from pathlib import Path
+from typing import Any, Dict, Optional
+
 
 class MathConfigManager:
     """Centralized configuration manager for all mathematical operations."""

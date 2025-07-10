@@ -8,6 +8,7 @@ works properly with all modules.
 """
 
 import numpy as np
+
 from hash_recollection import HashRecollectionAPI
 
 

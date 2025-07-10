@@ -5,8 +5,8 @@ Fix Flake8 Issues in ZPE-ZBE Core Files
 This script fixes common flake8 issues in the ZPE-ZBE core implementation.
 """
 
-import re
 import os
+import re
 from typing import List, Tuple
 
 

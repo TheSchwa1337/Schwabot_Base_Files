@@ -10,34 +10,37 @@ to create a progressive, mathematically-driven trading system.
 NO LAYERING - ONLY PROGRESSIVE BUILDING INSIDE EXISTING MATH
 """
 
-import os
-import sys
-import time
+import asyncio
 import json
 import logging
+import os
+import sys
 import threading
-import asyncio
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
+import time
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 # Add core directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'nano-core'))
 
-# Import our existing mathematical framework
-from core.soulprint_registry import SoulprintRegistry, SoulprintEntry
-from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator, QSCAllocationMode
-from core.profit_optimization_engine import ProfitOptimizationEngine, OptimizationMethod, RiskMetric
-from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
-from core.automated_strategy_engine import AutomatedStrategyEngine
 from nano_core.strategy_switch import match_strategy, select_best_trade_batch
-from core.reentry_logic import ReentryLogic
-from core.swing_pattern_recognition import SwingPatternRecognizer
-from core.profit_tier_adjuster import ProfitTierAdjuster
+
+from core.automated_strategy_engine import AutomatedStrategyEngine
+from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
 from core.order_wall_analyzer import OrderWallAnalyzer
+from core.profit_optimization_engine import OptimizationMethod, ProfitOptimizationEngine, RiskMetric
+from core.profit_tier_adjuster import ProfitTierAdjuster
+from core.qsc_enhanced_profit_allocator import QSCAllocationMode, QSCEnhancedProfitAllocator
+from core.reentry_logic import ReentryLogic
+
+# Import our existing mathematical framework
+from core.soulprint_registry import SoulprintEntry, SoulprintRegistry
+from core.swing_pattern_recognition import SwingPatternRecognizer
 
 # Setup logging
 logging.basicConfig()

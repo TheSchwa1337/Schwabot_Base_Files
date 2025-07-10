@@ -1,6 +1,5 @@
 from dual_unicore_handler import DualUnicoreHandler
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

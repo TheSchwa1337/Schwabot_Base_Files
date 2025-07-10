@@ -21,22 +21,24 @@ import asyncio
 import json
 import logging
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Import all Schwabot components
-from core.two_gram_detector import create_two_gram_detector, TwoGramDetector
-from core.strategy_trigger_router import create_strategy_trigger_router, StrategyTriggerRouter
-from core.visual_execution_node import create_visual_execution_node, VisualExecutionNode, GUIMode, VisualizationTheme
-from core.algorithmic_portfolio_balancer import create_portfolio_balancer, AlgorithmicPortfolioBalancer
-from core.btc_usdc_trading_integration import create_btc_usdc_integration, BTCUSDCTradingIntegration
+from core.algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer, create_portfolio_balancer
+from core.btc_usdc_trading_integration import BTCUSDCTradingIntegration, create_btc_usdc_integration
 from core.phantom_detector import PhantomDetector
 from core.phantom_registry import PhantomRegistry
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.strategy_trigger_router import StrategyTriggerRouter, create_strategy_trigger_router
+
+# Import all Schwabot components
+from core.two_gram_detector import TwoGramDetector, create_two_gram_detector
+from core.visual_execution_node import GUIMode, VisualExecutionNode, VisualizationTheme, create_visual_execution_node
+from utils.safe_print import debug, error, info, safe_print, success, warn
 
 
 class ComprehensiveIntegrationTest:

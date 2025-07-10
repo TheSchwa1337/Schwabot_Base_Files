@@ -20,12 +20,7 @@ from .multi_frequency_resonance_engine import (
     ResonanceMode,
     create_multi_frequency_resonance_engine,
 )
-from .profit_vectorization import (
-    FrequencyPhase,
-    ProfitVector,
-    ProfitVectorState,
-    create_vectorized_profit_orchestrator,
-)
+from .profit_vectorization import FrequencyPhase, ProfitVector, ProfitVectorState, create_vectorized_profit_orchestrator
 from .strategy_trigger_router import StrategyTriggerRouter
 from .two_gram_detector import TwoGramDetector, TwoGramSignal
 from .unified_math_system import UnifiedMathSystem, generate_unified_hash

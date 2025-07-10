@@ -5,30 +5,31 @@ Schwabot Flask API Server
 Advanced Trading Intelligence System with Soulprint Registry Integration
 """
 
-from flask import Flask, request, jsonify, render_template_string
-from flask_cors import CORS
-from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
 import sys
-import traceback
 import threading
 import time
+import traceback
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room
+
+from flask import Flask, jsonify, render_template_string, request
 
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from core.soulprint_registry import SoulprintRegistry
-from core.visual_execution_node import VisualExecutionNode
-from core.unified_math_system import generate_unified_hash
-from core.strategy_logic import activate_strategy_for_hash
+# Import automated trading routes
+from api.automated_trading_routes import automated_trading
 
 # Import live trading routes
 from api.live_trading_routes import live_trading
-
-# Import automated trading routes
-from api.automated_trading_routes import automated_trading
+from core.soulprint_registry import SoulprintRegistry
+from core.strategy_logic import activate_strategy_for_hash
+from core.unified_math_system import generate_unified_hash
+from core.visual_execution_node import VisualExecutionNode
 
 # Initialize Flask app
 app = Flask(__name__)

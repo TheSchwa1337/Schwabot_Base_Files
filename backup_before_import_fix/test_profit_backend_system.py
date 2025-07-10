@@ -4,23 +4,24 @@ Test script for the profit-driven backend dispatcher system.
 Demonstrates dynamic CPU/GPU selection based on profit metrics.
 """
 
-import numpy as np
-import time
-import sys
 import os
+import sys
+import time
+
+import numpy as np
 
 # Add the core directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
 
 from profit_backend_dispatcher import (
     dispatch_op,
-    matrix_multiply,
     elementwise_multiply,
     get_profit_stats,
-    reset_stats,
+    matrix_multiply,
     registry,
+    reset_stats,
 )
-from profit_decorators import profit_driven_op, profit_tracked, auto_backend_select
+from profit_decorators import auto_backend_select, profit_driven_op, profit_tracked
 
 
 def test_basic_operations():

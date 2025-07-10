@@ -1,9 +1,10 @@
-from core.clean_unified_math import CleanUnifiedMathSystem
-from core.brain_trading_engine import BrainTradingEngine
-from symbolic_profit_router import SymbolicProfitRouter
-from datetime import datetime
-from tkinter import ttk, scrolledtext
 import tkinter as tk
+from datetime import datetime
+from tkinter import scrolledtext, ttk
+
+from core.brain_trading_engine import BrainTradingEngine
+from core.clean_unified_math import CleanUnifiedMathSystem
+from symbolic_profit_router import SymbolicProfitRouter
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

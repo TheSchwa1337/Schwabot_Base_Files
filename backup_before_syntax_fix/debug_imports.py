@@ -1,8 +1,8 @@
-from dual_unicore_handler import DualUnicoreHandler
-from utils.safe_print import safe_print, info, warn, error, success, debug
 import sys
 import traceback
 
+from dual_unicore_handler import DualUnicoreHandler
+from utils.safe_print import debug, error, info, safe_print, success, warn
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

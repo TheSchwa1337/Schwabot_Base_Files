@@ -13,11 +13,12 @@ INTEGRATION APPROACH:
 - Maintains mathematical purity and trading decision integrity
 """
 
-import sys
-import os
 import logging
-import numpy as np
+import os
+import sys
 import time
+
+import numpy as np
 
 # Add the project root to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -176,7 +177,6 @@ def demo_enhancement_integration():
     print("\n📦 Test 6: Enhanced Math Operations")
 
     try:
-        from core.strategy.enhanced_math_ops import ()
             enhanced_cosine_sim, enhanced_matrix_multiply, get_enhancement_status
         )
 

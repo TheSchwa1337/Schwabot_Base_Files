@@ -4,17 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    NamedTuple,
-    NewType,
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import Any, Callable, Dict, List, NamedTuple, NewType, Optional, Tuple, Union
 
 import numpy as np
 from numpy.typing import NDArray

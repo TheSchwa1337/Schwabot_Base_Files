@@ -11,14 +11,15 @@ Implements biological immune system logic for front-running strategies:
 • Adaptive mutation and survival selection
 """
 
-import logging
-import numpy as np
 import hashlib
 import json
+import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

@@ -3,19 +3,60 @@ from .flip_switch_logic_lattice import FlipSwitchLogicLattice
 from .glyph_gate_engine import GlyphGateEngine
 from .glyph_strategy_core import GlyphStrategyCore
 from .multi_phase_strategy_weight_tensor import (
-from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Date,
+    Original,
+    Schwabot,
+    The,
+    This,
+    ZygotZalgoEntropyDualKeyGate,
+    19:37:07,
+    2025-07-02,
+    """,
+    -,
+    .zygot_zalgo_entropy_dual_key_gate,
+    __init__.py,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    errors,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    implementation,
+    import,
+    in,
+    it,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    strategy,
+    syntax,
+    system,
+    that,
+    the,
+)
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\strategy\__init__.py
-Date commented out: 2025-07-02 19:37:07
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

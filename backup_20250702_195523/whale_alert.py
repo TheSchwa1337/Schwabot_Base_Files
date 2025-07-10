@@ -14,7 +14,6 @@ import requests
 
 from .base_handler import BaseAPIHandler
 
-
 try:
     import aiohttp
 except ImportError:  # pragma: no cover

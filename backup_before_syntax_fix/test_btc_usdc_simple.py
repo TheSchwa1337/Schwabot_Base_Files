@@ -11,7 +11,7 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent / "core"))
@@ -37,8 +37,8 @@ def test_system_components():
 
         # Test Phantom Math components
         from core.phantom_detector import PhantomDetector
-        from core.phantom_registry import PhantomRegistry
         from core.phantom_logger import PhantomLogger
+        from core.phantom_registry import PhantomRegistry
         print("✅ Phantom Math components imported successfully")
 
         return True
@@ -139,8 +139,8 @@ async def test_phantom_math():
 
     try:
         from core.phantom_detector import PhantomDetector
-        from core.phantom_registry import PhantomRegistry
         from core.phantom_logger import PhantomLogger
+        from core.phantom_registry import PhantomRegistry
 
         # Initialize components
         detector = PhantomDetector()

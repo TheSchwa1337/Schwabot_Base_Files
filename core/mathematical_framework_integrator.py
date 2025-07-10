@@ -26,8 +26,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Union
 
 try:
-    import numpy as np
     import cupy as cp
+    import numpy as np
     USING_CUDA = True
     xp = cp
     _backend = 'cupy (GPU)'

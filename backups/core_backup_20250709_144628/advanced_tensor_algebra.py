@@ -50,11 +50,7 @@ from ..system.dual_state_router import get_dual_state_router
                         DUAL_STATE_AVAILABLE = False
                         get_dual_state_router = None
 
-from ..utils.cuda_helper import (
-    safe_cuda_operation,
-    safe_matrix_multiply,
-    safe_tensor_contraction,
-)
+from ..utils.cuda_helper import safe_cuda_operation, safe_matrix_multiply, safe_tensor_contraction
 
                         xp = get_backend()
 

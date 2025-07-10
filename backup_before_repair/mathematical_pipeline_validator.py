@@ -1,6 +1,3 @@
-from unified_math_system import unified_math
-from .unified_math_system import unified_math
-
 import hashlib
 import json
 import logging
@@ -12,12 +9,14 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import psutil
 from advanced_tensor_algebra import UnifiedTensorAlgebra
+from unified_math_system import unified_math
 from unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from zpe_core import ZPECore
 
 from utils.safe_print import debug, error, info, safe_print, success, warn
 
 from .advanced_tensor_algebra import UnifiedTensorAlgebra
+from .unified_math_system import unified_math
 from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from .zpe_core import ZPECore
 

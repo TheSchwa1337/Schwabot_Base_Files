@@ -1,9 +1,10 @@
-import numpy as np
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Tuple
 import logging
-import psutil
 import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
+import psutil
 
 #!/usr/bin/env python3
 """

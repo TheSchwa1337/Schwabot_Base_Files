@@ -7,12 +7,12 @@ This script fixes only the most critical core files that are essential for the S
 Focuses on the main trading components and ignores backup files, test files, and temporary scripts.
 """
 
-import os
-import re
 import ast
 import logging
+import os
+import re
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

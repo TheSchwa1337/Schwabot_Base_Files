@@ -2,6 +2,7 @@
 import ast
 import sys
 
+
 def test_file_syntax(filename):
     try:
         with open(filename, 'r') as f:

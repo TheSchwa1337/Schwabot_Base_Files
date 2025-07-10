@@ -23,40 +23,55 @@ import asyncio
 import json
 import logging
 import os
+import random
 import sys
 import time
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
-import random
+from typing import Any, Dict, List, Optional
 
 # Add core directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'core'))
 
 # Import all core modules
 try:
-    from core.gpt_command_layer import (
-        GPTCommandLayer, AIAgentType, CommandDomain, CommandPriority,
-        AICommand, CommandResponse, ConsciousnessProfile
-    )
-    from core.prophet_connector import (
-        ProphetConnector, ProphetCurve, CurveType, compute_alpha_score,
-        analyze_curve_alignment
-    )
-    from core.memory_stack.ai_command_sequencer import (
-        AICommandSequencer, sequence_ai_command, update_command_sequence_result
-    )
-    from core.memory_stack.memory_key_allocator import (
-        MemoryKeyAllocator, allocate_memory_key, create_memory_link,
-        KeyType, find_similar_memory_keys
-    )
-    from core.memory_stack.execution_validator import (
-        ExecutionValidator, simulate_execution_cost, validate_drift,
-        validate_execution
-    )
-    from core.hash_registry import HashRegistry, register_hash_entry, update_hash_status
     from core.api_gateway import APIGateway
     from core.fault_bus import FaultBus
-    from core.utils.windows_cli_compatibility import safe_print, safe_format_error
+    from core.gpt_command_layer import (
+        AIAgentType,
+        AICommand,
+        CommandDomain,
+        CommandPriority,
+        CommandResponse,
+        ConsciousnessProfile,
+        GPTCommandLayer,
+    )
+    from core.hash_registry import HashRegistry, register_hash_entry, update_hash_status
+    from core.memory_stack.ai_command_sequencer import (
+        AICommandSequencer,
+        sequence_ai_command,
+        update_command_sequence_result,
+    )
+    from core.memory_stack.execution_validator import (
+        ExecutionValidator,
+        simulate_execution_cost,
+        validate_drift,
+        validate_execution,
+    )
+    from core.memory_stack.memory_key_allocator import (
+        KeyType,
+        MemoryKeyAllocator,
+        allocate_memory_key,
+        create_memory_link,
+        find_similar_memory_keys,
+    )
+    from core.prophet_connector import (
+        CurveType,
+        ProphetConnector,
+        ProphetCurve,
+        analyze_curve_alignment,
+        compute_alpha_score,
+    )
+    from core.utils.windows_cli_compatibility import safe_format_error, safe_print
     MODULES_AVAILABLE = True
 except ImportError as e:
     safe_print(f"⚠️ Some modules not available: {e}")

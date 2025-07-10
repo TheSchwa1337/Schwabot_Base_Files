@@ -1,5 +1,3 @@
-from core.unified_math_system import unified_math
-
 import logging
 import time
 from dataclasses import dataclass
@@ -7,6 +5,8 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import numpy as np
+
+from core.unified_math_system import unified_math
 
 #!/usr/bin/env python3
 

@@ -1,7 +1,8 @@
-import traceback
-from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 import sys
 import time
+import traceback
+
+from core.speed_lattice_visualizer import PanelType, SpeedLatticeLivePanelSystem
 
 #!/usr/bin/env python3
 """

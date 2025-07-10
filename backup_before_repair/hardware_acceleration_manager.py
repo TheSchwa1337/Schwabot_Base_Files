@@ -1,10 +1,10 @@
-import psutil
-
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
+import psutil
 
 from .zbe_core import ZBECore
 from .zpe_core import ZPECore

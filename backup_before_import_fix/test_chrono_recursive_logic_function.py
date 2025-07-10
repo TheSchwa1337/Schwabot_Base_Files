@@ -10,13 +10,13 @@ Comprehensive tests for the CRLF implementation including:
 - Integration scenarios
 """
 
-import unittest
-import numpy as np
-import time
 import logging
-from typing import List, Dict, Any
+import time
+import unittest
+from typing import Any, Dict, List
 
-from core.chrono_recursive_logic_function import ()
+import numpy as np
+
     ChronoRecursiveLogicFunction,
     CRLFState,
     CRLFResponse,
@@ -361,7 +361,7 @@ class TestChronoRecursiveLogicFunction(unittest.TestCase):
     def test_integration_with_zpe_zbe(self):
         """Test CRLF integration with ZPE-ZBE concepts."""
         # Create a scenario that simulates ZPE-ZBE integration
-        from core.zpe_zbe_core import ZPEVector, ZBEBalance, QuantumSyncStatus
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
 
         # Simulate ZPE-ZBE enhanced strategy vector
         zpe_enhanced_strategy = np.array([0.7, 0.3, 0.4, 0.8])  # Enhanced with quantum factors

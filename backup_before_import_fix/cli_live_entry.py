@@ -28,10 +28,7 @@ from typing import Any, Dict, List, Optional
 
 # Configuration and utilities
 from config.schwabot_config import load_config
-from core.algorithmic_portfolio_balancer import (
-    AlgorithmicPortfolioBalancer,
-    create_portfolio_balancer,
-)
+from core.algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer, create_portfolio_balancer
 from core.btc_usdc_trading_integration import BTCUSDCTradingIntegration, create_btc_usdc_integration
 
 # New trading components
@@ -43,10 +40,7 @@ from core.master_profit_coordination_system import (
     create_master_profit_coordination_system,
 )
 from core.order_book_manager import OrderBookManager, create_order_book_manager
-from core.real_time_execution_engine import (
-    RealTimeExecutionEngine,
-    create_real_time_execution_engine,
-)
+from core.real_time_execution_engine import RealTimeExecutionEngine, create_real_time_execution_engine
 from core.strategy_trigger_router import StrategyTriggerRouter, create_strategy_trigger_router
 from core.trading_strategy_executor import TradingStrategyExecutor, create_trading_strategy_executor
 

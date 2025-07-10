@@ -12,15 +12,17 @@ Demonstrates the most important mathematical improvements:
 """
 
 import logging
-import numpy as np
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
+import numpy as np
+
+from core.bitmap_hash_folding import BitmapHashFolding, FoldedHashResult, FoldingMode
 
 # Import the critical math systems
-from core.entropy_drift_engine import EntropyDriftEngine, DriftMode, DriftResult
-from core.orbital_energy_quantizer import OrbitalEnergyQuantizer, OrbitalState, OrbitalEnergyResult
-from core.bitmap_hash_folding import BitmapHashFolding, FoldingMode, FoldedHashResult
-from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode
+from core.entropy_drift_engine import DriftMode, DriftResult, EntropyDriftEngine
+from core.orbital_energy_quantizer import OrbitalEnergyQuantizer, OrbitalEnergyResult, OrbitalState
+from core.strategy_bit_mapper import ExpansionMode, StrategyBitMapper
 from core.symbolic_registry import SymbolicRegistry
 
 # Configure logging

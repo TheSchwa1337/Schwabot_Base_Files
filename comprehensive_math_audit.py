@@ -13,14 +13,14 @@ This script systematically audits the Schwabot codebase to identify:
 This audit is critical before implementing the configuration, caching, and orchestration systems.
 """
 
+import ast
+import json
+import logging
 import os
 import re
-import ast
-import logging
-from pathlib import Path
-from typing import Dict, List, Set, Any, Tuple
 from dataclasses import dataclass
-import json
+from pathlib import Path
+from typing import Any, Dict, List, Set, Tuple
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

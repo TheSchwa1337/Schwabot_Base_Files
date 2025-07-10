@@ -11,8 +11,9 @@ comprehensive mathematical strategy execution.
 
 import sys
 import time
-import numpy as np
 from pathlib import Path
+
+import numpy as np
 
 # Add project root to Python path
 sys.path.append(str(Path(__file__).parent))

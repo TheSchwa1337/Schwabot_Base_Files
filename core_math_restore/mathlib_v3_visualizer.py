@@ -1,17 +1,20 @@
-from core.mathlib_v3 import MathLibV3, Dual
-from matplotlib.animation import FuncAnimation
-import matplotlib.pyplot as plt
-import numpy as np
 from __future__ import annotations
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from typing import Any, Dict, List
+
 import json
 import logging
 import queue
 import threading
 import time
 import tkinter as tk
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Dict, List
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.animation import FuncAnimation
+
+from core.mathlib_v3 import Dual, MathLibV3
 
 # -*- coding: utf-8 -*-
 """

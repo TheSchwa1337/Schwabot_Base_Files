@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict
-import time
 import asyncio
+import logging
+import time
+from typing import Any, Dict
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
-from .base_handler import BaseAPIHandler
 
+from .base_handler import BaseAPIHandler
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

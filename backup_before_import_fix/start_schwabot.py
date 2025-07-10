@@ -6,11 +6,11 @@ Quick Start Script for Schwabot Auto Trading System.
 Easy way to start the complete auto trading system with configuration options.
 """
 
-import asyncio
 import argparse
+import asyncio
 import logging
-import sys
 import os
+import sys
 from typing import Optional
 
 # Add the project root to Python path

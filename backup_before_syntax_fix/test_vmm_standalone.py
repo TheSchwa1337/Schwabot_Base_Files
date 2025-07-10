@@ -1,11 +1,9 @@
-import traceback
-import traceback
+import sys
+import time
 import traceback
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Callable
-import sys
-import time
+from typing import Callable, Dict, List, Optional
 
 #!/usr/bin/env python3
 """

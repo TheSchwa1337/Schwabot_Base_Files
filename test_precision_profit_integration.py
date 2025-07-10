@@ -1,12 +1,13 @@
-import numpy as np
-from decimal import Decimal, ROUND_DOWN
 import hashlib
-from enhanced_master_cycle_profit_engine import create_profit_optimized_engine
-from profit.precision_profit_engine import PrecisionLevel
-from typing import Dict, Any
 import logging
 import sys
 import time
+from decimal import ROUND_DOWN, Decimal
+from typing import Any, Dict
+
+import numpy as np
+from enhanced_master_cycle_profit_engine import create_profit_optimized_engine
+from profit.precision_profit_engine import PrecisionLevel
 
 #!/usr/bin/env python3
 """Precision Profit Integration Test - Multi-Decimal BTC Profit Extraction."

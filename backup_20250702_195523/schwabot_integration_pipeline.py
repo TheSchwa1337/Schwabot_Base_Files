@@ -1,17 +1,19 @@
-from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework
-from core.brain_trading_engine import BrainTradingEngine
-from symbolic_profit_router import SymbolicProfitRouter
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import hashlib
 import json
 import logging
 import random
 import time
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
+
+from core.brain_trading_engine import BrainTradingEngine
+from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework
+from symbolic_profit_router import SymbolicProfitRouter
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

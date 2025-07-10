@@ -15,15 +15,15 @@ across Windows, macOS, and Linux platforms. It validates:
 8. CLI interface readiness
 """
 
-import os
-import sys
-import subprocess
 import importlib
-import platform
 import json
+import os
+import platform
+import subprocess
+import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add project root to path
 project_root = Path(__file__).parent

@@ -12,30 +12,29 @@ Complete integration of all Schwabot components including:
 - API server
 """
 
-import asyncio
 import argparse
+import asyncio
 import logging
 import signal
 import sys
 import time
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent / "core"))
 
-from core import ()
     create_clean_trading_system,
     get_system_status,
     PORTFOLIO_BALANCER_AVAILABLE,
     BTC_USDC_INTEGRATION_AVAILABLE,
 )
-from core.phantom_detector import PhantomDetector
-from core.phantom_registry import PhantomRegistry
-from core.phantom_logger import PhantomLogger
 from core.phantom_band_navigator import PhantomBandNavigator
-from utils.safe_print import safe_print, info, warn, error, success
+from core.phantom_detector import PhantomDetector
+from core.phantom_logger import PhantomLogger
+from core.phantom_registry import PhantomRegistry
 from utils.logging_setup import setup_logging
+from utils.safe_print import error, info, safe_print, success, warn
 
 # Global variables for graceful shutdown
 shutdown_event = asyncio.Event()

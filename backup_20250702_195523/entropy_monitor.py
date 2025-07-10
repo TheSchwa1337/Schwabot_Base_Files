@@ -1,6 +1,7 @@
-import numpy as np
 from datetime import datetime
 from typing import Dict, List, Optional
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

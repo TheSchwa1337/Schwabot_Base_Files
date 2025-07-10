@@ -10,13 +10,13 @@ Dynamic registry of symbolic mathematical operators with CLI interface:
 • Integration with symbolic math interface
 """
 
-import logging
-import json
 import argparse
+import json
+import logging
 import sys
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
 

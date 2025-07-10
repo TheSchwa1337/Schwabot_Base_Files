@@ -1,8 +1,9 @@
-import numpy as np
+import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Any, Optional
-import time
+from typing import Any, Dict, Optional
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

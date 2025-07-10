@@ -1,11 +1,13 @@
-import numpy as np
-import traceback
-from core.dualistic_thought_engines import DualisticThoughtEngines, DualisticState
-from typing import Dict, Any
 import os
 import random
 import sys
 import time
+import traceback
+from typing import Any, Dict
+
+import numpy as np
+
+from core.dualistic_thought_engines import DualisticState, DualisticThoughtEngines
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

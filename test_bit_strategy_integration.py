@@ -12,15 +12,17 @@ Comprehensive test demonstrating the integration of:
 """
 
 import logging
-import numpy as np
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
+import numpy as np
+
+from core.entropy_decay_system import DecayMode, EntropyDecaySystem
 
 # Import the new systems
-from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode, BitStrategyResult
-from core.entropy_decay_system import EntropyDecaySystem, DecayMode
+from core.strategy_bit_mapper import BitStrategyResult, ExpansionMode, StrategyBitMapper
 from core.symbolic_registry import SymbolicRegistry
-from core.vault_orbital_bridge import VaultOrbitalBridge, VaultState, OrbitalState
+from core.vault_orbital_bridge import OrbitalState, VaultOrbitalBridge, VaultState
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

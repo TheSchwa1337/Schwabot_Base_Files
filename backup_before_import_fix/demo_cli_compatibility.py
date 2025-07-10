@@ -1,12 +1,11 @@
-from core.math_core import MathCore
-from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
-from core.constants import FERRIS_PRIMARY_CYCLE
-from core.constants import PSI_INFINITY
-from dual_unicore_handler import DualUnicoreHandler
 import os
 import platform
 import sys
+
+from core.constants import FERRIS_PRIMARY_CYCLE, PSI_INFINITY
+from core.math_core import MathCore
+from core.unified_math_system import unified_math
+from dual_unicore_handler import DualUnicoreHandler
 
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-

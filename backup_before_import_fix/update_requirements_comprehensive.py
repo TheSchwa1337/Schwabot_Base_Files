@@ -10,15 +10,13 @@ Usage:
     python update_requirements_comprehensive.py
 """
 
+# Configure logging
+import logging
 import os
 import re
 import sys
 from pathlib import Path
 from typing import Dict, List, Set
-
-# Configure logging
-import logging
-import sys
 
 # Fix Unicode encoding issues on Windows
 if sys.platform == 'win32':

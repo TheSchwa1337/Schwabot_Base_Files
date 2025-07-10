@@ -9,16 +9,18 @@ and integration with existing mathematical framework.
 """
 
 import asyncio
+import logging
 import os
 import sys
 import threading
-import pandas as pd
 from pathlib import Path
-import logging
+from typing import Any, Dict
+
+import pandas as pd
 import requests
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, jsonify
-from typing import Dict, Any
+
+from flask import Flask, jsonify, render_template, request
 
 # Add project root to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,14 +28,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from utils.market_data_utils import create_market_snapshot, pull_news_headlines
 from utils.price_bridge import get_secure_price
 from utils.secure_config_manager import SecureConfigManager, get_secure_api_key
-from core.lantern_core_integration import ()
+
     start_lantern_core,
     stop_lantern_core,
     get_lantern_core_status,
     lantern_core,
 )
-from core.trading_engine_integration import SchwabotTradingEngine, TradingMode
 from core.quad_bit_strategy_array import QuadBitStrategyArray, create_quad_bit_strategy_array
+from core.trading_engine_integration import SchwabotTradingEngine, TradingMode
 
 # Initialize Flask app
 app = Flask(__name__)

@@ -1,6 +1,8 @@
-from sklearn.decomposition import PCA
-from core.unified_math_system import unified_math
 from __future__ import annotations
+
+from sklearn.decomposition import PCA
+
+from core.unified_math_system import unified_math
 
 # -*- coding: utf - 8 -*-
 """Vector memory with rolling PCA analysis.""""""

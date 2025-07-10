@@ -5,10 +5,10 @@ Test script for CRLF integration into clean trading pipeline.
 
 import asyncio
 import logging
-import numpy as np
-from typing import Dict, Any
+from typing import Any, Dict
 
-from core.clean_trading_pipeline import ()
+import numpy as np
+
     CleanTradingPipeline, MarketData, TradingAction, StrategyBranch
 )
 from core.chrono_recursive_logic_function import CRLFTriggerState

@@ -8,15 +8,17 @@ to the web dashboard, showing live tick cycles, profit tiers,
 and trading decisions.
 """
 
+import json
+import logging
 import os
 import sys
 import time
-import json
-import logging
 from datetime import datetime
-from typing import Dict, List, Optional, Any
-from flask import Flask, render_template, jsonify, request
+from typing import Any, Dict, List, Optional
+
 from flask_socketio import SocketIO, emit
+
+from flask import Flask, jsonify, render_template, request
 
 # Add current directory to path
 sys.path.append(os.path.dirname(__file__))

@@ -24,8 +24,8 @@ import time
 from typing import Any, Dict, Optional
 
 try:
-    import numpy as np
     import cupy as cp
+    import numpy as np
     USING_CUDA = True
     xp = cp
     _backend = 'cupy (GPU)'

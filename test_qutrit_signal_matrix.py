@@ -11,16 +11,16 @@ Comprehensive testing of Layer 3: Qutrit/Tri-State Math Wiring
 - Fallback vector morphing
 """
 
-import numpy as np
-import time
-import sys
 import logging
+import sys
+import time
+
+import numpy as np
 
 # Add project root to path
 sys.path.append('.')
 
 try:
-    from core.qutrit_signal_matrix import ()
         QutritSignalMatrix, 
         QutritState, 
         QutritMatrixResult,

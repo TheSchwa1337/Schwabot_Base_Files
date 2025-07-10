@@ -1,15 +1,15 @@
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 from core.basket_vector_linker import BasketVectorLinker
 from core.glyph_phase_resolver import GlyphPhaseResolver
 from core.profit_memory_echo import ProfitMemoryEcho
 from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
 from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 from core.warp_sync_core import WarpSyncCore
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-from typing import Tuple
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

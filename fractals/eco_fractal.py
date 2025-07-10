@@ -1,6 +1,8 @@
-from fractals.fractal_base import FractalBase
-import numpy as np
 from typing import Callable
+
+import numpy as np
+
+from fractals.fractal_base import FractalBase
 
 
 class EcoFractal(FractalBase):

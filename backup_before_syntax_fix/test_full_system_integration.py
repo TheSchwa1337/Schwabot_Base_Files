@@ -1,16 +1,11 @@
-from core.api_bridge import APIBridge
-from core.api_bridge import APIBridge, fetch_price_data, fetch_order_book_data
-from core.api_bridge import fetch_price_data
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.hash_relay_system import hash_relay_system
-from core.hash_relay_system import hash_relay_system
-from core.hash_relay_system import hash_relay_system
-from typing import Dict, Any
 import asyncio
 import logging
 import time
+from typing import Any, Dict
+
+from core.api_bridge import APIBridge, fetch_order_book_data, fetch_price_data
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.hash_relay_system import hash_relay_system
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

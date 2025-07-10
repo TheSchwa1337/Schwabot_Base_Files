@@ -1,7 +1,8 @@
 import os
-import sys
 import subprocess
+import sys
 import traceback
+
 import chardet
 
 

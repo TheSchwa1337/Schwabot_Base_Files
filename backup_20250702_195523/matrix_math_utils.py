@@ -1,6 +1,14 @@
-import numpy as npMatrix Math Utilities for Schwabot ====================================
 from __future__ import annotations
-from typing import Dict, Any
+
+from typing import Any, Dict
+
+import ====================================
+import for
+import Math
+import numpy as npMatrix
+import Utilities
+
+import Schwabot
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

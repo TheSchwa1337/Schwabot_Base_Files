@@ -1,8 +1,8 @@
-from dual_unicore_handler import DualUnicoreHandler
-from pathlib import Path
 import os
 import re
+from pathlib import Path
 
+from dual_unicore_handler import DualUnicoreHandler
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

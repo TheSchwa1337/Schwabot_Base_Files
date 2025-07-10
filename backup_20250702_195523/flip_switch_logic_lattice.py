@@ -1,7 +1,7 @@
-import numpy as np
-from typing import Any, Callable, Dict, List, Optional
-from typing import Callable
 import time
+from typing import Any, Callable, Dict, List, Optional
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

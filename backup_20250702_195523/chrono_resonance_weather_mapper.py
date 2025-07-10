@@ -1,20 +1,20 @@
-from scipy import signal
-from scipy.fft import fft, fftfreq
+import asyncio
+import json
+import logging
 import math
-import numpy as np
+import os
+import random
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from typing import Tuple
-import asyncio
-import json
-import logging
-import os
-import random
+
+import numpy as np
 import requests
-import time
+from scipy import signal
+from scipy.fft import fft, fftfreq
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

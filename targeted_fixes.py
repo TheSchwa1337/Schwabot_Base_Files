@@ -7,9 +7,10 @@ This script addresses the specific critical issues found in the quality check.
 """
 
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
+
 
 def fix_core_init():
     """Fix the core/__init__.py file."""

@@ -1,7 +1,8 @@
-from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 import json
 import sys
 import time
+
+from core.speed_lattice_visualizer import PanelType, SpeedLatticeLivePanelSystem
 
 #!/usr/bin/env python3
 """

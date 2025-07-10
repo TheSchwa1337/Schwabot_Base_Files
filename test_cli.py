@@ -1,17 +1,18 @@
-import schwabot_immune_cli
-import schwabot_qsc_cli
-import schwabot_tensor_cli
-from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
-from schwabot.cli import main
-from schwabot.cli import main
-from schwabot.lantern_core import get_lantern_eye, LanternMainLoop
-from schwabot.session_context import create_trading_session, log_trading_activity
-from schwabot.update import do_update
-from schwabot.vortex_security import get_vortex_security
-from io import StringIO
 import argparse
 import os
 import sys
+from io import StringIO
+
+import schwabot_qsc_cli
+import schwabot_tensor_cli
+
+import schwabot_immune_cli
+from schwabot.alpha_encryption import alpha_encrypt_data, analyze_alpha_security, get_alpha_encryption
+from schwabot.cli import main
+from schwabot.lantern_core import LanternMainLoop, get_lantern_eye
+from schwabot.session_context import create_trading_session, log_trading_activity
+from schwabot.update import do_update
+from schwabot.vortex_security import get_vortex_security
 
 #!/usr/bin/env python3
 """Test script to verify CLI functionality."""

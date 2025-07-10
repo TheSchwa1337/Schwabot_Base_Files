@@ -1,11 +1,8 @@
-import traceback
-import traceback
-import traceback
-import VMM_Schwabot
-import VMM_Schwabot
-import VMM_Schwabot
 import os
 import sys
+import traceback
+
+import VMM_Schwabot
 
 #!/usr/bin/env python3
 """

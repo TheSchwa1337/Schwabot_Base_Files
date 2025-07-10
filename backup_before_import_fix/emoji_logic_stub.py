@@ -1,5 +1,5 @@
-from typing import Dict, Any, Callable
 import hashlib
+from typing import Any, Callable, Dict
 
 # -*- coding: utf-8 -*-
 """"""

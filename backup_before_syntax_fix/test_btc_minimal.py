@@ -1,16 +1,16 @@
+import collections
+import os
+import sys
+import time
+
 import numpy as np
 from drift_shells import DriftShells
 from entropic_vectorizer import EntropicVectorizer
 from feeds.chain_ws import BlockEvent
 from feeds.stratum_sniffer import ShareEvent
 from gpu_accelerator import GPUAccelerator
-from integrators.autonomic_strategy_reflex_layer import ()
 from memory_backlog import MemoryBacklog
 from triplet_harmony import TripletHarmony
-import collections
-import os
-import sys
-import time
 
 #!/usr/bin/env python3
 """

@@ -1,8 +1,8 @@
-from pathlib import Path
-from typing import Dict, Optional
 import re
 import subprocess
 import sys
+from pathlib import Path
+from typing import Dict, Optional
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

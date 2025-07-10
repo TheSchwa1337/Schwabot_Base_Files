@@ -6,20 +6,16 @@ Comprehensive Test Suite for Enhanced Mathematical Core
 Tests all mathematical functions, performance, and integration capabilities.
 """
 
+import logging
+import time
 import unittest
+from typing import Any, Dict
+
 import numpy as np
 import pandas as pd
-import time
-import logging
-from typing import Dict, Any
 
 # Import the enhanced mathematical core
-from core.enhanced_mathematical_core import (
-    EnhancedMathematicalCore,
-    MathResult,
-    TradingMetrics,
-    MathMode
-)
+from core.enhanced_mathematical_core import EnhancedMathematicalCore, MathMode, MathResult, TradingMetrics
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

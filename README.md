@@ -1,530 +1,349 @@
-# 🚀 Schwabot Auto Trading System
+# Schwabot Trading System - Fully Operational Trading Platform
 
-A sophisticated, quantum-enhanced auto trading system that combines advanced mathematical analysis, real-time market data processing, and intelligent risk management for cryptocurrency trading.
+A comprehensive, production-ready trading system that provides both CLI and API access for cryptocurrency trading with advanced mathematical models, real-time market data, and extensive integration capabilities.
 
-## 🌟 Features
+## 🚀 Features
 
-### 🔬 **Advanced Mathematical Foundation**
-- **Quantum Analysis**: Zero-Point Energy (ZPE) and Zero-Background Energy (ZBE) calculations
-- **Tensor Algebra**: Multi-dimensional market analysis and pattern recognition
-- **2-Gram Implementations**: Advanced linguistic and pattern analysis for market prediction
-- **GPU Shader Evaluations**: High-performance mathematical computations
+### Core Trading System
+- **Real-time trading** with multiple exchanges (Binance, Coinbase Pro, Kraken, etc.)
+- **Advanced mathematical models** including entropy-based algorithms
+- **Portfolio management** with real-time tracking and P&L analysis
+- **Risk management** with configurable limits and alerts
+- **Hot reloading** of subsystems for live updates
 
-### 📊 **Real-Time Market Analysis**
-- **Live Market Data Streaming**: WebSocket connections to multiple exchanges
-- **Order Book Analysis**: Detection of buy/sell walls, liquidity analysis, optimal entry/exit points
-- **Multi-Exchange Support**: Binance, Coinbase, Kraken, KuCoin, and more
-- **Advanced Technical Indicators**: Custom implementations with quantum enhancements
+### API & Integration
+- **REST API server** with FastAPI for programmatic access
+- **WebSocket support** for real-time data streaming
+- **Multiple integrations**: ngrok, Glassnode, Whale Watcher, Telegram, Discord
+- **API key management** with secure storage and rotation
+- **Comprehensive monitoring** with health checks and metrics
 
-### 🤖 **Intelligent Trading Execution**
-- **Smart Order Routing**: Multi-exchange order execution with slippage protection
-- **Advanced Risk Management**: Kelly Criterion position sizing, dynamic stop-loss/take-profit
-- **Portfolio-Level Risk Monitoring**: Real-time risk assessment and position management
-- **Multiple Execution Strategies**: Market, limit, iceberg, and smart order types
+### Mathematical Framework
+- **Tensor algebra** for advanced calculations
+- **Quantum mathematical bridge** for quantum-inspired algorithms
+- **Entropy-based trading** with drift detection
+- **Symbolic mathematics** with SymPy integration
+- **Machine learning** models with TensorFlow and PyTorch
 
-### 🧠 **AI-Powered Decision Making**
-- **Real-Time Signal Generation**: Continuous market monitoring and opportunity detection
-- **Multi-Strategy Integration**: Combines quantum, tensor, and traditional analysis
-- **Confidence-Based Execution**: Signal strength and confidence scoring
-- **Adaptive Learning**: System learns from market conditions and performance
+## 📋 Requirements
 
-### 🛡️ **Comprehensive Risk Management**
-- **Dynamic Position Sizing**: Kelly Criterion and multiple sizing models
-- **Portfolio Risk Limits**: Daily loss limits, maximum drawdown protection
-- **Real-Time Risk Monitoring**: Continuous portfolio risk assessment
-- **Emergency Stop Mechanisms**: Automatic risk reduction and position closure
+- Python 3.8+
+- 8GB+ RAM (16GB+ recommended)
+- Stable internet connection
+- API keys for desired exchanges
 
-## 🏗️ System Architecture
+## 🛠️ Installation
 
-```
-Schwabot Auto Trading System
-├── 📡 Real-Time Market Data Pipeline
-│   ├── WebSocket Connections
-│   ├── Multi-Exchange Integration
-│   └── Data Processing & Normalization
-├── 🔬 Quantum Mathematical Core
-│   ├── ZPE-ZBE Analysis
-│   ├── Tensor Algebra Engine
-│   └── 2-Gram Pattern Recognition
-├── 📊 Advanced Analysis Engine
-│   ├── Order Book Analyzer
-│   ├── Technical Indicators
-│   └── Market Sentiment Analysis
-├── 🤖 Smart Execution Engine
-│   ├── Order Router
-│   ├── Slippage Protection
-│   └── Multi-Strategy Execution
-├── 🛡️ Risk Management System
-│   ├── Position Sizing
-│   ├── Stop-Loss/Take-Profit
-│   └── Portfolio Risk Monitoring
-└── 📈 Performance Tracking
-    ├── Real-Time Metrics
-    ├── Performance Analytics
-    └── System Health Monitoring
-```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd AOI_Base_Files_Schwabot
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Setup configuration**
+   ```bash
+   cp config/production.env.template config/production.env
+   # Edit config/production.env with your settings
+   ```
+
+4. **Create necessary directories**
+   ```bash
+   python main.py --help
+   # This will create required directories automatically
+   ```
 
 ## 🚀 Quick Start
 
-### 1. Installation
-
+### 1. Basic System Startup
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd AOI_Base_Files_Schwabot
+# Start the system
+python main.py start
 
-# Install dependencies
-pip install -r requirements.txt
+# Start with API server
+python main.py start --api
 
-# Create necessary directories
-mkdir -p data/market_data data/trades data/performance logs backups
+# Check system status
+python main.py status
 ```
 
-### 2. Configuration
-
-Create a configuration file `config/schwabot_config.json`:
-
-```json
-{
-  "system": {
-    "name": "Schwabot Auto Trading System",
-    "version": "1.0.0",
-    "mode": "paper_trading",
-    "log_level": "INFO"
-  },
-  "exchanges": {
-    "primary": ["binance", "coinbase"],
-    "paper_trading": true
-  },
-  "trading": {
-    "symbols": ["BTC/USDT", "ETH/USDT"],
-    "base_capital": 10000.0,
-    "max_positions": 5
-  },
-  "risk_management": {
-    "max_daily_loss": 0.05,
-    "max_drawdown": 0.15,
-    "max_position_size": 0.1
-  }
-}
-```
-
-### 3. Start the System
-
-#### Option A: Quick Start (Recommended)
+### 2. API Key Management
 ```bash
-# Start with default settings (paper trading)
-python start_schwot.py
+# Add API key for Binance
+python main.py api-keys add --exchange binance --key YOUR_API_KEY --secret YOUR_SECRET
 
-# Start with custom settings
-python start_schwabot.py --mode paper --symbols BTC/USDT ETH/USDT --capital 50000
+# List configured exchanges
+python main.py api-keys list
+
+# Remove API key
+python main.py api-keys remove --exchange binance
 ```
 
-#### Option B: Direct Execution
+### 3. Trading Operations
 ```bash
-# Start the main system
-python schwabot_auto_trading_system.py
+# Place a market order
+python main.py order --symbol BTC/USDT --side buy --type market --quantity 0.01
+
+# Place a limit order
+python main.py order --symbol BTC/USDT --side sell --type limit --quantity 0.01 --price 50000
+
+# Check portfolio
+python main.py portfolio
 ```
 
-### 4. Command Line Options
-
+### 4. System Management
 ```bash
-# Paper trading with specific symbols
-python start_schwabot.py --mode paper --symbols BTC/USDT ETH/USDT
+# Hot-reload subsystems
+python main.py reload
 
-# Live trading (with safety confirmation)
-python start_schwabot.py --mode live --capital 10000
+# List all subsystems
+python main.py subsystems
 
-# Conservative risk profile
-python start_schwabot.py --risk-level conservative
-
-# Debug logging
-python start_schwabot.py --log-level DEBUG
-
-# Dry run mode (no actual trades)
-python start_schwabot.py --dry-run
+# Stop the system
+python main.py stop
 ```
 
-## 📊 System Components
+## 🌐 API Usage
 
-### Core Modules
+### Starting the API Server
+```bash
+python main.py start --api --api-host 0.0.0.0 --api-port 8000
+```
 
-#### 1. **Real-Time Market Data** (`core/real_time_market_data.py`)
-- WebSocket connections to multiple exchanges
-- Real-time ticker, order book, and trade data
-- Data normalization and processing
-- Market state management
+### API Endpoints
 
-#### 2. **Order Book Analyzer** (`core/order_book_analyzer.py`)
-- Buy/sell wall detection
-- Liquidity analysis
-- Optimal entry/exit point calculation
-- Market depth analysis
+#### System Status
+```bash
+curl http://localhost:8000/status
+```
 
-#### 3. **Advanced Risk Manager** (`core/advanced_risk_manager.py`)
-- Kelly Criterion position sizing
-- Dynamic stop-loss/take-profit calculation
-- Portfolio-level risk monitoring
-- Multiple position sizing models
+#### Place Order
+```bash
+curl -X POST http://localhost:8000/order \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbol": "BTC/USDT",
+    "side": "buy",
+    "order_type": "market",
+    "quantity": 0.01
+  }'
+```
 
-#### 4. **Smart Order Executor** (`core/smart_order_executor.py`)
-- Multi-exchange order routing
-- Slippage protection
-- Multiple execution strategies
-- Order status tracking
+#### Portfolio Summary
+```bash
+curl http://localhost:8000/portfolio
+```
 
-#### 5. **Real-Time Execution Engine** (`core/real_time_execution_engine.py`)
-- Continuous market monitoring
-- Signal generation and validation
-- Strategy execution
-- Performance tracking
+#### Subsystems List
+```bash
+curl http://localhost:8000/subsystems
+```
 
-### Quantum Mathematical Components
-
-#### 1. **ZPE-ZBE Core** (`core/zpe_zbe_core.py`)
-- Zero-Point Energy calculations
-- Zero-Background Energy analysis
-- Quantum market correlations
-- Energy-based signal generation
-
-#### 2. **Advanced Tensor Algebra** (`core/advanced_tensor_algebra.py`)
-- Multi-dimensional market analysis
-- Tensor-based pattern recognition
-- Market correlation analysis
-- High-dimensional data processing
-
-#### 3. **2-Gram Implementations** (`core/2gram_implementations.py`)
-- Linguistic market analysis
-- Pattern sequence recognition
-- Market sentiment analysis
-- Predictive modeling
+### Interactive API Documentation
+Once the API server is running, visit:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
 ## 🔧 Configuration
 
-### System Configuration
+### Main Configuration (`config/schwabot_config.yaml`)
+```yaml
+# Trading configuration
+trading:
+  default_exchange: "binance"
+  trading_pairs: ["BTC/USDT", "ETH/USDT"]
+  max_order_size: 1000
+  risk_limit: 0.02
 
-The system can be configured through:
+# Mathematical framework
+math:
+  entropy_threshold: 0.7
+  tensor_precision: "float64"
+  quantum_enabled: true
 
-1. **Configuration File**: `config/schwabot_config.json`
-2. **Command Line Arguments**: Via `start_schwabot.py`
-3. **Environment Variables**: For sensitive data like API keys
-
-### Key Configuration Options
-
-#### Trading Parameters
-```json
-{
-  "trading": {
-    "symbols": ["BTC/USDT", "ETH/USDT"],
-    "base_capital": 10000.0,
-    "max_positions": 5,
-    "position_sizing": "kelly"
-  }
-}
+# API server
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_enabled: true
 ```
 
-#### Risk Management
-```json
-{
-  "risk_management": {
-    "max_daily_loss": 0.05,
-    "max_drawdown": 0.15,
-    "max_position_size": 0.1,
-    "stop_loss_atr_multiplier": 2.0,
-    "take_profit_risk_reward": 2.0
-  }
-}
+### Integration Configuration (`config/integrations.yaml`)
+```yaml
+# Ngrok tunnel
+ngrok:
+  enabled: true
+  authtoken: "your_ngrok_token"
+  port: 8000
+
+# Glassnode analytics
+glassnode:
+  enabled: true
+  api_key: "your_glassnode_key"
+
+# Whale Watcher
+whale_watcher:
+  enabled: true
+  api_key: "your_whale_watcher_key"
 ```
 
-#### Analysis Settings
-```json
-{
-  "analysis": {
-    "enable_quantum": true,
-    "enable_tensor": true,
-    "enable_zpe_zbe": true,
-    "enable_order_book": true,
-    "enable_technical": true
-  }
-}
+## 🔌 Integrations
+
+### Available Integrations
+
+1. **Ngrok** - Expose API server publicly
+2. **Glassnode** - On-chain analytics and metrics
+3. **Whale Watcher** - Large transaction monitoring
+4. **Telegram** - Notifications and alerts
+5. **Discord** - Webhook notifications
+6. **Email** - SMTP notifications
+7. **TradingView** - Alert webhooks
+8. **CoinGecko** - Market data (free)
+9. **Multiple Exchanges** - Binance, Coinbase Pro, Kraken, FTX
+
+### Setting Up Integrations
+```bash
+# Setup all integrations
+python main.py integrations setup
+
+# Check integration status
+python main.py integrations status
 ```
 
-## 📈 Performance Monitoring
+## 📊 Monitoring & Logging
 
-### Real-Time Metrics
+### Log Files
+- `logs/schwabot_system.log` - Main system log
+- `logs/schwabot_cli.log` - CLI operations log
+- `logs/trading.log` - Trading operations log
 
-The system provides comprehensive performance monitoring:
+### Health Monitoring
+```bash
+# Check system health
+curl http://localhost:8000/health
 
-- **Signal Generation**: Total signals, success rate, confidence levels
-- **Trade Execution**: Execution time, slippage, success rate
-- **Risk Metrics**: Portfolio risk, drawdown, position exposure
-- **System Health**: Component status, error rates, uptime
-
-### Performance Dashboard
-
-Access real-time performance data:
-
-```python
-# Get system performance summary
-performance = system.execution_engine.get_performance_summary()
-print(f"Win Rate: {performance['win_rate']:.2%}")
-print(f"Total P&L: ${performance['total_pnl']:.2f}")
-print(f"Sharpe Ratio: {performance['sharpe_ratio']:.2f}")
+# Monitor in real-time
+tail -f logs/schwabot_system.log
 ```
 
-## 🛡️ Risk Management
+### Metrics
+The system exposes Prometheus metrics at `/metrics` when monitoring is enabled.
 
-### Built-in Safety Features
+## 🔒 Security
 
-1. **Paper Trading Mode**: Test strategies without real money
-2. **Position Limits**: Maximum concurrent positions
-3. **Daily Loss Limits**: Automatic stop on daily losses
-4. **Drawdown Protection**: Stop trading on excessive drawdown
-5. **Emergency Stop**: Immediate position closure on critical issues
-
-### Risk Levels
-
-- **Conservative**: 2% daily loss, 10% max drawdown, 5% max position
-- **Moderate**: 5% daily loss, 15% max drawdown, 10% max position
-- **Aggressive**: 10% daily loss, 25% max drawdown, 20% max position
-
-## 🔬 Mathematical Foundation
-
-### Quantum Analysis
-
-The system incorporates advanced quantum mathematical concepts:
-
-- **Zero-Point Energy (ZPE)**: Quantum vacuum fluctuations in market data
-- **Zero-Background Energy (ZBE)**: Background energy state analysis
-- **Quantum Entanglement**: Market correlation analysis
-- **Quantum Coherence**: Market stability metrics
-
-### Tensor Analysis
-
-Multi-dimensional market analysis using tensor algebra:
-
-- **Tensor Rank**: Market complexity measurement
-- **Tensor Norm**: Market strength indicators
-- **Multi-dimensional Patterns**: Complex market pattern recognition
-- **Correlation Analysis**: Cross-asset and cross-timeframe analysis
-
-### 2-Gram Analysis
-
-Advanced pattern recognition:
-
-- **Linguistic Analysis**: Market data as language patterns
-- **Sequence Recognition**: Pattern sequence identification
-- **Predictive Modeling**: Future pattern prediction
-- **Sentiment Analysis**: Market sentiment quantification
-
-## 🚨 Safety and Compliance
-
-### Important Warnings
-
-⚠️ **LIVE TRADING RISKS**
-- This system can trade with real money
-- Always test thoroughly in paper trading mode
-- Monitor the system closely during operation
-- Set appropriate risk limits for your capital
+### API Key Security
+- API keys are encrypted and stored securely
+- Automatic key rotation support
+- Sandbox mode for testing
+- IP whitelisting capabilities
 
 ### Best Practices
+1. Use environment variables for sensitive data
+2. Enable 2FA where possible
+3. Use sandbox/testnet for development
+4. Regularly rotate API keys
+5. Monitor for suspicious activity
 
-1. **Start with Paper Trading**: Test all strategies before live trading
-2. **Set Conservative Limits**: Use conservative risk parameters initially
-3. **Monitor Performance**: Regularly check system performance and health
-4. **Keep Backups**: Regular system backups and configuration saves
-5. **Stay Informed**: Keep up with market conditions and system updates
+## 🧪 Testing
 
-## 🛠️ Development and Customization
-
-### Adding New Strategies
-
-```python
-# Create a custom signal generator
-class CustomSignalGenerator:
-    def generate_signals(self, market_data):
-        # Your custom logic here
-        return signals
-
-# Register with the execution engine
-execution_engine.register_signal_generator(CustomSignalGenerator())
+### Unit Tests
+```bash
+pytest test/unit/
 ```
 
-### Extending Risk Management
-
-```python
-# Create custom risk rules
-class CustomRiskRule:
-    def check_risk(self, position, portfolio):
-        # Your custom risk logic
-        return risk_assessment
-
-# Add to risk manager
-risk_manager.add_risk_rule(CustomRiskRule())
+### Integration Tests
+```bash
+pytest test/integration/
 ```
 
-### Custom Indicators
-
-```python
-# Create custom technical indicators
-class CustomIndicator:
-    def calculate(self, data):
-        # Your indicator logic
-        return indicator_value
-
-# Use in analysis
-analysis_engine.add_indicator(CustomIndicator())
+### End-to-End Tests
+```bash
+pytest test/e2e/
 ```
 
-## 📚 API Reference
+## 📈 Performance
 
-### Main Classes
+### Optimization Tips
+1. Use SSD storage for better I/O performance
+2. Enable GPU acceleration for mathematical calculations
+3. Configure appropriate cache settings
+4. Monitor memory usage and adjust limits
+5. Use connection pooling for database operations
 
-#### `SchwabotAutoTradingSystem`
-Main system class that orchestrates all components.
+### Resource Requirements
+- **Minimum**: 4GB RAM, 2 CPU cores
+- **Recommended**: 16GB RAM, 8 CPU cores
+- **Production**: 32GB+ RAM, 16+ CPU cores
 
-```python
-system = SchwabotAutoTradingSystem()
-await system.initialize()
-await system.start()
-```
-
-#### `RealTimeExecutionEngine`
-Core execution engine for continuous trading.
-
-```python
-engine = RealTimeExecutionEngine(config)
-await engine.initialize()
-await engine.start_monitoring()
-```
-
-#### `AdvancedRiskManager`
-Comprehensive risk management system.
-
-```python
-risk_manager = AdvancedRiskManager(config)
-position_size = risk_manager.calculate_position_size(signal, market_data)
-```
-
-### Key Methods
-
-#### Signal Generation
-```python
-# Generate trading signals
-signals = await execution_engine._generate_signals(market_state)
-
-# Validate signals
-is_valid = execution_engine._validate_signal(signal)
-
-# Execute signals
-result = await execution_engine._execute_signal(signal)
-```
-
-#### Risk Management
-```python
-# Calculate position size
-size = risk_manager.calculate_position_size(signal, market_data)
-
-# Calculate stop loss
-stop_loss = risk_manager.calculate_dynamic_stop_loss(price, data, size)
-
-# Assess portfolio risk
-risk = risk_manager.assess_portfolio_risk(positions, market_data)
-```
-
-## 🐛 Troubleshooting
+## 🚨 Troubleshooting
 
 ### Common Issues
 
-#### 1. Import Errors
-```bash
-# Ensure all dependencies are installed
-pip install -r requirements.txt
+1. **Import Errors**
+   ```bash
+   pip install -r requirements.txt --upgrade
+   ```
 
-# Check Python path
-export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-```
+2. **API Connection Issues**
+   ```bash
+   # Check API keys
+   python main.py api-keys list
+   
+   # Test connection
+   python main.py status
+   ```
 
-#### 2. Exchange Connection Issues
-```bash
-# Check API keys and permissions
-# Verify exchange connectivity
-# Check rate limits
-```
+3. **Memory Issues**
+   ```bash
+   # Check memory usage
+   python -c "import psutil; print(psutil.virtual_memory())"
+   ```
 
-#### 3. Performance Issues
-```bash
-# Monitor system resources
-# Check log files for errors
-# Verify configuration settings
-```
+4. **Port Conflicts**
+   ```bash
+   # Use different port
+   python main.py start --api --api-port 8001
+   ```
 
 ### Debug Mode
-
-Enable debug logging for detailed troubleshooting:
-
 ```bash
-python start_schwabot.py --log-level DEBUG
+python main.py start --log-level DEBUG
 ```
 
-### Log Files
+## 📚 Documentation
 
-Check log files for detailed information:
-
-- `logs/schwabot_*.log`: Main system logs
-- `logs/schwabot_startup_*.log`: Startup logs
-- `data/performance/`: Performance data
-- `data/trades/`: Trade execution data
+- [System Architecture](docs/architecture.md)
+- [API Reference](docs/api_reference.md)
+- [Trading Strategies](docs/trading_strategies.md)
+- [Mathematical Framework](docs/mathematical_framework.md)
+- [Deployment Guide](docs/PRODUCTION_DEPLOYMENT_GUIDE.md)
 
 ## 🤝 Contributing
 
-### Development Setup
-
 1. Fork the repository
 2. Create a feature branch
-3. Install development dependencies
-4. Run tests
+3. Make your changes
+4. Add tests
 5. Submit a pull request
-
-### Code Style
-
-- Follow PEP 8 guidelines
-- Use type hints
-- Add comprehensive docstrings
-- Write unit tests for new features
-
-### Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run specific test modules
-pytest tests/test_risk_manager.py
-
-# Run with coverage
-pytest --cov=core
-```
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## ⚠️ Disclaimer
 
-This software is for educational and research purposes. Trading cryptocurrencies involves substantial risk of loss. The authors are not responsible for any financial losses incurred through the use of this software.
-
-**Always test thoroughly in paper trading mode before using real funds.**
+This software is for educational and research purposes. Trading cryptocurrencies involves substantial risk of loss. Use at your own risk. The authors are not responsible for any financial losses.
 
 ## 🆘 Support
 
-For support and questions:
-
-1. Check the documentation
-2. Review log files for errors
-3. Open an issue on GitHub
-4. Join the community discussions
+- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-repo/discussions)
+- **Documentation**: [Wiki](https://github.com/your-repo/wiki)
 
 ---
 
-**🚀 Ready to start your quantum-enhanced trading journey? Run `python start_schwabot.py` and let Schwabot guide your trading decisions!**
+**Schwabot Trading System** - Advanced cryptocurrency trading with mathematical precision.

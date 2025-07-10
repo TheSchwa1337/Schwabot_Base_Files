@@ -1,9 +1,8 @@
+import time
+
 from core.api_bridge import APIBridge
 from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.dualistic_thought_engines import DualisticThoughtEngines
 from core.hash_relay_system import hash_relay_system
-from core.hash_relay_system import hash_relay_system
-import time
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

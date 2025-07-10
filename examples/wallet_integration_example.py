@@ -1,12 +1,13 @@
-from pathlib import Path
-from schwabot.core.ferris_rde import FerrisRDE
-from schwabot.core.portfolio_integration import PortfolioIntegration
-from schwabot.core.strategy_mapper import StrategyMapper
-from schwabot.core.wallet_tracker import WalletTracker, AssetType
 import logging
 import os
 import sys
 import time
+from pathlib import Path
+
+from schwabot.core.ferris_rde import FerrisRDE
+from schwabot.core.portfolio_integration import PortfolioIntegration
+from schwabot.core.strategy_mapper import StrategyMapper
+from schwabot.core.wallet_tracker import AssetType, WalletTracker
 
 #!/usr/bin/env python3
 """

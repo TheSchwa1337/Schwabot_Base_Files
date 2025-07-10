@@ -7,6 +7,7 @@ import sys
 import traceback
 from pathlib import Path
 
+
 def test_file_import(file_path):
     """Test if a file can be imported without errors."""
     try:

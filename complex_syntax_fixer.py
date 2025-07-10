@@ -1,7 +1,7 @@
-from pathlib import Path
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

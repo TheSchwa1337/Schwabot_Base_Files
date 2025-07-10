@@ -19,17 +19,17 @@ Usage:
     python comprehensive_unit_test_suite.py [--module MODULE_NAME] [--all] [--report]
 """
 
-import sys
-import os
-import time
-import logging
-import unittest
 import argparse
 import json
+import logging
+import os
+import sys
+import time
 import traceback
-from typing import Dict, Any, List, Optional, Tuple
+import unittest
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath('.'))
@@ -87,8 +87,8 @@ class ComprehensiveUnitTester:
     def _initialize_math_infrastructure(self):
         """Initialize math infrastructure for testing."""
         try:
-            from core.math_config_manager import MathConfigManager
             from core.math_cache import MathResultCache
+            from core.math_config_manager import MathConfigManager
             from core.math_orchestrator import MathOrchestrator
             
             self.math_config = MathConfigManager()
@@ -163,7 +163,7 @@ class ComprehensiveUnitTester:
             # Test portfolio optimization
             start_time = time.time()
             import numpy as np
-            
+
             # Create test data
             returns = np.array([0.1, 0.15, 0.08, 0.12])
             cov_matrix = np.array([
@@ -271,7 +271,7 @@ class ComprehensiveUnitTester:
         
         try:
             from core.unified_trading_pipeline import create_unified_trading_pipeline
-            
+
             # Test pipeline creation
             start_time = time.time()
             pipeline = create_unified_trading_pipeline(
@@ -328,7 +328,7 @@ class ComprehensiveUnitTester:
         
         try:
             from core.schwabot_mathematical_trading_engine import create_schwabot_mathematical_trading_engine
-            
+
             # Test engine creation
             start_time = time.time()
             engine = create_schwabot_mathematical_trading_engine(
@@ -391,7 +391,7 @@ class ComprehensiveUnitTester:
         
         try:
             from core.integration_orchestrator import create_integration_orchestrator
-            
+
             # Test orchestrator creation
             start_time = time.time()
             orchestrator = create_integration_orchestrator(
@@ -436,7 +436,7 @@ class ComprehensiveUnitTester:
         
         try:
             from core.system_integration import create_system_integration
-            
+
             # Test system creation
             start_time = time.time()
             system = create_system_integration(

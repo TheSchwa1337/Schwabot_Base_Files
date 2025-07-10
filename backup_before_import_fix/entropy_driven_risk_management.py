@@ -1,10 +1,9 @@
-from collections import deque
-
 import json
 import logging
 import math
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple

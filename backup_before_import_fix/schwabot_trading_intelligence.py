@@ -5,21 +5,21 @@ Advanced Algorithmic Trading Intelligence System
 Core intelligence engine for the trading dashboard
 """
 
-import os
-import sys
 import json
 import logging
+import os
+import sys
 import threading
 import time
-from datetime import datetime
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 # Add core directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
 
-from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
 from core.automated_strategy_engine import AutomatedStrategyEngine
+from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
 from core.soulprint_registry import SoulprintRegistry
 
 # Setup logging

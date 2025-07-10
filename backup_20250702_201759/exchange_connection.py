@@ -1,15 +1,15 @@
-import ccxt
-import ccxt.async_support as ccxt_async
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
-from .enums import ConnectionStatus
 from __future__ import annotations
-from typing import Dict, Optional
+
 import asyncio
 import logging
 import time
+from typing import Dict, Optional
 
+import ccxt
+import ccxt.async_support as ccxt_async
 
-
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
+from .enums import ConnectionStatus
 
 try:
 

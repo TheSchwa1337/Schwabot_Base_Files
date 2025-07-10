@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 from typing import List, Tuple
 
+
 def fix_ann101_issues(file_path: str) -> None:
     """Fix ANN101 (Missing type annotation for self in method) issues."""
     with open(file_path, 'r', encoding='utf-8') as f:

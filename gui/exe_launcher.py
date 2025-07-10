@@ -4,11 +4,11 @@ Schwabot EXE Launcher - Standalone Trading Application
 Bundles Flask GUI with all core components for executable distribution.
 """
 
-import sys
 import os
+import sys
 import threading
-import webbrowser
 import time
+import webbrowser
 from pathlib import Path
 
 # Add project root to path
@@ -16,11 +16,11 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
+    from core.clean_unified_math import clean_unified_math
+    from core.unified_trade_router import UnifiedTradeRouter
+    from core.visual_execution_node import VisualExecutionNode
     from flask import Flask
     from gui.flask_app import app as flask_app
-    from core.visual_execution_node import VisualExecutionNode
-    from core.unified_trade_router import UnifiedTradeRouter
-    from core.clean_unified_math import clean_unified_math
 
     print("✅ All core modules imported successfully")
 except ImportError as e:

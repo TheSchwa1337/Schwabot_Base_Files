@@ -1,30 +1,78 @@
-from core.mathlib_v4 import MathLibV4
-from core.unified_math_system import UnifiedMathSystem
-from core.strategy_logic import StrategyLogic
 from __future__ import annotations
+
 from core.brain_trading_engine import BrainTradingEngine
 from core.ccxt_integration import CCXTIntegration
 from core.enhanced_strategy_framework import (
-from core.risk_manager import RiskManager
-from core.unified_trading_pipeline import UnifiedTradingPipeline, TradingDecision
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
-import asyncio
-import asyncio
-import logging
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Date,
+    Dict,
+    List,
+    Optional,
+    Original,
+    RiskManager,
+    Schwabot,
+    The,
+    This,
+    TradingDecision,
+    UnifiedTradingPipeline,
+    19:37:03,
+    2025-07-02,
+    """,
+    -,
+    asyncio,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core.risk_manager,
+    core.unified_trading_pipeline,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    implementation,
+    import,
+    in,
+    it,
+    logging,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    strategy_integration_bridge.py,
+    syntax,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
+from core.mathlib_v4 import MathLibV4
+from core.strategy_logic import StrategyLogic
+from core.unified_math_system import UnifiedMathSystem
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\strategy_integration_bridge.py
-Date commented out: 2025-07-02 19:37:03
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

@@ -1,6 +1,8 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from core.unified_math_system import unified_math
 from __future__ import annotations
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from core.unified_math_system import unified_math
 
 # -*- coding: utf - 8 -*-
 """News\\u2192sentiment vectoriser for ghost routing.""""""

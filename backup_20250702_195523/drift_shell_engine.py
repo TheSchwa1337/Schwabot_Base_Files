@@ -1,19 +1,19 @@
+import hashlib
+import logging
 import math
-import numpy as np
+import time
 from collections import deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+
 from core.quantum_drift_shell_engine import QuantumDriftShellEngine
 from core.risk_manager import RiskManager
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from hash_recollection.entropy_tracker import EntropyTracker
 from hash_recollection.pattern_utils import PatternUtils
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-from typing import Callable
-from typing import Tuple
-import hashlib
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

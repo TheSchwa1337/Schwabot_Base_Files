@@ -36,7 +36,7 @@ Usage:
 import os
 import re
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 FLAKE8_CRITICAL = [
     'E999', 'E128', 'E302', 'E303', 'E305', 'E265', 'E231', 'E501',

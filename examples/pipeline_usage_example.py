@@ -16,10 +16,11 @@ Key Features Demonstrated:
 • Performance monitoring
 """
 
-import numpy as np
-import time
 import logging
-from typing import List, Dict, Any
+import time
+from typing import Any, Dict, List
+
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,12 +28,8 @@ logger = logging.getLogger(__name__)
 
 # Import the unified pipeline manager
 try:
-    from core.unified_pipeline_manager import (
-        UnifiedPipelineManager, PipelineContext
-    )
-    from core.symbolic_math_interface import (
-        SymbolicContext, SignalField, TimeIndex, PhaseValue
-    )
+    from core.symbolic_math_interface import PhaseValue, SignalField, SymbolicContext, TimeIndex
+    from core.unified_pipeline_manager import PipelineContext, UnifiedPipelineManager
     PIPELINE_AVAILABLE = True
 except ImportError as e:
     logger.error(f"Pipeline not available: {e}")

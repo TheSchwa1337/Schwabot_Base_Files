@@ -1,11 +1,10 @@
-from core import ()
-from core.schwafit_core import SchwafitCore
-from core.schwafit_trading_integration import SchwafitTradingIntegration
-from core.schwafit_trading_integration import SchwafitTradingIntegration
-from datetime import datetime
 import asyncio
 import logging
 import sys
+from datetime import datetime
+
+from core.schwafit_core import SchwafitCore
+from core.schwafit_trading_integration import SchwafitTradingIntegration
 
 #!/usr/bin/env python3
 """

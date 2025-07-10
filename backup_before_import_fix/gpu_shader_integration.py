@@ -71,13 +71,7 @@ from OpenGL.GL import (
     glVertex2f,
     glViewport,
 )
-from OpenGL.GL.shaders import (
-    GL_FRAGMENT_SHADER,
-    GL_VERTEX_SHADER,
-    compileProgram,
-    compileShader,
-    glGetUniformLocation,
-)
+from OpenGL.GL.shaders import GL_FRAGMENT_SHADER, GL_VERTEX_SHADER, compileProgram, compileShader, glGetUniformLocation
 
 from .gpu_dna_autodetect import ShaderConfig, detect_gpu_dna, get_gpu_shader_config
 from .system_state_profiler import SystemProfile, get_system_profile

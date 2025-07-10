@@ -1,13 +1,13 @@
-import numpy as np
-from dataclasses import dataclass, field
-from decimal import ROUND_DOWN, Decimal
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-from typing import Tuple
 import hashlib
 import logging
 import random
 import time
+from dataclasses import dataclass, field
+from decimal import ROUND_DOWN, Decimal
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

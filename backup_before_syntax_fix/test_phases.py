@@ -1,5 +1,6 @@
 import math
-from core.ferris_rde_core import FerrisRDECore, FerrisPhase
+
+from core.ferris_rde_core import FerrisPhase, FerrisRDECore
 
 #!/usr/bin/env python3
 """Test LOW, MID, HIGH phases implementation."""

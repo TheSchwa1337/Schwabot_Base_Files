@@ -1,9 +1,10 @@
-import numpy as np
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, Any, List
 import hashlib
 import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

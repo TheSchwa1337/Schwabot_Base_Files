@@ -17,9 +17,6 @@ Features:
 - CLI integration for settings management
 """
 
-import logging
-
-
 import json
 import logging
 import time

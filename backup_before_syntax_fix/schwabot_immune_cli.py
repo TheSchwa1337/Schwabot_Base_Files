@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 import numpy as np
-from core.biological_immune_error_handler import ()
+
     ImmuneZone,
     immune_protected,
 )
@@ -163,7 +163,6 @@ class SchwabotImmuneCLI:
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
-            from core.enhanced_tcell_system import ()
                 TCellSignal,
                 ImmuneSignalType,
                 TCellValidator,

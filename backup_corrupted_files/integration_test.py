@@ -16,9 +16,9 @@ Key Functions:
 """
 
 import logging
-import time
-import sys
 import os
+import sys
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -30,13 +30,13 @@ logger = logging.getLogger(__name__)
 
 # Import dependencies
 try:
-    from core.math_config_manager import MathConfigManager
-    from core.math_cache import MathResultCache
-    from core.math_orchestrator import MathOrchestrator
-    from core.unified_trading_pipeline import create_unified_trading_pipeline
-    from core.schwabot_mathematical_trading_engine import create_schwabot_mathematical_trading_engine
     from core.integration_orchestrator import create_integration_orchestrator
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+    from core.schwabot_mathematical_trading_engine import create_schwabot_mathematical_trading_engine
     from core.system_integration import create_system_integration
+    from core.unified_trading_pipeline import create_unified_trading_pipeline
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
     logger.info("✅ Math infrastructure imported successfully")

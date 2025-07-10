@@ -11,9 +11,9 @@ This script fixes common syntax errors that prevent the codebase from running:
 6. Missing commas in function calls
 """
 
+import glob
 import os
 import re
-import glob
 from pathlib import Path
 
 

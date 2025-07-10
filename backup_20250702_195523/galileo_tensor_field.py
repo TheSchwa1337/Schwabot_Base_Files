@@ -1,11 +1,11 @@
+import logging
 import math
-import numpy as np
+import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from typing import Tuple
-import logging
-import time
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

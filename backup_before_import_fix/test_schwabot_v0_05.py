@@ -1,18 +1,20 @@
-import numpy as np
-from core.fallback_logic import FallbackLogic, FallbackType
-from core.ferris_rde import FerrisRDE, FerrisPhase
-from core.fractal_core import FractalCore, FractalType, FractalState
-from core.glyph_vm import GlyphVM, GlyphType, GlyphState
-from core.matrix_fault_resolver import MatrixFaultResolver
-from core.matrix_map_logic import MatrixMapLogic, MatrixType, LogicHashType
-from core.profit_cycle_allocator import ProfitCycleAllocator
-from core.strategy_mapper import StrategyMapper, StrategyType
-from core.wallet_tracker import WalletTracker, AssetType, PositionType
-from typing import Dict, Any
 import logging
 import os
 import sys
 import time
+from typing import Any, Dict
+
+import numpy as np
+
+from core.fallback_logic import FallbackLogic, FallbackType
+from core.ferris_rde import FerrisPhase, FerrisRDE
+from core.fractal_core import FractalCore, FractalState, FractalType
+from core.glyph_vm import GlyphState, GlyphType, GlyphVM
+from core.matrix_fault_resolver import MatrixFaultResolver
+from core.matrix_map_logic import LogicHashType, MatrixMapLogic, MatrixType
+from core.profit_cycle_allocator import ProfitCycleAllocator
+from core.strategy_mapper import StrategyMapper, StrategyType
+from core.wallet_tracker import AssetType, PositionType, WalletTracker
 
 #!/usr/bin/env python3
 """

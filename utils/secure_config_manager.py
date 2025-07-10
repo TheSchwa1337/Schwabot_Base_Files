@@ -3,9 +3,9 @@ import getpass
 import hashlib
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any, Dict, Optional
-import time
 
 from cryptography.fernet import Fernet
 

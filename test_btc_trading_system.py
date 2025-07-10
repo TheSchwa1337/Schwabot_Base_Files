@@ -17,7 +17,7 @@ import asyncio
 import logging
 import random
 import time
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(
@@ -33,7 +33,7 @@ def test_mathematical_framework_integrator():
     
     try:
         from core.mathematical_framework_integrator import mathematical_framework_integrator
-        
+
         # Test DLT waveform engine
         logger.info("📊 Testing DLT Waveform Engine...")
         waveform_result = mathematical_framework_integrator.dlt_engine.process_waveform_complete(
@@ -132,7 +132,7 @@ def test_btc_trading_engine():
     
     try:
         from core.btc_usdc_trading_engine import btc_trading_engine
-        
+
         # Test BTC price processing
         logger.info("📊 Testing BTC Price Processing...")
         price_data = btc_trading_engine.process_btc_price(
@@ -206,7 +206,7 @@ def test_unified_btc_trading_pipeline():
     
     try:
         from core.unified_btc_trading_pipeline import unified_btc_trading_pipeline
-        
+
         # Test BTC price processing through complete pipeline
         logger.info("📊 Testing Complete BTC Trading Pipeline...")
         

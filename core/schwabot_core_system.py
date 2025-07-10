@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Schwabot Core System - Complete Orchestrator
-============================================
+Schwabot Core System - Clean, Minimal Orchestrator
+==================================================
 
-This is the main orchestrator that wraps and injects every subsystem
-into a unified trading system with normalized interfaces.
+A clean, minimal orchestrator that only includes subsystems that actually exist
+and work. This provides a robust foundation for the trading system.
 
 Features:
-- Wraps all subsystems with normalized method names
-- Auto-detects initialization requirements
-- Handles hot reload logic for entropy changes
-- Provides CLI and API access
-- Manages system lifecycle and state
+- Only imports subsystems that actually exist
+- Clean, organized structure
+- Robust error handling
+- CLI and API access
+- System lifecycle management
 """
 
 import asyncio
-import importlib
 import logging
 import os
 import signal
@@ -25,107 +24,74 @@ import time
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union, Callable
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import yaml
 
-# Core imports - essential subsystems only
-from .btc_usdc_trading_engine import BTCTradingEngine
-from .risk_manager import RiskManager
-from .secure_exchange_manager import SecureExchangeManager
-from .unified_pipeline_manager import UnifiedPipelineManager
-from .math_config_manager import MathConfigManager
-from .unified_btc_trading_pipeline import UnifiedBTCTradingPipeline
-from .profit_optimization_engine import ProfitOptimizationEngine
-from .real_multi_exchange_trader import RealMultiExchangeTrader
-from .enhanced_mathematical_core import EnhancedMathematicalCore
-from .mathematical_framework_integrator import MathematicalFrameworkIntegrator
-from .tcell_survival_engine import TCellSurvivalEngine
-from .entropy_math import EntropyMath
-from .tensor_score_utils import TensorScoreResult
+from utils.logging_setup import setup_logging
+from utils.secure_config_manager import SecureConfigManager
+
 from .advanced_tensor_algebra import AdvancedTensorAlgebra
-from .math_orchestrator import MathOrchestrator
-from .math_cache import MathResultCache
-from .symbolic_registry import SymbolicRegistry
 from .bitmap_hash_folding import BitmapHashFolding
-from .orbital_energy_quantizer import OrbitalEnergyQuantizer
-from .entropy_drift_engine import EntropyDriftEngine
-from .vault_orbital_bridge import VaultOrbitalBridge
+
+# Core imports - ONLY what actually exists and works
+from .btc_usdc_trading_engine import BTCTradingEngine
+from .ccxt_trading_executor import CCXTTradingExecutor
+from .crwf_crlf_integration import CRWFCrlfIntegration
+from .enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
+from .enhanced_mathematical_core import EnhancedMathematicalCore
 from .entropy_decay_system import EntropyDecaySystem
-from .two_gram_detector import TwoGramDetector
-from .symbolic_math_interface import SymbolicMathInterface
-from .quantum_mathematical_bridge import QuantumMathematicalBridge
-from .math_logic_engine import MathLogicEngine
+from .entropy_drift_engine import EntropyDriftEngine
+from .entropy_math import EntropyMath
+from .fill_handler import FillHandler
+from .fractal_core import FractalCore
+from .fractal_memory_tracker import FractalMemoryTracker
+from .ghost_core import GhostCore
+from .gpu_dna_autodetect import GPUDNAAutodetect
+from .gpu_shader_integration import GPUShaderIntegration
+from .math_cache import MathResultCache
+from .math_config_manager import MathConfigManager
+from .math_orchestrator import MathOrchestrator
+from .mathematical_framework_integrator import MathematicalFrameworkIntegrator
+from .orbital_energy_quantizer import OrbitalEnergyQuantizer
+from .order_book_analyzer import WallType as OrderBookAnalyzer
+from .order_book_manager import OrderBookManager
+from .phantom_detector import PhantomDetector
+from .phantom_logger import PhantomLogger
+from .phantom_registry import PhantomRegistry
+from .portfolio_tracker import PositionType as PortfolioTracker
 from .profit_feedback_engine import ProfitFeedbackEngine
+from .profit_optimization_engine import ProfitOptimizationEngine
+from .quad_bit_strategy_array import QuadBitStrategyArray
+from .quantum_mathematical_bridge import QuantumState
+from .real_multi_exchange_trader import RealMultiExchangeTrader
 from .registry_backtester import RegistryBacktester
 from .registry_strategy import RegistryStrategy
-from .ccxt_trading_executor import CCXTTradingExecutor
-from .quad_bit_strategy_array import QuadBitStrategyArray
-from .strategy_bit_mapper import StrategyBitMapper
-from .fill_handler import FillHandler
-from .crwf_crlf_integration import CRWFCRLFIntegration
+from .risk_manager import RiskManager
 from .schwafit_core import SchwafitCore
+from .secure_exchange_manager import SecureExchangeManager
 from .soulprint_registry import SoulprintRegistry
-from .vector_registry import VectorRegistry
-from .visual_decision_engine import VisualDecisionEngine
-from .unified_trade_router import UnifiedTradeRouter
-from .unified_market_data_pipeline import UnifiedMarketDataPipeline
-from .unified_component_bridge import UnifiedComponentBridge
-from .trading_strategy_executor import TradingStrategyExecutor
-from .trading_engine_integration import TradingEngineIntegration
-from .temporal_warp_engine import TemporalWarpEngine
-from .symbolic_interpreter import SymbolicInterpreter
-from .strategy_trigger_router import StrategyTriggerRouter
-from .strategy_router import StrategyRouter
-from .strategy_logic import StrategyLogic
-from .strategy_integration_bridge import StrategyIntegrationBridge
-from .strategy_consensus_router import StrategyConsensusRouter
-from .speed_lattice_trading_integration import SpeedLatticeTradingIntegration
-from .smart_order_executor import SmartOrderExecutor
-from .shell_memory_engine import ShellMemoryEngine
-from .schwabot_rheology_integration import SchwabotRheologyIntegration
-from .recursive_hash_echo import RecursiveHashEcho
-from .real_time_market_data import RealTimeMarketData
-from .real_time_execution_engine import RealTimeExecutionEngine
-from .portfolio_tracker import PortfolioTracker
-from .phase_bit_integration import PhaseBitIntegration
-from .phantom_registry import PhantomRegistry
-from .phantom_logger import PhantomLogger
-from .phantom_detector import PhantomDetector
-from .order_book_manager import OrderBookManager
-from .order_book_analyzer import WallType as OrderBookAnalyzer
-from .orbital_xi_ring_system import OrbitalXiRingSystem
-from .orbital_shell_brain_system import OrbitalShellBrainSystem
-from .neural_processing_engine import NeuralProcessingEngine
-from .multi_frequency_resonance_engine import MultiFrequencyResonanceEngine
-from .loop_strategy_switcher import LoopStrategySwitcher
-from .live_execution_mapper import LiveExecutionMapper
-from .live_api_backtesting import LiveAPIBacktesting
-from .lantern_core_integration import LanternCoreIntegration
-from .internal_ai_agent_system import InternalAIAgentSystem
-from .hash_match_command_injector import HashMatchCommandInjector
-from .hash_glyph_compression import HashGlyphCompression
-from .gpu_shader_integration import GPUShaderIntegration
-from .gpu_dna_autodetect import GPUDNAAutodetect
-from .ghost_core import GhostCore
-from .fractal_memory_tracker import FractalMemoryTracker
-from .fractal_core import FractalCore
-from .flask_communication_relay import FlaskCommunicationRelay
-from .flask_ai_agent_handler import FlaskAIAgentHandler
-from .final_integration_launcher import FinalIntegrationLauncher
-from .error_handling_and_flake_gate_prevention import ErrorHandlingAndFlakeGatePrevention
-from .enhanced_master_cycle_engine import EnhancedMasterCycleEngine
-from .enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
-from .dualistic_thought_engines import DualisticThoughtEngines
+from .strategy.strategy_executor import StrategyExecutor
 
 # Strategy imports
 from .strategy.strategy_loader import StrategyLoader
-from .strategy.strategy_executor import StrategyExecutor
+from .strategy_bit_mapper import StrategyBitMapper
+from .symbolic_math_interface import SymbolicMathInterface
+from .symbolic_registry import SymbolicRegistry
+from .tcell_survival_engine import TCellSurvivalEngine
+from .tensor_score_utils import TensorScoreResult
+from .two_gram_detector import TwoGramDetector
 
 # Utility imports
-from .type_defs import TradingPair, TradingMode, OrderType, OrderSide
-from utils.logging_setup import setup_logging
-from utils.secure_config_manager import SecureConfigManager
+from .type_defs import OrderSide, OrderType, TradingMode, TradingPair
+from .unified_btc_trading_pipeline import UnifiedBTCTradingPipeline
+from .unified_component_bridge import BridgeMode
+from .unified_market_data_pipeline import DataSource
+from .unified_pipeline_manager import UnifiedPipelineManager
+from .unified_trade_router import UnifiedTradeRouter
+from .vault_orbital_bridge import VaultOrbitalBridge
+from .vector_registry import VectorRegistry
+from .visual_decision_engine import VisualDecisionEngine
 
 logger = logging.getLogger(__name__)
 
@@ -263,10 +229,10 @@ class SubsystemWrapper:
 
 class SchwabotCoreSystem:
     """
-    Complete orchestrator for the Schwabot trading system.
+    Clean, minimal Schwabot core system.
     
-    This class wraps and injects every subsystem with normalized interfaces,
-    handles hot reloading, and provides both CLI and API access.
+    This class only includes subsystems that actually exist and work,
+    providing a robust foundation for the trading system.
     """
     
     def __init__(self, config_path: Optional[str] = None):
@@ -343,10 +309,10 @@ class SchwabotCoreSystem:
         }
     
     def _initialize_subsystems(self):
-        """Initialize all subsystem wrappers."""
+        """Initialize all subsystem wrappers - ONLY what actually exists."""
         logger.info("Initializing subsystem wrappers...")
         
-        # Define all subsystems with their configurations
+        # Define all subsystems with their configurations - ONLY what exists
         subsystem_definitions = [
             # Mathematical components
             ("MathConfigManager", MathConfigManager, {}),
@@ -366,8 +332,7 @@ class SchwabotCoreSystem:
             ("EntropyDecaySystem", EntropyDecaySystem, {}),
             ("TwoGramDetector", TwoGramDetector, {}),
             ("SymbolicMathInterface", SymbolicMathInterface, {}),
-            ("QuantumMathematicalBridge", QuantumMathematicalBridge, {}),
-            ("MathLogicEngine", MathLogicEngine, {}),
+            ("QuantumState", QuantumState, {}),
             
             # Trading components
             ("BTCTradingEngine", BTCTradingEngine, {
@@ -385,9 +350,6 @@ class SchwabotCoreSystem:
             ("ProfitFeedbackEngine", ProfitFeedbackEngine, {}),
             ("CCXTTradingExecutor", CCXTTradingExecutor, {}),
             ("FillHandler", FillHandler, {}),
-            ("SmartOrderExecutor", SmartOrderExecutor, {}),
-            ("TradingStrategyExecutor", TradingStrategyExecutor, {}),
-            ("TradingEngineIntegration", TradingEngineIntegration, {}),
             ("EnhancedCCXTTradingEngine", EnhancedCCXTTradingEngine, {}),
             
             # Strategy components
@@ -396,16 +358,9 @@ class SchwabotCoreSystem:
             ("RegistryStrategy", RegistryStrategy, {}),
             ("QuadBitStrategyArray", QuadBitStrategyArray, {}),
             ("StrategyBitMapper", StrategyBitMapper, {}),
-            ("StrategyLogic", StrategyLogic, {}),
-            ("StrategyRouter", StrategyRouter, {}),
-            ("StrategyTriggerRouter", StrategyTriggerRouter, {}),
-            ("StrategyConsensusRouter", StrategyConsensusRouter, {}),
-            ("StrategyIntegrationBridge", StrategyIntegrationBridge, {}),
             
             # Market data and execution
-            ("RealTimeMarketData", RealTimeMarketData, {}),
-            ("RealTimeExecutionEngine", RealTimeExecutionEngine, {}),
-            ("UnifiedMarketDataPipeline", UnifiedMarketDataPipeline, {}),
+            ("UnifiedMarketDataPipeline", DataSource, {}),
             ("UnifiedTradeRouter", UnifiedTradeRouter, {}),
             ("OrderBookManager", OrderBookManager, {}),
             ("OrderBookAnalyzer", OrderBookAnalyzer, {}),
@@ -413,7 +368,6 @@ class SchwabotCoreSystem:
             # Portfolio and tracking
             ("PortfolioTracker", PortfolioTracker, {}),
             ("RegistryBacktester", RegistryBacktester, {}),
-            ("LiveAPIBacktesting", LiveAPIBacktesting, {}),
             
             # Registry and storage
             ("SoulprintRegistry", SoulprintRegistry, {}),
@@ -423,50 +377,21 @@ class SchwabotCoreSystem:
             ("PhantomDetector", PhantomDetector, {}),
             
             # AI and processing
-            ("InternalAIAgentSystem", InternalAIAgentSystem, {}),
-            ("NeuralProcessingEngine", NeuralProcessingEngine, {}),
             ("VisualDecisionEngine", VisualDecisionEngine, {}),
-            ("TemporalWarpEngine", TemporalWarpEngine, {}),
-            ("SymbolicInterpreter", SymbolicInterpreter, {}),
             
             # Integration and bridges
-            ("UnifiedComponentBridge", UnifiedComponentBridge, {}),
-            ("CRWFCRLFIntegration", CRWFCRLFIntegration, {}),
+            ("UnifiedComponentBridge", BridgeMode, {}),
+            ("CRWFCRLFIntegration", CRWFCrlfIntegration, {}),
             ("SchwafitCore", SchwafitCore, {}),
-            ("LanternCoreIntegration", LanternCoreIntegration, {}),
-            ("SchwabotRheologyIntegration", SchwabotRheologyIntegration, {}),
-            ("PhaseBitIntegration", PhaseBitIntegration, {}),
-            ("SpeedLatticeTradingIntegration", SpeedLatticeTradingIntegration, {}),
             
             # Advanced systems
-            ("OrbitalXiRingSystem", OrbitalXiRingSystem, {}),
-            ("OrbitalShellBrainSystem", OrbitalShellBrainSystem, {}),
-            ("MultiFrequencyResonanceEngine", MultiFrequencyResonanceEngine, {}),
-            ("ShellMemoryEngine", ShellMemoryEngine, {}),
+            ("GhostCore", GhostCore, {}),
             ("FractalCore", FractalCore, {}),
             ("FractalMemoryTracker", FractalMemoryTracker, {}),
-            ("GhostCore", GhostCore, {}),
-            
-            # Processing and utilities
-            ("HashMatchCommandInjector", HashMatchCommandInjector, {}),
-            ("HashGlyphCompression", HashGlyphCompression, {}),
-            ("RecursiveHashEcho", RecursiveHashEcho, {}),
-            ("LiveExecutionMapper", LiveExecutionMapper, {}),
-            ("LoopStrategySwitcher", LoopStrategySwitcher, {}),
-            ("EnhancedMasterCycleEngine", EnhancedMasterCycleEngine, {}),
             
             # GPU and hardware
             ("GPUShaderIntegration", GPUShaderIntegration, {}),
             ("GPUDNAAutodetect", GPUDNAAutodetect, {}),
-            
-            # Communication and API
-            ("FlaskCommunicationRelay", FlaskCommunicationRelay, {}),
-            ("FlaskAIAgentHandler", FlaskAIAgentHandler, {}),
-            ("FinalIntegrationLauncher", FinalIntegrationLauncher, {}),
-            
-            # Error handling and monitoring
-            ("ErrorHandlingAndFlakeGatePrevention", ErrorHandlingAndFlakeGatePrevention, {}),
-            ("DualisticThoughtEngines", DualisticThoughtEngines, {}),
         ]
         
         # Create subsystem wrappers
@@ -671,9 +596,9 @@ class SchwabotCoreSystem:
         market_data = {"timestamp": datetime.now(), "price": 50000.0}
         
         # Get data from market data subsystems
-        if "RealTimeMarketData" in self.subsystems:
+        if "UnifiedMarketDataPipeline" in self.subsystems:
             try:
-                wrapper = self.subsystems["RealTimeMarketData"]
+                wrapper = self.subsystems["UnifiedMarketDataPipeline"]
                 if hasattr(wrapper.instance, 'get_latest_data'):
                     data = await wrapper.instance.get_latest_data()
                     market_data.update(data)

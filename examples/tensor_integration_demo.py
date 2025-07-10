@@ -1,26 +1,52 @@
-from core.strategy_logic import (
-from core.strategy_logic import TradingSignal, SignalType, SignalStrength
-from core.galileo_tensor_bridge import GalileoTensorBridge
-from pathlib import Path
-from server.tensor_websocket_server import TensorWebSocketServer
-from typing import Any
-from utils.logging_setup import setup_logging
-import asyncio
-import sys
-import time
-
-#!/usr/bin/env python3
-"""Tensor Integration Demo.
-
-Comprehensive demonstration of Galileo-Tensor system integration
-with Schwabot's trading infrastructure. Shows real-time analysis,
-WebSocket streaming, and trading strategy integration.
-"""
-
-
-# Add project root to path
-project_root = Path(__file__).parent.parent
-sys.path.append(str(project_root))
+from core.strategy_logic import (  # !/usr/bin/env python3; Add project root to path
+    Any,
+    Comprehensive,
+    Demo.,
+    Galileo-Tensor,
+    GalileoTensorBridge,
+    Integration,
+    Path,
+    Schwabot's,
+    Shows,
+    SignalStrength,
+    SignalType,
+    TensorWebSocketServer,
+    TradingSignal,
+    WebSocket,
+    """,
+    """Tensor,
+    .parent.parent,
+    =,
+    __file__,
+    analysis,
+    and,
+    asyncio,
+    core.galileo_tensor_bridge,
+    core.strategy_logic,
+    demonstration,
+    from,
+    import,
+    infrastructure.,
+    integration,
+    integration.,
+    of,
+    pathlib,
+    project_root,
+    real-time,
+    server.tensor_websocket_server,
+    setup_logging,
+    str,
+    strategy,
+    streaming,
+    sys,
+    sys.path.append,
+    system,
+    time,
+    trading,
+    typing,
+    utils.logging_setup,
+    with,
+)
 
 
 # Setup logging

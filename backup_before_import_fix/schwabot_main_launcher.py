@@ -5,19 +5,19 @@ Advanced Algorithmic Trading Intelligence System
 Launches both the Trading Dashboard and Trading Intelligence
 """
 
+import logging
 import os
 import sys
-import time
 import threading
-import logging
+import time
 from datetime import datetime
 from typing import Dict, Optional
 
 # Add current directory to path
 sys.path.append(os.path.dirname(__file__))
 
-from schwabot_trading_dashboard import create_schwabot_dashboard, DashboardConfig
-from schwabot_trading_intelligence import create_schwabot_intelligence, IntelligenceConfig
+from schwabot_trading_dashboard import DashboardConfig, create_schwabot_dashboard
+from schwabot_trading_intelligence import IntelligenceConfig, create_schwabot_intelligence
 
 # Setup logging
 logging.basicConfig()

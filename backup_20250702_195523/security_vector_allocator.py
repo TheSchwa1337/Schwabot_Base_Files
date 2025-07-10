@@ -1,5 +1,6 @@
-import numpy as np
 from typing import Dict, Optional
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

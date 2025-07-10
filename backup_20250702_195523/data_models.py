@@ -1,10 +1,8 @@
-from .enums import ExchangeType, OrderSide, OrderType
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
 import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
-
-
+from .enums import ExchangeType, OrderSide, OrderType
 
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-

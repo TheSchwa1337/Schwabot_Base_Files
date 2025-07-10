@@ -39,7 +39,7 @@ async def test_core_system_initialization():
     
     try:
         from core.schwabot_core_system import SchwabotCoreSystem
-        
+
         # Create system instance
         system = SchwabotCoreSystem()
         print("✅ SchwabotCoreSystem instance created")
@@ -68,9 +68,9 @@ async def test_strategy_components():
     print("\nTesting strategy components...")
     
     try:
-        from core.strategy.strategy_loader import StrategyLoader
         from core.strategy.strategy_executor import StrategyExecutor
-        
+        from core.strategy.strategy_loader import StrategyLoader
+
         # Test strategy loader
         loader = StrategyLoader()
         success = await loader.initialize()
@@ -104,7 +104,7 @@ async def test_trading_components():
         from core.btc_usdc_trading_engine import BTCTradingEngine
         from core.risk_manager import RiskManager
         from core.secure_exchange_manager import SecureExchangeManager
-        
+
         # Test trading engine
         engine = BTCTradingEngine(config={
             "api_key": "demo",
@@ -150,7 +150,7 @@ async def test_mathematical_components():
     try:
         from core.enhanced_mathematical_core import EnhancedMathematicalCore
         from core.math_config_manager import MathConfigManager
-        
+
         # Test math config manager
         math_config = MathConfigManager()
         success = await math_config.initialize()

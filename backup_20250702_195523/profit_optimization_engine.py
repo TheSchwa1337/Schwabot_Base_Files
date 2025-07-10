@@ -1,31 +1,79 @@
-from numpy.typing import NDArray
 import math
-import numpy as np
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+
+import numpy as np
+from numpy.typing import NDArray
+
 from hash_recollection.entropy_tracker import EntropyState, EntropyTracker
 from hash_recollection.pattern_utils import PatternType, PatternUtils
 from schwabot.core.overlay.aleph_overlay_mapper import (
-from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter, DriftType
-from schwabot.core.phase.phase_transition_monitor import (
-from typing import Any, Dict, List, Optional, Tuple, Union
-from typing import Tuple
-import hashlib
-import logging
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Date,
+    Dict,
+    DriftPhaseWeighter,
+    DriftType,
+    List,
+    Optional,
+    Original,
+    Schwabot,
+    The,
+    This,
+    Tuple,
+    Union,
+    19:37:00,
+    2025-07-02,
+    """,
+    -,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    errors,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    hashlib,
+    implementation,
+    import,
+    in,
+    it,
+    logging,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    profit_optimization_engine.py,
+    properly.,
+    running,
+    schwabot.core.phase.drift_phase_weighter,
+    schwabot.core.phase.phase_transition_monitor,
+    syntax,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\profit_optimization_engine.py
-Date commented out: 2025-07-02 19:37:00
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

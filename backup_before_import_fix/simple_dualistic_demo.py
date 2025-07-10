@@ -1,8 +1,10 @@
-import numpy as np
-import traceback
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-from datetime import datetime
 import logging
+import traceback
+from datetime import datetime
+
+import numpy as np
+
+from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
 #!/usr/bin/env python3
 """

@@ -12,10 +12,11 @@ Implements the unified entropy drift function (𝓓) that connects:
 """
 
 import logging
-import numpy as np
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

@@ -16,15 +16,15 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Add project root to path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from utils.safe_print import safe_print, info, warn, error, success
 from core.clean_trading_pipeline import CleanTradingPipeline
 from core.strategy_bit_mapper import StrategyBitMapper
+from utils.safe_print import error, info, safe_print, success, warn
 
 
 class CrossPlatformCLIValidator:
@@ -98,9 +98,9 @@ class CrossPlatformCLIValidator:
         # Check for required platform-specific modules
         try:
             import asyncio
+            import pathlib
             import subprocess
             import tempfile
-            import pathlib
         except ImportError as e:
             error(f"Missing required module: {e}")
             return False
@@ -143,17 +143,17 @@ class CrossPlatformCLIValidator:
 
         try:
             # Test core imports
-            from core.schwafit_core import SchwafitCore
-            from core.strategy_bit_mapper import StrategyBitMapper
-            from core.clean_trading_pipeline import CleanTradingPipeline
-
-            # Test utility imports
-            from utils.safe_print import safe_print
-            from utils.logging_setup import setup_logging
+            from core.api.data_models import OrderRequest
 
             # Test API imports
             from core.api.integration_manager import ApiIntegrationManager
-            from core.api.data_models import OrderRequest
+            from core.clean_trading_pipeline import CleanTradingPipeline
+            from core.schwafit_core import SchwafitCore
+            from core.strategy_bit_mapper import StrategyBitMapper
+            from utils.logging_setup import setup_logging
+
+            # Test utility imports
+            from utils.safe_print import safe_print
 
             return True
 

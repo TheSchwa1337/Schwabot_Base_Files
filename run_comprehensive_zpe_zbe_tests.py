@@ -6,12 +6,12 @@ This script runs all tests for the new ZPE-ZBE core implementation
 and cleans up old test files that are no longer compatible.
 """
 
-import os
-import sys
 import logging
+import os
 import subprocess
+import sys
 import unittest
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 # Configure logging
 logging.basicConfig()
@@ -145,9 +145,9 @@ def validate_core_files():
 
     # Test imports
     try:
-        from core.zpe_zbe_core import ZPEZBECore, QuantumSyncStatus, ZPEVector, ZBEBalance
-        from core.unified_math_system import UnifiedMathSystem
         from core.clean_math_foundation import CleanMathFoundation
+        from core.unified_math_system import UnifiedMathSystem
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector, ZPEZBECore
         logger.info("   ✅ All core modules import successfully")
         return True
     except ImportError as e:

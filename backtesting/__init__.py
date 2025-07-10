@@ -12,8 +12,8 @@ Main Components:
 - InternalBacktester: Internal backtesting utilities
 """
 
-from .simple_backtester import SimpleBacktester
 from .historical_data_manager import HistoricalDataManager
+from .simple_backtester import SimpleBacktester
 
 __all__ = [
     "SimpleBacktester",

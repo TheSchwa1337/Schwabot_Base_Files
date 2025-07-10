@@ -24,16 +24,16 @@ Usage:
 """
 
 import argparse
+import getpass
 import logging
 import sys
-import getpass
 from pathlib import Path
 from typing import Optional
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from core.secure_exchange_manager import SecureExchangeManager, ExchangeType, get_exchange_manager
+from core.secure_exchange_manager import ExchangeType, SecureExchangeManager, get_exchange_manager
 
 logger = logging.getLogger(__name__)
 

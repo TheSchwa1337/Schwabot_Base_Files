@@ -11,7 +11,7 @@ import logging
 import random
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import AsyncGenerator, Dict, Any, Optional
+from typing import Any, AsyncGenerator, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

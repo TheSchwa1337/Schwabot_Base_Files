@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from dual_unicore_handler import DualUnicoreHandler
-from typing import Optional
 import json
 import os
 import platform
+from typing import Optional
 
+from dual_unicore_handler import DualUnicoreHandler
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

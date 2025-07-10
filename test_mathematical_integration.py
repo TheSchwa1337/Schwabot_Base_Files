@@ -5,22 +5,22 @@ Validates all Schwabot mathematical components and their integration
 """
 
 import asyncio
+import json
 import logging
 import time
-from typing import Dict, Any
-import json
+from typing import Any, Dict
 
-from utils.safe_print import safe_print, info, warn, error, success
+from core.order_wall_analyzer import OrderWallAnalyzer
+from core.profit.precision_profit_engine import PrecisionLevel, get_precision_engine
+from core.profit_tier_adjuster import ProfitTierAdjuster
+from core.reentry_logic import ReentryLogic
+from core.swarm.swarm_strategy_matrix import MarketConditions, get_swarm_matrix
+from core.swing_pattern_recognition import SwingPatternRecognizer
 
 # Import all mathematical components
-from core.system.dual_state_router_updated import get_dual_state_router, TaskProfile, TaskPriority
-from core.swarm.swarm_strategy_matrix import get_swarm_matrix, MarketConditions
-from core.profit.precision_profit_engine import get_precision_engine, PrecisionLevel
-from core.order_wall_analyzer import OrderWallAnalyzer
-from core.profit_tier_adjuster import ProfitTierAdjuster
-from core.swing_pattern_recognition import SwingPatternRecognizer
-from core.reentry_logic import ReentryLogic
+from core.system.dual_state_router_updated import TaskPriority, TaskProfile, get_dual_state_router
 from utils.cuda_helper import CUDAHelper
+from utils.safe_print import error, info, safe_print, success, warn
 
 logger = logging.getLogger(__name__)
 

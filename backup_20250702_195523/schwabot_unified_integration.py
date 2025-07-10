@@ -1,27 +1,78 @@
+import numpy as np
+
+from .advanced_dualistic_trading_execution_system import (
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    CCXTIntegration,
+    Date,
+    Dict,
+    EnhancedUnifiedProfitVectorizationSystem,
+    Enum,
+    List,
+    Optional,
+    Original,
+    QSCResult,
+    QuantumStaticCore,
+    Schwabot,
+    The,
+    This,
+    19:37:02,
+    2025-07-02,
+    """,
+    -,
+    .ccxt_integration,
+    .quantum_static_core,
+    .unified_profit_vectorization_system,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    enum,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    hashlib,
+    implementation,
+    import,
+    in,
+    it,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    schwabot_unified_integration.py,
+    syntax,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
 from .mathematical_pipeline_validator import MathematicalPipelineValidator
 from .unified_math_system import unified_math
-import numpy as np
-from .advanced_dualistic_trading_execution_system import (
-from .ccxt_integration import CCXTIntegration
-from .quantum_static_core import QuantumStaticCore, QSCResult
-from .unified_profit_vectorization_system import EnhancedUnifiedProfitVectorizationSystem
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, Any, List, Optional
-import hashlib
-import time
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\schwabot_unified_integration.py
-Date commented out: 2025-07-02 19:37:02
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

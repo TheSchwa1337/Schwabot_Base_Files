@@ -28,13 +28,11 @@ Architecture:
 Market Data → Entropy Analysis → Orbital Processing → Control Channels → Profit Output
 """
 
-from collections import deque
-
-
 import logging
 import math
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List

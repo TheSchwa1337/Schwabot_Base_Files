@@ -17,8 +17,9 @@ Test Coverage:
 
 import logging
 import time
+from typing import Any, Dict
+
 import numpy as np
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig()
@@ -33,7 +34,7 @@ def test_system_state_profiler():
     logger.info("🔍 Testing System State Profiler...")
 
     try:
-        from core.system_state_profiler import get_system_profile, create_system_profiler
+        from core.system_state_profiler import create_system_profiler, get_system_profile
 
         # Get system profile
         profile = get_system_profile()
@@ -177,7 +178,6 @@ def test_core_integration():
     logger.info("🚀 Testing Core Schwabot Integration...")
 
     try:
-        from core import ()
             get_system_status, 
             create_clean_trading_system,
             initialize_gpu_system
@@ -229,8 +229,9 @@ def benchmark_cpu_vs_gpu():
     logger.info("⚡ Benchmarking CPU vs GPU Performance...")
 
     try:
-        from core.gpu_shader_integration import compute_strategy_similarities_gpu
         import numpy as np
+
+        from core.gpu_shader_integration import compute_strategy_similarities_gpu
 
         # Test parameters
         vector_sizes = [16, 32, 64]

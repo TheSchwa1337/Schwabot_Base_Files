@@ -1,20 +1,23 @@
 from .api_integration import HashRecollectionAPI, create_and_run_api
 from .bit_operations import BitOperations, PhaseState
-from .entropy_tracker import EntropyTracker, EntropyState
+from .entropy_tracker import EntropyState, EntropyTracker
 from .exceptions import (
-from .pattern_utils import PatternUtils, PatternMatch
-
-    HashRecollectionError,
-    EntropyCalculationError,
-    BitOperationError,
-    PatternDetectionError,
     APIError,
+    BitOperationError,
     ConfigurationError,
     DataValidationError,
-    SignalGenerationError,
+    EntropyCalculationError,
+    HashRecollectionError,
+    IntegrationError,
     MathSystemError,
     MemoryError,
-    IntegrationError,
+    PatternDetectionError,
+    PatternMatch,
+    PatternUtils,
+    SignalGenerationError,
+    .pattern_utils,
+    from,
+    import,
 )
 
 __version__ = "1.0.0"

@@ -1,28 +1,80 @@
 import numpy as np
+
 from .hardware_acceleration_manager import HardwareAccelerationManager
 from .pure_profit_calculator import (
-from .zbe_core import ZBECore
-from .zpe_core import ZPECore
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any, Callable, Union
-import logging
-import psutil
-import threading
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Callable,
+    Date,
+    Dict,
+    Enum,
+    List,
+    Optional,
+    Original,
+    Schwabot,
+    The,
+    This,
+    Union,
+    ZBECore,
+    ZPECore,
+    19:36:56,
+    2025-07-02,
+    """,
+    -,
+    .zbe_core,
+    .zpe_core,
+    automatically,
+    because,
+    been,
+    clean,
+    collections,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    deque,
+    enhanced_acceleration_integration.py,
+    enum,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    implementation,
+    import,
+    in,
+    it,
+    logging,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    psutil,
+    running,
+    syntax,
+    system,
+    that,
+    the,
+    threading,
+    time,
+    typing,
+)
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\enhanced_acceleration_integration.py
-Date commented out: 2025-07-02 19:36:56
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

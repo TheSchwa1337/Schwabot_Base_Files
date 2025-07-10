@@ -9,7 +9,7 @@ Quick test to verify the 2-gram pattern detection system is working.
 import asyncio
 import logging
 import time
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -206,7 +206,7 @@ async def test_visual_execution_node():
 
     try:
         # Import the visual node
-        from core.visual_execution_node import create_visual_execution_node, GUIMode, VisualizationTheme
+        from core.visual_execution_node import GUIMode, VisualizationTheme, create_visual_execution_node
 
         # Create visual node
         visual_node = create_visual_execution_node({)}

@@ -15,12 +15,11 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent / "core"))
 
-from core import ()
     create_clean_trading_system,
     get_system_status,
     PORTFOLIO_BALANCER_AVAILABLE,
@@ -29,9 +28,9 @@ from core import ()
 from core.algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer, create_portfolio_balancer
 from core.btc_usdc_trading_integration import BTCUSDCTradingIntegration, create_btc_usdc_integration
 from core.phantom_detector import PhantomDetector
-from core.phantom_registry import PhantomRegistry
 from core.phantom_logger import PhantomLogger
-from utils.safe_print import safe_print, info, warn, error, success
+from core.phantom_registry import PhantomRegistry
+from utils.safe_print import error, info, safe_print, success, warn
 
 # Configure logging
 logging.basicConfig()

@@ -8,8 +8,8 @@ This script runs all quality checks and provides a detailed status report
 """
 
 import os
-import sys
 import subprocess
+import sys
 import time
 from typing import List, Tuple
 

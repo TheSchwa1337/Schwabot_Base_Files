@@ -10,27 +10,27 @@ Integrates tensor algebra, quantum computing, entropy analysis, and trading-spec
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from enum import Enum
 from functools import wraps
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
-from scipy import stats, signal, optimize
+from scipy import optimize, signal, stats
 from scipy.fft import fft, ifft
-from scipy.stats import norm, t, chi2
+from scipy.stats import chi2, norm, t
 
 # Try to import advanced libraries
 try:
-    import torch
     import tensorflow as tf
+    import torch
     TENSOR_LIBS_AVAILABLE = True
 except ImportError:
     TENSOR_LIBS_AVAILABLE = False
 
 try:
     import qiskit
-    from qiskit import QuantumCircuit, Aer, execute
+    from qiskit import Aer, QuantumCircuit, execute
     from qiskit.quantum_info import Operator, Statevector
     QUANTUM_AVAILABLE = True
 except ImportError:

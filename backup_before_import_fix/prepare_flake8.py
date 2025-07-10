@@ -1,7 +1,7 @@
 import os
-import sys
 import shutil
 import subprocess
+import sys
 
 
 def remove_cached_files(base_dir):

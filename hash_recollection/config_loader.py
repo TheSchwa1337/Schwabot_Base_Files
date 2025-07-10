@@ -7,11 +7,12 @@ Cross-platform configuration loader for hash_recollection system.
 Supports YAML, JSON, and environment variables.
 """
 
-import os
-import yaml
 import json
-from typing import Any, Dict, Optional
+import os
 from pathlib import Path
+from typing import Any, Dict, Optional
+
+import yaml
 
 from .exceptions import ConfigurationError
 

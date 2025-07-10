@@ -15,12 +15,13 @@ Simplified integration test for the newly implemented missing modules:
 This test demonstrates the complete chain reaction system with simplified imports.
 """
 
-import sys
-import os
-import time
 import json
 import logging
-from typing import Dict, Any, List
+import os
+import sys
+import time
+from typing import Any, Dict, List
+
 import numpy as np
 
 # Add the core directory to the path
@@ -28,11 +29,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))
 
 # Import the new modules with simplified dependencies
 try:
-    from tensor_weight_memory import TensorWeightMemory, MemoryUpdateMode
-    from symbolic_interpreter import SymbolicInterpreter, SymbolType, CollapseMode
-    from profit_matrix_feedback_loop import ProfitMatrixFeedbackLoop, BacktestResult, FeedbackMode
-    from dna_strategy_encoder import DNAStrategyEncoder, StrategyDNA, DNAEncodingMode, RecallMode
-    from strategy_consensus_router import StrategyConsensusRouter, ConsensusMode, RouteSelectionMode
+    from dna_strategy_encoder import DNAEncodingMode, DNAStrategyEncoder, RecallMode, StrategyDNA
+    from profit_matrix_feedback_loop import BacktestResult, FeedbackMode, ProfitMatrixFeedbackLoop
+    from strategy_consensus_router import ConsensusMode, RouteSelectionMode, StrategyConsensusRouter
+    from symbolic_interpreter import CollapseMode, SymbolicInterpreter, SymbolType
+    from tensor_weight_memory import MemoryUpdateMode, TensorWeightMemory
     MODULES_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some modules not available: {e}")

@@ -1,7 +1,8 @@
-from core.glyph.glyph_entropy_system import GlyphEntropySystem
-from core.trading_pipeline_integration import TradingPipelineIntegration
 import asyncio
 import logging
+
+from core.glyph.glyph_entropy_system import GlyphEntropySystem
+from core.trading_pipeline_integration import TradingPipelineIntegration
 
 # -*- coding: utf-8 -*-
 """

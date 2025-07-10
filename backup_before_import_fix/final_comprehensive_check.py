@@ -7,10 +7,10 @@ This script runs all code quality checks and provides a detailed report
 of the current state of the codebase.
 """
 
-import os
-import sys
-import subprocess
 import json
+import os
+import subprocess
+import sys
 import time
 from datetime import datetime
 from pathlib import Path

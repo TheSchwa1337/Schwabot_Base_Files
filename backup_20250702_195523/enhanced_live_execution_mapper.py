@@ -1,24 +1,69 @@
 import numpy as np
+
 from core.live_execution_mapper import ExecutionState, LiveExecutionMapper
 from core.profit_optimization_engine import (
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
-from typing import Tuple
-import logging
-import random
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Date,
+    Dict,
+    List,
+    Optional,
+    Original,
+    Schwabot,
+    The,
+    This,
+    Tuple,
+    19:36:57,
+    2025-07-02,
+    """,
+    -,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    enhanced_live_execution_mapper.py,
+    errors,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    implementation,
+    import,
+    in,
+    it,
+    logging,
+    mathematical,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    random,
+    running,
+    syntax,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\enhanced_live_execution_mapper.py
-Date commented out: 2025-07-02 19:36:57
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

@@ -4,28 +4,29 @@ Schwabot Visualizer Launcher - Comprehensive Visualization System
 Integrates all existing visualizers and creates missing ones like DLT Wave Form.
 """
 
-import sys
-import os
-import threading
-import webbrowser
-import time
 import json
+import os
 import subprocess
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+import sys
+import threading
+import time
+import webbrowser
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from flask import Flask, render_template, request, jsonify
     import matplotlib.pyplot as plt
     import numpy as np
     import pandas as pd
+
     from core.clean_unified_math import clean_unified_math
     from core.unified_math_system import generate_unified_hash
+    from flask import Flask, jsonify, render_template, request
 
     print("✅ Visualizer dependencies imported successfully")
 except ImportError as e:

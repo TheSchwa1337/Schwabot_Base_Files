@@ -4,7 +4,9 @@ Test script for the advanced trading system components.
 """
 
 import sys
+
 import numpy as np
+
 
 def test_advanced_system():
     """Test all advanced system components"""

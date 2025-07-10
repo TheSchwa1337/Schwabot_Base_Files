@@ -9,6 +9,7 @@ import sys
 import traceback
 from pathlib import Path
 
+
 def test_imports():
     """Test that core modules can be imported."""
     print("Testing core imports...")
@@ -36,6 +37,7 @@ def test_imports():
     
     try:
         from core.unified_pipeline_manager import UnifiedPipelineManager
+
         # Test instantiation
         pipeline_manager = UnifiedPipelineManager()
         print("✅ UnifiedPipelineManager imported and instantiated successfully")

@@ -1,30 +1,42 @@
-from core.unified_math_system import unified_math
-from core.gpt_command_layer import AIAgentType, CommandDomain, CommandPriority, AICommand, CommandResponse
+from core.gpt_command_layer import AIAgentType, AICommand, CommandDomain, CommandPriority, CommandResponse
 from core.hash_registry import register_hash_entry, update_hash_status
-from core.prophet_connector import compute_alpha_score, analyze_curve_alignment
-from core.utils.windows_cli_compatibility import (
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from dual_unicore_handler import DualUnicoreHandler
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any, Union
-from utils.safe_print import safe_print, info, warn, error, success, debug
-import asyncio
-import hashlib
-import json
-import logging
-import os
-import time
-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-
-
-
-# Initialize Unicode handler
-unicore = DualUnicoreHandler()
+from core.prophet_connector import analyze_curve_alignment, compute_alpha_score
+from core.unified_math_system import unified_math
+from core.utils.windows_cli_compatibility import (  # -*- coding: utf - 8 -*-; Initialize Unicode handler
+    Any,
+    Dict,
+    DualUnicoreHandler,
+    Enum,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    =,
+    asdict,
+    asyncio,
+    dataclass,
+    dataclasses,
+    datetime,
+    debug,
+    dual_unicore_handler,
+    enum,
+    error,
+    field,
+    from,
+    hashlib,
+    import,
+    info,
+    json,
+    logging,
+    os,
+    safe_print,
+    success,
+    time,
+    typing,
+    unicore,
+    utils.safe_print,
+    warn,
+)
 
 """"""
 """"""

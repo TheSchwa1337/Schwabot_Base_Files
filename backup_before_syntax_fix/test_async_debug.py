@@ -4,8 +4,8 @@ Simple async test script to debug CLI async issues.
 """
 
 import asyncio
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add project root to path

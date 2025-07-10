@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+
 class BacktestVisualizer:
 """Class for Schwabot trading functionality."""
         # Mathematical calculation implementation

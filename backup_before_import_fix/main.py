@@ -1,14 +1,15 @@
-from core.mathematical_backlog_manager import MathematicalBacklogManager
-from core.mathematical_relay_sequencer import MathematicalRelaySequencer
-from backtesting.simple_backtester import SimpleBacktester
-from core.ccxt_trading_executor import TradingPair
-from core.system_integration import SystemIntegrationManager, initialize_and_start_system
-from datetime import datetime
-from decimal import Decimal
 import argparse
 import asyncio
 import logging
 import sys
+from datetime import datetime
+from decimal import Decimal
+
+from backtesting.simple_backtester import SimpleBacktester
+from core.ccxt_trading_executor import TradingPair
+from core.mathematical_backlog_manager import MathematicalBacklogManager
+from core.mathematical_relay_sequencer import MathematicalRelaySequencer
+from core.system_integration import SystemIntegrationManager, initialize_and_start_system
 
 # -*- coding: utf-8 -*-
 """
@@ -44,10 +45,7 @@ logger = logging.getLogger(__name__)
 
 # Import system components
 try:
-    from core.system_integration import (
-        SystemIntegrationManager,
-        initialize_and_start_system,
-    )
+    from core.system_integration import SystemIntegrationManager, initialize_and_start_system
 
     SYSTEM_AVAILABLE = True
 except ImportError as e:

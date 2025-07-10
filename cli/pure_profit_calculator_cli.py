@@ -21,20 +21,20 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from core.pure_profit_calculator import (
+    HistoryState,
+    MarketData,
+    ProcessingMode,
     PureProfitCalculator,
     StrategyParameters,
-    ProcessingMode,
-    MarketData,
-    HistoryState,
-    create_sample_market_data,
-    create_pure_profit_calculator,
     assert_zpe_isolation,
+    create_pure_profit_calculator,
+    create_sample_market_data,
 )
 
 logger = logging.getLogger(__name__)
@@ -96,8 +96,8 @@ class PureProfitCalculatorCLI:
 
         try:
             # Capture flash screen output
-            import io
             import contextlib
+            import io
 
             f = io.StringIO()
             with contextlib.redirect_stdout(f):

@@ -1,5 +1,6 @@
-from fractals.fractal_base import FractalBase
 import numpy as np
+
+from fractals.fractal_base import FractalBase
 
 
 class ForeverFractal(FractalBase):

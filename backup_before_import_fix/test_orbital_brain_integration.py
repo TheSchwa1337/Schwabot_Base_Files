@@ -13,26 +13,30 @@ This script validates the complete, revolutionary implementation of:
 This confirms that the entire system is fully operational and ready for deployment.
 """
 
-import numpy as np
 import logging
-import time
 import sys
+import time
+
+import numpy as np
 
 # Add project root to path
 sys.path.append('.')
 
 try:
-    from core.orbital_shell_brain_system import ()
         OrbitalBRAINSystem,
         OrbitalShell,
         AltitudeVector,
         ShellConsensus,
         ProfitTierBucket,
     )
-    from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode
-    from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem, ProfitIntegrationMode, VectorizationStrategy
-    from core.clean_math_foundation import ThermalState, BitPhase
-    from core.qutrit_signal_matrix import QutritSignalMatrix, QutritState, QutritMatrixResult
+    from core.clean_math_foundation import BitPhase, ThermalState
+    from core.qutrit_signal_matrix import QutritMatrixResult, QutritSignalMatrix, QutritState
+    from core.strategy_bit_mapper import ExpansionMode, StrategyBitMapper
+    from core.unified_profit_vectorization_system import (
+        ProfitIntegrationMode,
+        UnifiedProfitVectorizationSystem,
+        VectorizationStrategy,
+    )
     SCHWABOT_READY = True
     except ImportError as e:
     print(f"❌ Critical import error: {e}")

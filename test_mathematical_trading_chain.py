@@ -7,22 +7,24 @@ This test validates that all mathematical concepts are actually implemented
 and calculating real values for BTC/USDC trading decisions.
 """
 
-import numpy as np
 import logging
-from typing import Dict, List, Tuple, Any
 import time
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+from core.advanced_tensor_algebra import AdvancedTensorAlgebra
+
 # Import our mathematical modules
 from core.entropy_math import EntropyMathSystem
-from core.tensor_score_utils import TensorScoreUtils
-from core.advanced_tensor_algebra import AdvancedTensorAlgebra
-from core.quantum_mathematical_bridge import QuantumMathematicalBridge
-from core.unified_math_system import UnifiedMathSystem
 from core.gpu_handlers import run_gpu_strategy
+from core.quantum_mathematical_bridge import QuantumMathematicalBridge
+from core.tensor_score_utils import TensorScoreUtils
+from core.unified_math_system import UnifiedMathSystem
 
 
 class MathematicalTradingChainTester:

@@ -30,7 +30,7 @@ async def test_system_creation():
     
     try:
         from core.schwabot_core_system import SchwabotCoreSystem
-        
+
         # Create system instance
         system = SchwabotCoreSystem()
         print("✅ System instance created successfully")
@@ -190,9 +190,10 @@ async def test_cli_api_methods():
     print("\nTesting CLI/API methods...")
     
     try:
+        from decimal import Decimal
+
         from core.schwabot_core_system import SchwabotCoreSystem
         from core.type_defs import OrderSide, OrderType
-        from decimal import Decimal
         
         system = SchwabotCoreSystem()
         await system.initialize()
@@ -237,9 +238,10 @@ async def test_trading_operations():
     print("\nTesting trading operations...")
     
     try:
+        from decimal import Decimal
+
         from core.schwabot_core_system import SchwabotCoreSystem
         from core.type_defs import OrderSide, OrderType
-        from decimal import Decimal
         
         system = SchwabotCoreSystem()
         await system.initialize()
@@ -309,8 +311,8 @@ async def test_system_integration():
     print("\nTesting system integration...")
     
     try:
-        from core.schwabot_core_system import get_system_instance, create_system_instance
-        
+        from core.schwabot_core_system import create_system_instance, get_system_instance
+
         # Test global instance management
         system1 = create_system_instance()
         system2 = get_system_instance()

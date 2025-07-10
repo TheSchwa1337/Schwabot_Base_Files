@@ -78,11 +78,7 @@ from .algorithmic_portfolio_balancer import (
 
                                         # BTC/USDC Trading Integration
                                             try:
-from .btc_usdc_trading_integration import (
-    BTCUSDCTradingConfig,
-    BTCUSDCTradingIntegration,
-    create_btc_usdc_integration,
-)
+from .btc_usdc_trading_integration import BTCUSDCTradingConfig, BTCUSDCTradingIntegration, create_btc_usdc_integration
 
                                             BTC_USDC_INTEGRATION_AVAILABLE = True
                                                 except ImportError:

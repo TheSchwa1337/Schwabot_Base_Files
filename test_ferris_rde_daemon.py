@@ -1,9 +1,10 @@
-import sys
-from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
-from utils.safe_print import success, error, safe_print
 import asyncio
 import logging
+import sys
 import time
+
+from core.ferris_rde_daemon import DaemonConfig, FerrisRDEDaemon, get_daemon_instance
+from utils.safe_print import error, safe_print, success
 
 #!/usr/bin/env python3
 """

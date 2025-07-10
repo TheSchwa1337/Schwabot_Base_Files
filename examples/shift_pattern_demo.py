@@ -1,22 +1,48 @@
+import traceback
+
 import matplotlib.pyplot as plt
 import numpy as np
-import traceback
-from core.advanced_drift_shell_integration import (
-from utils.safe_print import safe_print, info, error, success
-import os
-import sys
 
-#!/usr/bin/env python3
-"""
-Shift Pattern Engine Demo - Comprehensive Differential States Implementation
-
-This demo showcases all six differential states and their practical application
-in trading dynamics analysis.
-"""
-
-
-# Add parent directory to path for imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from core.advanced_drift_shell_integration import (  # !/usr/bin/env python3; Add parent directory to path for imports
+    Comprehensive,
+    Demo,
+    Differential,
+    Engine,
+    Implementation,
+    Pattern,
+    Shift,
+    States,
+    This,
+    """,
+    -,
+    __file__,
+    all,
+    analysis.,
+    and,
+    application,
+    demo,
+    differential,
+    dynamics,
+    error,
+    from,
+    import,
+    in,
+    info,
+    os,
+    os.path.abspath,
+    os.path.dirname,
+    practical,
+    safe_print,
+    showcases,
+    six,
+    states,
+    success,
+    sys,
+    sys.path.append,
+    their,
+    trading,
+    utils.safe_print,
+)
 
     ShiftPatternEngine,
 )

@@ -11,11 +11,12 @@ Converts orbital states (s,p,d,f) into quantized energy values:
 """
 
 import logging
-import numpy as np
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from enum import Enum
 import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

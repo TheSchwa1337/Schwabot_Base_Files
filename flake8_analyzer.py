@@ -1,8 +1,8 @@
-from collections import defaultdict
-from typing import List, Tuple
 import os
 import subprocess
 import sys
+from collections import defaultdict
+from typing import List, Tuple
 
 #!/usr/bin/env python3
 """

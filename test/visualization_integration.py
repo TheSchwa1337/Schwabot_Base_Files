@@ -3,25 +3,23 @@ Visualization Integration Test
 Tests the integration between trading engine and visualization components.
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import asyncio
 import json
 import time
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-from core.unified_trade_router import UnifiedTradeRouter
-from core.trading_engine_integration import (
-    TradeSignal, 
-    TradeExecution, 
-    generate_trade_signal
-)
 from core.clean_unified_math import clean_unified_math
+from core.trading_engine_integration import TradeExecution, TradeSignal, generate_trade_signal
+from core.unified_trade_router import UnifiedTradeRouter
 
 logger = logging.getLogger(__name__)
 
@@ -249,7 +247,7 @@ class ChartDataExporter:
         
         try:
             import csv
-            
+
             # Find the longest list to determine number of rows
             max_length = max(len(v) for v in data.values() if isinstance(v, list))
             

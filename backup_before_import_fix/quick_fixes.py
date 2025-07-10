@@ -7,9 +7,9 @@ This script addresses the most critical code quality issues found in the project
 """
 
 import os
-import sys
-import subprocess
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 

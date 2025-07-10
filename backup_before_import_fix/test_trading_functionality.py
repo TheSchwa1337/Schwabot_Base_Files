@@ -10,10 +10,10 @@ This script validates the core trading functionality including:
 - Backtesting integration
 """
 
+import logging
 import sys
 import time
-import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -50,7 +50,6 @@ def test_profit_calculator():
     logger.info("💰 Testing Pure Profit Calculator...")
 
     try:
-        from core.pure_profit_calculator import ()
             PureProfitCalculator, MarketData, HistoryState, 
             StrategyParameters, ProcessingMode, ProfitCalculationMode
         )
@@ -167,7 +166,6 @@ def test_cuda_integration():
     logger.info("⚡ Testing CUDA Integration...")
 
     try:
-        from utils.cuda_helper import ()
             USING_CUDA, safe_matrix_multiply, get_cuda_status
         )
 

@@ -1,8 +1,7 @@
-import shutil
-
 import hashlib
 import logging
 import os
+import shutil
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path

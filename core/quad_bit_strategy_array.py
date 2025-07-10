@@ -21,17 +21,18 @@ Key Functions:
 
 import logging
 import time
-import numpy as np
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 # Import dependencies
 try:
-    from core.math_config_manager import MathConfigManager
     from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
     from core.math_orchestrator import MathOrchestrator
 
     MATH_INFRASTRUCTURE_AVAILABLE = True

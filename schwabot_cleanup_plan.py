@@ -17,6 +17,7 @@ import os
 import shutil
 from pathlib import Path
 
+
 class SchwabotCleanupPlan:
     """Execute the cleanup and implementation plan."""
     

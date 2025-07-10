@@ -20,7 +20,7 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 # Configure logging
 logging.basicConfig(
@@ -31,14 +31,14 @@ logger = logging.getLogger(__name__)
 
 # Import Schwabot components
 try:
-    from core.hash_match_command_injector import create_hash_match_injector
-    from core.live_vector_simulator import LiveVectorSimulator, SimulationConfig, MarketSnapshot
-    from core.flask_ai_agent_handler import create_flask_ai_handler
     from core.agent_memory import AgentMemory
-    from core.profit_bucket_registry import ProfitBucketRegistry
-    from core.strategy_bit_mapper import StrategyBitMapper
     from core.entropy_signal_integration import EntropySignalIntegrator
+    from core.flask_ai_agent_handler import create_flask_ai_handler
+    from core.hash_match_command_injector import create_hash_match_injector
+    from core.live_vector_simulator import LiveVectorSimulator, MarketSnapshot, SimulationConfig
+    from core.profit_bucket_registry import ProfitBucketRegistry
     from core.real_time_execution_engine import RealTimeExecutionEngine
+    from core.strategy_bit_mapper import StrategyBitMapper
 except ImportError as e:
     logger.error(f"Import error: {e}")
     logger.error("Make sure all core modules are available")

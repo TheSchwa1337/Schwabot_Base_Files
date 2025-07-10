@@ -1,7 +1,8 @@
-import numpy as np
-from typing import List
 import os
 import time
+from typing import List
+
+import numpy as np
 
 #!/usr/bin/env python3
 """

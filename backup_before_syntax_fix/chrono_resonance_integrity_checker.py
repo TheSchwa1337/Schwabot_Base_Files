@@ -16,13 +16,13 @@ This prevents accidental modifications that could disrupt the delicate balance
 of the chrono resonance system.
 """
 
-import os
 import hashlib
 import logging
+import os
 import time
-from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -471,8 +471,9 @@ class ChronoResonanceIntegrityChecker:
     def _check_fractal_patterns(self):
         """Check that fractal pattern recognition is working correctly."""
         try:
-            from core.fractal_memory_tracker import create_fractal_memory_tracker
             import numpy as np
+
+            from core.fractal_memory_tracker import create_fractal_memory_tracker
 
             tracker = create_fractal_memory_tracker()
 
@@ -576,8 +577,9 @@ class ChronoResonanceIntegrityChecker:
         """Check that mathematical formulas are syntactically correct."""
         try:
             # Test CRLF formula computation
-            from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
             import numpy as np
+
+            from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction
 
             crlf = ChronoRecursiveLogicFunction()
 
@@ -621,8 +623,9 @@ class ChronoResonanceIntegrityChecker:
     def _check_two_gram_weighted_logic(self):
         """Check that two-gram weighted logic system is functioning correctly."""
         try:
-            from core.two_gram_detector import TwoGramDetector, create_two_gram_detector
             import numpy as np
+
+            from core.two_gram_detector import TwoGramDetector, create_two_gram_detector
 
             # Test two-gram detector creation
             detector = create_two_gram_detector({)}
@@ -738,8 +741,8 @@ class ChronoResonanceIntegrityChecker:
 
             # Test that critical trading components can be imported
             try:
-                from core.btc_usdc_trading_integration import BTCUSDCTradingIntegration
                 from core.algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer
+                from core.btc_usdc_trading_integration import BTCUSDCTradingIntegration
 
                 self.checks.append(IntegrityCheck())
                     component="entry_exit_calculations",

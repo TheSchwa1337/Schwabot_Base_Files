@@ -1,14 +1,12 @@
-import numpy as np
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.linguistic_glyph_engine import ()
-from core.linguistic_glyph_engine import ASICBitState, linguistic_engine
-from core.linguistic_glyph_engine import linguistic_engine
-from core.linguistic_glyph_engine import linguistic_engine
-from core.linguistic_glyph_engine import process_linguistic_command
 import json
 import os
 import sys
 import time
+
+import numpy as np
+
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.linguistic_glyph_engine import ASICBitState, linguistic_engine, process_linguistic_command
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

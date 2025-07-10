@@ -29,16 +29,8 @@ biological cellular behavior for distributed trading decisions.
 
     # Import biological systems
         try:
-        from .bio_cellular_signaling import (
-            BioCellularResponse,
-            BioCellularSignaling,
-            CellularSignalType,
-        )
-        from .bio_profit_vectorization import (
-            BioProfitResponse,
-            BioProfitVectorization,
-            ProfitMetabolismType,
-        )
+        from .bio_cellular_signaling import BioCellularResponse, BioCellularSignaling, CellularSignalType
+        from .bio_profit_vectorization import BioProfitResponse, BioProfitVectorization, ProfitMetabolismType
         from .matrix_mapper import FallbackDecision, MatrixMapper
         from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
         from .quantum_mathematical_bridge import QuantumMathematicalBridge

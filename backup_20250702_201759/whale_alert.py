@@ -6,12 +6,14 @@ Fetches whale transaction data from WhaleAlert API.
 Tracks large crypto transactions and provides insights into whale movements.
 """
 
-from .base_handler import BaseAPIHandler
-import requests
-import aiohttp
-from typing import Any, Dict, List
-import logging
 import asyncio
+import logging
+from typing import Any, Dict, List
+
+import aiohttp
+import requests
+
+from .base_handler import BaseAPIHandler
 
 try:
     import aiohttp

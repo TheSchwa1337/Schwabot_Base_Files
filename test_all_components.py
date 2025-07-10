@@ -4,13 +4,13 @@ Complete Component Analysis and Repair System
 Identifies and fixes all failing components to achieve 100% success rate
 """
 
+import ast
+import importlib
+import inspect
 import os
 import sys
-import importlib
 import traceback
-from typing import Dict, List, Tuple, Optional
-import ast
-import inspect
+from typing import Dict, List, Optional, Tuple
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))

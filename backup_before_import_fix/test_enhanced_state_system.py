@@ -12,9 +12,9 @@ Comprehensive test of the enhanced internal state management system, including:
 - Memory and backlog processing
 """
 
+import logging
 import sys
 import time
-import logging
 
 # Configure logging
 logging.basicConfig()
@@ -29,7 +29,6 @@ def test_enhanced_state_manager():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -108,8 +107,8 @@ def test_system_integration():
     print("=" * 50)
 
     try:
+        from core.internal_state.enhanced_state_manager import LogLevel, SystemMode
         from core.internal_state.system_integration import SystemIntegration
-        from core.internal_state.enhanced_state_manager import SystemMode, LogLevel
 
         # Test different modes
         for mode in [SystemMode.DEMO, SystemMode.TESTING]:
@@ -172,7 +171,6 @@ def test_btc_price_hashing():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -245,7 +243,6 @@ def test_memory_and_backlog():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -337,7 +334,6 @@ def test_logging_and_system_states():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -398,8 +394,8 @@ def test_demo_state_generation():
     print("=" * 50)
 
     try:
+        from core.internal_state.enhanced_state_manager import LogLevel, SystemMode
         from core.internal_state.system_integration import SystemIntegration
-        from core.internal_state.enhanced_state_manager import SystemMode, LogLevel
 
         # Create integration
         integration = SystemIntegration(mode=SystemMode.DEMO, log_level=LogLevel.INFO)
@@ -489,8 +485,8 @@ def test_system_initialization():
     print("=" * 50)
 
     try:
+        from core.internal_state.enhanced_state_manager import LogLevel, SystemMode
         from core.internal_state.system_integration import SystemIntegration
-        from core.internal_state.enhanced_state_manager import SystemMode, LogLevel
 
         # Test initialization in different modes
         for mode in [SystemMode.TESTING, SystemMode.DEMO, SystemMode.LIVE]:

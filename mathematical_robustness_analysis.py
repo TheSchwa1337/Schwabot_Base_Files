@@ -11,7 +11,8 @@ import inspect
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 # Configure logging

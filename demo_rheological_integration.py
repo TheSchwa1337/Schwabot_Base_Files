@@ -13,17 +13,18 @@ This demo shows how rheological principles integrate with the Schwabot trading s
 Run this demo to see the rheological integration in action!
 """
 
-import numpy as np
-import time
 import json
-from typing import Dict, List, Any
-import matplotlib.pyplot as plt
+import time
 from datetime import datetime
+from typing import Any, Dict, List
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Import our rheological integration system
     try:
-    from core.schwabot_rheology_integration import SchwabotRheologyIntegration, RheologicalState, RheologicalFlowType
     from core.quantum_mathematical_bridge import QuantumMathematicalBridge
+    from core.schwabot_rheology_integration import RheologicalFlowType, RheologicalState, SchwabotRheologyIntegration
     INTEGRATION_AVAILABLE = True
     except ImportError:
     print("⚠️ Integration modules not available - running in simulation mode")

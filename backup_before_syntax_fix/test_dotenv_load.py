@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Explicitly load the .env file from the current working directory

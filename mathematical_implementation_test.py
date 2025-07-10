@@ -8,12 +8,12 @@ are actually implemented in the Python code.
 """
 
 import ast
-import re
+import logging
 import os
+import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional, Any
-import logging
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Fix Unicode encoding issues on Windows
 if sys.platform == 'win32':

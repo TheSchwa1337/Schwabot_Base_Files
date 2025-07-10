@@ -15,13 +15,14 @@ intelligent system that operates like a living organism with sophisticated
 control mechanisms for optimal profit generation and risk management.
 """
 
-import numpy as np
-import time
 import json
-import matplotlib.pyplot as plt
-from typing import Dict, List, Any
-from datetime import datetime
 import logging
+import time
+from datetime import datetime
+from typing import Any, Dict, List
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -29,11 +30,11 @@ logger = logging.getLogger(__name__)
 
 # Import the complete system
     try:
-    from core.orbital_profit_control_system import OrbitalProfitControlSystem, create_orbital_profit_control_system
-    from core.entropy_driven_risk_management import EntropyDrivenRiskManager, CryptoAsset
     from core.bio_cellular_integration import BioCellularIntegration
-    from core.cellular_trade_executor import CellularTradeExecutor
     from core.bio_cellular_signaling import BioCellularSignaling
+    from core.cellular_trade_executor import CellularTradeExecutor
+    from core.entropy_driven_risk_management import CryptoAsset, EntropyDrivenRiskManager
+    from core.orbital_profit_control_system import OrbitalProfitControlSystem, create_orbital_profit_control_system
     SYSTEMS_AVAILABLE = True
     except ImportError as e:
     print(f"⚠️ Advanced systems not available: {e}")

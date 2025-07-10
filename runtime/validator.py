@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 import ast
 import logging
 import py_compile
 import subprocess
 import sys
 import time
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 from dual_unicore_handler import DualUnicoreHandler
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from utils.safe_print import debug, error, info, safe_print, success, warn
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

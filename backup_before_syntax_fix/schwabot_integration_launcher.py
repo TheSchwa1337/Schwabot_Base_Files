@@ -4,18 +4,18 @@ Schwabot Integration Launcher
 Complete system launcher with web dashboard, API, and trading integration
 """
 
+import logging
 import os
 import sys
-import time
 import threading
-import logging
+import time
 from datetime import datetime
 from typing import Dict, Optional
 
 # Add current directory to path
 sys.path.append(os.path.dirname(__file__))
 
-from schwabot_full_integration_system import create_schwabot_integration, IntegrationConfig
+from schwabot_full_integration_system import IntegrationConfig, create_schwabot_integration
 
 # Setup logging
 logging.basicConfig()

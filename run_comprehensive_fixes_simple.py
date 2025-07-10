@@ -14,15 +14,14 @@ Usage:
     python run_comprehensive_fixes_simple.py
 """
 
-import os
-import sys
-import subprocess
-import time
-from pathlib import Path
-from typing import List, Dict, Optional
-
 # Configure logging
 import logging
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+from typing import Dict, List, Optional
 
 logging.basicConfig(
     level=logging.INFO,

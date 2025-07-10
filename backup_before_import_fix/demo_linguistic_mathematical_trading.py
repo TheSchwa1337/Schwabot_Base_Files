@@ -1,14 +1,15 @@
-import numpy as np
-from core.api_bridge import api_bridge  # Corrected to import the instance
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
-from core.linguistic_glyph_engine import ()
-import traceback
 import asyncio  # Import asyncio for async operations
 import os
 import random
 import sys
 import time
+import traceback
+
+import numpy as np
+
+from core.api_bridge import api_bridge  # Corrected to import the instance
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

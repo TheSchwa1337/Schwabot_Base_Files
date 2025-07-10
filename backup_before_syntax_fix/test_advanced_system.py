@@ -4,6 +4,7 @@ Test script for the advanced trading system components.
 """
 
 import sys
+
 import numpy as np
 
 

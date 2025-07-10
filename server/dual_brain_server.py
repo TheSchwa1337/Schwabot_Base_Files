@@ -1,15 +1,18 @@
 from core.unified_math_system import UnifiedMathSystem
+
 from { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
-from core.dual_brain_architecture import DualBrainArchitecture, dual_brain
-from core.whale_tracker_integration import whale_tracker
-from flask import Flask, render_template, jsonify
-from flask_socketio import SocketIO, emit
 import asyncio
 import logging
 import os
 import sys
 import threading
 import time
+
+from flask_socketio import SocketIO, emit
+
+from core.dual_brain_architecture import DualBrainArchitecture, dual_brain
+from core.whale_tracker_integration import whale_tracker
+from flask import Flask, jsonify, render_template
 
 # -*- coding: utf-8 -*-
 """

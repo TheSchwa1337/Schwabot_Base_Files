@@ -1,15 +1,16 @@
    from core.clean_unified_math import CleanUnifiedMathSystem
-       import json
-    from core.brain_trading_engine import BrainTradingEngine
-    from symbolic_profit_router import SymbolicProfitRouter
-from datetime import datetime
-from pathlib import Path
-from tkinter import ttk, scrolledtext
+   import json
+   from core.brain_trading_engine import BrainTradingEngine
+   from symbolic_profit_router import SymbolicProfitRouter
+
 import json
 import os
 import threading
 import time
 import tkinter as tk
+from datetime import datetime
+from pathlib import Path
+from tkinter import scrolledtext, ttk
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

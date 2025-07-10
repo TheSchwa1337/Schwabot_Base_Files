@@ -16,9 +16,6 @@ Mathematical Foundation:
 This system provides quantum-enhanced trading execution with zero-impact operations.
 """
 
-import logging
-
-
 import asyncio
 import logging
 import time

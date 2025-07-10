@@ -1,14 +1,14 @@
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union
+
 from core.portfolio_tracker import PortfolioTracker
 from core.risk_manager import RiskManager
 from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
 from core.strategy_logic import SignalStrength, SignalType, StrategyLogic
 from core.trade_executor import TradeExecutor
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Union
-from typing import Tuple
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

@@ -1,9 +1,11 @@
-from core.unified_component_bridge import get_component_bridge
-from schwabot_unified_launcher import SchwabotUnifiedLauncher
-from pathlib import Path
 import argparse
 import logging
 import sys
+from pathlib import Path
+
+from schwabot_unified_launcher import SchwabotUnifiedLauncher
+
+from core.unified_component_bridge import get_component_bridge
 
 #!/usr/bin/env python3
 """Schwabot Unified Launcher - Quick Start Script."

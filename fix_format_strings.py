@@ -4,9 +4,9 @@ Script to fix invalid decimal literal format strings.
 Converts format strings like .format(var:.4f) to .format(var):.4f
 """
 
+import glob
 import os
 import re
-import glob
 
 
 def fix_format_strings(content):

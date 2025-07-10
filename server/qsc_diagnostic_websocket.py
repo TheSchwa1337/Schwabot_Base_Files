@@ -1,16 +1,18 @@
-import math
-import random
 import argparse
-from concurrent.futures import ThreadPoolExecutor
-from core.master_cycle_engine import MasterCycleEngine
-from typing import Dict, List, Optional, Any, Set
-from utils.logging_setup import setup_logging
 import asyncio
 import json
+import math
 import os
+import random
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List, Optional, Set
+
 import websockets
+
+from core.master_cycle_engine import MasterCycleEngine
+from utils.logging_setup import setup_logging
 
 #!/usr/bin/env python3
 """QSC Diagnostic WebSocket Server.

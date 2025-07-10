@@ -3,21 +3,23 @@
 Automated Trading Routes - Flask API endpoints for automated trading operations
 """
 
-from flask import Blueprint, request, jsonify
-from flask_socketio import emit
+import logging
 import os
 import sys
-import logging
 import threading
 import time
 from datetime import datetime
 from typing import Dict, List, Optional
 
+from flask_socketio import emit
+
+from flask import Blueprint, jsonify, request
+
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from core.automated_trading_engine import AutomatedTradingEngine
 from core.automated_strategy_engine import AutomatedStrategyEngine
+from core.automated_trading_engine import AutomatedTradingEngine
 
 logger = logging.getLogger(__name__)
 

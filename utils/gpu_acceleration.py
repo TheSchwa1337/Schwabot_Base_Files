@@ -18,16 +18,21 @@ Key Features:
 
 import logging
 import time
-from typing import Any, Dict, List, Optional, Union, Tuple
 from functools import wraps
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
 # Import type aliases
 try:
     from utils.type_aliases import (
-        SignalField, PhaseValue, EntropyValue, DriftCoefficient,
-        TimeIndex, ProcessingTime, BackendType
+        BackendType,
+        DriftCoefficient,
+        EntropyValue,
+        PhaseValue,
+        ProcessingTime,
+        SignalField,
+        TimeIndex,
     )
     TYPE_ALIASES_AVAILABLE = True
 except ImportError:

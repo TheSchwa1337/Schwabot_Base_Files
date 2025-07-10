@@ -1,8 +1,10 @@
-import numpy as np
-from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
 import json
 import logging
 import time
+
+import numpy as np
+
+from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
 
 # -*- coding: utf-8 -*-
 """

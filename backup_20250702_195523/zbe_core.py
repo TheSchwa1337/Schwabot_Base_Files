@@ -1,13 +1,14 @@
-import numpy as np
+import hashlib
+import logging
+import threading
+import time
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple
-import hashlib
-import logging
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 import psutil
-import threading
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

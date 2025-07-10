@@ -1,6 +1,3 @@
-from core.mathematical_pipeline_validator import MathematicalPipelineValidator
-from core.unified_math_system import unified_math
-
 import numpy as np
 
 from core.advanced_dualistic_trading_execution_system import (
@@ -87,6 +84,8 @@ from core.advanced_dualistic_trading_execution_system import (
     time,
     typing,
 )
+from core.mathematical_pipeline_validator import MathematicalPipelineValidator
+from core.unified_math_system import unified_math
 
 - core/clean_profit_vectorization.py (profit calculations)
 

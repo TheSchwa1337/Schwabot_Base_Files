@@ -1,6 +1,7 @@
 import ast
 import sys
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 
 def check_type_hints(file_path: str) -> Dict[str, List[str]]:
     """

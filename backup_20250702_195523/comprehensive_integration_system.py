@@ -1,36 +1,92 @@
+import numpy as np
+
+from core.advanced_dualistic_trading_execution_system import (
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    CCXTIntegration,
+    Date,
+    Dict,
+    DualisticStateMachine,
+    Enum,
+    List,
+    Optional,
+    OrderBookSnapshot,
+    Original,
+    Path,
+    PhaseBitIntegration,
+    Schwabot,
+    The,
+    This,
+    Tuple,
+    UnifiedTensorAlgebra,
+    Union,
+    ZPECore,
+    19:36:56,
+    2025-07-02,
+    """,
+    -,
+    asyncio,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    comprehensive_integration_system.py,
+    contains,
+    core,
+    core.advanced_tensor_algebra,
+    core.ccxt_integration,
+    core.dualistic_state_machine,
+    core.phase_bit_integration,
+    core.schwabot_unified_integration,
+    core.unified_profit_vectorization_system,
+    core.zpe_core,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    enum,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    hashlib,
+    implementation,
+    import,
+    in,
+    it,
+    logging,
+    mathematical,
+    os,
+    out,
+    out:,
+    pathlib,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    syntax,
+    sys,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
 from core.mathematical_pipeline_validator import MathematicalPipelineValidator
 from core.unified_math_system import unified_math
-import numpy as np
-from core.advanced_dualistic_trading_execution_system import (
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
-from core.dualistic_state_machine import DualisticStateMachine
-from core.phase_bit_integration import PhaseBitIntegration
-from core.schwabot_unified_integration import (
-from core.unified_profit_vectorization_system import (
-from core.zpe_core import ZPECore
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-import asyncio
-import hashlib
-import logging
-import os
-import sys
-import time
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\comprehensive_integration_system.py
-Date commented out: 2025-07-02 19:36:56
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

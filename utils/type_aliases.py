@@ -15,8 +15,9 @@ Key Benefits:
 • Provides clear semantic meaning for complex operations
 """
 
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
-from typing import Union, List, Dict, Any, Optional, Tuple
 
 # ============================================================================
 # CORE MATHEMATICAL TYPES

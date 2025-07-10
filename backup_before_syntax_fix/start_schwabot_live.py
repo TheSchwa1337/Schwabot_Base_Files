@@ -16,12 +16,12 @@ Usage:
     python start_schwabot_live.py --mode live --config config/schwabot_live_trading_config.yaml
 """
 
-import asyncio
 import argparse
+import asyncio
 import logging
 import os
-import sys
 import signal
+import sys
 import time
 from pathlib import Path
 

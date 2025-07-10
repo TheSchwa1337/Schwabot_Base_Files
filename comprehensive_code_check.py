@@ -1,9 +1,10 @@
 import os
-import sys
-import subprocess
-import traceback
-import chardet
 import re
+import subprocess
+import sys
+import traceback
+
+import chardet
 
 
 def detect_file_encoding(filepath):

@@ -41,11 +41,7 @@ from core.backend_math import get_backend
 
 # Application-specific imports
 from ..system.dual_state_router import get_dual_state_router
-from ..utils.cuda_helper import (
-    safe_cuda_operation,
-    safe_matrix_multiply,
-    safe_tensor_contraction,
-)
+from ..utils.cuda_helper import safe_cuda_operation, safe_matrix_multiply, safe_tensor_contraction
 
 xp = get_backend()
 

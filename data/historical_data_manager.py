@@ -1,21 +1,60 @@
 import numpy as np
 import pandas as pd
-from . import (
-from datetime import datetime, timedelta
-from decimal import Decimal, ROUND_DOWN
-from typing import Dict, Optional, Any
-import hashlib
-import logging
 
-#!/usr/bin/env python3
-"""Historical Data Manager - BTC/USDC Trading Data Pipeline.
+from . import (  # !/usr/bin/env python3
+    BTC,
+    BTC/USDC,
+    ROUND_DOWN,
+    Any,
+    Comprehensive,
+    Data,
+    Decimal,
+    Dict,
+    Features:,
+    Handles,
+    Historical,
+    Key,
+    Manager,
+    Multi-decimal,
+    Optional,
+    Pipeline.,
+    Schwabot's,
+    Trading,
+    2,
+    6,
+    8,
+    """Historical,
+    -,
+    analysis,
+    and,
+    data,
+    datetime,
+    decimal,
+    decimals,
+    for,
+    from,
+    generation.,
+    hash,
+    hashlib,
+    historical,
+    import,
+    ingestion,
+    logging,
+    management,
+    multi-decimal,
+    multiple,
+    pattern,
+    precision,
+    preprocessing,
+    price,
+    profit,
+    sources,
+    system,
+    system.,
+    timedelta,
+    typing,
+)
 
-Comprehensive historical data management system for Schwabot's precision profit system.
-Handles data ingestion, preprocessing, multi-decimal analysis, and hash pattern generation.
-
-Key Features:
-- Historical BTC price data ingestion from multiple sources
-- Multi-decimal precision analysis (2, 6, 8 decimals)
 - SHA256 hash pattern generation for temporal memory
 - Integration with QSC-GTS biological immune system
 - Real-time historical context for trading decisions

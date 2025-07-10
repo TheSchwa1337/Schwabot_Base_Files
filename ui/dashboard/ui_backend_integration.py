@@ -2,19 +2,20 @@ import asyncio
 import json
 import os
 import sys
+
+import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from starlette.websockets import WebSocketState
-import uvicorn
 
 # Add project root to path to load core modules
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from core.clean_trading_pipeline import create_trading_pipeline, CleanTradingPipeline
-from core.api.integration_manager import ApiIntegrationManager
 from core.api.data_models import OrderRequest
+from core.api.integration_manager import ApiIntegrationManager
+from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
 
 # --- Application Setup ---
 app = FastAPI(

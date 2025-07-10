@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Any, Dict
+
 import logging
 import unicodedata
+from typing import Any, Dict
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

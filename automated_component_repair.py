@@ -8,11 +8,11 @@ Fixes syntax errors, import errors, and validates components
 """
 
 import os
-import sys
 import re
 import shutil
-from typing import Dict, List, Optional
+import sys
 from pathlib import Path
+from typing import Dict, List, Optional
 
 
 class AutomatedRepairSystem:

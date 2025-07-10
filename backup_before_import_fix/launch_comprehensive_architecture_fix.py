@@ -2,15 +2,15 @@
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
-from dual_unicore_handler import DualUnicoreHandler
-from windows_cli_compatibility import WindowsCliCompatibilityHandler
 import os
 import platform
 import subprocess
 import sys
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from windows_cli_compatibility import WindowsCliCompatibilityHandler
 
+from dual_unicore_handler import DualUnicoreHandler
+from utils.safe_print import debug, error, info, safe_print, success, warn
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

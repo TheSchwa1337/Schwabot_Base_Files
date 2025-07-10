@@ -16,7 +16,8 @@ Usage:
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple, Set
+from typing import Dict, List, Set, Tuple
+
 
 class SchwabotAnalyzer:
     """Analyze schwabot directory for cleanup and refactoring."""

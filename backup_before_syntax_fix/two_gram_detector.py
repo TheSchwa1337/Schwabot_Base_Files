@@ -33,11 +33,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from .fractal_memory_tracker import (
-    FractalMemoryTracker,
-    FractalSnapshot,
-    create_fractal_memory_tracker,
-)
+from .fractal_memory_tracker import FractalMemoryTracker, FractalSnapshot, create_fractal_memory_tracker
 from .phantom_detector import PhantomZone
 from .phantom_registry import PhantomRegistry
 from .unified_math_system import generate_unified_hash

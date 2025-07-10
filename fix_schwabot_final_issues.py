@@ -9,6 +9,7 @@ Targeted fixes for remaining Flake8 issues in schwabot directory.
 import re
 from pathlib import Path
 
+
 def fix_schwabot_init():
     """Fix issues in schwabot/__init__.py."""
     init_file = Path("schwabot/__init__.py")

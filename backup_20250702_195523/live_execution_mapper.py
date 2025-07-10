@@ -1,28 +1,80 @@
 from core.portfolio_tracker import PortfolioTracker, Position
 from core.risk_manager import RiskManager, RiskMetric
 from core.strategy.entry_exit_portal import (
-from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
-from core.trade_executor import Order, TradeExecutor
-from dataclasses import dataclass, field
-from decimal import Decimal
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
-import logging
-import os
-import sys
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Date,
+    Decimal,
+    Dict,
+    Enum,
+    GlyphStrategyCore,
+    GlyphStrategyResult,
+    List,
+    Optional,
+    Order,
+    Original,
+    Schwabot,
+    The,
+    This,
+    TradeExecutor,
+    Union,
+    19:36:58,
+    2025-07-02,
+    """,
+    -,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core.strategy.glyph_strategy_core,
+    core.trade_executor,
+    core/clean_math_foundation.py,
+    dataclass,
+    dataclasses,
+    decimal,
+    enum,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    has,
+    implementation,
+    import,
+    in,
+    it,
+    live_execution_mapper.py,
+    logging,
+    mathematical,
+    os,
+    out,
+    out:,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    syntax,
+    sys,
+    system,
+    that,
+    the,
+    time,
+    typing,
+)
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\live_execution_mapper.py
-Date commented out: 2025-07-02 19:36:58
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

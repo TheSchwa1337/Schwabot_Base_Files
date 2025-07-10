@@ -1,14 +1,16 @@
-from core.unified_logic.phase_math import phase_adjust
-from core.unified_logic.btc_tick_backlog import save_btc_tick, BTCTick
+import random
+import time
+from datetime import datetime
+from typing import Any, Dict
+
+import yaml
+
+from core.unified_logic.btc_tick_backlog import BTCTick, save_btc_tick
 from core.unified_logic.entry_logic import entry_score
 from core.unified_logic.float_valuation import float_valuation
 from core.unified_logic.ghost_conditionals import ghost_conditional
+from core.unified_logic.phase_math import phase_adjust
 from core.unified_logic.unicode_emoji_asic import label_state
-from datetime import datetime
-from typing import Dict, Any
-import random
-import time
-import yaml
 
 # -*- coding: utf-8 -*-
 """Demo script for unified logic integration with live phase simulation and backlogging."""

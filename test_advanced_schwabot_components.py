@@ -1,15 +1,17 @@
-from schwabot.core.truth_lattice_math import TruthLatticeMath
-import numpy as np
+import json
+import logging
+import sys
+import time
 from pathlib import Path
+
+import numpy as np
+
 from schwabot.core.ghost_field_stabilizer import GhostFieldStabilizer
 from schwabot.core.overlay.aleph_overlay_mapper import AlephOverlayMapper
 from schwabot.core.phase.bit_wave_propagator import BitWavePropagator
 from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter
 from schwabot.core.phase.phase_transition_monitor import PhaseTransitionMonitor
-import json
-import logging
-import sys
-import time
+from schwabot.core.truth_lattice_math import TruthLatticeMath
 
 #!/usr/bin/env python3
 """

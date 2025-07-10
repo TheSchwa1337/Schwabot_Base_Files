@@ -1,17 +1,43 @@
 from core.master_cycle_engine import MasterCycleEngine
-from core.qsc_enhanced_profit_allocator import (
-from pathlib import Path
-from server.qsc_diagnostic_websocket import QSCDiagnosticServer
-from typing import Dict, Any
-from utils.logging_setup import setup_logging
-import asyncio
-import sys
-
-#!/usr/bin/env python3
-"""QSC + GTS Immune System Demo.
-
-Comprehensive demonstration of the complete Quantum Static Core (QSC) and
-Generalized Tensor Solutions (GTS) immune system for Schwabot trading.
+from core.qsc_enhanced_profit_allocator import (  # !/usr/bin/env python3
+    """QSC,
+    GTS,
+    QSC,
+    Any,
+    Comprehensive,
+    Core,
+    Demo.,
+    Dict,
+    Generalized,
+    Immune,
+    Path,
+    QSCDiagnosticServer,
+    Quantum,
+    Schwabot,
+    Solutions,
+    Static,
+    System,
+    Tensor,
+    +,
+    and,
+    asyncio,
+    complete,
+    demonstration,
+    for,
+    from,
+    immune,
+    import,
+    of,
+    pathlib,
+    server.qsc_diagnostic_websocket,
+    setup_logging,
+    sys,
+    system,
+    the,
+    trading.,
+    typing,
+    utils.logging_setup,
+)
 
 This demo shows:
 1. Auto-detection of Fibonacci divergence

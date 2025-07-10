@@ -1,8 +1,3 @@
-from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
-from secure_config_manager import get_secure_api_key
-from utils.secure_config_manager import get_secure_api_key
-import asyncio
-
 import asyncio
 import hashlib
 import json
@@ -15,6 +10,10 @@ import aiohttp
 
 # Add CCXT import at the top
 import ccxt.async_support as ccxt
+from secure_config_manager import get_secure_api_key
+
+from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
+from utils.secure_config_manager import get_secure_api_key
 
 #!/usr/bin/env python3
 

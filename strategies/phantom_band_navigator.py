@@ -16,17 +16,19 @@ Core Features:
 - Live execution integration
 """
 
-import numpy as np
-import time
-import logging
 import asyncio
-from typing import Dict, List, Optional, Tuple, Any
-from dataclasses import dataclass
-from datetime import datetime, timedelta
+import logging
+import os
 
 # Import Phantom Math components
 import sys
-import os
+import time
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.phantom_detector import PhantomDetector, PhantomZone
@@ -462,7 +464,7 @@ class PhantomBandNavigator:
 def main():
     """Test the Phantom Band Navigator strategy."""
     import matplotlib.pyplot as plt
-    
+
     # Initialize strategy
     navigator = PhantomBandNavigator()
     

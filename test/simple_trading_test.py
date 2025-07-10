@@ -3,19 +3,21 @@ Simple Trading Engine Test
 Basic integration test for the enhanced trading engine.
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from core.clean_unified_math import clean_unified_math
 from core.trading_engine_integration import (
-    TradeSignal, 
-    TradeExecution, 
-    generate_trade_signal,
+    TradeExecution,
+    TradeSignal,
+    TradingError,
     ValidationError,
-    TradingError
+    generate_trade_signal,
 )
 from core.unified_trade_router import UnifiedTradeRouter
-from core.clean_unified_math import clean_unified_math
+
 
 def test_basic_signal_generation():
     """Test basic signal generation."""

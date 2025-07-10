@@ -22,16 +22,16 @@ import numpy as np
         # CUDA Helper Integration (for additional, utilities)
             try:
             from utils.cuda_helper import (
-            get_cuda_status,
-            report_cuda_status,
-            safe_convolution,
-            safe_cuda_operation,
-            safe_eigenvalue_decomposition,
-            safe_fft,
-            safe_matrix_inverse,
-            safe_matrix_multiply,
-            safe_svd,
-            safe_tensor_contraction,
+                get_cuda_status,
+                report_cuda_status,
+                safe_convolution,
+                safe_cuda_operation,
+                safe_eigenvalue_decomposition,
+                safe_fft,
+                safe_matrix_inverse,
+                safe_matrix_multiply,
+                safe_svd,
+                safe_tensor_contraction,
             )
 
             CUDA_AVAILABLE = True

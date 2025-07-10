@@ -3,20 +3,21 @@ Enhanced Demo Trade Pipeline
 Demonstrates the integrated trading system with mathematical insights and error handling.
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import asyncio
 import json
+import logging
 import time
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from core.unified_trade_router import UnifiedTradeRouter
-from core.trading_engine_integration import TradingError, ErrorSeverity
 from core.clean_unified_math import clean_unified_math
-import logging
+from core.trading_engine_integration import ErrorSeverity, TradingError
+from core.unified_trade_router import UnifiedTradeRouter
 
 # Configure logging for better visibility
 logging.basicConfig(

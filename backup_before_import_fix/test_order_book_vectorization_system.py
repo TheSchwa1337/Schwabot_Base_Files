@@ -1,12 +1,14 @@
+import asyncio
+import logging
+import time
+from typing import Any, Dict, List
+
 import numpy as np
+
 from core.api_bridge import APIBridge
 from core.entry_exit_logic import EntryExitLogic
 from core.order_book_vectorizer import OrderBookVectorizer
 from core.strategy_bit_mapper import StrategyBitMapper
-from typing import Dict, List, Any
-import asyncio
-import logging
-import time
 
 # -*- coding: utf-8 -*-
 """

@@ -4,12 +4,13 @@ Phase 1 Cleanup Script for Schwabot Core
 Implements the first phase of the comprehensive cleanup plan.
 """
 
+import json
 import os
 import shutil
-import json
-from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any, Dict, List
+
 
 class Phase1Cleanup:
     def __init__(self, core_dir: str = "core", backup_dir: str = "backups"):

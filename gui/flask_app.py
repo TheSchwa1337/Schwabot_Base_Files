@@ -4,19 +4,20 @@ Schwabot Flask GUI - Comprehensive Trading Interface
 Provides demo, live trading, CCXT integration, and visualization capabilities.
 """
 
-from flask import Flask, render_template, request, jsonify, session
 import json
-import time
 import threading
+import time
 from datetime import datetime
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+
+from core.ccxt_integration import CCXTIntegration
+from core.clean_unified_math import clean_unified_math
+from core.unified_math_system import generate_unified_hash
+from core.unified_trade_router import UnifiedTradeRouter
 
 # Core imports
 from core.visual_execution_node import VisualExecutionNode
-from core.unified_trade_router import UnifiedTradeRouter
-from core.unified_math_system import generate_unified_hash
-from core.clean_unified_math import clean_unified_math
-from core.ccxt_integration import CCXTIntegration
+from flask import Flask, jsonify, render_template, request, session
 from gui.visualizer_launcher import VisualizerLauncher
 
 app = Flask(__name__)

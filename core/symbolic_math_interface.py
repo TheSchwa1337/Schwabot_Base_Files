@@ -1,27 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Symbolic Math Interface for Schwabot
-====================================
+Advanced Symbolic Math Interface for Schwabot
+=============================================
 
-Provides Cursor-friendly wrappers for complex mathematical operations:
-• Symbolic operator aliases (∇, Ω, ψ, λ)
-• Hardware-optimized computation (CPU/GPU)
-• Type-safe mathematical operations
-• Recursive logic preservation
+Provides comprehensive symbolic mathematical operations with:
+• Full CLI compatibility and type safety
+• Safe parsing and input validation
+• Registry hashing canonicalization
+• Lambda compilation for strategy integration
+• Quantum mathematical bridge integration
+• Recursive pipeline execution support
 
-This interface allows Cursor to understand complex math while maintaining
-the recursive depth and symbolic richness of Schwabot's mathematical framework.
+This interface maintains backward compatibility while providing
+advanced mathematical capabilities for Schwabot's trading system.
 """
 
 import logging
-import numpy as np
-from typing import Any, Dict, List, Optional, Tuple, Union
+import re
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+from sympy import Expr, Symbol, diff, integrate, lambdify, simplify, solve, symbols, sympify
+from sympy.core import S
 
 logger = logging.getLogger(__name__)
 
-# Type aliases for Cursor clarity
+# Type aliases for clarity
 SignalField = np.ndarray
 TimeIndex = int
 PhaseValue = float
@@ -37,6 +43,247 @@ class SymbolicContext:
     entropy_index: int
     phantom_layer: bool = False
 
+class SymbolicMathEngine:
+    """
+    Advanced symbolic math engine with full CLI compatibility.
+    Provides safe parsing, type conversion, and registry integration.
+    """
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or self._default_config()
+        self.logger = logger
+        self.active = False
+        self.initialized = False
+        self._initialize_system()
+    
+    def _default_config(self) -> Dict[str, Any]:
+        return {
+            'enabled': True,
+            'hardware_preference': 'auto',  # 'cpu', 'gpu', 'auto'
+            'enable_phantom_boost': True,
+            'enable_context_awareness': True,
+            'max_iterations': 100,
+            'convergence_threshold': 1e-6,
+            'safe_parsing': True,
+            'allow_unsafe_expressions': False,
+        }
+    
+    def _initialize_system(self) -> None:
+        """Initialize the symbolic math engine."""
+        try:
+            self.logger.info("Initializing SymbolicMathEngine")
+            self.initialized = True
+            self.active = True
+            self.logger.info("✅ SymbolicMathEngine initialized successfully")
+        except Exception as e:
+            self.logger.error(f"❌ Error initializing SymbolicMathEngine: {e}")
+            self.initialized = False
+    
+    def safe_sympify(self, expr_str: str) -> Optional[Expr]:
+        """
+        Safely parse a string expression into a sympy expression.
+        
+        Args:
+            expr_str: String representation of mathematical expression
+            
+        Returns:
+            Parsed sympy expression or None if parsing fails
+        """
+        try:
+            if self.config.get('safe_parsing', True):
+                if not self.is_safe_expr(expr_str):
+                    self.logger.warning(f"Unsafe expression detected: {expr_str}")
+                    if not self.config.get('allow_unsafe_expressions', False):
+                        return None
+            
+            return sympify(expr_str)
+        except Exception as e:
+            self.logger.warning(f"Could not parse expression: {expr_str} — {e}")
+            return None
+    
+    def is_safe_expr(self, expr_str: str) -> bool:
+        """
+        Check if an expression string is safe for evaluation.
+        
+        Args:
+            expr_str: String to validate
+            
+        Returns:
+            True if expression is safe, False otherwise
+        """
+        # Only allow numbers, operators, parentheses, x/X, whitespace, dots, and common functions
+        safe_pattern = r'^[\d\+\-\*\/\^\(\)xX\s\.\,\sincos\sintan\slog\sexp\ssqrt\sabs\s]+$'
+        return bool(re.fullmatch(safe_pattern, expr_str))
+    
+    def parse_expression(self, expr: Union[str, Expr]) -> Expr:
+        """
+        Parse an expression (string or sympy) into a sympy expression.
+        
+        Args:
+            expr: Expression to parse
+            
+        Returns:
+            Parsed sympy expression
+        """
+        if isinstance(expr, str):
+            parsed = self.safe_sympify(expr)
+            if parsed is None:
+                raise ValueError(f"Could not parse expression: {expr}")
+            return parsed
+        elif isinstance(expr, Expr):
+            return expr
+        else:
+            raise TypeError(f"Unsupported expression type: {type(expr)}")
+    
+    def simplify(self, expr: Union[str, Expr]) -> Expr:
+        """
+        Simplify a mathematical expression.
+        
+        Args:
+            expr: Expression to simplify
+            
+        Returns:
+            Simplified expression
+        """
+        parsed = self.parse_expression(expr)
+        return simplify(parsed)
+    
+    def differentiate(self, expr: Union[str, Expr], var: str = 'x') -> Expr:
+        """
+        Differentiate an expression with respect to a variable.
+        
+        Args:
+            expr: Expression to differentiate
+            var: Variable to differentiate with respect to
+            
+        Returns:
+            Differentiated expression
+        """
+        parsed = self.parse_expression(expr)
+        return diff(parsed, var)
+    
+    def integrate(self, expr: Union[str, Expr], var: str = 'x') -> Expr:
+        """
+        Integrate an expression with respect to a variable.
+        
+        Args:
+            expr: Expression to integrate
+            var: Variable to integrate with respect to
+            
+        Returns:
+            Integrated expression
+        """
+        parsed = self.parse_expression(expr)
+        return integrate(parsed, var)
+    
+    def solve_equation(self, expr: Union[str, Expr], var: str = 'x') -> List[Any]:
+        """
+        Solve an equation for a variable.
+        
+        Args:
+            expr: Equation to solve
+            var: Variable to solve for
+            
+        Returns:
+            List of solutions
+        """
+        parsed = self.parse_expression(expr)
+        return solve(parsed, var)
+    
+    def to_float(self, expr: Union[str, Expr]) -> float:
+        """
+        Convert an expression to a float value.
+        
+        Args:
+            expr: Expression to convert
+            
+        Returns:
+            Float value or NaN if conversion fails
+        """
+        try:
+            parsed = self.parse_expression(expr)
+            result = parsed.evalf()
+            return float(result)
+        except Exception as e:
+            self.logger.warning(f"Could not convert expression to float: {expr} — {e}")
+            return float('nan')
+    
+    def normalize_expr(self, expr: Union[str, Expr]) -> float:
+        """
+        Normalize an expression for registry hashing.
+        Always returns a canonical float value.
+        
+        Args:
+            expr: Expression to normalize
+            
+        Returns:
+            Canonical float value
+        """
+        try:
+            parsed = self.parse_expression(expr)
+            simplified = simplify(parsed)
+            return float(simplified.evalf())
+        except Exception as e:
+            self.logger.warning(f"Could not normalize expression: {expr} — {e}")
+            return 0.0
+    
+    def compile_lambda(self, expr: Union[str, Expr], var: str = 'x') -> Callable:
+        """
+        Compile an expression into a callable function for fast evaluation.
+        
+        Args:
+            expr: Expression to compile
+            var: Variable name for the function
+            
+        Returns:
+            Callable function that evaluates the expression
+        """
+        try:
+            parsed = self.parse_expression(expr)
+            x = symbols(var)
+            return lambdify(x, parsed, 'numpy')
+        except Exception as e:
+            self.logger.error(f"Could not compile expression: {expr} — {e}")
+            # Return a safe fallback function
+            return lambda x: 0.0
+    
+    def evaluate_at_point(self, expr: Union[str, Expr], var: str = 'x', value: float = 0.0) -> float:
+        """
+        Evaluate an expression at a specific point.
+        
+        Args:
+            expr: Expression to evaluate
+            var: Variable name
+            value: Value to substitute
+            
+        Returns:
+            Evaluated result
+        """
+        try:
+            parsed = self.parse_expression(expr)
+            x = symbols(var)
+            result = parsed.evalf(subs={x: value})
+            return float(result)
+        except Exception as e:
+            self.logger.warning(f"Could not evaluate expression: {expr} at {var}={value} — {e}")
+            return float('nan')
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get engine status."""
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'config': self.config,
+        }
+
+class SymbolicMathInterface(SymbolicMathEngine):
+    """
+    CLI-compatible interface that inherits from SymbolicMathEngine.
+    Provides backward compatibility for existing code.
+    """
+    pass
+
+# Advanced mathematical operations for Schwabot's recursive architecture
 class EntropicGradient:
     """
     Symbolic gradient operations (∇).
@@ -234,82 +481,6 @@ class NoiseField:
         except Exception as e:
             logger.error(f"Noise computation error: {e}")
             return 1.0
-
-class SymbolicMathEngine:
-    """
-    Main symbolic math engine that coordinates all operations.
-    Provides unified interface for complex mathematical computations.
-    """
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        self.config = config or self._default_config()
-        self.logger = logging.getLogger(__name__)
-        self.active = False
-        self.initialized = False
-        self._initialize_system()
-    
-    def _default_config(self) -> Dict[str, Any]:
-        return {
-            'enabled': True,
-            'hardware_preference': 'auto',  # 'cpu', 'gpu', 'auto'
-            'enable_phantom_boost': True,
-            'enable_context_awareness': True,
-            'max_iterations': 100,
-            'convergence_threshold': 1e-6,
-        }
-    
-    def _initialize_system(self) -> None:
-        """Initialize the symbolic math engine."""
-        try:
-            self.logger.info("Initializing SymbolicMathEngine")
-            self.initialized = True
-            self.active = True
-            self.logger.info("✅ SymbolicMathEngine initialized successfully")
-        except Exception as e:
-            self.logger.error(f"❌ Error initializing SymbolicMathEngine: {e}")
-            self.initialized = False
-    
-    def compute_phase_omega(self, signal_data: Union[List, np.ndarray], time_idx: TimeIndex, 
-                          context: Optional[SymbolicContext] = None) -> PhaseValue:
-        """
-        Complete phase omega computation pipeline.
-        
-        Symbolic: Ω = ∇ψ(t) * D
-        Cursor-friendly: engine.compute_phase_omega(signal_data, time_idx, context)
-        """
-        try:
-            # Extract signal field
-            signal_field = SignalPsi.extract_field(signal_data, 
-                                                 context.entropy_index if context else 0)
-            
-            # Compute gradient
-            gradient = EntropicGradient.derive_with_context(signal_field, time_idx, context)
-            
-            # Compute drift
-            if isinstance(signal_data, list):
-                drift = DriftField.compute_drift(signal_data, context)
-            else:
-                drift = 0.1  # Default drift for numpy arrays
-            
-            # Compute noise factor
-            noise_factor = NoiseField.sum_noise(signal_field)
-            
-            # Compute final phase omega
-            omega = PhaseOmega.compute_stable(gradient, drift, noise_factor)
-            
-            return omega
-            
-        except Exception as e:
-            self.logger.error(f"Phase omega computation error: {e}")
-            return 0.0
-    
-    def get_status(self) -> Dict[str, Any]:
-        """Get engine status."""
-        return {
-            'active': self.active,
-            'initialized': self.initialized,
-            'config': self.config,
-        }
 
 # Factory function for easy instantiation
 def create_symbolic_math_engine(config: Optional[Dict[str, Any]] = None) -> SymbolicMathEngine:

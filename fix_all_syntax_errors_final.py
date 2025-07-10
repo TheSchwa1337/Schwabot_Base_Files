@@ -7,12 +7,12 @@ This script identifies and fixes all remaining syntax errors in the Schwabot cod
 Targets missing colons, malformed decorators, indentation issues, and other syntax problems.
 """
 
-import os
-import re
 import ast
 import logging
+import os
+import re
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import Any, Dict, List, Tuple
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

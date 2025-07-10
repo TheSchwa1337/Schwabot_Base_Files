@@ -1,9 +1,9 @@
 import json
+import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Any
-import re
+from typing import Any, Dict, List
 
 #!/usr/bin/env python3
 """

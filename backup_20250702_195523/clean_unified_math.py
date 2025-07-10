@@ -1,10 +1,10 @@
+import logging
 import math
-import numpy as np
+import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
-import logging
-import time
 
+import numpy as np
 
 # -*- coding: utf-8 -*-
 

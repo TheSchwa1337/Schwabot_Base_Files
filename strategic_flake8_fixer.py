@@ -1,12 +1,11 @@
-from dataclasses import dataclass
-from dual_unicore_handler import DualUnicoreHandler
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set, Any
 import argparse
 import re
 import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-
+from dual_unicore_handler import DualUnicoreHandler
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

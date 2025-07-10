@@ -1,9 +1,10 @@
-import numpy as np
-from typing import Any, Dict, Optional, Union
 import hashlib
 import random
 import secrets
 import time
+from typing import Any, Dict, Optional, Union
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

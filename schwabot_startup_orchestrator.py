@@ -9,18 +9,19 @@ Author: Schwabot Development Team
 Version: 1.0.0 - Full Production Release
 """
 
-import sys
-import os
-import time
-import threading
 import importlib
-import traceback
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from enum import Enum
 import json
+import os
+import sys
+import threading
+import time
+import traceback
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 from unittest.mock import patch
+
 import numpy as np
 
 # Add core to path for imports
@@ -28,15 +29,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Try to import core components (graceful failure, handling)
     try:
+    from test.integrated_trading_test_suite import IntegratedTradingTestSuite
+
+    from core.advanced_tensor_algebra import tensor_dot_fusion
+    from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction, CRLFTriggerState
     from core.clean_unified_math import clean_unified_math, fractal_quantize_vector
+    from core.schwafit_core import SchwafitCore
+    from core.strategy_bit_mapper import ExpansionMode, StrategyBitMapper
     from core.trading_engine_integration import TradeSignal, TradingError
     from core.unified_trade_router import UnifiedTradeRouter
     from core.zpe_zbe_core import ZPEZBECore
-    from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction, CRLFTriggerState
-    from core.advanced_tensor_algebra import tensor_dot_fusion
-    from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode
-    from core.schwafit_core import SchwafitCore
-    from test.integrated_trading_test_suite import IntegratedTradingTestSuite
     except ImportError as e:
     print(f"⚠️  Import warning: {e}")
     print("🔧 Some components may need initialization...")

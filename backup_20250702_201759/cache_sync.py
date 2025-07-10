@@ -1,12 +1,14 @@
-from .handlers.base_handler import BaseAPIHandler
 from __future__ import annotations
-from pathlib import Path
-from types import ModuleType
-from typing import List
+
 import asyncio
 import importlib
 import inspect
 import logging
+from pathlib import Path
+from types import ModuleType
+from typing import List
+
+from .handlers.base_handler import BaseAPIHandler
 
 """A service for synchronizing API data caches."""
 

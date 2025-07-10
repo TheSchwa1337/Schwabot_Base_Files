@@ -6,10 +6,10 @@ This script tests the complete integration of the new ZPE-ZBE core system
 with quantum synchronization, performance tracking, and unified math system.
 """
 
-import unittest
 import logging
 import time
-from typing import Dict, Any, List
+import unittest
+from typing import Any, Dict, List
 from unittest.mock import Mock, patch
 
 # Configure logging
@@ -22,8 +22,8 @@ class TestZPEZBECore(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        from core.zpe_zbe_core import ZPEZBECore, ZPEVector, ZBEBalance, QuantumSyncStatus
         from core.clean_math_foundation import CleanMathFoundation
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector, ZPEZBECore
 
         self.math_foundation = CleanMathFoundation()
         self.zpe_zbe_core = ZPEZBECore(self.math_foundation)
@@ -167,7 +167,7 @@ class TestQuantumPerformanceRegistry(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        from core.zpe_zbe_core import QuantumPerformanceRegistry, QuantumPerformanceEntry
+        from core.zpe_zbe_core import QuantumPerformanceEntry, QuantumPerformanceRegistry
 
         self.registry = QuantumPerformanceRegistry(max_entries=5)
         self.test_entry = QuantumPerformanceEntry()
@@ -260,7 +260,7 @@ class TestZPEZBEPerformanceTracker(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        from core.zpe_zbe_core import ZPEZBEPerformanceTracker, ZPEVector, ZBEBalance
+        from core.zpe_zbe_core import ZBEBalance, ZPEVector, ZPEZBEPerformanceTracker
 
         self.tracker = ZPEZBEPerformanceTracker()
         self.zpe_vector = ZPEVector()
@@ -405,7 +405,7 @@ class TestUnifiedMathSystem(unittest.TestCase):
 
     def test_performance_tracking_integration(self):
         """Test integration with performance tracking."""
-        from core.zpe_zbe_core import ZPEVector, ZBEBalance, QuantumSyncStatus
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
 
         zpe_vector = ZPEVector()
             energy=1e-33,

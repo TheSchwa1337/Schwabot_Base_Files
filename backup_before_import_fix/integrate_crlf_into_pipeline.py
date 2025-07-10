@@ -10,8 +10,8 @@ This script enhances the clean trading pipeline with CRLF functionality for:
 """
 
 import logging
-from typing import Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 

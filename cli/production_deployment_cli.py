@@ -24,9 +24,9 @@ Usage:
 """
 
 import argparse
+import json
 import logging
 import sys
-import json
 from pathlib import Path
 from typing import Optional
 

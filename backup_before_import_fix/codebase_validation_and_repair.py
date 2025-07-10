@@ -14,17 +14,17 @@ Core Features:
 - Automatic repair suggestions
 """
 
-import os
-import sys
 import ast
 import importlib
-import logging
 import json
+import logging
+import os
+import sys
 import traceback
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add project root to path
 sys.path.append('.')

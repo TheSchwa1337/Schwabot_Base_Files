@@ -1,8 +1,8 @@
-from datetime import datetime
-from pathlib import Path
 import json
 import subprocess
 import sys
+from datetime import datetime
+from pathlib import Path
 
 #!/usr/bin/env python3
 """

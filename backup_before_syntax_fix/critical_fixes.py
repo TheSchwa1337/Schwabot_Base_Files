@@ -1,11 +1,12 @@
-import numpy as np
-import cupy as cp
-import numba
-from pathlib import Path
-from typing import List, Tuple, Optional, Union
 import logging
 import re
 import shutil
+from pathlib import Path
+from typing import List, Optional, Tuple, Union
+
+import cupy as cp
+import numba
+import numpy as np
 
 #!/usr/bin/env python3
 """

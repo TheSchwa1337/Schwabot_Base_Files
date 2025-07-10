@@ -1,7 +1,6 @@
-from collections import defaultdict
 import ast
 import os
-
+from collections import defaultdict
 
 MATH_REPORT = "math_structure_report.md"
 CODEBASE_DIRS = ["core", "core/math", "core/phase_engine", "core/recursive_engine"]

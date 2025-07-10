@@ -30,23 +30,9 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import (
-    CleanProfitVectorization,
-    ProfitVector,
-    VectorizationMode,
-)
-from .orbital_shell_brain_system import (
-    AltitudeVector,
-    OrbitalBRAINSystem,
-    ShellConsensus,
-)
-from .pure_profit_calculator import (
-    HistoryState,
-    MarketData,
-    ProfitResult,
-    PureProfitCalculator,
-    StrategyParameters,
-)
+from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
+from .orbital_shell_brain_system import AltitudeVector, OrbitalBRAINSystem, ShellConsensus
+from .pure_profit_calculator import HistoryState, MarketData, ProfitResult, PureProfitCalculator, StrategyParameters
 from .qutrit_signal_matrix import QutritSignalMatrix, QutritState
 
 # CUDA Integration with Fallback

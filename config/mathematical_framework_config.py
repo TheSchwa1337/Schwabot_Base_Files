@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from utils.safe_print import safe_print
+
 """mathematical_framework_config module."""
 
 

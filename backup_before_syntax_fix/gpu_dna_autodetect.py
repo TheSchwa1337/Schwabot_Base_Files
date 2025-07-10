@@ -24,12 +24,7 @@ try:
 except ImportError:
     PYGAME_AVAILABLE = False
 
-from .system_state_profiler import (
-    GPUProfile,
-    GPUTier,
-    SystemStateProfiler,
-    get_system_profile,
-)
+from .system_state_profiler import GPUProfile, GPUTier, SystemStateProfiler, get_system_profile
 
 # OpenGL imports with fallback
 try:

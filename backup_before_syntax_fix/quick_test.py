@@ -4,9 +4,9 @@ Quick Component Tester - Windows Console Compatible
 Tests components without Unicode characters
 """
 
+import importlib
 import os
 import sys
-import importlib
 
 # Add core to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))

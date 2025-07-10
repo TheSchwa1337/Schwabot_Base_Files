@@ -10,12 +10,13 @@ Implements recursive memory folding for bitmap compression:
 • Memory-efficient bitmap processing
 """
 
-import logging
-import numpy as np
 import hashlib
+import logging
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

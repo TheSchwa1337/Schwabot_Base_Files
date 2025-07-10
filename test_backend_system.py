@@ -7,13 +7,14 @@ import sys
 import traceback
 from pathlib import Path
 
+
 def test_backend_system():
     """Test the backend system functionality."""
     print("=== Testing Backend System ===\n")
     
     try:
         # Test backend_math.py
-        from core.backend_math import get_backend, is_gpu, backend_info
+        from core.backend_math import backend_info, get_backend, is_gpu
         
         xp = get_backend()
         info = backend_info()
@@ -75,7 +76,7 @@ def test_backend_consistency():
     print("\n=== Testing Backend Consistency ===\n")
     
     try:
-        from core.backend_math import get_backend, backend_info
+        from core.backend_math import backend_info, get_backend
         from core.fractal_core import xp as fractal_xp
         from core.quantum_mathematical_bridge import xp as quantum_xp
         from core.zpe_core import xp as zpe_xp

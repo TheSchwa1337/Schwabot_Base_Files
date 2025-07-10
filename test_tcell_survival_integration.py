@@ -12,17 +12,19 @@ Demonstrates biological immune system logic for front-running strategies:
 """
 
 import logging
-import numpy as np
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
-# Import the T-cell survival engine and critical math systems
-from core.tcell_survival_engine import TCellSurvivalEngine, TCellState, TCellStrategy
-from core.entropy_drift_engine import EntropyDriftEngine, DriftMode
-from core.orbital_energy_quantizer import OrbitalEnergyQuantizer, OrbitalState
+import numpy as np
+
 from core.bitmap_hash_folding import BitmapHashFolding, FoldingMode
+from core.entropy_drift_engine import DriftMode, EntropyDriftEngine
+from core.orbital_energy_quantizer import OrbitalEnergyQuantizer, OrbitalState
 from core.strategy_bit_mapper import StrategyBitMapper
 from core.symbolic_registry import SymbolicRegistry
+
+# Import the T-cell survival engine and critical math systems
+from core.tcell_survival_engine import TCellState, TCellStrategy, TCellSurvivalEngine
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

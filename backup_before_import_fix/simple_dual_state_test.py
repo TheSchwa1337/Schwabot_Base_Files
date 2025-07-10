@@ -8,8 +8,9 @@ Direct test of the dual state router without complex dependencies.
 
 import logging
 import time
+from typing import Any, Dict
+
 import numpy as np
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig()
@@ -29,7 +30,6 @@ def test_dual_state_router_direct():
         import sys
         sys.path.append('.')
 
-        from core.system.dual_state_router import ()
             get_dual_state_router, StrategyTier, ComputeMode
         )
 

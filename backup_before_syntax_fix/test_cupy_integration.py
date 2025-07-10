@@ -14,12 +14,12 @@ Tests:
 - Cross-platform compatibility
 """
 
-import sys
-import os
 import logging
+import os
+import sys
 import time
 import traceback
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 # Add project root to path
 sys.path.append('.')
@@ -167,7 +167,7 @@ class CupyIntegrationTester:
         logger.info("🔬 Testing Strategy Bit Mapper")
 
         try:
-            from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode
+            from core.strategy_bit_mapper import ExpansionMode, StrategyBitMapper
 
             # Test initialization
             mapper = StrategyBitMapper(matrix_dir="./test_matrices")
@@ -327,7 +327,7 @@ class CupyIntegrationTester:
         logger.info("🔬 Testing CUDA Helper")
 
         try:
-            from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
+            from utils.cuda_helper import USING_CUDA, safe_cuda_operation, xp
 
             # Test safe CUDA operation
             def cuda_fn():

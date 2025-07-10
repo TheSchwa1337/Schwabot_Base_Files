@@ -16,9 +16,10 @@ Usage:
     python start_trading_bot.py --mode best-phase --asset BTC
 """
 
-import sys
 import os
 import subprocess
+import sys
+
 
 def main():
     # Add current directory to path

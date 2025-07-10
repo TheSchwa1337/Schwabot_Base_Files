@@ -5,12 +5,12 @@ Validates code structure, imports, and dependencies.
 """
 
 import ast
+import importlib.util
+import logging
 import os
 import sys
-import logging
 from pathlib import Path
-from typing import Dict, List, Tuple, Set
-import importlib.util
+from typing import Dict, List, Set, Tuple
 
 logger = logging.getLogger(__name__)
 

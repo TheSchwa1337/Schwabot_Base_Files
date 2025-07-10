@@ -1,6 +1,6 @@
-import numpy as np
-from core import ()
 import time
+
+import numpy as np
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

@@ -30,12 +30,7 @@ Entropy-Enhanced Trading Executor
     # Core imports
     from core.entropy_signal_integration import EntropySignalIntegration
     from core.portfolio_tracker import PortfolioTracker
-    from core.pure_profit_calculator import (
-        HistoryState,
-        MarketData,
-        PureProfitCalculator,
-        StrategyParameters,
-    )
+    from core.pure_profit_calculator import HistoryState, MarketData, PureProfitCalculator, StrategyParameters
     from core.risk_manager import RiskManager
     from core.strategy_bit_mapper import StrategyBitMapper
 

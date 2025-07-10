@@ -1,12 +1,12 @@
-import math
-from core.brain_trading_engine import BrainTradingEngine
-from core.brain_trading_engine import BrainTradingEngine
-import subprocess
-from pathlib import Path
 import asyncio
 import json
 import logging
+import math
+import subprocess
 import time
+from pathlib import Path
+
+from core.brain_trading_engine import BrainTradingEngine
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

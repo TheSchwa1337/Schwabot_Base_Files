@@ -13,28 +13,27 @@ Usage:
     python main_trading_system.py --backtest  # Run backtesting
 """
 
-import asyncio
 import argparse
+import asyncio
 import logging
 import os
 import sys
-import yaml
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import yaml
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Core imports
-from core.entropy_enhanced_trading_executor import (
-    EntropyEnhancedTradingExecutor,
-    create_trading_executor,
-)
-from core.entropy_signal_integration import EntropySignalIntegration
-from core.strategy_bit_mapper import StrategyBitMapper
-from core.pure_profit_calculator import PureProfitCalculator
 from core.clean_trading_pipeline import CleanTradingPipeline
+
+# Core imports
+from core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor, create_trading_executor
+from core.entropy_signal_integration import EntropySignalIntegration
+from core.pure_profit_calculator import PureProfitCalculator
 from core.real_time_execution_engine import RealTimeExecutionEngine
+from core.strategy_bit_mapper import StrategyBitMapper
 
 # Utility imports
 from utils.logging_setup import setup_logging

@@ -1,15 +1,12 @@
-from core.balance_loader import ()
-from core.balance_loader import update_load_metrics, get_balance_statistics
-from core.ghost_trigger_manager import ()
-from core.ghost_trigger_manager import ()
-from core.multi_bit_btc_processor import MultiBitBTCProcessor
-from core.tick_management_system import ()
-from core.tick_management_system import run_tick_cycle, get_tick_statistics
 import asyncio
 import logging
 import os
 import sys
 import time
+
+from core.balance_loader import get_balance_statistics, update_load_metrics
+from core.multi_bit_btc_processor import MultiBitBTCProcessor
+from core.tick_management_system import get_tick_statistics, run_tick_cycle
 
 #!/usr/bin/env python3
 """

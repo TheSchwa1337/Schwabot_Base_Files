@@ -4,8 +4,9 @@ Test script for the new centralized math infrastructure.
 Verifies that Phase 1 cleanup created working components.
 """
 
-import sys
 import os
+import sys
+
 sys.path.append('core')
 
 def test_math_config_manager():
@@ -14,7 +15,7 @@ def test_math_config_manager():
     
     try:
         from math_config_manager import get_math_config, math_config
-        
+
         # Test basic functionality
         config = get_math_config()
         
@@ -47,8 +48,8 @@ def test_math_cache():
     print("\nTesting Math Results Cache...")
     
     try:
-        from math_cache import get_math_cache, MathResultsCache
         import numpy as np
+        from math_cache import MathResultsCache, get_math_cache
         
         cache = get_math_cache()
         
@@ -89,8 +90,8 @@ def test_math_orchestrator():
     print("\nTesting Math Orchestrator...")
     
     try:
-        from math_orchestrator import get_math_orchestrator, MathOrchestrator
         import numpy as np
+        from math_orchestrator import MathOrchestrator, get_math_orchestrator
         
         orchestrator = get_math_orchestrator()
         
@@ -134,13 +135,18 @@ def test_core_utilities():
     print("\nTesting Core Utilities...")
     
     try:
-        from core_utilities import (
-            safe_divide, normalize_array, GlyphRouter, 
-            IntegrationOrchestrator, analyze_order_wall,
-            adjust_profit_tier, detect_swing_pattern, UnifiedAPICoordinator
-        )
         import numpy as np
-        
+        from core_utilities import (
+            GlyphRouter,
+            IntegrationOrchestrator,
+            UnifiedAPICoordinator,
+            adjust_profit_tier,
+            analyze_order_wall,
+            detect_swing_pattern,
+            normalize_array,
+            safe_divide,
+        )
+
         # Test safe_divide
         result1 = safe_divide(10, 2)
         result2 = safe_divide(10, 0, default=42)

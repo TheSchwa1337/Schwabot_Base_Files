@@ -8,14 +8,14 @@ starting with critical syntax errors and ensuring all mathematical concepts
 are fully implemented in code, not just discussed in comments.
 """
 
-import os
-import re
 import ast
 import logging
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Any, Optional
+import os
+import re
 import subprocess
 import sys
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

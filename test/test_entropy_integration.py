@@ -7,12 +7,13 @@ This script tests the entropy signal flow through the trading pipeline
 to ensure all components work together correctly.
 """
 
-import sys
-import os
-import time
 import logging
-import numpy as np
+import os
+import sys
+import time
 from typing import List, Tuple
+
+import numpy as np
 
 # Add the core directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'core'))
@@ -22,8 +23,8 @@ try:
     from entropy_signal_integration import (
         get_entropy_integrator,
         process_entropy_signal,
+        should_execute_routing,
         should_execute_tick,
-        should_execute_routing
     )
     print("✅ Successfully imported entropy signal integration")
 except ImportError as e:

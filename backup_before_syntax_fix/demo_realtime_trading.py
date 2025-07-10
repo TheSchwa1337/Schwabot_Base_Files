@@ -4,12 +4,13 @@ Schwabot Real-Time Trading Demonstration
 Shows live trading with real-time feedback and progress updates
 """
 
-import requests
-import socketio
-import time
 import json
 import threading
+import time
 from datetime import datetime
+
+import requests
+import socketio
 
 # Configuration
 BASE_URL = "http://localhost:5000"

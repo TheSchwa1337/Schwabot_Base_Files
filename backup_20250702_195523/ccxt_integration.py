@@ -1,16 +1,28 @@
-import numpy as np
-import ccxt
-import ccxt.async_support as ccxt_async
 from __future__ import annotations
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from typing import Dict, List, Optional, Tuple, Any, Union
-from typing import TupleCCXT Integration for Order Optimization =========================================
+
 import asyncio
-import ccxt
-import ccxt.async_support as ccxt_async
 import logging
 import time
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from typing import (
+    Any,
+    Dict,
+    Integration,
+    List,
+    Optimization,
+    Optional,
+    Order,
+    Tuple,
+    TupleCCXT,
+    Union,
+    =========================================,
+    for,
+)
+
+import ccxt
+import ccxt.async_support as ccxt_async
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

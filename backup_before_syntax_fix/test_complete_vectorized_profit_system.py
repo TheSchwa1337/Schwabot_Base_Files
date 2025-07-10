@@ -15,8 +15,9 @@ This test verifies the entire profit optimization symphony works in harmony.
 import asyncio
 import logging
 import time
+from typing import Any, Dict
+
 import numpy as np
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -145,7 +146,7 @@ async def test_multi_frequency_resonance_engine():
     try:
         # Import the resonance engine
         from core.multi_frequency_resonance_engine import create_multi_frequency_resonance_engine
-        from core.vectorized_profit_orchestrator import ProfitVector, ProfitVectorState, FrequencyPhase
+        from core.vectorized_profit_orchestrator import FrequencyPhase, ProfitVector, ProfitVectorState
 
         # Create resonance engine
         resonance_config = {}
@@ -201,11 +202,11 @@ async def test_integrated_system_with_2gram():
 
     try:
         # Import all components
-        from core.two_gram_detector import create_two_gram_detector
         from core.algorithmic_portfolio_balancer import create_portfolio_balancer
         from core.btc_usdc_trading_integration import create_btc_usdc_integration
-        from core.strategy_trigger_router import create_strategy_trigger_router
         from core.master_profit_coordination_system import create_master_profit_coordination_system
+        from core.strategy_trigger_router import create_strategy_trigger_router
+        from core.two_gram_detector import create_two_gram_detector
 
         # Create all components
         print("🔧 Creating system components...")
@@ -352,7 +353,6 @@ async def test_profit_vector_state_transitions():
     print("=" * 60)
 
     try:
-        from core.vectorized_profit_orchestrator import ()
             create_vectorized_profit_orchestrator, ProfitVectorState, FrequencyPhase
         )
 
@@ -414,7 +414,7 @@ async def test_frequency_harmonics():
 
     try:
         from core.multi_frequency_resonance_engine import create_multi_frequency_resonance_engine
-        from core.vectorized_profit_orchestrator import ProfitVector, ProfitVectorState, FrequencyPhase
+        from core.vectorized_profit_orchestrator import FrequencyPhase, ProfitVector, ProfitVectorState
 
         resonance_engine = create_multi_frequency_resonance_engine({})
 

@@ -12,22 +12,23 @@ This engine implements the Ferris Wheel tick cycle feedback mechanism,
 enabling continuous strategy optimization based on mathematical performance metrics.
 """
 
+import hashlib
 import json
 import logging
-import hashlib
 import time
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass, field
 from decimal import Decimal
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
 
 # Import Schwabot mathematical components
 try:
-    from core.math_config_manager import MathConfigManager
     from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
     from core.math_orchestrator import MathOrchestrator
     from core.registry_strategy import StrategyResult
     

@@ -16,12 +16,7 @@ from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
 from backtesting.historical_data_manager import HistoricalDataManager
-from core.ccxt_trading_executor import (
-    CCXTTradingExecutor,
-    TradingPair,
-    IntegratedTradingSignal,
-    ExecutionResult,
-)
+from core.ccxt_trading_executor import CCXTTradingExecutor, ExecutionResult, IntegratedTradingSignal, TradingPair
 
 logger = logging.getLogger(__name__)
 

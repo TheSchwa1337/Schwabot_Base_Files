@@ -4,27 +4,28 @@ Comprehensive testing framework for the enhanced trading engine.
 Integrates with visualization and live pipeline components.
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import asyncio
 import json
 import logging
 import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
 from dataclasses import asdict
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
-from core.unified_trade_router import UnifiedTradeRouter
-from core.trading_engine_integration import (
-    TradeSignal, 
-    TradeExecution, 
-    TradingError, 
-    ErrorSeverity,
-    generate_trade_signal
-)
 from core.clean_unified_math import clean_unified_math
+from core.trading_engine_integration import (
+    ErrorSeverity,
+    TradeExecution,
+    TradeSignal,
+    TradingError,
+    generate_trade_signal,
+)
+from core.unified_trade_router import UnifiedTradeRouter
 
 # Configure logging
 logging.basicConfig(

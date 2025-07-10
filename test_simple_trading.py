@@ -4,13 +4,14 @@ Simple test to verify trading bot components work together.
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 # Add current directory to path
 sys.path.insert(0, os.getcwd())
 
 from core.cli_live_entry import LiveTradingBot
+
 
 async def test_basic_functionality():
     """Test basic trading bot functionality."""

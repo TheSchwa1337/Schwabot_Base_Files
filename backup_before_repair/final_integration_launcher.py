@@ -1,5 +1,3 @@
-import numpy as np
-
 import hashlib
 import time
 from dataclasses import dataclass

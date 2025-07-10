@@ -14,10 +14,10 @@ Features tested:
 """
 
 import asyncio
-import logging
 import json
+import logging
 from decimal import Decimal
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Setup logging
 logging.basicConfig()
@@ -28,8 +28,8 @@ logger = logging.getLogger(__name__)
 
 # Import the modules
     try:
-    from core.fill_handler import FillHandler, create_fill_handler, FillEvent, OrderState, FillStatus
-    from core.secure_exchange_manager import SecureExchangeManager, ExchangeType, TradeResult
+    from core.fill_handler import FillEvent, FillHandler, FillStatus, OrderState, create_fill_handler
+    from core.secure_exchange_manager import ExchangeType, SecureExchangeManager, TradeResult
     MODULES_AVAILABLE = True
     except ImportError as e:
     logger.error(f"Required modules not available: {e}")

@@ -1,4 +1,3 @@
-from speed_lattice_vault import ()
 import json
 import os
 import sys

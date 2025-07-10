@@ -6,12 +6,12 @@ Direct Enhanced State System Test
 Direct test of the enhanced state system functionality without complex dependencies.
 """
 
+import hashlib
+import logging
 import sys
 import time
-import logging
-import hashlib
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 
 # Configure logging

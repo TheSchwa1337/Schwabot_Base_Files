@@ -5,10 +5,10 @@ Test Suite for Unified Math System
 Tests for the unified mathematical system that integrates ZPE-ZBE core.
 """
 
-import unittest
 import logging
 import time
-from typing import Dict, Any
+import unittest
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -109,7 +109,7 @@ class TestUnifiedMathSystem(unittest.TestCase):
 
     def test_performance_tracking_integration(self):
         """Test integration with performance tracking."""
-        from core.zpe_zbe_core import ZPEVector, ZBEBalance, QuantumSyncStatus
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
 
         zpe_vector = ZPEVector()
             energy=1e-33,
@@ -170,7 +170,7 @@ class TestUnifiedMathSystem(unittest.TestCase):
         entropy = self.unified_math.get_system_entropy(quantum_analysis)
 
         # 4. Performance tracking (simulate a, trade)
-        from core.zpe_zbe_core import ZPEVector, ZBEBalance, QuantumSyncStatus
+        from core.zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
 
         zpe_vector = ZPEVector()
             energy=quantum_analysis['zpe_energy'],

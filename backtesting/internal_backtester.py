@@ -1,14 +1,16 @@
-from core.matrix_math_utils import analyze_price_matrix
-import numpy as np
 from __future__ import annotations
+
+import random
+import time
+from typing import Any, Dict, List, Sequence, Tuple
+
+import numpy as np
+
 from core.brain_trading_engine import register_risk_manager, update_risk_threshold
 from core.ccxt_integration import CCXTIntegration
 from core.ghost_core import GhostCore
+from core.matrix_math_utils import analyze_price_matrix
 from demo_integrated_trading_system import IntegratedTradingSystem
-from typing import List, Dict, Any, Sequence, Tuple
-import random
-import time
-
 
 """Internal Backtester for Schwabot
 ===================================

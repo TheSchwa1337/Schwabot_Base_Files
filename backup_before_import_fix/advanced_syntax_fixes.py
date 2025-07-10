@@ -7,9 +7,9 @@ This script addresses specific syntax errors found in the Schwabot mathematical 
 """
 
 import os
-import sys
-import subprocess
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 

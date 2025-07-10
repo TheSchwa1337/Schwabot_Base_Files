@@ -4,16 +4,14 @@
 Integration Test Suite for Schwabot Adaptive Configuration Management
 """
 
-import pytest
 import numpy as np
+import pytest
 
-from config.schwabot_adaptive_config_manager import (
-    SchwabotAdaptiveConfigManager,
-    MarketConditionAnalyzer
-)
+from config.schwabot_adaptive_config_manager import MarketConditionAnalyzer, SchwabotAdaptiveConfigManager
 from core.advanced_tensor_algebra import AdvancedTensorAlgebra
 from core.enhanced_error_recovery_system import EnhancedErrorRecoverySystem
 from core.system_state_profiler import SystemStateProfiler
+
 
 class TestAdaptiveConfigurationSystem:
     @pytest.fixture

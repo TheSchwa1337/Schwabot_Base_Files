@@ -10,12 +10,13 @@ Tests the integration between:
 - Core trading modules and mathematical core
 """
 
-import sys
-import os
 import logging
-import numpy as np
+import os
+import sys
 import time
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
+import numpy as np
 
 # Add the project root to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +35,6 @@ def test_cuda_helper_integration():
     print("=" * 50)
 
     try:
-        from utils.cuda_helper import ()
             FIT_PROFILE, math_core, detector,
             matrix_fit, cosine_match, entropy_of_vector,
             flatness_measure, phantom_score, ideal_tick_time,
@@ -108,7 +108,6 @@ def test_matrix_math_utils():
     print("=" * 50)
 
     try:
-        from core.matrix_math_utils import ()
             analyze_price_matrix, risk_parity_weights,
             calculate_sharpe_ratio, calculate_max_drawdown,
             calculate_var, calculate_cvar
@@ -227,7 +226,6 @@ def test_performance_benchmarks():
     print("=" * 50)
 
     try:
-        from utils.cuda_helper import ()
             matrix_fit, cosine_match, entropy_of_vector,
             safe_matrix_multiply, safe_fft, FIT_PROFILE
         )

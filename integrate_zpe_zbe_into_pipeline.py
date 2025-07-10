@@ -7,8 +7,8 @@ Zero Point Energy and Zero-Based Equilibrium functionality.
 """
 
 import logging
-from typing import Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 

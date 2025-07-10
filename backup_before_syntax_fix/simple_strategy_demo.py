@@ -1,7 +1,8 @@
-import numpy as np
-from collections import defaultdict, deque
-from typing import Dict, List, Any, Tuple
 import random
+from collections import defaultdict, deque
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
 
 #!/usr/bin/env python3
 """

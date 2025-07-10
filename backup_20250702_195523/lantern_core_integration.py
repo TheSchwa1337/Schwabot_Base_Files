@@ -1,39 +1,91 @@
-from core.unified_math_system import UnifiedMathSystem
-from core.portfolio_tracker import PortfolioTracker
-from core.risk_manager import RiskManager
 from core.biological_immune_error_handler import BiologicalImmuneErrorHandler
 from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
 from core.enhanced_live_execution_mapper import EnhancedLiveExecutionMapper
 from core.enhanced_master_cycle_profit_engine import EnhancedMasterCycleProfitEngine
 from core.enhanced_tcell_system import EnhancedTCellSystem
-from core.secure_api_coordinator import SecureAPICoordinator, APIProvider
+from core.portfolio_tracker import PortfolioTracker
+from core.risk_manager import RiskManager
+from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
 from core.strategy_logic import StrategyLogic
 from core.trading_engine_integration import (
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from utils.market_data_utils import create_market_snapshot, display_market_snapshot
-from utils.price_bridge import (
-from utils.secure_config_manager import get_secure_api_key, SecureConfigManager
-import asyncio
-import hashlib
-import json
-import logging
-import os
-import time
+    COMMENTED,
+    DUE,
+    ERRORS,
+    FILE,
+    LEGACY,
+    OUT,
+    SYNTAX,
+    TO,
+    Any,
+    Date,
+    Dict,
+    List,
+    Optional,
+    Original,
+    Path,
+    Schwabot,
+    SecureConfigManager,
+    The,
+    This,
+    Union,
+    19:36:58,
+    2025-07-02,
+    """,
+    -,
+    asyncio,
+    automatically,
+    because,
+    been,
+    clean,
+    commented,
+    contains,
+    core,
+    core/clean_math_foundation.py,
+    create_market_snapshot,
+    dataclass,
+    dataclasses,
+    datetime,
+    display_market_snapshot,
+    errors,
+    field,
+    file,
+    file:,
+    files:,
+    following,
+    foundation,
+    from,
+    get_secure_api_key,
+    has,
+    hashlib,
+    implementation,
+    import,
+    in,
+    it,
+    json,
+    lantern_core_integration.py,
+    logging,
+    mathematical,
+    os,
+    out,
+    out:,
+    pathlib,
+    preserved,
+    prevent,
+    properly.,
+    running,
+    syntax,
+    system,
+    that,
+    the,
+    time,
+    timedelta,
+    typing,
+    utils.market_data_utils,
+    utils.price_bridge,
+    utils.secure_config_manager,
+)
+from core.unified_math_system import UnifiedMathSystem
 
-"""
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-This file has been automatically commented out because it contains syntax errors
-that prevent the Schwabot system from running properly.
-
-Original file: core\lantern_core_integration.py
-Date commented out: 2025-07-02 19:36:58
-
-The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
 - core/clean_profit_vectorization.py (profit calculations)
 - core/clean_trading_pipeline.py (trading logic)
 - core/clean_unified_math.py (unified mathematics)

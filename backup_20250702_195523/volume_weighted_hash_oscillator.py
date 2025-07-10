@@ -1,9 +1,9 @@
-import numpy as np
-from collections import deque
-from typing import Any, Dict, List, Optional, Tuple, Union
-from typing import Tuple
 import hashlib
 import time
+from collections import deque
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

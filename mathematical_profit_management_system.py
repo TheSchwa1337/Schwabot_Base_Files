@@ -1,10 +1,11 @@
-import numpy as np
-from dataclasses import dataclass
-from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple
 import json
 import logging
 import time
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 #!/usr/bin/env python3
 """

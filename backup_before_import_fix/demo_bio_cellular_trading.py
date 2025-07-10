@@ -19,20 +19,21 @@ that responds to market stimuli like a living cell responds to environmental
 changes through complex biological signaling cascades.
 """
 
-import numpy as np
-import time
 import json
-import matplotlib.pyplot as plt
-from typing import Dict, List, Any
+import time
 from datetime import datetime
+from typing import Any, Dict, List
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Import the biological systems
     try:
     from core.bio_cellular_signaling import BioCellularSignaling, CellularSignalType, ReceptorState
     from core.bio_profit_vectorization import BioProfitVectorization, ProfitMetabolismType
     from core.cellular_trade_executor import CellularTradeExecutor, CellularTradeState, TradeDecisionType
-    from core.orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
     from core.matrix_mapper import MatrixMapper
+    from core.orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
     BIO_SYSTEMS_AVAILABLE = True
     except ImportError as e:
     print(f"⚠️ Bio-systems not available: {e}")

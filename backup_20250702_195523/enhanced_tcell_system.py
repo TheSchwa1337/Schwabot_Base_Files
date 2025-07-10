@@ -1,15 +1,14 @@
-import numpy as np
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List
-from typing import Callable
-from typing import Tuple
 import hashlib
 import inspect
 import logging
 import random
 import time
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Tuple
+
+import numpy as np
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

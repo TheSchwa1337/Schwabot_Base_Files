@@ -6,11 +6,11 @@ This script focuses on the 22 files with the most stubbed logic that must be imp
 Based on the analysis summary, these are blocking functional development.
 """
 
+import logging
 import os
 import re
-import logging
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -176,7 +176,8 @@ Advanced cycle management and optimization for trading strategies.
 
 import logging
 import time
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -287,7 +288,7 @@ Legacy master cycle engine with basic functionality.
 
 import logging
 import time
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -326,7 +327,8 @@ Advanced T-cell based immune system for trading strategy protection.
 
 import logging
 import time
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -411,7 +413,7 @@ Proper implementation for {file_name}.
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

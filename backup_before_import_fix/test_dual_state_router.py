@@ -9,8 +9,9 @@ compute orchestration for Schwabot trading strategies.
 
 import logging
 import time
+from typing import Any, Dict
+
 import numpy as np
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig()
@@ -27,7 +28,6 @@ def test_dual_state_router():
 
     try:
         # Import dual state router
-        from core.system.dual_state_router import ()
             get_dual_state_router, StrategyTier, ComputeMode
         )
 

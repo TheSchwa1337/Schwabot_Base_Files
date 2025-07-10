@@ -1,7 +1,7 @@
 # ferris_tick/strategies/stability_trigger.py
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 # Assuming zygot_shell is in a reachable path like `smart_money`
 # You might need to adjust this import based on your project structure or add a __init__.py for relative imports

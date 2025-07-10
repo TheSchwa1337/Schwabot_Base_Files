@@ -12,34 +12,31 @@ Comprehensive testing of Layer 8: Hash-Glyph Memory Compression + Cross-Agent Pa
 - Cross-agent vote blending
 """
 
-import numpy as np
-import time
-import sys
+import json
 import logging
 import os
-import json
+import sys
+import time
+
+import numpy as np
 
 # Add project root to path
 sys.path.append('.')
 
 try:
-    from core.hash_glyph_compression import ()
         HashGlyphCompressor,
         GlyphMemoryChunk,
         create_hash_glyph_compressor
     )
-    from core.ai_matrix_consensus import ()
         AIMatrixConsensus,
         AgentVote,
         AgentOpinion,
         ConsensusResult,
         create_ai_matrix_consensus
     )
-    from core.visual_decision_engine import ()
         VisualDecisionEngine,
         create_visual_decision_engine
     )
-    from core.loop_strategy_switcher import ()
         StrategyLoopSwitcher,
         AssetTarget,
         StrategyResult,

@@ -20,11 +20,7 @@ import numpy as np
 
 # Import components
     try:
-    from .bio_cellular_signaling import (
-        BioCellularResponse,
-        BioCellularSignaling,
-        CellularSignalType,
-    )
+    from .bio_cellular_signaling import BioCellularResponse, BioCellularSignaling, CellularSignalType
     from .matrix_mapper import MatrixMapper
     from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
 

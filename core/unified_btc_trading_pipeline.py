@@ -28,8 +28,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import numpy as np
     import cupy as cp
+    import numpy as np
     USING_CUDA = True
     xp = cp
     _backend = 'cupy (GPU)'
@@ -125,9 +125,9 @@ class UnifiedBTCTradingPipeline:
         try:
             from core.btc_usdc_trading_engine import BTCTradingEngine
             from core.mathematical_framework_integrator import MathematicalFrameworkIntegrator
-            from core.secure_exchange_manager import exchange_manager
-            from core.risk_manager import risk_manager
             from core.profit_optimization_engine import profit_optimization_engine
+            from core.risk_manager import risk_manager
+            from core.secure_exchange_manager import exchange_manager
             
             self.btc_engine = BTCTradingEngine()
             self.math_integrator = MathematicalFrameworkIntegrator()

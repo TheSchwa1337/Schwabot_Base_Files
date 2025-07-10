@@ -9,9 +9,6 @@ Handles order book management, trade execution, and portfolio operations.
 """
 
 import logging
-
-
-import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum

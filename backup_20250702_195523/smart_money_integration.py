@@ -1,13 +1,16 @@
-from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
-import numpy as np
 from __future__ import annotations
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-from core.enhanced_strategy_framework import EnhancedStrategyFramework, StrategySignal
+
+import logging
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-import logging
-import time
+
+import numpy as np
+
+from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+from core.enhanced_strategy_framework import EnhancedStrategyFramework, StrategySignal
+from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

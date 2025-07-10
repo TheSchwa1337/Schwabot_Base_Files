@@ -13,12 +13,13 @@ This script performs comprehensive codebase optimization including:
 This represents 39 days of work on the Schwabot trading system.
 """
 
-import os
-import sys
-import subprocess
 import logging
+import os
+import subprocess
+import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 import numpy as np
 
 # Configure logging

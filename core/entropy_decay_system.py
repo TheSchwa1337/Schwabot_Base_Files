@@ -11,11 +11,12 @@ Implements time-based entropy degradation to prevent ghost overhang:
 """
 
 import logging
-import numpy as np
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

@@ -1,17 +1,18 @@
+import logging
 import math
-import numpy as np
+import time
 from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+
 from core.drift_shell_engine import CorrectionFactors, ProfitVector
 from core.quantum_drift_shell_engine import QuantumDriftShellEngine
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
-from dataclasses import dataclass, field
-from enum import Enum
 from hash_recollection.entropy_tracker import EntropyTracker
 from hash_recollection.pattern_utils import PatternUtils
-from typing import Any, Dict, List, Optional, Tuple, Union
-from typing import Tuple
-import logging
-import time
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

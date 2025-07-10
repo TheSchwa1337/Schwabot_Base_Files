@@ -4,12 +4,13 @@ Comprehensive File Analysis for Schwabot Core
 Identifies files that need rewriting, deletion, or consolidation.
 """
 
+import ast
+import json
 import os
 import re
-import ast
 from pathlib import Path
-from typing import Dict, List, Tuple, Any
-import json
+from typing import Any, Dict, List, Tuple
+
 
 class FileAnalyzer:
     def __init__(self, core_dir: str = "core"):

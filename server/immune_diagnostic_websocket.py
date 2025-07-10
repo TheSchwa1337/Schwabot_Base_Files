@@ -1,30 +1,58 @@
 import numpy as np
-from core.biological_immune_error_handler import (
-from core.enhanced_master_cycle_engine import (
-from dataclasses import dataclass, asdict
-from enum import Enum
-from typing import Dict, List, Any, Set
-import asyncio
-import json
-import logging
-import time
-import websockets
 
-#!/usr/bin/env python3
-"""Immune Diagnostic WebSocket Server.
-
-Real-time monitoring and visualization server for the biological immune system.
-Provides comprehensive diagnostics, alerts, and auto-tab switching for critical events.
-Streams immune system metrics, zone changes, and recovery operations.
-"""
-
-
-
-
-
+from core.biological_immune_error_handler import (  # !/usr/bin/env python3
+    Any,
+    Diagnostic,
+    Dict,
     EnhancedMasterCycleEngine,
     EnhancedSystemMode,
+    Enum,
+    List,
+    Provides,
+    Real-time,
+    Server.,
+    Set,
+    Streams,
+    WebSocket,
+    """,
+    """Immune,
+    alerts,
+    and,
+    asdict,
+    asyncio,
+    auto-tab,
+    biological,
+    changes,
+    comprehensive,
+    core.enhanced_master_cycle_engine,
+    critical,
+    dataclass,
+    dataclasses,
+    diagnostics,
+    enum,
+    events.,
+    for,
+    from,
+    immune,
+    import,
+    json,
+    logging,
+    metrics,
+    monitoring,
+    operations.,
+    recovery,
+    server,
+    switching,
+    system,
+    system.,
+    the,
+    time,
+    typing,
+    visualization,
+    websockets,
+    zone,
 )
+
     ImmuneZone,
 )
 

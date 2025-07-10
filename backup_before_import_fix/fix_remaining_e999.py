@@ -1,6 +1,6 @@
+import re
 from pathlib import Path
 from typing import List
-import re
 
 #!/usr/bin/env python3
 """

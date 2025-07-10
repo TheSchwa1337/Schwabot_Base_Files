@@ -10,12 +10,13 @@ This script performs essential checks for deployment readiness:
 5. Trading system validation
 """
 
-import sys
-import os
-import subprocess
 import importlib
+import os
 import platform
+import subprocess
+import sys
 from pathlib import Path
+
 
 def print_section(title):
     """Print a formatted section header."""
@@ -172,8 +173,9 @@ def test_core_functionality():
     # Test 1: Tensor Operations
     total_tests += 1
     try:
-        from core.advanced_tensor_algebra import AdvancedTensorAlgebra
         import numpy as np
+
+        from core.advanced_tensor_algebra import AdvancedTensorAlgebra
 
         tensor_algebra = AdvancedTensorAlgebra()
         A = np.random.rand(10, 10)
@@ -188,8 +190,9 @@ def test_core_functionality():
     # Test 2: Enhanced Math Operations
     total_tests += 1
     try:
-        from core.strategy.enhanced_math_ops import enhanced_cosine_sim
         import numpy as np
+
+        from core.strategy.enhanced_math_ops import enhanced_cosine_sim
 
         a = np.random.rand(100)
         b = np.random.rand(100)

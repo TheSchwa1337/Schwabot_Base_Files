@@ -6,9 +6,10 @@ Final Mathematical Verification and Cleanup
 This script verifies all mathematical implementations and removes unnecessary stub files.
 """
 
-import os
 import logging
+import os
 from pathlib import Path
+
 import numpy as np
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

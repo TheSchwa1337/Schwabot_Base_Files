@@ -10,11 +10,11 @@ from __future__ import annotations
 
 from typing import Tuple
 
-from .profit_bucket_registry import ProfitBucketRegistry
-from core.tensor_score_utils import TensorScoreUtils
-from core.profit_optimization_engine import ProfitOptimizationEngine
 from core.math_orchestrator import MathOrchestrator
+from core.profit_optimization_engine import ProfitOptimizationEngine
+from core.tensor_score_utils import TensorScoreUtils
 
+from .profit_bucket_registry import ProfitBucketRegistry
 from .vector_band_gatekeeper import confirm_long_trend, confirm_mid_vector, confirm_short_drift
 
 

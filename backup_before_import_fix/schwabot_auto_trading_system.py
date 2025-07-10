@@ -13,29 +13,26 @@ Main auto trading system that integrates all components:
 """
 
 import asyncio
+import json
 import logging
+import os
 import signal
 import sys
 import time
 from typing import Any, Dict, List, Optional
-import json
-import os
-
-# Import all core components
-from core.real_time_execution_engine import (
-    RealTimeExecutionEngine,
-    start_real_time_execution_engine,
-)
-from core.real_time_market_data import RealTimeMarketDataStream
-from core.smart_order_executor import SmartOrderExecutor
-from core.advanced_risk_manager import AdvancedRiskManager
-from core.order_book_analyzer import OrderBookAnalyzer
-from core.clean_trading_pipeline import CleanTradingPipeline
-from core.zpe_zbe_core import create_zpe_zbe_core
-from core.advanced_tensor_algebra import AdvancedTensorAlgebra
 
 # Import configuration
 from config.schwabot_config import load_config
+from core.advanced_risk_manager import AdvancedRiskManager
+from core.advanced_tensor_algebra import AdvancedTensorAlgebra
+from core.clean_trading_pipeline import CleanTradingPipeline
+from core.order_book_analyzer import OrderBookAnalyzer
+
+# Import all core components
+from core.real_time_execution_engine import RealTimeExecutionEngine, start_real_time_execution_engine
+from core.real_time_market_data import RealTimeMarketDataStream
+from core.smart_order_executor import SmartOrderExecutor
+from core.zpe_zbe_core import create_zpe_zbe_core
 
 logger = logging.getLogger(__name__)
 

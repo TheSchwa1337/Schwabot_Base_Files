@@ -47,29 +47,20 @@
             create_crlf,
         )
         from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-        from .clean_profit_vectorization import (
-            CleanProfitVectorization,
-            ProfitVector,
-            VectorizationMode,
-        )
+        from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
         from .phase_bit_integration import phase_bit_integration
         from .portfolio_tracker import PortfolioTracker
         from .soulprint_registry import SoulprintRegistry
         from .strategy_bit_mapper import StrategyBitMapper
-        from .unified_market_data_pipeline import (
-            MarketDataPacket,
-            create_unified_pipeline,
-        )
+        from .unified_market_data_pipeline import MarketDataPacket, create_unified_pipeline
         from .unified_math_system import create_unified_math_system
-        from .zpe_zbe_core import (  # noqa: F401 - Used in performance monitoring and optimization
-            ZPEZBEPerformanceTracker,
-        )
         from .zpe_zbe_core import create_zpe_zbe_core  # noqa: F401 - Used in core system initialization
-        from .zpe_zbe_core import (  # noqa: F401 - Used in performance tracking (_update_zpe_zbe_performance_metrics); noqa: F401 - Used in quantum sync analysis (_enhance_market_data_with_zpe_zbe); noqa: F401 - Used in equilibrium calculations (_enhance_risk_management_with_zpe_zbe); noqa: F401 - Used in zero point energy analysis (_enhance_strategy_selection_with_zpe_zbe)
+        from .zpe_zbe_core import (  # noqa: F401 - Used in performance monitoring and optimization; noqa: F401 - Used in performance tracking (_update_zpe_zbe_performance_metrics); noqa: F401 - Used in quantum sync analysis (_enhance_market_data_with_zpe_zbe); noqa: F401 - Used in equilibrium calculations (_enhance_risk_management_with_zpe_zbe); noqa: F401 - Used in zero point energy analysis (_enhance_strategy_selection_with_zpe_zbe)
             QuantumPerformanceRegistry,
             QuantumSyncStatus,
             ZBEBalance,
             ZPEVector,
+            ZPEZBEPerformanceTracker,
         )
 
         # Entropy Signal Integration

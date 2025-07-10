@@ -16,16 +16,17 @@ the matrix mapper fallback classification system, featuring:
 Run this demo to see the complete orbital Ξ ring system in action!
 """
 
-import numpy as np
-import time
 import json
-from typing import Dict, List, Any
+import time
 from datetime import datetime
+from typing import Any, Dict, List
+
+import numpy as np
 
 # Import the orbital Ξ ring systems
     try:
+    from core.matrix_mapper import FallbackDecision, MappingMode, MatrixMapper
     from core.orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel, XiRingState
-    from core.matrix_mapper import MatrixMapper, FallbackDecision, MappingMode
     SYSTEMS_AVAILABLE = True
     except ImportError:
     print("⚠️ Core systems not available - running in simulation mode")

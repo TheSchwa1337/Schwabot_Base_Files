@@ -2,12 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-
-
-import logging
-
-
-import logging
 import threading
 import time
 import traceback

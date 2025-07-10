@@ -1,16 +1,18 @@
-from core.unified_math_system import UnifiedMathSystem
-import numpy as np
-import numpy.typing as npt
 from __future__ import annotations
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from enum import Enum
-from typing import Tuple
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union, Tuple
-from utils.safe_print import safe_print
+
 import logging
 import random
 import time
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from enum import Enum
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+import numpy.typing as npt
+
+from core.unified_math_system import UnifiedMathSystem
+from utils.safe_print import safe_print
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

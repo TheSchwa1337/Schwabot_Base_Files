@@ -6,14 +6,15 @@ Comprehensive installation script for Schwabot mathematical system dependencies.
 Validates system requirements, installs dependencies, and verifies installation.
 """
 
-import os
-import sys
-import subprocess
-import platform
 import importlib
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
 import json
+import os
+import platform
+import subprocess
+import sys
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
 
 # Color codes for output
 class Colors:
@@ -336,9 +337,9 @@ class SchwabotInstaller:
         
         try:
             import numpy as np
-            import scipy
             import pandas as pd
-            
+            import scipy
+
             # Test basic operations
             arr = np.array([1, 2, 3, 4, 5])
             mean = np.mean(arr)

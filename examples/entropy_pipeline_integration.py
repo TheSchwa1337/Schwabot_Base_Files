@@ -8,12 +8,13 @@ main trading pipeline, showing how to use the timing cycles and signal processin
 for automated trading decisions.
 """
 
-import time
 import logging
-import numpy as np
-from typing import List, Tuple, Dict, Any
-import sys
 import os
+import sys
+import time
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
 
 # Add the core directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'core'))
@@ -22,15 +23,15 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'core'))
 from entropy_signal_integration import (
     get_entropy_integrator,
     process_entropy_signal,
-    should_execute_tick,
     should_execute_routing,
+    should_execute_tick,
 )
 
 # Import other core components
 try:
-    from order_book_analyzer import OrderBookAnalyzer
     from dual_state_router import get_dual_state_router
     from neural_processing_engine import NeuralProcessingEngine
+    from order_book_analyzer import OrderBookAnalyzer
 except ImportError as e:
     print(f"Warning: Could not import some core components: {e}")
 

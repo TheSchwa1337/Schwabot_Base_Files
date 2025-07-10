@@ -1,8 +1,9 @@
-import numpy as np
-from collections import deque
-from typing import Dict, Any, List, Optional
 import logging
 import time
+from collections import deque
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 """
 Drawdown Predictor Module

@@ -19,18 +19,18 @@ import json
 import logging
 import sys
 from datetime import datetime, timedelta
-from pathlib import Path
 from decimal import Decimal
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any, Dict, List
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import Schwabot components
 try:
-    from core.registry_backtester import RegistryBacktester, BacktestConfig
-    from core.quad_bit_strategy_array import TradingPair
     from core.profit_feedback_engine import ProfitFeedbackEngine
+    from core.quad_bit_strategy_array import TradingPair
+    from core.registry_backtester import BacktestConfig, RegistryBacktester
     
     SCHWABOT_AVAILABLE = True
 except ImportError as e:

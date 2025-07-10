@@ -14,21 +14,21 @@ enabling full mathematical pipeline testing before live deployment.
 import asyncio
 import logging
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from decimal import Decimal
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 logger = logging.getLogger(__name__)
 
 # Import Schwabot components
 try:
-    from core.registry_strategy import RegistryStrategy, StrategyResult, TickData
-    from core.profit_feedback_engine import ProfitFeedbackEngine, FeedbackCycle
-    from core.btc_usdc_trading_engine import BTCTradingEngine
-    from core.quad_bit_strategy_array import TradingPair
     from backtesting.historical_data_manager import HistoricalDataManager
+    from core.btc_usdc_trading_engine import BTCTradingEngine
+    from core.profit_feedback_engine import FeedbackCycle, ProfitFeedbackEngine
+    from core.quad_bit_strategy_array import TradingPair
+    from core.registry_strategy import RegistryStrategy, StrategyResult, TickData
     
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:

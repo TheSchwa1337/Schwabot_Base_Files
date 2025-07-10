@@ -6,9 +6,9 @@ This script checks the current state of Flake8 violations
 and provides a summary of what's been fixed and what remains.
 """
 
+import os
 import subprocess
 import sys
-import os
 from pathlib import Path
 
 

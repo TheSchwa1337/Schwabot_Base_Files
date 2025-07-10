@@ -8,10 +8,11 @@ statistical analysis, and numerical operations.
 """
 
 import logging
+from decimal import getcontext
+from typing import TYPE_CHECKING, Any, Dict
+
 import numpy as np
 import numpy.typing as npt
-from typing import Any, Dict, TYPE_CHECKING
-from decimal import getcontext
 
 # Set high precision for financial calculations
 getcontext().prec = 18

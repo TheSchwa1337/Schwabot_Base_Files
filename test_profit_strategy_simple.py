@@ -1,7 +1,8 @@
-import numpy as np
-from dataclasses import dataclass
-from typing import Dict, Any
 import hashlib
+from dataclasses import dataclass
+from typing import Any, Dict
+
+import numpy as np
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

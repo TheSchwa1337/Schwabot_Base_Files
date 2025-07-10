@@ -1,12 +1,14 @@
 import math
-import numpy as np
-from .galileo_tensor_bridge import GalileoTensorBridge
-from .quantum_static_core import QuantumStaticCore, QSCResult, ResonanceLevel
+import time
 from dataclasses import dataclass, field
 from decimal import Decimal, getcontext
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-import time
+
+import numpy as np
+
+from .galileo_tensor_bridge import GalileoTensorBridge
+from .quantum_static_core import QSCResult, QuantumStaticCore, ResonanceLevel
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

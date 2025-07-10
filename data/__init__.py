@@ -1,6 +1,6 @@
-from pathlib import Path
 import logging
 import os
+from pathlib import Path
 
 #!/usr/bin/env python3
 """Schwabot Historical Data Pipeline.

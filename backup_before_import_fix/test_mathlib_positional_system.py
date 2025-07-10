@@ -1,8 +1,8 @@
-from mathlib_positional_state_system import ()
-from flake8_positional_corrector import Flake8PositionalCorrector, flake8_corrector
-from pathlib import Path
 import json
 import sys
+from pathlib import Path
+
+from flake8_positional_corrector import Flake8PositionalCorrector, flake8_corrector
 
 # -*- coding: utf-8 -*-
 """

@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+
 class Phase2ConsolidationPlan:
     """
     Systematic consolidation and correction plan for Schwabot codebase.

@@ -8,8 +8,9 @@ Tests the mathematical logic engine and integration bridge with real data scenar
 
 import logging
 import time
+from typing import Any, Dict
+
 import numpy as np
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -17,13 +18,25 @@ logger = logging.getLogger(__name__)
 
 # Import core modules
 try:
-    from core.math_logic_engine import (
-        entropy_drift, drift_chain_weight, vault_reentry_delay, phase_rotation,
-        vault_mass, bitmap_fold, orbital_energy, strategy_hash_evolution,
-        clonal_expansion_coefficient, mutation_rate, rebuy_probability,
-        hash_priority_score, echo_trigger_zone, should_enter, should_exit, sigmoid
-    )
     from core.math_integration_bridge import MathIntegrationBridge, create_math_integration_bridge
+    from core.math_logic_engine import (
+        bitmap_fold,
+        clonal_expansion_coefficient,
+        drift_chain_weight,
+        echo_trigger_zone,
+        entropy_drift,
+        hash_priority_score,
+        mutation_rate,
+        orbital_energy,
+        phase_rotation,
+        rebuy_probability,
+        should_enter,
+        should_exit,
+        sigmoid,
+        strategy_hash_evolution,
+        vault_mass,
+        vault_reentry_delay,
+    )
     MATH_ENGINE_AVAILABLE = True
 except ImportError as e:
     logger.error(f"Failed to import math engine: {e}")

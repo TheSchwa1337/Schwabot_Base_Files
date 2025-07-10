@@ -21,11 +21,11 @@ import argparse
 import logging
 import sys
 import time
-from typing import Dict, Any
+from typing import Any, Dict
 
 import yaml
 
-from core import create_clean_trading_system, CleanTradingSystem
+from core import CleanTradingSystem, create_clean_trading_system
 from utils.logging_setup import setup_logging
 from utils.secure_config_manager import SecureConfigManager
 

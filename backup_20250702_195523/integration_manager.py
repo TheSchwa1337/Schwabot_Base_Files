@@ -1,16 +1,14 @@
-from .data_models import APICredentials, OrderRequest, OrderResponse, MarketData, PortfolioPosition
-from .enums import ExchangeType, ConnectionStatus
-from .exchange_connection import ExchangeConnection
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 import asyncio
 import json
 import logging
 import time
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-
-
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
+from .enums import ConnectionStatus, ExchangeType
+from .exchange_connection import ExchangeConnection
 
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-

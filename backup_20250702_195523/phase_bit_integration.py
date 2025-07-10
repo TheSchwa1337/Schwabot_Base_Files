@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, NamedTuple, OptionalPhase Bit Integration Module
+from typing import Any, Bit, Dict, Integration, Module, NamedTuple, OptionalPhase
 
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS

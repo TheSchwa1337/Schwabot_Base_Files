@@ -7,9 +7,10 @@ This script verifies all mathematical implementations are working correctly
 for the Schwabot trading system after 39 days of development.
 """
 
-import numpy as np
 import logging
 from pathlib import Path
+
+import numpy as np
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

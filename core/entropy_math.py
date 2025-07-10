@@ -7,17 +7,18 @@ Provides core entropy mathematical calculations and utilities.
 """
 
 import logging
-import numpy as np
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 # Check for math infrastructure availability
 try:
-    from .math_config_manager import MathConfigManager
     from .math_cache import MathResultCache
+    from .math_config_manager import MathConfigManager
     from .math_orchestrator import MathOrchestrator
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:

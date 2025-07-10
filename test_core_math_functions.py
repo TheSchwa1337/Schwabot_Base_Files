@@ -7,10 +7,11 @@ This test validates that core mathematical concepts are actually implemented
 and calculating real values for BTC/USDC trading decisions.
 """
 
-import numpy as np
 import logging
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
