@@ -250,6 +250,20 @@ The system exposes Prometheus metrics at `/metrics` when monitoring is enabled.
 
 ## 🧪 Testing
 
+### Quick Test
+Run the comprehensive test suite to validate system functionality:
+
+```bash
+python test_ci_functionality.py
+```
+
+This test suite validates:
+- Core module imports and functionality
+- System initialization and configuration
+- Registry system and trading pipeline
+- CLI functionality and help system
+- Directory structure and file integrity
+
 ### Unit Tests
 ```bash
 pytest test/unit/
@@ -260,10 +274,24 @@ pytest test/unit/
 pytest test/integration/
 ```
 
-### End-to-End Tests
+### Legacy Tests
 ```bash
-pytest test/e2e/
+python test_unified_trading_pipeline.py
 ```
+
+## 🤖 Continuous Integration
+
+The repository includes comprehensive CI/CD testing that validates:
+
+- **Dependencies**: Cross-platform package installation
+- **Code Quality**: Flake8 syntax and style checks
+- **Imports**: Core module availability and loading
+- **Functionality**: System initialization and basic operations
+- **CLI Interface**: Command-line help and basic commands
+- **Configuration**: YAML/JSON config file loading
+- **Structure**: Required directories and files
+
+CI runs on every push and pull request, ensuring code quality and functionality.
 
 ## 📈 Performance
 
@@ -347,3 +375,60 @@ This software is for educational and research purposes. Trading cryptocurrencies
 ---
 
 **Schwabot Trading System** - Advanced cryptocurrency trading with mathematical precision.
+
+# Schwabot_Base_Files
+
+## Automated Testing
+
+The main test for this repository is now:
+
+```bash
+python test_ci_functionality.py
+```
+
+This comprehensive test script validates all core functionality including:
+
+- **Dependencies**: Verifies all required packages are available
+- **Core Imports**: Tests that all core modules can be imported successfully
+- **System Initialization**: Validates the trading system can be initialized
+- **Registry System**: Tests trade registry and coordination functionality  
+- **Pipeline Integration**: Validates the unified trading pipeline
+- **Configuration**: Tests YAML/JSON configuration loading
+- **CLI Interface**: Verifies command-line help and basic functionality
+- **Directory Structure**: Ensures all required files and folders exist
+- **Syntax Validation**: Checks Python syntax across core files
+
+### Legacy Tests
+
+The following tests are also available but are supplementary:
+
+```bash
+python test_unified_trading_pipeline.py  # Legacy trading pipeline tests
+```
+
+## Running Tests Locally
+
+To run the full test suite:
+
+```bash
+python test_ci_functionality.py
+```
+
+## Continuous Integration
+
+GitHub Actions CI is configured to run comprehensive tests on every push and pull request:
+
+1. **Main CI Workflow** (`.github/workflows/python-ci.yml`)
+   - Runs on Python 3.10 and 3.11
+   - Installs dependencies with cross-platform compatibility
+   - Executes the comprehensive test suite
+   - Validates code quality with Flake8 and Black
+   - Tests CLI functionality
+
+2. **Functional Test Workflow** (`.github/workflows/ci.yml`)
+   - Quick functional validation
+   - Supplementary legacy test execution
+
+The CI system handles cross-platform dependency issues (like Windows-only packages) and provides clear validation that the system works correctly.
+
+You can view the results in the Actions tab of the GitHub repository.

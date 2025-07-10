@@ -83,7 +83,7 @@ dash>=2.12.0
 streamlit>=1.34.0
 bokeh>=3.2.0
 
-# Platform-specific dependencies for windows
-pywin32>=228
-wmi>=1.5.1
+# Platform-specific dependencies for windows - only install on Windows
+pywin32>=228; sys_platform == "win32"
+wmi>=1.5.1; sys_platform == "win32"
 
