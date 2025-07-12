@@ -1,0 +1,343 @@
+# Heartbeat Integration Configuration
+# ==================================
+# Configuration for the Schwabot Heartbeat Integration Manager
+# Coordinates all advanced modules with a 5-minute heartbeat cycle
+
+# Core Heartbeat Settings
+heartbeat:
+  # Heartbeat cycle interval (seconds)
+  interval: 300  # 5 minutes
+  
+  # Enable/disable heartbeat features
+  enable_thermal_routing: true
+  enable_autonomic_limits: true
+  enable_api_caching: true
+  enable_profit_caching: true
+  enable_drift_profiling: true
+  enable_gpu_mapping: true
+  enable_profit_projection: true
+  
+  # Performance thresholds
+  max_concurrent_strategies: 10
+  strategy_confidence_threshold: 0.6
+  thermal_pressure_threshold: 0.8
+  memory_usage_threshold: 0.85
+  
+  # Cache settings
+  profit_echo_decay_factor: 0.95
+  
+  # Update intervals for different modules
+  drift_band_update_interval: 60    # 1 minute
+  gpu_mapping_interval: 120         # 2 minutes
+  profit_projection_interval: 180   # 3 minutes
+
+# Thermal Strategy Router Configuration
+thermal_router:
+  # Thermal thresholds
+  temperature_thresholds:
+    cool: 55.0      # Celsius
+    normal: 75.0
+    warm: 85.0
+    hot: 95.0
+  
+  # ZPE/ZBE thresholds
+  zpe_thresholds:
+    low: 0.3
+    medium: 0.6
+    high: 0.8
+  
+  # Strategy mode mapping
+  mode_mapping:
+    short_term_sniper:
+      zbe_threshold: 0.35
+      temp_threshold: 55.0
+      description: "High-frequency, low-latency strategies"
+    
+    mid_cycle_batcher:
+      zpe_range: [0.35, 0.65]
+      description: "Balanced processing strategies"
+    
+    macroframe_planner:
+      zpe_threshold: 0.65
+      ram_threshold: 0.8
+      description: "Long-term planning strategies"
+  
+  # Bitmap compression settings
+  bitmap_compression:
+    short_term_sniper: 8    # bits
+    mid_cycle_batcher: 16   # bits
+    macroframe_planner: 32  # bits
+
+# Autonomic Limit Layer Configuration
+autonomic_layer:
+  # Limit thresholds
+  limits:
+    max_drawdown: 0.04          # 4% maximum drawdown
+    max_cycle_repeats: 5        # Maximum consecutive cycles per tag
+    min_profit_threshold: 0.01  # 1% minimum profit
+    max_thermal_pressure: 0.9   # Maximum thermal pressure
+    max_entropy_rate: 0.8       # Maximum entropy rate
+    max_memory_usage: 0.85      # Maximum memory usage
+    min_confidence: 0.6         # Minimum strategy confidence
+    max_volume_multiplier: 2.0  # Maximum volume multiplier
+  
+  # Validation settings
+  validation:
+    enable_drawdown_check: true
+    enable_cycle_repetition_check: true
+    enable_profit_threshold_check: true
+    enable_thermal_pressure_check: true
+    enable_memory_usage_check: true
+    enable_confidence_check: true
+    enable_volume_multiplier_check: true
+  
+  # Performance tracking
+  performance_tracking:
+    max_history_size: 1000
+    success_rate_threshold: 0.7
+    auto_adjust_limits: true
+
+# API Tick Cache Configuration
+api_cache:
+  # Cache settings
+  ttl_seconds: 300              # 5 minutes TTL
+  max_cache_size: 10000         # Maximum cached entries
+  cleanup_interval: 600         # Cleanup every 10 minutes
+  
+  # Cache keys
+  cache_keys:
+    market_data: "market_data_{symbol}_{interval}"
+    tick_data: "tick_data_{symbol}_{timestamp}"
+    order_book: "order_book_{symbol}"
+    trade_history: "trade_history_{symbol}_{limit}"
+  
+  # Performance settings
+  enable_compression: true
+  compression_level: 6
+  enable_encryption: false
+
+# Profit Echo Cache Configuration
+profit_cache:
+  # Cache settings
+  max_profit_history: 1000      # Maximum profit entries per strategy
+  decay_factor: 0.95            # Profit decay factor
+  min_profit_threshold: 0.001   # Minimum profit to cache
+  
+  # Strategy tracking
+  strategy_tracking:
+    enable_profit_tracking: true
+    enable_confidence_tracking: true
+    enable_volume_tracking: true
+  
+  # Analysis settings
+  analysis:
+    profit_window_hours: 24     # Analysis window
+    confidence_threshold: 0.6   # Minimum confidence for analysis
+    volume_threshold: 100.0     # Minimum volume for analysis
+
+# Drift Band Profiler Configuration
+drift_profiler:
+  # Drift analysis settings
+  analysis:
+    price_window: 100           # Price points for drift calculation
+    volume_window: 50           # Volume points for drift calculation
+    min_data_points: 10         # Minimum data points required
+  
+  # Band calculation
+  bands:
+    profit_bands: 5             # Number of profit bands
+    volume_bands: 3             # Number of volume bands
+    confidence_bands: 4         # Number of confidence bands
+  
+  # Volume adjustment
+  volume_adjustment:
+    base_multiplier: 1.0
+    max_multiplier: 3.0
+    min_multiplier: 0.1
+    adjustment_factor: 0.1
+
+# GPU Logic Mapper Configuration
+gpu_mapper:
+  # GPU settings
+  gpu:
+    memory_limit: 0.8           # 80% of GPU memory
+    enable_cupy: true
+    fallback_to_cpu: true
+  
+  # Matrix processing
+  matrix:
+    max_matrix_size: 10000      # Maximum matrix size to process
+    compression_enabled: true
+    batch_processing_enabled: true
+    batch_size: 10
+  
+  # Tensor analysis
+  tensor_analysis:
+    enabled: true
+    methods:
+      - eigenvalue_decomposition
+      - singular_value_decomposition
+      - matrix_factorization
+      - correlation_analysis
+      - entropy_calculation
+    
+    # Method weights
+    weights:
+      eigenvalue: 0.3
+      singular_value: 0.3
+      entropy: 0.2
+      correlation: 0.2
+  
+  # Memory management
+  memory:
+    cleanup_threshold: 0.9      # Cleanup when 90% full
+    sync_interval: 100          # Sync every 100 operations
+    max_mapped_strategies: 100
+
+# Profit Projection Engine Configuration
+profit_engine:
+  # Projection settings
+  projection:
+    horizon_hours: 24           # Projection horizon
+    confidence_threshold: 0.6   # Minimum confidence
+    risk_adjustment_factor: 0.8 # Risk adjustment
+  
+  # Analysis methods
+  methods:
+    - tensor_analysis
+    - historical_regression
+    - market_condition_analysis
+    - strategy_confidence_scoring
+    - risk_adjusted_projection
+  
+  # Method weights
+  weights:
+    tensor: 0.3
+    historical: 0.4
+    market: 0.3
+    confidence: 0.2
+    risk_adjusted: 0.5
+  
+  # Market condition analysis
+  market_conditions:
+    volatility_threshold: 0.5
+    trend_strength_threshold: 0.3
+    volume_threshold: 1000.0
+    sentiment_threshold: 0.5
+  
+  # Historical analysis
+  historical:
+    lookback_period_hours: 168  # 1 week
+    min_data_points: 10
+    regression_degree: 2
+  
+  # Tensor analysis
+  tensor_analysis:
+    eigenvalue_weight: 0.3
+    singular_value_weight: 0.3
+    entropy_weight: 0.2
+    correlation_weight: 0.2
+
+# Performance Monitoring Configuration
+monitoring:
+  # Metrics collection
+  metrics:
+    enable_performance_tracking: true
+    enable_health_monitoring: true
+    enable_error_tracking: true
+  
+  # Health checks
+  health:
+    heartbeat_timeout: 600      # 10 minutes
+    memory_warning: 0.8         # 80% memory usage
+    thermal_warning: 85.0       # 85°C
+    error_rate_threshold: 0.1   # 10% error rate
+  
+  # Logging
+  logging:
+    level: "INFO"
+    enable_structured_logging: true
+    log_file: "logs/heartbeat_integration.log"
+    max_log_size: "100MB"
+    backup_count: 5
+
+# Integration Settings
+integration:
+  # Cross-module communication
+  communication:
+    enable_event_bus: true
+    enable_pub_sub: true
+    message_timeout: 30         # seconds
+  
+  # Synchronization
+  synchronization:
+    enable_module_sync: true
+    sync_interval: 60           # seconds
+    timeout: 10                 # seconds
+  
+  # Error handling
+  error_handling:
+    max_retries: 3
+    retry_delay: 5              # seconds
+    circuit_breaker_enabled: true
+    circuit_breaker_threshold: 5
+
+# Optimization Settings
+optimization:
+  # Performance optimization
+  performance:
+    enable_caching: true
+    enable_compression: true
+    enable_parallel_processing: true
+  
+  # Memory optimization
+  memory:
+    enable_garbage_collection: true
+    gc_interval: 300            # seconds
+    memory_pool_size: 1000
+  
+  # CPU optimization
+  cpu:
+    enable_threading: true
+    max_threads: 4
+    thread_pool_size: 10
+
+# Security Settings
+security:
+  # Data protection
+  data:
+    enable_encryption: false
+    encryption_algorithm: "AES-256"
+    key_rotation_interval: 86400  # 24 hours
+  
+  # Access control
+  access:
+    enable_authentication: false
+    enable_authorization: false
+    max_connections: 100
+  
+  # Audit logging
+  audit:
+    enable_audit_logging: false
+    audit_file: "logs/audit.log"
+    log_sensitive_operations: true
+
+# Development Settings
+development:
+  # Debug mode
+  debug:
+    enable_debug_mode: false
+    enable_trace_logging: false
+    enable_profiling: false
+  
+  # Testing
+  testing:
+    enable_mock_modules: false
+    enable_fake_data: false
+    test_timeout: 30            # seconds
+  
+  # Development tools
+  tools:
+    enable_hot_reload: false
+    enable_live_monitoring: false
+    enable_performance_profiling: false 
