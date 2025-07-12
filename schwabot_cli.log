@@ -1,0 +1,146 @@
+2025-07-12 19:41:26,206 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:26,224 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:26,240 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:26,240 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:26,255 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:26,272 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:26,273 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:26,294 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:26,309 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:41:40,368 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-12 19:41:40,962 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-12 19:41:42,082 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-12 19:41:42,154 - core.unified_pipeline_manager - INFO - Initializing UnifiedPipelineManager components
+2025-07-12 19:41:42,154 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-12 19:41:42,174 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,186 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:42,187 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:42,197 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,209 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:42,209 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:42,220 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,231 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:41:42,243 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,253 - core.two_gram_detector - INFO - Initializing TwoGramDetector
+2025-07-12 19:41:42,272 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,282 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:42,283 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:42,292 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,302 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,312 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:41:42,313 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:41:42,325 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:41:42,337 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:41:42,552 - core.strategy - WARNING - Strategy loader not available
+2025-07-12 19:41:42,643 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-12 19:42:30,559 - core.btc_usdc_trading_engine - INFO - ⚡ BTCTradingEngine using numpy (CPU) for tensor operations
+2025-07-12 19:42:30,564 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-12 19:42:30,565 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-12 19:42:30,568 - core.math_cache - INFO - ⚡ MathCache using numpy (CPU) for tensor operations
+2025-07-12 19:42:30,571 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:30,571 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:30,572 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:30,572 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:30,573 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:30,573 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:30,573 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:30,574 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:30,574 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:30,574 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:30,575 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:30,575 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:30,575 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:30,576 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:30,576 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:42:30,576 - core.math_cache - INFO - ✅ MathResultCache initialized successfully
+2025-07-12 19:42:43,022 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-12 19:42:43,026 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-12 19:42:43,030 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-12 19:42:43,030 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-12 19:42:43,579 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-12 19:42:43,579 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-12 19:42:43,601 - core.profit_optimization_engine - INFO - ⚡ ProfitOptimizationEngine using numpy (CPU) for tensor operations
+2025-07-12 19:42:44,805 - core.real_multi_exchange_trader - INFO - ⚡ MultiExchangeTrader using numpy (CPU) for tensor operations
+2025-07-12 19:42:44,815 - core.risk_manager - INFO - ⚡ RiskManager using numpy (CPU) for tensor operations
+2025-07-12 19:42:44,840 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-12 19:42:44,844 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-12 19:42:44,864 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-12 19:42:44,881 - core.secure_exchange_manager - INFO - ⚡ ExchangeManager using numpy (CPU) for tensor operations
+2025-07-12 19:42:44,901 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-12 19:42:44,967 - core.unified_pipeline_manager - INFO - ✅ Configuration loaded from config/pipeline_config.yaml
+2025-07-12 19:42:44,982 - core.unified_pipeline_manager - INFO - Initializing UnifiedPipelineManager components
+2025-07-12 19:42:44,988 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-12 19:42:44,994 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-12 19:42:44,997 - core.unified_pipeline_manager - INFO - ✅ Symbolic math engine initialized
+2025-07-12 19:42:45,002 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,005 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,017 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:45,028 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:45,032 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:45,041 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,051 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,061 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:45,064 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:45,066 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:45,067 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,068 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,070 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:42:45,071 - core.math_cache - INFO - ✅ MathResultCache initialized successfully
+2025-07-12 19:42:45,072 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,073 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,074 - core.two_gram_detector - INFO - Initializing TwoGramDetector
+2025-07-12 19:42:45,074 - core.two_gram_detector - INFO - ✅ TwoGramDetector initialized successfully
+2025-07-12 19:42:45,077 - core.unified_pipeline_manager - INFO - ✅ Two-gram detector initialized
+2025-07-12 19:42:45,077 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,078 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,079 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:45,081 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:45,082 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:45,083 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,083 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,084 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,084 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,085 - core.math_config_manager - INFO - Initializing MathConfigManager
+2025-07-12 19:42:45,085 - core.math_config_manager - INFO - Config file config/math_config.json not found, using defaults
+2025-07-12 19:42:45,086 - core.math_config_manager - INFO - ✅ MathConfigManager initialized successfully
+2025-07-12 19:42:45,087 - core.math_orchestrator - INFO - Initializing MathOrchestrator
+2025-07-12 19:42:45,087 - core.math_orchestrator - INFO - ✅ MathOrchestrator initialized successfully
+2025-07-12 19:42:45,088 - core.math_cache - INFO - Initializing MathResultCache
+2025-07-12 19:42:45,089 - core.math_cache - INFO - ✅ MathResultCache initialized successfully
+2025-07-12 19:42:45,090 - core.unified_pipeline_manager - INFO - ✅ UnifiedPipelineManager initialized successfully
+2025-07-12 19:42:45,131 - core.clean_unified_math - INFO - 🔄 Clean Unified Math using CPU fallback: NumPy (CPU)
+2025-07-12 19:42:45,132 - core.clean_unified_math - INFO - 🧠 Profit vector integration: ENABLED
+2025-07-12 19:42:45,330 - core.strategy - WARNING - Strategy loader not available
+2025-07-12 19:42:45,354 - core.entropy_enhanced_trading_executor - WARNING - ⚠️ PortfolioTracker not available - using fallback
+2025-07-12 19:42:45,356 - core.pure_profit_calculator - WARNING - ⚠️ Entropy Signal Integration not available in Pure Profit Calculator
+2025-07-12 19:42:45,366 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-12 19:42:45,366 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-12 19:42:45,366 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-12 19:42:45,366 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-12 19:42:45,367 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-12 19:42:45,367 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-12 19:42:45,368 - core.unified_btc_trading_pipeline - INFO - ✅ All core components imported successfully
+2025-07-12 19:42:45,368 - core.unified_btc_trading_pipeline - INFO - ✅ Unified BTC Trading Pipeline initialized
+2025-07-12 19:42:45,369 - core.pure_profit_calculator - WARNING - ⚠️ Entropy signal integration not available in Pure Profit Calculator
+2025-07-12 19:42:45,369 - core.pure_profit_calculator - INFO - 🧮 Pure Profit Calculator initialized - Mathematical Mode with hybrid
+2025-07-12 19:42:45,369 - __main__ - INFO - Core components initialized successfully
+2025-07-12 19:42:45,370 - __main__ - INFO - RUNNING COMPREHENSIVE SYSTEM TESTS
+2025-07-12 19:42:45,370 - __main__ - INFO - ============================================================
+2025-07-12 19:42:45,370 - __main__ - INFO - Test 1: Risk Manager
+2025-07-12 19:42:45,372 - core.risk_manager - INFO - ✅ Risk metrics calculated - VaR95: -0.0330, Sharpe: -0.5210, MDD: -0.5673
+2025-07-12 19:42:45,373 - __main__ - INFO - Test 2: BTC Trading Pipeline
+2025-07-12 19:42:45,373 - core.unified_btc_trading_pipeline - ERROR - ❌ Mathematical framework processing failed: 'BTCTradingEngine' object has no attribute 'process_price'
+2025-07-12 19:42:45,373 - core.unified_btc_trading_pipeline - ERROR - ❌ Mathematical framework processing failed: 'BTCTradingEngine' object has no attribute 'process_price'
+2025-07-12 19:42:45,374 - core.unified_btc_trading_pipeline - ERROR - ❌ Mathematical framework processing failed: 'BTCTradingEngine' object has no attribute 'process_price'
+2025-07-12 19:42:45,374 - core.unified_btc_trading_pipeline - ERROR - ❌ Mathematical framework processing failed: 'BTCTradingEngine' object has no attribute 'process_price'
+2025-07-12 19:42:45,374 - core.unified_btc_trading_pipeline - ERROR - ❌ Mathematical framework processing failed: 'BTCTradingEngine' object has no attribute 'process_price'
+2025-07-12 19:42:45,375 - __main__ - INFO - Test 3: Profit Calculator
+2025-07-12 19:42:45,375 - core.pure_profit_calculator - ERROR - ❌ Base profit calculation failed: 'dict' object has no attribute 'momentum_weight'
+2025-07-12 19:42:45,375 - core.pure_profit_calculator - ERROR - ❌ Risk adjustment calculation failed: 'dict' object has no attribute 'risk_tolerance'
+2025-07-12 19:42:45,376 - core.pure_profit_calculator - INFO - 🧮 Profit calculated: Base=0.0000, Adjusted=0.0000, Total=0.0450 (0.999ms)
+2025-07-12 19:42:45,376 - __main__ - INFO - Test 4: Error Handling
+2025-07-12 19:42:45,377 - __main__ - INFO - Test 5: Hash Registry
+2025-07-12 19:42:45,377 - __main__ - INFO - TEST SUMMARY
+2025-07-12 19:42:45,377 - __main__ - INFO - Tests Passed: 3
+2025-07-12 19:42:45,378 - __main__ - INFO - Tests Failed: 2
+2025-07-12 19:42:45,378 - __main__ - INFO - Success Rate: 60.0%

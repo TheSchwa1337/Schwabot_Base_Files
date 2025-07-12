@@ -10,6 +10,10 @@ Comprehensive risk assessment and management for Schwabot trading system:
 • Multi-dimensional risk metrics (VaR, CVaR, Sharpe ratio, MDD)
 • Dynamic risk limits and circuit breakers
 • Schwabot strategy integration with hash outputs
+• 🆕 ROBUST ERROR HANDLING & RECOVERY
+• 🆕 PER-SYMBOL ERROR TRACKING
+• 🆕 CONFIGURABLE CIRCUIT BREAKERS
+• 🆕 SAFE MODE TOGGLES
 
 Mathematical Foundation:
 - Value at Risk (VaR): VaR = μ - z_α * σ
@@ -26,6 +30,10 @@ Features:
 - Circuit breakers and emergency stops
 - JSON-compatible risk flags for strategy integration
 - Hash-based risk state tracking for Schwabot decision logic
+- 🆕 Real-time error log accumulator (in-memory + to-disk optional)
+- 🆕 Trade-by-trade fault classification
+- 🆕 Per-symbol error tracking and circuit breakers
+- 🆕 Safe mode with automatic and manual toggles
 """
 
 import hashlib
@@ -33,6 +41,7 @@ import json
 import logging
 import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -75,6 +84,52 @@ class ProcessingMode(Enum):
     SAFE_MODE = "safe_mode"
 
 
+class ErrorType(Enum):
+    """Error types for fault classification."""
+    TIMEOUT = "timeout"
+    LOGIC_REJECTION = "logic_rejection"
+    CCXT_REJECTION = "ccxt_rejection"
+    MATHEMATICAL_ERROR = "mathematical_error"
+    NETWORK_ERROR = "network_error"
+    MEMORY_ERROR = "memory_error"
+    SYSTEM_ERROR = "system_error"
+    UNKNOWN = "unknown"
+
+
+class SafeMode(Enum):
+    """Safe mode states."""
+    NORMAL = "normal"
+    DEGRADED = "degraded"
+    EMERGENCY = "emergency"
+    HALTED = "halted"
+
+
+@dataclass
+class ErrorLogEntry:
+    """Error log entry for fault tracking."""
+    timestamp: datetime
+    error_type: ErrorType
+    symbol: Optional[str]
+    trade_id: Optional[str]
+    error_message: str
+    severity: str
+    context: Dict[str, Any]
+    recovered: bool = False
+    recovery_time: Optional[float] = None
+
+
+@dataclass
+class CircuitBreakerState:
+    """Circuit breaker state for symbols and system."""
+    symbol: str
+    error_count: int = 0
+    last_error_time: Optional[datetime] = None
+    triggered: bool = False
+    trigger_time: Optional[datetime] = None
+    auto_reset_time: Optional[datetime] = None
+    manual_override: bool = False
+
+
 @dataclass
 class RiskMetric:
     """
@@ -84,7 +139,7 @@ class RiskMetric:
     - VaR: VaR = μ - z_α * σ (where z_α is the α-quantile of standard normal)
     - CVaR: CVaR = E[X|X > VaR] (Expected Shortfall)
     - Sharpe: Sharpe = (R_p - R_f) / σ_p (risk-adjusted return)
-    - MDD: MDD = max((Peak - Trough) / Peak) (maximum drawdown)
+    - MDD: MDD = max((Peak - Trough) / Peak)
     """
     var_95: float  # Value at Risk (95% confidence)
     var_99: float  # Value at Risk (99% confidence)
@@ -148,16 +203,12 @@ class RiskManager:
     - Kelly Criterion: f* = (bp - q) / b
     """
     
-    def __init__(self, risk_tolerance: float = 0.02, max_portfolio_risk: float = 0.05):
+    def __init__(self, risk_tolerance: Union[float, str, Dict[str, Any]] = 0.02, max_portfolio_risk: float = 0.05):
         """
         Initialize RiskManager with Schwabot-compatible configuration.
-        
-        Args:
-            risk_tolerance: Maximum acceptable risk per position (default: 2%)
-            max_portfolio_risk: Maximum acceptable portfolio risk (default: 5%)
+        Accepts float, string, or dict for risk_tolerance/config for full dynamic risk integration.
         """
-        self.risk_tolerance = risk_tolerance  # 2% default
-        self.max_portfolio_risk = max_portfolio_risk  # 5% default
+        # Default values
         self.positions: Dict[str, PositionRisk] = {}
         self.risk_history: List[PortfolioRisk] = []
         self.circuit_breakers: Dict[str, bool] = {}
@@ -168,10 +219,356 @@ class RiskManager:
             RiskLevel.HIGH: 0.05,
             RiskLevel.CRITICAL: 0.10
         }
+        self.strategy_profile = None
+        self.risk_config = None
         
-        logger.info(f"🛡️ RiskManager initialized with {_backend} backend")
-        logger.info(f"   Risk tolerance: {risk_tolerance:.1%}")
-        logger.info(f"   Max portfolio risk: {max_portfolio_risk:.1%}")
+        # 🆕 ROBUST ERROR HANDLING & RECOVERY
+        self.error_log: List[ErrorLogEntry] = []
+        self.circuit_breaker_states: Dict[str, CircuitBreakerState] = {}
+        self.safe_mode = SafeMode.NORMAL
+        self.error_thresholds = {
+            'max_errors_per_symbol': 3,
+            'max_errors_per_timeframe': 10,
+            'error_timeframe_seconds': 60,
+            'circuit_breaker_cooldown_seconds': 300,
+            'safe_mode_error_threshold': 5
+        }
+        self.error_stats = {
+            'total_errors': 0,
+            'recovered_errors': 0,
+            'symbol_errors': {},
+            'error_types': {},
+            'last_error_time': None
+        }
+        
+        # Parse input
+        if isinstance(risk_tolerance, dict):
+            self.risk_config = risk_tolerance
+            self.risk_tolerance = float(risk_tolerance.get('risk_tolerance', 0.02))
+            self.max_portfolio_risk = float(risk_tolerance.get('max_portfolio_risk', max_portfolio_risk))
+            self.strategy_profile = risk_tolerance.get('strategy_profile', None)
+            
+            # 🆕 Load error handling config
+            error_config = risk_tolerance.get('error_handling', {})
+            self.error_thresholds.update(error_config)
+            
+            logger.info(f"🛡️ RiskManager initialized with config dict: {json.dumps(risk_tolerance)}")
+        elif isinstance(risk_tolerance, str):
+            # Map string to preset values
+            mapping = {'low': 0.01, 'medium': 0.03, 'high': 0.05, 'critical': 0.10}
+            self.risk_tolerance = mapping.get(risk_tolerance.lower(), 0.02)
+            self.max_portfolio_risk = max_portfolio_risk
+            logger.info(f"🛡️ RiskManager initialized with string risk_tolerance: {risk_tolerance} -> {self.risk_tolerance:.1%}")
+        else:
+            self.risk_tolerance = float(risk_tolerance)
+            self.max_portfolio_risk = max_portfolio_risk
+            logger.info(f"🛡️ RiskManager initialized with float risk_tolerance: {self.risk_tolerance:.1%}")
+        
+        logger.info(f"   Max portfolio risk: {self.max_portfolio_risk:.1%}")
+        if self.strategy_profile:
+            logger.info(f"   Strategy profile: {self.strategy_profile}")
+        if self.risk_config:
+            logger.info(f"   Full risk config loaded.")
+        
+        # 🆕 Initialize error recovery system
+        try:
+            from core.enhanced_error_recovery_system import EnhancedErrorRecoverySystem
+            self.error_recovery = EnhancedErrorRecoverySystem()
+            logger.info("🔄 Enhanced error recovery system integrated")
+        except ImportError:
+            self.error_recovery = None
+            logger.warning("⚠️ Enhanced error recovery system not available")
+
+    def log_error(self, error_type: ErrorType, error_message: str, symbol: Optional[str] = None, 
+                  trade_id: Optional[str] = None, context: Dict[str, Any] = None) -> None:
+        """
+        🆕 Log an error with comprehensive tracking.
+        
+        Args:
+            error_type: Type of error for classification
+            error_message: Human-readable error message
+            symbol: Trading symbol (if applicable)
+            trade_id: Trade ID (if applicable)
+            context: Additional context information
+        """
+        try:
+            # Create error log entry
+            error_entry = ErrorLogEntry(
+                timestamp=datetime.now(),
+                error_type=error_type,
+                symbol=symbol,
+                trade_id=trade_id,
+                error_message=error_message,
+                severity=self._determine_error_severity(error_type),
+                context=context or {}
+            )
+            
+            # Add to error log
+            self.error_log.append(error_entry)
+            
+            # Update error statistics
+            self.error_stats['total_errors'] += 1
+            self.error_stats['last_error_time'] = datetime.now()
+            
+            # Update symbol error tracking
+            if symbol:
+                if symbol not in self.error_stats['symbol_errors']:
+                    self.error_stats['symbol_errors'][symbol] = 0
+                self.error_stats['symbol_errors'][symbol] += 1
+                
+                # Check circuit breaker for symbol
+                self._check_symbol_circuit_breaker(symbol)
+            
+            # Update error type tracking
+            error_type_str = error_type.value
+            if error_type_str not in self.error_stats['error_types']:
+                self.error_stats['error_types'][error_type_str] = 0
+            self.error_stats['error_types'][error_type_str] += 1
+            
+            # Check system-wide circuit breakers
+            self._check_system_circuit_breakers()
+            
+            # Log the error
+            logger.error(f"🚨 Error logged: {error_type.value} - {error_message} (Symbol: {symbol}, Trade: {trade_id})")
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to log error: {e}")
+
+    def _determine_error_severity(self, error_type: ErrorType) -> str:
+        """Determine error severity based on type."""
+        severity_map = {
+            ErrorType.TIMEOUT: "medium",
+            ErrorType.LOGIC_REJECTION: "low",
+            ErrorType.CCXT_REJECTION: "high",
+            ErrorType.MATHEMATICAL_ERROR: "high",
+            ErrorType.NETWORK_ERROR: "medium",
+            ErrorType.MEMORY_ERROR: "critical",
+            ErrorType.SYSTEM_ERROR: "critical",
+            ErrorType.UNKNOWN: "medium"
+        }
+        return severity_map.get(error_type, "medium")
+
+    def _check_symbol_circuit_breaker(self, symbol: str) -> None:
+        """Check and trigger circuit breaker for specific symbol."""
+        try:
+            # Initialize circuit breaker state if not exists
+            if symbol not in self.circuit_breaker_states:
+                self.circuit_breaker_states[symbol] = CircuitBreakerState(symbol=symbol)
+            
+            state = self.circuit_breaker_states[symbol]
+            current_time = datetime.now()
+            
+            # Reset error count if outside timeframe
+            if (state.last_error_time and 
+                (current_time - state.last_error_time).total_seconds() > self.error_thresholds['error_timeframe_seconds']):
+                state.error_count = 0
+            
+            # Update error count and time
+            state.error_count += 1
+            state.last_error_time = current_time
+            
+            # Check if circuit breaker should trigger
+            if (state.error_count >= self.error_thresholds['max_errors_per_symbol'] and 
+                not state.triggered and not state.manual_override):
+                
+                state.triggered = True
+                state.trigger_time = current_time
+                state.auto_reset_time = datetime.fromtimestamp(
+                    current_time.timestamp() + self.error_thresholds['circuit_breaker_cooldown_seconds']
+                )
+                
+                logger.critical(f"🚨 Circuit breaker triggered for {symbol} after {state.error_count} errors")
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to check symbol circuit breaker: {e}")
+
+    def _check_system_circuit_breakers(self) -> None:
+        """Check system-wide circuit breakers and safe mode."""
+        try:
+            current_time = datetime.now()
+            
+            # Check if too many errors in timeframe
+            recent_errors = [
+                error for error in self.error_log
+                if (current_time - error.timestamp).total_seconds() <= self.error_thresholds['error_timeframe_seconds']
+            ]
+            
+            if len(recent_errors) >= self.error_thresholds['safe_mode_error_threshold']:
+                self._enter_safe_mode(SafeMode.EMERGENCY, f"Too many errors: {len(recent_errors)} in {self.error_thresholds['error_timeframe_seconds']}s")
+            
+            # Check if any symbol has too many errors
+            for symbol, error_count in self.error_stats['symbol_errors'].items():
+                if error_count >= self.error_thresholds['max_errors_per_symbol']:
+                    logger.warning(f"⚠️ Symbol {symbol} has {error_count} errors - consider manual intervention")
+                    
+        except Exception as e:
+            logger.error(f"❌ Failed to check system circuit breakers: {e}")
+
+    def _enter_safe_mode(self, mode: SafeMode, reason: str) -> None:
+        """Enter safe mode with specified level."""
+        try:
+            if self.safe_mode != mode:
+                old_mode = self.safe_mode
+                self.safe_mode = mode
+                logger.critical(f"🚨 Safe mode changed: {old_mode.value} -> {mode.value} (Reason: {reason})")
+                
+                # Log the safe mode change
+                self.log_error(
+                    ErrorType.SYSTEM_ERROR,
+                    f"Safe mode entered: {mode.value} - {reason}",
+                    context={'old_mode': old_mode.value, 'new_mode': mode.value}
+                )
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to enter safe mode: {e}")
+
+    def exit_safe_mode(self, reason: str = "Manual override") -> None:
+        """Exit safe mode."""
+        try:
+            if self.safe_mode != SafeMode.NORMAL:
+                old_mode = self.safe_mode
+                self.safe_mode = SafeMode.NORMAL
+                logger.info(f"✅ Safe mode exited: {old_mode.value} -> normal (Reason: {reason})")
+                
+                # Log the safe mode exit
+                self.log_error(
+                    ErrorType.SYSTEM_ERROR,
+                    f"Safe mode exited: {old_mode.value} -> normal - {reason}",
+                    context={'old_mode': old_mode.value, 'new_mode': 'normal'}
+                )
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to exit safe mode: {e}")
+
+    def reset_circuit_breaker(self, symbol: str, manual: bool = False) -> bool:
+        """Reset circuit breaker for a symbol."""
+        try:
+            if symbol in self.circuit_breaker_states:
+                state = self.circuit_breaker_states[symbol]
+                state.triggered = False
+                state.error_count = 0
+                state.trigger_time = None
+                state.auto_reset_time = None
+                state.manual_override = manual
+                
+                logger.info(f"✅ Circuit breaker reset for {symbol} ({'manual' if manual else 'automatic'})")
+                return True
+            return False
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to reset circuit breaker: {e}")
+            return False
+
+    def get_error_log(self, limit: int = 100, symbol: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get error log entries."""
+        try:
+            entries = self.error_log
+            if symbol:
+                entries = [e for e in entries if e.symbol == symbol]
+            
+            # Return most recent entries
+            recent_entries = entries[-limit:] if len(entries) > limit else entries
+            
+            return [
+                {
+                    'timestamp': entry.timestamp.isoformat(),
+                    'error_type': entry.error_type.value,
+                    'symbol': entry.symbol,
+                    'trade_id': entry.trade_id,
+                    'error_message': entry.error_message,
+                    'severity': entry.severity,
+                    'context': entry.context,
+                    'recovered': entry.recovered,
+                    'recovery_time': entry.recovery_time
+                }
+                for entry in recent_entries
+            ]
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to get error log: {e}")
+            return []
+
+    def get_error_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive error statistics."""
+        try:
+            current_time = datetime.now()
+            
+            # Calculate recent error rates
+            recent_errors = [
+                error for error in self.error_log
+                if (current_time - error.timestamp).total_seconds() <= self.error_thresholds['error_timeframe_seconds']
+            ]
+            
+            # Calculate recovery rate
+            total_errors = self.error_stats['total_errors']
+            recovered_errors = self.error_stats['recovered_errors']
+            recovery_rate = (recovered_errors / total_errors * 100) if total_errors > 0 else 0
+            
+            return {
+                'total_errors': total_errors,
+                'recovered_errors': recovered_errors,
+                'recovery_rate_percent': recovery_rate,
+                'recent_errors': len(recent_errors),
+                'symbol_errors': self.error_stats['symbol_errors'],
+                'error_types': self.error_stats['error_types'],
+                'safe_mode': self.safe_mode.value,
+                'circuit_breakers_triggered': sum(1 for state in self.circuit_breaker_states.values() if state.triggered),
+                'last_error_time': self.error_stats['last_error_time'].isoformat() if self.error_stats['last_error_time'] else None
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to get error statistics: {e}")
+            return {}
+
+    def can_trade_symbol(self, symbol: str) -> bool:
+        """Check if trading is allowed for a specific symbol."""
+        try:
+            # Check safe mode
+            if self.safe_mode == SafeMode.HALTED:
+                return False
+            
+            # Check symbol circuit breaker
+            if symbol in self.circuit_breaker_states:
+                state = self.circuit_breaker_states[symbol]
+                if state.triggered:
+                    # Check if auto-reset time has passed
+                    if state.auto_reset_time and datetime.now() >= state.auto_reset_time:
+                        self.reset_circuit_breaker(symbol, manual=False)
+                    else:
+                        return False
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to check symbol trading status: {e}")
+            return False
+
+    def get_system_status(self) -> Dict[str, Any]:
+        """Get comprehensive system status including error handling."""
+        try:
+            risk_summary = self.get_risk_summary()
+            error_stats = self.get_error_statistics()
+            
+            return {
+                'risk_management': risk_summary,
+                'error_handling': error_stats,
+                'safe_mode': self.safe_mode.value,
+                'processing_mode': self.processing_mode.value,
+                'circuit_breakers': {
+                    symbol: {
+                        'triggered': state.triggered,
+                        'error_count': state.error_count,
+                        'last_error_time': state.last_error_time.isoformat() if state.last_error_time else None,
+                        'auto_reset_time': state.auto_reset_time.isoformat() if state.auto_reset_time else None
+                    }
+                    for symbol, state in self.circuit_breaker_states.items()
+                },
+                'timestamp': datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to get system status: {e}")
+            return {'error': str(e)}
 
     def compute_var(self, returns: xp.ndarray, confidence_level: float = 0.95) -> float:
         """
@@ -208,6 +605,12 @@ class RiskManager:
             return var
             
         except Exception as e:
+            # 🆕 Log mathematical error
+            self.log_error(
+                ErrorType.MATHEMATICAL_ERROR,
+                f"VaR calculation failed: {e}",
+                context={'confidence_level': confidence_level, 'returns_length': len(returns)}
+            )
             logger.error(f"❌ Failed to compute VaR: {e}")
             raise
 
@@ -253,6 +656,12 @@ class RiskManager:
             return es
             
         except Exception as e:
+            # 🆕 Log mathematical error
+            self.log_error(
+                ErrorType.MATHEMATICAL_ERROR,
+                f"Expected Shortfall calculation failed: {e}",
+                context={'confidence_level': confidence_level, 'returns_length': len(returns)}
+            )
             logger.error(f"❌ Failed to compute Expected Shortfall: {e}")
             raise
 
@@ -294,6 +703,12 @@ class RiskManager:
             return sharpe_ratio
             
         except Exception as e:
+            # 🆕 Log mathematical error
+            self.log_error(
+                ErrorType.MATHEMATICAL_ERROR,
+                f"Sharpe ratio calculation failed: {e}",
+                context={'risk_free_rate': risk_free_rate, 'returns_length': len(returns)}
+            )
             logger.error(f"❌ Failed to compute Sharpe ratio: {e}")
             raise
 
@@ -335,6 +750,12 @@ class RiskManager:
             return max_drawdown
             
         except Exception as e:
+            # 🆕 Log mathematical error
+            self.log_error(
+                ErrorType.MATHEMATICAL_ERROR,
+                f"Maximum drawdown calculation failed: {e}",
+                context={'returns_length': len(returns)}
+            )
             logger.error(f"❌ Failed to compute maximum drawdown: {e}")
             raise
 
@@ -438,6 +859,12 @@ class RiskManager:
             return risk_metric
             
         except Exception as e:
+            # 🆕 Log mathematical error
+            self.log_error(
+                ErrorType.MATHEMATICAL_ERROR,
+                f"Risk metrics calculation failed: {e}",
+                context={'confidence_levels': confidence_levels, 'returns_length': len(returns)}
+            )
             logger.error(f"❌ Failed to calculate risk metrics: {e}")
             return RiskMetric(
                 var_95=0.0, var_99=0.0, cvar_95=0.0, cvar_99=0.0,
@@ -466,6 +893,10 @@ class RiskManager:
             ValueError: If inputs are invalid
         """
         try:
+            # 🆕 Check if symbol is allowed to trade
+            if not self.can_trade_symbol(symbol):
+                raise ValueError(f"Trading not allowed for {symbol} due to circuit breaker or safe mode")
+            
             if position_size <= 0:
                 raise ValueError(f"Position size must be positive, got {position_size}")
             if current_price <= 0:
@@ -521,6 +952,13 @@ class RiskManager:
             return position_risk
             
         except Exception as e:
+            # 🆕 Log error with symbol context
+            self.log_error(
+                ErrorType.LOGIC_REJECTION,
+                f"Position risk assessment failed for {symbol}: {e}",
+                symbol=symbol,
+                context={'position_size': position_size, 'current_price': current_price, 'entry_price': entry_price}
+            )
             logger.error(f"❌ Failed to assess position risk for {symbol}: {e}")
             return None
 
@@ -610,6 +1048,12 @@ class RiskManager:
             return portfolio_risk
             
         except Exception as e:
+            # 🆕 Log error
+            self.log_error(
+                ErrorType.LOGIC_REJECTION,
+                f"Portfolio risk assessment failed: {e}",
+                context={'portfolio_data_keys': list(portfolio_data.keys())}
+            )
             logger.error(f"❌ Failed to assess portfolio risk: {e}")
             return None
 
