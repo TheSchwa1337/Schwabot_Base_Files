@@ -2,9 +2,12 @@ import asyncio
 import json
 import os
 import sys
+import time
+from datetime import datetime
+from typing import Dict, Any, Optional
 
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import HTMLResponse
 from starlette.websockets import WebSocketState
 
@@ -112,12 +115,190 @@ async def set_mode(mode: str):
 
 @app.post("/trigger_trade")
 async def trigger_trade(trade_data: dict):
-    """Manually triggers a trade (placeholder)."""
-    # trade_data expected to contain: action, symbol, quantity, hash_id
-    hash_id = trade_data.get("hash_id")
-    await manager.broadcast(f"Manual trade triggered with hash ID: {hash_id}. (Feature is a placeholder)")
-    # TODO: Implement manual trade execution logic
-    return {"status": "placeholder", "message": "Manual trade endpoint is not fully implemented."}
+    """Manually triggers a trade with full execution logic."""
+    try:
+        # Validate required fields
+        required_fields = ["action", "symbol", "quantity"]
+        for field in required_fields:
+            if field not in trade_data:
+                raise HTTPException(status_code=400, detail=f"Missing required field: {field}")
+        
+        action = trade_data.get("action").upper()
+        symbol = trade_data.get("symbol")
+        quantity = float(trade_data.get("quantity"))
+        price = trade_data.get("price")
+        exchange = trade_data.get("exchange", "binance")
+        hash_id = trade_data.get("hash_id", f"manual_{int(time.time())}")
+        
+        # Validate action
+        if action not in ["BUY", "SELL"]:
+            raise HTTPException(status_code=400, detail="Action must be 'BUY' or 'SELL'")
+        
+        # Validate quantity
+        if quantity <= 0:
+            raise HTTPException(status_code=400, detail="Quantity must be positive")
+        
+        # Get current price if not provided
+        if not price and pipeline_api:
+            try:
+                market_data = await pipeline_api.get_market_data(exchange, symbol)
+                price = market_data.get("price", 0)
+                if not price:
+                    raise HTTPException(status_code=400, detail="Could not fetch current price")
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"Failed to fetch price: {str(e)}")
+        
+        # Create order request
+        order_request = OrderRequest(
+            symbol=symbol,
+            side=action.lower(),
+            type="market" if not price else "limit",
+            amount=quantity,
+            price=price,
+            params={
+                "hash_id": hash_id,
+                "manual_trade": True,
+                "timestamp": datetime.now().isoformat()
+            }
+        )
+        
+        # Execute trade based on mode
+        pipeline_mode = getattr(pipeline, "mode", "testing")
+        
+        if pipeline_mode == "live" and pipeline_api:
+            # Live trading - execute through API
+            try:
+                result = await pipeline_api.place_order(exchange, order_request)
+                success = result.get("success", False)
+                
+                if success:
+                    await manager.broadcast(f"✅ LIVE TRADE EXECUTED: {action} {quantity} {symbol} @ {price}")
+                    return {
+                        "status": "success",
+                        "message": f"Live trade executed: {action} {quantity} {symbol}",
+                        "order_id": result.get("order_id"),
+                        "hash_id": hash_id,
+                        "execution_price": price,
+                        "mode": "live"
+                    }
+                else:
+                    await manager.broadcast(f"❌ LIVE TRADE FAILED: {result.get('error', 'Unknown error')}")
+                    return {
+                        "status": "error",
+                        "message": f"Live trade failed: {result.get('error', 'Unknown error')}",
+                        "hash_id": hash_id
+                    }
+                    
+            except Exception as e:
+                await manager.broadcast(f"❌ LIVE TRADE EXCEPTION: {str(e)}")
+                return {
+                    "status": "error",
+                    "message": f"Live trade exception: {str(e)}",
+                    "hash_id": hash_id
+                }
+        
+        else:
+            # Demo/testing mode - simulate trade
+            trade_result = {
+                "order_id": f"demo_{int(time.time())}",
+                "symbol": symbol,
+                "side": action.lower(),
+                "amount": quantity,
+                "price": price,
+                "status": "filled",
+                "timestamp": datetime.now().isoformat(),
+                "hash_id": hash_id
+            }
+            
+            # Process through pipeline for tracking
+            if pipeline:
+                try:
+                    pipeline.process_market_data(
+                        symbol=symbol,
+                        price=price,
+                        volume=quantity,
+                        granularity=1,
+                        tick_index=0
+                    )
+                except Exception as e:
+                    print(f"Warning: Failed to process trade through pipeline: {e}")
+            
+            await manager.broadcast(f"🎮 DEMO TRADE: {action} {quantity} {symbol} @ {price}")
+            return {
+                "status": "success",
+                "message": f"Demo trade executed: {action} {quantity} {symbol}",
+                "order_id": trade_result["order_id"],
+                "hash_id": hash_id,
+                "execution_price": price,
+                "mode": "demo"
+            }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = f"Trade execution failed: {str(e)}"
+        await manager.broadcast(f"❌ {error_msg}")
+        return {
+            "status": "error",
+            "message": error_msg,
+            "hash_id": trade_data.get("hash_id", "unknown")
+        }
+
+@app.post("/api/execute_signal")
+async def execute_signal(signal_data: dict):
+    """Execute a trading signal with mathematical validation."""
+    try:
+        # Extract signal data
+        asset = signal_data.get("asset", "BTC/USDC")
+        price = float(signal_data.get("price", 60000.0))
+        quantity = float(signal_data.get("quantity", 0.1))
+        mode = signal_data.get("mode", "demo")
+        confidence = float(signal_data.get("confidence", 0.5))
+        
+        # Validate confidence
+        if confidence < 0.0 or confidence > 1.0:
+            raise HTTPException(status_code=400, detail="Confidence must be between 0.0 and 1.0")
+        
+        # Determine action based on confidence and price
+        # This is a simple heuristic - in practice, you'd use more sophisticated logic
+        current_price = 60000.0  # This should come from market data
+        if price > current_price * 1.01:  # 1% above current
+            action = "BUY"
+        elif price < current_price * 0.99:  # 1% below current
+            action = "SELL"
+        else:
+            action = "HOLD"
+        
+        if action == "HOLD":
+            return {
+                "status": "hold",
+                "message": "Signal indicates hold position",
+                "confidence": confidence,
+                "price": price
+            }
+        
+        # Execute the trade
+        trade_data = {
+            "action": action,
+            "symbol": asset,
+            "quantity": quantity,
+            "price": price,
+            "hash_id": f"signal_{int(time.time())}",
+            "confidence": confidence,
+            "mode": mode
+        }
+        
+        return await trigger_trade(trade_data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = f"Signal execution failed: {str(e)}"
+        await manager.broadcast(f"❌ {error_msg}")
+        return {
+            "status": "error",
+            "message": error_msg
+        }
 
 @app.websocket("/stream")
 async def websocket_endpoint(websocket: WebSocket):

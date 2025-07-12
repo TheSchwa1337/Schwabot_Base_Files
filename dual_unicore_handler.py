@@ -1,9 +1,3 @@
-from __future__ import annotations
-
-import logging
-import unicodedata
-from typing import Any, Dict
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,6 +8,11 @@ Handles dual unicode operations for Schwabot mathematical processing.
 Provides unicode normalization and mathematical symbol handling.
 """
 
+from __future__ import annotations
+
+import logging
+import unicodedata
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +22,7 @@ class DualUnicoreHandler:
 
     def __init__(self):
         """Initialize dual unicode handler."""
-        self.mathematical_symbols = {}
+        self.mathematical_symbols = {
             "psi": "Ψ",
             "phi": "Φ",
             "delta": "Δ",
@@ -39,7 +38,7 @@ class DualUnicoreHandler:
             "gamma": "γ",
         }
 
-        self.subscripts = {}
+        self.subscripts = {
             "0": "₀",
             "1": "₁",
             "2": "₂",
@@ -57,7 +56,7 @@ class DualUnicoreHandler:
             "y": "ᵧ",
         }
 
-        self.superscripts = {}
+        self.superscripts = {
             "0": "⁰",
             "1": "¹",
             "2": "²",
@@ -76,7 +75,7 @@ class DualUnicoreHandler:
 
         logger.info("DualUnicoreHandler initialized")
 
-    def normalize_text(): -> str:
+    def normalize_text(self, text: str) -> str:
         """Normalize unicode text for mathematical processing."""
         try:
             # Normalize to NFC form
@@ -86,14 +85,14 @@ class DualUnicoreHandler:
             logger.error(f"Failed to normalize text: {e}")
             return text
 
-    def get_mathematical_symbol(): -> str:
+    def get_mathematical_symbol(self, symbol_name: str) -> str:
         """Get mathematical symbol by name."""
         return self.mathematical_symbols.get(symbol_name.lower(), symbol_name)
 
-    def add_subscript(): -> str:
+    def add_subscript(self, text: str, subscript: str) -> str:
         """Add subscript to text."""
         try:
-            subscript_chars = "".join()
+            subscript_chars = "".join(
                 self.subscripts.get(char, char) for char in str(subscript)
             )
             return f"{text}{subscript_chars}"
@@ -101,10 +100,10 @@ class DualUnicoreHandler:
             logger.error(f"Failed to add subscript: {e}")
             return f"{text}_{subscript}"
 
-    def add_superscript(): -> str:
+    def add_superscript(self, text: str, superscript: str) -> str:
         """Add superscript to text."""
         try:
-            superscript_chars = "".join()
+            superscript_chars = "".join(
                 self.superscripts.get(char, char) for char in str(superscript)
             )
             return f"{text}{superscript_chars}"
@@ -112,7 +111,7 @@ class DualUnicoreHandler:
             logger.error(f"Failed to add superscript: {e}")
             return f"{text}^{superscript}"
 
-    def format_mathematical_expression(): -> str:
+    def format_mathematical_expression(self, expression: str) -> str:
         """Format mathematical expression with proper unicode symbols."""
         try:
             # Replace common mathematical symbols
@@ -126,7 +125,7 @@ class DualUnicoreHandler:
             logger.error(f"Failed to format expression: {e}")
             return expression
 
-    def encode_dual_unicode(): -> str:
+    def encode_dual_unicode(self, primary: str, secondary: str) -> str:
         """Encode dual unicode representation."""
         try:
             primary_normalized = self.normalize_text(primary)
@@ -136,7 +135,7 @@ class DualUnicoreHandler:
             logger.error(f"Failed to encode dual unicode: {e}")
             return f"{primary}+{secondary}"
 
-    def decode_dual_unicode(): -> tuple[str, str]:
+    def decode_dual_unicode(self, encoded: str) -> tuple[str, str]:
         """Decode dual unicode representation."""
         try:
             if "⊕" in encoded:
@@ -151,7 +150,7 @@ class DualUnicoreHandler:
             logger.error(f"Failed to decode dual unicode: {e}")
             return encoded, ""
 
-    def process_mathematical_text(): -> str:
+    def process_mathematical_text(self, text: str) -> str:
         """Process mathematical text with unicode handling."""
         try:
             # Normalize the text
@@ -165,7 +164,7 @@ class DualUnicoreHandler:
             logger.error(f"Failed to process mathematical text: {e}")
             return text
 
-    def validate_unicode_integrity(): -> bool:
+    def validate_unicode_integrity(self, text: str) -> bool:
         """Validate unicode text integrity."""
         try:
             # Check if text can be encoded/decoded properly
@@ -176,9 +175,9 @@ class DualUnicoreHandler:
             logger.error(f"Unicode integrity validation failed: {e}")
             return False
 
-    def get_status(): -> Dict[str, Any]:
+    def get_status(self) -> Dict[str, Any]:
         """Get handler status information."""
-        return {}
+        return {
             "mathematical_symbols_count": len(self.mathematical_symbols),
             "subscripts_count": len(self.subscripts),
             "superscripts_count": len(self.superscripts),
