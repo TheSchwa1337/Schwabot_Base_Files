@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-⚡ REAL-TIME EXECUTION ENGINE - SCHWABOT TRADING EXECUTION SYSTEM
-================================================================
+Real Time Execution Engine Module
+==================================
+Provides real-time execution engine functionality for the Schwabot trading system.
 
-Advanced real-time execution engine for the Schwabot trading system.
+Mathematical Core:
+E(t) = {
+    BUY_M(q),     if S(t) > T_b
+    SELL_L(q, p), if S(t) < T_s
+}
+Where:
+- S(t): strategy signal
+- T_b, T_s: signal thresholds
+- q: quantity
+- p: limit price
 
-This module implements high-speed trading signal execution with risk management,
-order book analysis, and real-time market state monitoring.
-
-Mathematical Components:
-- Signal strength: S = Σ(w_i * f_i) where w_i = weight, f_i = feature_value
-- Order book analysis: OB_score = Σ(bid_volume * bid_price) / Σ(ask_volume * ask_price)
-- Execution latency: L = network_latency + processing_time + queue_delay
-- Risk assessment: R = position_size * volatility * leverage_factor
-
-Features:
-- Real-time signal processing and execution
-- Order book depth analysis and liquidity assessment
-- Risk management and position sizing
-- Execution latency monitoring and optimization
-- Integration with multiple exchange APIs
+This module executes low-latency trade orders in response to signal input
+and feeds into the unified trade router and execution layer.
 """
 
 import asyncio
@@ -29,346 +26,266 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-
 import numpy as np
+import json
+from concurrent.futures import ThreadPoolExecutor
 
 logger = logging.getLogger(__name__)
 
-# Import dependencies
+# Import mathematical infrastructure
 try:
-    from core.math_cache import MathResultCache
-    from core.math_config_manager import MathConfigManager
-    from core.math_orchestrator import MathOrchestrator
+    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
+    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Math infrastructure not available")
+    logger.warning("Mathematical infrastructure not available - using fallback")
 
 
-class SignalType(Enum):
-    """Trading signal types."""
+class OrderType(Enum):
+    """Order types."""
+    MARKET = "market"
+    LIMIT = "limit"
+    STOP = "stop"
+    STOP_LIMIT = "stop_limit"
+
+
+class OrderSide(Enum):
+    """Order sides."""
     BUY = "buy"
     SELL = "sell"
-    HOLD = "hold"
-    STOP_LOSS = "stop_loss"
-    TAKE_PROFIT = "take_profit"
-    SCALP = "scalp"
-    SWING = "swing"
-
-
-class SignalStrength(Enum):
-    """Signal strength levels."""
-    WEAK = 1
-    MODERATE = 2
-    STRONG = 3
-    VERY_STRONG = 4
-    EXTREME = 5
 
 
 class ExecutionStatus(Enum):
-    """Execution status enumeration."""
+    """Execution status."""
     PENDING = "pending"
-    PROCESSING = "processing"
-    EXECUTED = "executed"
-    FAILED = "failed"
-    CANCELLED = "cancelled"
     PARTIAL = "partial"
+    FILLED = "filled"
+    CANCELLED = "cancelled"
+    REJECTED = "rejected"
+    EXPIRED = "expired"
 
 
-@dataclass
-class OrderBookLevel:
-    """Order book level data."""
-    price: float
-    volume: float
-    timestamp: float = field(default_factory=time.time)
-
-
-@dataclass
-class OrderBook:
-    """Complete order book data."""
-    symbol: str
-    bids: List[OrderBookLevel]
-    asks: List[OrderBookLevel]
-    timestamp: float = field(default_factory=time.time)
-    spread: float = 0.0
-    mid_price: float = 0.0
-    total_bid_volume: float = 0.0
-    total_ask_volume: float = 0.0
+class SignalType(Enum):
+    """Signal types."""
+    BUY_SIGNAL = "buy_signal"
+    SELL_SIGNAL = "sell_signal"
+    HOLD_SIGNAL = "hold_signal"
+    EMERGENCY_STOP = "emergency_stop"
 
 
 @dataclass
 class TradingSignal:
-    """Trading signal with metadata."""
+    """Trading signal with mathematical properties."""
     signal_type: SignalType
-    strength: SignalStrength
     symbol: str
+    strength: float  # 0.0 to 1.0
+    confidence: float  # 0.0 to 1.0
     price: float
-    volume: float
-    confidence: float
+    quantity: float
     timestamp: float = field(default_factory=time.time)
+    mathematical_signature: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class ExecutionResult:
-    """Result of execution operation."""
-    success: bool
-    order_id: Optional[str] = None
-    executed_price: Optional[float] = None
-    executed_volume: Optional[float] = None
-    fees: Optional[float] = None
-    latency_ms: Optional[float] = None
-    status: ExecutionStatus = ExecutionStatus.PENDING
-    error: Optional[str] = None
+class ExecutionOrder:
+    """Execution order."""
+    order_id: str
+    symbol: str
+    side: OrderSide
+    order_type: OrderType
+    quantity: float
+    price: Optional[float] = None
+    stop_price: Optional[float] = None
     timestamp: float = field(default_factory=time.time)
+    status: ExecutionStatus = ExecutionStatus.PENDING
+    filled_quantity: float = 0.0
+    average_price: float = 0.0
+    mathematical_signature: str = ""
+
+
+@dataclass
+class ExecutionResult:
+    """Execution result."""
+    order_id: str
+    success: bool
+    status: ExecutionStatus
+    filled_quantity: float
+    average_price: float
+    execution_time: float
+    slippage: float
+    mathematical_signature: str = ""
+    error_message: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RealTimeExecutionConfig:
+    """Configuration for real-time execution engine."""
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+    max_concurrent_orders: int = 10
+    execution_timeout: float = 5.0  # seconds
+    slippage_tolerance: float = 0.001  # 0.1%
+    mathematical_analysis_enabled: bool = True
+    emergency_stop_enabled: bool = True
+    signal_thresholds: Dict[str, float] = field(default_factory=lambda: {
+        'buy_threshold': 0.7,
+        'sell_threshold': -0.7,
+        'emergency_threshold': 0.95
+    })
 
 
 class RealTimeExecutionEngine:
     """
-    ⚡ Real-Time Execution Engine
+    Real-Time Execution Engine System
     
-    Implements high-speed trading signal execution with risk management,
-    order book analysis, and real-time market state monitoring.
+    Implements low-latency trade execution:
+    E(t) = {
+        BUY_M(q),     if S(t) > T_b
+        SELL_L(q, p), if S(t) < T_s
+    }
+    
+    Executes low-latency trade orders in response to signal input and
+    feeds into the unified trade router and execution layer.
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
-        """
-        Initialize Real-Time Execution Engine.
-        
-        Args:
-            config: Configuration parameters
-        """
-        self.config = config or self._default_config()
+    def __init__(self, config: Optional[RealTimeExecutionConfig] = None):
+        """Initialize the real-time execution engine system."""
+        self.config = config or RealTimeExecutionConfig()
         self.logger = logging.getLogger(__name__)
         
         # Execution state
-        self.is_active = False
-        self.execution_queue: List[TradingSignal] = []
-        self.active_orders: Dict[str, Dict[str, Any]] = {}
+        self.active_orders: Dict[str, ExecutionOrder] = {}
+        self.execution_history: List[ExecutionResult] = []
+        self.signal_queue: asyncio.Queue = asyncio.Queue()
+        self.execution_queue: asyncio.Queue = asyncio.Queue()
+        
+        # Mathematical infrastructure
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_bridge = UnifiedMathematicalBridge()
+            self.math_integration = UnifiedMathematicalIntegrationMethods()
+            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+        else:
+            self.math_bridge = None
+            self.math_integration = None
+            self.math_monitor = None
         
         # Performance tracking
-        self.total_signals_processed = 0
-        self.successful_executions = 0
-        self.failed_executions = 0
-        self.total_latency_ms = 0.0
+        self.performance_metrics = {
+            'signals_processed': 0,
+            'orders_executed': 0,
+            'successful_executions': 0,
+            'failed_executions': 0,
+            'average_execution_time': 0.0,
+            'total_slippage': 0.0
+        }
         
-        # Risk management
-        self.max_position_size = self.config.get('max_position_size', 1000.0)
-        self.max_daily_loss = self.config.get('max_daily_loss', 100.0)
-        self.current_daily_loss = 0.0
-        self.daily_pnl = 0.0
-        
-        # Market state
-        self.current_order_books: Dict[str, OrderBook] = {}
-        self.market_volatility: Dict[str, float] = {}
-        
-        # Initialize math infrastructure if available
-        if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_config = MathConfigManager()
-            self.math_cache = MathResultCache()
-            self.math_orchestrator = MathOrchestrator()
+        # System state
+        self.initialized = False
+        self.active = False
+        self.emergency_stop_active = False
+        self.executor = ThreadPoolExecutor(max_workers=self.config.max_concurrent_orders)
         
         self._initialize_system()
     
-    def _default_config(self) -> Dict[str, Any]:
-        """Default configuration."""
-        return {
-            'enabled': True,
-            'timeout': 30.0,
-            'retries': 3,
-            'debug': False,
-            'log_level': 'INFO',
-            'max_position_size': 1000.0,
-            'max_daily_loss': 100.0,
-            'min_signal_strength': 2,
-            'max_execution_latency_ms': 100,
-            'risk_free_rate': 0.02,
-        }
-    
     def _initialize_system(self) -> None:
-        """Initialize the Real-Time Execution Engine system."""
+        """Initialize the real-time execution engine system."""
         try:
-            self.logger.info(f"⚡ Initializing {self.__class__.__name__}")
-            self.logger.info(f"   Max Position Size: {self.max_position_size}")
-            self.logger.info(f"   Max Daily Loss: {self.max_daily_loss}")
-            self.logger.info(f"   Min Signal Strength: {self.config.get('min_signal_strength', 2)}")
-            
+            self.logger.info("Initializing Real-Time Execution Engine System")
             self.initialized = True
-            self.logger.info(f"✅ {self.__class__.__name__} initialized successfully")
+            self.logger.info("✅ Real-Time Execution Engine System initialized successfully")
         except Exception as e:
-            self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
+            self.logger.error(f"❌ Error initializing Real-Time Execution Engine System: {e}")
             self.initialized = False
     
-    def activate(self) -> bool:
-        """Activate the execution engine."""
+    async def start_execution_engine(self) -> bool:
+        """Start the execution engine."""
         if not self.initialized:
-            self.logger.error("Execution engine not initialized")
+            self.logger.error("System not initialized")
             return False
         
         try:
-            self.is_active = True
-            self.logger.info(f"✅ {self.__class__.__name__} activated")
+            self.active = True
+            self.emergency_stop_active = False
+            
+            # Start processing tasks
+            asyncio.create_task(self._process_signal_queue())
+            asyncio.create_task(self._process_execution_queue())
+            
+            self.logger.info("✅ Real-Time Execution Engine started")
             return True
+            
         except Exception as e:
-            self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
+            self.logger.error(f"❌ Error starting execution engine: {e}")
             return False
     
-    def deactivate(self) -> bool:
-        """Deactivate the execution engine."""
+    async def stop_execution_engine(self) -> bool:
+        """Stop the execution engine."""
         try:
-            self.is_active = False
-            self.logger.info(f"✅ {self.__class__.__name__} deactivated")
+            self.active = False
+            
+            # Cancel all active orders
+            await self._cancel_all_orders()
+            
+            # Shutdown executor
+            self.executor.shutdown(wait=True)
+            
+            self.logger.info("✅ Real-Time Execution Engine stopped")
             return True
+            
         except Exception as e:
-            self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
+            self.logger.error(f"❌ Error stopping execution engine: {e}")
             return False
     
-    def update_order_book(self, symbol: str, bids: List[Tuple[float, float]], 
-                         asks: List[Tuple[float, float]]) -> None:
-        """
-        Update order book for a symbol.
+    async def submit_signal(self, signal: TradingSignal) -> bool:
+        """Submit a trading signal for processing."""
+        if not self.active:
+            self.logger.error("Execution engine not active")
+            return False
         
-        Args:
-            symbol: Trading symbol
-            bids: List of (price, volume) tuples for bids
-            asks: List of (price, volume) tuples for asks
-        """
         try:
-            # Convert to OrderBookLevel objects
-            bid_levels = [OrderBookLevel(price=p, volume=v) for p, v in bids]
-            ask_levels = [OrderBookLevel(price=p, volume=v) for p, v in asks]
+            # Check emergency stop
+            if self.emergency_stop_active:
+                self.logger.warning("Emergency stop active - signal ignored")
+                return False
             
-            # Sort by price (bids descending, asks ascending)
-            bid_levels.sort(key=lambda x: x.price, reverse=True)
-            ask_levels.sort(key=lambda x: x.price)
+            # Validate signal
+            if not self._validate_signal(signal):
+                self.logger.error(f"Invalid signal: {signal}")
+                return False
             
-            # Calculate order book metrics
-            total_bid_volume = sum(level.volume for level in bid_levels)
-            total_ask_volume = sum(level.volume for level in ask_levels)
+            # Add mathematical analysis
+            if self.config.mathematical_analysis_enabled:
+                await self._analyze_signal_mathematically(signal)
             
-            if bid_levels and ask_levels:
-                spread = ask_levels[0].price - bid_levels[0].price
-                mid_price = (bid_levels[0].price + ask_levels[0].price) / 2
-            else:
-                spread = 0.0
-                mid_price = 0.0
+            # Queue signal for processing
+            await self.signal_queue.put(signal)
             
-            # Create order book
-            order_book = OrderBook(
-                symbol=symbol,
-                bids=bid_levels,
-                asks=ask_levels,
-                spread=spread,
-                mid_price=mid_price,
-                total_bid_volume=total_bid_volume,
-                total_ask_volume=total_ask_volume
-            )
-            
-            self.current_order_books[symbol] = order_book
-            
-            # Update volatility
-            self._update_volatility(symbol, order_book)
+            self.logger.info(f"✅ Signal submitted: {signal.signal_type.value} for {signal.symbol}")
+            return True
             
         except Exception as e:
-            self.logger.error(f"❌ Error updating order book for {symbol}: {e}")
+            self.logger.error(f"❌ Error submitting signal: {e}")
+            return False
     
-    def _update_volatility(self, symbol: str, order_book: OrderBook) -> None:
-        """Update volatility calculation for a symbol."""
+    def _validate_signal(self, signal: TradingSignal) -> bool:
+        """Validate trading signal."""
         try:
-            if symbol in self.current_order_books:
-                old_order_book = self.current_order_books[symbol]
-                
-                # Calculate price change
-                price_change = abs(order_book.mid_price - old_order_book.mid_price)
-                price_change_pct = price_change / max(old_order_book.mid_price, 0.001)
-                
-                # Update volatility using exponential moving average
-                current_volatility = self.market_volatility.get(symbol, 0.0)
-                new_volatility = 0.9 * current_volatility + 0.1 * price_change_pct
-                
-                self.market_volatility[symbol] = new_volatility
-            else:
-                self.market_volatility[symbol] = 0.0
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error updating volatility for {symbol}: {e}")
-    
-    def calculate_signal_strength(self, signal: TradingSignal) -> SignalStrength:
-        """
-        Calculate signal strength based on market conditions.
-        
-        Args:
-            signal: Trading signal
+            # Check basic requirements
+            if not signal.symbol or signal.quantity <= 0 or signal.price <= 0:
+                return False
             
-        Returns:
-            Signal strength level
-        """
-        try:
-            if signal.symbol not in self.current_order_books:
-                return SignalStrength.WEAK
-            
-            order_book = self.current_order_books[signal.symbol]
-            volatility = self.market_volatility.get(signal.symbol, 0.0)
-            
-            # Base strength from signal confidence
-            base_strength = signal.confidence * 5  # Scale to 1-5
-            
-            # Adjust for order book conditions
-            liquidity_factor = min(order_book.total_bid_volume, order_book.total_ask_volume) / max(order_book.total_bid_volume + order_book.total_ask_volume, 1)
-            spread_factor = 1.0 / max(order_book.spread / order_book.mid_price, 0.001)
-            
-            # Adjust for volatility
-            volatility_factor = 1.0 / max(volatility, 0.001)
-            
-            # Calculate final strength
-            final_strength = base_strength * liquidity_factor * spread_factor * volatility_factor
-            
-            # Map to SignalStrength enum
-            if final_strength >= 4.5:
-                return SignalStrength.EXTREME
-            elif final_strength >= 3.5:
-                return SignalStrength.VERY_STRONG
-            elif final_strength >= 2.5:
-                return SignalStrength.STRONG
-            elif final_strength >= 1.5:
-                return SignalStrength.MODERATE
-            else:
-                return SignalStrength.WEAK
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error calculating signal strength: {e}")
-            return SignalStrength.WEAK
-    
-    def validate_signal(self, signal: TradingSignal) -> bool:
-        """
-        Validate trading signal against risk parameters.
-        
-        Args:
-            signal: Trading signal to validate
-            
-        Returns:
-            True if signal is valid
-        """
-        try:
             # Check signal strength
-            min_strength = self.config.get('min_signal_strength', 2)
-            if signal.strength.value < min_strength:
-                self.logger.debug(f"Signal strength too low: {signal.strength.value} < {min_strength}")
+            if signal.strength < 0.0 or signal.strength > 1.0:
                 return False
             
-            # Check position size
-            if signal.volume > self.max_position_size:
-                self.logger.warning(f"Position size too large: {signal.volume} > {self.max_position_size}")
-                return False
-            
-            # Check daily loss limit
-            if self.current_daily_loss >= self.max_daily_loss:
-                self.logger.warning(f"Daily loss limit reached: {self.current_daily_loss} >= {self.max_daily_loss}")
-                return False
-            
-            # Check order book availability
-            if signal.symbol not in self.current_order_books:
-                self.logger.warning(f"No order book data for {signal.symbol}")
+            # Check confidence
+            if signal.confidence < 0.0 or signal.confidence > 1.0:
                 return False
             
             return True
@@ -377,127 +294,519 @@ class RealTimeExecutionEngine:
             self.logger.error(f"❌ Error validating signal: {e}")
             return False
     
-    async def execute_signal(self, signal: TradingSignal) -> ExecutionResult:
-        """
-        Execute a trading signal.
-        
-        Args:
-            signal: Trading signal to execute
-            
-        Returns:
-            ExecutionResult with execution details
-        """
-        start_time = time.time()
-        
+    async def _analyze_signal_mathematically(self, signal: TradingSignal) -> None:
+        """Perform mathematical analysis on signal."""
         try:
-            self.total_signals_processed += 1
+            if not self.math_bridge:
+                return
             
-            # Validate signal
-            if not self.validate_signal(signal):
-                return ExecutionResult(
-                    success=False,
-                    status=ExecutionStatus.FAILED,
-                    error="Signal validation failed"
-                )
+            # Prepare signal data for mathematical analysis
+            signal_data = {
+                'signal_type': signal.signal_type.value,
+                'symbol': signal.symbol,
+                'strength': signal.strength,
+                'confidence': signal.confidence,
+                'price': signal.price,
+                'quantity': signal.quantity,
+                'timestamp': signal.timestamp,
+                'metadata': signal.metadata
+            }
             
-            # Calculate signal strength
-            signal.strength = self.calculate_signal_strength(signal)
+            # Perform mathematical integration
+            result = self.math_bridge.integrate_all_mathematical_systems(
+                signal_data, {}
+            )
             
-            # Simulate execution (replace with actual exchange API calls)
-            await asyncio.sleep(0.001)  # Simulate network latency
+            # Update signal with mathematical analysis
+            signal.mathematical_signature = result.mathematical_signature
+            signal.metadata['mathematical_analysis'] = {
+                'confidence': result.overall_confidence,
+                'connections': len(result.connections),
+                'performance_metrics': result.performance_metrics
+            }
             
-            # Generate execution result
-            execution_latency = (time.time() - start_time) * 1000
+        except Exception as e:
+            self.logger.error(f"❌ Error analyzing signal mathematically: {e}")
+    
+    async def _process_signal_queue(self) -> None:
+        """Process signals from the queue."""
+        try:
+            while self.active:
+                try:
+                    # Get signal from queue
+                    signal = await asyncio.wait_for(
+                        self.signal_queue.get(), 
+                        timeout=1.0
+                    )
+                    
+                    # Process signal
+                    await self._process_signal(signal)
+                    
+                    # Mark task as done
+                    self.signal_queue.task_done()
+                    
+                except asyncio.TimeoutError:
+                    continue
+                except Exception as e:
+                    self.logger.error(f"❌ Error processing signal: {e}")
+                    
+        except Exception as e:
+            self.logger.error(f"❌ Error in signal processing loop: {e}")
+    
+    async def _process_signal(self, signal: TradingSignal) -> None:
+        """Process a trading signal."""
+        try:
+            # Update performance metrics
+            self.performance_metrics['signals_processed'] += 1
             
-            # Simulate execution success/failure based on signal strength
-            success_probability = min(signal.strength.value / 5.0, 0.95)
-            success = np.random.random() < success_probability
-            
-            if success:
-                self.successful_executions += 1
-                self.total_latency_ms += execution_latency
+            # Check signal thresholds
+            if signal.signal_type == SignalType.BUY_SIGNAL:
+                if signal.strength > self.config.signal_thresholds['buy_threshold']:
+                    await self._execute_buy_order(signal)
+                else:
+                    self.logger.info(f"Buy signal below threshold: {signal.strength}")
+                    
+            elif signal.signal_type == SignalType.SELL_SIGNAL:
+                if signal.strength > self.config.signal_thresholds['sell_threshold']:
+                    await self._execute_sell_order(signal)
+                else:
+                    self.logger.info(f"Sell signal below threshold: {signal.strength}")
+                    
+            elif signal.signal_type == SignalType.EMERGENCY_STOP:
+                await self._execute_emergency_stop(signal)
                 
-                # Simulate order details
-                order_id = f"order_{int(time.time() * 1000)}"
-                executed_price = signal.price * (1 + np.random.normal(0, 0.001))  # Small price variation
-                executed_volume = signal.volume
-                fees = executed_price * executed_volume * 0.001  # 0.1% fee
+            else:  # HOLD_SIGNAL
+                self.logger.info(f"Hold signal received for {signal.symbol}")
                 
-                result = ExecutionResult(
-                    success=True,
-                    order_id=order_id,
-                    executed_price=executed_price,
-                    executed_volume=executed_volume,
-                    fees=fees,
-                    latency_ms=execution_latency,
-                    status=ExecutionStatus.EXECUTED
-                )
-                
-                self.logger.info(f"✅ Executed {signal.signal_type.value} order: {order_id} "
-                               f"(price: {executed_price:.8f}, volume: {executed_volume:.2f})")
-                
+        except Exception as e:
+            self.logger.error(f"❌ Error processing signal: {e}")
+    
+    async def _execute_buy_order(self, signal: TradingSignal) -> None:
+        """Execute a buy order."""
+        try:
+            # Create order
+            order = ExecutionOrder(
+                order_id=f"BUY_{signal.symbol}_{int(time.time() * 1000)}",
+                symbol=signal.symbol,
+                side=OrderSide.BUY,
+                order_type=OrderType.MARKET,
+                quantity=signal.quantity,
+                price=signal.price,
+                mathematical_signature=signal.mathematical_signature
+            )
+            
+            # Queue for execution
+            await self.execution_queue.put(order)
+            
+            self.logger.info(f"✅ Buy order queued: {order.order_id}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error creating buy order: {e}")
+    
+    async def _execute_sell_order(self, signal: TradingSignal) -> None:
+        """Execute a sell order."""
+        try:
+            # Create order
+            order = ExecutionOrder(
+                order_id=f"SELL_{signal.symbol}_{int(time.time() * 1000)}",
+                symbol=signal.symbol,
+                side=OrderSide.SELL,
+                order_type=OrderType.LIMIT,
+                quantity=signal.quantity,
+                price=signal.price,
+                mathematical_signature=signal.mathematical_signature
+            )
+            
+            # Queue for execution
+            await self.execution_queue.put(order)
+            
+            self.logger.info(f"✅ Sell order queued: {order.order_id}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error creating sell order: {e}")
+    
+    async def _execute_emergency_stop(self, signal: TradingSignal) -> None:
+        """Execute emergency stop."""
+        try:
+            if not self.config.emergency_stop_enabled:
+                return
+            
+            self.emergency_stop_active = True
+            self.logger.warning("🚨 EMERGENCY STOP ACTIVATED")
+            
+            # Cancel all active orders
+            await self._cancel_all_orders()
+            
+            # Create emergency stop order
+            order = ExecutionOrder(
+                order_id=f"EMERGENCY_{signal.symbol}_{int(time.time() * 1000)}",
+                symbol=signal.symbol,
+                side=OrderSide.SELL,
+                order_type=OrderType.MARKET,
+                quantity=signal.quantity,
+                price=signal.price,
+                mathematical_signature=signal.mathematical_signature
+            )
+            
+            # Execute immediately
+            result = await self._execute_order(order)
+            
+            self.logger.warning(f"🚨 Emergency stop executed: {result}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error executing emergency stop: {e}")
+    
+    async def _process_execution_queue(self) -> None:
+        """Process orders from the execution queue."""
+        try:
+            while self.active:
+                try:
+                    # Get order from queue
+                    order = await asyncio.wait_for(
+                        self.execution_queue.get(), 
+                        timeout=1.0
+                    )
+                    
+                    # Execute order
+                    result = await self._execute_order(order)
+                    
+                    # Store result
+                    self.execution_history.append(result)
+                    
+                    # Mark task as done
+                    self.execution_queue.task_done()
+                    
+                except asyncio.TimeoutError:
+                    continue
+                except Exception as e:
+                    self.logger.error(f"❌ Error processing execution: {e}")
+                    
+        except Exception as e:
+            self.logger.error(f"❌ Error in execution processing loop: {e}")
+    
+    async def _execute_order(self, order: ExecutionOrder) -> ExecutionResult:
+        """Execute an order."""
+        try:
+            start_time = time.time()
+            
+            # Add to active orders
+            self.active_orders[order.order_id] = order
+            
+            # Simulate execution (replace with actual exchange API call)
+            execution_result = await self._simulate_execution(order)
+            
+            # Calculate execution metrics
+            execution_time = time.time() - start_time
+            slippage = abs(execution_result.average_price - order.price) / order.price if order.price > 0 else 0.0
+            
+            # Create result
+            result = ExecutionResult(
+                order_id=order.order_id,
+                success=execution_result.status == ExecutionStatus.FILLED,
+                status=execution_result.status,
+                filled_quantity=execution_result.filled_quantity,
+                average_price=execution_result.average_price,
+                execution_time=execution_time,
+                slippage=slippage,
+                mathematical_signature=order.mathematical_signature
+            )
+            
+            # Update performance metrics
+            self.performance_metrics['orders_executed'] += 1
+            if result.success:
+                self.performance_metrics['successful_executions'] += 1
             else:
-                self.failed_executions += 1
-                result = ExecutionResult(
-                    success=False,
-                    latency_ms=execution_latency,
-                    status=ExecutionStatus.FAILED,
-                    error="Execution failed"
-                )
-                
-                self.logger.warning(f"❌ Failed to execute {signal.signal_type.value} signal")
+                self.performance_metrics['failed_executions'] += 1
             
+            self.performance_metrics['total_slippage'] += slippage
+            
+            # Update average execution time
+            current_avg = self.performance_metrics['average_execution_time']
+            total_executions = self.performance_metrics['orders_executed']
+            self.performance_metrics['average_execution_time'] = (
+                (current_avg * (total_executions - 1) + execution_time) / total_executions
+            )
+            
+            # Remove from active orders
+            if order.order_id in self.active_orders:
+                del self.active_orders[order.order_id]
+            
+            self.logger.info(f"✅ Order executed: {order.order_id} - {result.status.value}")
             return result
             
         except Exception as e:
-            self.failed_executions += 1
-            self.logger.error(f"❌ Error executing signal: {e}")
-            return ExecutionResult(
+            self.logger.error(f"❌ Error executing order {order.order_id}: {e}")
+            
+            # Create error result
+            result = ExecutionResult(
+                order_id=order.order_id,
                 success=False,
-                status=ExecutionStatus.FAILED,
-                error=str(e)
+                status=ExecutionStatus.REJECTED,
+                filled_quantity=0.0,
+                average_price=0.0,
+                execution_time=0.0,
+                slippage=0.0,
+                error_message=str(e)
+            )
+            
+            # Remove from active orders
+            if order.order_id in self.active_orders:
+                del self.active_orders[order.order_id]
+            
+            return result
+    
+    async def _simulate_execution(self, order: ExecutionOrder) -> ExecutionResult:
+        """Simulate order execution (replace with actual exchange API)."""
+        try:
+            # Simulate execution delay
+            await asyncio.sleep(0.1)
+            
+            # Simulate fill
+            fill_ratio = np.random.uniform(0.8, 1.0)  # 80-100% fill
+            filled_quantity = order.quantity * fill_ratio
+            
+            # Simulate price impact
+            price_impact = np.random.uniform(-0.001, 0.001)  # ±0.1%
+            execution_price = order.price * (1 + price_impact)
+            
+            # Determine status
+            if fill_ratio >= 0.95:
+                status = ExecutionStatus.FILLED
+            elif fill_ratio >= 0.5:
+                status = ExecutionStatus.PARTIAL
+            else:
+                status = ExecutionStatus.REJECTED
+            
+            return ExecutionResult(
+                order_id=order.order_id,
+                success=status in [ExecutionStatus.FILLED, ExecutionStatus.PARTIAL],
+                status=status,
+                filled_quantity=filled_quantity,
+                average_price=execution_price,
+                execution_time=0.1,
+                slippage=abs(execution_price - order.price) / order.price if order.price > 0 else 0.0
+            )
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error simulating execution: {e}")
+            return ExecutionResult(
+                order_id=order.order_id,
+                success=False,
+                status=ExecutionStatus.REJECTED,
+                filled_quantity=0.0,
+                average_price=0.0,
+                execution_time=0.0,
+                slippage=0.0,
+                error_message=str(e)
             )
     
-    def get_execution_stats(self) -> Dict[str, Any]:
-        """Get comprehensive execution statistics."""
-        avg_latency = self.total_latency_ms / max(self.successful_executions, 1)
-        success_rate = self.successful_executions / max(self.total_signals_processed, 1)
-        
-        return {
-            "total_signals_processed": self.total_signals_processed,
-            "successful_executions": self.successful_executions,
-            "failed_executions": self.failed_executions,
-            "success_rate": success_rate,
-            "avg_latency_ms": avg_latency,
-            "total_latency_ms": self.total_latency_ms,
-            "current_daily_loss": self.current_daily_loss,
-            "daily_pnl": self.daily_pnl,
-            "active_orders": len(self.active_orders),
-            "queue_size": len(self.execution_queue),
-            "is_active": self.is_active
-        }
+    async def _cancel_all_orders(self) -> None:
+        """Cancel all active orders."""
+        try:
+            for order_id in list(self.active_orders.keys()):
+                order = self.active_orders[order_id]
+                order.status = ExecutionStatus.CANCELLED
+                
+                # Create cancellation result
+                result = ExecutionResult(
+                    order_id=order_id,
+                    success=False,
+                    status=ExecutionStatus.CANCELLED,
+                    filled_quantity=0.0,
+                    average_price=0.0,
+                    execution_time=0.0,
+                    slippage=0.0,
+                    error_message="Cancelled due to emergency stop"
+                )
+                
+                self.execution_history.append(result)
+                del self.active_orders[order_id]
+            
+            self.logger.info(f"✅ Cancelled {len(self.active_orders)} active orders")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error cancelling orders: {e}")
     
-    def get_order_book_summary(self, symbol: str) -> Optional[Dict[str, Any]]:
-        """Get order book summary for a symbol."""
-        if symbol not in self.current_order_books:
-            return None
+    def get_active_orders(self) -> List[Dict[str, Any]]:
+        """Get all active orders."""
+        return [
+            {
+                'order_id': order.order_id,
+                'symbol': order.symbol,
+                'side': order.side.value,
+                'order_type': order.order_type.value,
+                'quantity': order.quantity,
+                'price': order.price,
+                'status': order.status.value,
+                'timestamp': order.timestamp
+            }
+            for order in self.active_orders.values()
+        ]
+    
+    def get_execution_history(self, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get execution history."""
+        recent_history = self.execution_history[-limit:]
+        return [
+            {
+                'order_id': result.order_id,
+                'success': result.success,
+                'status': result.status.value,
+                'filled_quantity': result.filled_quantity,
+                'average_price': result.average_price,
+                'execution_time': result.execution_time,
+                'slippage': result.slippage,
+                'error_message': result.error_message
+            }
+            for result in recent_history
+        ]
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get system performance metrics."""
+        metrics = self.performance_metrics.copy()
         
-        order_book = self.current_order_books[symbol]
-        volatility = self.market_volatility.get(symbol, 0.0)
+        # Calculate success rate
+        total_executions = metrics['orders_executed']
+        if total_executions > 0:
+            metrics['success_rate'] = metrics['successful_executions'] / total_executions
+            metrics['average_slippage'] = metrics['total_slippage'] / total_executions
+        else:
+            metrics['success_rate'] = 0.0
+            metrics['average_slippage'] = 0.0
         
+        return metrics
+    
+    def activate_emergency_stop(self) -> bool:
+        """Manually activate emergency stop."""
+        try:
+            self.emergency_stop_active = True
+            self.logger.warning("🚨 Emergency stop manually activated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error activating emergency stop: {e}")
+            return False
+    
+    def deactivate_emergency_stop(self) -> bool:
+        """Deactivate emergency stop."""
+        try:
+            self.emergency_stop_active = False
+            self.logger.info("✅ Emergency stop deactivated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error deactivating emergency stop: {e}")
+            return False
+    
+    def activate(self) -> bool:
+        """Activate the system."""
+        if not self.initialized:
+            self.logger.error("System not initialized")
+            return False
+        
+        try:
+            self.active = True
+            self.logger.info("✅ Real-Time Execution Engine System activated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error activating Real-Time Execution Engine System: {e}")
+            return False
+    
+    def deactivate(self) -> bool:
+        """Deactivate the system."""
+        try:
+            self.active = False
+            self.logger.info("✅ Real-Time Execution Engine System deactivated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error deactivating Real-Time Execution Engine System: {e}")
+            return False
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
         return {
-            "symbol": symbol,
-            "mid_price": order_book.mid_price,
-            "spread": order_book.spread,
-            "spread_pct": order_book.spread / max(order_book.mid_price, 0.001),
-            "total_bid_volume": order_book.total_bid_volume,
-            "total_ask_volume": order_book.total_ask_volume,
-            "volatility": volatility,
-            "timestamp": order_book.timestamp
+            'active': self.active,
+            'initialized': self.initialized,
+            'emergency_stop_active': self.emergency_stop_active,
+            'active_orders_count': len(self.active_orders),
+            'signals_queued': self.signal_queue.qsize(),
+            'orders_queued': self.execution_queue.qsize(),
+            'performance_metrics': self.get_performance_metrics(),
+            'config': {
+                'enabled': self.config.enabled,
+                'max_concurrent_orders': self.config.max_concurrent_orders,
+                'execution_timeout': self.config.execution_timeout,
+                'slippage_tolerance': self.config.slippage_tolerance,
+                'mathematical_analysis_enabled': self.config.mathematical_analysis_enabled,
+                'emergency_stop_enabled': self.config.emergency_stop_enabled
+            }
         }
 
 
-# Factory function
-def create_real_time_execution_engine(config: Optional[Dict[str, Any]] = None) -> RealTimeExecutionEngine:
-    """Create a RealTimeExecutionEngine instance."""
+def create_real_time_execution_engine(config: Optional[RealTimeExecutionConfig] = None) -> RealTimeExecutionEngine:
+    """Factory function to create RealTimeExecutionEngine instance."""
     return RealTimeExecutionEngine(config)
+
+
+async def main():
+    """Main function for testing."""
+    # Create configuration
+    config = RealTimeExecutionConfig(
+        enabled=True,
+        debug=True,
+        max_concurrent_orders=5,
+        execution_timeout=5.0,
+        slippage_tolerance=0.001,
+        mathematical_analysis_enabled=True,
+        emergency_stop_enabled=True
+    )
+    
+    # Create execution engine
+    engine = create_real_time_execution_engine(config)
+    
+    # Activate system
+    engine.activate()
+    
+    # Start execution engine
+    await engine.start_execution_engine()
+    
+    # Submit test signals
+    buy_signal = TradingSignal(
+        signal_type=SignalType.BUY_SIGNAL,
+        symbol="BTCUSDT",
+        strength=0.85,
+        confidence=0.9,
+        price=50000.0,
+        quantity=0.1
+    )
+    
+    sell_signal = TradingSignal(
+        signal_type=SignalType.SELL_SIGNAL,
+        symbol="BTCUSDT",
+        strength=0.8,
+        confidence=0.85,
+        price=51000.0,
+        quantity=0.1
+    )
+    
+    # Submit signals
+    await engine.submit_signal(buy_signal)
+    await engine.submit_signal(sell_signal)
+    
+    # Wait for processing
+    await asyncio.sleep(5)
+    
+    # Get status
+    status = engine.get_status()
+    print(f"System Status: {json.dumps(status, indent=2)}")
+    
+    # Get execution history
+    history = engine.get_execution_history()
+    print(f"Execution History: {json.dumps(history, indent=2)}")
+    
+    # Stop execution engine
+    await engine.stop_execution_engine()
+    
+    # Deactivate system
+    engine.deactivate()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
