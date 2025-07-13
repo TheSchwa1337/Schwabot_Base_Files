@@ -423,6 +423,34 @@ class AdvancedTensorAlgebra:
         """Legacy tensor contraction method."""
         return self.tensor_dot_fusion(tensor_a, tensor_b, axes)
 
+    def quantum_tensor_operation(self, tensor_a):
+        """
+        Perform quantum tensor operation on input tensor.
+        
+        Args:
+            tensor_a: Input tensor
+            
+        Returns:
+            Quantum-processed tensor
+        """
+        try:
+            # Apply quantum-inspired operations
+            # 1. Phase rotation
+            rotated = self.bit_phase_rotation(tensor_a, np.pi/4)
+            
+            # 2. Entropy modulation
+            modulated = self.entropy_modulation_system(rotated, modulation_strength=0.5)
+            
+            # 3. Quantum superposition effect
+            superposition_factor = np.exp(1j * np.angle(modulated))
+            quantum_tensor = modulated * np.real(superposition_factor)
+            
+            return quantum_tensor
+            
+        except Exception as e:
+            logger.error(f"Quantum tensor operation failed: {e}")
+            return tensor_a
+
     def calculate_market_entropy(self, price_changes):
         """Calculate market entropy from price changes."""
         try:

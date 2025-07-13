@@ -22,13 +22,15 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
+# Set up logger first
+logger = logging.getLogger(__name__)
+
 # Import ALL mathematical systems with fallbacks
 try:
     from mathlib import MathLib, MathLibV2, MathLibV3
     MATH_LIB_AVAILABLE = True
 except ImportError:
     MATH_LIB_AVAILABLE = False
-    logger = logging.getLogger(__name__)
     logger.warning("MathLib not available - using fallback")
 
 try:
@@ -110,8 +112,6 @@ except ImportError:
 
 from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
 from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
-
-logger = logging.getLogger(__name__)
 
 
 class BridgeConnectionType(Enum):

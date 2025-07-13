@@ -413,14 +413,87 @@ class ProfitOptimizationEngine:
             return 0.0
 
     def should_rebalance(self, current_weights: xp.ndarray, target_weights: xp.ndarray) -> bool:
-        """Check if portfolio should be rebalanced."""
+        """Check if portfolio needs rebalancing."""
         if current_weights is None or target_weights is None:
-            return False
+            return True
         
         weight_diff = xp.abs(current_weights - target_weights)
         max_diff = xp.max(weight_diff)
         
         return max_diff > self.constraints.rebalance_threshold
+
+    def optimize_profit(self, weights: List[float], returns: List[float], risk_aversion: float = 0.5) -> float:
+        """
+        Optimize profit using the formula: P = Σ w_i * r_i - λ * Σ w_i²
+        
+        Args:
+            weights: Portfolio weights
+            returns: Asset returns
+            risk_aversion: Risk aversion parameter (lambda)
+            
+        Returns:
+            Optimized profit value
+        """
+        try:
+            if xp is None:
+                raise ValueError("Tensor operations not available")
+            
+            # Convert to numpy arrays
+            w = xp.array(weights)
+            r = xp.array(returns)
+            
+            # Normalize weights
+            w = w / xp.sum(w)
+            
+            # Calculate expected return: Σ w_i * r_i
+            expected_return = xp.sum(w * r)
+            
+            # Calculate risk penalty: λ * Σ w_i²
+            risk_penalty = risk_aversion * xp.sum(w ** 2)
+            
+            # Calculate optimized profit: P = Σ w_i * r_i - λ * Σ w_i²
+            optimized_profit = expected_return - risk_penalty
+            
+            return float(optimized_profit)
+            
+        except Exception as e:
+            logger.error(f"Profit optimization failed: {e}")
+            return 0.0
+
+    def calculate_risk_adjusted_return(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
+        """
+        Calculate risk-adjusted return.
+        
+        Args:
+            returns: Asset returns
+            risk_free_rate: Risk-free rate
+            
+        Returns:
+            Risk-adjusted return
+        """
+        try:
+            if xp is None:
+                raise ValueError("Tensor operations not available")
+            
+            returns_array = xp.array(returns)
+            
+            # Calculate mean return
+            mean_return = xp.mean(returns_array)
+            
+            # Calculate volatility
+            volatility = xp.std(returns_array)
+            
+            # Calculate risk-adjusted return
+            if volatility > 0:
+                risk_adjusted_return = (mean_return - risk_free_rate) / volatility
+            else:
+                risk_adjusted_return = 0.0
+            
+            return float(risk_adjusted_return)
+            
+        except Exception as e:
+            logger.error(f"Risk-adjusted return calculation failed: {e}")
+            return 0.0
 
     def get_optimization_summary(self) -> Dict[str, Any]:
         """Get summary of optimization history."""

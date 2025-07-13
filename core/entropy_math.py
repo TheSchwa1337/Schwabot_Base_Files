@@ -138,6 +138,99 @@ class EntropyMath:
         
         return -np.sum(probs * np.log2(probs))
 
+    def calculate_shannon_entropy(self, probabilities: List[float]) -> float:
+        """
+        Calculate Shannon entropy: H = -Σ p_i * log2(p_i)
+        
+        Args:
+            probabilities: List of probabilities
+            
+        Returns:
+            Shannon entropy value
+        """
+        try:
+            probs = np.array(probabilities)
+            probs = probs[probs > 0]  # Remove zero probabilities
+            
+            if len(probs) == 0:
+                return 0.0
+            
+            # Normalize probabilities
+            probs = probs / np.sum(probs)
+            
+            # Calculate Shannon entropy
+            entropy = -np.sum(probs * np.log2(probs + 1e-10))
+            
+            return float(entropy)
+            
+        except Exception as e:
+            self.logger.error(f"Shannon entropy calculation failed: {e}")
+            return 0.0
+
+    def calculate_market_entropy(self, price_changes: List[float]) -> float:
+        """
+        Calculate market entropy from price changes.
+        
+        Args:
+            price_changes: List of price changes
+            
+        Returns:
+            Market entropy value
+        """
+        try:
+            changes = np.array(price_changes)
+            
+            # Calculate absolute changes
+            abs_changes = np.abs(changes)
+            total_change = np.sum(abs_changes)
+            
+            if total_change == 0:
+                return 0.0
+            
+            # Calculate probabilities
+            probabilities = abs_changes / total_change
+            
+            # Calculate entropy
+            entropy = -np.sum(probabilities * np.log(probabilities + 1e-10))
+            
+            return float(entropy)
+            
+        except Exception as e:
+            self.logger.error(f"Market entropy calculation failed: {e}")
+            return 0.0
+
+    def calculate_zbe_entropy(self, price_changes: List[float]) -> float:
+        """
+        Calculate Zero Bit Entropy (ZBE) from price changes.
+        
+        Args:
+            price_changes: List of price changes
+            
+        Returns:
+            ZBE entropy value
+        """
+        try:
+            changes = np.array(price_changes)
+            
+            # Calculate absolute changes
+            abs_changes = np.abs(changes)
+            total_change = np.sum(abs_changes)
+            
+            if total_change == 0:
+                return 0.0
+            
+            # Calculate probabilities
+            probabilities = abs_changes / total_change
+            
+            # Calculate ZBE entropy (similar to Shannon but with different base)
+            entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
+            
+            return float(entropy)
+            
+        except Exception as e:
+            self.logger.error(f"ZBE entropy calculation failed: {e}")
+            return 0.0
+
 # Factory function
 def create_entropy_math(config: Optional[Dict[str, Any]] = None) -> EntropyMath:
     """Create an entropy math instance."""

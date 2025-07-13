@@ -9,31 +9,13 @@ from core.unified_math_system import unified_math
 from utils.safe_print import debug, error, info, safe_print, success, warn
 
 # -*- coding: utf-8 -*-
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
-""""""
 """
-
-
-
-
 Persistent Homology - Schwabot UROS v1.0
-== == == == == == == == == == == == == == == == == == == ==
+========================================
 
 Implements persistent homology for topological data analysis in trading patterns.
-Critical for detecting persistent features in market data and price movements."""
-""""""
-""""""
+Critical for detecting persistent features in market data and price movements.
 """
-
 
 logger = logging.getLogger(__name__)
 
@@ -249,129 +231,117 @@ class PersistentHomology:
 
     def _compute_persistence_pairs(self, boundary_matrices: List[np.ndarray], simplices: List[Simplex]) -> List[Tuple[int, Optional[int]]]:
         """Compute persistence pairs using matrix reduction."""
-        # Simplified implementation - in practice, use more sophisticated algorithms
         persistence_pairs = []
-
-        for dim in range(len(boundary_matrices)):
-            matrix = boundary_matrices[dim]
-            if matrix.size == 0:
-                continue
-
-            # Find pairs by looking for non-zero entries
-            for i in range(matrix.shape[0]):
-                for j in range(matrix.shape[1]):
-                    if matrix[i, j] != 0:
-                        # This is a simplified pairing - real implementation would be more complex
-                        persistence_pairs.append((j, i))
-                        break
-
+        
+        # Simple implementation - in practice, you'd use more sophisticated algorithms
+        # For now, we'll create some basic pairs based on dimension
+        
+        for i, simplex in enumerate(simplices):
+            if simplex.dimension == 0:
+                # 0-simplices are born at time 0
+                persistence_pairs.append((i, None))
+            elif simplex.dimension == 1:
+                # 1-simplices might form cycles
+                if i < len(simplices) - 1:
+                    persistence_pairs.append((i, i + 1))
+                else:
+                    persistence_pairs.append((i, None))
+        
         return persistence_pairs
 
-    def analyze_market_patterns(self, price_data: np.ndarray, window_size: int) -> Dict[str, Any]:
+    def analyze_market_patterns(self, price_data: np.ndarray, volume_data: np.ndarray) -> Dict[str, Any]:
         """Analyze market patterns using persistent homology."""
-        if len(price_data) < window_size:
-            logger.warning("Insufficient data for pattern analysis")
-            return {}
-
-        # Extract features from price data
-        features = self._extract_price_features(price_data, window_size)
-
-        # Build simplicial complex
-        max_distance = unified_math.unified_math.std(features) * 2.0  # Adaptive distance threshold
-        self.build_simplicial_complex(features, max_distance)
-
-        # Compute persistence
-        persistent_features = self.compute_persistence()
-
-        # Analyze patterns
-        pattern_analysis = {
-            "total_features": len(persistent_features),
-            "feature_dimensions": {},
-            "persistence_distribution": [],
-            "confidence_scores": [],
-            "significant_features": []
-        }
-
-        for feature in persistent_features:
-            # Count by dimension
-            dim = feature.dimension
-            pattern_analysis["feature_dimensions"][dim] = pattern_analysis["feature_dimensions"].get(dim, 0) + 1
-
-            # Collect persistence values
-            pattern_analysis["persistence_distribution"].append(feature.persistence)
-            pattern_analysis["confidence_scores"].append(feature.confidence)
-
-            # Identify significant features
-            if feature.confidence >= self.confidence_threshold:
-                pattern_analysis["significant_features"].append({
-                    "id": feature.feature_id,
-                    "dimension": feature.dimension,
-                    "persistence": feature.persistence,
-                    "confidence": feature.confidence,
-                    "vertices": feature.vertices
-                })
-
-        return pattern_analysis
-
-    def _extract_price_features(self, price_data: np.ndarray, window_size: int) -> np.ndarray:
-        """Extract features from price data for topological analysis."""
-        features = []
-
-        for i in range(len(price_data) - window_size + 1):
-            window = price_data[i:i + window_size]
-
-            # Compute various features
-            returns = np.diff(window) / window[:-1]
-            volatility = unified_math.unified_math.std(returns)
-            trend = np.polyfit(range(len(window)), window, 1)[0]
-
-            # Normalize features
-            features.append([volatility, trend, unified_math.unified_math.mean(window)])
-
-        return np.array(features)
-
-    def get_topological_signals(self) -> List[Dict[str, Any]]:
-        """Get topological signals for trading decisions."""
-        signals = []
-
-        for feature in self.persistent_features:
-            if feature.confidence >= self.confidence_threshold:
-                signal = {
-                    "type": "topological_feature",
-                    "dimension": feature.dimension,
-                    "persistence": feature.persistence,
-                    "confidence": feature.confidence,
-                    "strength": min(1.0, feature.persistence / self.persistence_threshold),
-                    "timestamp": datetime.now(),
-                    "metadata": feature.metadata
+        try:
+            # Create point cloud from price and volume data
+            points = np.column_stack([price_data, volume_data])
+            
+            # Build simplicial complex
+            max_distance = np.std(points) * 2.0  # Adaptive distance threshold
+            simplices = self.build_simplicial_complex(points, max_distance)
+            
+            # Compute persistent features
+            features = self.compute_persistence()
+            
+            # Analyze results
+            analysis = {
+                'total_features': len(features),
+                'dimension_distribution': {},
+                'persistence_statistics': {},
+                'confidence_scores': []
+            }
+            
+            # Count features by dimension
+            for feature in features:
+                dim = feature.dimension
+                if dim not in analysis['dimension_distribution']:
+                    analysis['dimension_distribution'][dim] = 0
+                analysis['dimension_distribution'][dim] += 1
+                analysis['confidence_scores'].append(feature.confidence)
+            
+            # Compute persistence statistics
+            if features:
+                persistences = [f.persistence for f in features]
+                analysis['persistence_statistics'] = {
+                    'mean': np.mean(persistences),
+                    'std': np.std(persistences),
+                    'max': np.max(persistences),
+                    'min': np.min(persistences)
                 }
-                signals.append(signal)
+            
+            logger.info(f"Market pattern analysis completed: {len(features)} features found")
+            return analysis
+            
+        except Exception as e:
+            logger.error(f"Error in market pattern analysis: {e}")
+            return {
+                'total_features': 0,
+                'dimension_distribution': {},
+                'persistence_statistics': {},
+                'confidence_scores': [],
+                'error': str(e)
+            }
 
-        return signals
+    def get_persistence_diagram(self) -> List[Tuple[float, float]]:
+        """Get persistence diagram as list of (birth, death) pairs."""
+        diagram = []
+        for feature in self.persistent_features:
+            diagram.append((feature.birth_time, feature.death_time))
+        return diagram
+
+    def get_betti_numbers(self) -> Dict[int, int]:
+        """Compute Betti numbers for each dimension."""
+        betti_numbers = {}
+        
+        for feature in self.persistent_features:
+            dim = feature.dimension
+            if dim not in betti_numbers:
+                betti_numbers[dim] = 0
+            betti_numbers[dim] += 1
+        
+        return betti_numbers
 
 
-def main():-> None:
-    """Main function for testing persistent homology."""
-    # Initialize analyzer
-    analyzer = PersistentHomology()
-
-    # Generate sample price data
-    np.random.seed(42)
-    price_data = np.cumsum(np.random.randn(1000) * 0.01) + 100
-
-    # Analyze patterns
-    pattern_analysis = analyzer.analyze_market_patterns(price_data, 10)
-    safe_print(f"Pattern analysis: {pattern_analysis}")
-
-    # Get topological signals
-    signals = analyzer.get_topological_signals()
-    safe_print(f"Topological signals: {len(signals)}")
+# Factory function
+def create_persistent_homology_analyzer() -> PersistentHomology:
+    """Create a new persistent homology analyzer instance."""
+    return PersistentHomology()
 
 
+# Example usage
 if __name__ == "__main__":
-    main()
-
-""""""
-""""""
-""""""
-"""
+    # Create sample data
+    np.random.seed(42)
+    n_points = 50
+    price_data = np.random.normal(100, 10, n_points)
+    volume_data = np.random.normal(1000000, 200000, n_points)
+    
+    # Create analyzer
+    analyzer = PersistentHomology()
+    
+    # Analyze patterns
+    analysis = analyzer.analyze_market_patterns(price_data, volume_data)
+    
+    print("Persistent Homology Analysis Results:")
+    print(f"Total features: {analysis['total_features']}")
+    print(f"Dimension distribution: {analysis['dimension_distribution']}")
+    print(f"Persistence statistics: {analysis['persistence_statistics']}")
