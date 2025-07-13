@@ -96,7 +96,7 @@ class StrategyPattern:
     Provides core automated strategy engine functionality.
     """
 
-    def __init__(self,   config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize StrategyPattern with configuration."""
         self.config = config or self._default_config()
         self.logger = logging.getLogger(__name__)
@@ -104,26 +104,6 @@ class StrategyPattern:
         self.initialized = False
 
         # Initialize math infrastructure if available
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
-        # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
         if MATH_INFRASTRUCTURE_AVAILABLE:
             self.math_config = MathConfigManager()
             self.math_cache = MathResultCache()
@@ -182,6 +162,39 @@ class StrategyPattern:
             'initialized': self.initialized,
             'config': self.config,
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
+
+    def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
+        """Process trading data with mathematical calculations."""
+        try:
+            prices = market_data.get('prices', [])
+            volumes = market_data.get('volumes', [])
+            price_result = self.calculate_mathematical_result(prices)
+            volume_result = self.calculate_mathematical_result(volumes)
+            return Result(
+                success=True,
+                data={
+                    'price_analysis': price_result,
+                    'volume_analysis': volume_result,
+                    'timestamp': time.time()
+                }
+            )
+        except Exception as e:
+            return Result(
+                success=False,
+                error=str(e),
+                timestamp=time.time()
+            )
 
 
 # Factory function
