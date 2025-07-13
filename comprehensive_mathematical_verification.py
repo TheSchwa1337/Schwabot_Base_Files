@@ -76,6 +76,9 @@ class MathematicalVerificationTester:
         # Test 10: Performance Validation
         self._test_performance_validation()
         
+        # Test 11: Quantum-Classical Hybrid Mathematics
+        self._test_quantum_classical_hybrid_mathematics()
+        
         return self._generate_verification_report()
     
     def _test_unified_mathematical_bridge(self):
@@ -439,6 +442,80 @@ class MathematicalVerificationTester:
             
         except Exception as e:
             self._record_critical_failure("Performance Validation", str(e))
+    
+    def _test_quantum_classical_hybrid_mathematics(self):
+        """Test quantum-classical hybrid mathematics."""
+        logger.info("🧠 Testing Quantum-Classical Hybrid Mathematics")
+        
+        try:
+            # Test import
+            from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
+            
+            # Test initialization
+            hybrid_math = QuantumClassicalHybridMathematics()
+            self._assert_true(hybrid_math is not None, "Hybrid math initialization")
+            
+            # Test data
+            price_changes = np.random.normal(0, 0.01, 100)
+            volume_changes = np.random.normal(0, 0.02, 100)
+            time_series = np.arange(100)
+            
+            # Test delta-squared entanglement
+            delta_squared_result = hybrid_math.compute_delta_squared_entanglement(
+                price_changes, volume_changes, time_series
+            )
+            self._assert_true(hasattr(delta_squared_result, 'entanglement_strength'), "Delta-squared entanglement structure")
+            self._assert_true(isinstance(delta_squared_result.entanglement_strength, float), "Delta-squared entanglement type")
+            self._assert_true(delta_squared_result.entanglement_strength >= 0, "Delta-squared entanglement non-negative")
+            
+            # Test lambda nabla measurement
+            self._assert_true(hasattr(delta_squared_result, 'lambda_nabla'), "Lambda nabla measurement structure")
+            self._assert_true(isinstance(delta_squared_result.lambda_nabla, float), "Lambda nabla measurement type")
+            
+            # Test fractal recursion
+            fractal_result = hybrid_math.compute_fractal_recursion(price_changes)
+            self._assert_true(hasattr(fractal_result, 'fractal_dimension'), "Fractal recursion structure")
+            self._assert_true(isinstance(fractal_result.fractal_dimension, float), "Fractal dimension type")
+            self._assert_true(fractal_result.fractal_dimension > 0, "Fractal dimension positive")
+            
+            # Test infinite function value
+            self._assert_true(hasattr(fractal_result, 'infinite_function_value'), "Infinite function structure")
+            self._assert_true(isinstance(fractal_result.infinite_function_value, float), "Infinite function type")
+            
+            # Test waveform analysis
+            waveform_result = hybrid_math.analyze_waveform(price_changes)
+            self._assert_true(hasattr(waveform_result, 'amplitude'), "Waveform analysis structure")
+            self._assert_true(isinstance(waveform_result.amplitude, float), "Waveform amplitude type")
+            self._assert_true(waveform_result.amplitude >= 0, "Waveform amplitude non-negative")
+            
+            # Test memory key management
+            pattern = price_changes[-20:] if len(price_changes) >= 20 else price_changes
+            historical_patterns = [price_changes[i:i+20] for i in range(0, len(price_changes)-20, 10)] if len(price_changes) >= 30 else []
+            memory_result = hybrid_math.manage_memory_key(pattern, historical_patterns, time.time())
+            self._assert_true(hasattr(memory_result, 'key_hash'), "Memory key structure")
+            self._assert_true(isinstance(memory_result.key_hash, str), "Memory key hash type")
+            self._assert_true(len(memory_result.key_hash) > 0, "Memory key hash non-empty")
+            
+            # Test flow order booking
+            signals = [delta_squared_result.entanglement_strength, fractal_result.fractal_dimension, waveform_result.amplitude]
+            weights = [0.4, 0.3, 0.3]
+            confidence = 0.7
+            risk_metrics = {'volatility': 0.02, 'var_95': -0.01, 'max_drawdown': -0.05}
+            flow_result = hybrid_math.book_flow_order(signals, weights, confidence, risk_metrics)
+            self._assert_true(hasattr(flow_result, 'order_confidence'), "Flow order structure")
+            self._assert_true(isinstance(flow_result.order_confidence, float), "Flow order confidence type")
+            self._assert_true(0.0 <= flow_result.order_confidence <= 1.0, "Flow order confidence range")
+            
+            # Test return statistics
+            returns = np.random.normal(0.001, 0.02, 1000)
+            stats_result = hybrid_math.calculate_return_statistics(returns)
+            self._assert_true(hasattr(stats_result, 'sharpe_ratio'), "Return statistics structure")
+            self._assert_true(isinstance(stats_result.sharpe_ratio, float), "Sharpe ratio type")
+            
+            logger.info("✅ Quantum-Classical Hybrid Mathematics: PASSED")
+            
+        except Exception as e:
+            self._record_critical_failure("Quantum-Classical Hybrid Mathematics", str(e))
     
     def _assert_true(self, condition: bool, test_name: str):
         """Assert condition is true and record test result."""

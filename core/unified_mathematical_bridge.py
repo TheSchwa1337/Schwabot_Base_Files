@@ -110,6 +110,14 @@ except ImportError:
     HEARTBEAT_AVAILABLE = False
     logger.warning("Heartbeat Integration not available - using fallback")
 
+# NEW: Quantum-Classical Hybrid Mathematics
+try:
+    from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
+    QUANTUM_CLASSICAL_HYBRID_AVAILABLE = True
+except ImportError:
+    QUANTUM_CLASSICAL_HYBRID_AVAILABLE = False
+    logger.warning("Quantum-Classical Hybrid Mathematics not available - using fallback")
+
 from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
 from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
 
@@ -315,6 +323,14 @@ class UnifiedMathematicalBridge:
             self.heartbeat_manager = self._create_fallback_heartbeat()
             self.logger.warning("⚠️ Using fallback Heartbeat Manager")
         
+        # NEW: Quantum-Classical Hybrid Mathematics
+        if QUANTUM_CLASSICAL_HYBRID_AVAILABLE:
+            self.quantum_classical_hybrid = QuantumClassicalHybridMathematics()
+            self.logger.info("✅ Quantum-Classical Hybrid Mathematics initialized")
+        else:
+            self.quantum_classical_hybrid = self._create_fallback_quantum_classical_hybrid()
+            self.logger.warning("⚠️ Using fallback Quantum-Classical Hybrid Mathematics")
+        
         # Initialize integration methods
         self.integration_methods = UnifiedMathematicalIntegrationMethods(self)
         self.logger.info("✅ Mathematical Integration Methods initialized")
@@ -470,7 +486,7 @@ class UnifiedMathematicalBridge:
             )
     
     def _apply_quantum_strategy_analysis(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Apply quantum strategy analysis."""
+        """Apply quantum strategy analysis with enhanced quantum-classical hybrid mathematics."""
         try:
             # Create quantum superposition of trading states
             assets = [market_data.get('symbol', 'BTC')]
@@ -489,12 +505,23 @@ class UnifiedMathematicalBridge:
                 modulation_strength=measurement.get('entanglement', 0.5)
             )
             
+            # NEW: Enhanced quantum-classical hybrid analysis
+            enhanced_analysis = self._apply_quantum_classical_hybrid_analysis(market_data, measurement)
+            
             return {
                 "confidence": measurement.get("confidence", 0.5),
                 "superposition_state": measurement.get("state", "unknown"),
                 "entanglement_strength": measurement.get("entanglement", 0.0),
                 "tensor_enhancement": entropy_modulated.tolist(),
-                "mathematical_signature": self._create_quantum_signature(measurement, entropy_modulated)
+                "mathematical_signature": self._create_quantum_signature(measurement, entropy_modulated),
+                # NEW: Enhanced quantum-classical hybrid results
+                "delta_squared_entanglement": enhanced_analysis.get("delta_squared_entanglement", {}),
+                "lambda_nabla_measurement": enhanced_analysis.get("lambda_nabla_measurement", 0.0),
+                "fractal_recursion_result": enhanced_analysis.get("fractal_recursion_result", {}),
+                "waveform_analysis": enhanced_analysis.get("waveform_analysis", {}),
+                "memory_key_result": enhanced_analysis.get("memory_key_result", {}),
+                "flow_order_result": enhanced_analysis.get("flow_order_result", {}),
+                "return_statistics": enhanced_analysis.get("return_statistics", {})
             }
         except Exception as e:
             self.logger.error(f"Quantum strategy analysis failed: {e}")
@@ -502,7 +529,7 @@ class UnifiedMathematicalBridge:
     
     def _apply_phantom_math_with_quantum(self, market_data: Dict[str, Any], 
                                        quantum_result: Dict[str, Any]) -> Dict[str, Any]:
-        """Apply Phantom Math with quantum enhancement."""
+        """Apply Phantom Math with quantum enhancement and quantum-classical hybrid analysis."""
         try:
             # Use quantum tensor enhancement for phantom detection
             enhanced_prices = np.array(market_data.get('price_history', [100.0]))
@@ -521,17 +548,137 @@ class UnifiedMathematicalBridge:
                 quantum_result
             )
             
+            # Enhanced analysis using quantum-classical hybrid mathematics
+            enhanced_analysis = quantum_result.get('delta_squared_entanglement', {})
+            lambda_nabla = quantum_result.get('lambda_nabla_measurement', 0.0)
+            fractal_result = quantum_result.get('fractal_recursion_result', {})
+            
             return {
                 "phantom_detected": phantom_zone is not None,
                 "phantom_confidence": phantom_zone.confidence if phantom_zone else 0.0,
                 "phantom_type": phantom_zone.zone_type if phantom_zone else "none",
                 "quantum_enhanced": True,
                 "homology_features": len(homology_result),
-                "mathematical_signature": self._create_phantom_signature(phantom_zone, homology_result)
+                "mathematical_signature": self._create_phantom_signature(phantom_zone, homology_result),
+                # Enhanced quantum-classical hybrid results
+                "enhanced_entanglement": enhanced_analysis.get('entanglement_strength', 0.0),
+                "lambda_nabla_phantom": lambda_nabla,
+                "fractal_phantom_dimension": fractal_result.get('fractal_dimension', 1.0),
+                "containment_radius": fractal_result.get('containment_radius', 1.0)
             }
         except Exception as e:
             self.logger.error(f"Phantom math with quantum failed: {e}")
             return {"phantom_detected": False, "phantom_confidence": 0.0}
+    
+    def _apply_quantum_classical_hybrid_analysis(self, market_data: Dict[str, Any], quantum_measurement: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply quantum-classical hybrid analysis with delta-squared entanglement, lambda nabla, and fractal recursion."""
+        try:
+            # Extract market data
+            price_history = np.array(market_data.get('price_history', [100.0]))
+            volume_history = np.array(market_data.get('volume_history', [1000.0]))
+            
+            # Calculate price and volume changes
+            price_changes = np.diff(price_history)
+            volume_changes = np.diff(volume_history)
+            time_series = np.arange(len(price_changes))
+            
+            # 1. Delta-squared entanglement analysis
+            delta_squared_result = self.quantum_classical_hybrid.compute_delta_squared_entanglement(
+                price_changes, volume_changes, time_series
+            )
+            
+            # 2. Fractal recursion analysis
+            fractal_result = self.quantum_classical_hybrid.compute_fractal_recursion(price_changes)
+            
+            # 3. Waveform analysis with limiters
+            waveform_result = self.quantum_classical_hybrid.analyze_waveform(price_changes)
+            
+            # 4. Memory key management
+            pattern = price_changes[-20:] if len(price_changes) >= 20 else price_changes
+            historical_patterns = [price_changes[i:i+20] for i in range(0, len(price_changes)-20, 10)] if len(price_changes) >= 30 else []
+            memory_result = self.quantum_classical_hybrid.manage_memory_key(
+                pattern, historical_patterns, time.time()
+            )
+            
+            # 5. Flow order booking
+            signals = [delta_squared_result.entanglement_strength, fractal_result.fractal_dimension, waveform_result.amplitude]
+            weights = [0.4, 0.3, 0.3]
+            confidence = quantum_measurement.get("confidence", 0.5)
+            risk_metrics = {
+                'volatility': np.std(price_changes),
+                'var_95': np.percentile(price_changes, 5),
+                'max_drawdown': np.min(np.cumsum(price_changes))
+            }
+            flow_result = self.quantum_classical_hybrid.book_flow_order(
+                signals, weights, confidence, risk_metrics
+            )
+            
+            # 6. Return statistics (if historical returns available)
+            returns = market_data.get('returns_history', [])
+            if returns:
+                stats_result = self.quantum_classical_hybrid.calculate_return_statistics(returns)
+            else:
+                stats_result = None
+            
+            return {
+                "delta_squared_entanglement": {
+                    "entanglement_strength": delta_squared_result.entanglement_strength,
+                    "gamma_adjustment": delta_squared_result.gamma_adjustment,
+                    "entropy_contribution": delta_squared_result.entropy_contribution,
+                    "lambda_nabla": delta_squared_result.lambda_nabla,
+                    "quantum_state": delta_squared_result.quantum_state.value,
+                    "classical_correlation": delta_squared_result.classical_correlation
+                },
+                "lambda_nabla_measurement": delta_squared_result.lambda_nabla,
+                "fractal_recursion_result": {
+                    "fractal_dimension": fractal_result.fractal_dimension,
+                    "recursion_depth": fractal_result.recursion_depth,
+                    "convergence_rate": fractal_result.convergence_rate,
+                    "entropy_factor": fractal_result.entropy_factor,
+                    "containment_radius": fractal_result.containment_radius,
+                    "infinite_function_value": fractal_result.infinite_function_value
+                },
+                "waveform_analysis": {
+                    "amplitude": waveform_result.amplitude,
+                    "frequency": waveform_result.frequency,
+                    "phase": waveform_result.phase,
+                    "limiting_factor": waveform_result.limiting_factor,
+                    "relative_invariance": waveform_result.relative_invariance,
+                    "dualistic_state": waveform_result.dualistic_state
+                },
+                "memory_key_result": {
+                    "key_hash": memory_result.key_hash,
+                    "pattern_similarity": memory_result.pattern_similarity,
+                    "entropy_level": memory_result.entropy_level,
+                    "time_decay": memory_result.time_decay,
+                    "access_probability": memory_result.access_probability
+                },
+                "flow_order_result": {
+                    "order_confidence": flow_result.order_confidence,
+                    "risk_adjustment": flow_result.risk_adjustment,
+                    "signal_strength": flow_result.signal_strength,
+                    "execution_probability": flow_result.execution_probability,
+                    "rebooking_threshold": flow_result.rebooking_threshold
+                },
+                "return_statistics": {
+                    "mean_return": stats_result.mean_return if stats_result else 0.0,
+                    "sharpe_ratio": stats_result.sharpe_ratio if stats_result else 0.0,
+                    "max_drawdown": stats_result.max_drawdown if stats_result else 0.0,
+                    "win_rate": stats_result.win_rate if stats_result else 0.0
+                }
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Quantum-classical hybrid analysis failed: {e}")
+            return {
+                "delta_squared_entanglement": {},
+                "lambda_nabla_measurement": 0.0,
+                "fractal_recursion_result": {},
+                "waveform_analysis": {},
+                "memory_key_result": {},
+                "flow_order_result": {},
+                "return_statistics": {}
+            }
     
     def _calculate_quantum_phantom_connection_strength(self, quantum_result: Dict[str, Any], 
                                                      phantom_result: Dict[str, Any]) -> float:
@@ -667,7 +814,8 @@ class UnifiedMathematicalBridge:
             PHANTOM_MATH_AVAILABLE,
             RISK_MANAGER_AVAILABLE,
             PROFIT_CALC_AVAILABLE,
-            HEARTBEAT_AVAILABLE
+            HEARTBEAT_AVAILABLE,
+            QUANTUM_CLASSICAL_HYBRID_AVAILABLE
         ]
         return sum(systems)
     
@@ -861,6 +1009,21 @@ class UnifiedMathematicalBridge:
                 }
         
         return FallbackHeartbeatManager()
+    
+    def _create_fallback_quantum_classical_hybrid(self):
+        """Create fallback quantum-classical hybrid mathematics following your patterns."""
+        class FallbackQuantumClassicalHybridMathematics:
+            def __init__(self):
+                self.version = "fallback"
+            
+            def hybrid_quantum_classical_analysis(self, market_data, quantum_state):
+                return type('HybridAnalysisResult', (), {
+                    'quantum_component_confidence': 0.5,
+                    'classical_component_confidence': 0.5,
+                    'hybrid_state': 'fallback'
+                })()
+        
+        return FallbackQuantumClassicalHybridMathematics()
     
     # Placeholder methods for integration (to be implemented)
     def _detect_phantom_zone_with_quantum(self, quantum_enhanced_prices, homology_result, quantum_result):
