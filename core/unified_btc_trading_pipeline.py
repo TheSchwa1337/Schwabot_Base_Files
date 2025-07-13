@@ -119,411 +119,352 @@ class UnifiedBTCTradingPipeline:
     """
     
     def __init__(self, config: Optional[BTCTradingPipelineConfig] = None):
+        """Initialize BTC trading pipeline with mathematical integration."""
         self.config = config or BTCTradingPipelineConfig()
+        self.logger = logging.getLogger(__name__)
         
-        # Import core components with fallbacks
-        self.components_available = False
-        try:
-            # Try to import core components
-            from core.btc_usdc_trading_engine import BTCTradingEngine
-            from core.mathematical_framework_integrator import MathematicalFrameworkIntegrator
-            from core.profit_optimization_engine import profit_optimization_engine
-            from core.risk_manager import risk_manager
-            from core.secure_exchange_manager import exchange_manager
-            
-            self.btc_engine = BTCTradingEngine()
-            self.math_integrator = MathematicalFrameworkIntegrator()
-            self.exchange_manager = exchange_manager
-            self.risk_manager = risk_manager
-            self.profit_optimizer = profit_optimization_engine
-            
-            self.components_available = True
-            logger.info("✅ All core components imported successfully")
-            
-        except ImportError as e:
-            logger.warning(f"⚠️ Some core components not available: {e}")
-            # Create fallback components
-            self._create_fallback_components()
-        
-        # Initialize pipeline state
+        # Pipeline state
+        self.tick_counter = 0
         self.price_history: List[Dict[str, Any]] = []
         self.trading_signals: List[BTCTradingSignal] = []
         self.ghost_baskets: Dict[str, Dict[str, Any]] = {}
-        self.tick_counter = 0
         
-        logger.info("✅ Unified BTC Trading Pipeline initialized")
-    
-    def _create_fallback_components(self):
-        """Create fallback components when core modules are unavailable."""
-        logger.info("🔄 Creating fallback components")
+        # Mathematical infrastructure
+        self.components_available = self._initialize_mathematical_components()
         
-        # Fallback BTC Trading Engine
-        class FallbackBTCTradingEngine:
-            def __init__(self):
-                self.last_price = 0.0
-                self.position = 0.0
+        if not self.components_available:
+            raise RuntimeError("Mathematical infrastructure not available for BTC trading pipeline")
+
+    def _initialize_mathematical_components(self) -> bool:
+        """Initialize mathematical components for BTC trading."""
+        try:
+            # Import mathematical infrastructure
+            from core.math_cache import MathResultCache
+            from core.math_config_manager import MathConfigManager
+            from core.math_orchestrator import MathOrchestrator
             
-            def process_price(self, price: float, volume: float) -> Dict[str, Any]:
-                """Process BTC price with fallback logic."""
-                price_change = (price - self.last_price) / self.last_price if self.last_price > 0 else 0
-                self.last_price = price
-                
-                return {
-                    'price_change': price_change,
-                    'volume_ratio': volume / 1000000.0,  # Normalize to millions
-                    'momentum': price_change * 100,  # Convert to percentage
-                    'volatility': abs(price_change) * 10
-                }
-        
-        # Fallback Mathematical Framework Integrator
-        class FallbackMathematicalFrameworkIntegrator:
-            def __init__(self):
-                self.entropy_score = 0.5
-                self.tensor_score = 0.5
+            # Import mathematical modules for BTC analysis
+            from core.math.volume_weighted_hash_oscillator import VolumeWeightedHashOscillator
+            from core.math.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+            from core.math.qsc_quantum_signal_collapse_gate import QSCGate
+            from core.math.unified_tensor_algebra import UnifiedTensorAlgebra
+            from core.math.galileo_tensor_field_entropy_drift import GalileoTensorField
+            from core.math.advanced_tensor_algebra import AdvancedTensorAlgebra
+            from core.math.entropy_math import EntropyMath
             
-            def integrate_framework(self, price_data: Dict[str, Any]) -> Dict[str, Any]:
-                """Integrate mathematical framework with fallback logic."""
-                momentum = price_data.get('momentum', 0)
-                volatility = price_data.get('volatility', 0)
-                
-                # Simple entropy calculation
-                self.entropy_score = min(1.0, volatility * 2)
-                
-                # Simple tensor score
-                self.tensor_score = max(0.0, min(1.0, (momentum + 0.5) / 2))
-                
-                return {
-                    'entropy_score': self.entropy_score,
-                    'tensor_score': self.tensor_score,
-                    'confidence': (self.entropy_score + self.tensor_score) / 2,
-                    'bit_phase': 16 if self.tensor_score > 0.7 else 8
-                }
-        
-        # Fallback components
-        self.btc_engine = FallbackBTCTradingEngine()
-        self.math_integrator = FallbackMathematicalFrameworkIntegrator()
-        self.exchange_manager = None
-        self.risk_manager = None
-        self.profit_optimizer = None
-    
+            # Initialize mathematical infrastructure
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
+            
+            # Initialize mathematical modules for BTC analysis
+            self.vwho = VolumeWeightedHashOscillator()
+            self.zygot_zalgo = ZygotZalgoEntropyDualKeyGate()
+            self.qsc = QSCGate()
+            self.tensor_algebra = UnifiedTensorAlgebra()
+            self.galileo = GalileoTensorField()
+            self.advanced_tensor = AdvancedTensorAlgebra()
+            self.entropy_math = EntropyMath()
+            
+            self.logger.info("✅ Mathematical infrastructure initialized for BTC trading")
+            return True
+            
+        except ImportError as e:
+            self.logger.error(f"❌ Mathematical infrastructure not available: {e}")
+            return False
+
     def process_btc_price(self, price: float, volume: float, 
                          thermal_state: float = 65.0) -> BTCTradingResult:
-        """Process BTC price data through complete trading pipeline."""
+        """Process BTC price with mathematical analysis and generate trading signals."""
         try:
+            if not self.components_available:
+                raise RuntimeError("Mathematical infrastructure not available for BTC price processing")
+
             self.tick_counter += 1
             
-            # Generate hash from price data
-            price_str = f"{price:.2f}_{volume:.2f}_{self.tick_counter}"
-            hash_value = hashlib.sha256(price_str.encode()).hexdigest()
-            
-            # Store price data
-            price_data = {
-                'timestamp': int(time.time() * 1000),
+            # Store price history
+            self.price_history.append({
                 'price': price,
                 'volume': volume,
-                'hash_value': hash_value,
-                'tick': self.tick_counter,
-                'thermal_state': thermal_state
-            }
-            self.price_history.append(price_data)
+                'timestamp': int(time.time() * 1000),
+                'tick': self.tick_counter
+            })
             
             # Keep only recent history
             if len(self.price_history) > 1000:
-                self.price_history.pop(0)
+                self.price_history = self.price_history[-1000:]
+            
+            # Generate hash for this tick
+            hash_value = self._generate_hash(price, volume, self.tick_counter)
             
             # Process through mathematical framework
-            if self.components_available:
-                mathematical_result = self._process_mathematical_framework(
-                    price, volume, hash_value, self.tick_counter
-                )
-            else:
-                mathematical_result = self._process_mathematical_fallback(
-                    price, volume, hash_value, self.tick_counter
-                )
+            mathematical_result = self._process_mathematical_framework(price, volume, hash_value, self.tick_counter)
             
             # Generate trading signal
-            signal = self._generate_trading_signal(
-                price, volume, thermal_state, hash_value, mathematical_result
-            )
+            signal = self._generate_trading_signal(price, volume, thermal_state, hash_value, mathematical_result)
             
             # Update ghost basket
-            ghost_basket_update = self._update_ghost_basket(signal, mathematical_result)
+            basket_update = self._update_ghost_basket(signal, mathematical_result)
             
             # Determine execution recommendation
-            execution_recommendation = self._determine_execution_recommendation(
-                signal, mathematical_result, thermal_state
-            )
+            execution_recommendation = self._determine_execution_recommendation(signal, mathematical_result, thermal_state)
+            
+            # Store signal if generated
+            if signal:
+                self.trading_signals.append(signal)
+                if len(self.trading_signals) > 1000:
+                    self.trading_signals = self.trading_signals[-1000:]
             
             return BTCTradingResult(
                 success=True,
                 signal=signal,
                 mathematical_summary=mathematical_result,
-                ghost_basket_update=ghost_basket_update,
+                ghost_basket_update=basket_update,
                 execution_recommendation=execution_recommendation,
                 metadata={
                     'tick': self.tick_counter,
-                    'hash': hash_value[:8],
-                    'thermal_state': thermal_state
+                    'hash': hash_value,
+                    'thermal_state': thermal_state,
+                    'timestamp': int(time.time() * 1000)
                 }
             )
             
         except Exception as e:
-            logger.error(f"❌ BTC price processing failed: {e}")
+            self.logger.error(f"❌ BTC price processing failed: {e}")
             return BTCTradingResult(
                 success=False,
                 signal=None,
                 mathematical_summary={},
-                ghost_basket_update={},
-                execution_recommendation="error",
+                ghost_basket_update={'status': 'error'},
+                execution_recommendation='error',
                 metadata={'error': str(e)}
             )
-    
+
     def _process_mathematical_framework(self, price: float, volume: float,
                                       hash_value: str, tick: int) -> Dict[str, Any]:
-        """Process through full mathematical framework."""
+        """Process price through mathematical framework."""
         try:
-            # Process through BTC engine
-            btc_result = self.btc_engine.process_price(price, volume)
+            # Analyze hash
+            hash_analysis = self._analyze_hash(hash_value)
             
-            # Integrate mathematical framework
-            math_result = self.math_integrator.integrate_framework(btc_result)
+            # Analyze tick
+            tick_analysis = self._analyze_tick(tick)
             
-            # Add additional mathematical analysis
+            # Perform tensor operations
+            tensor_analysis = self._perform_tensor_operations(price, volume)
+            
+            # Calculate entropy
+            entropy_analysis = self._calculate_entropy(price, volume)
+            
+            # VWHO analysis
+            vwho_result = self.vwho.calculate_vwap_oscillator([price], [volume])
+            
+            # Zygot-Zalgo analysis
+            zygot_result = self.zygot_zalgo.calculate_dual_entropy(price, volume)
+            
+            # QSC analysis
+            qsc_result = self.qsc.calculate_quantum_collapse(price, volume)
+            
+            # Galileo analysis
+            galileo_result = self.galileo.calculate_entropy_drift(price, volume)
+            
+            # Advanced tensor analysis
+            advanced_tensor_result = self.advanced_tensor.tensor_score(np.array([price, volume]))
+            
+            # Combine all analyses
             mathematical_result = {
-                'btc_analysis': btc_result,
-                'math_integration': math_result,
-                'hash_analysis': self._analyze_hash(hash_value),
-                'tick_analysis': self._analyze_tick(tick),
-                'tensor_operations': self._perform_tensor_operations(price, volume),
-                'entropy_calculation': self._calculate_entropy(price, volume),
-                'confidence_score': math_result.get('confidence', 0.5),
-                'bit_phase': math_result.get('bit_phase', 16)
+                'hash_analysis': hash_analysis,
+                'tick_analysis': tick_analysis,
+                'tensor_analysis': tensor_analysis,
+                'entropy_analysis': entropy_analysis,
+                'vwho_score': vwho_result,
+                'zygot_entropy': zygot_result.get('zygot_entropy', 0.0),
+                'zalgo_entropy': zygot_result.get('zalgo_entropy', 0.0),
+                'qsc_collapse': float(qsc_result) if hasattr(qsc_result, 'real') else float(qsc_result),
+                'galileo_drift': galileo_result,
+                'advanced_tensor_score': advanced_tensor_result,
+                'overall_score': (vwho_result + tensor_analysis['tensor_score'] + advanced_tensor_result) / 3.0,
+                'timestamp': int(time.time() * 1000)
             }
             
             return mathematical_result
             
         except Exception as e:
-            logger.error(f"❌ Mathematical framework processing failed: {e}")
-            return self._process_mathematical_fallback(price, volume, hash_value, tick)
-    
-    def _process_mathematical_fallback(self, price: float, volume: float,
-                                     hash_value: str, tick: int) -> Dict[str, Any]:
-        """Fallback mathematical processing when core components unavailable."""
+            self.logger.error(f"❌ Mathematical framework processing failed: {e}")
+            raise
+
+    def _generate_hash(self, price: float, volume: float, tick: int) -> str:
+        """Generate hash for price data."""
         try:
-            # Simple price analysis
-            price_change = 0.0
-            if len(self.price_history) > 1:
-                prev_price = self.price_history[-2]['price']
-                price_change = (price - prev_price) / prev_price if prev_price > 0 else 0
-            
-            # Simple volume analysis
-            volume_ratio = volume / 1000000.0  # Normalize to millions
-            
-            # Simple momentum calculation
-            momentum = price_change * 100
-            
-            # Simple volatility calculation
-            volatility = abs(price_change) * 10
-            
-            # Simple entropy calculation
-            entropy_score = min(1.0, volatility * 2)
-            
-            # Simple tensor score
-            tensor_score = max(0.0, min(1.0, (momentum + 0.5) / 2))
-            
-            # Determine bit phase based on signal strength
-            if tensor_score > 0.8:
-                bit_phase = 64
-            elif tensor_score > 0.6:
-                bit_phase = 32
-            elif tensor_score > 0.4:
-                bit_phase = 16
-            elif tensor_score > 0.2:
-                bit_phase = 8
-            else:
-                bit_phase = 4
-            
-            return {
-                'price_change': price_change,
-                'volume_ratio': volume_ratio,
-                'momentum': momentum,
-                'volatility': volatility,
-                'entropy_score': entropy_score,
-                'tensor_score': tensor_score,
-                'confidence_score': (entropy_score + tensor_score) / 2,
-                'bit_phase': bit_phase,
-                'hash_analysis': self._analyze_hash(hash_value),
-                'tick_analysis': self._analyze_tick(tick)
-            }
-            
+            data_string = f"{price:.8f}_{volume:.8f}_{tick}"
+            return hashlib.sha256(data_string.encode()).hexdigest()
         except Exception as e:
-            logger.error(f"❌ Fallback mathematical processing failed: {e}")
-            return {
-                'price_change': 0.0,
-                'volume_ratio': 1.0,
-                'momentum': 0.0,
-                'volatility': 0.0,
-                'entropy_score': 0.5,
-                'tensor_score': 0.5,
-                'confidence_score': 0.5,
-                'bit_phase': 16,
-                'hash_analysis': {},
-                'tick_analysis': {}
-            }
-    
+            self.logger.error(f"❌ Hash generation failed: {e}")
+            return ""
+
     def _analyze_hash(self, hash_value: str) -> Dict[str, Any]:
-        """Analyze hash value for trading patterns."""
+        """Analyze hash value for patterns."""
         try:
             # Convert hash to numerical values
             hash_bytes = bytes.fromhex(hash_value)
-            hash_int = int.from_bytes(hash_bytes[:8], 'big')
+            hash_array = np.array([b for b in hash_bytes[:16]])  # Use first 16 bytes
             
-            # Extract patterns
-            pattern_score = (hash_int % 1000) / 1000.0
-            volatility_factor = ((hash_int >> 8) % 1000) / 1000.0
-            momentum_factor = ((hash_int >> 16) % 1000) / 1000.0
-            
-            return {
-                'pattern_score': pattern_score,
-                'volatility_factor': volatility_factor,
-                'momentum_factor': momentum_factor,
-                'hash_confidence': (pattern_score + volatility_factor + momentum_factor) / 3
-            }
-        except Exception as e:
-            logger.error(f"❌ Hash analysis failed: {e}")
-            return {
-                'pattern_score': 0.5,
-                'volatility_factor': 0.5,
-                'momentum_factor': 0.5,
-                'hash_confidence': 0.5
-            }
-    
-    def _analyze_tick(self, tick: int) -> Dict[str, Any]:
-        """Analyze tick counter for patterns."""
-        try:
-            # Simple tick analysis
-            tick_mod = tick % 100
-            tick_phase = (tick // 100) % 4
+            # Analyze hash patterns
+            entropy = self.entropy_math.calculate_entropy(hash_array)
+            tensor_score = self.tensor_algebra.tensor_score(hash_array)
             
             return {
-                'tick_mod': tick_mod,
-                'tick_phase': tick_phase,
-                'tick_confidence': 1.0 - (tick_mod / 100.0)
-            }
-        except Exception as e:
-            logger.error(f"❌ Tick analysis failed: {e}")
-            return {
-                'tick_mod': 0,
-                'tick_phase': 0,
-                'tick_confidence': 0.5
-            }
-    
-    def _perform_tensor_operations(self, price: float, volume: float) -> Dict[str, Any]:
-        """Perform tensor operations for trading analysis."""
-        try:
-            if xp is None:
-                return {'tensor_score': 0.5, 'tensor_confidence': 0.5}
-            
-            # Create simple tensor from price and volume
-            tensor = xp.array([price / 50000.0, volume / 1000000.0, 1.0])
-            
-            # Calculate tensor norm
-            tensor_norm = xp.linalg.norm(tensor)
-            
-            # Calculate tensor score
-            tensor_score = float(tensor_norm / 2.0)  # Normalize to 0-1
-            
-            return {
+                'entropy': entropy,
                 'tensor_score': tensor_score,
-                'tensor_confidence': min(1.0, tensor_score * 2),
-                'tensor_norm': float(tensor_norm)
+                'pattern_strength': 1.0 - entropy,
+                'hash_length': len(hash_value)
             }
         except Exception as e:
-            logger.error(f"❌ Tensor operations failed: {e}")
-            return {'tensor_score': 0.5, 'tensor_confidence': 0.5}
-    
-    def _calculate_entropy(self, price: float, volume: float) -> Dict[str, Any]:
-        """Calculate entropy for trading analysis."""
+            self.logger.error(f"❌ Hash analysis failed: {e}")
+            return {'entropy': 0.5, 'tensor_score': 0.5, 'pattern_strength': 0.5}
+
+    def _analyze_tick(self, tick: int) -> Dict[str, Any]:
+        """Analyze tick number for patterns."""
         try:
-            # Simple entropy calculation based on price and volume
-            price_entropy = abs(price - 50000) / 50000  # Distance from $50k
-            volume_entropy = min(1.0, volume / 1000000)  # Volume relative to 1M
+            # Convert tick to array for analysis
+            tick_array = np.array([tick, tick % 100, tick % 1000])
             
-            combined_entropy = (price_entropy + volume_entropy) / 2
+            # Analyze tick patterns
+            entropy = self.entropy_math.calculate_entropy(tick_array)
+            tensor_score = self.tensor_algebra.tensor_score(tick_array)
             
             return {
-                'price_entropy': price_entropy,
-                'volume_entropy': volume_entropy,
-                'combined_entropy': combined_entropy,
-                'entropy_confidence': 1.0 - combined_entropy
+                'tick_number': tick,
+                'entropy': entropy,
+                'tensor_score': tensor_score,
+                'pattern_strength': 1.0 - entropy,
+                'modulo_100': tick % 100,
+                'modulo_1000': tick % 1000
             }
         except Exception as e:
-            logger.error(f"❌ Entropy calculation failed: {e}")
+            self.logger.error(f"❌ Tick analysis failed: {e}")
+            return {'tick_number': tick, 'entropy': 0.5, 'tensor_score': 0.5}
+
+    def _perform_tensor_operations(self, price: float, volume: float) -> Dict[str, Any]:
+        """Perform tensor operations on price and volume data."""
+        try:
+            # Create market tensor
+            market_tensor = self.tensor_algebra.create_market_tensor(price, volume)
+            
+            # Advanced tensor analysis
+            data_array = np.array([price, volume])
+            advanced_score = self.advanced_tensor.tensor_score(data_array)
+            
+            # Calculate tensor metrics
+            tensor_entropy = self.entropy_math.calculate_entropy(data_array)
+            
             return {
-                'price_entropy': 0.5,
-                'volume_entropy': 0.5,
-                'combined_entropy': 0.5,
-                'entropy_confidence': 0.5
+                'tensor_score': market_tensor,
+                'advanced_tensor_score': advanced_score,
+                'tensor_entropy': tensor_entropy,
+                'tensor_stability': 1.0 - tensor_entropy,
+                'price_volume_ratio': price / volume if volume > 0 else 0.0
             }
-    
+        except Exception as e:
+            self.logger.error(f"❌ Tensor operations failed: {e}")
+            return {'tensor_score': 0.5, 'advanced_tensor_score': 0.5, 'tensor_entropy': 0.5}
+
+    def _calculate_entropy(self, price: float, volume: float) -> Dict[str, Any]:
+        """Calculate entropy metrics for price and volume."""
+        try:
+            # Create data array
+            data_array = np.array([price, volume])
+            
+            # Calculate entropy
+            entropy_value = self.entropy_math.calculate_entropy(data_array)
+            
+            # Calculate entropy drift
+            drift_value = self.galileo.calculate_entropy_drift(price, volume)
+            
+            return {
+                'entropy_value': entropy_value,
+                'entropy_drift': drift_value,
+                'entropy_stability': 1.0 - entropy_value,
+                'entropy_threshold_exceeded': entropy_value > self.config.entropy_threshold,
+                'data_complexity': entropy_value * drift_value
+            }
+        except Exception as e:
+            self.logger.error(f"❌ Entropy calculation failed: {e}")
+            return {'entropy_value': 0.5, 'entropy_drift': 0.0, 'entropy_stability': 0.5}
+
     def _get_entry_price(self) -> float:
-        """Get current entry price for trading."""
-        if self.price_history:
-            return self.price_history[-1]['price']
-        return 50000.0  # Default BTC price
-    
+        """Get current entry price for position sizing."""
+        try:
+            if self.price_history:
+                return self.price_history[-1]['price']
+            return 50000.0  # Default BTC price
+        except Exception as e:
+            self.logger.error(f"❌ Entry price calculation failed: {e}")
+            return 50000.0
+
     def _generate_trading_signal(self, price: float, volume: float, thermal_state: float,
                                hash_value: str, mathematical_result: Dict[str, Any]) -> Optional[BTCTradingSignal]:
         """Generate trading signal based on mathematical analysis."""
         try:
-            # Extract key metrics
-            confidence = mathematical_result.get('confidence_score', 0.5)
-            tensor_score = mathematical_result.get('tensor_score', 0.5)
-            bit_phase = mathematical_result.get('bit_phase', 16)
-            momentum = mathematical_result.get('momentum', 0.0)
+            # Extract mathematical scores
+            overall_score = mathematical_result.get('overall_score', 0.5)
+            tensor_score = mathematical_result.get('tensor_analysis', {}).get('tensor_score', 0.5)
+            entropy_value = mathematical_result.get('entropy_analysis', {}).get('entropy_value', 0.5)
+            vwho_score = mathematical_result.get('vwho_score', 0.5)
+            qsc_collapse = mathematical_result.get('qsc_collapse', 0.5)
             
-            # Determine thermal mode
-            thermal_mode = self._determine_thermal_mode(thermal_state)
+            # Calculate confidence
+            confidence = (overall_score + tensor_score + vwho_score + qsc_collapse) / 4.0
+            
+            # Determine signal type based on mathematical analysis
+            if confidence > self.config.confidence_threshold:
+                if overall_score > 0.7:
+                    signal_type = 'buy'
+                elif overall_score < 0.3:
+                    signal_type = 'sell'
+                else:
+                    signal_type = 'hold'
+            else:
+                signal_type = 'hold'
             
             # Calculate position size
-            position_size = self._calculate_position_size(price, thermal_mode, bit_phase)
-            
-            # Determine signal type
-            signal_type = 'hold'
-            if confidence > self.config.confidence_threshold:
-                if momentum > 0.01 and tensor_score > 0.6:
-                    signal_type = 'buy'
-                elif momentum < -0.01 and tensor_score > 0.6:
-                    signal_type = 'sell'
+            thermal_mode = self._determine_thermal_mode(thermal_state)
+            position_size = self._calculate_position_size(price, thermal_mode, 16)  # Default to 16-bit phase
             
             # Generate basket ID
-            basket_id = f"basket_{hash_value[:8]}_{int(time.time())}"
+            basket_id = f"basket_{int(time.time() / 3600)}"  # Hourly baskets
             
-            # Create trading signal
-            signal = BTCTradingSignal(
-                signal_type=signal_type,
-                price=price,
-                amount=position_size,
-                confidence=confidence,
-                tensor_score=tensor_score,
-                bit_phase=bit_phase,
-                thermal_state=thermal_state,
-                basket_id=basket_id,
-                hash_value=hash_value,
-                mathematical_analysis=mathematical_result
-            )
+            # Create mathematical analysis
+            mathematical_analysis = {
+                'overall_score': overall_score,
+                'tensor_score': tensor_score,
+                'entropy_value': entropy_value,
+                'vwho_score': vwho_score,
+                'qsc_collapse': qsc_collapse,
+                'confidence': confidence,
+                'thermal_mode': thermal_mode,
+                'hash_analysis': mathematical_result.get('hash_analysis', {}),
+                'tick_analysis': mathematical_result.get('tick_analysis', {}),
+            }
             
-            # Store signal
-            self.trading_signals.append(signal)
+            if signal_type != 'hold':
+                return BTCTradingSignal(
+                    signal_type=signal_type,
+                    price=price,
+                    amount=position_size,
+                    confidence=confidence,
+                    tensor_score=tensor_score,
+                    bit_phase=16,  # Default bit phase
+                    thermal_state=thermal_state,
+                    basket_id=basket_id,
+                    hash_value=hash_value,
+                    mathematical_analysis=mathematical_analysis
+                )
             
-            # Keep only recent signals
-            if len(self.trading_signals) > 100:
-                self.trading_signals.pop(0)
-            
-            return signal
+            return None
             
         except Exception as e:
-            logger.error(f"❌ Trading signal generation failed: {e}")
+            self.logger.error(f"❌ Signal generation failed: {e}")
             return None
     
     def _determine_thermal_mode(self, thermal_state: float) -> str:
@@ -571,7 +512,7 @@ class UnifiedBTCTradingPipeline:
             return max(min_size, min(max_size, position_size))
             
         except Exception as e:
-            logger.error(f"❌ Position size calculation failed: {e}")
+            self.logger.error(f"❌ Position size calculation failed: {e}")
             return self.config.base_position_size
     
     def _update_ghost_basket(self, signal: Optional[BTCTradingSignal], 
@@ -621,7 +562,7 @@ class UnifiedBTCTradingPipeline:
             }
             
         except Exception as e:
-            logger.error(f"❌ Ghost basket update failed: {e}")
+            self.logger.error(f"❌ Ghost basket update failed: {e}")
             return {'status': 'error', 'error': str(e)}
     
     def _determine_execution_recommendation(self, signal: Optional[BTCTradingSignal],
@@ -655,7 +596,7 @@ class UnifiedBTCTradingPipeline:
             return signal.signal_type
             
         except Exception as e:
-            logger.error(f"❌ Execution recommendation failed: {e}")
+            self.logger.error(f"❌ Execution recommendation failed: {e}")
             return "error"
     
     def get_pipeline_summary(self) -> Dict[str, Any]:
@@ -672,7 +613,7 @@ class UnifiedBTCTradingPipeline:
                 'backend': _backend
             }
         except Exception as e:
-            logger.error(f"❌ Pipeline summary failed: {e}")
+            self.logger.error(f"❌ Pipeline summary failed: {e}")
             return {'error': str(e)}
     
     def get_ghost_basket_summary(self) -> Dict[str, Any]:
@@ -693,7 +634,7 @@ class UnifiedBTCTradingPipeline:
                 'baskets': basket_summaries
             }
         except Exception as e:
-            logger.error(f"❌ Ghost basket summary failed: {e}")
+            self.logger.error(f"❌ Ghost basket summary failed: {e}")
             return {'error': str(e)}
 
 

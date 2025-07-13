@@ -274,13 +274,11 @@ class TradingAction:
             self.metrics.total_signals += 1
 
             # Process signal using mathematical infrastructure
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                signal_data = np.array([signal.price, signal.volume, signal.confidence])
-                processed_result = self.math_orchestrator.process_data(signal_data)
-                execution_score = float(processed_result)
-            else:
-                # Fallback signal processing
-                execution_score = self._fallback_signal_processing(signal)
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for signal processing")
+            signal_data = np.array([signal.price, signal.volume, signal.confidence])
+            processed_result = self.math_orchestrator.process_data(signal_data)
+            execution_score = float(processed_result)
 
             # Determine market regime
             market_regime = self._determine_market_regime(signal)
@@ -313,86 +311,34 @@ class TradingAction:
 
             signal = self.signals[signal_id]
 
-            # Simulate trade execution
-            execution_success = signal.confidence > self.config['confidence_threshold']
-            
-            if execution_success:
-                self.metrics.successful_trades += 1
-                self.logger.info(f"✅ Trade executed successfully for signal {signal_id}")
-            else:
-                self.metrics.failed_trades += 1
-                self.logger.warning(f"⚠️ Trade execution failed for signal {signal_id}")
-
-            return {
-                'success': execution_success,
-                'signal_id': signal_id,
-                'action_type': signal.action_type.value,
-                'price': signal.price,
-                'volume': signal.volume,
-                'timestamp': time.time()
-            }
+            # Real trade execution logic should be implemented here
+            # For now, fail fast if not implemented
+            raise NotImplementedError("Real trade execution not implemented - requires exchange API integration")
 
         except Exception as e:
             self.logger.error(f"Error executing trade for signal {signal_id}: {e}")
             return {'success': False, 'error': str(e)}
 
     def _determine_market_regime(self, signal: TradingSignal) -> MarketRegime:
-        """Determine market regime based on signal characteristics."""
+        """Determine market regime based on signal characteristics using real math infrastructure."""
         try:
-            # Use mathematical infrastructure for regime detection
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                regime_data = np.array([signal.price, signal.volume, signal.confidence])
-                regime_score = self.math_orchestrator.process_data(regime_data)
-                
-                # Map score to regime
-                if regime_score > 0.8:
-                    return MarketRegime.TRENDING
-                elif regime_score > 0.6:
-                    return MarketRegime.BREAKOUT
-                elif regime_score > 0.4:
-                    return MarketRegime.VOLATILE
-                elif regime_score > 0.2:
-                    return MarketRegime.RANGING
-                else:
-                    return MarketRegime.SIDEWAYS
-            else:
-                # Fallback regime determination
-                return self._fallback_regime_determination(signal)
-
-        except Exception as e:
-            self.logger.error(f"Error determining market regime: {e}")
-            return MarketRegime.SIDEWAYS
-
-    def _fallback_signal_processing(self, signal: TradingSignal) -> float:
-        """Fallback signal processing when math infrastructure is not available."""
-        try:
-            # Simple signal processing based on price, volume, and confidence
-            price_factor = signal.price / 100000  # Normalize price
-            volume_factor = signal.volume / 1000000  # Normalize volume
-            confidence_factor = signal.confidence
-            
-            execution_score = (price_factor + volume_factor) * confidence_factor
-            return float(execution_score)
-        except Exception as e:
-            self.logger.error(f"Error in fallback signal processing: {e}")
-            return 0.0
-
-    def _fallback_regime_determination(self, signal: TradingSignal) -> MarketRegime:
-        """Fallback regime determination when math infrastructure is not available."""
-        try:
-            # Simple regime determination based on signal characteristics
-            if signal.confidence > 0.8:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for regime determination")
+            regime_data = np.array([signal.price, signal.volume, signal.confidence])
+            regime_score = self.math_orchestrator.process_data(regime_data)
+            # Map score to regime
+            if regime_score > 0.8:
                 return MarketRegime.TRENDING
-            elif signal.confidence > 0.6:
+            elif regime_score > 0.6:
                 return MarketRegime.BREAKOUT
-            elif signal.volume > 500000:  # High volume
+            elif regime_score > 0.4:
                 return MarketRegime.VOLATILE
-            elif signal.confidence > 0.4:
+            elif regime_score > 0.2:
                 return MarketRegime.RANGING
             else:
                 return MarketRegime.SIDEWAYS
         except Exception as e:
-            self.logger.error(f"Error in fallback regime determination: {e}")
+            self.logger.error(f"Error determining market regime: {e}")
             return MarketRegime.SIDEWAYS
 
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
@@ -400,19 +346,13 @@ class TradingAction:
         try:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
-            
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use mathematical orchestration for trading analysis
-                    result = self.math_orchestrator.process_data(data)
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for result calculation")
+            if len(data) > 0:
+                result = self.math_orchestrator.process_data(data)
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
             return 0.0

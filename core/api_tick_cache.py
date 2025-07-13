@@ -838,6 +838,30 @@ class APITickCache:
             self.logger.error(f"Mathematical calculation error: {e}")
             return 0.0
 
+    def _calculate_mathematical_score(self, data: Dict[str, Any]) -> float:
+        """Calculate mathematical score from cached data."""
+        try:
+            # Extract relevant data for mathematical computation
+            price = data.get('price', 0.0)
+            volume = data.get('volume', 0.0)
+            timestamp = data.get('timestamp', 0.0)
+            
+            # Real mathematical computation based on price and volume
+            if price > 0 and volume > 0:
+                # Calculate volatility-based score
+                price_volatility = abs(price - self._get_average_price()) / price
+                volume_ratio = volume / self._get_average_volume()
+                
+                # Combine into mathematical score
+                mathematical_score = (price_volatility * 0.6 + volume_ratio * 0.4)
+                return min(max(mathematical_score, 0.0), 1.0)
+            else:
+                return 0.0
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating mathematical score: {e}")
+            raise
+
 
 # Singleton instance for global access
 tick_cache = APITickCache()

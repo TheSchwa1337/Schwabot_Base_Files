@@ -416,6 +416,165 @@ class EntropyDriftEngine:
             self.logger.error(f"Error predicting cross-asset movement: {e}")
             return 0.0, 0
 
+    def _calculate_entropy_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real entropy score from market data."""
+        try:
+            prices = market_data.get('prices', [])
+            volumes = market_data.get('volumes', [])
+            
+            if not prices or len(prices) < 2:
+                return 0.0
+            
+            # Real entropy calculation using Shannon entropy
+            price_changes = np.diff(prices)
+            
+            # Discretize price changes for entropy calculation
+            if len(price_changes) > 1:
+                bins = np.histogram(price_changes, bins=min(10, len(price_changes)//2))[0]
+                probs = bins / np.sum(bins)
+                
+                # Calculate Shannon entropy
+                entropy = -np.sum(probs * np.log(probs + 1e-8))
+                
+                # Normalize entropy score
+                max_entropy = np.log(len(probs))
+                if max_entropy > 0:
+                    return min(entropy / max_entropy, 1.0)
+            
+            return 0.0
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating entropy score: {e}")
+            raise
+
+    def _calculate_drift_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real drift score from market data."""
+        try:
+            prices = market_data.get('prices', [])
+            
+            if not prices or len(prices) < 2:
+                return 0.0
+            
+            # Real drift calculation
+            price_array = np.array(prices)
+            
+            # Calculate linear trend
+            x = np.arange(len(price_array))
+            slope, intercept = np.polyfit(x, price_array, 1)
+            
+            # Calculate drift magnitude
+            drift_magnitude = abs(slope) / (np.mean(price_array) + 1e-8)
+            
+            # Normalize drift score
+            return min(drift_magnitude, 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating drift score: {e}")
+            raise
+
+    def _calculate_volatility_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real volatility score from market data."""
+        try:
+            prices = market_data.get('prices', [])
+            
+            if not prices or len(prices) < 2:
+                return 0.0
+            
+            # Real volatility calculation
+            price_array = np.array(prices)
+            returns = np.diff(price_array) / price_array[:-1]
+            
+            # Calculate volatility
+            volatility = np.std(returns)
+            
+            # Normalize volatility score
+            return min(volatility * 10, 1.0)  # Scale factor for normalization
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating volatility score: {e}")
+            raise
+
+    def _calculate_momentum_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real momentum score from market data."""
+        try:
+            prices = market_data.get('prices', [])
+            
+            if not prices or len(prices) < 2:
+                return 0.0
+            
+            # Real momentum calculation
+            price_array = np.array(prices)
+            
+            # Calculate momentum as rate of change
+            momentum = (price_array[-1] - price_array[0]) / (price_array[0] + 1e-8)
+            
+            # Normalize momentum score
+            return min(max(momentum, 0.0), 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating momentum score: {e}")
+            raise
+
+    def _calculate_correlation_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real correlation score from market data."""
+        try:
+            prices = market_data.get('prices', [])
+            volumes = market_data.get('volumes', [])
+            
+            if not prices or not volumes or len(prices) != len(volumes):
+                return 0.0
+            
+            # Real correlation calculation
+            price_array = np.array(prices)
+            volume_array = np.array(volumes)
+            
+            # Calculate correlation coefficient
+            correlation = np.corrcoef(price_array, volume_array)[0, 1]
+            
+            # Handle NaN values
+            if np.isnan(correlation):
+                return 0.0
+            
+            # Normalize correlation score
+            return min(max(abs(correlation), 0.0), 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating correlation score: {e}")
+            raise
+
+    def _calculate_performance_score(self, market_data: Dict[str, Any]) -> float:
+        """Calculate real performance score from market data."""
+        try:
+            # Combine all scores for overall performance
+            entropy_score = self._calculate_entropy_score(market_data)
+            drift_score = self._calculate_drift_score(market_data)
+            volatility_score = self._calculate_volatility_score(market_data)
+            momentum_score = self._calculate_momentum_score(market_data)
+            correlation_score = self._calculate_correlation_score(market_data)
+            
+            # Weighted combination of scores
+            weights = {
+                'entropy': 0.25,
+                'drift': 0.20,
+                'volatility': 0.20,
+                'momentum': 0.20,
+                'correlation': 0.15
+            }
+            
+            performance_score = (
+                entropy_score * weights['entropy'] +
+                drift_score * weights['drift'] +
+                volatility_score * weights['volatility'] +
+                momentum_score * weights['momentum'] +
+                correlation_score * weights['correlation']
+            )
+            
+            return min(max(performance_score, 0.0), 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating performance score: {e}")
+            raise
+
 # Factory function
 def create_entropy_drift_engine(config: Optional[Dict[str, Any]] = None) -> EntropyDriftEngine:
     """Create an entropy drift engine instance."""

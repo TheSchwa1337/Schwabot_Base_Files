@@ -292,21 +292,20 @@ class SpeedLatticeTradingIntegrator:
     def hash_tick(self, tick_data: Dict[str, Any]) -> str:
         """Hash tick data for lattice processing."""
         try:
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for tick hashing")
+            
             # Create a hashable representation of tick data
             tick_string = f"{tick_data.get('price', 0)}_{tick_data.get('volume', 0)}_{tick_data.get('timestamp', 0)}"
             
-            # Generate hash using mathematical infrastructure if available
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                data = np.array([float(tick_data.get('price', 0)), float(tick_data.get('volume', 0))])
-                hash_value = self.math_orchestrator.process_data(data)
-                return str(hash_value)
-            else:
-                # Fallback to standard hashing
-                return hashlib.md5(tick_string.encode()).hexdigest()
+            # Generate hash using mathematical infrastructure
+            data = np.array([float(tick_data.get('price', 0)), float(tick_data.get('volume', 0))])
+            hash_value = self.math_orchestrator.process_data(data)
+            return str(hash_value)
                 
         except Exception as e:
             self.logger.error(f"Error hashing tick: {e}")
-            return hashlib.md5(str(tick_data).encode()).hexdigest()
+            raise
 
     def register_strategy(self, strategy_name: str, strategy_type: StrategyType, 
                          parameters: Dict[str, Any], priority: int = 1) -> bool:
@@ -335,6 +334,9 @@ class SpeedLatticeTradingIntegrator:
             if not self.active:
                 return {'success': False, 'error': 'System not active'}
 
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for strategy execution")
+
             # Hash the tick data
             tick_hash = self.hash_tick(tick_data)
             
@@ -361,13 +363,12 @@ class SpeedLatticeTradingIntegrator:
                          tick_hash: str) -> Dict[str, Any]:
         """Execute a single strategy."""
         try:
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for strategy execution")
+            
             # Use mathematical infrastructure for strategy execution
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                data = np.array([float(tick_data.get('price', 0)), float(tick_data.get('volume', 0))])
-                result = self.math_orchestrator.process_data(data)
-            else:
-                # Fallback strategy execution
-                result = self._fallback_strategy_execution(strategy, tick_data)
+            data = np.array([float(tick_data.get('price', 0)), float(tick_data.get('volume', 0))])
+            result = self.math_orchestrator.process_data(data)
 
             return {
                 'strategy_name': strategy.name,
@@ -387,41 +388,24 @@ class SpeedLatticeTradingIntegrator:
                 'timestamp': time.time()
             }
 
-    def _fallback_strategy_execution(self, strategy: TradingStrategy, tick_data: Dict[str, Any]) -> float:
-        """Fallback strategy execution when math infrastructure is not available."""
-        price = float(tick_data.get('price', 0))
-        volume = float(tick_data.get('volume', 0))
-        
-        if strategy.strategy_type == StrategyType.MOMENTUM:
-            return price * volume / 1000000  # Simple momentum calculation
-        elif strategy.strategy_type == StrategyType.MEAN_REVERSION:
-            return 1.0 - (price / 100000)  # Simple mean reversion
-        elif strategy.strategy_type == StrategyType.ARBITRAGE:
-            return volume / 1000000  # Simple arbitrage signal
-        else:
-            return (price + volume) / 2000000  # Default calculation
-
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and speed lattice integration."""
         try:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use mathematical orchestration for speed lattice analysis
-                    result = self.math_orchestrator.process_data(data)
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for calculation")
+            
+            if len(data) > 0:
+                # Use mathematical orchestration for speed lattice analysis
+                result = self.math_orchestrator.process_data(data)
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
+            raise
 
     def _update_metrics(self) -> None:
         """Update speed lattice metrics."""

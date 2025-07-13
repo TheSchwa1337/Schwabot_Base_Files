@@ -461,35 +461,16 @@ class StrategyExecutor:
             logger.error(f"Error in enhanced strategy execution loop: {e}")
 
     async def _generate_market_data(self) -> Dict[str, Any]:
-        """Generate or fetch market data for analysis."""
+        """Fetch real market data for analysis."""
         try:
-            # Simulate market data for testing
-            # In production, this would fetch from real market data sources
-            current_time = time.time()
-            base_price = 50000.0
-            price_variation = np.sin(current_time * 0.001) * 1000
-            current_price = base_price + price_variation
+            # Real market data should be fetched here
+            # This would integrate with actual market data sources (e.g., CCXT, Alpha Vantage, etc.)
+            # For now, fail fast if not implemented
+            raise NotImplementedError("Real market data fetching not implemented - requires market data API integration")
             
-            return {
-                "symbol": "BTC/USDC",
-                "price": current_price,
-                "volume": 1000.0 + np.random.normal(0, 100),
-                "volatility": 0.02 + np.random.normal(0, 0.005),
-                "timestamp": current_time,
-                "prices": [current_price - 100, current_price - 50, current_price],
-                "volumes": [950, 975, 1000]
-            }
         except Exception as e:
-            logger.error(f"Error generating market data: {e}")
-            return {
-                "symbol": "BTC/USDC",
-                "price": 50000.0,
-                "volume": 1000.0,
-                "volatility": 0.02,
-                "timestamp": time.time(),
-                "prices": [50000.0],
-                "volumes": [1000.0]
-            }
+            logger.error(f"Error fetching market data: {e}")
+            raise
 
     async def _process_enhanced_strategies(self, market_data: Dict[str, Any], 
                                          unified_signals: List[EnhancedTradingSignal]):
@@ -501,11 +482,9 @@ class StrategyExecutor:
                     logger.info(f"🔗 Processing unified signal: {signal.action} {signal.symbol} "
                               f"(confidence: {signal.confidence:.3f})")
                     
-                    # Simulate trade execution
-                    trade_result = await self._simulate_trade_execution(signal)
-                    
-                    # Update profit vectors with trade result
-                    await self.update_profit_vectors(trade_result)
+                    # Real trade execution should be implemented here
+                    # For now, fail fast if not implemented
+                    raise NotImplementedError("Real trade execution not implemented - requires exchange API integration")
             
             # Process individual strategies
             for strategy_name, strategy in self.active_strategies.items():
@@ -525,31 +504,16 @@ class StrategyExecutor:
             logger.error(f"Error in enhanced strategy processing: {e}")
 
     async def _simulate_trade_execution(self, signal: EnhancedTradingSignal) -> Dict[str, Any]:
-        """Simulate trade execution for testing purposes."""
+        """Execute trade using real exchange integration."""
         try:
-            # Simulate trade result
-            profit = np.random.normal(0.02, 0.01)  # 2% average profit with 1% std
-            drawdown = abs(np.random.normal(0.01, 0.005))  # 1% average drawdown
-            
-            trade_result = {
-                "symbol": signal.symbol,
-                "action": signal.action,
-                "entry_price": signal.entry_price,
-                "amount": signal.amount,
-                "profit": profit,
-                "drawdown": drawdown,
-                "volatility": signal.volatility,
-                "strategy_id": signal.strategy_id,
-                "exit_type": "simulated",
-                "risk_profile": "medium",
-                "timestamp": time.time()
-            }
-            
-            return trade_result
+            # Real trade execution should be implemented here
+            # This would integrate with actual exchange APIs
+            # For now, fail fast if not implemented
+            raise NotImplementedError("Real trade execution not implemented - requires exchange API integration")
             
         except Exception as e:
-            logger.error(f"Error simulating trade execution: {e}")
-            return {"error": str(e)}
+            logger.error(f"Error executing trade: {e}")
+            raise
 
     async def _process_strategies(self):
         """Process all active strategies (legacy method for compatibility)."""

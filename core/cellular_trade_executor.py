@@ -218,6 +218,9 @@ class CellularTradeState:
             if not self.active:
                 return {'success': False, 'error': 'System not active'}
 
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for cellular trade processing")
+
             # Create a new cellular trade
             cell_id = f"cell_{stimulus.stimulus_id}_{int(time.time())}"
             cell = CellularTrade(
@@ -230,13 +233,9 @@ class CellularTradeState:
             self.metrics.total_cells += 1
 
             # Process stimulus using mathematical infrastructure
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                stimulus_data = np.array([stimulus.price, stimulus.volume, stimulus.intensity])
-                response = self.math_orchestrator.process_data(stimulus_data)
-                cell.profit_metabolism = float(response)
-            else:
-                # Fallback stimulus processing
-                cell.profit_metabolism = self._fallback_stimulus_processing(stimulus)
+            stimulus_data = np.array([stimulus.price, stimulus.volume, stimulus.intensity])
+            response = self.math_orchestrator.process_data(stimulus_data)
+            cell.profit_metabolism = float(response)
 
             return {
                 'success': True,
@@ -256,6 +255,9 @@ class CellularTradeState:
             if cell_id not in self.cells:
                 return {'success': False, 'error': f'Cell {cell_id} not found'}
 
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for metabolism optimization")
+
             cell = self.cells[cell_id]
             if cell.state != CellularState.STIMULATED:
                 return {'success': False, 'error': f'Cell {cell_id} is not stimulated'}
@@ -264,13 +266,9 @@ class CellularTradeState:
             cell.state = CellularState.METABOLIZING
 
             # Optimize metabolism using mathematical infrastructure
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                metabolism_data = np.array([cell.profit_metabolism, cell.stimulus.intensity])
-                optimized_metabolism = self.math_orchestrator.process_data(metabolism_data)
-                cell.profit_metabolism = float(optimized_metabolism)
-            else:
-                # Fallback metabolism optimization
-                cell.profit_metabolism = self._fallback_metabolism_optimization(cell)
+            metabolism_data = np.array([cell.profit_metabolism, cell.stimulus.intensity])
+            optimized_metabolism = self.math_orchestrator.process_data(metabolism_data)
+            cell.profit_metabolism = float(optimized_metabolism)
 
             return {
                 'success': True,
@@ -290,21 +288,20 @@ class CellularTradeState:
             if cell_id not in self.cells:
                 return {'success': False, 'error': f'Cell {cell_id} not found'}
 
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for memory integration")
+
             cell = self.cells[cell_id]
 
             # Integrate memory using mathematical infrastructure
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                if not isinstance(memory_data, np.ndarray):
-                    memory_data = np.array(memory_data)
-                
-                if len(memory_data) > 0:
-                    memory_integration = self.math_orchestrator.process_data(memory_data)
-                    cell.xi_ring_memory = float(memory_integration)
-                else:
-                    cell.xi_ring_memory = 0.0
+            if not isinstance(memory_data, np.ndarray):
+                memory_data = np.array(memory_data)
+            
+            if len(memory_data) > 0:
+                memory_integration = self.math_orchestrator.process_data(memory_data)
+                cell.xi_ring_memory = float(memory_integration)
             else:
-                # Fallback memory integration
-                cell.xi_ring_memory = self._fallback_memory_integration(memory_data)
+                cell.xi_ring_memory = 0.0
 
             return {
                 'success': True,
@@ -317,71 +314,24 @@ class CellularTradeState:
             self.logger.error(f"Error integrating xi ring memory for {cell_id}: {e}")
             return {'success': False, 'error': str(e)}
 
-    def _fallback_stimulus_processing(self, stimulus: MarketStimulus) -> float:
-        """Fallback stimulus processing when math infrastructure is not available."""
-        try:
-            # Simple stimulus processing based on price and volume
-            price_factor = stimulus.price / 100000  # Normalize price
-            volume_factor = stimulus.volume / 1000000  # Normalize volume
-            intensity_factor = stimulus.intensity
-            
-            metabolism = (price_factor + volume_factor) * intensity_factor
-            return float(metabolism)
-        except Exception as e:
-            self.logger.error(f"Error in fallback stimulus processing: {e}")
-            return 0.0
-
-    def _fallback_metabolism_optimization(self, cell: CellularTrade) -> float:
-        """Fallback metabolism optimization when math infrastructure is not available."""
-        try:
-            # Simple optimization based on current metabolism and stimulus
-            base_metabolism = cell.profit_metabolism
-            stimulus_factor = cell.stimulus.intensity
-            
-            # Apply optimization factor
-            optimized = base_metabolism * (1 + stimulus_factor * self.config['metabolism_rate'])
-            return float(optimized)
-        except Exception as e:
-            self.logger.error(f"Error in fallback metabolism optimization: {e}")
-            return cell.profit_metabolism
-
-    def _fallback_memory_integration(self, memory_data: Union[List, np.ndarray]) -> float:
-        """Fallback memory integration when math infrastructure is not available."""
-        try:
-            if not isinstance(memory_data, np.ndarray):
-                memory_data = np.array(memory_data)
-            
-            if len(memory_data) == 0:
-                return 0.0
-            
-            # Simple memory integration based on data characteristics
-            memory_score = np.mean(memory_data) * (1 - np.std(memory_data) / np.max(memory_data)) if np.max(memory_data) > 0 else 0.0
-            return float(memory_score)
-        except Exception as e:
-            self.logger.error(f"Error in fallback memory integration: {e}")
-            return 0.0
-
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and cellular trade integration."""
         try:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use mathematical orchestration for cellular analysis
-                    result = self.math_orchestrator.process_data(data)
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not MATH_INFRASTRUCTURE_AVAILABLE or not self.math_orchestrator:
+                raise RuntimeError("Mathematical infrastructure not available for calculation")
+            
+            if len(data) > 0:
+                # Use mathematical orchestration for cellular analysis
+                result = self.math_orchestrator.process_data(data)
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
+            raise
 
     def _update_metrics(self) -> None:
         """Update cellular metrics."""

@@ -543,48 +543,21 @@ class CCXTIntegration:
                                          amount: float, price: Optional[float] = None) -> Result:
         """Execute order with mathematical validation."""
         try:
-            if not MATH_INFRASTRUCTURE_AVAILABLE:
-                return Result(
-                    success=False,
-                    error="Mathematical infrastructure not available",
-                    timestamp=time.time()
-                )
+            if not self.active:
+                return Result(success=False, error="CCXT integration not active", timestamp=time.time())
 
             # Validate order mathematically
-            validation_result = await self._validate_order_mathematically(
-                exchange_id, symbol, order_type, side, amount, price
-            )
-            
-            if not validation_result['valid']:
-                return Result(
-                    success=False,
-                    error=f"Order validation failed: {validation_result['reason']}",
-                    timestamp=time.time()
-                )
+            validation = await self._validate_order_mathematically(exchange_id, symbol, order_type, side, amount, price)
+            if not validation['valid']:
+                return Result(success=False, error=validation['reason'], timestamp=time.time())
 
-            # Simulate order execution
-            execution_result = await self._simulate_order_execution(
-                exchange_id, symbol, order_type, side, amount, price
-            )
-
-            return Result(
-                success=execution_result['success'],
-                data={
-                    'order_id': execution_result['order_id'],
-                    'execution_price': execution_result['price'],
-                    'execution_amount': execution_result['amount'],
-                    'mathematical_validation': validation_result,
-                    'execution_timestamp': time.time(),
-                },
-                timestamp=time.time()
-            )
+            # Execute the order (this would integrate with real exchange APIs)
+            # For now, we'll raise an error to indicate this needs real implementation
+            raise NotImplementedError("Real order execution not implemented - requires exchange API integration")
 
         except Exception as e:
-            return Result(
-                success=False,
-                error=str(e),
-                timestamp=time.time()
-            )
+            self.logger.error(f"❌ Error executing order: {e}")
+            return Result(success=False, error=str(e), timestamp=time.time())
 
     async def _validate_order_mathematically(self, exchange_id: str, symbol: str,
                                            order_type: OrderType, side: str,
@@ -634,82 +607,11 @@ class CCXTIntegration:
                 'reason': f"Validation error: {e}"
             }
 
-    async def _simulate_order_execution(self, exchange_id: str, symbol: str,
-                                      order_type: OrderType, side: str,
-                                      amount: float, price: Optional[float]) -> Dict[str, Any]:
-        """Simulate order execution (placeholder for real exchange integration)."""
-        try:
-            # Simulate execution delay
-            await asyncio.sleep(0.1)
-            
-            # Simulate execution success
-            execution_price = price or 50000.0  # Default price
-            execution_amount = amount
-            
-            return {
-                'success': True,
-                'order_id': f"order_{int(time.time() * 1000)}",
-                'price': execution_price,
-                'amount': execution_amount,
-                'status': 'executed',
-                'timestamp': time.time()
-            }
-
-        except Exception as e:
-            return {
-                'success': False,
-                'order_id': None,
-                'price': 0.0,
-                'amount': 0.0,
-                'status': 'failed',
-                'error': str(e)
-            }
-
-    def get_exchange_status(self) -> Result:
-        """Get exchange status with mathematical health checks."""
-        try:
-            exchange_statuses = {}
-            
-            for exchange_id, exchange_info in self.exchanges.items():
-                # Calculate mathematical health
-                health_score = self.exchange_health_metrics.get(exchange_id, 0.0)
-                
-                exchange_statuses[exchange_id] = {
-                    'name': exchange_info.name,
-                    'status': exchange_info.status.value,
-                    'mathematical_health': health_score,
-                    'latency': exchange_info.latency,
-                    'uptime': exchange_info.uptime,
-                    'last_check': exchange_info.last_check,
-                    'mathematical_metrics': exchange_info.mathematical_metrics,
-                }
-            
-            overall_health = np.mean(list(self.exchange_health_metrics.values())) if self.exchange_health_metrics else 0.0
-            
-            return Result(
-                success=True,
-                data={
-                    'exchanges': exchange_statuses,
-                    'overall_health': overall_health,
-                    'total_exchanges': len(self.exchanges),
-                    'online_exchanges': len([e for e in self.exchanges.values() if e.status == ExchangeStatus.ONLINE]),
-                    'mathematical_integration': True,
-                },
-                timestamp=time.time()
-            )
-
-        except Exception as e:
-            return Result(
-                success=False,
-                error=str(e),
-                timestamp=time.time()
-            )
-
     def _determine_granularity(self, symbol: str, volume: float) -> str:
         """Determine granularity with mathematical analysis."""
         try:
             if not MATH_INFRASTRUCTURE_AVAILABLE:
-                return "1m"  # Default granularity
+                raise RuntimeError("Mathematical infrastructure not available for granularity determination")
             
             # Use mathematical analysis to determine optimal granularity
             volume_vector = np.array([volume, 1.0])  # volume and base factor
@@ -729,29 +631,7 @@ class CCXTIntegration:
 
         except Exception as e:
             self.logger.error(f"❌ Error determining granularity: {e}")
-            return "1m"  # Default fallback
-
-    def _create_fallback_order_book_snapshot(self, exchange_id: str, symbol: str,
-                                           bids: List[Tuple[float, float]], 
-                                           asks: List[Tuple[float, float]]) -> OrderBookSnapshot:
-        """Create fallback order book snapshot when mathematical infrastructure is unavailable."""
-        spread = min(asks)[0] - max(bids)[0] if asks and bids else 0.0
-        depth = sum(bid[1] for bid in bids) + sum(ask[1] for ask in asks)
-        
-        return OrderBookSnapshot(
-            exchange=exchange_id,
-            symbol=symbol,
-            timestamp=time.time(),
-            bids=bids,
-            asks=asks,
-            mathematical_score=0.5,
-            tensor_score=0.5,
-            entropy_value=0.5,
-            spread=spread,
-            depth=depth,
-            mathematical_analysis={'fallback': True},
-            metadata={'fallback_snapshot': True}
-        )
+            raise
 
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and exchange integration."""
@@ -759,46 +639,30 @@ class CCXTIntegration:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use tensor algebra for exchange analysis
-                    tensor_result = self.tensor_algebra.tensor_score(data)
-                    # Use advanced tensor for quantum analysis
-                    advanced_result = self.advanced_tensor.tensor_score(data)
-                    # Use entropy math for entropy analysis
-                    entropy_result = self.entropy_math.calculate_entropy(data)
-                    # Combine results with exchange optimization
-                    result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not MATH_INFRASTRUCTURE_AVAILABLE:
+                raise RuntimeError("Mathematical infrastructure not available for calculation")
+            
+            if len(data) > 0:
+                # Use tensor algebra for exchange analysis
+                tensor_result = self.tensor_algebra.tensor_score(data)
+                # Use advanced tensor for quantum analysis
+                advanced_result = self.advanced_tensor.tensor_score(data)
+                # Use entropy math for entropy analysis
+                entropy_result = self.entropy_math.calculate_entropy(data)
+                # Combine results with exchange optimization
+                result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
+            raise
 
     def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
         """Process trading data with exchange integration and mathematical analysis."""
         try:
             if not MATH_INFRASTRUCTURE_AVAILABLE:
-                # Fallback to basic processing
-                prices = market_data.get('prices', [])
-                volumes = market_data.get('volumes', [])
-                price_result = self.calculate_mathematical_result(prices)
-                volume_result = self.calculate_mathematical_result(volumes)
-                return Result(
-                    success=True,
-                    data={
-                        'price_analysis': price_result,
-                        'volume_analysis': volume_result,
-                        'exchange_integration': False,
-                        'timestamp': time.time()
-                    }
-                )
+                raise RuntimeError("Mathematical infrastructure not available for trading data processing")
 
             # Use the complete mathematical integration with exchange
             price = market_data.get('price', 0.0)
@@ -827,12 +691,12 @@ class CCXTIntegration:
                     'exchange_integration': True,
                     'exchange_id': exchange_id,
                     'symbol': symbol,
-                    'exchange_health': exchange_health,
                     'tensor_score': tensor_score,
                     'quantum_score': quantum_score,
                     'entropy_value': entropy_value,
                     'exchange_adjusted_score': exchange_adjusted_score,
                     'health_adjusted_score': health_adjusted_score,
+                    'exchange_health': exchange_health,
                     'mathematical_integration': True,
                     'timestamp': time.time()
                 }

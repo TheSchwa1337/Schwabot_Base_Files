@@ -320,14 +320,13 @@ class BacktestConfig:
         """Run backtest with mathematical strategy validation."""
         try:
             if not MATH_INFRASTRUCTURE_AVAILABLE:
-                self.logger.warning("Mathematical infrastructure not available, using fallback")
-                return self._create_fallback_backtest_result(strategy_name, asset_pair, start_date, end_date)
+                raise RuntimeError("Mathematical infrastructure not available for backtesting")
 
             backtest_id = f"backtest_{int(time.time() * 1000)}"
             
             # Get historical data
             if asset_pair not in self.historical_data:
-                return self._create_fallback_backtest_result(strategy_name, asset_pair, start_date, end_date)
+                raise ValueError(f"No historical data available for asset pair: {asset_pair}")
             
             historical_data = self.historical_data[asset_pair]
             
@@ -376,7 +375,7 @@ class BacktestConfig:
 
         except Exception as e:
             self.logger.error(f"❌ Error running backtest: {e}")
-            return self._create_fallback_backtest_result(strategy_name, asset_pair, start_date, end_date)
+            raise
 
     async def _analyze_strategy_mathematically(self, strategy_name: str, 
                                              historical_data: Dict[str, Any], 
@@ -648,25 +647,209 @@ class BacktestConfig:
         except Exception as e:
             self.logger.error(f"❌ Error updating performance metrics: {e}")
 
-    def _create_fallback_backtest_result(self, strategy_name: str, asset_pair: str, 
-                                       start_date: str, end_date: str) -> BacktestResult:
-        """Create fallback backtest result when mathematical infrastructure is unavailable."""
-        return BacktestResult(
-            backtest_id=f"fallback_{int(time.time() * 1000)}",
-            strategy_name=strategy_name,
-            start_date=start_date,
-            end_date=end_date,
-            total_return=0.05,  # 5% return
-            sharpe_ratio=1.0,
-            max_drawdown=-0.1,  # 10% drawdown
-            win_rate=0.6,
-            mathematical_score=0.5,
-            tensor_score=0.5,
-            entropy_value=0.5,
-            mathematical_metrics={'fallback': True},
-            performance_metrics={'fallback': True},
-            strategy_validation={'fallback': True}
-        )
+    def _create_backtest_result_with_mathematical_analysis(self, strategy_name: str, asset_pair: str, 
+                                       start_date: str, end_date: str, historical_data: Dict[str, Any]) -> BacktestResult:
+        """Create backtest result using real mathematical analysis."""
+        try:
+            if not MATH_INFRASTRUCTURE_AVAILABLE:
+                raise RuntimeError("Mathematical infrastructure not available for backtest analysis")
+            
+            # Extract price and volume data for analysis
+            prices = historical_data.get('prices', [])
+            volumes = historical_data.get('volumes', [])
+            
+            if not prices or len(prices) < 2:
+                raise ValueError("Insufficient historical data for backtest analysis")
+            
+            # Convert to numpy arrays
+            price_array = np.array(prices)
+            volume_array = np.array(volumes)
+            
+            # Calculate real performance metrics
+            returns = np.diff(price_array) / price_array[:-1]
+            total_return = (price_array[-1] / price_array[0] - 1) if price_array[0] > 0 else 0.0
+            sharpe_ratio = np.mean(returns) / np.std(returns) if np.std(returns) > 0 else 0.0
+            max_drawdown = self._calculate_max_drawdown(price_array)
+            win_rate = np.sum(returns > 0) / len(returns) if len(returns) > 0 else 0.0
+            
+            # Use mathematical modules for analysis
+            mathematical_score = self.tensor_algebra.tensor_score(price_array)
+            tensor_score = self.advanced_tensor.tensor_score(volume_array)
+            entropy_value = self.entropy_math.calculate_entropy(returns)
+            
+            # Calculate mathematical metrics
+            mathematical_metrics = {
+                'price_volatility': np.std(returns),
+                'volume_correlation': np.corrcoef(price_array, volume_array)[0, 1] if len(price_array) == len(volume_array) else 0.0,
+                'momentum_score': self._calculate_momentum_score(price_array),
+                'mean_reversion_score': self._calculate_mean_reversion_score(price_array),
+                'volatility_clustering': self._calculate_volatility_clustering(returns),
+                'mathematical_analysis': True
+            }
+            
+            # Calculate performance metrics
+            performance_metrics = {
+                'sortino_ratio': self._calculate_sortino_ratio(returns),
+                'calmar_ratio': total_return / abs(max_drawdown) if max_drawdown != 0 else 0.0,
+                'profit_factor': self._calculate_profit_factor(returns),
+                'max_consecutive_losses': self._calculate_max_consecutive_losses(returns),
+                'performance_analysis': True
+            }
+            
+            # Validate strategy mathematically
+            strategy_validation = {
+                'validation_score': (mathematical_score + tensor_score + (1 - entropy_value)) / 3.0,
+                'risk_adjusted_return': total_return / (np.std(returns) + 1e-8),
+                'strategy_stability': 1.0 - entropy_value,
+                'mathematical_consistency': mathematical_score,
+                'tensor_reliability': tensor_score,
+                'strategy_validation': True
+            }
+            
+            return BacktestResult(
+                backtest_id=f"backtest_{int(time.time() * 1000)}",
+                strategy_name=strategy_name,
+                start_date=start_date,
+                end_date=end_date,
+                total_return=total_return,
+                sharpe_ratio=sharpe_ratio,
+                max_drawdown=max_drawdown,
+                win_rate=win_rate,
+                mathematical_score=mathematical_score,
+                tensor_score=tensor_score,
+                entropy_value=entropy_value,
+                mathematical_metrics=mathematical_metrics,
+                performance_metrics=performance_metrics,
+                strategy_validation=strategy_validation
+            )
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error creating backtest result: {e}")
+            raise
+
+    def _calculate_max_drawdown(self, prices: np.ndarray) -> float:
+        """Calculate maximum drawdown from price series."""
+        try:
+            peak = prices[0]
+            max_dd = 0.0
+            
+            for price in prices:
+                if price > peak:
+                    peak = price
+                dd = (peak - price) / peak if peak > 0 else 0.0
+                max_dd = max(max_dd, dd)
+            
+            return -max_dd  # Return negative value
+        except Exception as e:
+            self.logger.error(f"Error calculating max drawdown: {e}")
+            return 0.0
+
+    def _calculate_momentum_score(self, prices: np.ndarray) -> float:
+        """Calculate momentum score from price series."""
+        try:
+            if len(prices) < 2:
+                return 0.0
+            
+            # Calculate momentum as rate of change
+            momentum = (prices[-1] - prices[0]) / (prices[0] + 1e-8)
+            return min(max(momentum, 0.0), 1.0)
+        except Exception as e:
+            self.logger.error(f"Error calculating momentum score: {e}")
+            return 0.0
+
+    def _calculate_mean_reversion_score(self, prices: np.ndarray) -> float:
+        """Calculate mean reversion score from price series."""
+        try:
+            if len(prices) < 3:
+                return 0.0
+            
+            # Calculate mean reversion as deviation from trend
+            x = np.arange(len(prices))
+            slope, intercept = np.polyfit(x, prices, 1)
+            trend = slope * x + intercept
+            
+            # Calculate deviation from trend
+            deviation = np.mean(np.abs(prices - trend)) / (np.mean(prices) + 1e-8)
+            return min(deviation, 1.0)
+        except Exception as e:
+            self.logger.error(f"Error calculating mean reversion score: {e}")
+            return 0.0
+
+    def _calculate_volatility_clustering(self, returns: np.ndarray) -> float:
+        """Calculate volatility clustering score."""
+        try:
+            if len(returns) < 4:
+                return 0.0
+            
+            # Calculate rolling volatility
+            window = min(10, len(returns) // 2)
+            rolling_vol = [np.std(returns[i:i+window]) for i in range(len(returns) - window + 1)]
+            
+            # Calculate autocorrelation of volatility
+            if len(rolling_vol) > 1:
+                autocorr = np.corrcoef(rolling_vol[:-1], rolling_vol[1:])[0, 1]
+                return min(max(autocorr, 0.0), 1.0) if not np.isnan(autocorr) else 0.0
+            else:
+                return 0.0
+        except Exception as e:
+            self.logger.error(f"Error calculating volatility clustering: {e}")
+            return 0.0
+
+    def _calculate_sortino_ratio(self, returns: np.ndarray) -> float:
+        """Calculate Sortino ratio."""
+        try:
+            if len(returns) == 0:
+                return 0.0
+            
+            mean_return = np.mean(returns)
+            downside_returns = returns[returns < 0]
+            
+            if len(downside_returns) == 0:
+                return mean_return if mean_return > 0 else 0.0
+            
+            downside_deviation = np.std(downside_returns)
+            return mean_return / downside_deviation if downside_deviation > 0 else 0.0
+        except Exception as e:
+            self.logger.error(f"Error calculating Sortino ratio: {e}")
+            return 0.0
+
+    def _calculate_profit_factor(self, returns: np.ndarray) -> float:
+        """Calculate profit factor."""
+        try:
+            if len(returns) == 0:
+                return 0.0
+            
+            positive_returns = returns[returns > 0]
+            negative_returns = returns[returns < 0]
+            
+            gross_profit = np.sum(positive_returns) if len(positive_returns) > 0 else 0.0
+            gross_loss = abs(np.sum(negative_returns)) if len(negative_returns) > 0 else 1e-8
+            
+            return gross_profit / gross_loss
+        except Exception as e:
+            self.logger.error(f"Error calculating profit factor: {e}")
+            return 0.0
+
+    def _calculate_max_consecutive_losses(self, returns: np.ndarray) -> int:
+        """Calculate maximum consecutive losses."""
+        try:
+            if len(returns) == 0:
+                return 0
+            
+            max_consecutive = 0
+            current_consecutive = 0
+            
+            for ret in returns:
+                if ret < 0:
+                    current_consecutive += 1
+                    max_consecutive = max(max_consecutive, current_consecutive)
+                else:
+                    current_consecutive = 0
+            
+            return max_consecutive
+        except Exception as e:
+            self.logger.error(f"Error calculating max consecutive losses: {e}")
+            return 0
 
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and backtesting integration."""
@@ -674,46 +857,30 @@ class BacktestConfig:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use tensor algebra for backtesting analysis
-                    tensor_result = self.tensor_algebra.tensor_score(data)
-                    # Use advanced tensor for quantum analysis
-                    advanced_result = self.advanced_tensor.tensor_score(data)
-                    # Use entropy math for entropy analysis
-                    entropy_result = self.entropy_math.calculate_entropy(data)
-                    # Combine results with backtesting optimization
-                    result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not MATH_INFRASTRUCTURE_AVAILABLE:
+                raise RuntimeError("Mathematical infrastructure not available for calculation")
+            
+            if len(data) > 0:
+                # Use tensor algebra for backtesting analysis
+                tensor_result = self.tensor_algebra.tensor_score(data)
+                # Use advanced tensor for quantum analysis
+                advanced_result = self.advanced_tensor.tensor_score(data)
+                # Use entropy math for entropy analysis
+                entropy_result = self.entropy_math.calculate_entropy(data)
+                # Combine results with backtesting optimization
+                result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
+            raise
 
     def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
         """Process trading data with backtesting integration and mathematical analysis."""
         try:
             if not MATH_INFRASTRUCTURE_AVAILABLE:
-                # Fallback to basic processing
-                prices = market_data.get('prices', [])
-                volumes = market_data.get('volumes', [])
-                price_result = self.calculate_mathematical_result(prices)
-                volume_result = self.calculate_mathematical_result(volumes)
-                return Result(
-                    success=True,
-                    data={
-                        'price_analysis': price_result,
-                        'volume_analysis': volume_result,
-                        'backtesting_integration': False,
-                        'timestamp': time.time()
-                    }
-                )
+                raise RuntimeError("Mathematical infrastructure not available for trading data processing")
 
             # Use the complete mathematical integration with backtesting
             price = market_data.get('price', 0.0)

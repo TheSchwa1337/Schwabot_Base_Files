@@ -257,24 +257,24 @@ class CCXTTradingExecutor:
             pass
 
     async def execute_signal(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Execute a trading signal."""
+        """Execute a trading signal using real CCXT exchange integration."""
         try:
-            # Simulate execution
-            fill_price = self.price_data.get(signal.target_pair, Decimal("50000"))
-            fill_amount = Decimal("0.001")  # Small amount for demo
+            if not self.active:
+                return ExecutionResult(
+                    executed=False,
+                    strategy=OrderType.MARKET,
+                    pair=signal.target_pair,
+                    side=OrderSide.BUY,
+                    fill_amount=Decimal("0"),
+                    fill_price=Decimal("0"),
+                    timestamp=time.time(),
+                    error_message="CCXT executor not active"
+                )
             
-            result = ExecutionResult(
-                executed=True,
-                strategy=OrderType.MARKET,
-                pair=signal.target_pair,
-                side=OrderSide.BUY if signal.recommended_action == "buy" else OrderSide.SELL,
-                fill_amount=fill_amount,
-                fill_price=fill_price,
-                timestamp=time.time()
-            )
-            
-            self.logger.info(f"✅ Signal executed: {signal.recommended_action} {signal.target_pair.value}")
-            return result
+            # Real CCXT execution should be implemented here
+            # This would integrate with actual CCXT exchange APIs
+            # For now, fail fast if not implemented
+            raise NotImplementedError("Real CCXT execution not implemented - requires exchange API integration")
             
         except Exception as e:
             self.logger.error(f"❌ Signal execution failed: {e}")

@@ -39,6 +39,8 @@ from core.soulprint_registry import soulprint_registry
 from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
 from core.temporal_warp_engine import TemporalWarpEngine
 from core.clean_unified_math import CleanUnifiedMathSystem
+from core.enhanced_api_integration_manager import enhanced_api_manager
+from core.dynamic_portfolio_volatility_manager import dynamic_portfolio_manager, TimeFrame, VolatilityMethod
 
 # Optional CLI system
 try:
@@ -152,6 +154,15 @@ class UnifiedTradingPipeline:
         # Initialize specialized registries
         self.profit_bucket_registry = ProfitBucketRegistry()
         
+        # Add Enhanced API Integration Manager
+        self.api_manager = enhanced_api_manager
+        
+        # Initialize Dynamic Portfolio Volatility Manager
+        self.portfolio_manager = dynamic_portfolio_manager
+        
+        # Initialize portfolio with symbols from config
+        self._initialize_portfolio_from_config()
+        
         # Register specialized registries with coordinator
         registry_coordinator.register_specialized_registry("profit_buckets", self.profit_bucket_registry)
         registry_coordinator.register_specialized_registry("soulprints", soulprint_registry)
@@ -248,20 +259,83 @@ class UnifiedTradingPipeline:
             return {"error": str(e)}
 
     async def _generate_market_data(self) -> Dict[str, Any]:
-        """Generate or fetch market data."""
-        if self.mode == "demo":
-            # Simulate market data
-            current_price = 50000.0 + (time.time() % 1000) * 0.1
+        """Generate or fetch market data using dynamic portfolio manager."""
+        try:
+            if self.mode == "demo":
+                # Use portfolio manager for demo mode with tracked symbols
+                tracked_symbols = self.portfolio_manager.get_tracked_symbols()
+                if tracked_symbols:
+                    # Use first tracked symbol
+                    symbol = tracked_symbols[0]
+                    market_data = self.portfolio_manager.get_symbol_market_data(symbol)
+                    if market_data:
+                        return {
+                            "symbol": market_data["symbol"],
+                            "price": market_data["price"],
+                            "volume": 1000.0 + (time.time() % 100) * 10,  # Simulated volume
+                            "volatility": market_data.get("volatility", 0.02),
+                            "timestamp": market_data["timestamp"],
+                            "price_change": market_data.get("price_change", 0.0),
+                            "data_points": market_data.get("data_points", 0)
+                        }
+                
+                # Fallback to simulated data
+                current_price = 50000.0 + (time.time() % 1000) * 0.1
+                return {
+                    "symbol": "BTC/USDC",
+                    "price": current_price,
+                    "volume": 1000.0 + (time.time() % 100) * 10,
+                    "volatility": 0.02 + (time.time() % 10) * 0.001,
+                    "timestamp": time.time()
+                }
+            else:
+                # Live mode - use portfolio manager for real market data
+                tracked_symbols = self.portfolio_manager.get_tracked_symbols()
+                if not tracked_symbols:
+                    # Add default symbol if none tracked
+                    default_symbol = self.config.get("symbol", "BTC/USDC")
+                    self.portfolio_manager.add_portfolio_symbol(default_symbol)
+                    tracked_symbols = [default_symbol]
+                
+                # Update all tracked symbols
+                await self.portfolio_manager.update_tracked_symbols()
+                
+                # Get data for primary symbol
+                primary_symbol = tracked_symbols[0]
+                market_data = self.portfolio_manager.get_symbol_market_data(primary_symbol)
+                
+                if market_data:
+                    # Get real volatility from portfolio manager
+                    volatility = self.portfolio_manager.get_symbol_volatility(primary_symbol)
+                    
+                    # Get additional market data from API manager
+                    api_data = await self.api_manager.get_market_data(primary_symbol)
+                    
+                    return {
+                        "symbol": market_data["symbol"],
+                        "price": market_data["price"],
+                        "volume": api_data.volume_24h if api_data else 1000.0,
+                        "volatility": volatility if volatility is not None else 0.02,
+                        "timestamp": market_data["timestamp"],
+                        "price_change": market_data.get("price_change", 0.0),
+                        "data_points": market_data.get("data_points", 0),
+                        "market_cap": api_data.market_cap if api_data else 0.0,
+                        "source": api_data.source if api_data else "portfolio_manager",
+                        "data_quality": api_data.data_quality.value if api_data else "good"
+                    }
+                else:
+                    raise RuntimeError(f"Failed to get market data for {primary_symbol}")
+                    
+        except Exception as e:
+            logger.error(f"Error generating market data: {e}")
+            # Fallback to basic simulated data
             return {
                 "symbol": "BTC/USDC",
-                "price": current_price,
-                "volume": 1000.0 + (time.time() % 100) * 10,
-                "volatility": 0.02 + (time.time() % 10) * 0.001,
+                "price": 50000.0,
+                "volume": 1000.0,
+                "volatility": 0.02,
                 "timestamp": time.time()
             }
-        else:
-            # TODO: Implement live market data fetching
-            raise NotImplementedError("Live market data not yet implemented")
 
     def _apply_mathematical_systems(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply all mathematical systems to market data."""
@@ -605,6 +679,22 @@ class UnifiedTradingPipeline:
                     }
                 })
             
+            # Add portfolio insights
+            portfolio_summary = self.portfolio_manager.get_portfolio_summary()
+            if "error" not in portfolio_summary:
+                summary["portfolio_insights"] = portfolio_summary
+            
+            # Add volatility analysis for tracked symbols
+            tracked_symbols = self.portfolio_manager.get_tracked_symbols()
+            volatility_analysis = {}
+            for symbol in tracked_symbols[:3]:  # Limit to first 3 symbols
+                vol_analysis = self.portfolio_manager.get_volatility_analysis(symbol)
+                if "error" not in vol_analysis:
+                    volatility_analysis[symbol] = vol_analysis
+            
+            if volatility_analysis:
+                summary["volatility_analysis"] = volatility_analysis
+            
             # Add Math + Memory Fusion Core insights if available
             if FUSION_CORE_AVAILABLE and self.strategy_executor:
                 mathematical_insights = self.strategy_executor.get_mathematical_insights()
@@ -615,6 +705,38 @@ class UnifiedTradingPipeline:
         except Exception as e:
             logger.error(f"Error generating enhanced cycle summary: {e}")
             return {"error": str(e)}
+
+    def get_portfolio_summary(self) -> Dict[str, Any]:
+        """Get comprehensive portfolio summary with real-time data."""
+        try:
+            return self.portfolio_manager.get_portfolio_summary()
+        except Exception as e:
+            logger.error(f"Error getting portfolio summary: {e}")
+            return {"error": str(e)}
+
+    def get_volatility_analysis(self, symbol: str) -> Dict[str, Any]:
+        """Get volatility analysis for a specific symbol."""
+        try:
+            return self.portfolio_manager.get_volatility_analysis(symbol)
+        except Exception as e:
+            logger.error(f"Error getting volatility analysis for {symbol}: {e}")
+            return {"error": str(e)}
+
+    def get_tracked_symbols(self) -> List[str]:
+        """Get list of tracked symbols."""
+        try:
+            return self.portfolio_manager.get_tracked_symbols()
+        except Exception as e:
+            logger.error(f"Error getting tracked symbols: {e}")
+            return []
+
+    async def add_tracked_symbol(self, symbol: str) -> bool:
+        """Add a symbol to track for market data and volatility calculations."""
+        try:
+            return self.portfolio_manager.add_portfolio_symbol(symbol)
+        except Exception as e:
+            logger.error(f"Error adding tracked symbol {symbol}: {e}")
+            return False
 
     def get_performance_analytics(self) -> Dict[str, Any]:
         """Get comprehensive performance analytics."""
@@ -660,6 +782,17 @@ class UnifiedTradingPipeline:
         
         logger.info(f"✅ Backtest completed: {cycles_completed} cycles, ${self.total_profit:.2f} profit")
         return backtest_results
+
+    def _initialize_portfolio_from_config(self) -> None:
+        """Initialize the portfolio with symbols from the configuration."""
+        portfolio_symbols = self.config.get("portfolio_symbols", [])
+        if not portfolio_symbols:
+            logger.warning("No portfolio symbols configured. Using default 'BTC/USDC'.")
+            self.portfolio_manager.add_portfolio_symbol("BTC/USDC")
+        else:
+            for symbol in portfolio_symbols:
+                self.portfolio_manager.add_portfolio_symbol(symbol)
+            logger.info(f"Configured portfolio symbols: {', '.join(portfolio_symbols)}")
 
 # Global instance for easy access
 unified_trading_pipeline = UnifiedTradingPipeline() 

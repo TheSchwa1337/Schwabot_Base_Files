@@ -395,7 +395,7 @@ class MatrixMapper:
             raise
     
     def evaluate_hash_vector(self, strategy_hash: str, tick_data: Dict[str, Any]) -> Result:
-        """Evaluate hash vector and determine decision."""
+        """Evaluate hash vector and determine decision using real mathematical analysis."""
         try:
             start_time = time.time()
             
@@ -409,20 +409,22 @@ class MatrixMapper:
             if matrix is None:
                 return self._create_error_result(strategy_hash, "Matrix not found")
             
-            # Determine decision
-            decision = self._determine_decision(matrix.fitness_score)
+            # Use real mathematical analysis for decision making
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for hash vector evaluation")
             
-            # Execute decision
-            if decision == FallbackDecision.EXECUTE_CURRENT:
-                result = self._execute_current_strategy(matrix, tick_data)
-            elif decision == FallbackDecision.FALLBACK_ORBITAL:
-                result = self._execute_orbital_fallback(matrix, tick_data)
-            elif decision == FallbackDecision.GHOST_REACTIVATION:
-                result = self._execute_ghost_reactivation(matrix, tick_data)
-            elif decision == FallbackDecision.EMERGENCY_STABILIZATION:
-                result = self._execute_emergency_stabilization(matrix, tick_data)
-            else:  # ABORT_STRATEGY
-                result = self._execute_strategy_abort(matrix, tick_data)
+            # Analyze tick data mathematically
+            tick_array = np.array([tick_data.get('price', 0.0), tick_data.get('volume', 0.0)])
+            tick_analysis = self.math_orchestrator.process_data(tick_array)
+            
+            # Combine matrix fitness with tick analysis for decision
+            combined_score = (matrix.fitness_score + tick_analysis) / 2.0
+            
+            # Determine decision based on mathematical analysis
+            decision = self._determine_decision_mathematically(combined_score, matrix, tick_data)
+            
+            # Execute decision using real mathematical logic
+            result = self._execute_decision_mathematically(decision, matrix, tick_data)
             
             # Update execution time
             result.execution_time = time.time() - start_time
@@ -433,78 +435,91 @@ class MatrixMapper:
             self.logger.error(f"Error evaluating hash vector: {e}")
             raise
     
-    def _determine_decision(self, fitness_score: float) -> FallbackDecision:
-        """Determine decision based on fitness score."""
-        if fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.EXECUTE_CURRENT]:
-            return FallbackDecision.EXECUTE_CURRENT
-        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.FALLBACK_ORBITAL]:
-            return FallbackDecision.FALLBACK_ORBITAL
-        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.GHOST_REACTIVATION]:
-            return FallbackDecision.GHOST_REACTIVATION
-        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.EMERGENCY_STABILIZATION]:
-            return FallbackDecision.EMERGENCY_STABILIZATION
-        else:
-            return FallbackDecision.ABORT_STRATEGY
+    def _determine_decision_mathematically(self, combined_score: float, matrix: Matrix, tick_data: Dict[str, Any]) -> FallbackDecision:
+        """Determine decision using real mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for decision determination")
+            
+            # Create decision vector for mathematical analysis
+            decision_vector = np.array([
+                combined_score,
+                matrix.fitness_score,
+                tick_data.get('price', 0.0) / 100000.0,  # Normalize price
+                tick_data.get('volume', 0.0) / 1000000.0  # Normalize volume
+            ])
+            
+            # Use mathematical orchestration for decision analysis
+            decision_analysis = self.math_orchestrator.process_data(decision_vector)
+            
+            # Map mathematical analysis to decision
+            if decision_analysis > 0.8:
+                return FallbackDecision.EXECUTE_CURRENT
+            elif decision_analysis > 0.6:
+                return FallbackDecision.FALLBACK_ORBITAL
+            elif decision_analysis > 0.4:
+                return FallbackDecision.GHOST_REACTIVATION
+            elif decision_analysis > 0.2:
+                return FallbackDecision.EMERGENCY_STABILIZATION
+            else:
+                return FallbackDecision.ABORT_STRATEGY
+                
+        except Exception as e:
+            self.logger.error(f"Error determining decision mathematically: {e}")
+            raise
     
-    def _execute_current_strategy(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
-        """Execute current strategy."""
-        return Result(
-            decision=FallbackDecision.EXECUTE_CURRENT,
-            target_strategy=matrix.strategy_id,
-            target_ring=matrix.current_ring,
-            confidence=matrix.fitness_score,
-            execution_time=0.0,
-            fallback_path=[matrix.current_ring]
-        )
-    
-    def _execute_orbital_fallback(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
-        """Execute orbital fallback."""
-        # Determine next ring
-        current_ring_value = int(matrix.current_ring.value.split('_')[1])
-        next_ring_value = min(current_ring_value + 1, 4)
-        next_ring = XiRingLevel(f"ring_{next_ring_value}")
-        
-        return Result(
-            decision=FallbackDecision.FALLBACK_ORBITAL,
-            target_strategy=matrix.strategy_id,
-            target_ring=next_ring,
-            confidence=matrix.fitness_score * 0.8,
-            execution_time=0.0,
-            fallback_path=[matrix.current_ring, next_ring]
-        )
-    
-    def _execute_ghost_reactivation(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
-        """Execute ghost reactivation."""
-        return Result(
-            decision=FallbackDecision.GHOST_REACTIVATION,
-            target_strategy=matrix.strategy_id,
-            target_ring=XiRingLevel.RING_5,
-            confidence=matrix.fitness_score * 0.6,
-            execution_time=0.0,
-            fallback_path=[matrix.current_ring, XiRingLevel.RING_5]
-        )
-    
-    def _execute_emergency_stabilization(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
-        """Execute emergency stabilization."""
-        return Result(
-            decision=FallbackDecision.EMERGENCY_STABILIZATION,
-            target_strategy=matrix.strategy_id,
-            target_ring=XiRingLevel.RING_4,
-            confidence=matrix.fitness_score * 0.4,
-            execution_time=0.0,
-            fallback_path=[matrix.current_ring, XiRingLevel.RING_4]
-        )
-    
-    def _execute_strategy_abort(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
-        """Execute strategy abort."""
-        return Result(
-            decision=FallbackDecision.ABORT_STRATEGY,
-            target_strategy=None,
-            target_ring=matrix.current_ring,
-            confidence=0.0,
-            execution_time=0.0,
-            fallback_path=[matrix.current_ring]
-        )
+    def _execute_decision_mathematically(self, decision: FallbackDecision, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
+        """Execute decision using real mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for decision execution")
+            
+            # Create execution vector for mathematical analysis
+            execution_vector = np.array([
+                matrix.fitness_score,
+                tick_data.get('price', 0.0) / 100000.0,
+                tick_data.get('volume', 0.0) / 1000000.0,
+                float(decision.value) if hasattr(decision, 'value') else 0.0
+            ])
+            
+            # Use mathematical orchestration for execution analysis
+            execution_analysis = self.math_orchestrator.process_data(execution_vector)
+            
+            # Determine target ring based on mathematical analysis
+            if execution_analysis > 0.8:
+                target_ring = XiRingLevel.RING_0
+            elif execution_analysis > 0.6:
+                target_ring = XiRingLevel.RING_1
+            elif execution_analysis > 0.4:
+                target_ring = XiRingLevel.RING_2
+            elif execution_analysis > 0.2:
+                target_ring = XiRingLevel.RING_3
+            else:
+                target_ring = XiRingLevel.RING_4
+            
+            # Calculate confidence based on mathematical analysis
+            confidence = execution_analysis * matrix.fitness_score
+            
+            # Create fallback path based on mathematical analysis
+            fallback_path = [matrix.current_ring, target_ring]
+            
+            return Result(
+                decision=decision,
+                target_strategy=matrix.strategy_id,
+                target_ring=target_ring,
+                confidence=confidence,
+                execution_time=0.0,
+                fallback_path=fallback_path,
+                metadata={
+                    'execution_analysis': execution_analysis,
+                    'combined_score': execution_analysis,
+                    'mathematical_decision': True
+                }
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error executing decision mathematically: {e}")
+            raise
     
     def _apply_exponential_smoothing(self, old_values: np.ndarray, new_values: np.ndarray, 
                                    alpha: float = 0.3) -> np.ndarray:

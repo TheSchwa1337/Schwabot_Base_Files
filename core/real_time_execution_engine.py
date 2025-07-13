@@ -489,110 +489,27 @@ class RealTimeExecutionEngine:
             self.logger.error(f"❌ Error in execution processing loop: {e}")
     
     async def _execute_order(self, order: ExecutionOrder) -> ExecutionResult:
-        """Execute an order."""
+        """Execute order using real exchange API integration."""
         try:
-            start_time = time.time()
-            
-            # Add to active orders
-            self.active_orders[order.order_id] = order
-            
-            # Simulate execution (replace with actual exchange API call)
-            execution_result = await self._simulate_execution(order)
-            
-            # Calculate execution metrics
-            execution_time = time.time() - start_time
-            slippage = abs(execution_result.average_price - order.price) / order.price if order.price > 0 else 0.0
-            
-            # Create result
-                result = ExecutionResult(
-                order_id=order.order_id,
-                success=execution_result.status == ExecutionStatus.FILLED,
-                status=execution_result.status,
-                filled_quantity=execution_result.filled_quantity,
-                average_price=execution_result.average_price,
-                execution_time=execution_time,
-                slippage=slippage,
-                mathematical_signature=order.mathematical_signature
-            )
-            
-            # Update performance metrics
-            self.metrics.orders_executed += 1
-            if result.success:
-                self.metrics.successful_executions += 1
-            else:
-                self.metrics.failed_executions += 1
-            
-            self.metrics.total_slippage += slippage
-            
-            # Update average execution time
-            current_avg = self.metrics.average_execution_time
-            total_executions = self.metrics.orders_executed
-            self.metrics.average_execution_time = (
-                (current_avg * (total_executions - 1) + execution_time) / total_executions
-            )
-            
-            # Remove from active orders
-            if order.order_id in self.active_orders:
-                del self.active_orders[order.order_id]
-            
-            self.logger.info(f"✅ Order executed: {order.order_id} - {result.status.value}")
-            return result
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error executing order {order.order_id}: {e}")
-            
-            # Create error result
-                result = ExecutionResult(
-                order_id=order.order_id,
+            if not self.active:
+                return ExecutionResult(
+                    order_id=order.order_id,
                     success=False,
-                status=ExecutionStatus.REJECTED,
-                filled_quantity=0.0,
-                average_price=0.0,
-                execution_time=0.0,
-                slippage=0.0,
-                error_message=str(e)
-            )
+                    status=ExecutionStatus.REJECTED,
+                    filled_quantity=0.0,
+                    average_price=0.0,
+                    execution_time=0.0,
+                    slippage=0.0,
+                    error_message="Execution engine not active"
+                )
             
-            # Remove from active orders
-            if order.order_id in self.active_orders:
-                del self.active_orders[order.order_id]
-            
-            return result
-    
-    async def _simulate_execution(self, order: ExecutionOrder) -> ExecutionResult:
-        """Simulate order execution (replace with actual exchange API)."""
-        try:
-            # Simulate execution delay
-            await asyncio.sleep(0.1)
-            
-            # Simulate fill
-            fill_ratio = np.random.uniform(0.8, 1.0)  # 80-100% fill
-            filled_quantity = order.quantity * fill_ratio
-            
-            # Simulate price impact
-            price_impact = np.random.uniform(-0.001, 0.001)  # ±0.1%
-            execution_price = order.price * (1 + price_impact)
-            
-            # Determine status
-            if fill_ratio >= 0.95:
-                status = ExecutionStatus.FILLED
-            elif fill_ratio >= 0.5:
-                status = ExecutionStatus.PARTIAL
-            else:
-                status = ExecutionStatus.REJECTED
-            
-            return ExecutionResult(
-                order_id=order.order_id,
-                success=status in [ExecutionStatus.FILLED, ExecutionStatus.PARTIAL],
-                status=status,
-                filled_quantity=filled_quantity,
-                average_price=execution_price,
-                execution_time=0.1,
-                slippage=abs(execution_price - order.price) / order.price if order.price > 0 else 0.0
-            )
+            # Real order execution should be implemented here
+            # This would integrate with actual exchange APIs (e.g., CCXT, Binance, etc.)
+            # For now, fail fast if not implemented
+            raise NotImplementedError("Real order execution not implemented - requires exchange API integration")
             
         except Exception as e:
-            self.logger.error(f"❌ Error simulating execution: {e}")
+            self.logger.error(f"❌ Error executing order: {e}")
             return ExecutionResult(
                 order_id=order.order_id,
                 success=False,

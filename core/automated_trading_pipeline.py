@@ -505,51 +505,23 @@ class AutomatedTradingPipeline:
             )
 
     async def execute_trading_decision(self, decision: TradingDecision) -> Result:
-        """Execute trading decision with mathematical validation."""
+        """Execute a trading decision with mathematical validation."""
         try:
             if not self.active:
-                return Result(
-                    success=False,
-                    error="Trading pipeline not active",
-                    timestamp=time.time()
-                )
+                return Result(success=False, error="Pipeline not active", timestamp=time.time())
 
             # Validate decision mathematically
-            validation_result = self._validate_decision_mathematically(decision)
-            if not validation_result['valid']:
-                return Result(
-                    success=False,
-                    error=f"Decision validation failed: {validation_result['reason']}",
-                    timestamp=time.time()
-                )
+            validation = self._validate_decision_mathematically(decision)
+            if not validation['valid']:
+                return Result(success=False, error=validation['reason'], timestamp=time.time())
 
-            # Simulate order execution (in real implementation, this would connect to exchange)
-            execution_result = await self._simulate_order_execution(decision)
-
-            # Update pipeline metrics
-            if execution_result['success']:
-                self.pipeline_metrics.successful_decisions += 1
-
-            return Result(
-                success=execution_result['success'],
-                data={
-                    'decision_id': decision.decision_id,
-                    'decision_type': decision.decision_type.value,
-                    'execution_status': execution_result['status'],
-                    'execution_price': execution_result['price'],
-                    'execution_volume': execution_result['volume'],
-                    'mathematical_validation': validation_result,
-                    'execution_timestamp': time.time()
-                },
-                timestamp=time.time()
-            )
+            # Execute the decision (this would integrate with real exchange APIs)
+            # For now, we'll raise an error to indicate this needs real implementation
+            raise NotImplementedError("Real order execution not implemented - requires exchange API integration")
 
         except Exception as e:
-            return Result(
-                success=False,
-                error=str(e),
-                timestamp=time.time()
-            )
+            self.logger.error(f"❌ Error executing trading decision: {e}")
+            return Result(success=False, error=str(e), timestamp=time.time())
 
     def _validate_decision_mathematically(self, decision: TradingDecision) -> Dict[str, Any]:
         """Validate trading decision using mathematical analysis."""
@@ -581,95 +553,6 @@ class AutomatedTradingPipeline:
                 'valid': False,
                 'reason': f"Validation error: {e}"
             }
-
-    async def _simulate_order_execution(self, decision: TradingDecision) -> Dict[str, Any]:
-        """Simulate order execution (placeholder for real exchange integration)."""
-        try:
-            # Simulate execution delay
-            await asyncio.sleep(self.config.get('execution_delay', 0.1))
-
-            # Simulate execution success based on mathematical score
-            success_probability = decision.mathematical_score
-            success = np.random.random() < success_probability
-
-            if success:
-                return {
-                    'success': True,
-                    'status': ExecutionStatus.EXECUTED.value,
-                    'price': decision.price,
-                    'volume': decision.volume,
-                    'execution_id': f"exec_{int(time.time() * 1000)}"
-                }
-            else:
-                return {
-                    'success': False,
-                    'status': ExecutionStatus.FAILED.value,
-                    'price': 0.0,
-                    'volume': 0.0,
-                    'execution_id': None
-                }
-
-        except Exception as e:
-            return {
-                'success': False,
-                'status': ExecutionStatus.FAILED.value,
-                'price': 0.0,
-                'volume': 0.0,
-                'execution_id': None,
-                'error': str(e)
-            }
-
-    def get_exchange_status(self) -> Result:
-        """Get exchange status with mathematical health checks."""
-        try:
-            # Simulate exchange status (in real implementation, this would check actual exchange)
-            exchange_status = {
-                'status': 'online',
-                'latency': 50,  # ms
-                'uptime': 99.9,  # %
-                'last_check': time.time(),
-                'mathematical_health': self._calculate_mathematical_health(),
-                'pipeline_performance': {
-                    'total_decisions': self.pipeline_metrics.total_decisions,
-                    'success_rate': self.pipeline_metrics.execution_success_rate,
-                    'average_confidence': self.pipeline_metrics.average_confidence,
-                    'mathematical_accuracy': self.pipeline_metrics.mathematical_accuracy,
-                }
-            }
-
-            return Result(
-                success=True,
-                data=exchange_status,
-                timestamp=time.time()
-            )
-
-        except Exception as e:
-            return Result(
-                success=False,
-                error=str(e),
-                timestamp=time.time()
-            )
-
-    def _calculate_mathematical_health(self) -> float:
-        """Calculate mathematical health score of the pipeline."""
-        try:
-            if len(self.decision_history) == 0:
-                return 1.0
-
-            # Calculate health based on recent decisions
-            recent_decisions = self.decision_history[-10:]  # Last 10 decisions
-            
-            avg_confidence = np.mean([d.confidence for d in recent_decisions])
-            avg_tensor_score = np.mean([d.tensor_score for d in recent_decisions])
-            avg_entropy = np.mean([d.entropy_value for d in recent_decisions])
-
-            # Health score based on mathematical metrics
-            health_score = (avg_confidence + avg_tensor_score + (1 - avg_entropy)) / 3.0
-            return max(0.0, min(1.0, health_score))
-
-        except Exception as e:
-            self.logger.error(f"❌ Error calculating mathematical health: {e}")
-            return 0.5
 
     def _update_pipeline_metrics(self, decision: TradingDecision) -> None:
         """Update pipeline performance metrics."""
@@ -709,69 +592,36 @@ class AutomatedTradingPipeline:
         except Exception as e:
             self.logger.error(f"❌ Error updating pipeline metrics: {e}")
 
-    def _create_fallback_decision(self, price: float, volume: float, asset_pair: str) -> TradingDecision:
-        """Create fallback decision when mathematical infrastructure is unavailable."""
-        return TradingDecision(
-            decision_id=f"fallback_{int(time.time() * 1000)}",
-            decision_type=DecisionType.HOLD,
-            confidence=0.5,
-            mathematical_score=0.5,
-            tensor_score=0.5,
-            entropy_value=0.5,
-            price=price,
-            volume=volume,
-            asset_pair=asset_pair,
-            timestamp=time.time(),
-            mathematical_reasoning={'fallback': True},
-            metadata={'fallback_decision': True}
-        )
-
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and pipeline integration."""
         try:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use tensor algebra for pipeline analysis
-                    tensor_result = self.tensor_algebra.tensor_score(data)
-                    # Use advanced tensor for quantum analysis
-                    advanced_result = self.advanced_tensor.tensor_score(data)
-                    # Use entropy math for entropy analysis
-                    entropy_result = self.entropy_math.calculate_entropy(data)
-                    # Combine results with pipeline optimization
-                    result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not MATH_INFRASTRUCTURE_AVAILABLE:
+                raise RuntimeError("Mathematical infrastructure not available for calculation")
+            
+            if len(data) > 0:
+                # Use tensor algebra for pipeline analysis
+                tensor_result = self.tensor_algebra.tensor_score(data)
+                # Use advanced tensor for quantum analysis
+                advanced_result = self.advanced_tensor.tensor_score(data)
+                # Use entropy math for entropy analysis
+                entropy_result = self.entropy_math.calculate_entropy(data)
+                # Combine results with pipeline optimization
+                result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
+            raise
 
     def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
         """Process trading data with pipeline integration and mathematical analysis."""
         try:
             if not MATH_INFRASTRUCTURE_AVAILABLE:
-                # Fallback to basic processing
-                prices = market_data.get('prices', [])
-                volumes = market_data.get('volumes', [])
-                price_result = self.calculate_mathematical_result(prices)
-                volume_result = self.calculate_mathematical_result(volumes)
-                return Result(
-                    success=True,
-                    data={
-                        'price_analysis': price_result,
-                        'volume_analysis': volume_result,
-                        'pipeline_integration': False,
-                        'timestamp': time.time()
-                    }
-                )
+                raise RuntimeError("Mathematical infrastructure not available for trading data processing")
 
             # Use the complete mathematical integration with pipeline
             price = market_data.get('price', 0.0)
@@ -779,24 +629,29 @@ class AutomatedTradingPipeline:
             asset_pair = market_data.get('asset_pair', 'BTC/USD')
             
             # Process through pipeline (this would be async in real implementation)
-            # For now, we'll simulate the result
-            pipeline_result = {
-                'decision_type': 'HOLD',
-                'confidence': 0.7,
-                'mathematical_score': 0.6,
-                'tensor_score': 0.65,
-                'entropy_value': 0.4,
-                'pipeline_metrics': {
-                    'total_decisions': self.pipeline_metrics.total_decisions,
-                    'success_rate': self.pipeline_metrics.execution_success_rate,
-                }
-            }
+            # For now, we'll simulate the result using mathematical analysis
+            market_vector = np.array([price, volume])
+            
+            # Use mathematical modules for analysis
+            tensor_score = self.tensor_algebra.tensor_score(market_vector)
+            quantum_score = self.advanced_tensor.tensor_score(market_vector)
+            entropy_value = self.entropy_math.calculate_entropy(market_vector)
+            
+            # Apply pipeline context
+            pipeline_adjusted_score = tensor_score * (1 + self.pipeline_metrics.total_decisions * 0.01)
+            mathematical_accuracy = self.pipeline_metrics.mathematical_accuracy
             
             return Result(
                 success=True,
                 data={
                     'pipeline_integration': True,
-                    'pipeline_result': pipeline_result,
+                    'asset_pair': asset_pair,
+                    'tensor_score': tensor_score,
+                    'quantum_score': quantum_score,
+                    'entropy_value': entropy_value,
+                    'pipeline_adjusted_score': pipeline_adjusted_score,
+                    'mathematical_accuracy': mathematical_accuracy,
+                    'total_decisions': self.pipeline_metrics.total_decisions,
                     'mathematical_integration': True,
                     'timestamp': time.time()
                 }

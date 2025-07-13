@@ -276,19 +276,16 @@ class CycleMode:
             if cycle.state == CycleState.STARTING:
                 cycle.state = CycleState.RUNNING
 
-            # Process data using mathematical infrastructure if available
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                if not isinstance(data, np.ndarray):
-                    data = np.array(data)
-                
-                if len(data) > 0:
-                    result = self.math_orchestrator.process_data(data)
-                    performance_score = float(result)
-                else:
-                    performance_score = 0.0
+            # Process data using mathematical infrastructure only
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for cycle processing")
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            if len(data) > 0:
+                result = self.math_orchestrator.process_data(data)
+                performance_score = float(result)
             else:
-                # Fallback processing
-                performance_score = self._fallback_cycle_processing(data)
+                performance_score = 0.0
 
             # Update cycle performance
             cycle.performance_score = performance_score
@@ -306,45 +303,18 @@ class CycleMode:
             self.logger.error(f"Error processing cycle data for {cycle_id}: {e}")
             return {'success': False, 'error': str(e)}
 
-    def _fallback_cycle_processing(self, data: Union[List, np.ndarray]) -> float:
-        """Fallback cycle processing when math infrastructure is not available."""
-        try:
-            if not isinstance(data, np.ndarray):
-                data = np.array(data)
-            
-            if len(data) == 0:
-                return 0.0
-            
-            # Simple performance calculation based on data characteristics
-            mean_val = np.mean(data)
-            std_val = np.std(data)
-            max_val = np.max(data)
-            
-            # Performance score based on data quality and variance
-            performance = (mean_val / max_val) * (1 - std_val / max_val) if max_val > 0 else 0.0
-            return float(performance)
-        except Exception as e:
-            self.logger.error(f"Error in fallback cycle processing: {e}")
-            return 0.0
-
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and cycle engine integration."""
         try:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
-            
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use mathematical orchestration for cycle analysis
-                    result = self.math_orchestrator.process_data(data)
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for result calculation")
+            if len(data) > 0:
+                result = self.math_orchestrator.process_data(data)
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
             return 0.0

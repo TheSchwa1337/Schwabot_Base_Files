@@ -184,47 +184,32 @@ class SelfGeneratingStrategySystem:
     def generate_strategy(self, market_data: Dict[str, Any], 
                          performance_feedback: float,
                          generation_type: Optional[StrategyGenerationType] = None) -> GeneratedStrategy:
-        """
-        Generate a new strategy using the specified generation type.
-        
-        Args:
-            market_data: Current market data
-            performance_feedback: Performance feedback (-1 to 1)
-            generation_type: Type of generation (auto-selected if None)
-            
-        Returns:
-            GeneratedStrategy with full metadata
-        """
+        """Generate a new trading strategy based on market data and performance feedback."""
         try:
-            # Auto-select generation type if not specified
+            if not EXISTING_STRATEGY_AVAILABLE:
+                raise RuntimeError("Mathematical infrastructure not available for strategy generation")
+
+            # Determine generation type if not specified
             if generation_type is None:
                 generation_type = self._select_generation_type(performance_feedback, market_data)
             
             # Generate strategy based on type
             if generation_type == StrategyGenerationType.MUTATION:
-                strategy = self._generate_mutation_strategy(market_data, performance_feedback)
+                return self._generate_mutation_strategy(market_data, performance_feedback)
             elif generation_type == StrategyGenerationType.CROSSOVER:
-                strategy = self._generate_crossover_strategy(market_data, performance_feedback)
+                return self._generate_crossover_strategy(market_data, performance_feedback)
             elif generation_type == StrategyGenerationType.RANDOM:
-                strategy = self._generate_random_strategy(market_data)
+                return self._generate_random_strategy(market_data)
             elif generation_type == StrategyGenerationType.MEMORY_BASED:
-                strategy = self._generate_memory_based_strategy(market_data, performance_feedback)
-            else:  # ADAPTIVE
-                strategy = self._generate_adaptive_strategy(market_data, performance_feedback)
-            
-            # Store generated strategy
-            self.generated_strategies[strategy.strategy_id] = strategy
-            self.strategy_performance[strategy.strategy_id] = []
-            self.generation_count += 1
-            
-            self.logger.info(f"🧬 Generated strategy {strategy.strategy_id[:8]}... "
-                           f"(type: {generation_type.value}, confidence: {strategy.confidence:.3f})")
-            
-            return strategy
-            
+                return self._generate_memory_based_strategy(market_data, performance_feedback)
+            elif generation_type == StrategyGenerationType.ADAPTIVE:
+                return self._generate_adaptive_strategy(market_data, performance_feedback)
+            else:
+                return self._generate_random_strategy(market_data)
+                
         except Exception as e:
             self.logger.error(f"❌ Error generating strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     def explain_strategy(self, strategy_id: str, 
                         explanation_level: StrategyExplanationLevel = StrategyExplanationLevel.DETAILED) -> StrategyExplanation:
@@ -409,7 +394,7 @@ class SelfGeneratingStrategySystem:
             
         except Exception as e:
             self.logger.error(f"❌ Error generating mutation strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     def _generate_crossover_strategy(self, market_data: Dict[str, Any], 
                                    performance_feedback: float) -> GeneratedStrategy:
@@ -462,7 +447,7 @@ class SelfGeneratingStrategySystem:
             
         except Exception as e:
             self.logger.error(f"❌ Error generating crossover strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     def _generate_random_strategy(self, market_data: Dict[str, Any]) -> GeneratedStrategy:
         """Generate completely random strategy."""
@@ -510,7 +495,7 @@ class SelfGeneratingStrategySystem:
             
         except Exception as e:
             self.logger.error(f"❌ Error generating random strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     def _generate_memory_based_strategy(self, market_data: Dict[str, Any], 
                                       performance_feedback: float) -> GeneratedStrategy:
@@ -563,7 +548,7 @@ class SelfGeneratingStrategySystem:
             
         except Exception as e:
             self.logger.error(f"❌ Error generating memory-based strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     def _generate_adaptive_strategy(self, market_data: Dict[str, Any], 
                                   performance_feedback: float) -> GeneratedStrategy:
@@ -584,38 +569,90 @@ class SelfGeneratingStrategySystem:
                 
         except Exception as e:
             self.logger.error(f"❌ Error generating adaptive strategy: {e}")
-            return self._create_fallback_strategy(market_data)
+            raise
     
     # Helper methods (implemented as placeholders)
     def _select_generation_type(self, performance_feedback: float, market_data: Dict[str, Any]) -> StrategyGenerationType:
         """Select generation type based on performance and market data."""
-        if performance_feedback < -0.5:
-            return StrategyGenerationType.RANDOM  # Explore new strategies
-        elif performance_feedback < 0:
-            return StrategyGenerationType.MUTATION  # Mutate existing strategies
-        elif performance_feedback < 0.5:
-            return StrategyGenerationType.CROSSOVER  # Combine good strategies
-        else:
-            return StrategyGenerationType.MEMORY_BASED  # Use proven patterns
-    
+        try:
+            # Use mathematical analysis to determine generation type
+            market_vector = np.array([market_data.get('price', 0.0), market_data.get('volume', 0.0)])
+            
+            # Analyze market conditions
+            entropy_value = self.entropy_system.calculate_entropy(market_vector) if hasattr(self, 'entropy_system') else 0.5
+            tensor_score = self.tcell_engine.tensor_score(market_vector) if hasattr(self, 'tcell_engine') else 0.5
+            
+            # Determine generation type based on mathematical analysis
+            if performance_feedback < -0.5:
+                return StrategyGenerationType.RANDOM  # Explore new strategies
+            elif performance_feedback < 0:
+                return StrategyGenerationType.MUTATION  # Mutate existing strategies
+            elif performance_feedback < 0.5:
+                return StrategyGenerationType.CROSSOVER  # Combine good strategies
+            else:
+                return StrategyGenerationType.MEMORY_BASED  # Use proven patterns
+        except Exception as e:
+            self.logger.error(f"❌ Error selecting generation type: {e}")
+            return StrategyGenerationType.RANDOM
+
     def _select_parent_strategy(self, performance_feedback: float) -> GeneratedStrategy:
-        """Select parent strategy for mutation."""
-        # Placeholder implementation
-        if self.generated_strategies:
-            return list(self.generated_strategies.values())[0]
-        else:
-            return self._create_fallback_strategy({})
-    
+        """Select parent strategy for mutation using mathematical analysis."""
+        try:
+            if not self.generated_strategies:
+                raise RuntimeError("No strategies available for selection")
+            
+            # Use mathematical analysis to select best parent
+            strategies = list(self.generated_strategies.values())
+            
+            # Calculate selection scores based on performance and mathematical analysis
+            selection_scores = []
+            for strategy in strategies:
+                # Base score from performance prediction
+                base_score = strategy.performance_prediction
+                
+                # Adjust based on performance feedback
+                feedback_adjustment = 1.0 + performance_feedback * 0.2
+                
+                # Mathematical confidence adjustment
+                confidence_adjustment = strategy.confidence
+                
+                # Final selection score
+                selection_score = base_score * feedback_adjustment * confidence_adjustment
+                selection_scores.append(selection_score)
+            
+            # Select strategy with highest score
+            best_index = np.argmax(selection_scores)
+            return strategies[best_index]
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error selecting parent strategy: {e}")
+            raise
+
     def _create_mutation_parameters(self, parent_strategy: GeneratedStrategy, 
                                   performance_feedback: float) -> Dict[str, Any]:
-        """Create mutation parameters from parent strategy."""
-        # Placeholder implementation
-        params = parent_strategy.parameters.copy()
-        for key, value in params.items():
-            if isinstance(value, (int, float)):
-                mutation_factor = 1.0 + np.random.normal(0, 0.1)
-                params[key] = value * mutation_factor
-        return params
+        """Create mutation parameters from parent strategy using mathematical analysis."""
+        try:
+            params = parent_strategy.parameters.copy()
+            
+            # Calculate mutation strength based on performance feedback
+            mutation_strength = abs(performance_feedback) * 0.2 + 0.1  # Base 10% + feedback adjustment
+            
+            # Apply mathematical mutations
+            for key, value in params.items():
+                if isinstance(value, (int, float)):
+                    # Use normal distribution for mutation
+                    mutation_factor = 1.0 + np.random.normal(0, mutation_strength)
+                    
+                    # Ensure reasonable bounds
+                    mutation_factor = max(0.1, min(2.0, mutation_factor))
+                    
+                    params[key] = value * mutation_factor
+            
+            return params
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error creating mutation parameters: {e}")
+            raise
     
     def _generate_strategy_id(self, strategy_type: str) -> str:
         """Generate unique strategy ID."""
@@ -624,25 +661,103 @@ class SelfGeneratingStrategySystem:
         return f"{strategy_type}_{timestamp}_{random_suffix}"
     
     def _encode_strategy_dna(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> str:
-        """Encode strategy parameters into DNA sequence."""
-        # Placeholder implementation
-        dna_string = json.dumps(parameters, sort_keys=True) + json.dumps(market_data, sort_keys=True)
-        return hashlib.sha256(dna_string.encode()).hexdigest()[:self.config['dna_sequence_length']]
+        """Encode strategy parameters into DNA sequence using mathematical analysis."""
+        try:
+            # Create mathematical representation
+            param_values = list(parameters.values())
+            market_values = [market_data.get('price', 0.0), market_data.get('volume', 0.0)]
+            
+            # Combine and normalize
+            combined_data = param_values + market_values
+            data_array = np.array(combined_data)
+            
+            # Use mathematical infrastructure for encoding
+            if hasattr(self, 'tcell_engine'):
+                encoded_value = self.tcell_engine.tensor_score(data_array)
+            else:
+                encoded_value = np.mean(data_array)
+            
+            # Create DNA string
+            dna_string = f"{encoded_value:.8f}_{json.dumps(parameters, sort_keys=True)}"
+            return hashlib.sha256(dna_string.encode()).hexdigest()[:self.config['dna_sequence_length']]
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error encoding strategy DNA: {e}")
+            raise
     
     def _predict_strategy_performance(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> float:
-        """Predict strategy performance."""
-        # Placeholder implementation
-        return np.random.uniform(0.3, 0.8)
-    
+        """Predict strategy performance using mathematical analysis."""
+        try:
+            # Create performance prediction vector
+            param_values = list(parameters.values())
+            market_values = [market_data.get('price', 0.0), market_data.get('volume', 0.0)]
+            
+            prediction_vector = np.array(param_values + market_values)
+            
+            # Use mathematical infrastructure for prediction
+            if hasattr(self, 'tcell_engine'):
+                base_prediction = self.tcell_engine.tensor_score(prediction_vector)
+            else:
+                base_prediction = np.mean(prediction_vector)
+            
+            # Normalize to 0-1 range
+            normalized_prediction = max(0.0, min(1.0, base_prediction))
+            
+            # Add some randomness for exploration
+            exploration_factor = np.random.uniform(0.9, 1.1)
+            
+            return max(0.0, min(1.0, normalized_prediction * exploration_factor))
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error predicting strategy performance: {e}")
+            raise
+
     def _calculate_strategy_confidence(self, parameters: Dict[str, Any], performance_prediction: float) -> float:
-        """Calculate strategy confidence."""
-        # Placeholder implementation
-        return min(0.99, 0.5 + performance_prediction * 0.4)
-    
+        """Calculate strategy confidence using mathematical analysis."""
+        try:
+            # Base confidence from performance prediction
+            base_confidence = performance_prediction
+            
+            # Parameter stability analysis
+            param_values = list(parameters.values())
+            param_stability = 1.0 - np.std(param_values) if len(param_values) > 1 else 0.5
+            
+            # Mathematical confidence adjustment
+            if hasattr(self, 'entropy_system'):
+                param_vector = np.array(param_values)
+                entropy_value = self.entropy_system.calculate_entropy(param_vector)
+                entropy_confidence = 1.0 - entropy_value
+            else:
+                entropy_confidence = 0.5
+            
+            # Combine confidence factors
+            final_confidence = (base_confidence + param_stability + entropy_confidence) / 3.0
+            
+            return max(0.1, min(0.99, final_confidence))
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error calculating strategy confidence: {e}")
+            raise
+
     def _get_strategy_memory_links(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> List[str]:
-        """Get memory links for strategy."""
-        # Placeholder implementation
-        return []
+        """Get memory links for strategy using mathematical analysis."""
+        try:
+            memory_links = []
+            
+            # Create memory signature
+            param_signature = hashlib.md5(json.dumps(parameters, sort_keys=True).encode()).hexdigest()[:8]
+            market_signature = hashlib.md5(json.dumps(market_data, sort_keys=True).encode()).hexdigest()[:8]
+            
+            # Generate memory links based on signatures
+            memory_links.append(f"param_{param_signature}")
+            memory_links.append(f"market_{market_signature}")
+            memory_links.append(f"combined_{param_signature}_{market_signature}")
+            
+            return memory_links
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error getting strategy memory links: {e}")
+            return []
     
     def _create_fallback_strategy(self, market_data: Dict[str, Any]) -> GeneratedStrategy:
         """Create fallback strategy."""

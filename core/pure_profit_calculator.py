@@ -439,38 +439,78 @@ class PureProfitCalculator:
             logger.error(f"❌ Hash contribution calculation failed: {e}")
             return 0.0
 
-    def _calculate_confidence_score(self, market_data: MarketData, history_state: HistoryState) -> float:
-        """Calculate confidence score based on signal alignment."""
+    def _calculate_mathematical_score(self, market_data: MarketData, history_state: HistoryState) -> float:
+        """Calculate real mathematical score from market data."""
         try:
-            confidence_factors = []
-
-            # Price-volume alignment
-            if market_data.volume_profile > 1.0 and market_data.momentum > 0:
-                confidence_factors.append(0.8)
-            elif market_data.volume_profile < 0.8 and market_data.momentum < 0:
-                confidence_factors.append(0.6)
-            else:
-                confidence_factors.append(0.4)
-
-            # Volatility-momentum alignment
-            if abs(market_data.momentum) > market_data.volatility:
-                confidence_factors.append(0.7)
-            else:
-                confidence_factors.append(0.5)
-
-            # Historical signal consistency
-            if history_state.signal_history:
-                recent_signals = history_state.signal_history[-5:]
-                signal_consistency = (
-                    1.0 - np.std(recent_signals) if len(recent_signals) > 1 else 0.5
+            # Real mathematical computation based on market data
+            price = market_data.btc_price
+            volume = market_data.usdc_volume
+            volatility = market_data.volatility
+            momentum = market_data.momentum
+            
+            # Calculate mathematical score using multiple factors
+            if price > 0 and volume > 0:
+                # Price-volume relationship
+                price_volume_ratio = volume / (price * 1000)  # Normalize
+                
+                # Volatility-adjusted momentum
+                volatility_adjusted_momentum = momentum / (volatility + 1e-8)
+                
+                # Combine factors into mathematical score
+                mathematical_score = (
+                    price_volume_ratio * 0.3 +
+                    volatility_adjusted_momentum * 0.4 +
+                    (1.0 - volatility) * 0.3  # Lower volatility is better
                 )
-                confidence_factors.append(signal_consistency)
-
-            return np.mean(confidence_factors) if confidence_factors else 0.5
-
+                
+                return min(max(mathematical_score, 0.0), 1.0)
+            else:
+                return 0.0
+                
         except Exception as e:
-            logger.error(f"❌ Confidence score calculation failed: {e}")
-            return 0.5
+            logger.error(f"Error calculating mathematical score: {e}")
+            raise
+
+    def _calculate_confidence_score(self, market_data: MarketData, history_state: HistoryState) -> float:
+        """Calculate real confidence score from market data."""
+        try:
+            # Real confidence calculation based on data quality and consistency
+            price = market_data.btc_price
+            volume = market_data.usdc_volume
+            on_chain_signals = market_data.on_chain_signals
+            
+            # Calculate data quality score
+            data_quality = 0.0
+            if price > 0 and volume > 0:
+                data_quality += 0.5  # Basic data available
+                
+                # Volume quality
+                if volume > 1000:  # Sufficient volume
+                    data_quality += 0.3
+                
+                # On-chain signal quality
+                if on_chain_signals:
+                    whale_activity = on_chain_signals.get('whale_activity', 0.0)
+                    network_health = on_chain_signals.get('network_health', 0.0)
+                    
+                    data_quality += whale_activity * 0.1
+                    data_quality += network_health * 0.1
+            
+            # Calculate consistency score
+            consistency_score = 0.0
+            if hasattr(self, 'last_market_data') and self.last_market_data:
+                # Compare with previous data for consistency
+                price_change = abs(price - self.last_market_data.btc_price) / price
+                if price_change < 0.1:  # Less than 10% change
+                    consistency_score = 0.5
+            
+            # Combine into confidence score
+            confidence_score = (data_quality + consistency_score) / 2.0
+            return min(max(confidence_score, 0.0), 1.0)
+            
+        except Exception as e:
+            logger.error(f"Error calculating confidence score: {e}")
+            raise
 
     def _get_mode_multiplier(self, mode: ProfitCalculationMode) -> float:
         """Get mode-specific multiplier."""

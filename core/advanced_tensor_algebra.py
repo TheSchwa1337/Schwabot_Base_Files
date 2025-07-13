@@ -325,32 +325,33 @@ class AdvancedTensorAlgebra:
             logger.error("Entropy modulation system failed: {0}".format(e))
             return tensor
 
-    def tensor_score(self, input_vector: np.ndarray, weight_matrix: np.ndarray = None) -> float:
-        """
-        Calculate tensor score for input vector.
-
-        Args:
-            input_vector: Input vector
-            weight_matrix: Weight matrix (identity if None)
-
-        Returns:
-            Tensor score
-        """
+    def tensor_score(self, input_vector: np.ndarray) -> float:
+        """Calculate tensor score using advanced tensor algebra."""
         try:
-            if weight_matrix is None:
-                weight_matrix = np.eye(len(input_vector))
+            if input_vector is None or len(input_vector) == 0:
+                return 0.0
             
-            # Calculate weighted score
-            score = np.dot(input_vector.T, np.dot(weight_matrix, input_vector))
+            # Real tensor algebra computation
+            # Apply quantum tensor operations
+            quantum_tensor = self.bit_phase_rotation(input_vector)
             
-            # Normalize score
-            normalized_score = score / (np.linalg.norm(input_vector) ** 2 + 1e-10)
+            # Apply entropy modulation
+            entropy_modulated = self.entropy_modulation_system(quantum_tensor, 0.5)
             
-            return float(normalized_score)
-
+            # Calculate tensor norm and normalize
+            tensor_norm = np.linalg.norm(entropy_modulated)
+            if tensor_norm > 0:
+                normalized_tensor = entropy_modulated / tensor_norm
+                
+                # Calculate score based on tensor properties
+                score = np.mean(np.abs(normalized_tensor)) * np.std(normalized_tensor)
+                return min(max(score, 0.0), 1.0)
+            else:
+                return 0.0
+                
         except Exception as e:
-            logger.error("Tensor score calculation failed: {0}".format(e))
-            return 0.0
+            self.logger.error(f"Error calculating tensor score: {e}")
+            raise
 
     def _calculate_adaptive_rotation_angle(self, x: np.ndarray) -> float:
         """Calculate adaptive rotation angle based on vector properties."""

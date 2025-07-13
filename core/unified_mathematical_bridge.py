@@ -737,23 +737,138 @@ class UnifiedMathematicalBridge:
         self.performance_monitor.start_monitoring()
     
     def _detect_phantom_zone_with_quantum(self, quantum_enhanced_prices, homology_result, quantum_result):
-        """Placeholder for phantom zone detection."""
-        return type('PhantomZone', (), {
-            'confidence': 0.5,
-            'zone_type': 'fallback'
-        })()
+        """Detect phantom zone using real quantum and mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for phantom zone detection")
+            
+            # Convert inputs to numpy arrays for analysis
+            if not isinstance(quantum_enhanced_prices, np.ndarray):
+                quantum_enhanced_prices = np.array(quantum_enhanced_prices)
+            
+            # Real mathematical analysis for phantom zone detection
+            phantom_analysis = self.math_orchestrator.process_data(quantum_enhanced_prices)
+            
+            # Calculate phantom zone confidence based on quantum and homology results
+            quantum_confidence = quantum_result.get('confidence', 0.0) if isinstance(quantum_result, dict) else 0.0
+            homology_confidence = homology_result.get('confidence', 0.0) if isinstance(homology_result, dict) else 0.0
+            
+            # Determine zone type based on mathematical analysis
+            if phantom_analysis > 0.8:
+                zone_type = 'high_confidence'
+            elif phantom_analysis > 0.6:
+                zone_type = 'medium_confidence'
+            elif phantom_analysis > 0.4:
+                zone_type = 'low_confidence'
+            else:
+                zone_type = 'no_zone'
+            
+            # Calculate overall confidence
+            overall_confidence = (phantom_analysis + quantum_confidence + homology_confidence) / 3.0
+            
+            return type('PhantomZone', (), {
+                'confidence': overall_confidence,
+                'zone_type': zone_type,
+                'phantom_analysis': phantom_analysis,
+                'quantum_confidence': quantum_confidence,
+                'homology_confidence': homology_confidence
+            })()
+            
+        except Exception as e:
+            self.logger.error(f"Error detecting phantom zone: {e}")
+            raise
     
     def _create_quantum_signature(self, measurement, entropy_modulated):
-        """Placeholder for quantum signature creation."""
-        return "quantum_signature"
+        """Create quantum signature using real mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for quantum signature creation")
+            
+            # Convert inputs to numpy arrays
+            if not isinstance(measurement, np.ndarray):
+                measurement = np.array(measurement)
+            if not isinstance(entropy_modulated, np.ndarray):
+                entropy_modulated = np.array(entropy_modulated)
+            
+            # Real mathematical analysis for quantum signature
+            measurement_analysis = self.math_orchestrator.process_data(measurement)
+            entropy_analysis = self.math_orchestrator.process_data(entropy_modulated)
+            
+            # Create quantum signature based on mathematical analysis
+            signature_components = [
+                f"q_{measurement_analysis:.6f}",
+                f"e_{entropy_analysis:.6f}",
+                f"t_{int(time.time())}"
+            ]
+            
+            quantum_signature = "_".join(signature_components)
+            return quantum_signature
+            
+        except Exception as e:
+            self.logger.error(f"Error creating quantum signature: {e}")
+            raise
     
     def _create_phantom_signature(self, phantom_zone, homology_result):
-        """Placeholder for phantom signature creation."""
-        return "phantom_signature"
+        """Create phantom signature using real mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for phantom signature creation")
+            
+            # Extract phantom zone data
+            phantom_confidence = getattr(phantom_zone, 'confidence', 0.0)
+            zone_type = getattr(phantom_zone, 'zone_type', 'unknown')
+            
+            # Extract homology result data
+            homology_confidence = homology_result.get('confidence', 0.0) if isinstance(homology_result, dict) else 0.0
+            
+            # Real mathematical analysis for phantom signature
+            phantom_data = np.array([phantom_confidence, homology_confidence])
+            phantom_analysis = self.math_orchestrator.process_data(phantom_data)
+            
+            # Create phantom signature based on mathematical analysis
+            signature_components = [
+                f"p_{phantom_confidence:.6f}",
+                f"h_{homology_confidence:.6f}",
+                f"a_{phantom_analysis:.6f}",
+                f"z_{zone_type}",
+                f"t_{int(time.time())}"
+            ]
+            
+            phantom_signature = "_".join(signature_components)
+            return phantom_signature
+            
+        except Exception as e:
+            self.logger.error(f"Error creating phantom signature: {e}")
+            raise
     
     def _create_quantum_phantom_signature(self, quantum_result, phantom_result):
-        """Placeholder for quantum-phantom signature creation."""
-        return "quantum_phantom_signature"
+        """Create quantum-phantom signature using real mathematical analysis."""
+        try:
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for quantum-phantom signature creation")
+            
+            # Extract quantum and phantom result data
+            quantum_confidence = quantum_result.get('confidence', 0.0) if isinstance(quantum_result, dict) else 0.0
+            phantom_confidence = phantom_result.get('confidence', 0.0) if isinstance(phantom_result, dict) else 0.0
+            
+            # Real mathematical analysis for quantum-phantom signature
+            combined_data = np.array([quantum_confidence, phantom_confidence])
+            combined_analysis = self.math_orchestrator.process_data(combined_data)
+            
+            # Create quantum-phantom signature based on mathematical analysis
+            signature_components = [
+                f"q_{quantum_confidence:.6f}",
+                f"p_{phantom_confidence:.6f}",
+                f"c_{combined_analysis:.6f}",
+                f"t_{int(time.time())}"
+            ]
+            
+            quantum_phantom_signature = "_".join(signature_components)
+            return quantum_phantom_signature
+            
+        except Exception as e:
+            self.logger.error(f"Error creating quantum-phantom signature: {e}")
+            raise
 
     def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
         """Calculate mathematical result with proper data handling and bridge integration."""
@@ -761,18 +876,14 @@ class UnifiedMathematicalBridge:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if self.math_orchestrator:
-                # Use the actual mathematical modules for calculation
-                if len(data) > 0:
-                    # Use mathematical orchestration for bridge integration analysis
-                    result = self.math_orchestrator.process_data(data)
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                # Fallback to basic calculation
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+            if not (MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator):
+                raise RuntimeError("Mathematical infrastructure not available for result calculation")
+            
+            if len(data) > 0:
+                result = self.math_orchestrator.process_data(data)
                 return float(result)
+            else:
+                return 0.0
         except Exception as e:
             self.logger.error(f"Mathematical calculation error: {e}")
             return 0.0
@@ -821,6 +932,85 @@ class UnifiedMathematicalBridge:
                 'health_threshold': self.config.health_threshold
             }
         }
+
+    def _calculate_bridge_confidence(self, connection_data: Dict[str, Any]) -> float:
+        """Calculate bridge confidence using real mathematical operations."""
+        try:
+            # Extract connection metrics
+            connection_strength = connection_data.get('connection_strength', 0.0)
+            mathematical_signature = connection_data.get('mathematical_signature', '')
+            performance_metrics = connection_data.get('performance_metrics', {})
+            
+            # Real mathematical computation for bridge confidence
+            if connection_strength > 0 and mathematical_signature:
+                # Calculate signature complexity
+                signature_complexity = len(mathematical_signature) / 100.0  # Normalize
+                
+                # Calculate performance score
+                performance_score = 0.0
+                if performance_metrics:
+                    # Weight different performance metrics
+                    weights = {
+                        'phantom_confidence': 0.3,
+                        'risk_score': 0.2,
+                        'signal_confidence': 0.2,
+                        'math_confidence': 0.3
+                    }
+                    
+                    for metric, weight in weights.items():
+                        if metric in performance_metrics:
+                            performance_score += performance_metrics[metric] * weight
+                
+                # Combine into bridge confidence
+                bridge_confidence = (
+                    connection_strength * 0.4 +
+                    signature_complexity * 0.3 +
+                    performance_score * 0.3
+                )
+                
+                return min(max(bridge_confidence, 0.0), 1.0)
+            else:
+                return 0.0
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating bridge confidence: {e}")
+            raise
+
+    def _calculate_connection_strength(self, source_data: Dict[str, Any], target_data: Dict[str, Any]) -> float:
+        """Calculate connection strength using real mathematical operations."""
+        try:
+            # Extract source and target metrics
+            source_confidence = source_data.get('confidence', 0.0)
+            target_confidence = target_data.get('confidence', 0.0)
+            source_signature = source_data.get('signature', '')
+            target_signature = target_data.get('signature', '')
+            
+            # Real mathematical computation for connection strength
+            if source_confidence > 0 and target_confidence > 0:
+                # Calculate signature similarity
+                signature_similarity = 0.0
+                if source_signature and target_signature:
+                    # Simple hash-based similarity
+                    source_hash = hash(source_signature) % 1000
+                    target_hash = hash(target_signature) % 1000
+                    signature_similarity = 1.0 - abs(source_hash - target_hash) / 1000.0
+                
+                # Calculate confidence correlation
+                confidence_correlation = (source_confidence + target_confidence) / 2.0
+                
+                # Calculate connection strength
+                connection_strength = (
+                    confidence_correlation * 0.6 +
+                    signature_similarity * 0.4
+                )
+                
+                return min(max(connection_strength, 0.0), 1.0)
+            else:
+                return 0.0
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating connection strength: {e}")
+            raise
 
 
 # Factory function following your patterns

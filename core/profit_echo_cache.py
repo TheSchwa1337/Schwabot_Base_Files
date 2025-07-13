@@ -1066,6 +1066,104 @@ class ProfitEchoCache:
             self.logger.error(f"Mathematical calculation error: {e}")
             return 0.0
 
+    def _calculate_mathematical_score(self, profits: List[float]) -> float:
+        """Calculate mathematical score from profit history."""
+        try:
+            if not profits:
+                return 0.0
+            
+            # Real mathematical computation based on profit patterns
+            profits_array = np.array(profits)
+            
+            # Calculate profit volatility
+            profit_volatility = np.std(profits_array) if len(profits_array) > 1 else 0.0
+            
+            # Calculate profit trend
+            if len(profits_array) > 1:
+                profit_trend = np.polyfit(range(len(profits_array)), profits_array, 1)[0]
+            else:
+                profit_trend = 0.0
+            
+            # Calculate average profit
+            avg_profit = np.mean(profits_array)
+            
+            # Combine into mathematical score
+            volatility_score = min(profit_volatility / (abs(avg_profit) + 1e-8), 1.0)
+            trend_score = min(max(profit_trend / (abs(avg_profit) + 1e-8), 0.0), 1.0)
+            
+            mathematical_score = (volatility_score * 0.4 + trend_score * 0.6)
+            return min(max(mathematical_score, 0.0), 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating mathematical score: {e}")
+            raise
+
+    def _calculate_tensor_score(self, profits: List[float]) -> float:
+        """Calculate tensor score from profit history."""
+        try:
+            if not profits:
+                return 0.0
+            
+            # Real tensor computation based on profit patterns
+            profits_array = np.array(profits)
+            
+            # Create profit tensor
+            if len(profits_array) >= 3:
+                # Use 3D tensor representation
+                tensor_data = profits_array.reshape(-1, 1, 1)
+                
+                # Calculate tensor properties
+                tensor_norm = np.linalg.norm(tensor_data)
+                tensor_mean = np.mean(tensor_data)
+                tensor_std = np.std(tensor_data)
+                
+                # Calculate tensor score
+                if tensor_norm > 0:
+                    normalized_tensor = tensor_data / tensor_norm
+                    tensor_score = np.mean(np.abs(normalized_tensor)) * (tensor_std / (abs(tensor_mean) + 1e-8))
+                    return min(max(tensor_score, 0.0), 1.0)
+                else:
+                    return 0.0
+            else:
+                # Fallback for insufficient data
+                return np.mean(np.abs(profits_array)) / (np.mean(np.abs(profits_array)) + 1e-8)
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating tensor score: {e}")
+            raise
+
+    def _calculate_entropy_score(self, profits: List[float]) -> float:
+        """Calculate entropy score from profit history."""
+        try:
+            if not profits:
+                return 0.0
+            
+            # Real entropy computation based on profit patterns
+            profits_array = np.array(profits)
+            
+            # Calculate profit entropy using Shannon entropy
+            if len(profits_array) > 1:
+                # Discretize profits for entropy calculation
+                profit_bins = np.histogram(profits_array, bins=min(10, len(profits_array)//2))[0]
+                profit_probs = profit_bins / np.sum(profit_bins)
+                
+                # Calculate Shannon entropy
+                entropy = -np.sum(profit_probs * np.log(profit_probs + 1e-8))
+                
+                # Normalize entropy score
+                max_entropy = np.log(len(profit_probs))
+                if max_entropy > 0:
+                    entropy_score = entropy / max_entropy
+                    return min(max(entropy_score, 0.0), 1.0)
+                else:
+                    return 0.0
+            else:
+                return 0.0
+                
+        except Exception as e:
+            self.logger.error(f"Error calculating entropy score: {e}")
+            raise
+
 # Factory function
 def create_profit_echo_cache(path: str = "data/profit_echo.json", config: Optional[Dict[str, Any]] = None):
     """Create a profit echo cache instance with mathematical integration."""

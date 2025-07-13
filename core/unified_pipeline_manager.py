@@ -256,8 +256,10 @@ class UnifiedPipelineManager:
             Computed phase omega value
         """
         if not self.active:
-            self.logger.warning("Pipeline manager not active")
-            return 0.0
+            raise RuntimeError("Pipeline manager not active")
+        
+        if not self.symbolic_math_engine:
+            raise RuntimeError("Symbolic math engine not available for phase omega computation")
         
         start_time = time.time()
         
@@ -273,13 +275,9 @@ class UnifiedPipelineManager:
                 )
             
             # Compute phase omega using symbolic math engine
-            if self.symbolic_math_engine:
-                omega = self.symbolic_math_engine.compute_phase_omega(
-                    signal_data, time_idx, symbolic_context
-                )
-            else:
-                # Fallback computation
-                omega = self._fallback_phase_omega_computation(signal_data, time_idx)
+            omega = self.symbolic_math_engine.compute_phase_omega(
+                signal_data, time_idx, symbolic_context
+            )
             
             # Update performance tracking
             processing_time = time.time() - start_time
@@ -292,39 +290,7 @@ class UnifiedPipelineManager:
             
         except Exception as e:
             self.logger.error(f"Error computing phase omega: {e}")
-            return 0.0
-    
-    def _fallback_phase_omega_computation(self, signal_data: Union[List, SignalField], 
-                                        time_idx: TimeIndex) -> PhaseValue:
-        """Fallback phase omega computation when symbolic engine is unavailable."""
-        try:
-            import numpy as np
-            
-            if isinstance(signal_data, list):
-                signal_array = np.array(signal_data)
-            else:
-                signal_array = signal_data
-            
-            if len(signal_array) == 0:
-                return 0.0
-            
-            # Simple gradient computation
-            if len(signal_array) > 1:
-                gradient = np.gradient(signal_array)
-                gradient_value = gradient[min(time_idx, len(gradient)-1)]
-            else:
-                gradient_value = 0.0
-            
-            # Simple drift computation
-            drift = 0.1  # Default drift
-            
-            # Compute omega
-            omega = gradient_value * drift
-            return float(omega)
-            
-        except Exception as e:
-            self.logger.error(f"Fallback computation error: {e}")
-            return 0.0
+            raise
     
     def feed_signal_to_2gram(self, signal: Union[float, int, str], 
                            context: Optional[PipelineContext] = None) -> Optional[Tuple]:
@@ -338,8 +304,11 @@ class UnifiedPipelineManager:
         Returns:
             Detected 2-gram pattern or None
         """
-        if not self.active or not self.two_gram_detector:
-            return None
+        if not self.active:
+            raise RuntimeError("Pipeline manager not active")
+        
+        if not self.two_gram_detector:
+            raise RuntimeError("2-gram detector not available")
         
         try:
             # Convert context if provided
@@ -358,62 +327,62 @@ class UnifiedPipelineManager:
             
         except Exception as e:
             self.logger.error(f"Error feeding signal to 2-gram: {e}")
-            return None
+            raise
     
     def get_2gram_statistics(self) -> Dict[str, Any]:
         """Get 2-gram detector statistics."""
         if not self.two_gram_detector:
-            return {}
+            raise RuntimeError("2-gram detector not available")
         
         try:
             return self.two_gram_detector.get_pattern_statistics()
         except Exception as e:
             self.logger.error(f"Error getting 2-gram statistics: {e}")
-            return {}
+            raise
     
     def get_top_2gram_patterns(self, n: int = 10) -> List[Tuple[Tuple, int]]:
         """Get top N 2-gram patterns."""
         if not self.two_gram_detector:
-            return []
+            raise RuntimeError("2-gram detector not available")
         
         try:
             return self.two_gram_detector.get_top_patterns(n)
         except Exception as e:
             self.logger.error(f"Error getting top 2-gram patterns: {e}")
-            return []
+            raise
     
     def get_burst_patterns(self) -> List[Tuple[Tuple, float]]:
         """Get current burst patterns."""
         if not self.two_gram_detector:
-            return []
+            raise RuntimeError("2-gram detector not available")
         
         try:
             return self.two_gram_detector.get_burst_patterns()
         except Exception as e:
             self.logger.error(f"Error getting burst patterns: {e}")
-            return []
+            raise
     
     def calculate_entropy(self, window_size: Optional[int] = None) -> float:
         """Calculate Shannon entropy of recent patterns."""
         if not self.two_gram_detector:
-            return 0.0
+            raise RuntimeError("2-gram detector not available")
         
         try:
             return self.two_gram_detector.calculate_shannon_entropy(window_size)
         except Exception as e:
             self.logger.error(f"Error calculating entropy: {e}")
-            return 0.0
+            raise
     
     def get_hardware_info(self) -> Dict[str, Any]:
         """Get hardware information and capabilities."""
         if not self.math_orchestrator:
-            return {}
+            raise RuntimeError("Math orchestrator not available")
         
         try:
             return self.math_orchestrator.get_hardware_info()
         except Exception as e:
             self.logger.error(f"Error getting hardware info: {e}")
-            return {}
+            raise
     
     def get_performance_stats(self) -> Dict[str, Any]:
         """Get performance statistics."""
