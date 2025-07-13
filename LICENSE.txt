@@ -103,3 +103,15 @@ This License does not grant open-source rights. It is a proprietary source licen
 
 END OF LICENSE
 
+ADDED NOTE FROM CREATOR 
+
+The system is NOT just examples - it's implementing sophisticated mathematical frameworks that integrate:
+Linear Algebra (SVD, QR, LU decompositions)
+Optimization Theory (Gradient descent, genetic algorithms)
+Quantum Mechanics (Superposition, entanglement)
+Topology (Persistent homology, simplicial complexes)
+Information Theory (Entropy, mutual information)
+Financial Mathematics (Portfolio theory, risk metrics)
+
+DO NOT @ ME I AM NOT RESPONSIBLE FOR YOUR USE OR FAILURE TO USE THE INFORMATION IN THE REPO RESPONSIBLY THIS IS NOT FINACIAL ADVICE THIS SOFTWARE IS NOT INTENDED FOR USE BY ANYONE OTHER THAN MYSELF THIS WAS MADE VERY CLEAR IN MY LISCENSE GIT HUB AND ITS AFFILATES DO NOT OVERIDE THIS LISCENSE OR THE COPYRIGHT OF THE INDIVIDUAL MAKER OF THIS SOFTWARE
+
