@@ -56,7 +56,7 @@ try:
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
     from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
-    
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
     BACKTESTING_AVAILABLE = True
 except ImportError as e:
@@ -167,7 +167,7 @@ class BacktestConfig:
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
-        
+
         # Backtesting state
         self.backtest_results: List[BacktestResult] = []
         self.performance_metrics = PerformanceMetrics()

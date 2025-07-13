@@ -63,4 +63,19 @@ class BridgeMetrics:
     failed_integrations: int = 0
     average_connection_strength: float = 0.0
     mathematical_analyses: int = 0
-    last_updated: float = field(default_factory=time.time) 
+    last_updated: float = field(default_factory=time.time)
+
+
+@dataclass
+class UnifiedBridgeConfig:
+    """Configuration for unified mathematical bridge."""
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+    mathematical_integration: bool = True
+    connection_monitoring: bool = True
+    performance_optimization: bool = True
+    health_threshold: float = 0.7
+    max_connections: int = 100
+    connection_timeout: float = 60.0 

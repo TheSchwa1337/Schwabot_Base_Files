@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from core.unified_mathematical_bridge import MathematicalConnection, BridgeConnectionType
+from core.mathematical_connection import MathematicalConnection, BridgeConnectionType
 
 logger = logging.getLogger(__name__)
 
@@ -35,278 +35,236 @@ class UnifiedMathematicalIntegrationMethods:
                                                 portfolio_state: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Phantom Math → Risk Management with mathematical validation."""
         
-        try:
-            # Extract phantom result from previous connection
-            phantom_result = quantum_phantom_connection.metadata.get('phantom_zone', {})
-            
-            # Risk calculation with phantom enhancement
-            risk_metrics = self._calculate_phantom_enhanced_risk(phantom_result, portfolio_state)
-            
-            # Matrix fault validation
-            fault_validation = self._validate_risk_with_matrix_faults(risk_metrics)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_phantom_risk_connection_strength(
-                phantom_result, risk_metrics
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_phantom_risk_signature(phantom_result, risk_metrics)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.PHANTOM_TO_RISK,
-                source_system="phantom_math",
-                target_system="risk_management",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'phantom_confidence': phantom_result.get('phantom_confidence', 0.0),
-                    'risk_score': risk_metrics.get('risk_score', 0.0),
-                    'fault_validation': fault_validation.get('valid', False)
-                },
-                metadata={
-                    'phantom_result': phantom_result,
-                    'risk_metrics': risk_metrics,
-                    'fault_validation': fault_validation
-                }
-            )
-            
-            self.logger.info(f"🔗 Phantom→Risk connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Phantom→Risk integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.PHANTOM_TO_RISK, "phantom_math", "risk_management"
-            )
+        # Extract phantom result from previous connection
+        phantom_result = quantum_phantom_connection.metadata.get('phantom_zone', {})
+        
+        # Risk calculation with phantom enhancement
+        risk_metrics = self._calculate_phantom_enhanced_risk(phantom_result, portfolio_state)
+        
+        # Matrix fault validation
+        fault_validation = self._validate_risk_with_matrix_faults(risk_metrics)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_phantom_risk_connection_strength(
+            phantom_result, risk_metrics
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_phantom_risk_signature(phantom_result, risk_metrics)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.PHANTOM_TO_RISK,
+            source_system="phantom_math",
+            target_system="risk_management",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'phantom_confidence': phantom_result.get('phantom_confidence', 0.0),
+                'risk_score': risk_metrics.get('risk_score', 0.0),
+                'fault_validation': fault_validation.get('valid', False)
+            },
+            metadata={
+                'phantom_result': phantom_result,
+                'risk_metrics': risk_metrics,
+                'fault_validation': fault_validation
+            }
+        )
+        
+        self.logger.info(f"🔗 Phantom→Risk connection established (strength: {connection_strength:.3f})")
+        return connection
     
     def integrate_persistent_homology_to_signal_generation(self, market_data: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Persistent Homology → Signal Generation with mathematical optimization."""
         
-        try:
-            # Persistent homology analysis
-            homology_result = self._apply_persistent_homology_analysis(market_data)
-            
-            # Signal generation with homology features
-            signal_result = self._generate_homology_enhanced_signals(market_data, homology_result)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_homology_signal_connection_strength(
-                homology_result, signal_result
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_homology_signal_signature(homology_result, signal_result)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.HOMOLOGY_TO_SIGNAL,
-                source_system="persistent_homology",
-                target_system="signal_generation",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'homology_features': homology_result.get('feature_count', 0),
-                    'signal_confidence': signal_result.get('confidence', 0.0),
-                    'persistence_score': homology_result.get('persistence_score', 0.0)
-                },
-                metadata={
-                    'homology_result': homology_result,
-                    'signal_result': signal_result
-                }
-            )
-            
-            self.logger.info(f"🔗 Homology→Signal connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Homology→Signal integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.HOMOLOGY_TO_SIGNAL, "persistent_homology", "signal_generation"
-            )
+        # Persistent homology analysis
+        homology_result = self._apply_persistent_homology_analysis(market_data)
+        
+        # Signal generation with homology features
+        signal_result = self._generate_homology_enhanced_signals(market_data, homology_result)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_homology_signal_connection_strength(
+            homology_result, signal_result
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_homology_signal_signature(homology_result, signal_result)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.HOMOLOGY_TO_SIGNAL,
+            source_system="persistent_homology",
+            target_system="signal_generation",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'homology_features': homology_result.get('feature_count', 0),
+                'signal_confidence': signal_result.get('confidence', 0.0),
+                'persistence_score': homology_result.get('persistence_score', 0.0)
+            },
+            metadata={
+                'homology_result': homology_result,
+                'signal_result': signal_result
+            }
+        )
+        
+        self.logger.info(f"🔗 Homology→Signal connection established (strength: {connection_strength:.3f})")
+        return connection
     
     def integrate_signal_generation_to_profit_optimization(self, homology_signal_connection: MathematicalConnection,
                                                          portfolio_state: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Signal Generation → Profit Optimization with unified math."""
         
-        try:
-            # Extract signal result from previous connection
-            signal_result = homology_signal_connection.metadata.get('signal_result', {})
-            
-            # Profit optimization with unified math
-            profit_result = self._optimize_profit_with_unified_math(signal_result, portfolio_state)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_signal_profit_connection_strength(
-                signal_result, profit_result
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_signal_profit_signature(signal_result, profit_result)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.SIGNAL_TO_PROFIT,
-                source_system="signal_generation",
-                target_system="profit_optimization",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'signal_confidence': signal_result.get('confidence', 0.0),
-                    'profit_optimization': profit_result.get('optimized_profit', 0.0),
-                    'unified_math_confidence': profit_result.get('math_confidence', 0.0)
-                },
-                metadata={
-                    'signal_result': signal_result,
-                    'profit_result': profit_result
-                }
-            )
-            
-            self.logger.info(f"🔗 Signal→Profit connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Signal→Profit integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.SIGNAL_TO_PROFIT, "signal_generation", "profit_optimization"
-            )
+        # Extract signal result from previous connection
+        signal_result = homology_signal_connection.metadata.get('signal_result', {})
+        
+        # Profit optimization with unified math
+        profit_result = self._optimize_profit_with_unified_math(signal_result, portfolio_state)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_signal_profit_connection_strength(
+            signal_result, profit_result
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_signal_profit_signature(signal_result, profit_result)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.SIGNAL_TO_PROFIT,
+            source_system="signal_generation",
+            target_system="profit_optimization",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'signal_confidence': signal_result.get('confidence', 0.0),
+                'profit_optimization': profit_result.get('optimized_profit', 0.0),
+                'unified_math_confidence': profit_result.get('math_confidence', 0.0)
+            },
+            metadata={
+                'signal_result': signal_result,
+                'profit_result': profit_result
+            }
+        )
+        
+        self.logger.info(f"🔗 Signal→Profit connection established (strength: {connection_strength:.3f})")
+        return connection
     
     def integrate_tensor_algebra_to_unified_math(self, market_data: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Tensor Algebra → Unified Math with performance enhancement."""
         
-        try:
-            # Tensor algebra operations
-            tensor_result = self._apply_tensor_algebra_operations(market_data)
-            
-            # Unified math integration
-            unified_result = self._integrate_with_unified_math(tensor_result)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_tensor_unified_connection_strength(
-                tensor_result, unified_result
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_tensor_unified_signature(tensor_result, unified_result)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.TENSOR_TO_UNIFIED,
-                source_system="tensor_algebra",
-                target_system="unified_math",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'tensor_operations': tensor_result.get('operation_count', 0),
-                    'unified_math_confidence': unified_result.get('confidence', 0.0),
-                    'performance_enhancement': unified_result.get('performance_gain', 0.0)
-                },
-                metadata={
-                    'tensor_result': tensor_result,
-                    'unified_result': unified_result
-                }
-            )
-            
-            self.logger.info(f"🔗 Tensor→Unified connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Tensor→Unified integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.TENSOR_TO_UNIFIED, "tensor_algebra", "unified_math"
-            )
+        # Tensor algebra operations
+        tensor_result = self._apply_tensor_algebra_operations(market_data)
+        
+        # Unified math integration
+        unified_result = self._integrate_with_unified_math(tensor_result)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_tensor_unified_connection_strength(
+            tensor_result, unified_result
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_tensor_unified_signature(tensor_result, unified_result)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.TENSOR_TO_UNIFIED,
+            source_system="tensor_algebra",
+            target_system="unified_math",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'tensor_operations': tensor_result.get('operation_count', 0),
+                'unified_math_confidence': unified_result.get('confidence', 0.0),
+                'performance_enhancement': unified_result.get('performance_gain', 0.0)
+            },
+            metadata={
+                'tensor_result': tensor_result,
+                'unified_result': unified_result
+            }
+        )
+        
+        self.logger.info(f"🔗 Tensor→Unified connection established (strength: {connection_strength:.3f})")
+        return connection
     
     def integrate_vault_orbital_to_math_integration(self, market_data: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Vault Orbital → Math Integration with system coordination."""
         
-        try:
-            # Vault orbital analysis
-            vault_orbital_result = self._apply_vault_orbital_analysis(market_data)
-            
-            # Math integration coordination
-            math_integration_result = self._coordinate_math_integration(vault_orbital_result)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_vault_math_connection_strength(
-                vault_orbital_result, math_integration_result
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_vault_math_signature(vault_orbital_result, math_integration_result)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.VAULT_TO_ORBITAL,
-                source_system="vault_orbital",
-                target_system="math_integration",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'vault_state': vault_orbital_result.get('vault_state', 'unknown'),
-                    'orbital_state': vault_orbital_result.get('orbital_state', 'unknown'),
-                    'integration_confidence': math_integration_result.get('confidence', 0.0)
-                },
-                metadata={
-                    'vault_orbital_result': vault_orbital_result,
-                    'math_integration_result': math_integration_result
-                }
-            )
-            
-            self.logger.info(f"🔗 Vault→Math connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Vault→Math integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.VAULT_TO_ORBITAL, "vault_orbital", "math_integration"
-            )
+        # Vault orbital analysis
+        vault_orbital_result = self._apply_vault_orbital_analysis(market_data)
+        
+        # Math integration coordination
+        math_integration_result = self._coordinate_math_integration(vault_orbital_result)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_vault_math_connection_strength(
+            vault_orbital_result, math_integration_result
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_vault_math_signature(vault_orbital_result, math_integration_result)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.VAULT_TO_ORBITAL,
+            source_system="vault_orbital",
+            target_system="math_integration",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'vault_state': vault_orbital_result.get('vault_state', 'unknown'),
+                'orbital_state': vault_orbital_result.get('orbital_state', 'unknown'),
+                'integration_confidence': math_integration_result.get('confidence', 0.0)
+            },
+            metadata={
+                'vault_orbital_result': vault_orbital_result,
+                'math_integration_result': math_integration_result
+            }
+        )
+        
+        self.logger.info(f"🔗 Vault→Math connection established (strength: {connection_strength:.3f})")
+        return connection
     
     def integrate_profit_optimization_to_heartbeat(self, signal_profit_connection: MathematicalConnection,
                                                  portfolio_state: Dict[str, Any]) -> MathematicalConnection:
         """Integrate Profit Optimization → Heartbeat Integration with system health."""
         
-        try:
-            # Extract profit result from previous connection
-            profit_result = signal_profit_connection.metadata.get('profit_result', {})
-            
-            # Heartbeat integration with profit awareness
-            heartbeat_result = self._integrate_profit_with_heartbeat(profit_result, portfolio_state)
-            
-            # Calculate connection strength
-            connection_strength = self._calculate_profit_heartbeat_connection_strength(
-                profit_result, heartbeat_result
-            )
-            
-            # Create mathematical signature
-            mathematical_signature = self._create_profit_heartbeat_signature(profit_result, heartbeat_result)
-            
-            connection = MathematicalConnection(
-                connection_type=BridgeConnectionType.PROFIT_TO_HEARTBEAT,
-                source_system="profit_optimization",
-                target_system="heartbeat_integration",
-                connection_strength=connection_strength,
-                mathematical_signature=mathematical_signature,
-                last_validation=time.time(),
-                performance_metrics={
-                    'profit_optimization': profit_result.get('optimized_profit', 0.0),
-                    'heartbeat_health': heartbeat_result.get('health_score', 0.0),
-                    'system_performance': heartbeat_result.get('performance_score', 0.0)
-                },
-                metadata={
-                    'profit_result': profit_result,
-                    'heartbeat_result': heartbeat_result
-                }
-            )
-            
-            self.logger.info(f"🔗 Profit→Heartbeat connection established (strength: {connection_strength:.3f})")
-            return connection
-            
-        except Exception as e:
-            self.logger.error(f"❌ Profit→Heartbeat integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.PROFIT_TO_HEARTBEAT, "profit_optimization", "heartbeat_integration"
-            )
+        # Extract profit result from previous connection
+        profit_result = signal_profit_connection.metadata.get('profit_result', {})
+        
+        # Heartbeat integration with profit awareness
+        heartbeat_result = self._integrate_profit_with_heartbeat(profit_result, portfolio_state)
+        
+        # Calculate connection strength
+        connection_strength = self._calculate_profit_heartbeat_connection_strength(
+            profit_result, heartbeat_result
+        )
+        
+        # Create mathematical signature
+        mathematical_signature = self._create_profit_heartbeat_signature(profit_result, heartbeat_result)
+        
+        connection = MathematicalConnection(
+            connection_type=BridgeConnectionType.PROFIT_TO_HEARTBEAT,
+            source_system="profit_optimization",
+            target_system="heartbeat_integration",
+            connection_strength=connection_strength,
+            mathematical_signature=mathematical_signature,
+            last_validation=time.time(),
+            performance_metrics={
+                'profit_optimization': profit_result.get('optimized_profit', 0.0),
+                'heartbeat_health': heartbeat_result.get('health_score', 0.0),
+                'system_performance': heartbeat_result.get('performance_score', 0.0)
+            },
+            metadata={
+                'profit_result': profit_result,
+                'heartbeat_result': heartbeat_result
+            }
+        )
+        
+        self.logger.info(f"🔗 Profit→Heartbeat connection established (strength: {connection_strength:.3f})")
+        return connection
     
     # Implementation methods for mathematical operations
     def _calculate_phantom_enhanced_risk(self, phantom_result: Dict[str, Any], 
@@ -338,7 +296,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Phantom enhanced risk calculation failed: {e}")
-            return {'risk_score': 0.5, 'base_risk': 0.5, 'phantom_enhancement': 0.0}
+            raise
     
     def _validate_risk_with_matrix_faults(self, risk_metrics: Dict[str, Any]) -> Dict[str, Any]:
         """Validate risk metrics using matrix fault resolution."""
@@ -364,7 +322,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Risk validation failed: {e}")
-            return {'valid': True, 'fault_level': 'low', 'validation_confidence': 0.5}
+            raise
     
     def _apply_persistent_homology_analysis(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply persistent homology analysis to market data."""
@@ -396,13 +354,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Persistent homology analysis failed: {e}")
-            return {
-                'feature_count': 0,
-                'persistence_score': 0.0,
-                'max_persistence': 0.0,
-                'simplices_count': 0,
-                'topological_stability': 0.0
-            }
+            raise
     
     def _generate_homology_enhanced_signals(self, market_data: Dict[str, Any], 
                                           homology_result: Dict[str, Any]) -> Dict[str, Any]:
@@ -433,13 +385,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Homology enhanced signal generation failed: {e}")
-            return {
-                'signal_type': 'HOLD',
-                'confidence': 0.5,
-                'homology_features': 0,
-                'persistence_score': 0.0,
-                'topological_stability': 0.0
-            }
+            raise
     
     def _optimize_profit_with_unified_math(self, signal_result: Dict[str, Any], 
                                          portfolio_state: Dict[str, Any]) -> Dict[str, Any]:
@@ -468,13 +414,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Profit optimization failed: {e}")
-            return {
-                'optimized_profit': 0.0,
-                'base_profit': 0.0,
-                'math_confidence': 0.5,
-                'signal_confidence': 0.5,
-                'enhancement_factor': 1.0
-            }
+            raise
     
     def _apply_tensor_algebra_operations(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply tensor algebra operations to market data."""
@@ -495,13 +435,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Tensor algebra operations failed: {e}")
-            return {
-                'operation_count': 0,
-                'quantum_tensor': [],
-                'entropy_modulated': [],
-                'tensor_score': 0.5,
-                'performance_gain': 0.0
-            }
+            raise
     
     def _integrate_with_unified_math(self, tensor_result: Dict[str, Any]) -> Dict[str, Any]:
         """Integrate tensor results with unified math system."""
@@ -522,12 +456,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Unified math integration failed: {e}")
-            return {
-                'confidence': 0.5,
-                'performance_gain': 0.0,
-                'tensor_score': 0.5,
-                'enhanced_score': 0.5
-            }
+            raise
     
     def _apply_vault_orbital_analysis(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply vault orbital bridge analysis."""
@@ -554,14 +483,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Vault orbital analysis failed: {e}")
-            return {
-                'vault_state': 'stable',
-                'orbital_state': 's',
-                'recommended_strategy': 'hold',
-                'confidence': 0.5,
-                'liquidity_level': 0.5,
-                'entropy_level': 0.1
-            }
+            raise
     
     def _coordinate_math_integration(self, vault_orbital_result: Dict[str, Any]) -> Dict[str, Any]:
         """Coordinate math integration based on vault orbital results."""
@@ -589,12 +511,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Math integration coordination failed: {e}")
-            return {
-                'integration_mode': 'fallback_integration',
-                'confidence': 0.5,
-                'vault_state': 'stable',
-                'orbital_state': 's'
-            }
+            raise
     
     def _integrate_profit_with_heartbeat(self, profit_result: Dict[str, Any], 
                                        portfolio_state: Dict[str, Any]) -> Dict[str, Any]:
@@ -621,13 +538,7 @@ class UnifiedMathematicalIntegrationMethods:
             }
         except Exception as e:
             self.logger.error(f"Profit-heartbeat integration failed: {e}")
-            return {
-                'health_score': 0.5,
-                'performance_score': 0.5,
-                'heartbeat_status': 'fallback',
-                'optimized_profit': 0.0,
-                'math_confidence': 0.5
-            }
+            raise
     
     # Connection strength calculation methods
     def _calculate_phantom_risk_connection_strength(self, phantom_result: Dict[str, Any], 
@@ -646,7 +557,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Phantom-risk connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     def _calculate_homology_signal_connection_strength(self, homology_result: Dict[str, Any], 
                                                      signal_result: Dict[str, Any]) -> float:
@@ -665,7 +576,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Homology-signal connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     def _calculate_signal_profit_connection_strength(self, signal_result: Dict[str, Any], 
                                                    profit_result: Dict[str, Any]) -> float:
@@ -681,7 +592,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Signal-profit connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     def _calculate_tensor_unified_connection_strength(self, tensor_result: Dict[str, Any], 
                                                     unified_result: Dict[str, Any]) -> float:
@@ -697,7 +608,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Tensor-unified connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     def _calculate_vault_math_connection_strength(self, vault_orbital_result: Dict[str, Any], 
                                                 math_integration_result: Dict[str, Any]) -> float:
@@ -712,7 +623,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Vault-math connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     def _calculate_profit_heartbeat_connection_strength(self, profit_result: Dict[str, Any], 
                                                       heartbeat_result: Dict[str, Any]) -> float:
@@ -728,7 +639,7 @@ class UnifiedMathematicalIntegrationMethods:
             return min(max(connection_strength, 0.0), 1.0)
         except Exception as e:
             self.logger.error(f"Profit-heartbeat connection strength calculation failed: {e}")
-            return 0.5
+            raise
     
     # Signature creation methods
     def _create_phantom_risk_signature(self, phantom_result: Dict[str, Any], 
@@ -739,7 +650,7 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Phantom-risk signature creation failed: {e}")
-            return "phantom_risk_signature"
+            raise
     
     def _create_homology_signal_signature(self, homology_result: Dict[str, Any], 
                                         signal_result: Dict[str, Any]) -> str:
@@ -749,7 +660,7 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Homology-signal signature creation failed: {e}")
-            return "homology_signal_signature"
+            raise
     
     def _create_signal_profit_signature(self, signal_result: Dict[str, Any], 
                                       profit_result: Dict[str, Any]) -> str:
@@ -759,7 +670,7 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Signal-profit signature creation failed: {e}")
-            return "signal_profit_signature"
+            raise
     
     def _create_tensor_unified_signature(self, tensor_result: Dict[str, Any], 
                                        unified_result: Dict[str, Any]) -> str:
@@ -769,7 +680,7 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Tensor-unified signature creation failed: {e}")
-            return "tensor_unified_signature"
+            raise
     
     def _create_vault_math_signature(self, vault_orbital_result: Dict[str, Any], 
                                    math_integration_result: Dict[str, Any]) -> str:
@@ -779,7 +690,7 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Vault-math signature creation failed: {e}")
-            return "vault_math_signature"
+            raise
     
     def _create_profit_heartbeat_signature(self, profit_result: Dict[str, Any], 
                                          heartbeat_result: Dict[str, Any]) -> str:
@@ -789,18 +700,4 @@ class UnifiedMathematicalIntegrationMethods:
             return hashlib.sha256(signature_data.encode()).hexdigest()
         except Exception as e:
             self.logger.error(f"Profit-heartbeat signature creation failed: {e}")
-            return "profit_heartbeat_signature"
-    
-    def _create_fallback_connection(self, connection_type: BridgeConnectionType, 
-                                  source: str, target: str) -> MathematicalConnection:
-        """Create fallback connection when integration fails."""
-        return MathematicalConnection(
-            connection_type=connection_type,
-            source_system=source,
-            target_system=target,
-            connection_strength=0.5,
-            mathematical_signature="fallback_signature",
-            last_validation=time.time(),
-            performance_metrics={'fallback': True},
-            metadata={'fallback': True}
-        ) 
+            raise 

@@ -210,9 +210,9 @@ class MultiFrequencyResonanceEngine:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
             self.unified_bridge = UnifiedMathematicalBridge(self.config)
             self.trading_pipeline = AutomatedTradingPipeline(self.config)
-
+        
         self._initialize_system()
-
+    
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration with mathematical frequency analysis settings."""
         return {
@@ -232,7 +232,7 @@ class MultiFrequencyResonanceEngine:
             'resonance_threshold': 0.7,
             'confidence_threshold': 0.8,
         }
-
+    
     def _initialize_system(self) -> None:
         """Initialize the system with mathematical integration."""
         try:
@@ -264,7 +264,7 @@ class MultiFrequencyResonanceEngine:
         except Exception as e:
             self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
             self.initialized = False
-
+    
     def _setup_frequency_bands(self) -> None:
         """Setup frequency bands for analysis."""
         try:
@@ -308,7 +308,7 @@ class MultiFrequencyResonanceEngine:
         if not self.initialized:
             self.logger.error("System not initialized")
             return False
-
+        
         try:
             self.active = True
             self.logger.info(f"✅ {self.__class__.__name__} activated with mathematical integration")
@@ -316,7 +316,7 @@ class MultiFrequencyResonanceEngine:
         except Exception as e:
             self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
             return False
-
+    
     def deactivate(self) -> bool:
         """Deactivate the system."""
         try:
@@ -326,7 +326,7 @@ class MultiFrequencyResonanceEngine:
         except Exception as e:
             self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
             return False
-
+    
     def get_status(self) -> Dict[str, Any]:
         """Get system status with mathematical integration status."""
         return {
@@ -634,7 +634,7 @@ class MultiFrequencyResonanceEngine:
                 avg_mathematical_score = np.mean(mathematical_scores)
                 avg_tensor_score = np.mean(tensor_scores)
                 avg_entropy_value = np.mean(entropy_values)
-            else:
+        else:
                 avg_mathematical_score = 0.5
                 avg_tensor_score = 0.5
                 avg_entropy_value = 0.5
@@ -850,7 +850,7 @@ class MultiFrequencyResonanceEngine:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE:
+        if MATH_INFRASTRUCTURE_AVAILABLE:
                 if len(data) > 0:
                     tensor_result = self.tensor_algebra.tensor_score(data)
                     advanced_result = self.advanced_tensor.tensor_score(data)

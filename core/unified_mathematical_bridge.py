@@ -40,115 +40,29 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
-try:
-    from core.math_cache import MathResultCache
-    from core.math_config_manager import MathConfigManager
-    from core.math_orchestrator import MathOrchestrator
-    from core.mathematical_connection import (
-        BridgeConnectionType, 
-        MathematicalConnection, 
-        UnifiedBridgeResult, 
-        BridgeMetrics
-    )
-
-    MATH_INFRASTRUCTURE_AVAILABLE = True
-except ImportError:
-    MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Math infrastructure not available")
-
-# Import ALL mathematical systems with fallbacks
-try:
-    from mathlib import MathLib, MathLibV2, MathLibV3
-    MATH_LIB_AVAILABLE = True
-except ImportError:
-    MATH_LIB_AVAILABLE = False
-    logger.warning("MathLib not available - using fallback")
-
-try:
-    from mathlib.quantum_strategy import QuantumStrategyEngine
-    QUANTUM_STRATEGY_AVAILABLE = True
-except ImportError:
-    QUANTUM_STRATEGY_AVAILABLE = False
-    logger.warning("Quantum Strategy not available - using fallback")
-
-try:
-    from mathlib.persistent_homology import PersistentHomology
-    PERSISTENT_HOMOLOGY_AVAILABLE = True
-except ImportError:
-    PERSISTENT_HOMOLOGY_AVAILABLE = False
-    logger.warning("Persistent Homology not available - using fallback")
-
-try:
-    from core.advanced_tensor_algebra import AdvancedTensorAlgebra
-    TENSOR_ALGEBRA_AVAILABLE = True
-except ImportError:
-    TENSOR_ALGEBRA_AVAILABLE = False
-    logger.warning("Advanced Tensor Algebra not available - using fallback")
-
-try:
-    from core.clean_unified_math import CleanUnifiedMathSystem
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    UNIFIED_MATH_AVAILABLE = False
-    logger.warning("Clean Unified Math not available - using fallback")
-
-try:
-    from core.vault_orbital_bridge import VaultOrbitalBridge
-    VAULT_ORBITAL_AVAILABLE = True
-except ImportError:
-    VAULT_ORBITAL_AVAILABLE = False
-    logger.warning("Vault Orbital Bridge not available - using fallback")
-
-try:
-    from core.math_integration_bridge import MathIntegrationBridge
-    MATH_INTEGRATION_AVAILABLE = True
-except ImportError:
-    MATH_INTEGRATION_AVAILABLE = False
-    logger.warning("Math Integration Bridge not available - using fallback")
-
-try:
-    from core.quantum_mathematical_bridge import QuantumState
-    QUANTUM_MATH_AVAILABLE = True
-except ImportError:
-    QUANTUM_MATH_AVAILABLE = False
-    logger.warning("Quantum Mathematical Bridge not available - using fallback")
-
-try:
-    from strategies.phantom_band_navigator import PhantomBandNavigator
-    PHANTOM_MATH_AVAILABLE = True
-except ImportError:
-    PHANTOM_MATH_AVAILABLE = False
-    logger.warning("Phantom Math not available - using fallback")
-
-try:
-    from core.risk_manager import RiskManager
-    RISK_MANAGER_AVAILABLE = True
-except ImportError:
-    RISK_MANAGER_AVAILABLE = False
-    logger.warning("Risk Manager not available - using fallback")
-
-try:
-    from core.pure_profit_calculator import PureProfitCalculator
-    PROFIT_CALC_AVAILABLE = True
-except ImportError:
-    PROFIT_CALC_AVAILABLE = False
-    logger.warning("Profit Calculator not available - using fallback")
-
-try:
-    from core.heartbeat_integration_manager import HeartbeatIntegrationManager
-    HEARTBEAT_AVAILABLE = True
-except ImportError:
-    HEARTBEAT_AVAILABLE = False
-    logger.warning("Heartbeat Integration not available - using fallback")
-
-# NEW: Quantum-Classical Hybrid Mathematics
-try:
-    from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
-    QUANTUM_CLASSICAL_HYBRID_AVAILABLE = True
-except ImportError:
-    QUANTUM_CLASSICAL_HYBRID_AVAILABLE = False
-    logger.warning("Quantum-Classical Hybrid Mathematics not available - using fallback")
-
+from core.math_cache import MathResultCache
+from core.math_config_manager import MathConfigManager
+from core.math_orchestrator import MathOrchestrator
+from core.mathematical_connection import (
+    BridgeConnectionType, 
+    MathematicalConnection, 
+    UnifiedBridgeResult, 
+    BridgeMetrics,
+    UnifiedBridgeConfig
+)
+from mathlib import MathLib, MathLibV2, MathLibV3
+from mathlib.quantum_strategy import QuantumStrategyEngine
+from mathlib.persistent_homology import PersistentHomology
+from core.advanced_tensor_algebra import AdvancedTensorAlgebra
+from core.clean_unified_math import CleanUnifiedMathSystem
+from core.vault_orbital_bridge import VaultOrbitalBridge
+from core.math_integration_bridge import MathIntegrationBridge
+from core.quantum_mathematical_bridge import QuantumState
+from strategies.phantom_band_navigator import PhantomBandNavigator
+from core.risk_manager import RiskManager
+from core.pure_profit_calculator import PureProfitCalculator
+from core.heartbeat_integration_manager import HeartbeatIntegrationManager
+from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
 from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
 from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
 
@@ -176,14 +90,9 @@ class UnifiedMathematicalBridge:
         self.logger = logging.getLogger(__name__)
         
         # Mathematical infrastructure
-        if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_config = MathConfigManager()
-            self.math_cache = MathResultCache()
-            self.math_orchestrator = MathOrchestrator()
-        else:
-            self.math_config = None
-            self.math_cache = None
-            self.math_orchestrator = None
+        self.math_config = MathConfigManager()
+        self.math_cache = MathResultCache()
+        self.math_orchestrator = MathOrchestrator()
         
         # Initialize ALL mathematical systems
         self._initialize_mathematical_systems()
@@ -261,111 +170,57 @@ class UnifiedMathematicalBridge:
         """Initialize ALL mathematical systems following your patterns."""
         
         # Core mathematical libraries
-        if MATH_LIB_AVAILABLE:
-            self.math_lib = MathLib()
-            self.math_lib_v2 = MathLibV2()
-            self.math_lib_v3 = MathLibV3()
-            self.logger.info("✅ MathLib systems initialized")
-        else:
-            self.math_lib = self._create_fallback_math_lib()
-            self.math_lib_v2 = self._create_fallback_math_lib()
-            self.math_lib_v3 = self._create_fallback_math_lib()
-            self.logger.warning("⚠️ Using fallback MathLib systems")
+        self.math_lib = MathLib()
+        self.math_lib_v2 = MathLibV2()
+        self.math_lib_v3 = MathLibV3()
+        self.logger.info("✅ MathLib systems initialized")
         
         # Quantum systems
-        if QUANTUM_STRATEGY_AVAILABLE:
-            self.quantum_engine = QuantumStrategyEngine()
-            self.logger.info("✅ Quantum Strategy Engine initialized")
-        else:
-            self.quantum_engine = self._create_fallback_quantum_engine()
-            self.logger.warning("⚠️ Using fallback Quantum Engine")
+        self.quantum_engine = QuantumStrategyEngine()
+        self.logger.info("✅ Quantum Strategy Engine initialized")
         
-        if QUANTUM_MATH_AVAILABLE:
-            self.quantum_math_bridge = QuantumState()
-            self.logger.info("✅ Quantum Mathematical Bridge initialized")
-        else:
-            self.quantum_math_bridge = self._create_fallback_quantum_math()
-            self.logger.warning("⚠️ Using fallback Quantum Math Bridge")
+        self.quantum_math_bridge = QuantumState()
+        self.logger.info("✅ Quantum Mathematical Bridge initialized")
         
         # Persistent homology
-        if PERSISTENT_HOMOLOGY_AVAILABLE:
-            self.persistent_homology = PersistentHomology()
-            self.logger.info("✅ Persistent Homology initialized")
-        else:
-            self.persistent_homology = self._create_fallback_homology()
-            self.logger.warning("⚠️ Using fallback Persistent Homology")
+        self.persistent_homology = PersistentHomology()
+        self.logger.info("✅ Persistent Homology initialized")
         
         # Tensor algebra
-        if TENSOR_ALGEBRA_AVAILABLE:
-            self.tensor_algebra = AdvancedTensorAlgebra()
-            self.logger.info("✅ Advanced Tensor Algebra initialized")
-        else:
-            self.tensor_algebra = self._create_fallback_tensor_algebra()
-            self.logger.warning("⚠️ Using fallback Tensor Algebra")
+        self.tensor_algebra = AdvancedTensorAlgebra()
+        self.logger.info("✅ Advanced Tensor Algebra initialized")
         
         # Unified math system
-        if UNIFIED_MATH_AVAILABLE:
-            self.unified_math = CleanUnifiedMathSystem()
-            self.logger.info("✅ Clean Unified Math System initialized")
-        else:
-            self.unified_math = self._create_fallback_unified_math()
-            self.logger.warning("⚠️ Using fallback Unified Math System")
+        self.unified_math = CleanUnifiedMathSystem()
+        self.logger.info("✅ Clean Unified Math System initialized")
         
         # Vault orbital bridge
-        if VAULT_ORBITAL_AVAILABLE:
-            self.vault_orbital_bridge = VaultOrbitalBridge()
-            self.logger.info("✅ Vault Orbital Bridge initialized")
-        else:
-            self.vault_orbital_bridge = self._create_fallback_vault_orbital()
-            self.logger.warning("⚠️ Using fallback Vault Orbital Bridge")
+        self.vault_orbital_bridge = VaultOrbitalBridge()
+        self.logger.info("✅ Vault Orbital Bridge initialized")
         
         # Math integration bridge
-        if MATH_INTEGRATION_AVAILABLE:
-            self.math_integration_bridge = MathIntegrationBridge()
-            self.logger.info("✅ Math Integration Bridge initialized")
-        else:
-            self.math_integration_bridge = self._create_fallback_math_integration()
-            self.logger.warning("⚠️ Using fallback Math Integration Bridge")
+        self.math_integration_bridge = MathIntegrationBridge()
+        self.logger.info("✅ Math Integration Bridge initialized")
         
         # Phantom math
-        if PHANTOM_MATH_AVAILABLE:
-            self.phantom_navigator = PhantomBandNavigator()
-            self.logger.info("✅ Phantom Band Navigator initialized")
-        else:
-            self.phantom_navigator = self._create_fallback_phantom_math()
-            self.logger.warning("⚠️ Using fallback Phantom Math")
+        self.phantom_navigator = PhantomBandNavigator()
+        self.logger.info("✅ Phantom Band Navigator initialized")
         
         # Risk management
-        if RISK_MANAGER_AVAILABLE:
-            self.risk_manager = RiskManager()
-            self.logger.info("✅ Risk Manager initialized")
-        else:
-            self.risk_manager = self._create_fallback_risk_manager()
-            self.logger.warning("⚠️ Using fallback Risk Manager")
+        self.risk_manager = RiskManager()
+        self.logger.info("✅ Risk Manager initialized")
         
         # Profit calculator
-        if PROFIT_CALC_AVAILABLE:
-            self.profit_calculator = PureProfitCalculator({})
-            self.logger.info("✅ Pure Profit Calculator initialized")
-        else:
-            self.profit_calculator = self._create_fallback_profit_calculator()
-            self.logger.warning("⚠️ Using fallback Profit Calculator")
+        self.profit_calculator = PureProfitCalculator({})
+        self.logger.info("✅ Pure Profit Calculator initialized")
         
         # Heartbeat integration
-        if HEARTBEAT_AVAILABLE:
-            self.heartbeat_manager = HeartbeatIntegrationManager()
-            self.logger.info("✅ Heartbeat Integration Manager initialized")
-        else:
-            self.heartbeat_manager = self._create_fallback_heartbeat()
-            self.logger.warning("⚠️ Using fallback Heartbeat Manager")
+        self.heartbeat_manager = HeartbeatIntegrationManager()
+        self.logger.info("✅ Heartbeat Integration Manager initialized")
         
         # NEW: Quantum-Classical Hybrid Mathematics
-        if QUANTUM_CLASSICAL_HYBRID_AVAILABLE:
-            self.quantum_classical_hybrid = QuantumClassicalHybridMathematics()
-            self.logger.info("✅ Quantum-Classical Hybrid Mathematics initialized")
-        else:
-            self.quantum_classical_hybrid = self._create_fallback_quantum_classical_hybrid()
-            self.logger.warning("⚠️ Using fallback Quantum-Classical Hybrid Mathematics")
+        self.quantum_classical_hybrid = QuantumClassicalHybridMathematics()
+        self.logger.info("✅ Quantum-Classical Hybrid Mathematics initialized")
         
         # Initialize integration methods
         self.integration_methods = UnifiedMathematicalIntegrationMethods(self)
@@ -520,9 +375,7 @@ class UnifiedMathematicalBridge:
             
         except Exception as e:
             self.logger.error(f"❌ Quantum→Phantom integration failed: {e}")
-            return self._create_fallback_connection(
-                BridgeConnectionType.QUANTUM_TO_PHANTOM, "quantum_strategy", "phantom_math"
-            )
+            raise
     
     def _apply_quantum_strategy_analysis(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply quantum strategy analysis with enhanced quantum-classical hybrid mathematics."""
@@ -842,19 +695,19 @@ class UnifiedMathematicalBridge:
     def _get_active_systems_count(self) -> int:
         """Get count of active mathematical systems."""
         systems = [
-            MATH_LIB_AVAILABLE,
-            QUANTUM_STRATEGY_AVAILABLE,
-            PERSISTENT_HOMOLOGY_AVAILABLE,
-            TENSOR_ALGEBRA_AVAILABLE,
-            UNIFIED_MATH_AVAILABLE,
-            VAULT_ORBITAL_AVAILABLE,
-            MATH_INTEGRATION_AVAILABLE,
-            QUANTUM_MATH_AVAILABLE,
-            PHANTOM_MATH_AVAILABLE,
-            RISK_MANAGER_AVAILABLE,
-            PROFIT_CALC_AVAILABLE,
-            HEARTBEAT_AVAILABLE,
-            QUANTUM_CLASSICAL_HYBRID_AVAILABLE
+            True, # MathLib
+            True, # QuantumStrategyEngine
+            True, # PersistentHomology
+            True, # AdvancedTensorAlgebra
+            True, # CleanUnifiedMathSystem
+            True, # VaultOrbitalBridge
+            True, # MathIntegrationBridge
+            True, # QuantumState
+            True, # PhantomBandNavigator
+            True, # RiskManager
+            True, # PureProfitCalculator
+            True, # HeartbeatIntegrationManager
+            True  # QuantumClassicalHybridMathematics
         ]
         return sum(systems)
     
@@ -883,189 +736,6 @@ class UnifiedMathematicalBridge:
         """Start performance monitoring."""
         self.performance_monitor.start_monitoring()
     
-    def _create_fallback_connection(self, connection_type: BridgeConnectionType, 
-                                  source: str, target: str) -> MathematicalConnection:
-        """Create fallback connection when integration fails."""
-        return MathematicalConnection(
-            connection_type=connection_type,
-            source_system=source,
-            target_system=target,
-            connection_strength=0.5,
-            mathematical_signature="fallback_signature",
-            last_validation=time.time(),
-            performance_metrics={'fallback': True},
-            mathematical_health=self.health_metrics['connection_integrity'],
-            metadata={'fallback': True}
-        )
-    
-    # Fallback system creators (following your patterns)
-    def _create_fallback_math_lib(self):
-        """Create fallback MathLib following your patterns."""
-        class FallbackMathLib:
-            def __init__(self):
-                self.version = "fallback"
-            
-            def add(self, a, b): return a + b
-            def multiply(self, a, b): return a * b
-            def mean(self, values): return sum(values) / len(values) if values else 0.0
-            def correlation(self, x, y): return 0.5  # Fallback correlation
-            def grad(self, func, x): return 0.5  # Fallback gradient
-        
-        return FallbackMathLib()
-    
-    def _create_fallback_quantum_engine(self):
-        """Create fallback quantum engine following your patterns."""
-        class FallbackQuantumEngine:
-            def __init__(self):
-                self.strategies = {}
-            
-            def create_superposition_strategy(self, strategy_id, assets):
-                strategy = type('Strategy', (), {
-                    'strategy_id': strategy_id,
-                    'assets': assets
-                })()
-                self.strategies[strategy_id] = strategy
-                return strategy
-            
-            def measure_quantum_state(self, strategy_id):
-                return {
-                    'confidence': 0.5,
-                    'state': 'fallback',
-                    'entanglement': 0.0
-                }
-        
-        return FallbackQuantumEngine()
-    
-    def _create_fallback_homology(self):
-        """Create fallback persistent homology following your patterns."""
-        class FallbackPersistentHomology:
-            def build_simplicial_complex(self, points, max_distance):
-                return []
-        
-        return FallbackPersistentHomology()
-    
-    def _create_fallback_tensor_algebra(self):
-        """Create fallback tensor algebra following your patterns."""
-        class FallbackTensorAlgebra:
-            def bit_phase_rotation(self, x, theta=None):
-                return x
-            
-            def entropy_modulation_system(self, tensor, modulation_strength=1.0):
-                return tensor
-            
-            def tensor_score(self, input_vector):
-                return 0.5
-        
-        return FallbackTensorAlgebra()
-    
-    def _create_fallback_unified_math(self):
-        """Create fallback unified math following your patterns."""
-        class FallbackUnifiedMath:
-            def optimize_profit(self, base_profit, enhancement, confidence):
-                return base_profit * enhancement * confidence
-        
-        return FallbackUnifiedMath()
-    
-    def _create_fallback_vault_orbital(self):
-        """Create fallback vault orbital bridge following your patterns."""
-        class FallbackVaultOrbitalBridge:
-            def bridge_states(self, liquidity_level, entropy_level, volatility=0.0, phase_consistency=1.0):
-                return type('BridgeResult', (), {
-                    'vault_state': 'stable',
-                    'orbital_state': 's',
-                    'recommended_strategy': 'hold',
-                    'confidence': 0.5,
-                    'transition_triggered': False
-                })()
-        
-        return FallbackVaultOrbitalBridge()
-    
-    def _create_fallback_math_integration(self):
-        """Create fallback math integration bridge following your patterns."""
-        class FallbackMathIntegrationBridge:
-            def integrate_with_strategy_bit_mapper(self, asset, market_data, strategy_params):
-                return type('MathIntegrationResult', (), {
-                    'success': True,
-                    'operation': 'fallback',
-                    'result': {'confidence': 0.5},
-                    'confidence': 0.5,
-                    'execution_time': 0.0
-                })()
-        
-        return FallbackMathIntegrationBridge()
-    
-    def _create_fallback_quantum_math(self):
-        """Create fallback quantum math bridge following your patterns."""
-        class FallbackQuantumMath:
-            def normalize_state(self, state):
-                return np.array(state)
-        
-        return FallbackQuantumMath()
-    
-    def _create_fallback_phantom_math(self):
-        """Create fallback phantom math following your patterns."""
-        class FallbackPhantomNavigator:
-            def phantom_band_navigator(self, symbol, tick_window, available_balance=1000.0):
-                return type('PhantomSignal', (), {
-                    'symbol': symbol,
-                    'signal_type': 'HOLD',
-                    'confidence': 0.5,
-                    'phantom_zone': type('PhantomZone', (), {'confidence': 0.5})()
-                })()
-        
-        return FallbackPhantomNavigator()
-    
-    def _create_fallback_risk_manager(self):
-        """Create fallback risk manager following your patterns."""
-        class FallbackRiskManager:
-            def calculate_risk_metrics(self, returns):
-                return type('RiskMetrics', (), {
-                    'var_95': -0.02,
-                    'max_drawdown': -0.05,
-                    'volatility': 0.02
-                })()
-        
-        return FallbackRiskManager()
-    
-    def _create_fallback_profit_calculator(self):
-        """Create fallback profit calculator following your patterns."""
-        class FallbackProfitCalculator:
-            def __init__(self, strategy_params):
-                self.strategy_params = strategy_params
-            
-            def calculate_profit(self, market_data):
-                return 0.01  # 1% default profit
-        
-        return FallbackProfitCalculator({})
-    
-    def _create_fallback_heartbeat(self):
-        """Create fallback heartbeat manager following your patterns."""
-        class FallbackHeartbeatManager:
-            def run_heartbeat_cycle(self):
-                return {
-                    'status': 'success',
-                    'cycle_number': 1,
-                    'timestamp': time.time()
-                }
-        
-        return FallbackHeartbeatManager()
-    
-    def _create_fallback_quantum_classical_hybrid(self):
-        """Create fallback quantum-classical hybrid mathematics following your patterns."""
-        class FallbackQuantumClassicalHybridMathematics:
-            def __init__(self):
-                self.version = "fallback"
-            
-            def hybrid_quantum_classical_analysis(self, market_data, quantum_state):
-                return type('HybridAnalysisResult', (), {
-                    'quantum_component_confidence': 0.5,
-                    'classical_component_confidence': 0.5,
-                    'hybrid_state': 'fallback'
-                })()
-        
-        return FallbackQuantumClassicalHybridMathematics()
-    
-    # Placeholder methods for integration (to be implemented)
     def _detect_phantom_zone_with_quantum(self, quantum_enhanced_prices, homology_result, quantum_result):
         """Placeholder for phantom zone detection."""
         return type('PhantomZone', (), {
@@ -1091,7 +761,7 @@ class UnifiedMathematicalBridge:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+            if self.math_orchestrator:
                 # Use the actual mathematical modules for calculation
                 if len(data) > 0:
                     # Use mathematical orchestration for bridge integration analysis

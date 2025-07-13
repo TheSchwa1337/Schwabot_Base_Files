@@ -144,3 +144,37 @@
 2025-07-12 19:42:45,377 - __main__ - INFO - Tests Passed: 3
 2025-07-12 19:42:45,378 - __main__ - INFO - Tests Failed: 2
 2025-07-12 19:42:45,378 - __main__ - INFO - Success Rate: 60.0%
+2025-07-13 17:38:30,164 - core.btc_usdc_trading_engine - INFO - ⚡ BTCTradingEngine using numpy (CPU) for tensor operations
+2025-07-13 17:38:30,170 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-13 17:38:30,171 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-13 17:38:31,209 - core.clean_unified_math - INFO - 🔄 Clean Unified Math using CPU fallback: NumPy (CPU)
+2025-07-13 17:38:31,209 - core.clean_unified_math - INFO - 🧠 Profit vector integration: ENABLED
+2025-07-13 17:38:51,171 - core.math.entropy_math - WARNING - Math infrastructure not available
+2025-07-13 17:38:51,343 - utils.gpu_fallback_manager - INFO - CuPy not available, falling back to NumPy: No module named 'cupy'
+2025-07-13 17:38:51,350 - utils.gpu_fallback_manager - INFO - CUDA runtime not available
+2025-07-13 17:38:51,350 - utils.gpu_fallback_manager - INFO - GPU not available, using CPU fallback
+2025-07-13 17:38:51,351 - utils.gpu_fallback_manager - INFO - Using NumPy for CPU computation
+2025-07-13 17:38:51,351 - utils.gpu_fallback_manager - INFO - GPU Fallback Manager initialized with backend: numpy
+2025-07-13 17:38:51,352 - utils.gpu_fallback_manager - INFO - GPU Status: GPUStatus(cuda_available=False, cupy_available=False, gpu_memory_gb=0.0, gpu_name='Unknown', compute_capability='', driver_version='', cuda_version='', fallback_reason="CuPy not available: No module named 'cupy'")
+2025-07-13 17:38:51,543 - utils.safe_print - WARNING - Unified math system not available, using fallback implementations
+2025-07-13 17:38:51,545 - dual_unicore_handler - INFO - DualUnicoreHandler initialized
+2025-07-13 17:38:51,551 - mathlib.quantum_strategy - WARNING - Unified math system not available, using fallback implementations
+2025-07-13 17:38:51,553 - core.unified_mathematical_bridge - WARNING - Persistent Homology not available - using fallback
+2025-07-13 17:38:51,563 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-13 17:38:51,564 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-13 17:38:51,582 - core.phantom_detector - WARNING - Mathematical infrastructure not available: cannot import name 'UnifiedMathematicalBridge' from partially initialized module 'core.unified_mathematical_bridge' (most likely due to a circular import) (C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\core\unified_mathematical_bridge.py)
+2025-07-13 17:38:51,589 - core.unified_mathematical_bridge - WARNING - Phantom Math not available - using fallback
+2025-07-13 17:38:51,593 - core.risk_manager - INFO - ⚡ RiskManager using numpy (CPU) for tensor operations
+2025-07-13 17:38:51,601 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-13 17:38:51,601 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-13 17:38:51,606 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-13 17:38:51,608 - core.pure_profit_calculator - WARNING - ⚠️ Entropy Signal Integration not available in Pure Profit Calculator
+2025-07-13 17:38:51,660 - core.thermal_strategy_router.ThermalEntropyEngine - INFO - ✅ Thermal entropy engine initialized
+2025-07-13 17:38:51,661 - core.bitmap_hash_folding - INFO - ✅ Bitmap Hash Folding Engine initialized
+2025-07-13 17:38:51,661 - core.matrix_mapper - INFO - Initializing Matrix Mapper...
+2025-07-13 17:38:51,662 - core.matrix_mapper - INFO - [SUCCESS] Matrix Mapper initialized successfully
+2025-07-13 17:38:51,662 - core.strategy.strategy_loader - INFO - Strategy Loader initialized
+2025-07-13 17:38:51,663 - core.strategy_bit_mapper - INFO - ✅ Strategy Bit Mapper initialized
+2025-07-13 17:38:51,663 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Infrastructure components initialized
+2025-07-13 17:38:51,664 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Thermal strategy router initialized
+2025-07-13 17:38:51,702 - __main__ - ERROR - Failed to initialize components: expected an indented block after 'try' statement on line 888 (profit_echo_cache.py, line 889)

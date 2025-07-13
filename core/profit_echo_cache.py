@@ -631,7 +631,7 @@ class ProfitEchoCache:
                     "volatility": 0.0,
                     "mathematical_analysis": False,
                 }, timestamp=time.time())
-
+            
             # Calculate basic trend
             recent = profits[-3:] if len(profits) >= 3 else profits
             older = profits[:-3] if len(profits) >= 3 else profits[:1]
@@ -658,7 +658,7 @@ class ProfitEchoCache:
                 volatility = np.std(profits)
             else:
                 volatility = 0.0
-
+            
             # Perform mathematical analysis if available
             if MATH_INFRASTRUCTURE_AVAILABLE:
                 mathematical_analysis = await self._analyze_trend_mathematically(
@@ -704,12 +704,12 @@ class ProfitEchoCache:
                 }, timestamp=time.time())
             else:
                 return Result(success=True, data={
-                    "trend": "calculated",
+                "trend": "calculated",
                     "direction": direction.value,
-                    "slope": slope,
-                    "volatility": volatility,
-                    "recent_avg": recent_avg,
-                    "older_avg": older_avg,
+                "slope": slope,
+                "volatility": volatility,
+                "recent_avg": recent_avg,
+                "older_avg": older_avg,
                     "data_points": len(profits),
                     "mathematical_analysis": False,
                 }, timestamp=time.time())
@@ -898,7 +898,7 @@ class ProfitEchoCache:
                         mathematical_scores.append(entry['mathematical_score'])
                     if 'tensor_score' in entry:
                         tensor_scores.append(entry['tensor_score'])
-            
+        
             return {
                 "total_tags": len(self.echo),
                 "total_entries": total_entries,

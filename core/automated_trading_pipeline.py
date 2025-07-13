@@ -57,7 +57,7 @@ try:
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
     from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.unified_trading_pipeline import UnifiedTradingPipeline
-    
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
     TRADING_PIPELINE_AVAILABLE = True
 except ImportError as e:
@@ -175,7 +175,7 @@ class AutomatedTradingPipeline:
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
-        
+
         # Pipeline state
         self.decision_history: List[TradingDecision] = []
         self.pipeline_metrics = PipelineMetrics()

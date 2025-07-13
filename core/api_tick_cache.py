@@ -855,9 +855,9 @@ if __name__ == "__main__":
             print(f"✅ BTC/USDC: {result['data']}")
         else:
             print(f"❌ Failed to get BTC/USDC data: {result['error']}")
-        
-        # Show cache stats
-        stats = tick_cache.get_cache_stats()
-        print(f"📊 Cache stats: {stats}")
+    
+    # Show cache stats
+    stats = tick_cache.get_cache_stats()
+    print(f"📊 Cache stats: {stats}") 
     
     asyncio.run(test_cache()) 

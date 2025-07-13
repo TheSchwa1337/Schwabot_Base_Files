@@ -31,19 +31,14 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-# Import core modules
-try:
-    from core.thermal_strategy_router import ThermalStrategyRouter
-    from core.autonomic_limit_layer import AutonomicLimitLayer
-    from core.api_tick_cache import APITickCache
-    from core.profit_echo_cache import ProfitEchoCache
-    from core.drift_band_profiler import DriftBandProfiler
-    from core.gpu_logic_mapper import GPULogicMapper
-    from core.profit_projection_engine import ProfitProjectionEngine
-    CORE_MODULES_AVAILABLE = True
-except ImportError as e:
-    CORE_MODULES_AVAILABLE = False
-    logging.warning(f"Some core modules not available: {e}")
+# Import core modules - no fallbacks, only real implementations
+from core.thermal_strategy_router import ThermalStrategyRouter
+from core.autonomic_limit_layer import AutonomicLimitLayer
+from core.api_tick_cache import APITickCache
+from core.profit_echo_cache import ProfitEchoCache
+from core.drift_band_profiler import DriftBandProfiler
+from core.gpu_logic_mapper import GPULogicMapper
+from core.profit_projection_engine import ProfitProjectionEngine
 
 logger = logging.getLogger(__name__)
 
@@ -134,10 +129,6 @@ class HeartbeatIntegrationManager:
         try:
             self.logger.info("🔄 Initializing Heartbeat Integration Manager...")
             
-            if not CORE_MODULES_AVAILABLE:
-                self.logger.warning("⚠️ Core modules not available, using fallback mode")
-                return self._initialize_fallback()
-            
             # Initialize thermal strategy router
             if self.config.get("enable_thermal_routing", True):
                 self.thermal_router = ThermalStrategyRouter()
@@ -179,79 +170,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"❌ Initialization failed: {e}")
-            return False
-
-    def _initialize_fallback(self) -> bool:
-        """Initialize fallback mode when core modules are not available."""
-        self.logger.info("🔄 Initializing fallback mode...")
-        
-        # Create minimal fallback implementations
-        self.thermal_router = self._create_thermal_router_fallback()
-        self.autonomic_layer = self._create_autonomic_layer_fallback()
-        self.api_cache = self._create_api_cache_fallback()
-        self.profit_cache = self._create_profit_cache_fallback()
-        self.drift_profiler = self._create_drift_profiler_fallback()
-        self.gpu_mapper = self._create_gpu_mapper_fallback()
-        self.profit_engine = self._create_profit_engine_fallback()
-        
-        self.is_initialized = True
-        self.logger.info("✅ Fallback mode initialized")
-        return True
-
-    def _create_thermal_router_fallback(self):
-        """Create fallback thermal router."""
-        class FallbackThermalRouter:
-            def determine_mode(self): return "balanced"
-            def engage_strategy(self): return {"status": "fallback"}
-            def get_router_stats(self): return {"mode": "fallback"}
-        return FallbackThermalRouter()
-
-    def _create_autonomic_layer_fallback(self):
-        """Create fallback autonomic layer."""
-        class FallbackAutonomicLayer:
-            def validate_strategy_execution(self, tag, data): 
-                return True, "fallback", {"status": "fallback"}
-            def get_layer_stats(self): return {"status": "fallback"}
-        return FallbackAutonomicLayer()
-
-    def _create_api_cache_fallback(self):
-        """Create fallback API cache."""
-        class FallbackAPICache:
-            def get_cached_data(self, key): return None
-            def cache_data(self, key, data): pass
-            def get_cache_stats(self): return {"status": "fallback"}
-        return FallbackAPICache()
-
-    def _create_profit_cache_fallback(self):
-        """Create fallback profit cache."""
-        class FallbackProfitCache:
-            def add_profit(self, tag, profit): pass
-            def get_recent_profits(self, tag): return []
-            def average_profit(self, tag): return 0.0
-            def get_cache_stats(self): return {"status": "fallback"}
-        return FallbackProfitCache()
-
-    def _create_drift_profiler_fallback(self):
-        """Create fallback drift profiler."""
-        class FallbackDriftProfiler:
-            def update_drift_bands(self, price_data): pass
-            def get_volume_adjustment(self, tag): return 1.0
-            def get_profiler_stats(self): return {"status": "fallback"}
-        return FallbackDriftProfiler()
-
-    def _create_gpu_mapper_fallback(self):
-        """Create fallback GPU mapper."""
-        class FallbackGPUMapper:
-            def map_strategy_to_gpu(self, strategy): return {"status": "fallback"}
-            def get_gpu_stats(self): return {"status": "fallback"}
-        return FallbackGPUMapper()
-
-    def _create_profit_engine_fallback(self):
-        """Create fallback profit engine."""
-        class FallbackProfitEngine:
-            def project_profit(self, strategy_data): return 0.0
-            def get_engine_stats(self): return {"status": "fallback"}
-        return FallbackProfitEngine()
+            raise
 
     async def start(self) -> bool:
         """Start the heartbeat integration manager."""
@@ -336,6 +255,7 @@ class HeartbeatIntegrationManager:
             cycle_result["errors"].append(str(e))
             self._update_performance_metrics(time.time() - cycle_start, False)
             self.logger.error(f"❌ Heartbeat cycle failed: {e}")
+            raise
         
         return cycle_result
 
@@ -378,6 +298,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"System metrics update failed: {e}")
+            raise
 
     async def _process_thermal_routing(self, cycle_result: Dict[str, Any]) -> None:
         """Process thermal strategy routing."""
@@ -403,6 +324,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Thermal routing failed: {e}")
+            raise
 
     async def _process_drift_profiling(self, cycle_result: Dict[str, Any]) -> None:
         """Process drift band profiling."""
@@ -430,6 +352,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Drift profiling failed: {e}")
+            raise
 
     async def _process_gpu_mapping(self, cycle_result: Dict[str, Any]) -> None:
         """Process GPU logic mapping."""
@@ -446,6 +369,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"GPU mapping failed: {e}")
+            raise
 
     async def _process_profit_projection(self, cycle_result: Dict[str, Any]) -> None:
         """Process profit projection."""
@@ -463,6 +387,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Profit projection failed: {e}")
+            raise
 
     async def _coordinate_strategy_execution(self, cycle_result: Dict[str, Any]) -> None:
         """Coordinate strategy execution across all modules."""
@@ -500,6 +425,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Strategy coordination failed: {e}")
+            raise
 
     def _should_execute_strategy(self, tag: str, strategy_data: Dict[str, Any]) -> bool:
         """Determine if a strategy should be executed."""
@@ -528,7 +454,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"Error checking strategy execution: {e}")
-            return False
+            raise
 
     async def _execute_strategy(self, tag: str, strategy_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a strategy (placeholder implementation)."""
@@ -578,6 +504,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"Error updating strategy performance: {e}")
+            raise
 
     async def _update_caches(self, cycle_result: Dict[str, Any]) -> None:
         """Update API and profit caches."""
@@ -605,6 +532,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Cache updates failed: {e}")
+            raise
 
     async def _validate_autonomic_limits(self, cycle_result: Dict[str, Any]) -> None:
         """Validate autonomic limits."""
@@ -622,6 +550,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             cycle_result["warnings"].append(f"Autonomic validation failed: {e}")
+            raise
 
     def _update_performance_metrics(self, cycle_time: float, success: bool) -> None:
         """Update performance metrics."""
@@ -649,6 +578,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"Error updating performance metrics: {e}")
+            raise
 
     async def run_continuous_heartbeat(self) -> None:
         """Run continuous heartbeat cycles."""
@@ -672,6 +602,7 @@ class HeartbeatIntegrationManager:
             self.logger.info("🛑 Continuous heartbeat cancelled")
         except Exception as e:
             self.logger.error(f"❌ Continuous heartbeat error: {e}")
+            raise
         finally:
             await self.stop()
 
@@ -728,7 +659,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"Error getting integration stats: {e}")
-            return {"error": str(e)}
+            raise
 
     def get_health_status(self) -> Dict[str, Any]:
         """Get system health status."""
@@ -768,7 +699,7 @@ class HeartbeatIntegrationManager:
             
         except Exception as e:
             self.logger.error(f"Error getting health status: {e}")
-            return {"overall_health": False, "error": str(e)}
+            raise
 
 
 # Global instance for easy access

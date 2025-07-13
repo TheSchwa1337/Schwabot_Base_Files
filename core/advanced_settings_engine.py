@@ -53,7 +53,7 @@ try:
     # Import trading pipeline for settings integration
     from core.unified_trading_pipeline import UnifiedTradingPipeline
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
     TRADING_PIPELINE_AVAILABLE = True
 except ImportError as e:

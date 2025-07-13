@@ -57,7 +57,7 @@ try:
     from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
     from core.automated_strategy_engine import AutomatedStrategyEngine
-    
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
     STRATEGY_INTEGRATION_AVAILABLE = True
 except ImportError as e:
@@ -193,7 +193,7 @@ class CleanStrategyIntegrationBridge:
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
-        
+
         # Strategy integration state
         self.integration_metrics = IntegrationMetrics()
         self.strategy_signals: List[StrategySignal] = []

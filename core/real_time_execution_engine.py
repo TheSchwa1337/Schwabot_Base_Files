@@ -275,7 +275,7 @@ class RealTimeExecutionEngine:
             
             self.logger.info(f"✅ Signal submitted: {signal.signal_type.value} for {signal.symbol}")
             return True
-            
+                
         except Exception as e:
             self.logger.error(f"❌ Error submitting signal: {e}")
             return False
@@ -504,7 +504,7 @@ class RealTimeExecutionEngine:
             slippage = abs(execution_result.average_price - order.price) / order.price if order.price > 0 else 0.0
             
             # Create result
-            result = ExecutionResult(
+                result = ExecutionResult(
                 order_id=order.order_id,
                 success=execution_result.status == ExecutionStatus.FILLED,
                 status=execution_result.status,
@@ -542,9 +542,9 @@ class RealTimeExecutionEngine:
             self.logger.error(f"❌ Error executing order {order.order_id}: {e}")
             
             # Create error result
-            result = ExecutionResult(
+                result = ExecutionResult(
                 order_id=order.order_id,
-                success=False,
+                    success=False,
                 status=ExecutionStatus.REJECTED,
                 filled_quantity=0.0,
                 average_price=0.0,

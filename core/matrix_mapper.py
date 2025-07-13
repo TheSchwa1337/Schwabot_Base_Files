@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Matrix Mapper - Fallback Classification System
+Matrix Mapper - Classification System
 
-Implements Nexus mathematics for matrix mapping and fallback classification:
+Implements Nexus mathematics for matrix mapping and classification:
 - Strategy fitness evaluation using mathematical foundations
 - Orbital transitions through Ξ rings
 - Memory retention and decay management
-- Curved strategic fallback paths
-- Ghost reactivation capabilities
+- Curved strategic paths
+- Reactivation capabilities
 """
 
 import logging
@@ -23,15 +23,6 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-class FallbackDecision(Enum):
-    """Fallback decision types."""
-    EXECUTE_CURRENT = "execute_current"
-    FALLBACK_ORBITAL = "fallback_orbital"
-    GHOST_REACTIVATION = "ghost_reactivation"
-    EMERGENCY_STABILIZATION = "emergency_stabilization"
-    ABORT_STRATEGY = "abort_strategy"
-
-
 class MappingMode(Enum):
     """Matrix mapping operation modes."""
     NORMAL = "normal"
@@ -44,16 +35,16 @@ class MappingMode(Enum):
 class XiRingLevel(Enum):
     """Ξ ring levels for orbital transitions."""
     RING_0 = "ring_0"  # Core ring
-    RING_1 = "ring_1"  # Primary fallback
-    RING_2 = "ring_2"  # Secondary fallback
-    RING_3 = "ring_3"  # Tertiary fallback
-    RING_4 = "ring_4"  # Emergency fallback
-    RING_5 = "ring_5"  # Ghost reactivation
+    RING_1 = "ring_1"  # Primary
+    RING_2 = "ring_2"  # Secondary
+    RING_3 = "ring_3"  # Tertiary
+    RING_4 = "ring_4"  # Emergency
+    RING_5 = "ring_5"  # Reactivation
 
 
 @dataclass
-class FallbackMatrix:
-    """Matrix structure for fallback classification."""
+class Matrix:
+    """Matrix structure for classification."""
     strategy_id: str
     current_ring: XiRingLevel
     entropy_vector: np.ndarray
@@ -77,8 +68,8 @@ class FallbackMatrix:
 
 
 @dataclass
-class FallbackResult:
-    """Result structure for fallback operations."""
+class Result:
+    """Result structure for operations."""
     decision: FallbackDecision
     target_strategy: Optional[str]
     target_ring: XiRingLevel
@@ -96,14 +87,14 @@ class FallbackResult:
 
 class MatrixMapper:
     """
-    Matrix Mapper - Fallback Classification System
+    Matrix Mapper - Classification System
     
-    This class implements the sophisticated fallback classification system that:
+    This class implements the sophisticated classification system that:
     - Evaluates strategy fitness using mathematical foundations
     - Orchestrates orbital transitions through Ξ rings
     - Manages memory retention and decay
-    - Implements curved strategic fallback paths
-    - Provides ghost reactivation capabilities
+    - Implements curved strategic paths
+    - Provides reactivation capabilities
     """
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
@@ -113,7 +104,7 @@ class MatrixMapper:
         self.initialized = False
         
         # Matrix storage
-        self.fallback_matrices: Dict[str, FallbackMatrix] = {}
+        self.matrices: Dict[str, Matrix] = {}
         self.strategy_registry: Dict[str, Dict[str, Any]] = {}
         self.mapping_history: deque = deque(maxlen=1000)
         
@@ -128,8 +119,8 @@ class MatrixMapper:
         self.MEMORY_DECAY_RATE = 0.95
         self.FALLBACK_TIMEOUT = 30.0
         
-        # Thresholds for fallback decisions
-        self.FALLBACK_THRESHOLDS = {
+        # Thresholds for decisions
+        self.DECISION_THRESHOLDS = {
             FallbackDecision.EXECUTE_CURRENT: 0.7,
             FallbackDecision.FALLBACK_ORBITAL: 0.4,
             FallbackDecision.GHOST_REACTIVATION: 0.2,
@@ -170,11 +161,12 @@ class MatrixMapper:
         except Exception as e:
             self.logger.error(f"[FAIL] Error initializing Matrix Mapper: {e}")
             self.initialized = False
+            raise
     
     def load_matrix(self, strategy_id: str, market_data: Dict[str, Any], 
-                   strategy_performance: Dict[str, Any]) -> FallbackMatrix:
+                   strategy_performance: Dict[str, Any]) -> Matrix:
         """
-        Load or create a fallback matrix for a strategy.
+        Load or create a matrix for a strategy.
         
         Args:
             strategy_id: Strategy identifier
@@ -182,30 +174,30 @@ class MatrixMapper:
             strategy_performance: Strategy performance data
             
         Returns:
-            Fallback matrix for the strategy
+            Matrix for the strategy
         """
         try:
-            if strategy_id in self.fallback_matrices:
+            if strategy_id in self.matrices:
                 # Update existing matrix
                 matrix = self._update_matrix(
-                    self.fallback_matrices[strategy_id], market_data, strategy_performance
+                    self.matrices[strategy_id], market_data, strategy_performance
                 )
             else:
                 # Create new matrix
                 matrix = self._create_matrix(strategy_id, market_data, strategy_performance)
             
             # Store matrix
-            self.fallback_matrices[strategy_id] = matrix
+            self.matrices[strategy_id] = matrix
             
             return matrix
             
         except Exception as e:
             self.logger.error(f"Error loading matrix for {strategy_id}: {e}")
-            return self._create_default_matrix(strategy_id)
+            raise
     
     def _create_matrix(self, strategy_id: str, market_data: Dict[str, Any], 
-                      strategy_performance: Dict[str, Any]) -> FallbackMatrix:
-        """Create a new fallback matrix."""
+                      strategy_performance: Dict[str, Any]) -> Matrix:
+        """Create a new matrix."""
         try:
             # Calculate mathematical components
             entropy_vector = self._calculate_entropy_vector(market_data)
@@ -226,7 +218,7 @@ class MatrixMapper:
             # Determine initial ring
             initial_ring = self._determine_initial_ring(fitness_score)
             
-            return FallbackMatrix(
+            return Matrix(
                 strategy_id=strategy_id,
                 current_ring=initial_ring,
                 entropy_vector=entropy_vector,
@@ -239,11 +231,11 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error creating matrix: {e}")
-            return self._create_default_matrix(strategy_id)
+            raise
     
-    def _update_matrix(self, matrix: FallbackMatrix, market_data: Dict[str, Any], 
-                      strategy_performance: Dict[str, Any]) -> FallbackMatrix:
-        """Update an existing fallback matrix."""
+    def _update_matrix(self, matrix: Matrix, market_data: Dict[str, Any], 
+                      strategy_performance: Dict[str, Any]) -> Matrix:
+        """Update an existing matrix."""
         try:
             # Calculate new components
             new_entropy_vector = self._calculate_entropy_vector(market_data)
@@ -279,7 +271,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error updating matrix: {e}")
-            return matrix
+            raise
     
     def _calculate_entropy_vector(self, market_data: Dict[str, Any]) -> np.ndarray:
         """Calculate entropy vector from market data."""
@@ -302,7 +294,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error calculating entropy vector: {e}")
-            return np.array([1.0, 1.0, 1.0])
+            raise
     
     def _calculate_oscillation_profile(self, market_data: Dict[str, Any]) -> np.ndarray:
         """Calculate oscillation profile from market data."""
@@ -323,7 +315,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error calculating oscillation profile: {e}")
-            return np.array([1.0, 1.0, 1.0])
+            raise
     
     def _calculate_inertial_mass_tensor(self, strategy_performance: Dict[str, Any]) -> np.ndarray:
         """Calculate inertial mass tensor from strategy performance."""
@@ -343,7 +335,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error calculating inertial mass tensor: {e}")
-            return np.eye(2)
+            raise
     
     def _calculate_memory_retention_curve(self, strategy_performance: Dict[str, Any]) -> np.ndarray:
         """Calculate memory retention curve from strategy performance."""
@@ -360,7 +352,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error calculating memory retention curve: {e}")
-            return np.ones(10)
+            raise
     
     def _generate_core_hash_vector(self, strategy_id: str, entropy_vector: np.ndarray,
                                  inertial_mass_tensor: np.ndarray, 
@@ -380,7 +372,7 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error generating core hash: {e}")
-            return f"hash_{strategy_id}_{int(time.time())}"
+            raise
     
     def _calculate_fitness_score(self, entropy_vector: np.ndarray, oscillation_profile: np.ndarray,
                                inertial_mass_tensor: np.ndarray, 
@@ -400,16 +392,16 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error calculating fitness score: {e}")
-            return 0.5
+            raise
     
-    def evaluate_hash_vector(self, strategy_hash: str, tick_data: Dict[str, Any]) -> FallbackResult:
-        """Evaluate hash vector and determine fallback decision."""
+    def evaluate_hash_vector(self, strategy_hash: str, tick_data: Dict[str, Any]) -> Result:
+        """Evaluate hash vector and determine decision."""
         try:
             start_time = time.time()
             
             # Find corresponding matrix
             matrix = None
-            for strategy_id, mat in self.fallback_matrices.items():
+            for strategy_id, mat in self.matrices.items():
                 if mat.core_hash == strategy_hash:
                     matrix = mat
                     break
@@ -417,8 +409,8 @@ class MatrixMapper:
             if matrix is None:
                 return self._create_error_result(strategy_hash, "Matrix not found")
             
-            # Determine fallback decision
-            decision = self._determine_fallback_decision(matrix.fitness_score)
+            # Determine decision
+            decision = self._determine_decision(matrix.fitness_score)
             
             # Execute decision
             if decision == FallbackDecision.EXECUTE_CURRENT:
@@ -439,24 +431,24 @@ class MatrixMapper:
             
         except Exception as e:
             self.logger.error(f"Error evaluating hash vector: {e}")
-            return self._create_error_result(strategy_hash, str(e))
+            raise
     
-    def _determine_fallback_decision(self, fitness_score: float) -> FallbackDecision:
-        """Determine fallback decision based on fitness score."""
-        if fitness_score >= self.FALLBACK_THRESHOLDS[FallbackDecision.EXECUTE_CURRENT]:
+    def _determine_decision(self, fitness_score: float) -> FallbackDecision:
+        """Determine decision based on fitness score."""
+        if fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.EXECUTE_CURRENT]:
             return FallbackDecision.EXECUTE_CURRENT
-        elif fitness_score >= self.FALLBACK_THRESHOLDS[FallbackDecision.FALLBACK_ORBITAL]:
+        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.FALLBACK_ORBITAL]:
             return FallbackDecision.FALLBACK_ORBITAL
-        elif fitness_score >= self.FALLBACK_THRESHOLDS[FallbackDecision.GHOST_REACTIVATION]:
+        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.GHOST_REACTIVATION]:
             return FallbackDecision.GHOST_REACTIVATION
-        elif fitness_score >= self.FALLBACK_THRESHOLDS[FallbackDecision.EMERGENCY_STABILIZATION]:
+        elif fitness_score >= self.DECISION_THRESHOLDS[FallbackDecision.EMERGENCY_STABILIZATION]:
             return FallbackDecision.EMERGENCY_STABILIZATION
         else:
             return FallbackDecision.ABORT_STRATEGY
     
-    def _execute_current_strategy(self, matrix: FallbackMatrix, tick_data: Dict[str, Any]) -> FallbackResult:
+    def _execute_current_strategy(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
         """Execute current strategy."""
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.EXECUTE_CURRENT,
             target_strategy=matrix.strategy_id,
             target_ring=matrix.current_ring,
@@ -465,14 +457,14 @@ class MatrixMapper:
             fallback_path=[matrix.current_ring]
         )
     
-    def _execute_orbital_fallback(self, matrix: FallbackMatrix, tick_data: Dict[str, Any]) -> FallbackResult:
+    def _execute_orbital_fallback(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
         """Execute orbital fallback."""
         # Determine next ring
         current_ring_value = int(matrix.current_ring.value.split('_')[1])
         next_ring_value = min(current_ring_value + 1, 4)
         next_ring = XiRingLevel(f"ring_{next_ring_value}")
         
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.FALLBACK_ORBITAL,
             target_strategy=matrix.strategy_id,
             target_ring=next_ring,
@@ -481,9 +473,9 @@ class MatrixMapper:
             fallback_path=[matrix.current_ring, next_ring]
         )
     
-    def _execute_ghost_reactivation(self, matrix: FallbackMatrix, tick_data: Dict[str, Any]) -> FallbackResult:
+    def _execute_ghost_reactivation(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
         """Execute ghost reactivation."""
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.GHOST_REACTIVATION,
             target_strategy=matrix.strategy_id,
             target_ring=XiRingLevel.RING_5,
@@ -492,9 +484,9 @@ class MatrixMapper:
             fallback_path=[matrix.current_ring, XiRingLevel.RING_5]
         )
     
-    def _execute_emergency_stabilization(self, matrix: FallbackMatrix, tick_data: Dict[str, Any]) -> FallbackResult:
+    def _execute_emergency_stabilization(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
         """Execute emergency stabilization."""
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.EMERGENCY_STABILIZATION,
             target_strategy=matrix.strategy_id,
             target_ring=XiRingLevel.RING_4,
@@ -503,9 +495,9 @@ class MatrixMapper:
             fallback_path=[matrix.current_ring, XiRingLevel.RING_4]
         )
     
-    def _execute_strategy_abort(self, matrix: FallbackMatrix, tick_data: Dict[str, Any]) -> FallbackResult:
+    def _execute_strategy_abort(self, matrix: Matrix, tick_data: Dict[str, Any]) -> Result:
         """Execute strategy abort."""
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.ABORT_STRATEGY,
             target_strategy=None,
             target_ring=matrix.current_ring,
@@ -521,7 +513,7 @@ class MatrixMapper:
             return alpha * new_values + (1 - alpha) * old_values
         except Exception as e:
             self.logger.error(f"Error applying exponential smoothing: {e}")
-            return new_values
+            raise
     
     def _update_memory_retention_curve(self, current_curve: np.ndarray) -> np.ndarray:
         """Update memory retention curve with decay."""
@@ -529,7 +521,7 @@ class MatrixMapper:
             return current_curve * self.MEMORY_DECAY_RATE
         except Exception as e:
             self.logger.error(f"Error updating memory retention curve: {e}")
-            return current_curve
+            raise
     
     def _determine_initial_ring(self, fitness_score: float) -> XiRingLevel:
         """Determine initial ring based on fitness score."""
@@ -544,22 +536,9 @@ class MatrixMapper:
         else:
             return XiRingLevel.RING_4
     
-    def _create_default_matrix(self, strategy_id: str) -> FallbackMatrix:
-        """Create a default matrix for error cases."""
-        return FallbackMatrix(
-            strategy_id=strategy_id,
-            current_ring=XiRingLevel.RING_0,
-            entropy_vector=np.array([1.0, 1.0, 1.0]),
-            oscillation_profile=np.array([1.0, 1.0, 1.0]),
-            inertial_mass_tensor=np.eye(2),
-            memory_retention_curve=np.ones(10),
-            core_hash=f"default_{strategy_id}",
-            fitness_score=0.5
-        )
-    
-    def _create_error_result(self, strategy_id: str, error_message: str) -> FallbackResult:
+    def _create_error_result(self, strategy_id: str, error_message: str) -> Result:
         """Create an error result."""
-        return FallbackResult(
+        return Result(
             decision=FallbackDecision.ABORT_STRATEGY,
             target_strategy=strategy_id,
             target_ring=XiRingLevel.RING_0,
@@ -571,20 +550,20 @@ class MatrixMapper:
     
     def get_mapper_summary(self) -> Dict[str, Any]:
         """Get comprehensive mapper summary."""
-        if not self.fallback_matrices:
+        if not self.matrices:
             return {'status': 'no_matrices'}
         
         # Compute mapper statistics
-        total_matrices = len(self.fallback_matrices)
+        total_matrices = len(self.matrices)
         total_mappings = len(self.mapping_history)
         
         # Ring distribution
         ring_distribution = {}
         for ring in XiRingLevel:
-            ring_distribution[ring.value] = sum(1 for m in self.fallback_matrices.values() if m.current_ring == ring)
+            ring_distribution[ring.value] = sum(1 for m in self.matrices.values() if m.current_ring == ring)
         
         # Fitness statistics
-        fitness_scores = [m.fitness_score for m in self.fallback_matrices.values()]
+        fitness_scores = [m.fitness_score for m in self.matrices.values()]
         
         return {
             'total_matrices': total_matrices,

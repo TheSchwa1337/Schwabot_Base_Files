@@ -181,7 +181,7 @@ class UnifiedTradeRouter:
             self.math_bridge = None
             self.math_integration = None
             self.math_monitor = None
-        
+
         # Performance tracking
         self.performance_metrics = {
             'requests_processed': 0,
@@ -194,9 +194,9 @@ class UnifiedTradeRouter:
         # System state
         self.initialized = False
         self.active = False
-        
+
         self._initialize_system()
-    
+
     def _initialize_system(self) -> None:
         """Initialize the unified trade router system."""
         try:
@@ -219,13 +219,13 @@ class UnifiedTradeRouter:
         except Exception as e:
             self.logger.error(f"❌ Error initializing Unified Trade Router System: {e}")
             self.initialized = False
-    
+
     async def start_router(self) -> bool:
         """Start the unified trade router."""
         if not self.initialized:
             self.logger.error("System not initialized")
             return False
-        
+
         try:
             self.active = True
             
@@ -239,7 +239,7 @@ class UnifiedTradeRouter:
         except Exception as e:
             self.logger.error(f"❌ Error starting unified trade router: {e}")
             return False
-    
+
     async def stop_router(self) -> bool:
         """Stop the unified trade router."""
         try:
@@ -250,7 +250,7 @@ class UnifiedTradeRouter:
         except Exception as e:
             self.logger.error(f"❌ Error stopping unified trade router: {e}")
             return False
-    
+
     async def route_trade(self, trade_data: Dict[str, Any]) -> bool:
         """Route a trade request to optimal venue."""
         if not self.active:
@@ -841,7 +841,7 @@ class UnifiedTradeRouter:
                     }
                     for venue, perf in self.venue_performance.items()
                 }
-                
+
         except Exception as e:
             self.logger.error(f"❌ Error getting venue performance: {e}")
             return {}

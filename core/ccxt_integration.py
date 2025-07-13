@@ -56,7 +56,7 @@ try:
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
     from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
-    
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
     EXCHANGE_INTEGRATION_AVAILABLE = True
 except ImportError as e:
@@ -170,7 +170,7 @@ class CCXTIntegration:
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
-        
+
         # Exchange state
         self.exchanges: Dict[str, ExchangeInfo] = {}
         self.order_book_cache: Dict[str, OrderBookSnapshot] = {}

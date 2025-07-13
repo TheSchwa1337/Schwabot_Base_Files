@@ -1,107 +1,136 @@
-import argparse
-import os
-import sys
-
-import schwabot_qsc_cli
-import schwabot_tensor_cli
-
-import schwabot_immune_cli
-from schwabot.alpha_encryption import alpha_encrypt_data, analyze_alpha_security, get_alpha_encryption
-from schwabot.cli import main
-from schwabot.lantern_core import LanternMainLoop, get_lantern_eye
-from schwabot.session_context import create_trading_session, log_trading_activity
-from schwabot.update import do_update
-from schwabot.vortex_security import get_vortex_security
-
 #!/usr/bin/env python3
-"""Simple CLI test script."""
+"""
+Simple CLI test script to verify basic functionality.
+"""
 
+import sys
+import os
+import json
+from pathlib import Path
 
-# Add the project root to sys.path
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+# Add the current directory to Python path
+sys.path.insert(0, str(Path(__file__).parent))
 
 def test_cli_imports():
-    """Test if we can import the CLI and its dependencies."""
-    print("🧪 Testing Schwabot CLI Imports")
-    print("=" * 40)
-
+    """Test if we can import the CLI components."""
     try:
-        # Test basic CLI import
-        print("✅ Successfully imported CLI main function")
-
-        # Test required module imports
-        print("✅ Successfully imported vortex_security")
-
-        print("✅ Successfully imported session_context")
-
-        print("✅ Successfully imported alpha_encryption")
-
-        print("✅ Successfully imported lantern_core")
-
-        print("✅ Successfully imported update module")
-
-        # Test specialized CLI modules
-        print("\nTesting specialized CLI modules...")
-
-        print("✅ QSC CLI module imported")
-
-        print("✅ Immune CLI module imported")
-
-        print("✅ Tensor CLI module imported")
-
-        print("\n🎉 All CLI imports successful!")
-        return True
-
-    except ImportError as e:
-        print(f"❌ Import error: {e}")
-        return False
-    except Exception as e:
-        print(f"❌ Unexpected error: {e}")
-        return False
-
-def test_cli_structure():
-    """Test CLI argument parser structure."""
-    print("\n🔧 Testing CLI Structure")
-    print("=" * 40)
-
-    try:
-
-        # Test that main function exists and is callable
-        if callable(main):
-            print("✅ CLI main function is callable")
-        else:
-            print("❌ CLI main function is not callable")
+        print("Testing CLI imports...")
+        
+        # Test basic imports
+        import argparse
+        import asyncio
+        import logging
+        print("✅ Basic imports successful")
+        
+        # Test core components
+        try:
+            from core.risk_manager import RiskManager
+            print("✅ RiskManager import successful")
+        except ImportError as e:
+            print(f"⚠️ RiskManager import failed: {e}")
+        
+        try:
+            from core.pure_profit_calculator import PureProfitCalculator
+            print("✅ PureProfitCalculator import successful")
+        except ImportError as e:
+            print(f"⚠️ PureProfitCalculator import failed: {e}")
+        
+        # Test main CLI
+        try:
+            from main import SchwabotCLI
+            print("✅ SchwabotCLI import successful")
+        except ImportError as e:
+            print(f"❌ SchwabotCLI import failed: {e}")
             return False
-
-        print("✅ CLI structure test passed")
+        
         return True
-
+        
     except Exception as e:
-        print(f"❌ CLI structure test failed: {e}")
+        print(f"❌ Import test failed: {e}")
         return False
+
+def test_cli_initialization():
+    """Test CLI initialization."""
+    try:
+        print("\nTesting CLI initialization...")
+        from main import SchwabotCLI
+        
+        cli = SchwabotCLI()
+        print("✅ CLI initialization successful")
+        
+        # Test basic methods
+        help_text = cli.get_help_text()
+        if help_text and len(help_text) > 100:
+            print("✅ Help text generation successful")
+        else:
+            print("⚠️ Help text generation may have issues")
+        
+        platform_info = cli.get_platform_info()
+        if platform_info and 'platform' in platform_info:
+            print("✅ Platform info generation successful")
+        else:
+            print("⚠️ Platform info generation may have issues")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ CLI initialization failed: {e}")
+        return False
+
+def test_system_status():
+    """Test system status functionality."""
+    try:
+        print("\nTesting system status...")
+        from main import SchwabotCLI
+        
+        cli = SchwabotCLI()
+        status = cli.get_system_status()
+        
+        if status and isinstance(status, dict):
+            print("✅ System status generation successful")
+            print(f"Status keys: {list(status.keys())}")
+            return True
+        else:
+            print("⚠️ System status may have issues")
+            return False
+            
+    except Exception as e:
+        print(f"❌ System status test failed: {e}")
+        return False
+
+def main():
+    """Run all tests."""
+    print("🚀 Schwabot CLI Simple Test Suite")
+    print("=" * 40)
+    
+    tests = [
+        ("Import Test", test_cli_imports),
+        ("CLI Initialization", test_cli_initialization),
+        ("System Status", test_system_status),
+    ]
+    
+    passed = 0
+    total = len(tests)
+    
+    for test_name, test_func in tests:
+        print(f"\n📋 Running: {test_name}")
+        try:
+            if test_func():
+                passed += 1
+                print(f"✅ {test_name} PASSED")
+            else:
+                print(f"❌ {test_name} FAILED")
+        except Exception as e:
+            print(f"❌ {test_name} ERROR: {e}")
+    
+    print(f"\n📊 Test Results: {passed}/{total} tests passed")
+    
+    if passed == total:
+        print("🎉 All tests passed! CLI is working correctly.")
+        return 0
+    else:
+        print("⚠️ Some tests failed. CLI may have issues.")
+        return 1
 
 if __name__ == "__main__":
-    print("🧪 Schwabot CLI Test Suite")
-    print("=" * 50)
-
-    # Test imports
-    imports_ok = test_cli_imports()
-
-    if imports_ok:
-        # Test structure
-        structure_ok = test_cli_structure()
-
-        print("\n" + "=" * 50)
-        if structure_ok:
-            print("🎉 All CLI tests passed!")
-            print("\nThe CLI should be ready to use with commands like:")
-            print("  python -m schwabot.cli --help")
-            print("  python -m schwabot.cli security --status")
-            print("  python -m schwabot.cli alpha --demo")
-            print("  python -m schwabot.cli qsc")
-            print("  python -m schwabot.cli immune")
-            print("  python -m schwabot.cli tensor")
-        else:
-            print("❌ CLI structure test failed!")
-    else:
-        print("❌ CLI import test failed!") 
+    sys.exit(main()) 

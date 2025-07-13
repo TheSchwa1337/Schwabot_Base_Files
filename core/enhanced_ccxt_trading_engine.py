@@ -219,9 +219,9 @@ class EnhancedCCXTTradingEngine:
         # System state
         self.initialized = False
         self.active = False
-        
+
         self._initialize_system()
-    
+
     def _initialize_system(self) -> None:
         """Initialize the enhanced CCXT trading engine system."""
         try:
@@ -236,7 +236,7 @@ class EnhancedCCXTTradingEngine:
         except Exception as e:
             self.logger.error(f"❌ Error initializing Enhanced CCXT Trading Engine System: {e}")
             self.initialized = False
-    
+
     def _initialize_exchange_configs(self) -> None:
         """Initialize exchange configurations."""
         try:
@@ -857,7 +857,7 @@ class EnhancedCCXTTradingEngine:
         if not self.initialized:
             self.logger.error("System not initialized")
             return False
-        
+
         try:
             self.active = True
             self.logger.info("✅ Enhanced CCXT Trading Engine System activated")
@@ -865,7 +865,7 @@ class EnhancedCCXTTradingEngine:
         except Exception as e:
             self.logger.error(f"❌ Error activating Enhanced CCXT Trading Engine System: {e}")
             return False
-    
+
     def deactivate(self) -> bool:
         """Deactivate the system."""
         try:
@@ -875,7 +875,7 @@ class EnhancedCCXTTradingEngine:
         except Exception as e:
             self.logger.error(f"❌ Error deactivating Enhanced CCXT Trading Engine System: {e}")
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get system status."""
         return {
