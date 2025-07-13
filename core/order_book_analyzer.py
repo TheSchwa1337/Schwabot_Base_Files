@@ -26,13 +26,14 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Mathematical infrastructure not available - using fallback")
+    logger.warning("Math infrastructure not available")
 
 
 class WallType(Enum):
@@ -109,6 +110,17 @@ class OrderBookAnalyzerConfig:
     mathematical_analysis_enabled: bool = True
 
 
+@dataclass
+class OrderBookAnalyzerMetrics:
+    """Order book analyzer metrics."""
+    snapshots_analyzed: int = 0
+    walls_detected: int = 0
+    liquidity_analyses: int = 0
+    mathematical_analyses: int = 0
+    average_processing_time: float = 0.0
+    last_updated: float = 0.0
+
+
 class OrderBookAnalyzer:
     """
     Order Book Analyzer System
@@ -132,22 +144,16 @@ class OrderBookAnalyzer:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_bridge = UnifiedMathematicalBridge()
-            self.math_integration = UnifiedMathematicalIntegrationMethods()
-            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
         else:
-            self.math_bridge = None
-            self.math_integration = None
-            self.math_monitor = None
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Performance tracking
-        self.performance_metrics = {
-            'snapshots_analyzed': 0,
-            'walls_detected': 0,
-            'liquidity_analyses': 0,
-            'mathematical_analyses': 0,
-            'average_processing_time': 0.0
-        }
+        self.metrics = OrderBookAnalyzerMetrics()
         
         # System state
         self.initialized = False
@@ -205,27 +211,27 @@ class OrderBookAnalyzer:
                 self.liquidity_history[symbol] = []
             self.liquidity_history[symbol].append(liquidity_analysis)
             
-            # Update performance metrics
+            # Update metrics
             processing_time = time.time() - start_time
-            self.performance_metrics['snapshots_analyzed'] += 1
-            self.performance_metrics['walls_detected'] += len(walls)
-            self.performance_metrics['liquidity_analyses'] += 1
-            self.performance_metrics['mathematical_analyses'] += 1
+            self.metrics.snapshots_analyzed += 1
+            self.metrics.walls_detected += len(walls)
+            self.metrics.liquidity_analyses += 1
+            self.metrics.mathematical_analyses += 1
             
             # Update average processing time
-            current_avg = self.performance_metrics['average_processing_time']
-            total_analyses = self.performance_metrics['snapshots_analyzed']
-            self.performance_metrics['average_processing_time'] = (
+            current_avg = self.metrics.average_processing_time
+            total_analyses = self.metrics.snapshots_analyzed
+            self.metrics.average_processing_time = (
                 (current_avg * (total_analyses - 1) + processing_time) / total_analyses
             )
             
-            # Return comprehensive analysis
+            # Return analysis results
             return {
                 'symbol': symbol,
                 'timestamp': snapshot.timestamp,
                 'market_structure': market_structure.value,
                 'walls': [self._wall_to_dict(wall) for wall in walls],
-                'liquidity_analysis': self._liquidity_to_dict(liquidity_analysis),
+                'liquidity': self._liquidity_to_dict(liquidity_analysis),
                 'mathematical_analysis': mathematical_analysis,
                 'processing_time': processing_time
             }
@@ -235,9 +241,8 @@ class OrderBookAnalyzer:
             return {}
     
     def _parse_order_book_data(self, symbol: str, order_book_data: Dict[str, Any]) -> OrderBookSnapshot:
-        """Parse raw order book data into structured format."""
+        """Parse order book data into structured format."""
         try:
-            timestamp = time.time()
             bids = []
             asks = []
             
@@ -248,8 +253,7 @@ class OrderBookAnalyzer:
                         bids.append(OrderBookLevel(
                             price=float(bid[0]),
                             quantity=float(bid[1]),
-                            side='bid',
-                            timestamp=timestamp
+                            side='bid'
                         ))
             
             # Parse asks
@@ -259,13 +263,12 @@ class OrderBookAnalyzer:
                         asks.append(OrderBookLevel(
                             price=float(ask[0]),
                             quantity=float(ask[1]),
-                            side='ask',
-                            timestamp=timestamp
+                            side='ask'
                         ))
             
             return OrderBookSnapshot(
                 symbol=symbol,
-                timestamp=timestamp,
+                timestamp=time.time(),
                 bids=bids,
                 asks=asks
             )
@@ -275,21 +278,21 @@ class OrderBookAnalyzer:
             return OrderBookSnapshot(symbol=symbol, timestamp=time.time(), bids=[], asks=[])
     
     def _detect_walls(self, snapshot: OrderBookSnapshot) -> List[OrderBookWall]:
-        """Detect buy and sell walls in the order book."""
+        """Detect order book walls."""
         try:
             walls = []
             
-            # Detect buy walls (large bid clusters)
+            # Detect buy walls
             buy_walls = self._detect_buy_walls(snapshot.bids)
             walls.extend(buy_walls)
             
-            # Detect sell walls (large ask clusters)
+            # Detect sell walls
             sell_walls = self._detect_sell_walls(snapshot.asks)
             walls.extend(sell_walls)
             
             # Detect liquidity cliffs
-            liquidity_cliffs = self._detect_liquidity_cliffs(snapshot)
-            walls.extend(liquidity_cliffs)
+            cliffs = self._detect_liquidity_cliffs(snapshot)
+            walls.extend(cliffs)
             
             return walls
             
@@ -298,54 +301,69 @@ class OrderBookAnalyzer:
             return []
     
     def _detect_buy_walls(self, bids: List[OrderBookLevel]) -> List[OrderBookWall]:
-        """Detect buy walls in bid side."""
+        """Detect buy walls in bid orders."""
         try:
             walls = []
             
             if len(bids) < 3:
                 return walls
             
-            # Calculate average quantity for threshold
-            quantities = [bid.quantity for bid in bids]
-            avg_quantity = np.mean(quantities)
-            threshold = avg_quantity * 2.0  # Wall threshold
-            
-            # Group consecutive levels with high quantity
+            # Group consecutive price levels
             current_wall_quantity = 0.0
-            wall_start_price = 0.0
+            current_wall_price = bids[0].price
             wall_levels = 0
             
             for i, bid in enumerate(bids):
-                if bid.quantity > threshold:
-                    if current_wall_quantity == 0:
-                        wall_start_price = bid.price
-                        current_wall_quantity = bid.quantity
-                        wall_levels = 1
-                    else:
-                        current_wall_quantity += bid.quantity
-                        wall_levels += 1
+                # Check if price is close to previous (within 0.1%)
+                if abs(bid.price - current_wall_price) / current_wall_price < 0.001:
+                    current_wall_quantity += bid.quantity
+                    wall_levels += 1
                 else:
-                    # End of potential wall
-                    if current_wall_quantity > 0 and wall_levels >= 2:
-                        # Create wall
-                        wall_price = wall_start_price
-                        wall_strength = min(current_wall_quantity / (avg_quantity * 5), 1.0)
-                        wall_confidence = min(wall_levels / 5, 1.0)
-                        
-                        wall = OrderBookWall(
-                            wall_type=WallType.BUY_WALL,
-                            price_level=wall_price,
-                            total_quantity=current_wall_quantity,
-                            strength=wall_strength,
-                            confidence=wall_confidence,
-                            mathematical_signature=self._create_wall_signature(
-                                wall_price, current_wall_quantity, wall_strength, "buy"
-                            )
+                    # Check if we have a significant wall
+                    if wall_levels >= 3 and current_wall_quantity > 0:
+                        # Calculate wall strength using mathematical infrastructure
+                        wall_strength = self._calculate_wall_strength(
+                            current_wall_quantity, wall_levels, current_wall_price
                         )
-                        walls.append(wall)
+                        
+                        if wall_strength > self.config.wall_detection_threshold:
+                            wall = OrderBookWall(
+                                wall_type=WallType.BUY_WALL,
+                                price_level=current_wall_price,
+                                total_quantity=current_wall_quantity,
+                                strength=wall_strength,
+                                confidence=min(wall_strength * 1.2, 1.0),
+                                mathematical_signature=self._create_wall_signature(
+                                    current_wall_price, current_wall_quantity, 
+                                    wall_strength, "buy_wall"
+                                )
+                            )
+                            walls.append(wall)
                     
-                    current_wall_quantity = 0.0
-                    wall_levels = 0
+                    # Start new wall
+                    current_wall_quantity = bid.quantity
+                    current_wall_price = bid.price
+                    wall_levels = 1
+            
+            # Check final wall
+            if wall_levels >= 3 and current_wall_quantity > 0:
+                wall_strength = self._calculate_wall_strength(
+                    current_wall_quantity, wall_levels, current_wall_price
+                )
+                
+                if wall_strength > self.config.wall_detection_threshold:
+                    wall = OrderBookWall(
+                        wall_type=WallType.BUY_WALL,
+                        price_level=current_wall_price,
+                        total_quantity=current_wall_quantity,
+                        strength=wall_strength,
+                        confidence=min(wall_strength * 1.2, 1.0),
+                        mathematical_signature=self._create_wall_signature(
+                            current_wall_price, current_wall_quantity, 
+                            wall_strength, "buy_wall"
+                        )
+                    )
+                    walls.append(wall)
             
             return walls
             
@@ -354,54 +372,69 @@ class OrderBookAnalyzer:
             return []
     
     def _detect_sell_walls(self, asks: List[OrderBookLevel]) -> List[OrderBookWall]:
-        """Detect sell walls in ask side."""
+        """Detect sell walls in ask orders."""
         try:
             walls = []
             
             if len(asks) < 3:
                 return walls
             
-            # Calculate average quantity for threshold
-            quantities = [ask.quantity for ask in asks]
-            avg_quantity = np.mean(quantities)
-            threshold = avg_quantity * 2.0  # Wall threshold
-            
-            # Group consecutive levels with high quantity
+            # Group consecutive price levels
             current_wall_quantity = 0.0
-            wall_start_price = 0.0
+            current_wall_price = asks[0].price
             wall_levels = 0
             
             for i, ask in enumerate(asks):
-                if ask.quantity > threshold:
-                    if current_wall_quantity == 0:
-                        wall_start_price = ask.price
-                        current_wall_quantity = ask.quantity
-                        wall_levels = 1
-                    else:
-                        current_wall_quantity += ask.quantity
-                        wall_levels += 1
+                # Check if price is close to previous (within 0.1%)
+                if abs(ask.price - current_wall_price) / current_wall_price < 0.001:
+                    current_wall_quantity += ask.quantity
+                    wall_levels += 1
                 else:
-                    # End of potential wall
-                    if current_wall_quantity > 0 and wall_levels >= 2:
-                        # Create wall
-                        wall_price = wall_start_price
-                        wall_strength = min(current_wall_quantity / (avg_quantity * 5), 1.0)
-                        wall_confidence = min(wall_levels / 5, 1.0)
-                        
-                        wall = OrderBookWall(
-                            wall_type=WallType.SELL_WALL,
-                            price_level=wall_price,
-                            total_quantity=current_wall_quantity,
-                            strength=wall_strength,
-                            confidence=wall_confidence,
-                            mathematical_signature=self._create_wall_signature(
-                                wall_price, current_wall_quantity, wall_strength, "sell"
-                            )
+                    # Check if we have a significant wall
+                    if wall_levels >= 3 and current_wall_quantity > 0:
+                        # Calculate wall strength using mathematical infrastructure
+                        wall_strength = self._calculate_wall_strength(
+                            current_wall_quantity, wall_levels, current_wall_price
                         )
-                        walls.append(wall)
+                        
+                        if wall_strength > self.config.wall_detection_threshold:
+                            wall = OrderBookWall(
+                                wall_type=WallType.SELL_WALL,
+                                price_level=current_wall_price,
+                                total_quantity=current_wall_quantity,
+                                strength=wall_strength,
+                                confidence=min(wall_strength * 1.2, 1.0),
+                                mathematical_signature=self._create_wall_signature(
+                                    current_wall_price, current_wall_quantity, 
+                                    wall_strength, "sell_wall"
+                                )
+                            )
+                            walls.append(wall)
                     
-                    current_wall_quantity = 0.0
-                    wall_levels = 0
+                    # Start new wall
+                    current_wall_quantity = ask.quantity
+                    current_wall_price = ask.price
+                    wall_levels = 1
+            
+            # Check final wall
+            if wall_levels >= 3 and current_wall_quantity > 0:
+                wall_strength = self._calculate_wall_strength(
+                    current_wall_quantity, wall_levels, current_wall_price
+                )
+                
+                if wall_strength > self.config.wall_detection_threshold:
+                    wall = OrderBookWall(
+                        wall_type=WallType.SELL_WALL,
+                        price_level=current_wall_price,
+                        total_quantity=current_wall_quantity,
+                        strength=wall_strength,
+                        confidence=min(wall_strength * 1.2, 1.0),
+                        mathematical_signature=self._create_wall_signature(
+                            current_wall_price, current_wall_quantity, 
+                            wall_strength, "sell_wall"
+                        )
+                    )
+                    walls.append(wall)
             
             return walls
             
@@ -414,44 +447,46 @@ class OrderBookAnalyzer:
         try:
             cliffs = []
             
-            # Analyze bid side for cliffs
-            if len(snapshot.bids) >= 5:
+            # Analyze bid liquidity distribution
+            if len(snapshot.bids) > 5:
                 bid_quantities = [bid.quantity for bid in snapshot.bids]
-                for i in range(1, len(bid_quantities) - 1):
-                    current_qty = bid_quantities[i]
-                    next_qty = bid_quantities[i + 1]
-                    
-                    # Check for significant drop
-                    if next_qty < current_qty * 0.3:  # 70% drop
+                bid_std = np.std(bid_quantities)
+                bid_mean = np.mean(bid_quantities)
+                
+                # Find levels with significantly lower liquidity
+                for i, bid in enumerate(snapshot.bids):
+                    if bid.quantity < (bid_mean - 2 * bid_std) and bid.quantity > 0:
                         cliff = OrderBookWall(
                             wall_type=WallType.LIQUIDITY_CLIFF,
-                            price_level=snapshot.bids[i].price,
-                            total_quantity=current_qty,
-                            strength=1.0 - (next_qty / current_qty),
+                            price_level=bid.price,
+                            total_quantity=bid.quantity,
+                            strength=1.0 - (bid.quantity / bid_mean),
                             confidence=0.8,
                             mathematical_signature=self._create_wall_signature(
-                                snapshot.bids[i].price, current_qty, 1.0 - (next_qty / current_qty), "cliff"
+                                bid.price, bid.quantity, 
+                                1.0 - (bid.quantity / bid_mean), "liquidity_cliff"
                             )
                         )
                         cliffs.append(cliff)
             
-            # Analyze ask side for cliffs
-            if len(snapshot.asks) >= 5:
+            # Analyze ask liquidity distribution
+            if len(snapshot.asks) > 5:
                 ask_quantities = [ask.quantity for ask in snapshot.asks]
-                for i in range(1, len(ask_quantities) - 1):
-                    current_qty = ask_quantities[i]
-                    next_qty = ask_quantities[i + 1]
-                    
-                    # Check for significant drop
-                    if next_qty < current_qty * 0.3:  # 70% drop
+                ask_std = np.std(ask_quantities)
+                ask_mean = np.mean(ask_quantities)
+                
+                # Find levels with significantly lower liquidity
+                for i, ask in enumerate(snapshot.asks):
+                    if ask.quantity < (ask_mean - 2 * ask_std) and ask.quantity > 0:
                         cliff = OrderBookWall(
                             wall_type=WallType.LIQUIDITY_CLIFF,
-                            price_level=snapshot.asks[i].price,
-                            total_quantity=current_qty,
-                            strength=1.0 - (next_qty / current_qty),
+                            price_level=ask.price,
+                            total_quantity=ask.quantity,
+                            strength=1.0 - (ask.quantity / ask_mean),
                             confidence=0.8,
                             mathematical_signature=self._create_wall_signature(
-                                snapshot.asks[i].price, current_qty, 1.0 - (next_qty / current_qty), "cliff"
+                                ask.price, ask.quantity, 
+                                1.0 - (ask.quantity / ask_mean), "liquidity_cliff"
                             )
                         )
                         cliffs.append(cliff)
@@ -465,7 +500,7 @@ class OrderBookAnalyzer:
     def _analyze_liquidity(self, snapshot: OrderBookSnapshot) -> LiquidityAnalysis:
         """Analyze liquidity and calculate imbalance ratio."""
         try:
-            # Calculate total bid and ask liquidity
+            # Calculate bid and ask liquidity
             bid_liquidity = sum(bid.quantity for bid in snapshot.bids)
             ask_liquidity = sum(ask.quantity for ask in snapshot.asks)
             
@@ -480,11 +515,11 @@ class OrderBookAnalyzer:
             if snapshot.bids and snapshot.asks:
                 best_bid = max(bid.price for bid in snapshot.bids)
                 best_ask = min(ask.price for ask in snapshot.asks)
-                spread = best_ask - best_bid
+                spread = (best_ask - best_bid) / best_bid
             else:
                 spread = 0.0
             
-            # Calculate depth score (how deep the order book is)
+            # Calculate depth score
             depth_score = min(len(snapshot.bids) + len(snapshot.asks), 100) / 100.0
             
             # Create mathematical signature
@@ -514,33 +549,27 @@ class OrderBookAnalyzer:
     def _perform_mathematical_analysis(self, snapshot: OrderBookSnapshot) -> Dict[str, Any]:
         """Perform mathematical analysis on order book data."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return {}
             
             # Prepare data for mathematical analysis
-            order_book_data = {
-                'symbol': snapshot.symbol,
-                'timestamp': snapshot.timestamp,
-                'bid_count': len(snapshot.bids),
-                'ask_count': len(snapshot.asks),
-                'total_bid_quantity': sum(bid.quantity for bid in snapshot.bids),
-                'total_ask_quantity': sum(ask.quantity for ask in snapshot.asks),
-                'bid_prices': [bid.price for bid in snapshot.bids],
-                'ask_prices': [ask.price for ask in snapshot.asks],
-                'bid_quantities': [bid.quantity for bid in snapshot.bids],
-                'ask_quantities': [ask.quantity for ask in snapshot.asks]
-            }
+            bid_prices = [bid.price for bid in snapshot.bids]
+            bid_quantities = [bid.quantity for bid in snapshot.bids]
+            ask_prices = [ask.price for ask in snapshot.asks]
+            ask_quantities = [ask.quantity for ask in snapshot.asks]
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                order_book_data, {}
-            )
+            # Combine data for analysis
+            analysis_data = np.array(bid_prices + bid_quantities + ask_prices + ask_quantities)
+            
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(analysis_data)
             
             return {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics,
-                'mathematical_signature': result.mathematical_signature
+                'mathematical_score': float(result),
+                'bid_count': len(snapshot.bids),
+                'ask_count': len(snapshot.asks),
+                'total_levels': len(snapshot.bids) + len(snapshot.asks),
+                'timestamp': time.time()
             }
             
         except Exception as e:
@@ -550,17 +579,14 @@ class OrderBookAnalyzer:
     def _classify_market_structure(self, snapshot: OrderBookSnapshot, 
                                  walls: List[OrderBookWall], 
                                  liquidity_analysis: LiquidityAnalysis) -> MarketStructure:
-        """Classify market structure based on order book analysis."""
+        """Classify market structure based on analysis."""
         try:
+            # Count wall types
+            buy_walls = sum(1 for wall in walls if wall.wall_type == WallType.BUY_WALL)
+            sell_walls = sum(1 for wall in walls if wall.wall_type == WallType.SELL_WALL)
+            
             # Analyze imbalance
             imbalance = abs(liquidity_analysis.imbalance_ratio)
-            
-            # Count wall types
-            buy_walls = len([w for w in walls if w.wall_type == WallType.BUY_WALL])
-            sell_walls = len([w for w in walls if w.wall_type == WallType.SELL_WALL])
-            
-            # Analyze spread
-            spread_ratio = liquidity_analysis.spread / liquidity_analysis.bid_liquidity if liquidity_analysis.bid_liquidity > 0 else 0
             
             # Classify based on analysis
             if imbalance > 0.1:  # Strong imbalance
@@ -568,11 +594,11 @@ class OrderBookAnalyzer:
                     return MarketStructure.BULLISH
                 else:
                     return MarketStructure.BEARISH
-            elif buy_walls > sell_walls + 1:  # More buy walls
+            elif buy_walls > sell_walls and buy_walls > 0:
                 return MarketStructure.BULLISH
-            elif sell_walls > buy_walls + 1:  # More sell walls
+            elif sell_walls > buy_walls and sell_walls > 0:
                 return MarketStructure.BEARISH
-            elif spread_ratio > 0.01:  # Wide spread
+            elif liquidity_analysis.spread > 0.01:  # High spread
                 return MarketStructure.VOLATILE
             else:
                 return MarketStructure.NEUTRAL
@@ -581,41 +607,54 @@ class OrderBookAnalyzer:
             self.logger.error(f"❌ Error classifying market structure: {e}")
             return MarketStructure.NEUTRAL
     
+    def _calculate_wall_strength(self, quantity: float, levels: int, price: float) -> float:
+        """Calculate wall strength using mathematical infrastructure."""
+        try:
+            if not self.math_orchestrator:
+                # Fallback calculation
+                return min(quantity / 1000.0, 1.0)  # Normalize to 1000 units
+            
+            # Use mathematical orchestration for wall strength calculation
+            wall_data = np.array([quantity, levels, price])
+            strength = self.math_orchestrator.process_data(wall_data)
+            return float(strength)
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error calculating wall strength: {e}")
+            return 0.0
+    
     def _create_wall_signature(self, price: float, quantity: float, 
                              strength: float, wall_type: str) -> str:
         """Create mathematical signature for wall."""
         try:
-            signature_components = [
-                f"P:{price:.6f}",
-                f"Q:{quantity:.6f}",
-                f"S:{strength:.3f}",
-                f"T:{wall_type}"
-            ]
-            return "|".join(signature_components)
+            signature_data = np.array([price, quantity, strength])
+            if self.math_orchestrator:
+                signature = self.math_orchestrator.process_data(signature_data)
+                return f"{wall_type}_{signature:.6f}"
+            else:
+                return f"{wall_type}_{price:.2f}_{quantity:.2f}_{strength:.3f}"
         except Exception as e:
             self.logger.error(f"❌ Error creating wall signature: {e}")
-            return ""
+            return f"{wall_type}_fallback"
     
     def _create_liquidity_signature(self, bid_liquidity: float, ask_liquidity: float,
                                   imbalance: float, spread: float, depth: float) -> str:
         """Create mathematical signature for liquidity analysis."""
         try:
-            signature_components = [
-                f"B:{bid_liquidity:.6f}",
-                f"A:{ask_liquidity:.6f}",
-                f"I:{imbalance:.6f}",
-                f"S:{spread:.6f}",
-                f"D:{depth:.3f}"
-            ]
-            return "|".join(signature_components)
+            liquidity_data = np.array([bid_liquidity, ask_liquidity, imbalance, spread, depth])
+            if self.math_orchestrator:
+                signature = self.math_orchestrator.process_data(liquidity_data)
+                return f"liquidity_{signature:.6f}"
+            else:
+                return f"liquidity_{imbalance:.3f}_{spread:.3f}_{depth:.3f}"
         except Exception as e:
             self.logger.error(f"❌ Error creating liquidity signature: {e}")
-            return ""
+            return "liquidity_fallback"
     
     def _wall_to_dict(self, wall: OrderBookWall) -> Dict[str, Any]:
         """Convert wall to dictionary."""
         return {
-            'type': wall.wall_type.value,
+            'wall_type': wall.wall_type.value,
             'price_level': wall.price_level,
             'total_quantity': wall.total_quantity,
             'strength': wall.strength,
@@ -637,32 +676,40 @@ class OrderBookAnalyzer:
     
     def get_order_book_analysis(self, symbol: str) -> Optional[Dict[str, Any]]:
         """Get latest order book analysis for a symbol."""
-        snapshot = self.order_book_snapshots.get(symbol)
-        if not snapshot:
-            return None
-        
-        return {
-            'symbol': symbol,
-            'timestamp': snapshot.timestamp,
-            'market_structure': snapshot.market_structure.value,
-            'bid_count': len(snapshot.bids),
-            'ask_count': len(snapshot.asks),
-            'mathematical_analysis': snapshot.mathematical_analysis
-        }
+        if symbol in self.order_book_snapshots:
+            snapshot = self.order_book_snapshots[symbol]
+            return {
+                'symbol': snapshot.symbol,
+                'timestamp': snapshot.timestamp,
+                'market_structure': snapshot.market_structure.value,
+                'bid_count': len(snapshot.bids),
+                'ask_count': len(snapshot.asks),
+                'mathematical_analysis': snapshot.mathematical_analysis
+            }
+        return None
     
     def get_wall_history(self, symbol: str) -> List[Dict[str, Any]]:
-        """Get wall detection history for a symbol."""
-        walls = self.wall_history.get(symbol, [])
-        return [self._wall_to_dict(wall) for wall in walls[-10:]]  # Last 10 walls
+        """Get wall history for a symbol."""
+        if symbol in self.wall_history:
+            return [self._wall_to_dict(wall) for wall in self.wall_history[symbol][-50:]]
+        return []
     
     def get_liquidity_history(self, symbol: str) -> List[Dict[str, Any]]:
-        """Get liquidity analysis history for a symbol."""
-        liquidity = self.liquidity_history.get(symbol, [])
-        return [self._liquidity_to_dict(liq) for liq in liquidity[-10:]]  # Last 10 analyses
+        """Get liquidity history for a symbol."""
+        if symbol in self.liquidity_history:
+            return [self._liquidity_to_dict(liquidity) for liquidity in self.liquidity_history[symbol][-50:]]
+        return []
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get system performance metrics."""
-        return self.performance_metrics.copy()
+        return {
+            'snapshots_analyzed': self.metrics.snapshots_analyzed,
+            'walls_detected': self.metrics.walls_detected,
+            'liquidity_analyses': self.metrics.liquidity_analyses,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'average_processing_time': self.metrics.average_processing_time,
+            'last_updated': time.time()
+        }
     
     def activate(self) -> bool:
         """Activate the system."""
@@ -694,14 +741,37 @@ class OrderBookAnalyzer:
             'active': self.active,
             'initialized': self.initialized,
             'symbols_tracked': len(self.order_book_snapshots),
-            'performance_metrics': self.performance_metrics,
+            'performance_metrics': self.get_performance_metrics(),
             'config': {
                 'enabled': self.config.enabled,
                 'wall_detection_threshold': self.config.wall_detection_threshold,
                 'imbalance_threshold': self.config.imbalance_threshold,
+                'max_depth_levels': self.config.max_depth_levels,
                 'mathematical_analysis_enabled': self.config.mathematical_analysis_enabled
             }
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and order book analysis integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for order book analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
 
 
 def create_order_book_analyzer(config: Optional[OrderBookAnalyzerConfig] = None) -> OrderBookAnalyzer:
@@ -717,6 +787,7 @@ def main():
         debug=True,
         wall_detection_threshold=0.1,
         imbalance_threshold=0.05,
+        max_depth_levels=20,
         mathematical_analysis_enabled=True
     )
     
@@ -726,31 +797,31 @@ def main():
     # Activate system
     analyzer.activate()
     
-    # Sample order book data
-    sample_order_book = {
+    # Test order book data
+    test_order_book = {
         'bids': [
-            ['50000.0', '1.5'],
-            ['49999.0', '2.0'],
-            ['49998.0', '1.8'],
-            ['49997.0', '0.5'],
-            ['49996.0', '0.3']
+            [50000.0, 1.5],
+            [49999.0, 2.0],
+            [49998.0, 1.8],
+            [49997.0, 3.2],
+            [49996.0, 1.2]
         ],
         'asks': [
-            ['50001.0', '1.2'],
-            ['50002.0', '2.5'],
-            ['50003.0', '1.0'],
-            ['50004.0', '0.8'],
-            ['50005.0', '0.6']
+            [50001.0, 1.0],
+            [50002.0, 2.5],
+            [50003.0, 1.8],
+            [50004.0, 2.1],
+            [50005.0, 1.5]
         ]
     }
     
     # Analyze order book
-    result = analyzer.analyze_order_book("BTCUSDT", sample_order_book)
+    result = analyzer.analyze_order_book("BTCUSDT", test_order_book)
     print(f"Analysis Result: {json.dumps(result, indent=2)}")
     
     # Get status
     status = analyzer.get_status()
-    print(f"System Status: {status}")
+    print(f"System Status: {json.dumps(status, indent=2)}")
     
     # Deactivate system
     analyzer.deactivate()

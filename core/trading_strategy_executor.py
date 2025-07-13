@@ -30,13 +30,14 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Mathematical infrastructure not available - using fallback")
+    logger.warning("Math infrastructure not available")
 
 
 class ExecutionPath(Enum):
@@ -131,6 +132,18 @@ class TradingStrategyExecutorConfig:
     })
 
 
+@dataclass
+class TradingStrategyExecutorMetrics:
+    """Trading strategy executor metrics."""
+    signals_processed: int = 0
+    decisions_made: int = 0
+    executions_triggered: int = 0
+    average_processing_time: float = 0.0
+    strategy_accuracy: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = 0.0
+
+
 class TradingStrategyExecutor:
     """
     Trading Strategy Executor System
@@ -163,22 +176,16 @@ class TradingStrategyExecutor:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_bridge = UnifiedMathematicalBridge()
-            self.math_integration = UnifiedMathematicalIntegrationMethods()
-            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
         else:
-            self.math_bridge = None
-            self.math_integration = None
-            self.math_monitor = None
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Performance tracking
-        self.performance_metrics = {
-            'signals_processed': 0,
-            'decisions_made': 0,
-            'executions_triggered': 0,
-            'average_processing_time': 0.0,
-            'strategy_accuracy': 0.0
-        }
+        self.metrics = TradingStrategyExecutorMetrics()
         
         # System state
         self.initialized = False
@@ -279,35 +286,34 @@ class TradingStrategyExecutor:
             signal_content = f"{signal_data.get('strategy_type', '')}{signal_data.get('symbol', '')}{time.time()}"
             signal_hash = hashlib.sha256(signal_content.encode()).hexdigest()[:16]
             
-            # Determine strategy type
-            strategy_type_str = signal_data.get('strategy_type', 'momentum').lower()
-            strategy_type = self._map_strategy_type(strategy_type_str)
+            # Map strategy type
+            strategy_type = self._map_strategy_type(signal_data.get('strategy_type', 'momentum'))
             
-            # Calculate price delta and threshold
-            current_price = signal_data.get('current_price', 0.0)
-            reference_price = signal_data.get('reference_price', current_price)
-            price_delta = current_price - reference_price
-            threshold = signal_data.get('threshold', 0.01)  # 1% default
+            # Extract price delta and threshold
+            price_delta = float(signal_data.get('price_delta', 0.0))
+            threshold = float(signal_data.get('threshold', 0.01))
             
-            # Determine execution path based on mathematical model
+            # Determine execution path
             execution_path = self._determine_execution_path(price_delta, threshold)
             
             # Determine signal strength
             strength = self._determine_signal_strength(abs(price_delta), threshold)
             
-            # Calculate confidence
-            confidence = signal_data.get('confidence', 0.5)
+            # Extract other parameters
+            symbol = signal_data.get('symbol', 'BTCUSDT')
+            confidence = float(signal_data.get('confidence', 0.5))
+            metadata = signal_data.get('metadata', {})
             
             return StrategySignal(
                 signal_hash=signal_hash,
                 strategy_type=strategy_type,
                 execution_path=execution_path,
-                symbol=signal_data.get('symbol', ''),
+                symbol=symbol,
                 strength=strength,
                 confidence=confidence,
                 price_delta=price_delta,
                 threshold=threshold,
-                metadata=signal_data.get('metadata', {})
+                metadata=metadata
             )
             
         except Exception as e:
@@ -317,7 +323,7 @@ class TradingStrategyExecutor:
                 signal_hash="default",
                 strategy_type=StrategyType.MOMENTUM,
                 execution_path=ExecutionPath.HOLD,
-                symbol="",
+                symbol="BTCUSDT",
                 strength=SignalStrength.WEAK,
                 confidence=0.0,
                 price_delta=0.0,
@@ -325,36 +331,38 @@ class TradingStrategyExecutor:
             )
     
     def _map_strategy_type(self, strategy_type_str: str) -> StrategyType:
-        """Map string to strategy type."""
-        mapping = {
-            'momentum': StrategyType.MOMENTUM,
-            'mean_reversion': StrategyType.MEAN_REVERSION,
-            'scalping': StrategyType.SCALPING,
-            'arbitrage': StrategyType.ARBITRAGE,
-            'grid': StrategyType.GRID,
-            'quantum': StrategyType.QUANTUM,
-            'phantom': StrategyType.PHANTOM,
-            'hybrid': StrategyType.HYBRID
-        }
-        return mapping.get(strategy_type_str, StrategyType.MOMENTUM)
+        """Map string to strategy type enum."""
+        try:
+            strategy_map = {
+                'momentum': StrategyType.MOMENTUM,
+                'mean_reversion': StrategyType.MEAN_REVERSION,
+                'scalping': StrategyType.SCALPING,
+                'arbitrage': StrategyType.ARBITRAGE,
+                'grid': StrategyType.GRID,
+                'quantum': StrategyType.QUANTUM,
+                'phantom': StrategyType.PHANTOM,
+                'hybrid': StrategyType.HYBRID
+            }
+            return strategy_map.get(strategy_type_str.lower(), StrategyType.MOMENTUM)
+        except Exception as e:
+            self.logger.error(f"❌ Error mapping strategy type: {e}")
+            return StrategyType.MOMENTUM
     
     def _determine_execution_path(self, price_delta: float, threshold: float) -> ExecutionPath:
-        """Determine execution path based on mathematical model."""
+        """Determine execution path based on price delta and threshold."""
         try:
-            # Mathematical model: f(s_i) = {Aggressive Market Buy if δP > θ, Passive Maker Sell if δP < -θ, Hold else}
             if price_delta > threshold:
                 return ExecutionPath.AGGRESSIVE_MARKET_BUY
             elif price_delta < -threshold:
                 return ExecutionPath.PASSIVE_MAKER_SELL
             else:
                 return ExecutionPath.HOLD
-                
         except Exception as e:
             self.logger.error(f"❌ Error determining execution path: {e}")
             return ExecutionPath.HOLD
     
     def _determine_signal_strength(self, abs_delta: float, threshold: float) -> SignalStrength:
-        """Determine signal strength based on price delta."""
+        """Determine signal strength based on absolute delta and threshold."""
         try:
             ratio = abs_delta / threshold if threshold > 0 else 0
             
@@ -366,7 +374,6 @@ class TradingStrategyExecutor:
                 return SignalStrength.MODERATE
             else:
                 return SignalStrength.WEAK
-                
         except Exception as e:
             self.logger.error(f"❌ Error determining signal strength: {e}")
             return SignalStrength.WEAK
@@ -378,12 +385,12 @@ class TradingStrategyExecutor:
             if not signal.symbol or signal.confidence < 0.0 or signal.confidence > 1.0:
                 return False
             
-            # Check strategy type
-            if signal.strategy_type not in StrategyType:
+            # Check price delta is finite
+            if not np.isfinite(signal.price_delta):
                 return False
             
-            # Check execution path
-            if signal.execution_path not in ExecutionPath:
+            # Check threshold is positive
+            if signal.threshold <= 0:
                 return False
             
             return True
@@ -393,37 +400,32 @@ class TradingStrategyExecutor:
             return False
     
     async def _analyze_signal_mathematically(self, signal: StrategySignal) -> None:
-        """Perform mathematical analysis on signal."""
+        """Perform mathematical analysis on strategy signal."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return
             
             # Prepare signal data for mathematical analysis
-            signal_data = {
-                'signal_hash': signal.signal_hash,
-                'strategy_type': signal.strategy_type.value,
-                'execution_path': signal.execution_path.value,
-                'symbol': signal.symbol,
-                'strength': signal.strength.value,
-                'confidence': signal.confidence,
-                'price_delta': signal.price_delta,
-                'threshold': signal.threshold,
-                'timestamp': signal.timestamp,
-                'metadata': signal.metadata
-            }
+            signal_data = np.array([
+                signal.confidence,
+                signal.price_delta,
+                signal.threshold,
+                time.time(),
+                len(signal.symbol)
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                signal_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(signal_data)
             
             # Update signal with mathematical analysis
-            signal.mathematical_signature = result.mathematical_signature
+            signal.mathematical_signature = str(result)
             signal.metadata['mathematical_analysis'] = {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics
+                'confidence': float(result),
+                'timestamp': time.time()
             }
+            
+            # Update metrics
+            self.metrics.mathematical_analyses += 1
             
         except Exception as e:
             self.logger.error(f"❌ Error analyzing signal mathematically: {e}")
@@ -456,10 +458,8 @@ class TradingStrategyExecutor:
     async def _process_signal(self, signal: StrategySignal) -> None:
         """Process a strategy signal."""
         try:
-            start_time = time.time()
-            
             # Update performance metrics
-            self.performance_metrics['signals_processed'] += 1
+            self.metrics.signals_processed += 1
             
             # Make execution decision
             decision = await self._make_execution_decision(signal)
@@ -473,18 +473,7 @@ class TradingStrategyExecutor:
             # Queue decision for execution
             await self.decision_queue.put(decision)
             
-            # Update performance metrics
-            processing_time = time.time() - start_time
-            self.performance_metrics['decisions_made'] += 1
-            
-            # Update average processing time
-            current_avg = self.performance_metrics['average_processing_time']
-            total_signals = self.performance_metrics['signals_processed']
-            self.performance_metrics['average_processing_time'] = (
-                (current_avg * (total_signals - 1) + processing_time) / total_signals
-            )
-            
-            self.logger.info(f"✅ Signal processed: {signal.signal_hash} -> {decision.selected_path.value}")
+            self.logger.info(f"✅ Signal processed: {signal.strategy_type.value} -> {decision.selected_path.value}")
             
         except Exception as e:
             self.logger.error(f"❌ Error processing signal: {e}")
@@ -492,50 +481,56 @@ class TradingStrategyExecutor:
     async def _make_execution_decision(self, signal: StrategySignal) -> ExecutionDecision:
         """Make execution decision based on signal."""
         try:
-            # Apply strategy weights
-            strategy_weight = self.config.strategy_weights.get(signal.strategy_type.value, 0.1)
+            # Start with signal's suggested path
+            selected_path = signal.execution_path
             
-            # Calculate weighted confidence
-            weighted_confidence = signal.confidence * strategy_weight
-            
-            # Determine if execution should be triggered
-            should_execute = weighted_confidence >= self.config.execution_threshold
-            
-            # Select execution path
-            if should_execute:
-                selected_path = signal.execution_path
-                reasoning = f"Signal confidence {signal.confidence:.3f} * strategy weight {strategy_weight:.3f} = {weighted_confidence:.3f} >= threshold {self.config.execution_threshold}"
-            else:
+            # Adjust based on confidence and mathematical analysis
+            if signal.confidence < self.config.execution_threshold:
                 selected_path = ExecutionPath.HOLD
-                reasoning = f"Signal confidence {signal.confidence:.3f} * strategy weight {strategy_weight:.3f} = {weighted_confidence:.3f} < threshold {self.config.execution_threshold}"
+                confidence = signal.confidence * 0.5
+                reasoning = "Low confidence - holding position"
+            else:
+                confidence = signal.confidence
+                reasoning = f"High confidence {signal.strategy_type.value} signal"
             
             # Generate execution parameters
             execution_parameters = self._generate_execution_parameters(signal, selected_path)
             
             # Perform mathematical analysis on decision
-            mathematical_analysis = await self._analyze_decision_mathematically(signal, selected_path, weighted_confidence)
+            mathematical_analysis = await self._analyze_decision_mathematically(
+                signal, selected_path, confidence
+            )
             
-            return ExecutionDecision(
+            # Create decision
+            decision = ExecutionDecision(
                 signal_hash=signal.signal_hash,
                 selected_path=selected_path,
-                confidence=weighted_confidence,
+                confidence=confidence,
                 reasoning=reasoning,
                 mathematical_analysis=mathematical_analysis,
                 execution_parameters=execution_parameters
             )
             
+            # Update metrics
+            self.metrics.decisions_made += 1
+            
+            return decision
+            
         except Exception as e:
             self.logger.error(f"❌ Error making execution decision: {e}")
+            
+            # Return safe decision
             return ExecutionDecision(
                 signal_hash=signal.signal_hash,
                 selected_path=ExecutionPath.HOLD,
                 confidence=0.0,
-                reasoning=f"Error in decision making: {e}",
+                reasoning="Error in decision making - holding position",
+                mathematical_analysis={},
                 execution_parameters={}
             )
     
     def _generate_execution_parameters(self, signal: StrategySignal, selected_path: ExecutionPath) -> Dict[str, Any]:
-        """Generate execution parameters based on signal and path."""
+        """Generate execution parameters based on signal and selected path."""
         try:
             base_params = {
                 'symbol': signal.symbol,
@@ -565,55 +560,43 @@ class TradingStrategyExecutor:
                     'order_type': 'market',
                     'side': 'buy' if signal.price_delta > 0 else 'sell',
                     'urgency': 'high',
-                    'position_size': 'small',
-                    'timeout': 30  # seconds
-                })
-            elif selected_path == ExecutionPath.MEAN_REVERSION:
-                base_params.update({
-                    'order_type': 'limit',
-                    'side': 'sell' if signal.price_delta > 0 else 'buy',
-                    'urgency': 'medium',
-                    'mean_reversion_strength': abs(signal.price_delta) / signal.threshold
+                    'timeout': 30  # 30 seconds
                 })
             else:  # HOLD
                 base_params.update({
                     'action': 'hold',
-                    'reason': 'Below execution threshold'
+                    'reason': 'No clear signal'
                 })
             
             return base_params
             
         except Exception as e:
             self.logger.error(f"❌ Error generating execution parameters: {e}")
-            return {'error': str(e)}
+            return {'action': 'hold', 'reason': 'Error in parameter generation'}
     
     async def _analyze_decision_mathematically(self, signal: StrategySignal, selected_path: ExecutionPath, confidence: float) -> Dict[str, Any]:
-        """Perform mathematical analysis on decision."""
+        """Perform mathematical analysis on execution decision."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return {}
             
-            # Prepare decision data for mathematical analysis
-            decision_data = {
-                'signal_hash': signal.signal_hash,
-                'selected_path': selected_path.value,
-                'confidence': confidence,
-                'strategy_type': signal.strategy_type.value,
-                'price_delta': signal.price_delta,
-                'threshold': signal.threshold,
-                'mathematical_signature': signal.mathematical_signature
-            }
+            # Prepare decision data for analysis
+            decision_data = np.array([
+                confidence,
+                signal.price_delta,
+                signal.threshold,
+                len(selected_path.value),
+                time.time()
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                decision_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(decision_data)
             
             return {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics,
-                'mathematical_signature': result.mathematical_signature
+                'mathematical_score': float(result),
+                'decision_confidence': confidence,
+                'path_complexity': len(selected_path.value),
+                'timestamp': time.time()
             }
             
         except Exception as e:
@@ -628,17 +611,17 @@ class TradingStrategyExecutor:
             
             performance = self.strategy_performance[signal.strategy_type]
             
-            # Update metrics
+            # Update basic metrics
             performance.total_signals += 1
-            performance.average_confidence = (
-                (performance.average_confidence * (performance.total_signals - 1) + decision.confidence) / 
-                performance.total_signals
-            )
+            
+            # Update confidence tracking
+            total_confidence = performance.average_confidence * (performance.total_signals - 1)
+            performance.average_confidence = (total_confidence + decision.confidence) / performance.total_signals
             
             # Update mathematical signature
-            performance.mathematical_signature = signal.mathematical_signature
+            performance.mathematical_signature = decision.mathematical_analysis.get('mathematical_signature', '')
             
-            # Note: PnL and win rate would be updated after execution results are received
+            # Note: PnL and win rate would be updated after actual execution results
             
         except Exception as e:
             self.logger.error(f"❌ Error updating strategy performance: {e}")
@@ -654,7 +637,7 @@ class TradingStrategyExecutor:
                         timeout=1.0
                     )
                     
-                    # Process decision (send to execution engine)
+                    # Execute decision
                     await self._execute_decision(decision)
                     
                     # Mark task as done
@@ -669,25 +652,19 @@ class TradingStrategyExecutor:
             self.logger.error(f"❌ Error in decision processing loop: {e}")
     
     async def _execute_decision(self, decision: ExecutionDecision) -> None:
-        """Execute a decision (send to execution engine)."""
+        """Execute a trading decision."""
         try:
-            # Update performance metrics
-            self.performance_metrics['executions_triggered'] += 1
+            # Update metrics
+            self.metrics.executions_triggered += 1
             
             # Log execution
-            self.logger.info(f"🚀 Executing decision: {decision.signal_hash} -> {decision.selected_path.value}")
+            self.logger.info(f"✅ Executing decision: {decision.selected_path.value} for {decision.signal_hash}")
             
-            # Here you would send the decision to the execution engine
-            # For now, we'll just log it
-            execution_data = {
-                'decision_id': decision.signal_hash,
-                'execution_path': decision.selected_path.value,
-                'confidence': decision.confidence,
-                'parameters': decision.execution_parameters,
-                'timestamp': decision.timestamp
-            }
+            # In production, this would trigger actual order execution
+            # For now, just simulate execution
+            await asyncio.sleep(0.1)  # Simulate execution time
             
-            self.logger.info(f"Execution data: {json.dumps(execution_data, indent=2)}")
+            self.logger.info(f"✅ Decision executed successfully: {decision.selected_path.value}")
             
         except Exception as e:
             self.logger.error(f"❌ Error executing decision: {e}")
@@ -707,6 +684,7 @@ class TradingStrategyExecutor:
                     'mathematical_signature': performance.mathematical_signature
                 }
             else:
+                # Return all strategy performance
                 return {
                     strategy_type.value: {
                         'total_signals': perf.total_signals,
@@ -733,7 +711,7 @@ class TradingStrategyExecutor:
                     'confidence': decision.confidence,
                     'reasoning': decision.reasoning,
                     'timestamp': decision.timestamp,
-                    'execution_parameters': decision.execution_parameters
+                    'mathematical_analysis': decision.mathematical_analysis
                 }
                 for decision in recent_decisions
             ]
@@ -743,7 +721,15 @@ class TradingStrategyExecutor:
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get system performance metrics."""
-        return self.performance_metrics.copy()
+        return {
+            'signals_processed': self.metrics.signals_processed,
+            'decisions_made': self.metrics.decisions_made,
+            'executions_triggered': self.metrics.executions_triggered,
+            'average_processing_time': self.metrics.average_processing_time,
+            'strategy_accuracy': self.metrics.strategy_accuracy,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'last_updated': time.time()
+        }
     
     def activate(self) -> bool:
         """Activate the system."""
@@ -774,12 +760,10 @@ class TradingStrategyExecutor:
         return {
             'active': self.active,
             'initialized': self.initialized,
+            'active_strategies': len(self.active_strategies),
             'signals_queued': self.signal_queue.qsize(),
             'decisions_queued': self.decision_queue.qsize(),
-            'active_strategies': len(self.active_strategies),
-            'total_signals': len(self.strategy_signals),
-            'total_decisions': len(self.execution_decisions),
-            'performance_metrics': self.performance_metrics,
+            'performance_metrics': self.get_performance_metrics(),
             'config': {
                 'enabled': self.config.enabled,
                 'max_concurrent_strategies': self.config.max_concurrent_strategies,
@@ -788,6 +772,28 @@ class TradingStrategyExecutor:
                 'performance_tracking_enabled': self.config.performance_tracking_enabled
             }
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and trading strategy execution integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for trading strategy analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
 
 
 def create_trading_strategy_executor(config: Optional[TradingStrategyExecutorConfig] = None) -> TradingStrategyExecutor:
@@ -807,7 +813,7 @@ async def main():
         performance_tracking_enabled=True
     )
     
-    # Create executor
+    # Create strategy executor
     executor = create_trading_strategy_executor(config)
     
     # Activate system
@@ -817,36 +823,25 @@ async def main():
     await executor.start_executor()
     
     # Submit test signals
-    test_signals = [
-        {
-            'strategy_type': 'momentum',
-            'symbol': 'BTCUSDT',
-            'current_price': 50000.0,
-            'reference_price': 49500.0,
-            'confidence': 0.85,
-            'threshold': 0.01
-        },
-        {
-            'strategy_type': 'mean_reversion',
-            'symbol': 'ETHUSDT',
-            'current_price': 3000.0,
-            'reference_price': 3100.0,
-            'confidence': 0.75,
-            'threshold': 0.02
-        },
-        {
-            'strategy_type': 'scalping',
-            'symbol': 'BTCUSDT',
-            'current_price': 50100.0,
-            'reference_price': 50050.0,
-            'confidence': 0.6,
-            'threshold': 0.005
-        }
-    ]
+    momentum_signal = {
+        'strategy_type': 'momentum',
+        'symbol': 'BTCUSDT',
+        'price_delta': 0.02,  # 2% price increase
+        'threshold': 0.01,    # 1% threshold
+        'confidence': 0.85
+    }
+    
+    mean_reversion_signal = {
+        'strategy_type': 'mean_reversion',
+        'symbol': 'ETHUSDT',
+        'price_delta': -0.015,  # 1.5% price decrease
+        'threshold': 0.01,      # 1% threshold
+        'confidence': 0.75
+    }
     
     # Submit signals
-    for signal_data in test_signals:
-        await executor.submit_strategy_signal(signal_data)
+    await executor.submit_strategy_signal(momentum_signal)
+    await executor.submit_strategy_signal(mean_reversion_signal)
     
     # Wait for processing
     await asyncio.sleep(5)

@@ -31,13 +31,14 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Mathematical infrastructure not available - using fallback")
+    logger.warning("Math infrastructure not available")
 
 
 class RoutingStrategy(Enum):
@@ -129,6 +130,18 @@ class StrategyRouterConfig:
     })
 
 
+@dataclass
+class StrategyRouterMetrics:
+    """Strategy router metrics."""
+    signals_routed: int = 0
+    successful_routes: int = 0
+    routing_errors: int = 0
+    average_routing_time: float = 0.0
+    routing_accuracy: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = 0.0
+
+
 class StrategyRouter:
     """
     Strategy Router System
@@ -157,22 +170,16 @@ class StrategyRouter:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_bridge = UnifiedMathematicalBridge()
-            self.math_integration = UnifiedMathematicalIntegrationMethods()
-            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
         else:
-            self.math_bridge = None
-            self.math_integration = None
-            self.math_monitor = None
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Performance tracking
-        self.performance_metrics = {
-            'signals_routed': 0,
-            'successful_routes': 0,
-            'routing_errors': 0,
-            'average_routing_time': 0.0,
-            'routing_accuracy': 0.0
-        }
+        self.metrics = StrategyRouterMetrics()
         
         # System state
         self.initialized = False
@@ -261,17 +268,22 @@ class StrategyRouter:
             return False
     
     def _validate_signal_data(self, signal_data: Dict[str, Any]) -> bool:
-        """Validate signal data for routing."""
+        """Validate signal data."""
         try:
-            required_fields = ['signal_id', 'symbol', 'signal_type', 'confidence']
-            
+            # Check required fields
+            required_fields = ['signal_id', 'symbol', 'signal_type', 'strength']
             for field in required_fields:
                 if field not in signal_data:
                     return False
             
-            # Check confidence range
-            confidence = signal_data.get('confidence', 0.0)
-            if confidence < 0.0 or confidence > 1.0:
+            # Validate signal strength
+            strength = signal_data.get('strength', 0.0)
+            if not isinstance(strength, (int, float)) or strength < 0.0 or strength > 1.0:
+                return False
+            
+            # Validate signal type
+            valid_types = ['buy', 'sell', 'hold', 'strong_buy', 'strong_sell']
+            if signal_data.get('signal_type') not in valid_types:
                 return False
             
             return True
@@ -283,31 +295,29 @@ class StrategyRouter:
     async def _analyze_signal_mathematically(self, signal_data: Dict[str, Any]) -> None:
         """Perform mathematical analysis on signal."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return
             
             # Prepare signal data for mathematical analysis
-            analysis_data = {
-                'signal_id': signal_data.get('signal_id'),
-                'symbol': signal_data.get('symbol'),
-                'signal_type': signal_data.get('signal_type'),
-                'confidence': signal_data.get('confidence'),
-                'timestamp': time.time(),
-                'metadata': signal_data.get('metadata', {})
-            }
+            signal_vector = np.array([
+                signal_data.get('strength', 0.0),
+                signal_data.get('confidence', 0.0),
+                signal_data.get('price', 0.0),
+                signal_data.get('volume', 0.0),
+                time.time()
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                analysis_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(signal_vector)
             
             # Update signal data with mathematical analysis
             signal_data['mathematical_analysis'] = {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics,
-                'mathematical_signature': result.mathematical_signature
+                'confidence': float(result),
+                'timestamp': time.time()
             }
+            
+            # Update metrics
+            self.metrics.mathematical_analyses += 1
             
         except Exception as e:
             self.logger.error(f"❌ Error analyzing signal mathematically: {e}")
@@ -338,18 +348,17 @@ class StrategyRouter:
             self.logger.error(f"❌ Error in signal processing loop: {e}")
     
     async def _process_signal(self, signal_data: Dict[str, Any]) -> None:
-        """Process a signal for routing."""
+        """Process a trading signal."""
         try:
-            start_time = time.time()
-            
             # Update performance metrics
-            self.performance_metrics['signals_routed'] += 1
+            self.metrics.signals_routed += 1
             
             # Make routing decision
             decision = await self._make_routing_decision(signal_data)
             
             # Store decision
             self.routing_history.append(decision)
+            self.active_routes[decision.signal_id] = decision
             
             # Update strategy performance
             self._update_strategy_performance(decision)
@@ -357,100 +366,83 @@ class StrategyRouter:
             # Queue for execution
             await self.routing_queue.put(decision)
             
-            # Update performance metrics
-            routing_time = time.time() - start_time
-            self.performance_metrics['average_routing_time'] = (
-                (self.performance_metrics['average_routing_time'] * (self.performance_metrics['signals_routed'] - 1) + routing_time) / 
-                self.performance_metrics['signals_routed']
-            )
-            
             self.logger.info(f"✅ Signal routed: {signal_data.get('signal_id')} -> {decision.selected_strategy}")
             
         except Exception as e:
             self.logger.error(f"❌ Error processing signal: {e}")
-            self.performance_metrics['routing_errors'] += 1
+            self.metrics.routing_errors += 1
     
     async def _make_routing_decision(self, signal_data: Dict[str, Any]) -> RoutingDecision:
-        """Make routing decision based on mathematical optimization."""
+        """Make routing decision based on signal and market conditions."""
         try:
             signal_id = signal_data.get('signal_id', 'unknown')
-            symbol = signal_data.get('symbol', '')
+            symbol = signal_data.get('symbol', 'BTC/USDT')
             
-            # Get market conditions
+            # Get market condition
             market_condition = self._get_market_condition(symbol)
             
-            # Calculate routing scores for each strategy
+            # Calculate routing scores for all strategies
             routing_scores = {}
             for strategy_name in self.config.strategy_weights.keys():
-                score = await self._calculate_routing_score(
-                    signal_data, strategy_name, market_condition
-                )
+                score = await self._calculate_routing_score(signal_data, strategy_name, market_condition)
                 routing_scores[strategy_name] = score
             
-            # Select optimal strategy
+            # Select best strategy
             selected_strategy = max(routing_scores.items(), key=lambda x: x[1])[0]
             routing_score = routing_scores[selected_strategy]
             
-            # Determine if routing should proceed
-            should_route = routing_score >= self.config.routing_threshold
-            
-            if not should_route:
-                selected_strategy = "hold"
-                routing_score = 0.0
-            
             # Generate routing parameters
-            routing_parameters = self._generate_routing_parameters(
-                signal_data, selected_strategy, market_condition
-            )
+            routing_parameters = self._generate_routing_parameters(signal_data, selected_strategy, market_condition)
             
             # Perform mathematical analysis on decision
             mathematical_analysis = await self._analyze_decision_mathematically(
                 signal_data, selected_strategy, routing_score, market_condition
             )
             
-            # Create reasoning
-            reasoning = self._generate_routing_reasoning(
-                signal_data, selected_strategy, routing_score, market_condition
-            )
+            # Generate reasoning
+            reasoning = self._generate_routing_reasoning(signal_data, selected_strategy, routing_score, market_condition)
             
-            return RoutingDecision(
+            # Create decision
+            decision = RoutingDecision(
                 signal_id=signal_id,
                 selected_strategy=selected_strategy,
                 routing_score=routing_score,
-                confidence=signal_data.get('confidence', 0.0),
+                confidence=signal_data.get('confidence', 0.5),
                 reasoning=reasoning,
                 mathematical_analysis=mathematical_analysis,
                 routing_parameters=routing_parameters
             )
             
+            return decision
+            
         except Exception as e:
             self.logger.error(f"❌ Error making routing decision: {e}")
+            
+            # Return safe decision
             return RoutingDecision(
                 signal_id=signal_data.get('signal_id', 'unknown'),
-                selected_strategy="hold",
-                routing_score=0.0,
+                selected_strategy='momentum',  # Default strategy
+                routing_score=0.5,
                 confidence=0.0,
-                reasoning=f"Error in routing decision: {e}",
+                reasoning="Error in decision making - using default strategy",
+                mathematical_analysis={},
                 routing_parameters={}
             )
     
     def _get_market_condition(self, symbol: str) -> MarketConditionData:
-        """Get current market condition for symbol."""
+        """Get market condition for a symbol."""
         try:
-            # Use cached condition or create default
+            # Return cached market condition or default
             if symbol in self.market_conditions:
                 return self.market_conditions[symbol]
             
-            # Create default market condition
-            default_condition = MarketConditionData(
+            # Return default market condition
+            return MarketConditionData(
                 condition=MarketCondition.SIDEWAYS,
                 volatility=0.02,  # 2% volatility
                 trend_strength=0.0,
                 liquidity_score=0.8
             )
-            
-            self.market_conditions[symbol] = default_condition
-            return default_condition
             
         except Exception as e:
             self.logger.error(f"❌ Error getting market condition: {e}")
@@ -464,40 +456,40 @@ class StrategyRouter:
     async def _calculate_routing_score(self, signal_data: Dict[str, Any], 
                                      strategy_name: str, 
                                      market_condition: MarketConditionData) -> float:
-        """Calculate routing score for a strategy using mathematical optimization."""
+        """Calculate routing score for a strategy."""
         try:
-            # Get strategy weight
-            strategy_weight = self.config.strategy_weights.get(strategy_name, 0.1)
-            
             # Get strategy performance
-            performance = self.strategy_performance.get(strategy_name)
-            if not performance:
-                return 0.0
+            performance = self.strategy_performance[strategy_name]
             
-            # Calculate performance function f_j(s_i)
-            performance_score = self._calculate_performance_function(
-                signal_data, performance, market_condition
-            )
+            # Get strategy weight
+            weight = self.config.strategy_weights.get(strategy_name, 0.1)
             
-            # Calculate market condition function g_j(s_i)
-            market_score = self._calculate_market_condition_function(
-                signal_data, strategy_name, market_condition
-            )
+            # Calculate performance function
+            performance_score = self._calculate_performance_function(signal_data, performance, market_condition)
             
-            # Calculate risk adjustment factor λ_j
-            risk_factor = self._calculate_risk_factor(
-                signal_data, strategy_name, market_condition
-            )
+            # Calculate market condition function
+            market_score = self._calculate_market_condition_function(signal_data, strategy_name, market_condition)
             
-            # Apply mathematical optimization formula: R(s_i) = argmax_j {w_j * f_j(s_i) + λ_j * g_j(s_i)}
-            routing_score = (strategy_weight * performance_score + 
-                           risk_factor * market_score)
+            # Calculate risk factor
+            risk_factor = self._calculate_risk_factor(signal_data, strategy_name, market_condition)
+            
+            # Apply mathematical analysis if available
+            mathematical_boost = 1.0
+            if self.math_orchestrator and 'mathematical_analysis' in signal_data:
+                math_confidence = signal_data['mathematical_analysis'].get('confidence', 0.5)
+                mathematical_boost = 0.8 + (math_confidence * 0.4)  # 0.8 to 1.2 range
+            
+            # Calculate final score: R(s_i) = argmax_j {w_j * f_j(s_i) + λ_j * g_j(s_i)}
+            routing_score = (
+                weight * performance_score + 
+                risk_factor * market_score
+            ) * mathematical_boost
             
             return max(0.0, min(1.0, routing_score))  # Clamp to [0, 1]
             
         except Exception as e:
             self.logger.error(f"❌ Error calculating routing score: {e}")
-            return 0.0
+            return 0.5
     
     def _calculate_performance_function(self, signal_data: Dict[str, Any], 
                                       performance: StrategyPerformance, 
@@ -505,27 +497,23 @@ class StrategyRouter:
         """Calculate performance function f_j(s_i)."""
         try:
             # Base performance score
-            base_score = performance.win_rate * performance.average_score
+            base_score = performance.win_rate if performance.total_signals > 0 else 0.5
             
-            # Adjust for signal confidence
-            confidence = signal_data.get('confidence', 0.5)
-            confidence_adjustment = confidence * 0.3
+            # Adjust for signal strength
+            signal_strength = signal_data.get('strength', 0.5)
+            strength_adjustment = signal_strength * 0.3
             
             # Adjust for market condition alignment
-            market_alignment = self._calculate_market_alignment(
-                signal_data, market_condition
-            )
+            market_alignment = self._calculate_market_alignment(signal_data, market_condition)
             
-            # Combine scores
-            performance_score = (base_score * 0.5 + 
-                               confidence_adjustment * 0.3 + 
-                               market_alignment * 0.2)
+            # Calculate final performance score
+            performance_score = base_score + strength_adjustment + market_alignment
             
             return max(0.0, min(1.0, performance_score))
             
         except Exception as e:
             self.logger.error(f"❌ Error calculating performance function: {e}")
-            return 0.0
+            return 0.5
     
     def _calculate_market_condition_function(self, signal_data: Dict[str, Any], 
                                            strategy_name: str, 
@@ -538,41 +526,35 @@ class StrategyRouter:
             # Adjust based on strategy type and market condition
             if strategy_name == 'momentum':
                 if market_condition.condition in [MarketCondition.BULL_TRENDING, MarketCondition.BEAR_TRENDING]:
-                    market_score += 0.3
+                    market_score += 0.2
                 elif market_condition.condition == MarketCondition.SIDEWAYS:
-                    market_score -= 0.2
-                    
+                    market_score -= 0.1
+            
             elif strategy_name == 'mean_reversion':
                 if market_condition.condition == MarketCondition.SIDEWAYS:
-                    market_score += 0.3
+                    market_score += 0.2
                 elif market_condition.condition in [MarketCondition.BULL_TRENDING, MarketCondition.BEAR_TRENDING]:
-                    market_score -= 0.2
-                    
+                    market_score -= 0.1
+            
             elif strategy_name == 'scalping':
                 if market_condition.condition == MarketCondition.VOLATILE:
-                    market_score += 0.3
+                    market_score += 0.2
                 elif market_condition.condition == MarketCondition.CALM:
-                    market_score -= 0.2
-                    
-            elif strategy_name == 'arbitrage':
-                if market_condition.liquidity_score > 0.8:
-                    market_score += 0.3
-                else:
-                    market_score -= 0.2
+                    market_score -= 0.1
             
             # Adjust for volatility
-            volatility_penalty = market_condition.volatility * self.config.risk_factors['volatility_penalty']
-            market_score -= volatility_penalty
+            volatility_adjustment = market_condition.volatility * 2.0  # Scale volatility
+            market_score += volatility_adjustment
             
             # Adjust for liquidity
-            liquidity_bonus = market_condition.liquidity_score * 0.2
-            market_score += liquidity_bonus
+            liquidity_adjustment = (market_condition.liquidity_score - 0.5) * 0.2
+            market_score += liquidity_adjustment
             
             return max(0.0, min(1.0, market_score))
             
         except Exception as e:
             self.logger.error(f"❌ Error calculating market condition function: {e}")
-            return 0.0
+            return 0.5
     
     def _calculate_risk_factor(self, signal_data: Dict[str, Any], 
                              strategy_name: str, 
@@ -580,65 +562,72 @@ class StrategyRouter:
         """Calculate risk adjustment factor λ_j."""
         try:
             # Base risk factor
-            risk_factor = 0.5
+            risk_factor = 1.0
             
-            # Adjust based on strategy risk profile
-            strategy_risk_profiles = {
-                'momentum': 0.6,
-                'mean_reversion': 0.4,
-                'scalping': 0.8,
-                'arbitrage': 0.3,
-                'grid': 0.5,
-                'quantum': 0.7,
-                'phantom': 0.9
-            }
+            # Adjust for volatility
+            volatility_penalty = self.config.risk_factors.get('volatility_penalty', 0.1)
+            risk_factor -= market_condition.volatility * volatility_penalty
             
-            risk_factor = strategy_risk_profiles.get(strategy_name, 0.5)
+            # Adjust for liquidity
+            liquidity_penalty = self.config.risk_factors.get('liquidity_penalty', 0.05)
+            risk_factor -= (1.0 - market_condition.liquidity_score) * liquidity_penalty
             
-            # Adjust for market volatility
-            volatility_adjustment = market_condition.volatility * 0.5
-            risk_factor += volatility_adjustment
+            # Adjust for signal strength
+            signal_strength = signal_data.get('strength', 0.5)
+            if signal_strength > 0.8:
+                risk_factor += 0.1  # Bonus for strong signals
+            elif signal_strength < 0.3:
+                risk_factor -= 0.1  # Penalty for weak signals
             
-            # Adjust for signal confidence
-            confidence = signal_data.get('confidence', 0.5)
-            confidence_adjustment = (1.0 - confidence) * 0.3
-            risk_factor += confidence_adjustment
-            
-            return max(0.0, min(1.0, risk_factor))
+            return max(0.1, min(2.0, risk_factor))  # Clamp to reasonable range
             
         except Exception as e:
             self.logger.error(f"❌ Error calculating risk factor: {e}")
-            return 0.5
+            return 1.0
     
     def _calculate_market_alignment(self, signal_data: Dict[str, Any], 
                                   market_condition: MarketConditionData) -> float:
         """Calculate market alignment score."""
         try:
-            # Simple market alignment based on trend strength
-            trend_alignment = market_condition.trend_strength * self.config.risk_factors['trend_alignment_bonus']
+            signal_type = signal_data.get('signal_type', 'hold')
+            condition = market_condition.condition
             
-            # Adjust for volatility
-            volatility_alignment = 1.0 - market_condition.volatility
+            # Calculate alignment based on signal type and market condition
+            if signal_type in ['buy', 'strong_buy']:
+                if condition == MarketCondition.BULL_TRENDING:
+                    return 0.2
+                elif condition == MarketCondition.BEAR_TRENDING:
+                    return -0.1
+                else:
+                    return 0.0
             
-            # Combine alignments
-            alignment_score = (trend_alignment + volatility_alignment) / 2.0
+            elif signal_type in ['sell', 'strong_sell']:
+                if condition == MarketCondition.BEAR_TRENDING:
+                    return 0.2
+                elif condition == MarketCondition.BULL_TRENDING:
+                    return -0.1
+                else:
+                    return 0.0
             
-            return max(0.0, min(1.0, alignment_score))
+            else:  # hold
+                if condition == MarketCondition.SIDEWAYS:
+                    return 0.1
+                else:
+                    return 0.0
             
         except Exception as e:
             self.logger.error(f"❌ Error calculating market alignment: {e}")
-            return 0.5
+            return 0.0
     
     def _generate_routing_parameters(self, signal_data: Dict[str, Any], 
                                    selected_strategy: str, 
                                    market_condition: MarketConditionData) -> Dict[str, Any]:
-        """Generate routing parameters."""
+        """Generate routing parameters for selected strategy."""
         try:
             base_params = {
                 'strategy': selected_strategy,
-                'symbol': signal_data.get('symbol'),
-                'signal_type': signal_data.get('signal_type'),
-                'confidence': signal_data.get('confidence'),
+                'signal_type': signal_data.get('signal_type', 'hold'),
+                'signal_strength': signal_data.get('strength', 0.5),
                 'market_condition': market_condition.condition.value,
                 'volatility': market_condition.volatility,
                 'liquidity_score': market_condition.liquidity_score
@@ -647,32 +636,44 @@ class StrategyRouter:
             # Add strategy-specific parameters
             if selected_strategy == 'momentum':
                 base_params.update({
-                    'trend_following': True,
-                    'stop_loss': 0.02,
-                    'take_profit': 0.04
+                    'lookback_period': 20,
+                    'momentum_threshold': 0.02,
+                    'position_size_multiplier': 1.0
                 })
+            
             elif selected_strategy == 'mean_reversion':
                 base_params.update({
-                    'reversion_threshold': 0.03,
-                    'position_sizing': 'conservative'
+                    'mean_period': 50,
+                    'std_dev_multiplier': 2.0,
+                    'position_size_multiplier': 0.8
                 })
+            
             elif selected_strategy == 'scalping':
                 base_params.update({
-                    'timeout': 300,  # 5 minutes
-                    'position_size': 'small',
-                    'high_frequency': True
+                    'timeframe': '1m',
+                    'profit_target': 0.005,
+                    'stop_loss': 0.003,
+                    'position_size_multiplier': 0.5
                 })
+            
             elif selected_strategy == 'arbitrage':
                 base_params.update({
                     'min_spread': 0.001,
-                    'execution_speed': 'ultra_fast'
+                    'execution_timeout': 30,
+                    'position_size_multiplier': 0.3
+                })
+            
+            else:  # Default parameters
+                base_params.update({
+                    'position_size_multiplier': 0.7,
+                    'risk_adjustment': 1.0
                 })
             
             return base_params
             
         except Exception as e:
             self.logger.error(f"❌ Error generating routing parameters: {e}")
-            return {'error': str(e)}
+            return {'strategy': selected_strategy, 'error': str(e)}
     
     async def _analyze_decision_mathematically(self, signal_data: Dict[str, Any], 
                                              selected_strategy: str, 
@@ -680,31 +681,28 @@ class StrategyRouter:
                                              market_condition: MarketConditionData) -> Dict[str, Any]:
         """Perform mathematical analysis on routing decision."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return {}
             
             # Prepare decision data for mathematical analysis
-            decision_data = {
-                'signal_id': signal_data.get('signal_id'),
-                'selected_strategy': selected_strategy,
-                'routing_score': routing_score,
-                'market_condition': market_condition.condition.value,
-                'volatility': market_condition.volatility,
-                'trend_strength': market_condition.trend_strength,
-                'liquidity_score': market_condition.liquidity_score,
-                'mathematical_signature': signal_data.get('mathematical_analysis', {}).get('mathematical_signature', '')
-            }
+            decision_data = np.array([
+                routing_score,
+                signal_data.get('strength', 0.0),
+                signal_data.get('confidence', 0.0),
+                market_condition.volatility,
+                market_condition.liquidity_score,
+                len(selected_strategy)
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                decision_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(decision_data)
             
             return {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics,
-                'mathematical_signature': result.mathematical_signature
+                'mathematical_score': float(result),
+                'routing_confidence': routing_score,
+                'strategy_complexity': len(selected_strategy),
+                'market_volatility': market_condition.volatility,
+                'timestamp': time.time()
             }
             
         except Exception as e:
@@ -715,29 +713,48 @@ class StrategyRouter:
                                   selected_strategy: str, 
                                   routing_score: float, 
                                   market_condition: MarketConditionData) -> str:
-        """Generate human-readable routing reasoning."""
+        """Generate human-readable reasoning for routing decision."""
         try:
+            signal_type = signal_data.get('signal_type', 'hold')
+            signal_strength = signal_data.get('strength', 0.5)
+            
             reasoning_parts = []
             
-            # Strategy selection reason
-            if selected_strategy == "hold":
-                reasoning_parts.append(f"Routing score {routing_score:.3f} below threshold {self.config.routing_threshold}")
+            # Strategy selection reasoning
+            if routing_score > 0.8:
+                reasoning_parts.append(f"High confidence routing to {selected_strategy}")
+            elif routing_score > 0.6:
+                reasoning_parts.append(f"Moderate confidence routing to {selected_strategy}")
             else:
-                reasoning_parts.append(f"Selected {selected_strategy} strategy with routing score {routing_score:.3f}")
+                reasoning_parts.append(f"Low confidence routing to {selected_strategy}")
             
-            # Market condition context
-            reasoning_parts.append(f"Market condition: {market_condition.condition.value}")
-            reasoning_parts.append(f"Volatility: {market_condition.volatility:.3f}")
+            # Market condition reasoning
+            condition_name = market_condition.condition.value.replace('_', ' ').title()
+            reasoning_parts.append(f"Market condition: {condition_name}")
             
-            # Signal confidence
-            confidence = signal_data.get('confidence', 0.0)
-            reasoning_parts.append(f"Signal confidence: {confidence:.3f}")
+            # Signal strength reasoning
+            if signal_strength > 0.8:
+                reasoning_parts.append("Strong signal detected")
+            elif signal_strength > 0.6:
+                reasoning_parts.append("Moderate signal strength")
+            else:
+                reasoning_parts.append("Weak signal - conservative routing")
+            
+            # Strategy-specific reasoning
+            if selected_strategy == 'momentum':
+                reasoning_parts.append("Momentum strategy selected for trend following")
+            elif selected_strategy == 'mean_reversion':
+                reasoning_parts.append("Mean reversion strategy for range-bound markets")
+            elif selected_strategy == 'scalping':
+                reasoning_parts.append("Scalping strategy for high-frequency opportunities")
+            elif selected_strategy == 'arbitrage':
+                reasoning_parts.append("Arbitrage strategy for price inefficiencies")
             
             return " | ".join(reasoning_parts)
             
         except Exception as e:
             self.logger.error(f"❌ Error generating routing reasoning: {e}")
-            return f"Error generating reasoning: {e}"
+            return f"Routed to {selected_strategy} with score {routing_score:.3f}"
     
     def _update_strategy_performance(self, decision: RoutingDecision) -> None:
         """Update strategy performance metrics."""
@@ -748,17 +765,20 @@ class StrategyRouter:
             
             performance = self.strategy_performance[strategy_name]
             
-            # Update metrics
+            # Update basic metrics
             performance.total_signals += 1
+            
+            # Update average score
+            current_avg = performance.average_score
+            total_signals = performance.total_signals
             performance.average_score = (
-                (performance.average_score * (performance.total_signals - 1) + decision.routing_score) / 
-                performance.total_signals
+                (current_avg * (total_signals - 1) + decision.routing_score) / total_signals
             )
             
             # Update mathematical signature
             performance.mathematical_signature = decision.mathematical_analysis.get('mathematical_signature', '')
             
-            # Note: win rate and successful routes would be updated after execution results
+            # Note: Win rate would be updated after actual execution results
             
         except Exception as e:
             self.logger.error(f"❌ Error updating strategy performance: {e}")
@@ -774,7 +794,7 @@ class StrategyRouter:
                         timeout=1.0
                     )
                     
-                    # Process decision (send to execution engine)
+                    # Execute routing decision
                     await self._execute_routing_decision(decision)
                     
                     # Mark task as done
@@ -789,26 +809,23 @@ class StrategyRouter:
             self.logger.error(f"❌ Error in routing processing loop: {e}")
     
     async def _execute_routing_decision(self, decision: RoutingDecision) -> None:
-        """Execute a routing decision (send to execution engine)."""
+        """Execute a routing decision."""
         try:
-            # Update performance metrics
-            self.performance_metrics['successful_routes'] += 1
+            # Update metrics
+            self.metrics.successful_routes += 1
             
             # Log execution
-            self.logger.info(f"🚀 Executing routing decision: {decision.signal_id} -> {decision.selected_strategy}")
+            self.logger.info(f"✅ Routing decision executed: {decision.signal_id} -> {decision.selected_strategy}")
             
-            # Here you would send the decision to the execution engine
-            # For now, we'll just log it
-            execution_data = {
-                'decision_id': decision.signal_id,
-                'selected_strategy': decision.selected_strategy,
-                'routing_score': decision.routing_score,
-                'confidence': decision.confidence,
-                'parameters': decision.routing_parameters,
-                'timestamp': decision.timestamp
-            }
+            # In production, this would trigger actual strategy execution
+            # For now, just simulate execution
+            await asyncio.sleep(0.1)  # Simulate execution time
             
-            self.logger.info(f"Routing execution data: {json.dumps(execution_data, indent=2)}")
+            # Remove from active routes
+            if decision.signal_id in self.active_routes:
+                del self.active_routes[decision.signal_id]
+            
+            self.logger.info(f"✅ Routing decision completed: {decision.selected_strategy}")
             
         except Exception as e:
             self.logger.error(f"❌ Error executing routing decision: {e}")
@@ -820,10 +837,9 @@ class StrategyRouter:
             
             market_condition = MarketConditionData(
                 condition=condition,
-                volatility=condition_data.get('volatility', 0.02),
-                trend_strength=condition_data.get('trend_strength', 0.0),
-                liquidity_score=condition_data.get('liquidity_score', 0.8),
-                mathematical_signature=condition_data.get('mathematical_signature', '')
+                volatility=float(condition_data.get('volatility', 0.02)),
+                trend_strength=float(condition_data.get('trend_strength', 0.0)),
+                liquidity_score=float(condition_data.get('liquidity_score', 0.8))
             )
             
             self.market_conditions[symbol] = market_condition
@@ -839,10 +855,10 @@ class StrategyRouter:
         """Get strategy performance metrics."""
         try:
             if strategy_name:
-                performance = self.strategy_performance.get(strategy_name)
-                if not performance:
+                if strategy_name not in self.strategy_performance:
                     return {}
                 
+                performance = self.strategy_performance[strategy_name]
                 return {
                     'strategy_name': performance.strategy_name,
                     'total_signals': performance.total_signals,
@@ -853,15 +869,16 @@ class StrategyRouter:
                     'mathematical_signature': performance.mathematical_signature
                 }
             else:
+                # Return all strategy performance
                 return {
-                    name: {
+                    strategy_name: {
                         'total_signals': perf.total_signals,
                         'successful_routes': perf.successful_routes,
                         'average_score': perf.average_score,
                         'win_rate': perf.win_rate,
                         'risk_score': perf.risk_score
                     }
-                    for name, perf in self.strategy_performance.items()
+                    for strategy_name, perf in self.strategy_performance.items()
                 }
                 
         except Exception as e:
@@ -880,7 +897,7 @@ class StrategyRouter:
                     'confidence': decision.confidence,
                     'reasoning': decision.reasoning,
                     'timestamp': decision.timestamp,
-                    'routing_parameters': decision.routing_parameters
+                    'mathematical_analysis': decision.mathematical_analysis
                 }
                 for decision in recent_decisions
             ]
@@ -890,16 +907,15 @@ class StrategyRouter:
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get system performance metrics."""
-        metrics = self.performance_metrics.copy()
-        
-        # Calculate routing accuracy
-        total_routes = metrics['signals_routed']
-        if total_routes > 0:
-            metrics['routing_accuracy'] = metrics['successful_routes'] / total_routes
-        else:
-            metrics['routing_accuracy'] = 0.0
-        
-        return metrics
+        return {
+            'signals_routed': self.metrics.signals_routed,
+            'successful_routes': self.metrics.successful_routes,
+            'routing_errors': self.metrics.routing_errors,
+            'average_routing_time': self.metrics.average_routing_time,
+            'routing_accuracy': self.metrics.routing_accuracy,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'last_updated': time.time()
+        }
     
     def activate(self) -> bool:
         """Activate the system."""
@@ -930,12 +946,10 @@ class StrategyRouter:
         return {
             'active': self.active,
             'initialized': self.initialized,
+            'active_routes_count': len(self.active_routes),
             'signals_queued': self.signal_queue.qsize(),
             'routing_queued': self.routing_queue.qsize(),
-            'active_routes': len(self.active_routes),
-            'total_routing_decisions': len(self.routing_history),
-            'symbols_tracked': len(self.market_conditions),
-            'performance_metrics': self.performance_metrics,
+            'performance_metrics': self.get_performance_metrics(),
             'config': {
                 'enabled': self.config.enabled,
                 'max_concurrent_routes': self.config.max_concurrent_routes,
@@ -944,6 +958,28 @@ class StrategyRouter:
                 'adaptive_routing_enabled': self.config.adaptive_routing_enabled
             }
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and strategy routing integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for strategy routing analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
 
 
 def create_strategy_router(config: Optional[StrategyRouterConfig] = None) -> StrategyRouter:
@@ -963,7 +999,7 @@ async def main():
         adaptive_routing_enabled=True
     )
     
-    # Create router
+    # Create strategy router
     router = create_strategy_router(config)
     
     # Activate system
@@ -972,42 +1008,31 @@ async def main():
     # Start router
     await router.start_router()
     
-    # Update market conditions
-    router.update_market_condition("BTCUSDT", {
-        'condition': 'bull_trending',
-        'volatility': 0.025,
-        'trend_strength': 0.7,
-        'liquidity_score': 0.9
-    })
-    
     # Submit test signals
     test_signals = [
         {
-            'signal_id': 'signal_001',
-            'symbol': 'BTCUSDT',
+            'signal_id': 'test_001',
+            'symbol': 'BTC/USDT',
             'signal_type': 'buy',
-            'confidence': 0.85,
-            'metadata': {'price': 50000.0}
+            'strength': 0.8,
+            'confidence': 0.9,
+            'price': 50000.0,
+            'volume': 100.0
         },
         {
-            'signal_id': 'signal_002',
-            'symbol': 'ETHUSDT',
+            'signal_id': 'test_002',
+            'symbol': 'ETH/USDT',
             'signal_type': 'sell',
-            'confidence': 0.75,
-            'metadata': {'price': 3000.0}
-        },
-        {
-            'signal_id': 'signal_003',
-            'symbol': 'BTCUSDT',
-            'signal_type': 'hold',
-            'confidence': 0.4,
-            'metadata': {'price': 50100.0}
+            'strength': 0.7,
+            'confidence': 0.8,
+            'price': 3000.0,
+            'volume': 50.0
         }
     ]
     
-    # Route signals
-    for signal_data in test_signals:
-        await router.route_signal(signal_data)
+    # Submit signals
+    for signal in test_signals:
+        await router.route_signal(signal)
     
     # Wait for processing
     await asyncio.sleep(5)
@@ -1020,9 +1045,9 @@ async def main():
     performance = router.get_strategy_performance()
     print(f"Strategy Performance: {json.dumps(performance, indent=2)}")
     
-    # Get recent routing decisions
+    # Get recent decisions
     decisions = router.get_recent_routing_decisions()
-    print(f"Recent Routing Decisions: {json.dumps(decisions, indent=2)}")
+    print(f"Recent Decisions: {json.dumps(decisions, indent=2)}")
     
     # Stop router
     await router.stop_router()

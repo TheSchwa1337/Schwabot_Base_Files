@@ -34,13 +34,14 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Mathematical infrastructure not available - using fallback")
+    logger.warning("Math infrastructure not available")
 
 
 class OrderType(Enum):
@@ -140,6 +141,19 @@ class RealTimeExecutionConfig:
     })
 
 
+@dataclass
+class RealTimeExecutionMetrics:
+    """Real-time execution metrics."""
+    signals_processed: int = 0
+    orders_executed: int = 0
+    successful_executions: int = 0
+    failed_executions: int = 0
+    average_execution_time: float = 0.0
+    total_slippage: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = 0.0
+
+
 class RealTimeExecutionEngine:
     """
     Real-Time Execution Engine System
@@ -167,23 +181,16 @@ class RealTimeExecutionEngine:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_bridge = UnifiedMathematicalBridge()
-            self.math_integration = UnifiedMathematicalIntegrationMethods()
-            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
         else:
-            self.math_bridge = None
-            self.math_integration = None
-            self.math_monitor = None
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Performance tracking
-        self.performance_metrics = {
-            'signals_processed': 0,
-            'orders_executed': 0,
-            'successful_executions': 0,
-            'failed_executions': 0,
-            'average_execution_time': 0.0,
-            'total_slippage': 0.0
-        }
+        self.metrics = RealTimeExecutionMetrics()
         
         # System state
         self.initialized = False
@@ -297,33 +304,30 @@ class RealTimeExecutionEngine:
     async def _analyze_signal_mathematically(self, signal: TradingSignal) -> None:
         """Perform mathematical analysis on signal."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return
             
             # Prepare signal data for mathematical analysis
-            signal_data = {
-                'signal_type': signal.signal_type.value,
-                'symbol': signal.symbol,
-                'strength': signal.strength,
-                'confidence': signal.confidence,
-                'price': signal.price,
-                'quantity': signal.quantity,
-                'timestamp': signal.timestamp,
-                'metadata': signal.metadata
-            }
+            signal_data = np.array([
+                signal.strength,
+                signal.confidence,
+                signal.price,
+                signal.quantity,
+                signal.timestamp
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                signal_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(signal_data)
             
             # Update signal with mathematical analysis
-            signal.mathematical_signature = result.mathematical_signature
+            signal.mathematical_signature = str(result)
             signal.metadata['mathematical_analysis'] = {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics
+                'confidence': float(result),
+                'timestamp': time.time()
             }
+            
+            # Update metrics
+            self.metrics.mathematical_analyses += 1
             
         except Exception as e:
             self.logger.error(f"❌ Error analyzing signal mathematically: {e}")
@@ -357,7 +361,7 @@ class RealTimeExecutionEngine:
         """Process a trading signal."""
         try:
             # Update performance metrics
-            self.performance_metrics['signals_processed'] += 1
+            self.metrics.signals_processed += 1
             
             # Check signal thresholds
             if signal.signal_type == SignalType.BUY_SIGNAL:
@@ -512,18 +516,18 @@ class RealTimeExecutionEngine:
             )
             
             # Update performance metrics
-            self.performance_metrics['orders_executed'] += 1
+            self.metrics.orders_executed += 1
             if result.success:
-                self.performance_metrics['successful_executions'] += 1
+                self.metrics.successful_executions += 1
             else:
-                self.performance_metrics['failed_executions'] += 1
+                self.metrics.failed_executions += 1
             
-            self.performance_metrics['total_slippage'] += slippage
+            self.metrics.total_slippage += slippage
             
             # Update average execution time
-            current_avg = self.performance_metrics['average_execution_time']
-            total_executions = self.performance_metrics['orders_executed']
-            self.performance_metrics['average_execution_time'] = (
+            current_avg = self.metrics.average_execution_time
+            total_executions = self.metrics.orders_executed
+            self.metrics.average_execution_time = (
                 (current_avg * (total_executions - 1) + execution_time) / total_executions
             )
             
@@ -662,7 +666,16 @@ class RealTimeExecutionEngine:
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get system performance metrics."""
-        metrics = self.performance_metrics.copy()
+        metrics = {
+            'signals_processed': self.metrics.signals_processed,
+            'orders_executed': self.metrics.orders_executed,
+            'successful_executions': self.metrics.successful_executions,
+            'failed_executions': self.metrics.failed_executions,
+            'average_execution_time': self.metrics.average_execution_time,
+            'total_slippage': self.metrics.total_slippage,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'last_updated': time.time()
+        }
         
         # Calculate success rate
         total_executions = metrics['orders_executed']
@@ -738,6 +751,28 @@ class RealTimeExecutionEngine:
                 'emergency_stop_enabled': self.config.emergency_stop_enabled
             }
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and real-time execution integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for real-time execution analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
 
 
 def create_real_time_execution_engine(config: Optional[RealTimeExecutionConfig] = None) -> RealTimeExecutionEngine:

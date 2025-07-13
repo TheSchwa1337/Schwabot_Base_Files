@@ -35,13 +35,14 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    logger.warning("Mathematical infrastructure not available - using fallback")
+    logger.warning("Math infrastructure not available")
 
 
 class OrderType(Enum):
@@ -63,11 +64,11 @@ class OrderStatus(Enum):
     """Order status."""
     PENDING = "pending"
     OPEN = "open"
+    CLOSED = "closed"
+    CANCELED = "canceled"
     PARTIAL = "partial"
-    FILLED = "filled"
-    CANCELLED = "cancelled"
-    REJECTED = "rejected"
     EXPIRED = "expired"
+    REJECTED = "rejected"
 
 
 class ExchangeType(Enum):
@@ -94,6 +95,7 @@ class TradingOrder:
     status: OrderStatus = OrderStatus.PENDING
     filled_quantity: float = 0.0
     average_price: float = 0.0
+    fees: float = 0.0
     mathematical_signature: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -106,9 +108,9 @@ class OrderExecution:
     status: OrderStatus
     filled_quantity: float
     average_price: float
+    fees: float
     execution_time: float
     slippage: float
-    fees: float
     mathematical_signature: str = ""
     error_message: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -116,7 +118,7 @@ class OrderExecution:
 
 @dataclass
 class ExchangeBalance:
-    """Exchange balance information."""
+    """Exchange balance."""
     currency: str
     free: float
     used: float
@@ -128,14 +130,14 @@ class ExchangeBalance:
 class MarketInfo:
     """Market information."""
     symbol: str
-    base_currency: str
-    quote_currency: str
+    base: str
+    quote: str
     min_amount: float
     max_amount: float
     min_price: float
     max_price: float
-    price_precision: int
-    amount_precision: int
+    tick_size: float
+    step_size: float
     mathematical_signature: str = ""
 
 
@@ -146,27 +148,28 @@ class EnhancedCCXTConfig:
     timeout: float = 30.0
     retries: int = 3
     debug: bool = False
-    max_concurrent_orders: int = 20
+    max_concurrent_orders: int = 10
     order_timeout: float = 60.0  # seconds
     slippage_tolerance: float = 0.002  # 0.2%
     mathematical_analysis_enabled: bool = True
-    sandbox_mode: bool = True
-    rate_limit_enabled: bool = True
-    exchanges: Dict[str, Dict[str, Any]] = field(default_factory=lambda: {
-        'binance': {
-            'api_key': '',
-            'secret': '',
-            'sandbox': True,
-            'rate_limit': 1200  # requests per minute
-        },
-        'coinbase': {
-            'api_key': '',
-            'secret': '',
-            'passphrase': '',
-            'sandbox': True,
-            'rate_limit': 1000
-        }
-    })
+    exchange_configs: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    supported_exchanges: List[str] = field(default_factory=lambda: [
+        'binance', 'coinbase', 'kraken', 'kucoin', 'bybit', 'okx'
+    ])
+
+
+@dataclass
+class EnhancedCCXTMetrics:
+    """Enhanced CCXT trading engine metrics."""
+    orders_submitted: int = 0
+    orders_executed: int = 0
+    successful_executions: int = 0
+    failed_executions: int = 0
+    average_execution_time: float = 0.0
+    total_fees: float = 0.0
+    total_slippage: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = 0.0
 
 
 class EnhancedCCXTTradingEngine:
@@ -202,24 +205,16 @@ class EnhancedCCXTTradingEngine:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_bridge = UnifiedMathematicalBridge()
-            self.math_integration = UnifiedMathematicalIntegrationMethods()
-            self.math_monitor = UnifiedMathematicalPerformanceMonitor()
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
         else:
-            self.math_bridge = None
-            self.math_integration = None
-            self.math_monitor = None
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Performance tracking
-        self.performance_metrics = {
-            'orders_submitted': 0,
-            'orders_executed': 0,
-            'successful_executions': 0,
-            'failed_executions': 0,
-            'average_execution_time': 0.0,
-            'total_fees': 0.0,
-            'total_slippage': 0.0
-        }
+        self.metrics = EnhancedCCXTMetrics()
         
         # System state
         self.initialized = False
@@ -232,10 +227,8 @@ class EnhancedCCXTTradingEngine:
         try:
             self.logger.info("Initializing Enhanced CCXT Trading Engine System")
             
-            # Initialize exchange connections
-            for exchange_name, exchange_config in self.config.exchanges.items():
-                if exchange_config.get('api_key') and exchange_config.get('secret'):
-                    self._initialize_exchange(exchange_name, exchange_config)
+            # Initialize exchange configurations
+            self._initialize_exchange_configs()
             
             self.initialized = True
             self.logger.info("✅ Enhanced CCXT Trading Engine System initialized successfully")
@@ -244,38 +237,39 @@ class EnhancedCCXTTradingEngine:
             self.logger.error(f"❌ Error initializing Enhanced CCXT Trading Engine System: {e}")
             self.initialized = False
     
-    def _initialize_exchange(self, exchange_name: str, config: Dict[str, Any]) -> None:
-        """Initialize exchange connection."""
+    def _initialize_exchange_configs(self) -> None:
+        """Initialize exchange configurations."""
         try:
-            # Get exchange class
-            exchange_class = getattr(ccxt, exchange_name)
+            # Set up default exchange configurations
+            default_configs = {
+                'binance': {
+                    'apiKey': '',
+                    'secret': '',
+                    'sandbox': True,
+                    'enableRateLimit': True
+                },
+                'coinbase': {
+                    'apiKey': '',
+                    'secret': '',
+                    'sandbox': True,
+                    'enableRateLimit': True
+                },
+                'kraken': {
+                    'apiKey': '',
+                    'secret': '',
+                    'sandbox': True,
+                    'enableRateLimit': True
+                }
+            }
             
-            # Create exchange instance
-            exchange = exchange_class({
-                'apiKey': config.get('api_key', ''),
-                'secret': config.get('secret', ''),
-                'password': config.get('passphrase', ''),
-                'sandbox': config.get('sandbox', self.config.sandbox_mode),
-                'enableRateLimit': config.get('rate_limit_enabled', self.config.rate_limit_enabled),
-                'rateLimit': config.get('rate_limit', 1000),
-                'timeout': self.config.timeout * 1000,  # Convert to milliseconds
-                'verbose': self.config.debug
-            })
-            
-            # Test connection
-            exchange.load_markets()
-            
-            # Store exchange
-            self.exchanges[exchange_name] = exchange
-            
-            # Initialize data structures
-            self.balances[exchange_name] = {}
-            self.market_info[exchange_name] = {}
-            
-            self.logger.info(f"✅ Initialized {exchange_name} exchange connection")
-            
+            # Update with user configs
+            for exchange, config in default_configs.items():
+                if exchange in self.config.exchange_configs:
+                    config.update(self.config.exchange_configs[exchange])
+                self.config.exchange_configs[exchange] = config
+                
         except Exception as e:
-            self.logger.error(f"❌ Error initializing {exchange_name} exchange: {e}")
+            self.logger.error(f"❌ Error initializing exchange configs: {e}")
     
     async def start_trading_engine(self) -> bool:
         """Start the trading engine."""
@@ -289,9 +283,6 @@ class EnhancedCCXTTradingEngine:
             # Start processing tasks
             asyncio.create_task(self._process_order_queue())
             asyncio.create_task(self._process_execution_queue())
-            
-            # Load initial data
-            await self._load_exchange_data()
             
             self.logger.info("✅ Enhanced CCXT Trading Engine started")
             return True
@@ -309,8 +300,7 @@ class EnhancedCCXTTradingEngine:
             await self._cancel_all_orders()
             
             # Close exchange connections
-            for exchange in self.exchanges.values():
-                await exchange.close()
+            await self._close_exchange_connections()
             
             self.logger.info("✅ Enhanced CCXT Trading Engine stopped")
             return True
@@ -319,66 +309,82 @@ class EnhancedCCXTTradingEngine:
             self.logger.error(f"❌ Error stopping trading engine: {e}")
             return False
     
-    async def _load_exchange_data(self) -> None:
-        """Load initial exchange data."""
+    async def connect_exchange(self, exchange_name: str, api_key: str = "", secret: str = "") -> bool:
+        """Connect to an exchange."""
         try:
-            for exchange_name, exchange in self.exchanges.items():
-                # Load balances
-                await self._load_balances(exchange_name, exchange)
-                
-                # Load market info
-                await self._load_market_info(exchange_name, exchange)
-                
+            if exchange_name not in self.config.supported_exchanges:
+                self.logger.error(f"Exchange {exchange_name} not supported")
+                return False
+            
+            # Get exchange class
+            exchange_class = getattr(ccxt, exchange_name)
+            
+            # Create exchange instance
+            config = self.config.exchange_configs.get(exchange_name, {})
+            if api_key:
+                config['apiKey'] = api_key
+            if secret:
+                config['secret'] = secret
+            
+            exchange = exchange_class(config)
+            
+            # Test connection
+            await exchange.load_markets()
+            
+            # Store exchange
+            self.exchanges[exchange_name] = exchange
+            
+            # Initialize balances and market info
+            await self._initialize_exchange_data(exchange_name)
+            
+            self.logger.info(f"✅ Connected to {exchange_name}")
+            return True
+            
         except Exception as e:
-            self.logger.error(f"❌ Error loading exchange data: {e}")
+            self.logger.error(f"❌ Error connecting to {exchange_name}: {e}")
+            return False
     
-    async def _load_balances(self, exchange_name: str, exchange: ccxt.Exchange) -> None:
-        """Load exchange balances."""
+    async def _initialize_exchange_data(self, exchange_name: str) -> None:
+        """Initialize exchange data."""
         try:
+            exchange = self.exchanges[exchange_name]
+            
+            # Load balances
             balances = await exchange.fetch_balance()
+            self.balances[exchange_name] = {}
             
             for currency, balance_data in balances.items():
                 if isinstance(balance_data, dict) and 'free' in balance_data:
-                    balance = ExchangeBalance(
+                    self.balances[exchange_name][currency] = ExchangeBalance(
                         currency=currency,
                         free=float(balance_data['free']),
                         used=float(balance_data['used']),
                         total=float(balance_data['total'])
                     )
-                    self.balances[exchange_name][currency] = balance
             
-            self.logger.info(f"✅ Loaded balances for {exchange_name}")
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error loading balances for {exchange_name}: {e}")
-    
-    async def _load_market_info(self, exchange_name: str, exchange: ccxt.Exchange) -> None:
-        """Load market information."""
-        try:
+            # Load market info
             markets = exchange.markets
+            self.market_info[exchange_name] = {}
             
             for symbol, market_data in markets.items():
                 if market_data.get('active'):
-                    market_info = MarketInfo(
+                    self.market_info[exchange_name][symbol] = MarketInfo(
                         symbol=symbol,
-                        base_currency=market_data.get('base', ''),
-                        quote_currency=market_data.get('quote', ''),
+                        base=market_data.get('base', ''),
+                        quote=market_data.get('quote', ''),
                         min_amount=float(market_data.get('limits', {}).get('amount', {}).get('min', 0)),
                         max_amount=float(market_data.get('limits', {}).get('amount', {}).get('max', float('inf'))),
                         min_price=float(market_data.get('limits', {}).get('price', {}).get('min', 0)),
                         max_price=float(market_data.get('limits', {}).get('price', {}).get('max', float('inf'))),
-                        price_precision=int(market_data.get('precision', {}).get('price', 8)),
-                        amount_precision=int(market_data.get('precision', {}).get('amount', 8))
+                        tick_size=float(market_data.get('precision', {}).get('price', 0.0001)),
+                        step_size=float(market_data.get('precision', {}).get('amount', 0.0001))
                     )
-                    self.market_info[exchange_name][symbol] = market_info
-            
-            self.logger.info(f"✅ Loaded market info for {exchange_name}")
             
         except Exception as e:
-            self.logger.error(f"❌ Error loading market info for {exchange_name}: {e}")
+            self.logger.error(f"❌ Error initializing exchange data for {exchange_name}: {e}")
     
-    async def submit_order(self, order_data: Dict[str, Any]) -> bool:
-        """Submit a trading order."""
+    async def submit_order(self, exchange_name: str, order_data: Dict[str, Any]) -> bool:
+        """Submit an order to an exchange."""
         if not self.active:
             self.logger.error("Trading engine not active")
             return False
@@ -400,9 +406,9 @@ class EnhancedCCXTTradingEngine:
             self.active_orders[order.order_id] = order
             
             # Queue for processing
-            await self.order_queue.put(order)
+            await self.order_queue.put((exchange_name, order))
             
-            self.logger.info(f"✅ Order submitted: {order.order_id} for {order.symbol}")
+            self.logger.info(f"✅ Order submitted: {order.order_id} to {exchange_name}")
             return True
             
         except Exception as e:
@@ -413,20 +419,23 @@ class EnhancedCCXTTradingEngine:
         """Validate order data."""
         try:
             required_fields = ['symbol', 'side', 'order_type', 'quantity']
-            
             for field in required_fields:
                 if field not in order_data:
                     return False
             
-            # Check quantity
-            quantity = order_data.get('quantity', 0)
-            if quantity <= 0:
+            # Validate quantity
+            if order_data['quantity'] <= 0:
                 return False
             
-            # Check price for limit orders
-            order_type = order_data.get('order_type')
-            if order_type in ['limit', 'stop_limit'] and not order_data.get('price'):
-                return False
+            # Validate price for limit orders
+            if order_data['order_type'] in ['limit', 'stop_limit']:
+                if 'price' not in order_data or order_data['price'] <= 0:
+                    return False
+            
+            # Validate stop price for stop orders
+            if order_data['order_type'] in ['stop', 'stop_limit']:
+                if 'stop_price' not in order_data or order_data['stop_price'] <= 0:
+                    return False
             
             return True
             
@@ -437,22 +446,18 @@ class EnhancedCCXTTradingEngine:
     def _create_trading_order(self, order_data: Dict[str, Any]) -> TradingOrder:
         """Create a trading order from order data."""
         try:
-            # Generate order ID
-            order_id = f"{order_data.get('exchange', 'unknown')}_{order_data.get('symbol')}_{int(time.time() * 1000)}"
+            order_id = f"{order_data['symbol']}_{order_data['side']}_{int(time.time() * 1000)}"
             
-            # Create order
-            order = TradingOrder(
+            return TradingOrder(
                 order_id=order_id,
-                symbol=order_data.get('symbol'),
-                side=OrderSide(order_data.get('side')),
-                order_type=OrderType(order_data.get('order_type')),
-                quantity=float(order_data.get('quantity')),
-                price=float(order_data.get('price')) if order_data.get('price') else None,
-                stop_price=float(order_data.get('stop_price')) if order_data.get('stop_price') else None,
+                symbol=order_data['symbol'],
+                side=OrderSide(order_data['side']),
+                order_type=OrderType(order_data['order_type']),
+                quantity=float(order_data['quantity']),
+                price=float(order_data.get('price', 0)) if order_data.get('price') else None,
+                stop_price=float(order_data.get('stop_price', 0)) if order_data.get('stop_price') else None,
                 metadata=order_data.get('metadata', {})
             )
-            
-            return order
             
         except Exception as e:
             self.logger.error(f"❌ Error creating trading order: {e}")
@@ -461,34 +466,30 @@ class EnhancedCCXTTradingEngine:
     async def _analyze_order_mathematically(self, order: TradingOrder) -> None:
         """Perform mathematical analysis on order."""
         try:
-            if not self.math_bridge:
+            if not self.math_orchestrator:
                 return
             
             # Prepare order data for mathematical analysis
-            order_data = {
-                'order_id': order.order_id,
-                'symbol': order.symbol,
-                'side': order.side.value,
-                'order_type': order.order_type.value,
-                'quantity': order.quantity,
-                'price': order.price,
-                'stop_price': order.stop_price,
-                'timestamp': order.timestamp,
-                'metadata': order.metadata
-            }
+            order_data = np.array([
+                order.quantity,
+                order.price or 0.0,
+                order.stop_price or 0.0,
+                time.time(),
+                len(order.symbol)
+            ])
             
-            # Perform mathematical integration
-            result = self.math_bridge.integrate_all_mathematical_systems(
-                order_data, {}
-            )
+            # Perform mathematical orchestration
+            result = self.math_orchestrator.process_data(order_data)
             
             # Update order with mathematical analysis
-            order.mathematical_signature = result.mathematical_signature
+            order.mathematical_signature = str(result)
             order.metadata['mathematical_analysis'] = {
-                'confidence': result.overall_confidence,
-                'connections': len(result.connections),
-                'performance_metrics': result.performance_metrics
+                'confidence': float(result),
+                'timestamp': time.time()
             }
+            
+            # Update metrics
+            self.metrics.mathematical_analyses += 1
             
         except Exception as e:
             self.logger.error(f"❌ Error analyzing order mathematically: {e}")
@@ -499,13 +500,13 @@ class EnhancedCCXTTradingEngine:
             while self.active:
                 try:
                     # Get order from queue
-                    order = await asyncio.wait_for(
+                    exchange_name, order = await asyncio.wait_for(
                         self.order_queue.get(), 
                         timeout=1.0
                     )
                     
                     # Process order
-                    await self._process_order(order)
+                    await self._process_order(exchange_name, order)
                     
                     # Mark task as done
                     self.order_queue.task_done()
@@ -518,117 +519,41 @@ class EnhancedCCXTTradingEngine:
         except Exception as e:
             self.logger.error(f"❌ Error in order processing loop: {e}")
     
-    async def _process_order(self, order: TradingOrder) -> None:
+    async def _process_order(self, exchange_name: str, order: TradingOrder) -> None:
         """Process a trading order."""
         try:
-            start_time = time.time()
-            
             # Update performance metrics
-            self.performance_metrics['orders_submitted'] += 1
+            self.metrics.orders_submitted += 1
+            
+            # Check if exchange is connected
+            if exchange_name not in self.exchanges:
+                self.logger.error(f"Exchange {exchange_name} not connected")
+                await self._handle_order_failure(order, "Exchange not connected")
+                return
             
             # Execute order
-            execution = await self._execute_order(order)
+            execution_result = await self._execute_order(exchange_name, order)
             
-            # Store execution result
-            self.order_history.append(execution)
+            # Store result
+            self.order_history.append(execution_result)
             
-            # Update order status
-            order.status = execution.status
-            order.filled_quantity = execution.filled_quantity
-            order.average_price = execution.average_price
+            # Queue for execution tracking
+            await self.execution_queue.put(execution_result)
             
-            # Remove from active orders if completed
-            if execution.status in [OrderStatus.FILLED, OrderStatus.CANCELLED, OrderStatus.REJECTED]:
-                if order.order_id in self.active_orders:
-                    del self.active_orders[order.order_id]
-            
-            # Update performance metrics
-            execution_time = time.time() - start_time
-            self.performance_metrics['orders_executed'] += 1
-            
-            if execution.success:
-                self.performance_metrics['successful_executions'] += 1
-            else:
-                self.performance_metrics['failed_executions'] += 1
-            
-            self.performance_metrics['total_fees'] += execution.fees
-            self.performance_metrics['total_slippage'] += execution.slippage
-            
-            # Update average execution time
-            current_avg = self.performance_metrics['average_execution_time']
-            total_executions = self.performance_metrics['orders_executed']
-            self.performance_metrics['average_execution_time'] = (
-                (current_avg * (total_executions - 1) + execution_time) / total_executions
-            )
-            
-            self.logger.info(f"✅ Order processed: {order.order_id} - {execution.status.value}")
+            self.logger.info(f"✅ Order processed: {order.order_id} - {execution_result.status.value}")
             
         except Exception as e:
             self.logger.error(f"❌ Error processing order: {e}")
+            await self._handle_order_failure(order, str(e))
     
-    async def _execute_order(self, order: TradingOrder) -> OrderExecution:
-        """Execute an order on the exchange."""
+    async def _execute_order(self, exchange_name: str, order: TradingOrder) -> OrderExecution:
+        """Execute an order on an exchange."""
         try:
             start_time = time.time()
-            
-            # Determine exchange (for now, use first available)
-            exchange_name = list(self.exchanges.keys())[0]
             exchange = self.exchanges[exchange_name]
             
             # Prepare order parameters
-            order_params = self._prepare_order_params(order)
-            
-            # Execute order based on type
-            if order.order_type == OrderType.MARKET:
-                result = await self._execute_market_order(exchange, order, order_params)
-            elif order.order_type == OrderType.LIMIT:
-                result = await self._execute_limit_order(exchange, order, order_params)
-            elif order.order_type == OrderType.STOP:
-                result = await self._execute_stop_order(exchange, order, order_params)
-            else:
-                result = await self._execute_limit_order(exchange, order, order_params)
-            
-            # Calculate execution metrics
-            execution_time = time.time() - start_time
-            slippage = self._calculate_slippage(order, result)
-            fees = self._calculate_fees(result)
-            
-            # Create execution result
-            execution = OrderExecution(
-                order_id=order.order_id,
-                success=result.get('status') in ['closed', 'filled'],
-                status=self._map_order_status(result.get('status')),
-                filled_quantity=float(result.get('filled', 0)),
-                average_price=float(result.get('average', 0)),
-                execution_time=execution_time,
-                slippage=slippage,
-                fees=fees,
-                mathematical_signature=order.mathematical_signature,
-                metadata={'exchange_result': result}
-            )
-            
-            return execution
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error executing order {order.order_id}: {e}")
-            
-            # Create error execution result
-            return OrderExecution(
-                order_id=order.order_id,
-                success=False,
-                status=OrderStatus.REJECTED,
-                filled_quantity=0.0,
-                average_price=0.0,
-                execution_time=0.0,
-                slippage=0.0,
-                fees=0.0,
-                error_message=str(e)
-            )
-    
-    def _prepare_order_params(self, order: TradingOrder) -> Dict[str, Any]:
-        """Prepare order parameters for exchange."""
-        try:
-            params = {
+            order_params = {
                 'symbol': order.symbol,
                 'type': order.order_type.value,
                 'side': order.side.value,
@@ -636,132 +561,124 @@ class EnhancedCCXTTradingEngine:
             }
             
             if order.price:
-                params['price'] = order.price
+                order_params['price'] = order.price
             
             if order.stop_price:
-                params['stopPrice'] = order.stop_price
+                order_params['stopPrice'] = order.stop_price
             
-            # Add mathematical signature if available
-            if order.mathematical_signature:
-                params['clientOrderId'] = f"{order.order_id}_{order.mathematical_signature[:8]}"
-            
-            return params
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error preparing order parameters: {e}")
-            return {}
-    
-    async def _execute_market_order(self, exchange: ccxt.Exchange, order: TradingOrder, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a market order."""
-        try:
-            if order.side == OrderSide.BUY:
-                result = await exchange.create_market_buy_order(order.symbol, order.quantity, params)
+            # Execute order
+            if order.order_type == OrderType.MARKET:
+                result = await exchange.create_market_order(**order_params)
             else:
-                result = await exchange.create_market_sell_order(order.symbol, order.quantity, params)
+                result = await exchange.create_order(**order_params)
             
-            return result
+            # Calculate execution metrics
+            execution_time = time.time() - start_time
+            filled_quantity = float(result.get('filled', 0))
+            average_price = float(result.get('average', 0))
+            fees = float(result.get('fee', {}).get('cost', 0))
             
-        except Exception as e:
-            self.logger.error(f"❌ Error executing market order: {e}")
-            raise
-    
-    async def _execute_limit_order(self, exchange: ccxt.Exchange, order: TradingOrder, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a limit order."""
-        try:
-            result = await exchange.create_order(
-                symbol=order.symbol,
-                type=order.order_type.value,
-                side=order.side.value,
-                amount=order.quantity,
-                price=order.price,
-                params=params
+            # Calculate slippage
+            slippage = 0.0
+            if order.price and average_price > 0:
+                slippage = abs(average_price - order.price) / order.price
+            
+            # Create execution result
+            execution_result = OrderExecution(
+                order_id=order.order_id,
+                success=result.get('status') in ['closed', 'partial'],
+                status=OrderStatus(result.get('status', 'rejected')),
+                filled_quantity=filled_quantity,
+                average_price=average_price,
+                fees=fees,
+                execution_time=execution_time,
+                slippage=slippage,
+                mathematical_signature=order.mathematical_signature,
+                metadata={'exchange_result': result}
             )
             
-            return result
+            # Update performance metrics
+            self.metrics.orders_executed += 1
+            if execution_result.success:
+                self.metrics.successful_executions += 1
+            else:
+                self.metrics.failed_executions += 1
             
-        except Exception as e:
-            self.logger.error(f"❌ Error executing limit order: {e}")
-            raise
-    
-    async def _execute_stop_order(self, exchange: ccxt.Exchange, order: TradingOrder, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a stop order."""
-        try:
-            # Most exchanges don't support stop orders directly, so we'll use stop-limit
-            params['type'] = 'stop-limit'
-            params['stopPrice'] = order.stop_price
+            self.metrics.total_fees += fees
+            self.metrics.total_slippage += slippage
             
-            result = await exchange.create_order(
-                symbol=order.symbol,
-                type='stop-limit',
-                side=order.side.value,
-                amount=order.quantity,
-                price=order.price,
-                params=params
+            # Update average execution time
+            current_avg = self.metrics.average_execution_time
+            total_executions = self.metrics.orders_executed
+            self.metrics.average_execution_time = (
+                (current_avg * (total_executions - 1) + execution_time) / total_executions
             )
             
-            return result
+            # Remove from active orders
+            if order.order_id in self.active_orders:
+                del self.active_orders[order.order_id]
+            
+            return execution_result
             
         except Exception as e:
-            self.logger.error(f"❌ Error executing stop order: {e}")
-            raise
+            self.logger.error(f"❌ Error executing order {order.order_id}: {e}")
+            
+            # Create error result
+            execution_result = OrderExecution(
+                order_id=order.order_id,
+                success=False,
+                status=OrderStatus.REJECTED,
+                filled_quantity=0.0,
+                average_price=0.0,
+                fees=0.0,
+                execution_time=0.0,
+                slippage=0.0,
+                error_message=str(e)
+            )
+            
+            # Remove from active orders
+            if order.order_id in self.active_orders:
+                del self.active_orders[order.order_id]
+            
+            return execution_result
     
-    def _map_order_status(self, exchange_status: str) -> OrderStatus:
-        """Map exchange order status to internal status."""
-        status_mapping = {
-            'open': OrderStatus.OPEN,
-            'closed': OrderStatus.FILLED,
-            'canceled': OrderStatus.CANCELLED,
-            'pending': OrderStatus.PENDING,
-            'partial': OrderStatus.PARTIAL,
-            'rejected': OrderStatus.REJECTED,
-            'expired': OrderStatus.EXPIRED
-        }
-        return status_mapping.get(exchange_status, OrderStatus.PENDING)
-    
-    def _calculate_slippage(self, order: TradingOrder, result: Dict[str, Any]) -> float:
-        """Calculate order slippage."""
+    async def _handle_order_failure(self, order: TradingOrder, error_message: str) -> None:
+        """Handle order failure."""
         try:
-            if not order.price or not result.get('average'):
-                return 0.0
+            execution_result = OrderExecution(
+                order_id=order.order_id,
+                success=False,
+                status=OrderStatus.REJECTED,
+                filled_quantity=0.0,
+                average_price=0.0,
+                fees=0.0,
+                execution_time=0.0,
+                slippage=0.0,
+                error_message=error_message
+            )
             
-            executed_price = float(result['average'])
-            expected_price = order.price
+            self.order_history.append(execution_result)
             
-            slippage = abs(executed_price - expected_price) / expected_price
-            return slippage
+            # Remove from active orders
+            if order.order_id in self.active_orders:
+                del self.active_orders[order.order_id]
             
         except Exception as e:
-            self.logger.error(f"❌ Error calculating slippage: {e}")
-            return 0.0
-    
-    def _calculate_fees(self, result: Dict[str, Any]) -> float:
-        """Calculate order fees."""
-        try:
-            fees = result.get('fee', {})
-            if isinstance(fees, dict):
-                return float(fees.get('cost', 0))
-            elif isinstance(fees, (int, float)):
-                return float(fees)
-            else:
-                return 0.0
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error calculating fees: {e}")
-            return 0.0
+            self.logger.error(f"❌ Error handling order failure: {e}")
     
     async def _process_execution_queue(self) -> None:
         """Process execution results from the queue."""
         try:
             while self.active:
                 try:
-                    # Get execution from queue
-                    execution = await asyncio.wait_for(
+                    # Get execution result from queue
+                    execution_result = await asyncio.wait_for(
                         self.execution_queue.get(), 
                         timeout=1.0
                     )
                     
-                    # Process execution (update balances, etc.)
-                    await self._process_execution(execution)
+                    # Process execution result
+                    await self._process_execution_result(execution_result)
                     
                     # Mark task as done
                     self.execution_queue.task_done()
@@ -769,70 +686,77 @@ class EnhancedCCXTTradingEngine:
                 except asyncio.TimeoutError:
                     continue
                 except Exception as e:
-                    self.logger.error(f"❌ Error processing execution: {e}")
+                    self.logger.error(f"❌ Error processing execution result: {e}")
                     
         except Exception as e:
             self.logger.error(f"❌ Error in execution processing loop: {e}")
     
-    async def _process_execution(self, execution: OrderExecution) -> None:
+    async def _process_execution_result(self, execution_result: OrderExecution) -> None:
         """Process an execution result."""
         try:
-            # Update balances if order was successful
-            if execution.success:
-                await self._update_balances_after_execution(execution)
+            # Log execution result
+            if execution_result.success:
+                self.logger.info(f"✅ Order executed successfully: {execution_result.order_id}")
+            else:
+                self.logger.warning(f"⚠️ Order execution failed: {execution_result.order_id} - {execution_result.error_message}")
             
-            # Log execution
-            self.logger.info(f"💰 Execution completed: {execution.order_id} - {execution.filled_quantity} @ {execution.average_price}")
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error processing execution: {e}")
-    
-    async def _update_balances_after_execution(self, execution: OrderExecution) -> None:
-        """Update balances after successful execution."""
-        try:
-            # This would typically involve fetching updated balances from the exchange
-            # For now, we'll just log the execution
-            self.logger.info(f"✅ Balances updated for execution: {execution.order_id}")
+            # Update balances if needed
+            # This would typically involve updating the balance cache
             
         except Exception as e:
-            self.logger.error(f"❌ Error updating balances: {e}")
+            self.logger.error(f"❌ Error processing execution result: {e}")
     
     async def _cancel_all_orders(self) -> None:
         """Cancel all active orders."""
         try:
-            for order_id, order in list(self.active_orders.items()):
-                try:
-                    # Cancel order on exchange
-                    exchange_name = list(self.exchanges.keys())[0]
-                    exchange = self.exchanges[exchange_name]
-                    
-                    await exchange.cancel_order(order_id, order.symbol)
-                    
-                    # Update order status
-                    order.status = OrderStatus.CANCELLED
-                    
-                    # Create cancellation execution
-                    cancellation = OrderExecution(
-                        order_id=order_id,
-                        success=False,
-                        status=OrderStatus.CANCELLED,
-                        filled_quantity=0.0,
-                        average_price=0.0,
-                        execution_time=0.0,
-                        slippage=0.0,
-                        fees=0.0,
-                        error_message="Cancelled by system"
-                    )
-                    
-                    self.order_history.append(cancellation)
-                    
-                except Exception as e:
-                    self.logger.error(f"❌ Error cancelling order {order_id}: {e}")
-            
-            self.logger.info(f"✅ Cancelled {len(self.active_orders)} active orders")
+            for order_id in list(self.active_orders.keys()):
+                order = self.active_orders[order_id]
+                
+                # Try to cancel on exchange
+                for exchange_name, exchange in self.exchanges.items():
+                    try:
+                        await exchange.cancel_order(order_id, order.symbol)
+                        self.logger.info(f"✅ Cancelled order {order_id} on {exchange_name}")
+                        break
+                    except Exception as e:
+                        self.logger.warning(f"⚠️ Could not cancel order {order_id} on {exchange_name}: {e}")
+                
+                # Mark as cancelled
+                order.status = OrderStatus.CANCELED
+                
+                # Create cancellation result
+                execution_result = OrderExecution(
+                    order_id=order_id,
+                    success=False,
+                    status=OrderStatus.CANCELED,
+                    filled_quantity=0.0,
+                    average_price=0.0,
+                    fees=0.0,
+                    execution_time=0.0,
+                    slippage=0.0,
+                    error_message="Cancelled due to system shutdown"
+                )
+                
+                self.order_history.append(execution_result)
+                del self.active_orders[order_id]
             
         except Exception as e:
             self.logger.error(f"❌ Error cancelling orders: {e}")
+    
+    async def _close_exchange_connections(self) -> None:
+        """Close all exchange connections."""
+        try:
+            for exchange_name, exchange in self.exchanges.items():
+                try:
+                    await exchange.close()
+                    self.logger.info(f"✅ Closed connection to {exchange_name}")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ Error closing connection to {exchange_name}: {e}")
+            
+            self.exchanges.clear()
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error closing exchange connections: {e}")
     
     def get_active_orders(self) -> List[Dict[str, Any]]:
         """Get all active orders."""
@@ -844,10 +768,10 @@ class EnhancedCCXTTradingEngine:
                 'order_type': order.order_type.value,
                 'quantity': order.quantity,
                 'price': order.price,
+                'stop_price': order.stop_price,
                 'status': order.status.value,
-                'filled_quantity': order.filled_quantity,
-                'average_price': order.average_price,
-                'timestamp': order.timestamp
+                'timestamp': order.timestamp,
+                'mathematical_signature': order.mathematical_signature
             }
             for order in self.active_orders.values()
         ]
@@ -857,97 +781,73 @@ class EnhancedCCXTTradingEngine:
         recent_history = self.order_history[-limit:]
         return [
             {
-                'order_id': execution.order_id,
-                'success': execution.success,
-                'status': execution.status.value,
-                'filled_quantity': execution.filled_quantity,
-                'average_price': execution.average_price,
-                'execution_time': execution.execution_time,
-                'slippage': execution.slippage,
-                'fees': execution.fees,
-                'error_message': execution.error_message
+                'order_id': result.order_id,
+                'success': result.success,
+                'status': result.status.value,
+                'filled_quantity': result.filled_quantity,
+                'average_price': result.average_price,
+                'fees': result.fees,
+                'execution_time': result.execution_time,
+                'slippage': result.slippage,
+                'error_message': result.error_message,
+                'mathematical_signature': result.mathematical_signature
             }
-            for execution in recent_history
+            for result in recent_history
         ]
     
-    def get_balances(self, exchange_name: Optional[str] = None) -> Dict[str, Any]:
+    def get_exchange_balances(self, exchange_name: str) -> Dict[str, Dict[str, float]]:
         """Get exchange balances."""
-        try:
-            if exchange_name:
-                balances = self.balances.get(exchange_name, {})
-                return {
-                    currency: {
-                        'free': balance.free,
-                        'used': balance.used,
-                        'total': balance.total,
-                        'mathematical_signature': balance.mathematical_signature
-                    }
-                    for currency, balance in balances.items()
-                }
-            else:
-                return {
-                    exchange: {
-                        currency: {
-                            'free': balance.free,
-                            'used': balance.used,
-                            'total': balance.total
-                        }
-                        for currency, balance in balances.items()
-                    }
-                    for exchange, balances in self.balances.items()
-                }
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error getting balances: {e}")
+        if exchange_name not in self.balances:
             return {}
+        
+        return {
+            currency: {
+                'free': balance.free,
+                'used': balance.used,
+                'total': balance.total
+            }
+            for currency, balance in self.balances[exchange_name].items()
+        }
     
-    def get_market_info(self, exchange_name: Optional[str] = None) -> Dict[str, Any]:
+    def get_market_info(self, exchange_name: str, symbol: str) -> Optional[Dict[str, Any]]:
         """Get market information."""
-        try:
-            if exchange_name:
-                markets = self.market_info.get(exchange_name, {})
-                return {
-                    symbol: {
-                        'base_currency': market.base_currency,
-                        'quote_currency': market.quote_currency,
-                        'min_amount': market.min_amount,
-                        'max_amount': market.max_amount,
-                        'price_precision': market.price_precision,
-                        'amount_precision': market.amount_precision
-                    }
-                    for symbol, market in markets.items()
-                }
-            else:
-                return {
-                    exchange: {
-                        symbol: {
-                            'base_currency': market.base_currency,
-                            'quote_currency': market.quote_currency,
-                            'min_amount': market.min_amount,
-                            'max_amount': market.max_amount
-                        }
-                        for symbol, market in markets.items()
-                    }
-                    for exchange, markets in self.market_info.items()
-                }
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error getting market info: {e}")
-            return {}
+        if exchange_name not in self.market_info or symbol not in self.market_info[exchange_name]:
+            return None
+        
+        market = self.market_info[exchange_name][symbol]
+        return {
+            'symbol': market.symbol,
+            'base': market.base,
+            'quote': market.quote,
+            'min_amount': market.min_amount,
+            'max_amount': market.max_amount,
+            'min_price': market.min_price,
+            'max_price': market.max_price,
+            'tick_size': market.tick_size,
+            'step_size': market.step_size
+        }
     
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get system performance metrics."""
-        metrics = self.performance_metrics.copy()
+        metrics = {
+            'orders_submitted': self.metrics.orders_submitted,
+            'orders_executed': self.metrics.orders_executed,
+            'successful_executions': self.metrics.successful_executions,
+            'failed_executions': self.metrics.failed_executions,
+            'average_execution_time': self.metrics.average_execution_time,
+            'total_fees': self.metrics.total_fees,
+            'total_slippage': self.metrics.total_slippage,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'last_updated': time.time()
+        }
         
         # Calculate success rate
         total_executions = metrics['orders_executed']
         if total_executions > 0:
             metrics['success_rate'] = metrics['successful_executions'] / total_executions
-            metrics['average_fees'] = metrics['total_fees'] / total_executions
             metrics['average_slippage'] = metrics['total_slippage'] / total_executions
         else:
             metrics['success_rate'] = 0.0
-            metrics['average_fees'] = 0.0
             metrics['average_slippage'] = 0.0
         
         return metrics
@@ -981,21 +881,42 @@ class EnhancedCCXTTradingEngine:
         return {
             'active': self.active,
             'initialized': self.initialized,
-            'exchanges_connected': len(self.exchanges),
-            'active_orders': len(self.active_orders),
+            'connected_exchanges': list(self.exchanges.keys()),
+            'active_orders_count': len(self.active_orders),
             'orders_queued': self.order_queue.qsize(),
             'executions_queued': self.execution_queue.qsize(),
-            'total_orders': len(self.order_history),
-            'performance_metrics': self.performance_metrics,
+            'performance_metrics': self.get_performance_metrics(),
             'config': {
                 'enabled': self.config.enabled,
                 'max_concurrent_orders': self.config.max_concurrent_orders,
                 'order_timeout': self.config.order_timeout,
                 'slippage_tolerance': self.config.slippage_tolerance,
                 'mathematical_analysis_enabled': self.config.mathematical_analysis_enabled,
-                'sandbox_mode': self.config.sandbox_mode
+                'supported_exchanges': self.config.supported_exchanges
             }
         }
+
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and CCXT trading engine integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for CCXT trading analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
 
 
 def create_enhanced_ccxt_trading_engine(config: Optional[EnhancedCCXTConfig] = None) -> EnhancedCCXTTradingEngine:
@@ -1009,11 +930,10 @@ async def main():
     config = EnhancedCCXTConfig(
         enabled=True,
         debug=True,
-        max_concurrent_orders=10,
+        max_concurrent_orders=5,
         order_timeout=60.0,
         slippage_tolerance=0.002,
-        mathematical_analysis_enabled=True,
-        sandbox_mode=True
+        mathematical_analysis_enabled=True
     )
     
     # Create trading engine
@@ -1025,30 +945,20 @@ async def main():
     # Start trading engine
     await engine.start_trading_engine()
     
-    # Submit test orders (these won't actually execute in sandbox without API keys)
-    test_orders = [
-        {
-            'exchange': 'binance',
-            'symbol': 'BTC/USDT',
-            'side': 'buy',
-            'order_type': 'market',
-            'quantity': 0.001,
-            'metadata': {'test': True}
-        },
-        {
-            'exchange': 'binance',
-            'symbol': 'ETH/USDT',
-            'side': 'sell',
-            'order_type': 'limit',
-            'quantity': 0.01,
-            'price': 3000.0,
-            'metadata': {'test': True}
-        }
-    ]
+    # Connect to exchange (simulated)
+    # await engine.connect_exchange('binance', 'test_key', 'test_secret')
     
-    # Submit orders
-    for order_data in test_orders:
-        await engine.submit_order(order_data)
+    # Submit test order
+    test_order = {
+        'symbol': 'BTC/USDT',
+        'side': 'buy',
+        'order_type': 'market',
+        'quantity': 0.001,
+        'metadata': {'test': True}
+    }
+    
+    # Submit order (commented out for testing without real exchange)
+    # await engine.submit_order('binance', test_order)
     
     # Wait for processing
     await asyncio.sleep(5)

@@ -5,159 +5,353 @@ Advanced Dualistic Trading Execution System Module
 ==================================================
 Provides advanced dualistic trading execution functionality for the Schwabot trading system.
 
-Main Classes:
-- ExecutionMode: Core dualistic trading execution functionality
-- DecisionCurveCalculator: Decision curve calculations
-- TradeSwitchResolver: Trade switch resolution logic
+Mathematical Core:
+D(x) = σ(α * x + β) => Decision Curve
+Where:
+- σ: Sigmoid activation function
+- α: Steepness parameter
+- β: Bias parameter
+- x: Input signal vector
 
-Key Functions:
-- sigmoid: Sigmoid activation function for decision making
-- calculate_decision_curve: Calculate decision curves for trading signals
-- resolve_trade_switch: Resolve trade switching decisions
-- execute_dualistic_trade: Execute dualistic trading operations
-
+This module implements dualistic decision making with mathematical optimization,
+decision curve analysis, and trade switching resolution.
 """
 
+import asyncio
 import logging
 import time
-import numpy as np
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import numpy as np
+import json
 
 logger = logging.getLogger(__name__)
 
-# Import dependencies
+# Import mathematical infrastructure
 try:
     from core.math_cache import MathResultCache
     from core.math_config_manager import MathConfigManager
     from core.math_orchestrator import MathOrchestrator
+
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Math infrastructure not available")
 
 
-class Status(Enum):
-    """System status enumeration."""
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    ERROR = "error"
-    PROCESSING = "processing"
-
-
-class Mode(Enum):
-    """Operation mode enumeration."""
+class ExecutionMode(Enum):
+    """Execution mode types."""
     NORMAL = "normal"
-    DEBUG = "debug"
-    TEST = "test"
-    PRODUCTION = "production"
+    AGGRESSIVE = "aggressive"
+    CONSERVATIVE = "conservative"
+    ADAPTIVE = "adaptive"
 
 
 class TradeDirection(Enum):
-    """Trade direction enumeration."""
+    """Trade direction types."""
     BUY = "buy"
     SELL = "sell"
     HOLD = "hold"
+    STRONG_BUY = "strong_buy"
+    STRONG_SELL = "strong_sell"
+
+
+class DecisionType(Enum):
+    """Decision type classifications."""
+    TREND_FOLLOWING = "trend_following"
+    MEAN_REVERSION = "mean_reversion"
+    BREAKOUT = "breakout"
+    CONSOLIDATION = "consolidation"
+    UNCERTAIN = "uncertain"
+
+
+@dataclass
+class DualisticDecision:
+    """Dualistic decision with mathematical analysis."""
+    decision_id: str
+    direction: TradeDirection
+    confidence: float
+    decision_curve: np.ndarray
+    decision_type: DecisionType
+    mathematical_analysis: Dict[str, Any] = field(default_factory=dict)
+    timestamp: float = field(default_factory=time.time)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class TradeSwitch:
+    """Trade switch event."""
+    switch_id: str
+    from_direction: TradeDirection
+    to_direction: TradeDirection
+    trigger_value: float
+    confidence: float
+    mathematical_signature: str = ""
+    timestamp: float = field(default_factory=time.time)
 
 
 @dataclass
 class DualisticConfig:
-    """Dualistic Trading Configuration data class."""
+    """Configuration for dualistic trading execution system."""
     enabled: bool = True
     timeout: float = 30.0
     retries: int = 3
     debug: bool = False
-    sigmoid_steepness: float = 1.0  # Sigmoid steepness parameter
-    decision_threshold: float = 0.5  # Decision threshold
-    switch_sensitivity: float = 0.1  # Switch sensitivity
+    sigmoid_steepness: float = 1.0
+    decision_threshold: float = 0.5
+    switch_sensitivity: float = 0.1
+    mathematical_analysis_enabled: bool = True
+    adaptive_thresholds: bool = True
+    curve_smoothing: bool = True
+    max_curve_points: int = 1000
 
 
 @dataclass
-class TradingResult:
-    """Trading Result data class."""
-    success: bool = False
-    direction: Optional[TradeDirection] = None
-    confidence: Optional[float] = None
-    decision_curve: Optional[np.ndarray] = None
-    switch_resolved: Optional[bool] = None
-    data: Optional[Dict[str, Any]] = None
-    error: Optional[str] = None
-    timestamp: float = field(default_factory=time.time)
+class DualisticMetrics:
+    """Dualistic trading execution metrics."""
+    decisions_made: int = 0
+    switches_triggered: int = 0
+    average_confidence: float = 0.0
+    decision_accuracy: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = 0.0
 
 
-class DecisionCurveCalculator:
-    """Decision Curve Calculator for dualistic trading."""
+class AdvancedDualisticTradingExecutionSystem:
+    """
+    Advanced Dualistic Trading Execution System
+    
+    Implements dualistic decision making:
+    D(x) = σ(α * x + β) => Decision Curve
+    
+    Provides advanced dualistic trading execution with mathematical optimization,
+    decision curve analysis, and trade switching resolution.
+    """
     
     def __init__(self, config: Optional[DualisticConfig] = None):
+        """Initialize the advanced dualistic trading execution system."""
         self.config = config or DualisticConfig()
-        self.logger = logging.getLogger(f"{__name__}.DecisionCurveCalculator")
+        self.logger = logging.getLogger(__name__)
         
-    def sigmoid(self, x: Union[float, np.ndarray], 
-                steepness: float = None) -> Union[float, np.ndarray]:
-        """
-        Sigmoid activation function for decision making.
+        # System state
+        self.decisions: List[DualisticDecision] = []
+        self.trade_switches: List[TradeSwitch] = []
+        self.current_direction: TradeDirection = TradeDirection.HOLD
+        self.decision_history: List[float] = []
         
-        Args:
-            x: Input value(s)
-            steepness: Sigmoid steepness parameter
-            
-        Returns:
-            Sigmoid output value(s)
-        """
+        # Processing queues
+        self.signal_queue: asyncio.Queue = asyncio.Queue()
+        self.decision_queue: asyncio.Queue = asyncio.Queue()
+        
+        # Mathematical infrastructure
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
+        else:
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
+        
+        # Performance tracking
+        self.metrics = DualisticMetrics()
+        
+        # System state
+        self.initialized = False
+        self.active = False
+        
+        self._initialize_system()
+    
+    def _initialize_system(self) -> None:
+        """Initialize the dualistic trading execution system."""
         try:
-            if steepness is None:
-                steepness = self.config.sigmoid_steepness
+            self.logger.info("Initializing Advanced Dualistic Trading Execution System")
             
-            # Sigmoid function: 1 / (1 + e^(-steepness * x))
-            sigmoid_output = 1.0 / (1.0 + np.exp(-steepness * x))
+            # Initialize decision history
+            self.decision_history = []
             
-            self.logger.debug(f"Sigmoid calculated with steepness {steepness}")
-            return sigmoid_output
+            self.initialized = True
+            self.logger.info("✅ Advanced Dualistic Trading Execution System initialized successfully")
             
         except Exception as e:
-            self.logger.error(f"Error calculating sigmoid: {e}")
-            return 0.5  # Default to neutral
+            self.logger.error(f"❌ Error initializing Advanced Dualistic Trading Execution System: {e}")
+            self.initialized = False
     
-    def calculate_decision_curve(self, signal_data: np.ndarray, 
-                               time_points: Optional[np.ndarray] = None) -> np.ndarray:
-        """
-        Calculate decision curve for trading signals.
+    async def start_execution_system(self) -> bool:
+        """Start the dualistic execution system."""
+        if not self.initialized:
+            self.logger.error("System not initialized")
+            return False
         
-        Args:
-            signal_data: Input signal data array
-            time_points: Time points for the curve (optional)
-            
-        Returns:
-            Decision curve array
-        """
         try:
-            # Convert to numpy array if needed
-            if not isinstance(signal_data, np.ndarray):
-                signal_data = np.array(signal_data)
+            self.active = True
             
+            # Start processing tasks
+            asyncio.create_task(self._process_signal_queue())
+            asyncio.create_task(self._process_decision_queue())
+            
+            self.logger.info("✅ Advanced Dualistic Trading Execution System started")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error starting dualistic execution system: {e}")
+            return False
+    
+    async def stop_execution_system(self) -> bool:
+        """Stop the dualistic execution system."""
+        try:
+            self.active = False
+            self.logger.info("✅ Advanced Dualistic Trading Execution System stopped")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error stopping dualistic execution system: {e}")
+            return False
+    
+    async def process_signal(self, signal_data: Union[List, np.ndarray]) -> bool:
+        """Process a trading signal for dualistic decision making."""
+        if not self.active:
+            self.logger.error("Execution system not active")
+            return False
+        
+        try:
+            # Validate signal data
+            if not self._validate_signal_data(signal_data):
+                self.logger.error(f"Invalid signal data: {signal_data}")
+                return False
+            
+            # Queue for processing
+            await self.signal_queue.put(signal_data)
+            
+            self.logger.info(f"✅ Signal queued for dualistic processing")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error processing signal: {e}")
+            return False
+    
+    def _validate_signal_data(self, signal_data: Union[List, np.ndarray]) -> bool:
+        """Validate signal data."""
+        try:
+            if not isinstance(signal_data, (list, np.ndarray)):
+                return False
+            
+            # Convert to numpy array
+            data = np.array(signal_data)
+            
+            # Check for valid data
+            if len(data) == 0 or not np.all(np.isfinite(data)):
+                return False
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error validating signal data: {e}")
+            return False
+    
+    async def _process_signal_queue(self) -> None:
+        """Process signals from the queue."""
+        try:
+            while self.active:
+                try:
+                    # Get signal from queue
+                    signal_data = await asyncio.wait_for(
+                        self.signal_queue.get(), 
+                        timeout=1.0
+                    )
+                    
+                    # Process signal
+                    await self._process_signal(signal_data)
+                    
+                    # Mark task as done
+                    self.signal_queue.task_done()
+                    
+                except asyncio.TimeoutError:
+                    continue
+                except Exception as e:
+                    self.logger.error(f"❌ Error processing signal: {e}")
+                    
+        except Exception as e:
+            self.logger.error(f"❌ Error in signal processing loop: {e}")
+    
+    async def _process_signal(self, signal_data: Union[List, np.ndarray]) -> None:
+        """Process a trading signal."""
+        try:
+            # Convert to numpy array
+            data = np.array(signal_data)
+            
+            # Calculate decision curve
+            decision_curve = self._calculate_decision_curve(data)
+            
+            # Make dualistic decision
+            decision = await self._make_dualistic_decision(data, decision_curve)
+            
+            # Store decision
+            self.decisions.append(decision)
+            
+            # Update decision history
+            self.decision_history.append(decision_curve[-1])
+            if len(self.decision_history) > self.config.max_curve_points:
+                self.decision_history = self.decision_history[-self.config.max_curve_points:]
+            
+            # Check for trade switch
+            if self._should_trigger_switch(decision):
+                switch = self._create_trade_switch(decision)
+                self.trade_switches.append(switch)
+                self.current_direction = decision.direction
+            
+            # Queue for execution
+            await self.decision_queue.put(decision)
+            
+            self.logger.info(f"✅ Dualistic decision made: {decision.direction.value} with confidence {decision.confidence:.3f}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error processing signal: {e}")
+    
+    def _calculate_decision_curve(self, signal_data: np.ndarray) -> np.ndarray:
+        """Calculate decision curve using sigmoid activation."""
+        try:
             # Normalize signal data to [-1, 1] range
-            signal_normalized = 2 * (signal_data - np.min(signal_data)) / \
-                              (np.max(signal_data) - np.min(signal_data) + 1e-10) - 1
+            signal_min = np.min(signal_data)
+            signal_max = np.max(signal_data)
+            signal_range = signal_max - signal_min
             
-            # Apply sigmoid to create decision curve
-            decision_curve = self.sigmoid(signal_normalized)
+            if signal_range > 0:
+                signal_normalized = 2 * (signal_data - signal_min) / signal_range - 1
+            else:
+                signal_normalized = np.zeros_like(signal_data)
             
-            # Apply smoothing if time points are provided
-            if time_points is not None and len(time_points) > 1:
-                # Simple moving average smoothing
+            # Apply sigmoid activation: D(x) = σ(α * x + β)
+            alpha = self.config.sigmoid_steepness
+            beta = 0.0  # Bias parameter
+            
+            decision_curve = self._sigmoid(alpha * signal_normalized + beta)
+            
+            # Apply smoothing if enabled
+            if self.config.curve_smoothing and len(decision_curve) > 5:
                 window_size = min(5, len(decision_curve) // 10)
                 if window_size > 1:
-                    decision_curve = np.convolve(decision_curve, 
-                                               np.ones(window_size) / window_size, 
-                                               mode='same')
+                    decision_curve = np.convolve(
+                        decision_curve, 
+                        np.ones(window_size) / window_size, 
+                        mode='same'
+                    )
             
-            self.logger.debug(f"Decision curve calculated: {len(decision_curve)} points")
             return decision_curve
             
         except Exception as e:
-            self.logger.error(f"Error calculating decision curve: {e}")
-            return np.zeros_like(signal_data)
+            self.logger.error(f"❌ Error calculating decision curve: {e}")
+            return np.full_like(signal_data, 0.5)
+    
+    def _sigmoid(self, x: np.ndarray) -> np.ndarray:
+        """Sigmoid activation function."""
+        try:
+            # Sigmoid: σ(x) = 1 / (1 + e^(-x))
+            return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))
+        except Exception as e:
+            self.logger.error(f"❌ Error calculating sigmoid: {e}")
+            return np.full_like(x, 0.5)
 
 
 class TradeSwitchResolver:

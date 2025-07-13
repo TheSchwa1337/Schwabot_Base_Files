@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Unified Mathematical Bridge - Complete System Integration
-========================================================
+Unified Mathematical Bridge - Phase 3 Enhanced
+==============================================
 
 Comprehensive mathematical bridge that integrates ALL Schwabot mathematical systems:
 - Quantum Strategy → Phantom Math → Risk Management
 - Persistent Homology → Signal Generation → Profit Optimization
 - Mathematical Validation → Backup Systems → Recovery
 - Heartbeat Integration → Performance Metrics → System Health
+
+Mathematical Core:
+B(x) = {
+    Quantum Integration:    Q_i(x) = integrate_quantum_systems(x)
+    Phantom Integration:    P_i(x) = integrate_phantom_math(x)
+    Homology Integration:   H_i(x) = integrate_persistent_homology(x)
+    Tensor Integration:     T_i(x) = integrate_tensor_algebra(x)
+}
+Where:
+- x: mathematical data vector
+- Q_i: quantum system integration
+- P_i: phantom math integration
+- H_i: homology integration
+- T_i: tensor algebra integration
 
 This bridge ensures NO mathematical components are left behind while maintaining
 your sophisticated mathematical architecture and enhancing performance.
@@ -24,6 +38,17 @@ import numpy as np
 
 # Set up logger first
 logger = logging.getLogger(__name__)
+
+# Import mathematical infrastructure
+try:
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
 
 # Import ALL mathematical systems with fallbacks
 try:
@@ -144,6 +169,7 @@ class MathematicalConnection:
     mathematical_signature: str
     last_validation: float
     performance_metrics: Dict[str, float]
+    mathematical_health: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -157,23 +183,69 @@ class UnifiedBridgeResult:
     execution_time: float
     mathematical_signature: str
     performance_metrics: Dict[str, float]
+    mathematical_health: float = 0.0
     error_message: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+@dataclass
+class BridgeMetrics:
+    """Bridge performance metrics."""
+    total_connections: int = 0
+    active_connections: int = 0
+    successful_integrations: int = 0
+    failed_integrations: int = 0
+    average_connection_strength: float = 0.0
+    mathematical_analyses: int = 0
+    last_updated: float = field(default_factory=time.time)
+
+
+@dataclass
+class UnifiedBridgeConfig:
+    """Configuration for unified mathematical bridge."""
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+    mathematical_integration: bool = True
+    connection_monitoring: bool = True
+    performance_optimization: bool = True
+    health_threshold: float = 0.7
+    max_connections: int = 100
+    connection_timeout: float = 60.0
+
+
 class UnifiedMathematicalBridge:
     """
-    Unified Mathematical Bridge - Complete System Integration
+    Unified Mathematical Bridge System - Phase 3 Enhanced
+    
+    Implements comprehensive mathematical integration:
+    B(x) = {
+        Quantum Integration:    Q_i(x) = integrate_quantum_systems(x)
+        Phantom Integration:    P_i(x) = integrate_phantom_math(x)
+        Homology Integration:   H_i(x) = integrate_persistent_homology(x)
+        Tensor Integration:     T_i(x) = integrate_tensor_algebra(x)
+    }
     
     This bridge ensures ALL mathematical systems are connected and no components
     are left behind. It follows your established bridge patterns while providing
     comprehensive integration and performance enhancement.
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize the unified mathematical bridge."""
-        self.config = config or self._default_config()
+    def __init__(self, config: Optional[UnifiedBridgeConfig] = None):
+        """Initialize the unified mathematical bridge system."""
+        self.config = config or UnifiedBridgeConfig()
         self.logger = logging.getLogger(__name__)
+        
+        # Mathematical infrastructure
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
+        else:
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
         
         # Initialize ALL mathematical systems
         self._initialize_mathematical_systems()
@@ -183,6 +255,7 @@ class UnifiedMathematicalBridge:
         self.connection_history: List[MathematicalConnection] = []
         
         # Performance tracking
+        self.metrics = BridgeMetrics()
         self.performance_metrics: Dict[str, List[float]] = {}
         self.operation_stats: Dict[str, Dict[str, Any]] = {}
         
@@ -194,8 +267,33 @@ class UnifiedMathematicalBridge:
             'system_health': 1.0
         }
         
-        self.logger.info("🧠 Unified Mathematical Bridge initialized")
-        self.logger.info(f"✅ Active systems: {self._get_active_systems_count()}")
+        # System state
+        self.initialized = False
+        self.active = False
+        
+        self._initialize_system()
+    
+    def _initialize_system(self) -> None:
+        """Initialize the unified mathematical bridge system."""
+        try:
+            self.logger.info("Initializing Unified Mathematical Bridge System")
+            
+            # Initialize mathematical systems
+            self._initialize_mathematical_systems()
+            
+            # Initialize integration methods
+            self.integration_methods = UnifiedMathematicalIntegrationMethods(self)
+            
+            # Initialize performance monitor
+            self.performance_monitor = UnifiedMathematicalPerformanceMonitor(self)
+            
+            self.initialized = True
+            self.logger.info("✅ Unified Mathematical Bridge System initialized successfully")
+            self.logger.info(f"✅ Active systems: {self._get_active_systems_count()}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error initializing Unified Mathematical Bridge System: {e}")
+            self.initialized = False
     
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration following your bridge patterns."""
@@ -340,7 +438,7 @@ class UnifiedMathematicalBridge:
         self.logger.info("✅ Performance Monitor initialized")
         
         # Start performance monitoring
-        if self.config.get('enable_real_time_monitoring', True):
+        if self.config.enabled:
             self.performance_monitor.start_monitoring()
             self.logger.info("🔄 Real-time performance monitoring started")
     
@@ -406,6 +504,7 @@ class UnifiedMathematicalBridge:
                 execution_time=execution_time,
                 mathematical_signature=mathematical_signature,
                 performance_metrics=performance_metrics,
+                mathematical_health=self.health_metrics['system_health'],
                 metadata={
                     'active_systems': self._get_active_systems_count(),
                     'connection_count': len(connections),
@@ -432,7 +531,8 @@ class UnifiedMathematicalBridge:
                 execution_time=time.time() - start_time,
                 mathematical_signature="",
                 performance_metrics={},
-                error_message=str(e)
+                error_message=str(e),
+                mathematical_health=self.health_metrics['system_health']
             )
             
             # Record error result for performance monitoring
@@ -470,6 +570,7 @@ class UnifiedMathematicalBridge:
                     'phantom_confidence': phantom_result.get('phantom_confidence', 0.0),
                     'entanglement_strength': quantum_result.get('entanglement_strength', 0.0)
                 },
+                mathematical_health=self.health_metrics['connection_integrity'],
                 metadata={
                     'quantum_state': quantum_result,
                     'phantom_zone': phantom_result
@@ -855,6 +956,7 @@ class UnifiedMathematicalBridge:
             mathematical_signature="fallback_signature",
             last_validation=time.time(),
             performance_metrics={'fallback': True},
+            mathematical_health=self.health_metrics['connection_integrity'],
             metadata={'fallback': True}
         )
     
@@ -1045,9 +1147,76 @@ class UnifiedMathematicalBridge:
         """Placeholder for quantum-phantom signature creation."""
         return "quantum_phantom_signature"
 
+    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+        """Calculate mathematical result with proper data handling and bridge integration."""
+        try:
+            if not isinstance(data, np.ndarray):
+                data = np.array(data)
+            
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                # Use the actual mathematical modules for calculation
+                if len(data) > 0:
+                    # Use mathematical orchestration for bridge integration analysis
+                    result = self.math_orchestrator.process_data(data)
+                    return float(result)
+                else:
+                    return 0.0
+            else:
+                # Fallback to basic calculation
+                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                return float(result)
+        except Exception as e:
+            self.logger.error(f"Mathematical calculation error: {e}")
+            return 0.0
+    
+    def activate(self) -> bool:
+        """Activate the system."""
+        if not self.initialized:
+            self.logger.error("System not initialized")
+            return False
+        
+        try:
+            self.active = True
+            self.logger.info("✅ Unified Mathematical Bridge System activated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error activating Unified Mathematical Bridge System: {e}")
+            return False
+    
+    def deactivate(self) -> bool:
+        """Deactivate the system."""
+        try:
+            self.active = False
+            self.logger.info("✅ Unified Mathematical Bridge System deactivated")
+            return True
+        except Exception as e:
+            self.logger.error(f"❌ Error deactivating Unified Mathematical Bridge System: {e}")
+            return False
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'total_connections': self.metrics.total_connections,
+            'active_connections': self.metrics.active_connections,
+            'successful_integrations': self.metrics.successful_integrations,
+            'failed_integrations': self.metrics.failed_integrations,
+            'average_connection_strength': self.metrics.average_connection_strength,
+            'mathematical_analyses': self.metrics.mathematical_analyses,
+            'health_metrics': self.health_metrics,
+            'config': {
+                'enabled': self.config.enabled,
+                'mathematical_integration': self.config.mathematical_integration,
+                'connection_monitoring': self.config.connection_monitoring,
+                'performance_optimization': self.config.performance_optimization,
+                'health_threshold': self.config.health_threshold
+            }
+        }
+
 
 # Factory function following your patterns
-def create_unified_mathematical_bridge(config: Optional[Dict[str, Any]] = None) -> UnifiedMathematicalBridge:
+def create_unified_mathematical_bridge(config: Optional[UnifiedBridgeConfig] = None) -> UnifiedMathematicalBridge:
     """Create a unified mathematical bridge instance."""
     return UnifiedMathematicalBridge(config)
 
