@@ -21,7 +21,7 @@ Features:
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -355,7 +355,7 @@ class GPULogicMapper:
         
         return result
 
-    def _perform_tensor_analysis(self, gpu_matrix: cp.ndarray) -> Dict[str, Any]:
+    def _perform_tensor_analysis(self, gpu_matrix: Any) -> Dict[str, Any]:
         """
         Perform tensor analysis on GPU matrix.
         
@@ -373,35 +373,63 @@ class GPULogicMapper:
             for method in methods:
                 try:
                     if method == "eigenvalue_decomposition":
-                        eigenvalues = cp.linalg.eigvals(gpu_matrix)
-                        analysis_results["eigenvalues"] = cp.asnumpy(eigenvalues)
+                        if CUPY_AVAILABLE and isinstance(gpu_matrix, cp.ndarray):
+                            eigenvalues = cp.linalg.eigvals(gpu_matrix)
+                            analysis_results["eigenvalues"] = cp.asnumpy(eigenvalues)
+                        else:
+                            eigenvalues = np.linalg.eigvals(gpu_matrix)
+                            analysis_results["eigenvalues"] = eigenvalues
                         
                     elif method == "singular_value_decomposition":
-                        U, s, Vh = cp.linalg.svd(gpu_matrix)
-                        analysis_results["singular_values"] = cp.asnumpy(s)
+                        if CUPY_AVAILABLE and isinstance(gpu_matrix, cp.ndarray):
+                            U, s, Vh = cp.linalg.svd(gpu_matrix)
+                            analysis_results["singular_values"] = cp.asnumpy(s)
+                        else:
+                            U, s, Vh = np.linalg.svd(gpu_matrix)
+                            analysis_results["singular_values"] = s
                         
                     elif method == "matrix_factorization":
                         # Simple LU decomposition
-                        P, L, U = cp.linalg.lu(gpu_matrix)
-                        analysis_results["lu_factorization"] = {
-                            "L_norm": float(cp.linalg.norm(L)),
-                            "U_norm": float(cp.linalg.norm(U))
-                        }
+                        if CUPY_AVAILABLE and isinstance(gpu_matrix, cp.ndarray):
+                            P, L, U = cp.linalg.lu(gpu_matrix)
+                            analysis_results["lu_factorization"] = {
+                                "L_norm": float(cp.linalg.norm(L)),
+                                "U_norm": float(cp.linalg.norm(U))
+                            }
+                        else:
+                            P, L, U = np.linalg.lu(gpu_matrix)
+                            analysis_results["lu_factorization"] = {
+                                "L_norm": float(np.linalg.norm(L)),
+                                "U_norm": float(np.linalg.norm(U))
+                            }
                         
                     elif method == "correlation_analysis":
                         # Calculate correlation matrix
-                        corr_matrix = cp.corrcoef(gpu_matrix)
-                        analysis_results["correlation_matrix"] = cp.asnumpy(corr_matrix)
+                        if CUPY_AVAILABLE and isinstance(gpu_matrix, cp.ndarray):
+                            corr_matrix = cp.corrcoef(gpu_matrix)
+                            analysis_results["correlation_matrix"] = cp.asnumpy(corr_matrix)
+                        else:
+                            corr_matrix = np.corrcoef(gpu_matrix)
+                            analysis_results["correlation_matrix"] = corr_matrix
                         
                     elif method == "entropy_calculation":
                         # Calculate matrix entropy
-                        matrix_flat = cp.ravel(gpu_matrix)
-                        hist, _ = cp.histogram(matrix_flat, bins=50)
-                        hist = hist[hist > 0]  # Remove zero bins
-                        if len(hist) > 0:
-                            prob = hist / cp.sum(hist)
-                            entropy = -cp.sum(prob * cp.log2(prob + 1e-10))
-                            analysis_results["entropy"] = float(entropy)
+                        if CUPY_AVAILABLE and isinstance(gpu_matrix, cp.ndarray):
+                            matrix_flat = cp.ravel(gpu_matrix)
+                            hist, _ = cp.histogram(matrix_flat, bins=50)
+                            hist = hist[hist > 0]  # Remove zero bins
+                            if len(hist) > 0:
+                                prob = hist / cp.sum(hist)
+                                entropy = -cp.sum(prob * cp.log2(prob + 1e-10))
+                                analysis_results["entropy"] = float(entropy)
+                        else:
+                            matrix_flat = np.ravel(gpu_matrix)
+                            hist, _ = np.histogram(matrix_flat, bins=50)
+                            hist = hist[hist > 0]  # Remove zero bins
+                            if len(hist) > 0:
+                                prob = hist / np.sum(hist)
+                                entropy = -np.sum(prob * np.log2(prob + 1e-10))
+                                analysis_results["entropy"] = float(entropy)
                         
                 except Exception as e:
                     self.logger.warning(f"Tensor analysis method {method} failed: {e}")
@@ -469,7 +497,7 @@ class GPULogicMapper:
         
         return analysis_results
 
-    def get_strategy_matrix(self, strategy_hash: str) -> Optional[Union[cp.ndarray, np.ndarray]]:
+    def get_strategy_matrix(self, strategy_hash: str) -> Optional[Any]:
         """
         Get mapped strategy matrix.
         

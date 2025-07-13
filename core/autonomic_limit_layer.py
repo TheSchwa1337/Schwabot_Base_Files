@@ -24,6 +24,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
+# Set up logger first
+logger = logging.getLogger(__name__)
+
 # Import existing infrastructure
 try:
     from core.profit_echo_cache import profit_echo_cache
@@ -33,8 +36,6 @@ try:
 except ImportError:
     INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Some infrastructure not available")
-
-logger = logging.getLogger(__name__)
 
 
 class AutonomicLimitLayer:

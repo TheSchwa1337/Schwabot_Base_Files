@@ -5,19 +5,8 @@ Provides core type definitions for the Schwabot trading system.
 """
 
 import logging
-import logging
-
-
-import logging
-import logging
-
-
-import logging
-import logging
-
-
-import logging
 import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, Optional, Union, List, Tuple
@@ -82,6 +71,68 @@ MarketData = Dict[str, Any]
 TradingSignal = Dict[str, Union[str, float, bool]]
 StrategyConfig = Dict[str, Any]
 ExchangeConfig = Dict[str, Any]
+
+
+class TradingStrategy(ABC):
+    """
+    Abstract base class for trading strategies.
+    
+    All trading strategies must inherit from this class and implement
+    the required abstract methods.
+    """
+    
+    def __init__(self):
+        """Initialize the trading strategy."""
+        self.name = self.__class__.__name__
+        self.description = "Base trading strategy"
+        self.is_initialized = False
+        self.is_active = False
+    
+    @abstractmethod
+    async def initialize(self) -> bool:
+        """Initialize the strategy."""
+        pass
+    
+    @abstractmethod
+    async def analyze(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze market data and return analysis results."""
+        pass
+    
+    @abstractmethod
+    async def generate_signals(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Generate trading signals based on analysis."""
+        pass
+    
+    @abstractmethod
+    def get_name(self) -> str:
+        """Get the strategy name."""
+        pass
+    
+    @abstractmethod
+    def get_description(self) -> str:
+        """Get the strategy description."""
+        pass
+    
+    def activate(self) -> bool:
+        """Activate the strategy."""
+        if not self.is_initialized:
+            return False
+        self.is_active = True
+        return True
+    
+    def deactivate(self) -> bool:
+        """Deactivate the strategy."""
+        self.is_active = False
+        return True
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get strategy status."""
+        return {
+            'name': self.get_name(),
+            'description': self.get_description(),
+            'initialized': self.is_initialized,
+            'active': self.is_active
+        }
 
 
 class Vector64Processor:

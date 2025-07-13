@@ -1069,4 +1069,7 @@ class ProfitEchoCache:
 # Factory function
 def create_profit_echo_cache(path: str = "data/profit_echo.json", config: Optional[Dict[str, Any]] = None):
     """Create a profit echo cache instance with mathematical integration."""
-    return ProfitEchoCache(path, config) 
+    return ProfitEchoCache(path, config)
+
+# Singleton instance for global use
+profit_echo_cache = ProfitEchoCache() 

@@ -15,6 +15,8 @@ Main Components:
 - Real-time monitoring and alerting
 """
 
+from typing import Dict, Any
+
 __version__ = "0.5.0"
 __author__ = "Schwabot Development Team"
 __license__ = "Proprietary"

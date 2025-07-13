@@ -25,6 +25,9 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+# Set up logger first
+logger = logging.getLogger(__name__)
+
 # Import existing infrastructure
 try:
     from core.zpe_core import ZPEMode
@@ -38,8 +41,6 @@ try:
 except ImportError:
     INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Some infrastructure not available")
-
-logger = logging.getLogger(__name__)
 
 
 class ThermalEntropyEngine:
