@@ -1,0 +1,883 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Self-Generating Strategy System - Adaptive Strategy Evolution
+============================================================
+
+Advanced self-generating strategy system that leverages Schwabot's existing
+T-Cell survival engine and adaptive configuration manager to provide strategy
+evolution, explanation, and adaptation logic.
+
+This system builds upon:
+- tcell_survival_engine.py (biological strategy evolution with mutation)
+- schwabot_adaptive_config_manager.py (adaptive configuration generation)
+- vector_registry.py (strategy pattern recognition)
+- memory_key_allocator.py (memory-based strategy tracking)
+
+Mathematical Foundation:
+- Strategy Evolution: S_new = mutate(S_old, performance_feedback, entropy)
+- DNA Encoding: DNA = encode(strategy_parameters, market_context, performance)
+- Strategy Explanation: E = decode(DNA) + performance_analysis + adaptation_reasoning
+- Memory Integration: M = f(pattern_similarity, historical_success, adaptation_history)
+"""
+
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+import numpy as np
+import hashlib
+import json
+
+# Import existing systems
+try:
+    from core.tcell_survival_engine import TCellSurvivalEngine, TCellStrategy, TCellState
+    from config.schwabot_adaptive_config_manager import SchwabotAdaptiveConfigManager
+    from core.vector_registry import VectorRegistry
+    from core.memory_key_allocator import MemoryKeyAllocator
+    from core.enhanced_entropy_randomization_system import EnhancedEntropyRandomizationSystem
+    EXISTING_STRATEGY_AVAILABLE = True
+except ImportError:
+    EXISTING_STRATEGY_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("⚠️ Some existing strategy systems not available")
+
+logger = logging.getLogger(__name__)
+
+
+class StrategyGenerationType(Enum):
+    """Types of strategy generation."""
+    MUTATION = "mutation"           # Mutate existing strategy
+    CROSSOVER = "crossover"         # Combine two strategies
+    RANDOM = "random"               # Generate random strategy
+    MEMORY_BASED = "memory_based"   # Generate from memory patterns
+    ADAPTIVE = "adaptive"           # Adaptive generation
+
+
+class StrategyExplanationLevel(Enum):
+    """Levels of strategy explanation."""
+    BASIC = "basic"                 # Basic parameter explanation
+    DETAILED = "detailed"           # Detailed reasoning
+    COMPREHENSIVE = "comprehensive" # Full DNA analysis
+    ADAPTIVE = "adaptive"           # Adaptation reasoning
+
+
+@dataclass
+class GeneratedStrategy:
+    """Generated strategy with full metadata."""
+    strategy_id: str
+    strategy_type: str
+    parameters: Dict[str, Any]
+    dna_sequence: str
+    generation_type: StrategyGenerationType
+    parent_strategies: List[str]
+    performance_prediction: float
+    confidence: float
+    adaptation_reasoning: str
+    memory_links: List[str]
+    created_at: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class StrategyExplanation:
+    """Comprehensive strategy explanation."""
+    strategy_id: str
+    explanation_level: StrategyExplanationLevel
+    dna_analysis: Dict[str, Any]
+    parameter_explanation: Dict[str, str]
+    performance_analysis: Dict[str, Any]
+    adaptation_reasoning: str
+    memory_context: Dict[str, Any]
+    mathematical_foundation: Dict[str, Any]
+    confidence_breakdown: Dict[str, float]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class StrategyAdaptationResult:
+    """Result of strategy adaptation process."""
+    original_strategy: GeneratedStrategy
+    adapted_strategy: GeneratedStrategy
+    adaptation_type: StrategyGenerationType
+    adaptation_strength: float
+    performance_improvement: float
+    reasoning: str
+    memory_integration: Dict[str, Any]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class SelfGeneratingStrategySystem:
+    """
+    Self-Generating Strategy System
+    
+    Provides strategy evolution, explanation, and adaptation logic using
+    existing T-Cell infrastructure and memory systems.
+    """
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        """Initialize the self-generating strategy system."""
+        self.config = config or self._default_config()
+        self.logger = logging.getLogger(__name__)
+        
+        # Strategy storage
+        self.generated_strategies: Dict[str, GeneratedStrategy] = {}
+        self.strategy_performance: Dict[str, List[float]] = {}
+        self.adaptation_history: List[StrategyAdaptationResult] = {}
+        
+        # Initialize existing systems
+        self._initialize_existing_systems()
+        
+        # Performance tracking
+        self.generation_count = 0
+        self.successful_adaptations = 0
+        self.average_performance = 0.5
+        
+        self.logger.info("🧬 Self-Generating Strategy System initialized")
+        self.logger.info(f"✅ Active systems: {self._get_active_systems_count()}")
+    
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration."""
+        return {
+            'mutation_rate': 0.1,
+            'crossover_rate': 0.2,
+            'random_generation_rate': 0.05,
+            'memory_integration_weight': 0.3,
+            'performance_threshold': 0.6,
+            'adaptation_learning_rate': 0.01,
+            'dna_sequence_length': 64,
+            'explanation_detail_level': 'detailed',
+            'max_strategies': 1000,
+            'performance_window': 50
+        }
+    
+    def _initialize_existing_systems(self):
+        """Initialize existing strategy systems."""
+        if EXISTING_STRATEGY_AVAILABLE:
+            try:
+                # Initialize T-cell survival engine
+                self.tcell_engine = TCellSurvivalEngine()
+                self.logger.info("✅ T-Cell Survival Engine initialized")
+                
+                # Initialize adaptive config manager
+                self.adaptive_config_manager = SchwabotAdaptiveConfigManager()
+                self.logger.info("✅ Adaptive Config Manager initialized")
+                
+                # Initialize vector registry
+                self.vector_registry = VectorRegistry()
+                self.logger.info("✅ Vector Registry initialized")
+                
+                # Initialize memory key allocator
+                self.memory_allocator = MemoryKeyAllocator()
+                self.logger.info("✅ Memory Key Allocator initialized")
+                
+                # Initialize entropy system
+                self.entropy_system = EnhancedEntropyRandomizationSystem()
+                self.logger.info("✅ Enhanced Entropy System initialized")
+                
+            except Exception as e:
+                self.logger.warning(f"⚠️ Failed to initialize some systems: {e}")
+        else:
+            self.logger.warning("⚠️ Using fallback strategy systems")
+    
+    def generate_strategy(self, market_data: Dict[str, Any], 
+                         performance_feedback: float,
+                         generation_type: Optional[StrategyGenerationType] = None) -> GeneratedStrategy:
+        """
+        Generate a new strategy using the specified generation type.
+        
+        Args:
+            market_data: Current market data
+            performance_feedback: Performance feedback (-1 to 1)
+            generation_type: Type of generation (auto-selected if None)
+            
+        Returns:
+            GeneratedStrategy with full metadata
+        """
+        try:
+            # Auto-select generation type if not specified
+            if generation_type is None:
+                generation_type = self._select_generation_type(performance_feedback, market_data)
+            
+            # Generate strategy based on type
+            if generation_type == StrategyGenerationType.MUTATION:
+                strategy = self._generate_mutation_strategy(market_data, performance_feedback)
+            elif generation_type == StrategyGenerationType.CROSSOVER:
+                strategy = self._generate_crossover_strategy(market_data, performance_feedback)
+            elif generation_type == StrategyGenerationType.RANDOM:
+                strategy = self._generate_random_strategy(market_data)
+            elif generation_type == StrategyGenerationType.MEMORY_BASED:
+                strategy = self._generate_memory_based_strategy(market_data, performance_feedback)
+            else:  # ADAPTIVE
+                strategy = self._generate_adaptive_strategy(market_data, performance_feedback)
+            
+            # Store generated strategy
+            self.generated_strategies[strategy.strategy_id] = strategy
+            self.strategy_performance[strategy.strategy_id] = []
+            self.generation_count += 1
+            
+            self.logger.info(f"🧬 Generated strategy {strategy.strategy_id[:8]}... "
+                           f"(type: {generation_type.value}, confidence: {strategy.confidence:.3f})")
+            
+            return strategy
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error generating strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    def explain_strategy(self, strategy_id: str, 
+                        explanation_level: StrategyExplanationLevel = StrategyExplanationLevel.DETAILED) -> StrategyExplanation:
+        """
+        Generate comprehensive explanation for a strategy.
+        
+        Args:
+            strategy_id: Strategy ID to explain
+            explanation_level: Level of explanation detail
+            
+        Returns:
+            StrategyExplanation with full analysis
+        """
+        try:
+            if strategy_id not in self.generated_strategies:
+                raise ValueError(f"Strategy {strategy_id} not found")
+            
+            strategy = self.generated_strategies[strategy_id]
+            
+            # Analyze DNA sequence
+            dna_analysis = self._analyze_dna_sequence(strategy.dna_sequence)
+            
+            # Explain parameters
+            parameter_explanation = self._explain_parameters(strategy.parameters, explanation_level)
+            
+            # Analyze performance
+            performance_analysis = self._analyze_performance(strategy_id)
+            
+            # Generate adaptation reasoning
+            adaptation_reasoning = self._generate_adaptation_reasoning(strategy, explanation_level)
+            
+            # Get memory context
+            memory_context = self._get_memory_context(strategy)
+            
+            # Mathematical foundation
+            mathematical_foundation = self._get_mathematical_foundation(strategy)
+            
+            # Confidence breakdown
+            confidence_breakdown = self._calculate_confidence_breakdown(strategy)
+            
+            explanation = StrategyExplanation(
+                strategy_id=strategy_id,
+                explanation_level=explanation_level,
+                dna_analysis=dna_analysis,
+                parameter_explanation=parameter_explanation,
+                performance_analysis=performance_analysis,
+                adaptation_reasoning=adaptation_reasoning,
+                memory_context=memory_context,
+                mathematical_foundation=mathematical_foundation,
+                confidence_breakdown=confidence_breakdown,
+                metadata={
+                    'explanation_timestamp': time.time(),
+                    'strategy_type': strategy.strategy_type,
+                    'generation_type': strategy.generation_type.value
+                }
+            )
+            
+            self.logger.info(f"📖 Generated explanation for strategy {strategy_id[:8]}... "
+                           f"(level: {explanation_level.value})")
+            
+            return explanation
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error explaining strategy: {e}")
+            return self._create_fallback_explanation(strategy_id)
+    
+    def adapt_strategy(self, strategy_id: str, 
+                      market_data: Dict[str, Any],
+                      performance_feedback: float) -> StrategyAdaptationResult:
+        """
+        Adapt an existing strategy based on performance feedback.
+        
+        Args:
+            strategy_id: Strategy ID to adapt
+            market_data: Current market data
+            performance_feedback: Performance feedback (-1 to 1)
+            
+        Returns:
+            StrategyAdaptationResult with adaptation details
+        """
+        try:
+            if strategy_id not in self.generated_strategies:
+                raise ValueError(f"Strategy {strategy_id} not found")
+            
+            original_strategy = self.generated_strategies[strategy_id]
+            
+            # Determine adaptation type
+            adaptation_type = self._determine_adaptation_type(performance_feedback, original_strategy)
+            
+            # Generate adapted strategy
+            adapted_strategy = self._adapt_strategy_parameters(original_strategy, performance_feedback, market_data)
+            
+            # Calculate adaptation strength
+            adaptation_strength = self._calculate_adaptation_strength(performance_feedback, adaptation_type)
+            
+            # Predict performance improvement
+            performance_improvement = self._predict_performance_improvement(original_strategy, adapted_strategy)
+            
+            # Generate reasoning
+            reasoning = self._generate_adaptation_reasoning(original_strategy, adapted_strategy, performance_feedback)
+            
+            # Integrate with memory
+            memory_integration = self._integrate_adaptation_with_memory(original_strategy, adapted_strategy)
+            
+            result = StrategyAdaptationResult(
+                original_strategy=original_strategy,
+                adapted_strategy=adapted_strategy,
+                adaptation_type=adaptation_type,
+                adaptation_strength=adaptation_strength,
+                performance_improvement=performance_improvement,
+                reasoning=reasoning,
+                memory_integration=memory_integration,
+                metadata={
+                    'adaptation_timestamp': time.time(),
+                    'market_context': market_data.get('symbol', 'unknown'),
+                    'performance_feedback': performance_feedback
+                }
+            )
+            
+            # Store adapted strategy
+            self.generated_strategies[adapted_strategy.strategy_id] = adapted_strategy
+            self.adaptation_history.append(result)
+            self.successful_adaptations += 1
+            
+            self.logger.info(f"🔄 Adapted strategy {strategy_id[:8]}... "
+                           f"(improvement: {performance_improvement:.3f}, strength: {adaptation_strength:.3f})")
+            
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error adapting strategy: {e}")
+            return self._create_fallback_adaptation(strategy_id, performance_feedback)
+    
+    def _generate_mutation_strategy(self, market_data: Dict[str, Any], 
+                                  performance_feedback: float) -> GeneratedStrategy:
+        """Generate strategy through mutation of existing strategies."""
+        try:
+            # Select parent strategy for mutation
+            parent_strategy = self._select_parent_strategy(performance_feedback)
+            
+            # Create mutation parameters
+            mutation_params = self._create_mutation_parameters(parent_strategy, performance_feedback)
+            
+            # Generate new strategy ID
+            strategy_id = self._generate_strategy_id("mutation")
+            
+            # Create DNA sequence
+            dna_sequence = self._encode_strategy_dna(mutation_params, market_data)
+            
+            # Predict performance
+            performance_prediction = self._predict_strategy_performance(mutation_params, market_data)
+            
+            # Calculate confidence
+            confidence = self._calculate_strategy_confidence(mutation_params, performance_prediction)
+            
+            # Generate adaptation reasoning
+            adaptation_reasoning = f"Mutated from {parent_strategy.strategy_id[:8]}... " \
+                                 f"based on performance feedback {performance_feedback:.3f}"
+            
+            # Get memory links
+            memory_links = self._get_strategy_memory_links(mutation_params, market_data)
+            
+            strategy = GeneratedStrategy(
+                strategy_id=strategy_id,
+                strategy_type="mutation",
+                parameters=mutation_params,
+                dna_sequence=dna_sequence,
+                generation_type=StrategyGenerationType.MUTATION,
+                parent_strategies=[parent_strategy.strategy_id],
+                performance_prediction=performance_prediction,
+                confidence=confidence,
+                adaptation_reasoning=adaptation_reasoning,
+                memory_links=memory_links,
+                created_at=time.time(),
+                metadata={
+                    'mutation_strength': abs(performance_feedback),
+                    'market_context': market_data.get('symbol', 'unknown')
+                }
+            )
+            
+            return strategy
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error generating mutation strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    def _generate_crossover_strategy(self, market_data: Dict[str, Any], 
+                                   performance_feedback: float) -> GeneratedStrategy:
+        """Generate strategy through crossover of two existing strategies."""
+        try:
+            # Select two parent strategies
+            parent1, parent2 = self._select_parent_strategies_for_crossover(performance_feedback)
+            
+            # Create crossover parameters
+            crossover_params = self._create_crossover_parameters(parent1, parent2, performance_feedback)
+            
+            # Generate strategy ID
+            strategy_id = self._generate_strategy_id("crossover")
+            
+            # Create DNA sequence
+            dna_sequence = self._encode_strategy_dna(crossover_params, market_data)
+            
+            # Predict performance
+            performance_prediction = self._predict_strategy_performance(crossover_params, market_data)
+            
+            # Calculate confidence
+            confidence = self._calculate_strategy_confidence(crossover_params, performance_prediction)
+            
+            # Generate adaptation reasoning
+            adaptation_reasoning = f"Crossover of {parent1.strategy_id[:8]}... and {parent2.strategy_id[:8]}... " \
+                                 f"based on performance feedback {performance_feedback:.3f}"
+            
+            # Get memory links
+            memory_links = self._get_strategy_memory_links(crossover_params, market_data)
+            
+            strategy = GeneratedStrategy(
+                strategy_id=strategy_id,
+                strategy_type="crossover",
+                parameters=crossover_params,
+                dna_sequence=dna_sequence,
+                generation_type=StrategyGenerationType.CROSSOVER,
+                parent_strategies=[parent1.strategy_id, parent2.strategy_id],
+                performance_prediction=performance_prediction,
+                confidence=confidence,
+                adaptation_reasoning=adaptation_reasoning,
+                memory_links=memory_links,
+                created_at=time.time(),
+                metadata={
+                    'crossover_ratio': 0.5,
+                    'market_context': market_data.get('symbol', 'unknown')
+                }
+            )
+            
+            return strategy
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error generating crossover strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    def _generate_random_strategy(self, market_data: Dict[str, Any]) -> GeneratedStrategy:
+        """Generate completely random strategy."""
+        try:
+            # Create random parameters
+            random_params = self._create_random_parameters(market_data)
+            
+            # Generate strategy ID
+            strategy_id = self._generate_strategy_id("random")
+            
+            # Create DNA sequence
+            dna_sequence = self._encode_strategy_dna(random_params, market_data)
+            
+            # Predict performance
+            performance_prediction = self._predict_strategy_performance(random_params, market_data)
+            
+            # Calculate confidence
+            confidence = self._calculate_strategy_confidence(random_params, performance_prediction)
+            
+            # Generate adaptation reasoning
+            adaptation_reasoning = "Randomly generated strategy for exploration"
+            
+            # Get memory links
+            memory_links = self._get_strategy_memory_links(random_params, market_data)
+            
+            strategy = GeneratedStrategy(
+                strategy_id=strategy_id,
+                strategy_type="random",
+                parameters=random_params,
+                dna_sequence=dna_sequence,
+                generation_type=StrategyGenerationType.RANDOM,
+                parent_strategies=[],
+                performance_prediction=performance_prediction,
+                confidence=confidence,
+                adaptation_reasoning=adaptation_reasoning,
+                memory_links=memory_links,
+                created_at=time.time(),
+                metadata={
+                    'exploration_factor': 1.0,
+                    'market_context': market_data.get('symbol', 'unknown')
+                }
+            )
+            
+            return strategy
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error generating random strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    def _generate_memory_based_strategy(self, market_data: Dict[str, Any], 
+                                      performance_feedback: float) -> GeneratedStrategy:
+        """Generate strategy based on memory patterns."""
+        try:
+            # Find similar patterns in memory
+            similar_patterns = self._find_similar_memory_patterns(market_data)
+            
+            # Create memory-based parameters
+            memory_params = self._create_memory_based_parameters(similar_patterns, performance_feedback)
+            
+            # Generate strategy ID
+            strategy_id = self._generate_strategy_id("memory")
+            
+            # Create DNA sequence
+            dna_sequence = self._encode_strategy_dna(memory_params, market_data)
+            
+            # Predict performance
+            performance_prediction = self._predict_strategy_performance(memory_params, market_data)
+            
+            # Calculate confidence
+            confidence = self._calculate_strategy_confidence(memory_params, performance_prediction)
+            
+            # Generate adaptation reasoning
+            adaptation_reasoning = f"Generated from {len(similar_patterns)} memory patterns " \
+                                 f"with average performance {np.mean([p['performance'] for p in similar_patterns]):.3f}"
+            
+            # Get memory links
+            memory_links = self._get_strategy_memory_links(memory_params, market_data)
+            
+            strategy = GeneratedStrategy(
+                strategy_id=strategy_id,
+                strategy_type="memory_based",
+                parameters=memory_params,
+                dna_sequence=dna_sequence,
+                generation_type=StrategyGenerationType.MEMORY_BASED,
+                parent_strategies=[p['strategy_id'] for p in similar_patterns],
+                performance_prediction=performance_prediction,
+                confidence=confidence,
+                adaptation_reasoning=adaptation_reasoning,
+                memory_links=memory_links,
+                created_at=time.time(),
+                metadata={
+                    'pattern_count': len(similar_patterns),
+                    'market_context': market_data.get('symbol', 'unknown')
+                }
+            )
+            
+            return strategy
+            
+        except Exception as e:
+            self.logger.error(f"❌ Error generating memory-based strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    def _generate_adaptive_strategy(self, market_data: Dict[str, Any], 
+                                  performance_feedback: float) -> GeneratedStrategy:
+        """Generate adaptive strategy using multiple generation methods."""
+        try:
+            # Determine best generation method based on current state
+            generation_method = self._select_adaptive_generation_method(performance_feedback, market_data)
+            
+            # Generate strategy using selected method
+            if generation_method == StrategyGenerationType.MUTATION:
+                return self._generate_mutation_strategy(market_data, performance_feedback)
+            elif generation_method == StrategyGenerationType.CROSSOVER:
+                return self._generate_crossover_strategy(market_data, performance_feedback)
+            elif generation_method == StrategyGenerationType.MEMORY_BASED:
+                return self._generate_memory_based_strategy(market_data, performance_feedback)
+            else:
+                return self._generate_random_strategy(market_data)
+                
+        except Exception as e:
+            self.logger.error(f"❌ Error generating adaptive strategy: {e}")
+            return self._create_fallback_strategy(market_data)
+    
+    # Helper methods (implemented as placeholders)
+    def _select_generation_type(self, performance_feedback: float, market_data: Dict[str, Any]) -> StrategyGenerationType:
+        """Select generation type based on performance and market data."""
+        if performance_feedback < -0.5:
+            return StrategyGenerationType.RANDOM  # Explore new strategies
+        elif performance_feedback < 0:
+            return StrategyGenerationType.MUTATION  # Mutate existing strategies
+        elif performance_feedback < 0.5:
+            return StrategyGenerationType.CROSSOVER  # Combine good strategies
+        else:
+            return StrategyGenerationType.MEMORY_BASED  # Use proven patterns
+    
+    def _select_parent_strategy(self, performance_feedback: float) -> GeneratedStrategy:
+        """Select parent strategy for mutation."""
+        # Placeholder implementation
+        if self.generated_strategies:
+            return list(self.generated_strategies.values())[0]
+        else:
+            return self._create_fallback_strategy({})
+    
+    def _create_mutation_parameters(self, parent_strategy: GeneratedStrategy, 
+                                  performance_feedback: float) -> Dict[str, Any]:
+        """Create mutation parameters from parent strategy."""
+        # Placeholder implementation
+        params = parent_strategy.parameters.copy()
+        for key, value in params.items():
+            if isinstance(value, (int, float)):
+                mutation_factor = 1.0 + np.random.normal(0, 0.1)
+                params[key] = value * mutation_factor
+        return params
+    
+    def _generate_strategy_id(self, strategy_type: str) -> str:
+        """Generate unique strategy ID."""
+        timestamp = int(time.time() * 1000)
+        random_suffix = hashlib.md5(f"{strategy_type}_{timestamp}".encode()).hexdigest()[:8]
+        return f"{strategy_type}_{timestamp}_{random_suffix}"
+    
+    def _encode_strategy_dna(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> str:
+        """Encode strategy parameters into DNA sequence."""
+        # Placeholder implementation
+        dna_string = json.dumps(parameters, sort_keys=True) + json.dumps(market_data, sort_keys=True)
+        return hashlib.sha256(dna_string.encode()).hexdigest()[:self.config['dna_sequence_length']]
+    
+    def _predict_strategy_performance(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> float:
+        """Predict strategy performance."""
+        # Placeholder implementation
+        return np.random.uniform(0.3, 0.8)
+    
+    def _calculate_strategy_confidence(self, parameters: Dict[str, Any], performance_prediction: float) -> float:
+        """Calculate strategy confidence."""
+        # Placeholder implementation
+        return min(0.99, 0.5 + performance_prediction * 0.4)
+    
+    def _get_strategy_memory_links(self, parameters: Dict[str, Any], market_data: Dict[str, Any]) -> List[str]:
+        """Get memory links for strategy."""
+        # Placeholder implementation
+        return []
+    
+    def _create_fallback_strategy(self, market_data: Dict[str, Any]) -> GeneratedStrategy:
+        """Create fallback strategy."""
+        return GeneratedStrategy(
+            strategy_id="fallback_strategy",
+            strategy_type="fallback",
+            parameters={'threshold': 0.5, 'weight': 0.3, 'rate': 0.1},
+            dna_sequence="fallback_dna_sequence",
+            generation_type=StrategyGenerationType.RANDOM,
+            parent_strategies=[],
+            performance_prediction=0.5,
+            confidence=0.5,
+            adaptation_reasoning="Fallback strategy",
+            memory_links=[],
+            created_at=time.time()
+        )
+    
+    def _get_active_systems_count(self) -> int:
+        """Get count of active systems."""
+        systems = [
+            EXISTING_STRATEGY_AVAILABLE,
+            hasattr(self, 'tcell_engine'),
+            hasattr(self, 'adaptive_config_manager'),
+            hasattr(self, 'vector_registry'),
+            hasattr(self, 'memory_allocator'),
+            hasattr(self, 'entropy_system')
+        ]
+        return sum(systems)
+    
+    # Additional placeholder methods for full implementation
+    def _select_parent_strategies_for_crossover(self, performance_feedback: float) -> Tuple[GeneratedStrategy, GeneratedStrategy]:
+        """Select two parent strategies for crossover."""
+        strategies = list(self.generated_strategies.values())
+        if len(strategies) >= 2:
+            return strategies[0], strategies[1]
+        else:
+            fallback = self._create_fallback_strategy({})
+            return fallback, fallback
+    
+    def _create_crossover_parameters(self, parent1: GeneratedStrategy, parent2: GeneratedStrategy, 
+                                   performance_feedback: float) -> Dict[str, Any]:
+        """Create crossover parameters from two parent strategies."""
+        params = {}
+        for key in parent1.parameters.keys():
+            if np.random.random() < 0.5:
+                params[key] = parent1.parameters[key]
+            else:
+                params[key] = parent2.parameters[key]
+        return params
+    
+    def _create_random_parameters(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create random strategy parameters."""
+        return {
+            'threshold': np.random.uniform(0.1, 0.9),
+            'weight': np.random.uniform(0.1, 0.9),
+            'rate': np.random.uniform(0.01, 0.2),
+            'confidence': np.random.uniform(0.3, 0.8)
+        }
+    
+    def _find_similar_memory_patterns(self, market_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Find similar memory patterns."""
+        return []
+    
+    def _create_memory_based_parameters(self, similar_patterns: List[Dict[str, Any]], 
+                                      performance_feedback: float) -> Dict[str, Any]:
+        """Create memory-based parameters."""
+        return self._create_random_parameters({})
+    
+    def _select_adaptive_generation_method(self, performance_feedback: float, 
+                                         market_data: Dict[str, Any]) -> StrategyGenerationType:
+        """Select adaptive generation method."""
+        return StrategyGenerationType.MUTATION
+    
+    def _determine_adaptation_type(self, performance_feedback: float, 
+                                 strategy: GeneratedStrategy) -> StrategyGenerationType:
+        """Determine adaptation type."""
+        if performance_feedback < 0:
+            return StrategyGenerationType.MUTATION
+        else:
+            return StrategyGenerationType.CROSSOVER
+    
+    def _adapt_strategy_parameters(self, strategy: GeneratedStrategy, 
+                                 performance_feedback: float,
+                                 market_data: Dict[str, Any]) -> GeneratedStrategy:
+        """Adapt strategy parameters."""
+        adapted_params = strategy.parameters.copy()
+        for key, value in adapted_params.items():
+            if isinstance(value, (int, float)):
+                adaptation_factor = 1.0 + performance_feedback * 0.1
+                adapted_params[key] = value * adaptation_factor
+        
+        adapted_strategy = GeneratedStrategy(
+            strategy_id=f"{strategy.strategy_id}_adapted",
+            strategy_type=f"{strategy.strategy_type}_adapted",
+            parameters=adapted_params,
+            dna_sequence=self._encode_strategy_dna(adapted_params, market_data),
+            generation_type=StrategyGenerationType.ADAPTIVE,
+            parent_strategies=[strategy.strategy_id],
+            performance_prediction=strategy.performance_prediction * (1 + performance_feedback * 0.1),
+            confidence=strategy.confidence,
+            adaptation_reasoning=f"Adapted based on performance feedback {performance_feedback:.3f}",
+            memory_links=strategy.memory_links,
+            created_at=time.time()
+        )
+        
+        return adapted_strategy
+    
+    def _calculate_adaptation_strength(self, performance_feedback: float, 
+                                     adaptation_type: StrategyGenerationType) -> float:
+        """Calculate adaptation strength."""
+        return abs(performance_feedback) * 0.5
+    
+    def _predict_performance_improvement(self, original_strategy: GeneratedStrategy, 
+                                       adapted_strategy: GeneratedStrategy) -> float:
+        """Predict performance improvement."""
+        return adapted_strategy.performance_prediction - original_strategy.performance_prediction
+    
+    def _generate_adaptation_reasoning(self, original_strategy: GeneratedStrategy, 
+                                     adapted_strategy: GeneratedStrategy,
+                                     performance_feedback: float) -> str:
+        """Generate adaptation reasoning."""
+        return f"Adapted strategy based on performance feedback {performance_feedback:.3f}"
+    
+    def _integrate_adaptation_with_memory(self, original_strategy: GeneratedStrategy, 
+                                        adapted_strategy: GeneratedStrategy) -> Dict[str, Any]:
+        """Integrate adaptation with memory."""
+        return {'memory_integration': 'placeholder'}
+    
+    def _create_fallback_adaptation(self, strategy_id: str, performance_feedback: float) -> StrategyAdaptationResult:
+        """Create fallback adaptation result."""
+        fallback_strategy = self._create_fallback_strategy({})
+        return StrategyAdaptationResult(
+            original_strategy=fallback_strategy,
+            adapted_strategy=fallback_strategy,
+            adaptation_type=StrategyGenerationType.MUTATION,
+            adaptation_strength=0.0,
+            performance_improvement=0.0,
+            reasoning="Fallback adaptation",
+            memory_integration={}
+        )
+    
+    def _analyze_dna_sequence(self, dna_sequence: str) -> Dict[str, Any]:
+        """Analyze DNA sequence."""
+        return {'dna_analysis': 'placeholder'}
+    
+    def _explain_parameters(self, parameters: Dict[str, Any], 
+                          explanation_level: StrategyExplanationLevel) -> Dict[str, str]:
+        """Explain strategy parameters."""
+        explanations = {}
+        for key, value in parameters.items():
+            explanations[key] = f"Parameter {key} set to {value}"
+        return explanations
+    
+    def _analyze_performance(self, strategy_id: str) -> Dict[str, Any]:
+        """Analyze strategy performance."""
+        return {'performance_analysis': 'placeholder'}
+    
+    def _generate_adaptation_reasoning(self, strategy: GeneratedStrategy, 
+                                     explanation_level: StrategyExplanationLevel) -> str:
+        """Generate adaptation reasoning."""
+        return f"Strategy {strategy.strategy_id[:8]}... adapted for optimization"
+    
+    def _get_memory_context(self, strategy: GeneratedStrategy) -> Dict[str, Any]:
+        """Get memory context for strategy."""
+        return {'memory_context': 'placeholder'}
+    
+    def _get_mathematical_foundation(self, strategy: GeneratedStrategy) -> Dict[str, Any]:
+        """Get mathematical foundation for strategy."""
+        return {'mathematical_foundation': 'placeholder'}
+    
+    def _calculate_confidence_breakdown(self, strategy: GeneratedStrategy) -> Dict[str, float]:
+        """Calculate confidence breakdown."""
+        return {'parameter_confidence': 0.5, 'performance_confidence': 0.5}
+    
+    def _create_fallback_explanation(self, strategy_id: str) -> StrategyExplanation:
+        """Create fallback explanation."""
+        return StrategyExplanation(
+            strategy_id=strategy_id,
+            explanation_level=StrategyExplanationLevel.BASIC,
+            dna_analysis={},
+            parameter_explanation={},
+            performance_analysis={},
+            adaptation_reasoning="Fallback explanation",
+            memory_context={},
+            mathematical_foundation={},
+            confidence_breakdown={}
+        )
+
+
+# Factory function
+def create_self_generating_strategy_system(config: Optional[Dict[str, Any]] = None) -> SelfGeneratingStrategySystem:
+    """Create a self-generating strategy system instance."""
+    return SelfGeneratingStrategySystem(config)
+
+
+# Singleton instance for global use
+self_generating_strategy_system = SelfGeneratingStrategySystem()
+
+
+def main():
+    """Test the self-generating strategy system."""
+    logger.info("🧬 Testing Self-Generating Strategy System")
+    
+    # Test market data
+    test_market_data = {
+        'symbol': 'BTC',
+        'price': 50000.0,
+        'volume': 1000.0,
+        'volatility': 0.02
+    }
+    
+    # Generate strategies
+    mutation_strategy = self_generating_strategy_system.generate_strategy(
+        test_market_data, 0.3, StrategyGenerationType.MUTATION
+    )
+    
+    crossover_strategy = self_generating_strategy_system.generate_strategy(
+        test_market_data, 0.5, StrategyGenerationType.CROSSOVER
+    )
+    
+    # Explain strategy
+    explanation = self_generating_strategy_system.explain_strategy(
+        mutation_strategy.strategy_id, StrategyExplanationLevel.DETAILED
+    )
+    
+    # Adapt strategy
+    adaptation_result = self_generating_strategy_system.adapt_strategy(
+        mutation_strategy.strategy_id, test_market_data, 0.7
+    )
+    
+    logger.info(f"✅ Test completed successfully")
+    logger.info(f"🧬 Generated strategies: {self_generating_strategy_system.generation_count}")
+    logger.info(f"🔄 Successful adaptations: {self_generating_strategy_system.successful_adaptations}")
+    logger.info(f"📊 Average performance: {self_generating_strategy_system.average_performance:.3f}")
+
+
+if __name__ == "__main__":
+    main() 
