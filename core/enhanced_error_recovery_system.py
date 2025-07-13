@@ -320,13 +320,38 @@ class SystemHealthMonitor:
     def get_current_health(self) -> SystemHealth:
         """Get current system health"""
         try:
-            # Simplified health metrics
+            # Get real system metrics instead of placeholders
+            try:
+                import psutil
+                
+                # Real system metrics
+                cpu_usage = psutil.cpu_percent(interval=1)
+                memory_usage = psutil.virtual_memory().percent / 100.0
+                disk_usage = psutil.disk_usage('/').percent / 100.0
+                
+                # Network latency (simplified)
+                try:
+                    import socket
+                    start_time = time.time()
+                    socket.create_connection(("8.8.8.8", 53), timeout=1)
+                    network_latency = time.time() - start_time
+                except:
+                    network_latency = 0.1  # Fallback if network test fails
+                    
+            except Exception as e:
+                self.logger.error(f"Error getting system metrics: {e}")
+                # Emergency fallback values
+                cpu_usage = 0.5
+                memory_usage = 0.6
+                disk_usage = 0.4
+                network_latency = 0.1
+                
             health = SystemHealth(
-                cpu_usage=0.5,  # Placeholder
-                memory_usage=0.6,  # Placeholder
-                disk_usage=0.4,  # Placeholder
+                cpu_usage=cpu_usage,
+                memory_usage=memory_usage,
+                disk_usage=disk_usage,
                 gpu_usage=None,
-                network_latency=0.1,  # Placeholder
+                network_latency=network_latency,
                 error_rate=self.error_stats.get('total_errors', 0) / 100.0,
                 recovery_rate=self.error_stats.get('recovery_rate', 0.0),
                 uptime=time.time(),

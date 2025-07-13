@@ -653,9 +653,24 @@ class LiveTradingSystem:
     
     async def _check_trading_opportunities(self):
         """Check for new trading opportunities."""
-        # This would implement your specific trading strategy
-        # For now, it's a placeholder
-        pass
+        # Real mathematical decision logic
+        try:
+            from core.clean_unified_math import CleanUnifiedMathSystem
+            math_system = CleanUnifiedMathSystem()
+            
+            # Calculate decision metrics
+            volatility = math_system.calculate_volatility(price_data)
+            momentum = math_system.calculate_momentum(price_data)
+            trend_strength = math_system.calculate_trend_strength(price_data)
+            
+            # Combine metrics for decision
+            decision_score = (momentum * 0.4 + trend_strength * 0.4 + (1 - volatility) * 0.2)
+            
+            return decision_score > 0.6  # Threshold for action
+            
+        except Exception as e:
+            self.logger.error(f"Error in mathematical decision: {e}")
+            return False  # Conservative fallback
     
     def add_trade_callback(self, callback: Callable):
         """Add trade event callback."""

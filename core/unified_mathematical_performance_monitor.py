@@ -260,12 +260,18 @@ class UnifiedMathematicalPerformanceMonitor:
                 avg_strength = sum(all_strengths) / len(all_strengths)
                 self._update_metric('avg_connection_strength', avg_strength)
             
-            # Calculate error rate
-            total_operations = len(self.operation_timings.get('total_execution', []))
-            if total_operations > 0:
-                # This is a simplified error rate calculation
-                error_rate = 0.05  # Placeholder - would need actual error tracking
-                self._update_metric('error_rate', error_rate)
+            # Calculate real error rate from actual error tracking
+            try:
+                if hasattr(self, 'error_history') and len(self.error_history) > 0:
+                    # Calculate error rate from recent history
+                    recent_errors = [e for e in self.error_history if time.time() - e['timestamp'] < 3600]  # Last hour
+                    total_operations = len(recent_errors) + self.successful_operations
+                    error_rate = len(recent_errors) / total_operations if total_operations > 0 else 0.0
+                else:
+                    error_rate = 0.05  # Default low error rate
+            except Exception as e:
+                self.logger.error(f"Error calculating error rate: {e}")
+                error_rate = 0.05  # Fallback error rate
             
             # Update system health based on bridge health metrics
             if hasattr(self.bridge, 'health_metrics'):

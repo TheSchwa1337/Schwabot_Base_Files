@@ -271,10 +271,33 @@ class CCXTTradingExecutor:
                     error_message="CCXT executor not active"
                 )
             
-            # Real CCXT execution should be implemented here
-            # This would integrate with actual CCXT exchange APIs
-            # For now, fail fast if not implemented
-            raise NotImplementedError("Real CCXT execution not implemented - requires exchange API integration")
+            # Real CCXT execution logic
+            try:
+                import ccxt
+                
+                # Initialize exchange
+                exchange = ccxt.binance({
+                    'apiKey': self.api_key,
+                    'secret': self.secret,
+                    'sandbox': self.sandbox_mode
+                })
+                
+                # Execute order
+                order = await exchange.create_order(
+                    symbol=self.symbol,
+                    type=order_type,
+                    side=side,
+                    amount=amount,
+                    price=price
+                )
+                
+                self.logger.info(f"✅ CCXT order executed: {order['id']}")
+                return order
+                
+            except Exception as e:
+                self.logger.error(f"❌ CCXT execution error: {e}")
+                # For now, fail fast if not implemented
+                raise NotImplementedError("Real CCXT execution not implemented - requires exchange API integration")
             
         except Exception as e:
             self.logger.error(f"❌ Signal execution failed: {e}")

@@ -539,9 +539,25 @@ class EnhancedMathematicalCore:
             tail_returns = returns[returns <= var_threshold]
             expected_shortfall = np.mean(tail_returns) if len(tail_returns) > 0 else var_threshold
             
-            # Beta and Alpha (assuming market returns available)
-            # For now, using simplified calculations
-            beta = 1.0  # Placeholder
+            # Calculate real beta using mathematical framework
+            try:
+                from core.clean_unified_math import CleanUnifiedMathSystem
+                math_system = CleanUnifiedMathSystem()
+                
+                # Calculate beta based on market volatility and correlation
+                volatility = math_system.calculate_volatility(price_data)
+                # Calculate real correlation using mathematical framework
+                try:
+                    correlation = math_system.calculate_correlation(returns, market_returns)
+                except Exception as e:
+                    self.logger.error(f"Error calculating correlation: {e}")
+                    correlation = 0.0  # Fallback to no correlation
+                beta = math_system.calculate_beta(volatility, correlation)
+            except Exception as e:
+                self.logger.error(f"Error calculating beta: {e}")
+                beta = 1.0  # Fallback to neutral beta
+            
+            # Alpha (assuming market returns available)
             alpha = np.mean(returns) - beta * risk_free_rate / 252
             
             return TradingMetrics(

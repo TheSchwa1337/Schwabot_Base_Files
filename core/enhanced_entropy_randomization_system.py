@@ -554,9 +554,25 @@ class EnhancedEntropyRandomizationSystem:
     def _update_memory_entropy(self, market_data: Dict[str, Any], strategy_state: Dict[str, Any]):
         """Update memory entropy source."""
         try:
-            # Memory entropy is updated by integrate_memory_patterns
-            # This is just a placeholder for consistency
-            pass
+            # Real memory entropy calculation based on pattern recognition
+            pattern_hash = self._generate_pattern_hash(market_data)
+            similar_patterns = self._find_similar_patterns(pattern_hash)
+            
+            if similar_patterns:
+                # Calculate memory entropy based on pattern similarity
+                avg_similarity = np.mean([sim for _, sim in similar_patterns])
+                memory_entropy = 1.0 - avg_similarity  # Higher similarity = lower entropy
+            else:
+                # No similar patterns found - high entropy
+                memory_entropy = 0.8
+            
+            # Apply decay factor
+            decay = self._calculate_pattern_decay(pattern_hash)
+            memory_entropy *= decay
+            
+            self.entropy_sources[EntropySource.MEMORY].entropy_value = memory_entropy
+            self.entropy_sources[EntropySource.MEMORY].last_update = time.time()
+            
         except Exception as e:
             self.logger.error(f"❌ Error updating memory entropy: {e}")
     

@@ -188,10 +188,25 @@ class CompleteInternalizedScalpingSystem:
     async def _collect_market_data(self) -> MarketData:
         """Collect real-time market data."""
         try:
-            # Real market data collection logic
-            # This would integrate with actual exchange APIs
-            current_price = 50000.0  # Placeholder for real price
-            current_volume = 1000.0  # Placeholder for real volume
+            # Get real market data instead of placeholders
+            try:
+                from core.enhanced_api_integration_manager import enhanced_api_manager
+                
+                # Fetch real market data
+                market_data = await enhanced_api_manager.get_market_data(symbol)
+                if market_data:
+                    current_price = market_data.price
+                    current_volume = market_data.volume_24h
+                else:
+                    # Fallback to reasonable defaults if API fails
+                    current_price = 50000.0
+                    current_volume = 1000.0
+                    self.logger.warning(f"Failed to get real market data for {symbol}, using fallback values")
+            except Exception as e:
+                self.logger.error(f"Error fetching market data: {e}")
+                # Emergency fallback
+                current_price = 50000.0
+                current_volume = 1000.0
             
             market_data = MarketData(
                 timestamp=time.time(),

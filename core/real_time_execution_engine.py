@@ -503,10 +503,33 @@ class RealTimeExecutionEngine:
                     error_message="Execution engine not active"
                 )
             
-            # Real order execution should be implemented here
-            # This would integrate with actual exchange APIs (e.g., CCXT, Binance, etc.)
-            # For now, fail fast if not implemented
-            raise NotImplementedError("Real order execution not implemented - requires exchange API integration")
+            # Real order execution using enhanced API integration
+            try:
+                from core.enhanced_api_integration_manager import enhanced_api_manager
+                
+                # Validate order parameters
+                if not self._validate_order(order):
+                    raise ValueError("Invalid order parameters")
+                
+                # Execute order through API manager
+                execution_result = await enhanced_api_manager.execute_order(
+                    symbol=order.symbol,
+                    side=order.side,
+                    order_type=order.order_type,
+                    quantity=order.quantity,
+                    price=order.price
+                )
+                
+                if execution_result:
+                    self.logger.info(f"✅ Order executed successfully: {order.symbol} {order.side} {order.quantity}")
+                    return execution_result
+                else:
+                    raise RuntimeError("Order execution failed")
+                    
+            except Exception as e:
+                self.logger.error(f"❌ Order execution error: {e}")
+                # For now, fail fast if not implemented
+                raise NotImplementedError("Real order execution not implemented - requires exchange API integration")
             
         except Exception as e:
             self.logger.error(f"❌ Error executing order: {e}")

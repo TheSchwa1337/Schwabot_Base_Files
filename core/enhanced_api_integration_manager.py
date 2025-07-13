@@ -44,9 +44,11 @@ try:
     import numba
     from numba import cuda
     GPU_AVAILABLE = True
+    logger.info("✅ GPU acceleration available (CuPy + Numba)")
 except ImportError:
     GPU_AVAILABLE = False
     cp = None  # Define cp as None when not available
+    logger.info("⚠️ GPU acceleration not available, using CPU fallback")
 
 logger = logging.getLogger(__name__)
 
@@ -769,29 +771,30 @@ class EnhancedAPIIntegrationManager:
             self.logger.error(f"❌ CPU computation error: {e}")
             return {}
     
-    def _compute_ema_gpu(self, data: cp.ndarray, period: int) -> cp.ndarray:
-        """Compute Exponential Moving Average using GPU."""
+    def _compute_ema_gpu(self, data: np.ndarray, period: int) -> np.ndarray:
+        """Compute EMA using GPU acceleration."""
+        if not self.gpu_available or cp is None:
+            # Fallback to CPU if GPU not available
+            return self._compute_ema_cpu(data, period)
+        
         try:
-            if not self.gpu_available or cp is None:
-                # Fallback to CPU computation
-                return self._compute_ema_cpu(cp.asnumpy(data) if hasattr(data, 'asnumpy') else data, period)
+            # Convert to GPU array
+            gpu_data = cp.asarray(data)
             
+            # Compute EMA on GPU
             alpha = 2.0 / (period + 1)
-            ema = cp.zeros_like(data)
-            ema[0] = data[0]
+            ema = cp.zeros_like(gpu_data)
+            ema[0] = gpu_data[0]
             
-            for i in range(1, len(data)):
-                ema[i] = alpha * data[i] + (1 - alpha) * ema[i-1]
+            for i in range(1, len(gpu_data)):
+                ema[i] = alpha * gpu_data[i] + (1 - alpha) * ema[i-1]
             
-            return ema
+            # Convert back to CPU
+            return cp.asnumpy(ema)
             
         except Exception as e:
-            self.logger.error(f"Error computing EMA on GPU: {e}")
-            # Fallback to CPU
-            if hasattr(data, 'asnumpy'):
-                return self._compute_ema_cpu(data.asnumpy(), period)
-            else:
-                return self._compute_ema_cpu(data, period)
+            self.logger.warning(f"GPU EMA computation failed, falling back to CPU: {e}")
+            return self._compute_ema_cpu(data, period)
     
     def _compute_ema_cpu(self, data: np.ndarray, period: int) -> np.ndarray:
         """Compute Exponential Moving Average on CPU."""

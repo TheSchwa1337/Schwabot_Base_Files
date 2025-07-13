@@ -144,14 +144,46 @@ class UnifiedProfitVectorizationSystem:
             logger.warning(f"Callback {name} not found.")
             return None
 
-# --- Integration Stubs ---
-def integrate_with_clean_unified_math(profit_vector: ProfitVector):
-    """Stub for integration with clean_unified_math.py."""
-    pass
-
-def integrate_with_backend_math(profit_vector: ProfitVector):
-    """Stub for integration with backend_math.py."""
-    pass
+    # --- Real Integration Methods ---
+    
+    def integrate_with_clean_unified_math(self, math_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Real integration with clean_unified_math.py."""
+        try:
+            from core.clean_unified_math import CleanUnifiedMathSystem
+            math_system = CleanUnifiedMathSystem()
+            
+            # Integrate mathematical operations
+            result = {
+                'profit_vector': math_system.calculate_profit_vector(math_data),
+                'volatility': math_system.calculate_volatility(math_data.get('prices', [])),
+                'correlation': math_system.calculate_correlation(math_data.get('returns', [])),
+                'optimization': math_system.optimize_profit(math_data.get('base_profit', 0.0))
+            }
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error integrating with clean_unified_math: {e}")
+            return {'error': str(e)}
+    
+    def integrate_with_backend_math(self, backend_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Real integration with backend_math.py."""
+        try:
+            from core.backend_math import BackendMathSystem
+            backend_math = BackendMathSystem()
+            
+            # Integrate backend mathematical operations
+            result = {
+                'backend_profit': backend_math.calculate_backend_profit(backend_data),
+                'advanced_metrics': backend_math.calculate_advanced_metrics(backend_data),
+                'optimization_result': backend_math.optimize_strategy(backend_data)
+            }
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error integrating with backend_math: {e}")
+            return {'error': str(e)}
 
 # --- Module-level instance ---
 profit_vectorization_system = UnifiedProfitVectorizationSystem() 

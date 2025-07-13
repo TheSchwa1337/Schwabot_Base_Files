@@ -479,8 +479,19 @@ class EntropySignalIntegrator:
         # Calculate latency (simplified)
         latency_ms = signal.metadata.get("processing_time_ms", 0)
         
-        # Calculate routing accuracy (simplified)
-        routing_accuracy = 0.8  # Placeholder
+        # Calculate real routing accuracy based on signal performance
+        try:
+            if hasattr(self, 'signal_history') and len(self.signal_history) > 0:
+                # Calculate accuracy from historical signal performance
+                successful_signals = sum(1 for signal in self.signal_history if signal.get('profit', 0) > 0)
+                total_signals = len(self.signal_history)
+                routing_accuracy = successful_signals / total_signals if total_signals > 0 else 0.8
+            else:
+                # Default accuracy for new systems
+                routing_accuracy = 0.8
+        except Exception as e:
+            self.logger.error(f"Error calculating routing accuracy: {e}")
+            routing_accuracy = 0.8  # Fallback accuracy
         
         # Calculate quantum activation rate
         quantum_activation_rate = 0.6 if signal.quantum_state == "QUANTUM_ACTIVE" else 0.4
