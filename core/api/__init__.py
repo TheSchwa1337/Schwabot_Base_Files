@@ -10,24 +10,39 @@ It exposes the primary classes for easy access from other parts of the
 Schwabot system.
 """
 
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
-from .enums import ConnectionStatus, ExchangeType, OrderSide, OrderType
-from .exchange_connection import ExchangeConnection
+from .data_models import (
+    APICredentials, MarketData, OrderRequest, OrderResponse, 
+    PortfolioPosition, TradingSignal, RiskMetrics, Config, Result
+)
+from .enums import (
+    ConnectionStatus, ExchangeType, OrderSide, OrderType, 
+    DataType, TradingMode, RiskLevel, MarketRegime
+)
+from .exchange_connection import ExchangeConnection, ExchangeManager
 from .integration_manager import ApiIntegrationManager
 
 __all__ = [
     # Enums
     "ExchangeType",
-    "OrderType",
+    "OrderType", 
     "OrderSide",
     "ConnectionStatus",
+    "DataType",
+    "TradingMode",
+    "RiskLevel",
+    "MarketRegime",
     # Data Models
     "APICredentials",
     "MarketData",
     "OrderRequest",
-    "OrderResponse",
+    "OrderResponse", 
     "PortfolioPosition",
+    "TradingSignal",
+    "RiskMetrics",
+    "Config",
+    "Result",
     # Core Classes
     "ExchangeConnection",
+    "ExchangeManager",
     "ApiIntegrationManager",
 ]

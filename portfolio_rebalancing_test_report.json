@@ -1,0 +1,171 @@
+{
+  "test_timestamp": 1752371666.7981467,
+  "test_duration": 175.47539901733398,
+  "overall_success": true,
+  "tests_passed": 6,
+  "total_tests": 6,
+  "test_results": {
+    "exchange_connections": {
+      "success": true,
+      "connected_exchanges": 1,
+      "healthy_exchanges": 1,
+      "status": {
+        "binance": {
+          "exchange": "binance",
+          "status": "CONNECTED",
+          "last_heartbeat": 1752371499.047795,
+          "last_error": null,
+          "reconnect_attempts": 0,
+          "successful_requests": 0,
+          "failed_requests": 0,
+          "success_rate": 0
+        },
+        "coinbase": {
+          "exchange": "coinbase",
+          "status": "ERROR",
+          "last_heartbeat": 0,
+          "last_error": "coinbase does not have a sandbox URL",
+          "reconnect_attempts": 1,
+          "successful_requests": 0,
+          "failed_requests": 0,
+          "success_rate": 0
+        }
+      },
+      "health_check": {
+        "binance": true,
+        "coinbase": false
+      }
+    },
+    "market_data_fetching": {
+      "success": true,
+      "exchanges_with_data": 1,
+      "data_samples": {
+        "binance": {
+          "BTC/USDT": {
+            "symbol": "BTC/USDT",
+            "price": 117618.83,
+            "bid": 117617.0,
+            "ask": 117618.83,
+            "volume": 1452.18965,
+            "high": 200000.0,
+            "low": 30000.0,
+            "change": 8.51,
+            "change_percent": 0.007,
+            "timestamp": 1752371515.940814
+          },
+          "ETH/USDT": {
+            "symbol": "ETH/USDT",
+            "price": 2952.45,
+            "bid": 2952.45,
+            "ask": 3017.01,
+            "volume": 65246.1654,
+            "high": 3044.83,
+            "low": 2000.0,
+            "change": -10.26,
+            "change_percent": -0.346,
+            "timestamp": 1752371516.5096757
+          }
+        }
+      }
+    },
+    "real_time_market_data": {
+      "success": true,
+      "updates_received": 214,
+      "price_cache_size": 2,
+      "connection_status": {
+        "coinbase": "connected",
+        "binance": "disconnected"
+      },
+      "statistics": {
+        "messages_received": 215,
+        "connection_errors": 3,
+        "price_cache_size": 2,
+        "active_callbacks": 1,
+        "last_cleanup": 1752371516.5838275,
+        "is_running": true
+      },
+      "sample_prices": {
+        "BTC/USD": {
+          "price": 117665.79,
+          "volume": 2233.34379261,
+          "bid": 117665.79,
+          "ask": 117665.8,
+          "timestamp": 1752371545.574898,
+          "exchange": "coinbase",
+          "high_24h": 118244.51,
+          "low_24h": 116940.82,
+          "change_24h": 0.0,
+          "change_percent_24h": 0.0
+        },
+        "ETH/USD": {
+          "price": 2953.38,
+          "volume": 59004.96356088,
+          "bid": 2953.38,
+          "ask": 2953.39,
+          "timestamp": 1752371545.930961,
+          "exchange": "coinbase",
+          "high_24h": 2981.01,
+          "low_24h": 2905.29,
+          "change_24h": 0.0,
+          "change_percent_24h": 0.0
+        }
+      }
+    },
+    "portfolio_tracker": {
+      "success": true,
+      "positions_count": 2,
+      "total_value": -7998.9,
+      "rebalancing_enabled": true,
+      "market_data_status": {
+        "binance": "disconnected"
+      },
+      "performance_metrics": {
+        "total_pnl": 0.0,
+        "total_pnl_percentage": 0,
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_value": -7998.9,
+        "rebalancing_efficiency": 0.0,
+        "rebalancing_cost": 0.0,
+        "rebalancing_actions": 0,
+        "price_updates": 0,
+        "uptime": 0
+      }
+    },
+    "rebalancing_logic": {
+      "success": true,
+      "needs_rebalancing": false,
+      "rebalancing_actions_count": 0,
+      "events_triggered": 0,
+      "current_allocation": {},
+      "target_allocation": {
+        "BTC": 0.7,
+        "ETH": 0.3
+      }
+    },
+    "full_integration": {
+      "success": true,
+      "price_updates_received": 431,
+      "rebalancing_events": 0,
+      "portfolio_value": -1279.041,
+      "market_data_connections": {
+        "coinbase": "connected",
+        "binance": "disconnected"
+      },
+      "exchange_connections": 0,
+      "performance_metrics": {
+        "total_pnl": 6719.859,
+        "total_pnl_percentage": 0,
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 6719.859,
+        "total_value": -1279.041,
+        "rebalancing_efficiency": 0.0,
+        "rebalancing_cost": 0.0,
+        "rebalancing_actions": 0,
+        "price_updates": 11,
+        "uptime": 4.866404294967651
+      },
+      "system_uptime": 175.3983030319214
+    }
+  }
+}

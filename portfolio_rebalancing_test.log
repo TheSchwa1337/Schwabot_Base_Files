@@ -1,0 +1,80 @@
+2025-07-12 21:51:31,340 - core.api.exchange_connection - INFO - Exchange connection initialized for binance
+2025-07-12 21:51:31,350 - core.api.exchange_connection - INFO - Exchange connection initialized for coinbase
+2025-07-12 21:51:31,357 - core.api.exchange_connection - INFO - Connecting to binance...
+2025-07-12 21:51:39,063 - core.api.exchange_connection - INFO - Connecting to coinbase...
+2025-07-12 21:51:50,199 - core.api.exchange_connection - INFO - Attempting to reconnect to coinbase (attempt 2)
+2025-07-12 21:51:55,212 - core.api.exchange_connection - INFO - Connecting to coinbase...
+2025-07-12 21:51:56,519 - ccxt.base.exchange - WARNING - binance requires to release all resources with an explicit call to the .close() coroutine. If you are using the exchange instance with async coroutines, add `await exchange.close()` to your code into a place when you're done with the exchange and don't need the exchange instance anymore (at the end of your async coroutine).
+2025-07-12 21:51:56,522 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000002D2563E2F30>
+2025-07-12 21:51:56,523 - asyncio - ERROR - Unclosed connector
+connections: ['[(<aiohttp.client_proto.ResponseHandler object at 0x000002D2594B0170>, 23065.125), (<aiohttp.client_proto.ResponseHandler object at 0x000002D2594B0110>, 23077.281)]', '[(<aiohttp.client_proto.ResponseHandler object at 0x000002D25947FE30>, 23085.218)]']
+connector: <aiohttp.connector.TCPConnector object at 0x000002D258FACB60>
+2025-07-12 21:51:56,543 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-12 21:51:56,544 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-12 21:51:56,544 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-12 21:51:56,544 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-12 21:51:57,665 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:03,607 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:09,569 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:26,570 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-12 21:52:26,609 - core.real_time_market_data_integration - INFO - Closed coinbase WebSocket connection
+2025-07-12 21:52:26,609 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-12 21:52:26,617 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-12 21:52:26,618 - core.enhanced_portfolio_tracker - INFO - Enhanced portfolio tracker initialized
+2025-07-12 21:52:26,618 - core.portfolio_tracker - INFO - Opened position: BTC/USD_1752371546_buy Position(symbol='BTC/USD', quantity=Decimal('0.1'), avg_price=Decimal('50000'), current_price=Decimal('50000'), side='buy', entry_time=1752371546.6189811, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:52:26,619 - core.portfolio_tracker - INFO - Opened position: ETH/USD_1752371546_buy Position(symbol='ETH/USD', quantity=Decimal('1.0'), avg_price=Decimal('3000'), current_price=Decimal('3000'), side='buy', entry_time=1752371546.6199808, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:52:26,620 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-12 21:52:26,620 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-12 21:52:26,621 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-12 21:52:27,579 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:33,463 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:39,406 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:45,372 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 4): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:46,639 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-12 21:52:46,640 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-12 21:52:46,655 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-12 21:52:46,657 - core.enhanced_portfolio_tracker - INFO - Enhanced portfolio tracker initialized
+2025-07-12 21:52:46,657 - core.portfolio_tracker - INFO - Opened position: BTC/USD_1752371566_buy Position(symbol='BTC/USD', quantity=Decimal('0.05'), avg_price=Decimal('50000'), current_price=Decimal('50000'), side='buy', entry_time=1752371566.6579905, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:52:46,658 - core.portfolio_tracker - INFO - Opened position: ETH/USD_1752371566_buy Position(symbol='ETH/USD', quantity=Decimal('2.0'), avg_price=Decimal('3000'), current_price=Decimal('3000'), side='buy', entry_time=1752371566.658989, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:52:46,659 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-12 21:52:46,659 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-12 21:52:46,659 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-12 21:52:46,669 - core.enhanced_portfolio_tracker - INFO - Added rebalancing callback, total callbacks: 1
+2025-07-12 21:52:47,616 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:53,488 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:52:59,425 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:05,408 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 4): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:11,272 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 5): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:17,206 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 6): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:23,076 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 7): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:26,701 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-12 21:53:26,701 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-12 21:53:26,715 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-12 21:53:26,716 - core.enhanced_portfolio_tracker - INFO - Enhanced portfolio tracker initialized
+2025-07-12 21:53:26,717 - core.portfolio_tracker - INFO - Opened position: BTC/USD_1752371606_buy Position(symbol='BTC/USD', quantity=Decimal('0.1'), avg_price=Decimal('50000'), current_price=Decimal('50000'), side='buy', entry_time=1752371606.7166939, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:53:26,717 - core.portfolio_tracker - INFO - Opened position: ETH/USD_1752371606_buy Position(symbol='ETH/USD', quantity=Decimal('1.0'), avg_price=Decimal('3000'), current_price=Decimal('3000'), side='buy', entry_time=1752371606.7176933, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-12 21:53:26,718 - core.enhanced_portfolio_tracker - INFO - Added price update callback, total callbacks: 1
+2025-07-12 21:53:26,718 - core.enhanced_portfolio_tracker - INFO - Added rebalancing callback, total callbacks: 1
+2025-07-12 21:53:26,719 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-12 21:53:26,719 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-12 21:53:26,719 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-12 21:53:28,764 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:34,671 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:40,557 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:46,419 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 4): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:52,378 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 5): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:53:58,251 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 6): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:54:04,151 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 7): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:54:10,047 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 8): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:54:15,885 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 9): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:54:21,763 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 10): server rejected WebSocket connection: HTTP 451
+2025-07-12 21:54:26,738 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-12 21:54:26,780 - core.real_time_market_data_integration - INFO - Closed coinbase WebSocket connection
+2025-07-12 21:54:26,781 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-12 21:54:26,801 - __main__ - INFO - ============================================================
+2025-07-12 21:54:26,809 - __main__ - INFO - ============================================================
+2025-07-12 21:54:26,816 - __main__ - INFO - Tests Passed: 6/6
+2025-07-12 21:54:26,817 - __main__ - INFO - Test Duration: 175.48 seconds
+2025-07-12 21:54:26,817 - __main__ - INFO - ============================================================
+2025-07-12 21:54:26,863 - __main__ - INFO - ============================================================
