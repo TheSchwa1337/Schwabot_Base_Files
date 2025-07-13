@@ -287,27 +287,29 @@ class EntropyEnhancedTradingExecutor:
             raise
 
     async def execute_trading_cycle(self) -> TradingResult:
-        """
-        Execute a complete trading cycle with entropy enhancement.
-
-        Returns:
-            TradingResult: Result of the trading cycle
-        """
+        """Execute a complete trading cycle with portfolio integration."""
         try:
             self.trading_state = TradingState.ANALYZING
-
-            # 1. Collect market data
+            
+            # Step 1: Sync portfolio with exchange (if available)
+            await self.sync_portfolio_with_exchange()
+            
+            # Step 2: Collect market data
             market_data = await self._collect_market_data()
-
-            # 2. Process entropy signals
+            
+            # Step 3: Update position prices with current market data
+            price_data = {'BTC/USDC': market_data.current_price}
+            await self.update_position_prices(price_data)
+            
+            # Step 4: Process entropy signals
             entropy_result = await self._process_entropy_signals(market_data)
-
-            # 3. Generate strategy decision
+            
+            # Step 5: Generate trading decision
             decision = await self._generate_trading_decision(market_data, entropy_result)
-
-            # 4. Risk assessment
+            
+            # Step 6: Assess risk
             if not self._assess_risk(decision):
-                logger.warning("⚠️ Risk assessment failed - skipping trade")
+                logger.info(f"🚫 Risk assessment failed for {decision.action.value}")
                 return TradingResult(
                     success=False,
                     order_id=None,
@@ -315,21 +317,24 @@ class EntropyEnhancedTradingExecutor:
                     executed_quantity=0.0,
                     fees=0.0,
                     timestamp=time.time(),
-                    action=TradingAction.HOLD,
+                    action=decision.action,
                     metadata={'reason': 'risk_assessment_failed'}
                 )
-
-            # 5. Execute trade
+            
+            # Step 7: Execute trade
             self.trading_state = TradingState.EXECUTING
             result = await self._execute_trade(decision)
-
-            # 6. Update portfolio and metrics
+            
+            # Step 8: Update portfolio and performance metrics
             self._update_portfolio(result)
             self._update_performance_metrics(result)
-
+            
+            # Step 9: Update trading state
             self.trading_state = TradingState.IDLE
+            self.last_trade_time = time.time()
+            
             return result
-
+            
         except Exception as e:
             logger.error(f"❌ Trading cycle failed: {e}")
             self.trading_state = TradingState.ERROR
@@ -609,11 +614,79 @@ class EntropyEnhancedTradingExecutor:
             )
 
     def _update_portfolio(self, result: TradingResult) -> None:
-        """Update portfolio with trade result."""
+        """Update portfolio with trade result using production-ready portfolio tracker."""
         try:
-            if PORTFOLIO_AVAILABLE:
-                # Use core portfolio tracker
-                pass
+            if not result.success or result.executed_quantity <= 0:
+                return
+
+            symbol = 'BTC/USDC'
+            
+            if PORTFOLIO_AVAILABLE and hasattr(self, 'portfolio_tracker'):
+                # Use production-ready portfolio tracker
+                if result.action == TradingAction.BUY:
+                    # Opening a long position
+                    pos_id = self.portfolio_tracker.open_position(
+                        symbol=symbol,
+                        quantity=result.executed_quantity,
+                        price=result.executed_price,
+                        side='buy',
+                        metadata={
+                            'order_id': result.order_id,
+                            'fees': result.fees,
+                            'timestamp': result.timestamp,
+                            'entropy_score': getattr(result, 'entropy_score', 0.0),
+                            'strategy_id': getattr(result, 'strategy_id', 'unknown')
+                        }
+                    )
+                    logger.info(f"📈 Opened long position: {pos_id} - {result.executed_quantity} BTC at ${result.executed_price}")
+                    
+                elif result.action == TradingAction.SELL:
+                    # Check if we have open positions to close
+                    open_positions = [pos_id for pos_id, pos in self.portfolio_tracker.positions.items() 
+                                    if pos.symbol == symbol and pos.side == 'buy' and not pos.closed]
+                    
+                    if open_positions:
+                        # Close existing long positions
+                        for pos_id in open_positions:
+                            closed_pos = self.portfolio_tracker.close_position(pos_id, result.executed_price)
+                            if closed_pos:
+                                logger.info(f"📉 Closed long position: {pos_id} - {closed_pos.quantity} BTC at ${result.executed_price}")
+                                logger.info(f"💰 Realized PnL: ${float(closed_pos.realized_pnl):.2f}")
+                    else:
+                        # Opening a short position (if supported)
+                        pos_id = self.portfolio_tracker.open_position(
+                            symbol=symbol,
+                            quantity=result.executed_quantity,
+                            price=result.executed_price,
+                            side='sell',
+                            metadata={
+                                'order_id': result.order_id,
+                                'fees': result.fees,
+                                'timestamp': result.timestamp,
+                                'entropy_score': getattr(result, 'entropy_score', 0.0),
+                                'strategy_id': getattr(result, 'strategy_id', 'unknown')
+                            }
+                        )
+                        logger.info(f"📉 Opened short position: {pos_id} - {result.executed_quantity} BTC at ${result.executed_price}")
+                
+                # Record transaction
+                self.portfolio_tracker.record_transaction({
+                    'timestamp': result.timestamp,
+                    'action': result.action.value,
+                    'symbol': symbol,
+                    'quantity': result.executed_quantity,
+                    'price': result.executed_price,
+                    'fees': result.fees,
+                    'order_id': result.order_id,
+                    'success': result.success
+                })
+                
+                # Update portfolio summary
+                summary = self.portfolio_tracker.get_portfolio_summary()
+                logger.info(f"💼 Portfolio Summary - Total Value: ${summary['total_value']:.2f}, "
+                          f"Realized PnL: ${summary['realized_pnl']:.2f}, "
+                          f"Unrealized PnL: ${summary['unrealized_pnl']:.2f}")
+                
             else:
                 # Use fallback portfolio tracker
                 if result.success and result.executed_quantity > 0:
@@ -624,6 +697,75 @@ class EntropyEnhancedTradingExecutor:
 
         except Exception as e:
             logger.error(f"❌ Failed to update portfolio: {e}")
+            # Log detailed error for debugging
+            import traceback
+            logger.error(f"Portfolio update error details: {traceback.format_exc()}")
+
+    async def sync_portfolio_with_exchange(self) -> None:
+        """Synchronize portfolio balances with exchange."""
+        try:
+            if not hasattr(self, 'exchange') or not self.exchange:
+                logger.warning("⚠️ No exchange connection available for portfolio sync")
+                return
+                
+            if PORTFOLIO_AVAILABLE and hasattr(self, 'portfolio_tracker'):
+                # Fetch current balances from exchange
+                balance = await self.exchange.fetch_balance()
+                
+                # Update portfolio tracker with real exchange balances
+                self.portfolio_tracker.sync_balances(balance)
+                
+                logger.info(f"🔄 Portfolio synchronized with exchange")
+                
+                # Log current balances
+                summary = self.portfolio_tracker.get_portfolio_summary()
+                logger.info(f"💰 Exchange Balances: {summary['balances']}")
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to sync portfolio with exchange: {e}")
+
+    async def update_position_prices(self, price_data: Dict[str, float]) -> None:
+        """Update position prices with current market data."""
+        try:
+            if PORTFOLIO_AVAILABLE and hasattr(self, 'portfolio_tracker'):
+                # Update unrealized PnL for all open positions
+                self.portfolio_tracker.update_prices(price_data)
+                
+                # Log position updates
+                for pos_id, position in self.portfolio_tracker.positions.items():
+                    if not position.closed:
+                        logger.debug(f"📊 Position {pos_id}: {position.symbol} - "
+                                   f"Unrealized PnL: ${float(position.unrealized_pnl):.2f}")
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to update position prices: {e}")
+
+    def get_portfolio_status(self) -> Dict[str, Any]:
+        """Get comprehensive portfolio status."""
+        try:
+            if PORTFOLIO_AVAILABLE and hasattr(self, 'portfolio_tracker'):
+                summary = self.portfolio_tracker.get_portfolio_summary()
+                
+                # Add additional portfolio metrics
+                open_positions_count = len([p for p in self.portfolio_tracker.positions.values() if not p.closed])
+                closed_positions_count = len(self.portfolio_tracker.closed_positions)
+                
+                return {
+                    **summary,
+                    'open_positions_count': open_positions_count,
+                    'closed_positions_count': closed_positions_count,
+                    'total_transactions': len(self.portfolio_tracker.transaction_history),
+                    'last_sync': self.portfolio_tracker.last_update
+                }
+            else:
+                return {
+                    'error': 'Portfolio tracker not available',
+                    'fallback_total_value': getattr(self.portfolio_tracker, 'total_value', 0.0)
+                }
+                
+        except Exception as e:
+            logger.error(f"❌ Failed to get portfolio status: {e}")
+            return {'error': str(e)}
 
     def _update_performance_metrics(self, result: TradingResult) -> None:
         """Update performance metrics."""
@@ -635,15 +777,20 @@ class EntropyEnhancedTradingExecutor:
                 self.successful_trades += 1
                 self.performance_metrics['successful_trades'] += 1
 
-                # Calculate profit
-                if result.action == TradingAction.BUY:
-                    profit = result.executed_quantity * (result.executed_price - self.current_position)
-                elif result.action == TradingAction.SELL:
-                    profit = result.executed_quantity * (self.current_position - result.executed_price)
+                # Calculate profit using portfolio tracker if available
+                if PORTFOLIO_AVAILABLE and hasattr(self, 'portfolio_tracker'):
+                    # Use portfolio tracker for accurate profit calculation
+                    summary = self.portfolio_tracker.get_portfolio_summary()
+                    self.performance_metrics['total_profit'] = summary['realized_pnl']
                 else:
-                    profit = 0.0
-
-                self.performance_metrics['total_profit'] += profit
+                    # Fallback profit calculation
+                    if result.action == TradingAction.BUY:
+                        profit = result.executed_quantity * (result.executed_price - self.current_position)
+                    elif result.action == TradingAction.SELL:
+                        profit = result.executed_quantity * (self.current_position - result.executed_price)
+                    else:
+                        profit = 0.0
+                    self.performance_metrics['total_profit'] += profit
 
             # Update current position
             if result.action == TradingAction.BUY:

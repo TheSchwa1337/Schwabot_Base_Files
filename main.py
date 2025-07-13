@@ -60,6 +60,7 @@ class SchwabotCLI:
             from core.risk_manager import RiskManager
             from core.unified_btc_trading_pipeline import create_btc_trading_pipeline
             from core.pure_profit_calculator import PureProfitCalculator
+            from core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
             
             # Initialize components
             self.trading_executor = None
@@ -74,6 +75,9 @@ class SchwabotCLI:
                 'position_size': 0.1
             }
             self.profit_calculator = PureProfitCalculator(strategy_params)
+            
+            # Initialize production pipeline (will be configured when needed)
+            self.production_pipeline = None
             
             logger.info("Core components initialized successfully")
             
@@ -413,6 +417,184 @@ class SchwabotCLI:
             logger.error(f"Live trading failed: {e}")
             self.live_trading_active = False
     
+    async def start_production_trading(self, config_path: Optional[str] = None) -> None:
+        """Start production trading with real API keys and portfolio management."""
+        logger.info("🚀 STARTING PRODUCTION TRADING SYSTEM")
+        logger.info("=" * 60)
+        
+        try:
+            # Load configuration
+            if config_path:
+                config = self._load_production_config(config_path)
+            else:
+                config = self._get_production_config()
+            
+            # Create production pipeline
+            self.production_pipeline = create_production_pipeline(
+                exchange_name=config['exchange_name'],
+                api_key=config['api_key'],
+                secret=config['secret'],
+                sandbox=config.get('sandbox', True),
+                symbols=config.get('symbols', ['BTC/USDC']),
+                risk_tolerance=config.get('risk_tolerance', 0.2),
+                max_position_size=config.get('max_position_size', 0.1),
+                max_daily_loss=config.get('max_daily_loss', 0.05)
+            )
+            
+            logger.info(f"✅ Production pipeline created for {config['exchange_name']}")
+            logger.info(f"📊 Trading symbols: {config.get('symbols', ['BTC/USDC'])}")
+            logger.info(f"⚠️ Risk tolerance: {config.get('risk_tolerance', 0.2)}")
+            logger.info(f"💰 Max position size: {config.get('max_position_size', 0.1)}")
+            
+            # Start trading
+            self.live_trading_active = True
+            await self.production_pipeline.start_trading()
+            
+        except Exception as e:
+            logger.error(f"❌ Production trading failed: {e}")
+            self.live_trading_active = False
+            raise
+
+    def _load_production_config(self, config_path: str) -> Dict[str, Any]:
+        """Load production configuration from file."""
+        try:
+            import yaml
+            with open(config_path, 'r') as f:
+                config = yaml.safe_load(f)
+            
+            # Validate required fields
+            required_fields = ['exchange_name', 'api_key', 'secret']
+            for field in required_fields:
+                if field not in config:
+                    raise ValueError(f"Missing required field: {field}")
+            
+            return config
+            
+        except Exception as e:
+            logger.error(f"Failed to load production config: {e}")
+            raise
+
+    def _get_production_config(self) -> Dict[str, Any]:
+        """Get production configuration interactively or from environment."""
+        try:
+            # Try to load from environment variables
+            import os
+            
+            config = {
+                'exchange_name': os.getenv('SCHWABOT_EXCHANGE', 'coinbase'),
+                'api_key': os.getenv('SCHWABOT_API_KEY'),
+                'secret': os.getenv('SCHWABOT_SECRET'),
+                'sandbox': os.getenv('SCHWABOT_SANDBOX', 'true').lower() == 'true',
+                'symbols': os.getenv('SCHWABOT_SYMBOLS', 'BTC/USDC').split(','),
+                'risk_tolerance': float(os.getenv('SCHWABOT_RISK_TOLERANCE', '0.2')),
+                'max_position_size': float(os.getenv('SCHWABOT_MAX_POSITION_SIZE', '0.1')),
+                'max_daily_loss': float(os.getenv('SCHWABOT_MAX_DAILY_LOSS', '0.05'))
+            }
+            
+            # Validate API keys
+            if not config['api_key'] or not config['secret']:
+                logger.warning("⚠️ API keys not found in environment variables")
+                logger.info("Please set SCHWABOT_API_KEY and SCHWABOT_SECRET environment variables")
+                logger.info("Or provide a configuration file with --config")
+                raise ValueError("API keys required for production trading")
+            
+            return config
+            
+        except Exception as e:
+            logger.error(f"Failed to get production config: {e}")
+            raise
+
+    async def stop_production_trading(self) -> None:
+        """Stop production trading and export final report."""
+        if not self.production_pipeline:
+            logger.warning("⚠️ No production pipeline active")
+            return
+        
+        try:
+            logger.info("🛑 Stopping production trading...")
+            await self.production_pipeline.stop_trading()
+            
+            # Export final report
+            report = self.production_pipeline.export_trading_report()
+            
+            # Save report to file
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            report_path = f"trading_report_{timestamp}.json"
+            
+            with open(report_path, 'w') as f:
+                json.dump(report, f, indent=2, default=str)
+            
+            logger.info(f"📊 Trading report saved to: {report_path}")
+            logger.info(f"💰 Final PnL: ${report['system_status']['performance']['total_pnl']:.2f}")
+            logger.info(f"📈 Total trades: {report['system_status']['performance']['total_trades']}")
+            
+            self.live_trading_active = False
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to stop production trading: {e}")
+
+    def get_production_status(self) -> Dict[str, Any]:
+        """Get production trading system status."""
+        if not self.production_pipeline:
+            return {'error': 'No production pipeline active'}
+        
+        try:
+            return self.production_pipeline.get_system_status()
+        except Exception as e:
+            return {'error': str(e)}
+
+    async def sync_production_portfolio(self) -> None:
+        """Manually sync production portfolio with exchange."""
+        if not self.production_pipeline:
+            logger.warning("⚠️ No production pipeline active")
+            return
+        
+        try:
+            logger.info("🔄 Syncing production portfolio...")
+            await self.production_pipeline.sync_portfolio()
+            
+            status = self.production_pipeline.get_system_status()
+            portfolio = status['portfolio']
+            
+            logger.info(f"💰 Portfolio Value: ${portfolio['total_value']:.2f}")
+            logger.info(f"📈 Realized PnL: ${portfolio['realized_pnl']:.2f}")
+            logger.info(f"📊 Unrealized PnL: ${portfolio['unrealized_pnl']:.2f}")
+            logger.info(f"🔢 Open Positions: {portfolio['open_positions_count']}")
+            
+        except Exception as e:
+            logger.error(f"❌ Portfolio sync failed: {e}")
+
+    def export_production_report(self) -> Dict[str, Any]:
+        """Export comprehensive production trading report."""
+        if not self.production_pipeline:
+            return {'error': 'No production pipeline active'}
+        
+        try:
+            report = self.production_pipeline.export_trading_report()
+            
+            # Save to file with timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            report_path = f"production_report_{timestamp}.json"
+            
+            with open(report_path, 'w') as f:
+                json.dump(report, f, indent=2, default=str)
+            
+            logger.info(f"📊 Production report saved to: {report_path}")
+            
+            return {
+                'report_path': report_path,
+                'summary': {
+                    'total_trades': report['system_status']['performance']['total_trades'],
+                    'win_rate': report['system_status']['performance']['win_rate'],
+                    'total_pnl': report['system_status']['performance']['total_pnl'],
+                    'portfolio_value': report['system_status']['portfolio']['total_value']
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to export production report: {e}")
+            return {'error': str(e)}
+    
     def _get_default_config(self) -> Dict[str, Any]:
         """Get default configuration for live trading."""
         return {
@@ -563,6 +745,14 @@ async def main():
     parser.add_argument('--error-log-limit', type=int, default=100, help='Limit for error log entries')
     parser.add_argument('--reset-circuit-breakers', action='store_true', help='Reset all circuit breakers')
     
+    # Production trading commands
+    parser.add_argument('--production', action='store_true', help='Start production trading with real API keys')
+    parser.add_argument('--production-config', type=str, help='Production configuration file')
+    parser.add_argument('--stop-production', action='store_true', help='Stop production trading')
+    parser.add_argument('--production-status', action='store_true', help='Get production trading status')
+    parser.add_argument('--sync-portfolio', action='store_true', help='Sync production portfolio with exchange')
+    parser.add_argument('--export-report', action='store_true', help='Export production trading report')
+    
     args = parser.parse_args()
     
     # Initialize CLI
@@ -570,39 +760,92 @@ async def main():
     
     try:
         if args.run_tests:
+            # Run comprehensive tests
             results = await cli.run_comprehensive_tests()
             print(json.dumps(results, indent=2))
-        
+            
         elif args.backtest:
+            # Run backtest
             results = await cli.run_backtest(args.backtest_days)
             print(json.dumps(results, indent=2))
-        
+            
         elif args.live:
+            # Start live trading
             await cli.start_live_trading(args.config)
-        
+            
+        elif args.production:
+            # Start production trading
+            await cli.start_production_trading(args.production_config)
+            
+        elif args.stop_production:
+            # Stop production trading
+            await cli.stop_production_trading()
+            
+        elif args.production_status:
+            # Get production status
+            status = cli.get_production_status()
+            print(json.dumps(status, indent=2))
+            
+        elif args.sync_portfolio:
+            # Sync production portfolio
+            await cli.sync_production_portfolio()
+            
+        elif args.export_report:
+            # Export production report
+            report = cli.export_production_report()
+            print(json.dumps(report, indent=2))
+            
         elif args.hash_log:
+            # Log hash decisions
             cli.log_hash_decisions(args.symbol)
-        
+            
         elif args.fetch_hash_decision:
+            # Fetch hash decisions
             decisions = cli.fetch_hash_decisions()
             print(json.dumps(decisions, indent=2))
-        
+            
         elif args.system_status:
+            # Get system status
             status = cli.get_system_status()
             print(json.dumps(status, indent=2))
-        
+            
         elif args.error_log:
+            # Get error log
             errors = cli.get_error_log(args.error_log_limit)
             print(json.dumps(errors, indent=2))
-        
+            
         elif args.reset_circuit_breakers:
+            # Reset circuit breakers
             cli.reset_circuit_breakers()
-        
+            
         else:
+            # Show help if no arguments provided
             parser.print_help()
-    
+            print("\n🚀 Schwabot Production Trading System")
+            print("=" * 50)
+            print("Available commands:")
+            print("  --production              Start production trading with real API keys")
+            print("  --production-config FILE  Use configuration file for production trading")
+            print("  --stop-production         Stop production trading and export report")
+            print("  --production-status       Get production trading status")
+            print("  --sync-portfolio          Sync portfolio with exchange")
+            print("  --export-report           Export comprehensive trading report")
+            print("\nEnvironment Variables:")
+            print("  SCHWABOT_EXCHANGE         Exchange name (default: coinbase)")
+            print("  SCHWABOT_API_KEY          API key for exchange")
+            print("  SCHWABOT_SECRET           Secret key for exchange")
+            print("  SCHWABOT_SANDBOX          Use sandbox mode (default: true)")
+            print("  SCHWABOT_SYMBOLS          Trading symbols (default: BTC/USDC)")
+            print("  SCHWABOT_RISK_TOLERANCE   Risk tolerance (default: 0.2)")
+            print("  SCHWABOT_MAX_POSITION_SIZE Max position size (default: 0.1)")
+            print("  SCHWABOT_MAX_DAILY_LOSS   Max daily loss (default: 0.05)")
+            
+    except KeyboardInterrupt:
+        logger.info("🛑 Interrupted by user")
+        if cli.live_trading_active:
+            await cli.stop_production_trading()
     except Exception as e:
-        logger.error(f"CLI execution failed: {e}")
+        logger.error(f"❌ CLI execution failed: {e}")
         sys.exit(1)
 
 
