@@ -727,6 +727,75 @@ class SchwabotCLI:
             
         except Exception as e:
             logger.error(f"Failed to reset circuit breakers: {e}")
+    
+    def get_help_text(self) -> str:
+        """Get comprehensive help text for the CLI."""
+        help_text = """
+🚀 SCHWABOT UNIFIED CLI - PRODUCTION TRADING SYSTEM
+==================================================
+
+AVAILABLE COMMANDS:
+------------------
+--run-tests                    Run comprehensive system tests
+--backtest                    Run backtest simulation
+--backtest-days DAYS          Number of days for backtest (default: 30)
+--live                        Start live trading (demo mode)
+--config FILE                 Configuration file for live trading
+--production                  Start production trading with real API keys
+--production-config FILE      Production configuration file
+--stop-production             Stop production trading and export report
+--production-status           Get production trading status
+--sync-portfolio              Sync portfolio with exchange
+--export-report               Export comprehensive trading report
+
+HASH-BASED DECISIONS:
+--------------------
+--hash-log                    Log hash decisions for symbol
+--symbol SYMBOL               Trading symbol (default: BTC/USDT)
+--fetch-hash-decision         Fetch hash-based decisions
+
+SYSTEM MANAGEMENT:
+-----------------
+--system-status               Get comprehensive system status
+--error-log                   Get error log entries
+--error-log-limit LIMIT       Limit for error log entries (default: 100)
+--reset-circuit-breakers      Reset all circuit breakers
+
+ENVIRONMENT VARIABLES:
+---------------------
+SCHWABOT_EXCHANGE             Exchange name (default: coinbase)
+SCHWABOT_API_KEY              API key for exchange
+SCHWABOT_SECRET               Secret key for exchange
+SCHWABOT_SANDBOX              Use sandbox mode (default: true)
+SCHWABOT_SYMBOLS              Trading symbols (default: BTC/USDC)
+SCHWABOT_RISK_TOLERANCE       Risk tolerance (default: 0.2)
+SCHWABOT_MAX_POSITION_SIZE    Max position size (default: 0.1)
+SCHWABOT_MAX_DAILY_LOSS       Max daily loss (default: 0.05)
+
+EXAMPLES:
+---------
+python main.py --run-tests                    # Run system tests
+python main.py --backtest --backtest-days 60  # 60-day backtest
+python main.py --production                   # Start production trading
+python main.py --system-status                # Check system health
+"""
+        return help_text
+    
+    def get_platform_info(self) -> Dict[str, Any]:
+        """Get platform-specific information."""
+        import platform
+        import sys
+        
+        return {
+            "platform": sys.platform,
+            "os_name": platform.system(),
+            "os_version": platform.version(),
+            "python_version": sys.version,
+            "architecture": platform.architecture(),
+            "processor": platform.processor(),
+            "machine": platform.machine(),
+            "node": platform.node()
+        }
 
 
 async def main():
