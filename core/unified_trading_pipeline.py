@@ -28,8 +28,11 @@ import asyncio
 import logging
 import time
 import hashlib
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass
+import json
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from enum import Enum
+import numpy as np
 
 # Core components
 from core.trade_registry import canonical_trade_registry
@@ -60,6 +63,9 @@ except ImportError:
     FUSION_CORE_AVAILABLE = False
     logger = logging.getLogger(__name__)
     logger.warning("Math + Memory Fusion Core not available - using fallback mode")
+
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -534,7 +540,7 @@ class UnifiedTradingPipeline:
         """Generate canonical hash for trade tracking."""
         try:
             hash_data = f"{signal.symbol}_{signal.action}_{signal.entry_price}_{signal.timestamp}"
-            return hashlib.md5(hash_data.encode()).hexdigest()[:8]
+            return generate_hash_from_string(hash_data)[:8]
         except Exception as e:
             logger.error(f"Error generating canonical hash: {e}")
             return "unknown"
@@ -544,7 +550,7 @@ class UnifiedTradingPipeline:
         try:
             if signal.profit_vectors:
                 vector_data = "_".join([str(v.profit) for v in signal.profit_vectors])
-                return hashlib.md5(vector_data.encode()).hexdigest()[:8]
+                return generate_hash_from_string(vector_data)[:8]
             return "no_vectors"
         except Exception as e:
             logger.error(f"Error generating profit vector hash: {e}")
@@ -554,7 +560,7 @@ class UnifiedTradingPipeline:
         """Generate soulprint hash for long-term memory."""
         try:
             soulprint_data = f"{signal.strategy_id}_{signal.confidence}_{signal.entropy_correction}_{signal.timestamp}"
-            return hashlib.md5(soulprint_data.encode()).hexdigest()[:8]
+            return generate_hash_from_string(soulprint_data)[:8]
         except Exception as e:
             logger.error(f"Error generating soulprint hash: {e}")
             return "unknown"

@@ -23,6 +23,9 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
 logger = logging.getLogger(__name__)
 
 # Import Schwabot mathematical components
@@ -228,12 +231,12 @@ class ProfitFeedbackEngine:
                 feedback_data += f":{hash(str(market_data))}"
             
             # Generate SHA-256 hash
-            feedback_hash = hashlib.sha256(feedback_data.encode()).hexdigest()
+            feedback_hash = generate_hash_from_string(feedback_data)
             return feedback_hash
             
         except Exception as e:
             logger.error(f"❌ Error generating feedback hash: {e}")
-            return hashlib.sha256(str(time.time()).encode()).hexdigest()
+            return generate_hash_from_string(str(time.time()))
     
     def _generate_registry_update(self, strategy_result: StrategyResult, 
                                  feedback_hash: str) -> Dict[str, Any]:

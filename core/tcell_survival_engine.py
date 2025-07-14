@@ -30,6 +30,9 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
 logger = logging.getLogger(__name__)
 
 class TCellState(Enum):
@@ -454,7 +457,7 @@ class TCellSurvivalEngine:
                           f"{params['timestamp']}"
             
             # Generate SHA-256 hash
-            return hashlib.sha256(param_string.encode()).hexdigest()
+            return generate_hash_from_string(param_string)
             
         except Exception as e:
             self.logger.error(f"Error generating strategy hash: {e}")

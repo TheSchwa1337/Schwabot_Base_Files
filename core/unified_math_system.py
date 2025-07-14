@@ -17,14 +17,18 @@ Features:
 """
 
 import hashlib as _hashlib
+import json
 import logging
 import math as _math
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
+
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -483,7 +487,7 @@ def generate_unified_hash(arr: Sequence[float], time_slot: str) -> str:
     """
     vec = ''.join(f"{x:.6f}" for x in arr)
     base = f"{vec}{time_slot}"
-    return _hashlib.sha256(base.encode()).hexdigest()
+    return generate_hash_from_string(base)
 
 
 # Mathematical constants for unified system

@@ -8,7 +8,7 @@ Provides configuration management for mathematical operations.
 This module is a simplified interface to the mathematical framework integrator.
 """
 
-from .math.mathematical_framework_integrator import MathConfigManager, MathConfig
+from core.math.mathematical_framework_integrator import MathConfigManager, MathConfig
 
 # Re-export for backward compatibility
 __all__ = ['MathConfigManager', 'MathConfig']

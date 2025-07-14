@@ -37,6 +37,9 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
 logger = logging.getLogger(__name__)
 
 # Import the actual mathematical infrastructure
@@ -569,7 +572,7 @@ class ConfigFormat:
             settings_str = json.dumps(settings, sort_keys=True)
             
             # Generate hash signature
-            signature = hashlib.sha256(settings_str.encode()).hexdigest()
+            signature = generate_hash_from_string(settings_str)
             
             return signature
             

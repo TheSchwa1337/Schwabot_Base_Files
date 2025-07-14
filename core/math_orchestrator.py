@@ -8,7 +8,7 @@ Provides orchestration of mathematical operations.
 This module is a simplified interface to the mathematical framework integrator.
 """
 
-from .math.mathematical_framework_integrator import MathOrchestrator, MathConfig
+from core.math.mathematical_framework_integrator import MathOrchestrator, MathConfig
 
 # Re-export for backward compatibility
 __all__ = ['MathOrchestrator', 'MathConfig']

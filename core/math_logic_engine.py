@@ -7,10 +7,20 @@ Implements all core mathematical behaviors for recursive, immune-inspired, memor
 """
 
 import hashlib
+import json
+import logging
 import math
-from typing import List, Tuple
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union, Tuple
 
 import numpy as np
+
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
+logger = logging.getLogger(__name__)
 
 
 # 1. Unified Entropy Drift Function (𝓓(t))
@@ -186,8 +196,8 @@ def strategy_hash_evolution(prev_hash: str, delta_roi: float,
                           entropy_deviation: float) -> str:
     """Evolve strategy hash using SHA256."""
     try:
-        seed = f"{prev_hash}_{delta_roi:.6f}_{entropy_deviation:.6f}".encode()
-        return hashlib.sha256(seed).hexdigest()
+        seed = f"{prev_hash}_{delta_roi:.6f}_{entropy_deviation:.6f}"
+        return generate_hash_from_string(seed)
     except Exception:
         return prev_hash
 

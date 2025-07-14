@@ -19,8 +19,13 @@ import json
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+from decimal import Decimal
 from datetime import datetime
+
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -232,7 +237,7 @@ class TradeRegistry:
         }
         
         trade_json = json.dumps(hash_data, sort_keys=True)
-        return hashlib.sha256(trade_json.encode()).hexdigest()
+        return generate_hash_from_string(trade_json)
 
     def _update_indices(self, trade_hash: str, trade_entry: TradeEntry) -> None:
         """Update all indices for the trade."""

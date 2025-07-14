@@ -24,6 +24,7 @@ Features:
 """
 
 import hashlib
+import json
 import logging
 import time
 from dataclasses import dataclass, field
@@ -31,6 +32,9 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
+
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -238,12 +242,12 @@ class HashMatchCommandInjector:
             tick_string = f"{tick_data.get('price', 0):.8f}_{tick_data.get('volume', 0):.2f}_{tick_data.get('entropy', 0):.6f}_{tick_data.get('volatility', 0):.6f}"
             
             # Generate SHA256 hash
-            hash_result = hashlib.sha256(tick_string.encode()).hexdigest()
+            hash_result = generate_hash_from_string(tick_string)
             return hash_result
             
         except Exception as e:
             self.logger.error(f"❌ Error generating tick hash: {e}")
-            return hashlib.sha256("error".encode()).hexdigest()
+            return generate_hash_from_string("error")
     
     def calculate_pattern_similarity(self, hash1: str, hash2: str) -> float:
         """

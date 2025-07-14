@@ -114,3 +114,117 @@
 2025-07-12 21:57:14,402 - __main__ - INFO - ============================================================
 2025-07-12 21:57:14,402 - __main__ - INFO - ALL TESTS COMPLETED SUCCESSFULLY!
 2025-07-12 21:57:14,402 - __main__ - INFO - ============================================================
+2025-07-14 01:43:58,676 - __main__ - INFO - ============================================================
+2025-07-14 01:43:58,677 - __main__ - INFO - LIVE TRADING SYSTEM COMPREHENSIVE TEST
+2025-07-14 01:43:58,677 - __main__ - INFO - ============================================================
+2025-07-14 01:43:58,677 - __main__ - INFO - Testing Exchange Connections
+2025-07-14 01:43:58,677 - core.api.exchange_connection - INFO - No API keys found for binance - will use public data only
+2025-07-14 01:43:58,678 - core.api.exchange_connection - INFO - No API keys found for coinbase - will use public data only
+2025-07-14 01:43:58,678 - core.api.exchange_connection - INFO - No API keys found for kraken - will use public data only
+2025-07-14 01:43:58,678 - core.api.exchange_connection - INFO - No API keys found for kucoin - will use public data only
+2025-07-14 01:43:58,678 - core.api.exchange_connection - INFO - No API keys found for okx - will use public data only
+2025-07-14 01:43:58,679 - core.api.exchange_connection - INFO - No API keys found for binance - will use public data only
+2025-07-14 01:43:58,679 - core.api.exchange_connection - INFO - No API keys found for coinbase - will use public data only
+2025-07-14 01:43:58,680 - core.api.exchange_connection - INFO - No API keys found for kraken - will use public data only
+2025-07-14 01:43:58,681 - core.api.exchange_connection - INFO - No API keys found for kucoin - will use public data only
+2025-07-14 01:43:58,682 - core.api.exchange_connection - INFO - No API keys found for okx - will use public data only
+2025-07-14 01:43:58,683 - core.api.exchange_connection - INFO - Exchange connection initialized for binance
+2025-07-14 01:43:58,683 - core.api.exchange_connection - INFO - Initialized connection for binance
+2025-07-14 01:43:58,684 - core.api.exchange_connection - INFO - Exchange connection initialized for coinbase
+2025-07-14 01:43:58,684 - core.api.exchange_connection - INFO - Initialized connection for coinbase
+2025-07-14 01:43:58,685 - core.api.exchange_connection - INFO - Connecting to binance...
+2025-07-14 01:44:05,912 - core.api.exchange_connection - INFO - Public-only mode for binance
+2025-07-14 01:44:05,912 - core.api.exchange_connection - INFO - Successfully connected to binance
+2025-07-14 01:44:05,912 - core.api.exchange_connection - INFO - Connected to binance
+2025-07-14 01:44:05,912 - core.api.exchange_connection - INFO - Connecting to coinbase...
+2025-07-14 01:44:54,913 - core.api.exchange_connection - INFO - Public-only mode for coinbase
+2025-07-14 01:44:54,913 - core.api.exchange_connection - INFO - Successfully connected to coinbase
+2025-07-14 01:44:54,914 - core.api.exchange_connection - INFO - Connected to coinbase
+2025-07-14 01:44:54,914 - __main__ - INFO - Exchange status: {'binance': {'exchange': 'binance', 'status': 'CONNECTED', 'last_heartbeat': 1752471845.9123056, 'last_error': None, 'reconnect_attempts': 0, 'successful_requests': 0, 'failed_requests': 0, 'cache_size': 0}, 'coinbase': {'exchange': 'coinbase', 'status': 'CONNECTED', 'last_heartbeat': 1752471894.9131699, 'last_error': None, 'reconnect_attempts': 0, 'successful_requests': 0, 'failed_requests': 0, 'cache_size': 0}}
+2025-07-14 01:44:58,491 - __main__ - INFO - Exchange health: {'binance': True, 'coinbase': True}
+2025-07-14 01:44:58,492 - core.api.exchange_connection - INFO - Disconnecting from binance...
+2025-07-14 01:44:58,737 - core.api.exchange_connection - INFO - Disconnected from binance
+2025-07-14 01:44:58,737 - core.api.exchange_connection - INFO - Disconnecting from coinbase...
+2025-07-14 01:44:59,003 - core.api.exchange_connection - INFO - Disconnected from coinbase
+2025-07-14 01:44:59,003 - __main__ - INFO - Exchange connections test completed
+2025-07-14 01:44:59,023 - __main__ - INFO - Testing Coinbase Direct API
+2025-07-14 01:44:59,024 - core.api.coinbase_direct - INFO - Coinbase Direct API initialized (sandbox: True)
+2025-07-14 01:44:59,024 - core.api.coinbase_direct - INFO - Connecting to Coinbase API...
+2025-07-14 01:44:59,537 - core.api.coinbase_direct - INFO - Coinbase server time: 2025-07-14T05:44:59.707Z
+2025-07-14 01:44:59,537 - core.api.coinbase_direct - INFO - Successfully connected to Coinbase API
+2025-07-14 01:44:59,538 - __main__ - INFO - Coinbase API connection: True
+2025-07-14 01:44:59,610 - __main__ - INFO - Found 12 products
+2025-07-14 01:44:59,793 - __main__ - INFO - BTC-USD ticker: {'ask': '10.63', 'bid': '10.01', 'volume': '144062.39317363', 'trade_id': 182407455, 'price': '10.01', 'size': '0.1819106', 'time': '2025-07-14T05:44:59.496315129Z', 'rfq_volume': '2288868.052714'}
+2025-07-14 01:44:59,795 - core.api.coinbase_direct - INFO - Disconnected from Coinbase API
+2025-07-14 01:44:59,795 - __main__ - INFO - Coinbase Direct API test completed
+2025-07-14 01:44:59,796 - __main__ - INFO - Starting Live Trading System Test
+2025-07-14 01:44:59,796 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-14 01:44:59,797 - core.api.exchange_connection - INFO - No API keys found for binance - will use public data only
+2025-07-14 01:44:59,797 - core.api.exchange_connection - INFO - No API keys found for coinbase - will use public data only
+2025-07-14 01:44:59,797 - core.api.exchange_connection - INFO - No API keys found for kraken - will use public data only
+2025-07-14 01:44:59,798 - core.api.exchange_connection - INFO - No API keys found for kucoin - will use public data only
+2025-07-14 01:44:59,798 - core.api.exchange_connection - INFO - No API keys found for okx - will use public data only
+2025-07-14 01:44:59,800 - core.enhanced_portfolio_tracker - INFO - Enhanced portfolio tracker initialized
+2025-07-14 01:44:59,800 - core.real_time_market_data_integration - INFO - Real-time market data integration initialized
+2025-07-14 01:44:59,801 - core.api.exchange_connection - INFO - No API keys found for binance - will use public data only
+2025-07-14 01:44:59,802 - core.api.exchange_connection - INFO - No API keys found for coinbase - will use public data only
+2025-07-14 01:44:59,802 - core.api.exchange_connection - INFO - No API keys found for kraken - will use public data only
+2025-07-14 01:44:59,803 - core.api.exchange_connection - INFO - No API keys found for kucoin - will use public data only
+2025-07-14 01:44:59,803 - core.api.exchange_connection - INFO - No API keys found for okx - will use public data only
+2025-07-14 01:44:59,804 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 01:44:59,804 - core.math.tensor_algebra.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 01:44:59,805 - core.math - INFO - Mathematical decision engine initialized
+2025-07-14 01:44:59,805 - core.live_trading_system - INFO - Mathematical decision engine initialized
+2025-07-14 01:44:59,805 - core.live_trading_system - INFO - All components initialized successfully
+2025-07-14 01:44:59,805 - core.live_trading_system - INFO - Live trading system initialized
+2025-07-14 01:44:59,806 - __main__ - INFO - Starting trading system...
+2025-07-14 01:44:59,807 - core.live_trading_system - INFO - Starting live trading system...
+2025-07-14 01:44:59,807 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-14 01:44:59,807 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-14 01:44:59,807 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-14 01:44:59,887 - core.real_time_market_data_integration - INFO - Starting real-time market data integration...
+2025-07-14 01:44:59,888 - core.real_time_market_data_integration - INFO - Real-time market data integration started
+2025-07-14 01:44:59,888 - core.enhanced_portfolio_tracker - INFO - Added rebalancing callback, total callbacks: 1
+2025-07-14 01:44:59,889 - core.real_time_market_data_integration - INFO - Added price callback, total callbacks: 1
+2025-07-14 01:44:59,889 - core.live_trading_system - INFO - Live trading system started successfully
+2025-07-14 01:44:59,890 - core.portfolio_tracker - INFO - Opened position: BTC/USD_1752471899_buy Position(symbol='BTC/USD', quantity=Decimal('0.05'), avg_price=Decimal('50000'), current_price=Decimal('50000'), side='buy', entry_time=1752471899.8893027, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-14 01:44:59,891 - core.portfolio_tracker - INFO - Opened position: ETH/USD_1752471899_buy Position(symbol='ETH/USD', quantity=Decimal('1.0'), avg_price=Decimal('3000'), current_price=Decimal('3000'), side='buy', entry_time=1752471899.8913012, realized_pnl=Decimal('0'), unrealized_pnl=Decimal('0'), stop_loss=None, take_profit=None, closed=False, close_time=None, close_price=None, metadata={})
+2025-07-14 01:44:59,892 - __main__ - INFO - Running system for 60 seconds...
+2025-07-14 01:44:59,944 - __main__ - INFO - Performance: {'total_pnl': 0.0, 'daily_trades': 0, 'open_positions': 0, 'uptime': 0.14801931381225586, 'portfolio_value': -5498.95}
+2025-07-14 01:45:00,892 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:01,004 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 1): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:06,843 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:06,881 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 2): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:12,820 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:12,825 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 3): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:18,718 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 4): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:18,808 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 4): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:24,630 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 5): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:24,663 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 5): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:30,497 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 6): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:30,592 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 6): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:36,446 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 7): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:36,589 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 7): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:42,380 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 8): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:42,525 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 8): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:48,248 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 9): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:48,458 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 9): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:54,189 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 10): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:54,406 - core.real_time_market_data_integration - ERROR - Binance WebSocket error (attempt 10): server rejected WebSocket connection: HTTP 451
+2025-07-14 01:45:59,901 - __main__ - INFO - System status: {'is_running': True, 'uptime': 60.10450887680054, 'daily_trades': 0, 'total_pnl': 0.0, 'open_positions': 0, 'portfolio_value': -1846.923, 'exchanges': {}, 'coinbase_status': None, 'config': {'live_trading_enabled': False, 'sandbox_mode': True, 'rebalancing_enabled': True, 'math_decision_enabled': True}}
+2025-07-14 01:45:59,902 - __main__ - INFO - Trading history: 0 trades
+2025-07-14 01:45:59,902 - __main__ - INFO - Portfolio summary: {'balances': {'USDC': 0.0, 'USD': -5500.0, 'BTC': 0.05, 'ETH': 1.0}, 'open_positions': [{'symbol': 'BTC/USD', 'quantity': Decimal('0.05'), 'avg_price': Decimal('50000'), 'current_price': Decimal('122291.54'), 'side': 'buy', 'entry_time': 1752471899.8893027, 'realized_pnl': Decimal('0'), 'unrealized_pnl': Decimal('3614.5770'), 'stop_loss': None, 'take_profit': None, 'closed': False, 'close_time': None, 'close_price': None, 'metadata': {}}, {'symbol': 'ETH/USD', 'quantity': Decimal('1.0'), 'avg_price': Decimal('3000'), 'current_price': Decimal('3037.45'), 'side': 'buy', 'entry_time': 1752471899.8913012, 'realized_pnl': Decimal('0'), 'unrealized_pnl': Decimal('37.450'), 'stop_loss': None, 'take_profit': None, 'closed': False, 'close_time': None, 'close_price': None, 'metadata': {}}], 'closed_positions': [], 'realized_pnl': 0.0, 'unrealized_pnl': 3652.027, 'total_value': -1846.923, 'last_update': 1752471959.5570493, 'rebalancing': {'enabled': True, 'threshold': 0.05, 'target_allocation': {'BTC': 0.6, 'ETH': 0.4}, 'needs_rebalancing': False, 'rebalancing_actions': [], 'current_allocation': {}, 'last_rebalance': 0, 'actions_executed': 0, 'total_cost': 0.0}, 'market_data': {'price_updates_received': 11, 'last_price_update': 1752471954.9701834, 'connection_status': {'coinbase': 'connected', 'binance': 'disconnected'}, 'statistics': {'messages_received': 890, 'connection_errors': 10, 'price_cache_size': 2, 'active_callbacks': 1, 'last_cleanup': 1752471899.9439917, 'is_running': True}}, 'exchanges': {'status': {}, 'connected_count': 0}}
+2025-07-14 01:45:59,906 - __main__ - INFO - Performance metrics: {'total_pnl': 3652.027, 'total_pnl_percentage': 0, 'realized_pnl': 0.0, 'unrealized_pnl': 3652.027, 'total_value': -1846.923, 'rebalancing_efficiency': 0.0, 'rebalancing_cost': 0.0, 'rebalancing_actions': 0, 'price_updates': 11, 'uptime': 4.936280727386475}
+2025-07-14 01:45:59,907 - __main__ - INFO - Test completed successfully!
+2025-07-14 01:45:59,907 - __main__ - INFO - Stopping trading system...
+2025-07-14 01:45:59,908 - core.live_trading_system - INFO - Stopping live trading system...
+2025-07-14 01:45:59,908 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-14 01:45:59,946 - core.real_time_market_data_integration - INFO - Closed coinbase WebSocket connection
+2025-07-14 01:45:59,947 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-14 01:45:59,956 - core.real_time_market_data_integration - INFO - Stopping real-time market data integration...
+2025-07-14 01:45:59,999 - core.real_time_market_data_integration - INFO - Closed coinbase WebSocket connection
+2025-07-14 01:46:00,000 - core.real_time_market_data_integration - INFO - Real-time market data integration stopped
+2025-07-14 01:46:00,000 - core.live_trading_system - INFO - Live trading system stopped
+2025-07-14 01:46:00,000 - __main__ - INFO - ============================================================
+2025-07-14 01:46:00,001 - __main__ - INFO - ALL TESTS COMPLETED SUCCESSFULLY!
+2025-07-14 01:46:00,001 - __main__ - INFO - ============================================================

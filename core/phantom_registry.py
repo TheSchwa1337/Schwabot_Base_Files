@@ -34,6 +34,9 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
 logger = logging.getLogger(__name__)
 
 # Import the actual mathematical infrastructure
@@ -525,8 +528,7 @@ class PhantomRegistry:
             signature_string = json.dumps(signature_data, sort_keys=True)
             
             # Generate hash signature
-            import hashlib
-            signature = hashlib.sha256(signature_string.encode()).hexdigest()
+            signature = generate_hash_from_string(signature_string)
             
             # Truncate to specified length
             signature_length = self.registry_parameters.get('mathematical_signature_length', 64)

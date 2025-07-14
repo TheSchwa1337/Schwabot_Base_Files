@@ -38,6 +38,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Import hash configuration manager
+from core.hash_config_manager import hash_config_manager, get_hash_settings
+
 
 class SchwabotCLI:
     """Unified CLI for Schwabot trading system."""
@@ -61,6 +64,7 @@ class SchwabotCLI:
             from core.unified_btc_trading_pipeline import create_btc_trading_pipeline
             from core.pure_profit_calculator import PureProfitCalculator
             from core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
+            from core.hash_glyph_compression import HashGlyphCompressor
             
             # Initialize components
             self.trading_executor = None
@@ -79,8 +83,11 @@ class SchwabotCLI:
             # Initialize production pipeline (will be configured when needed)
             self.production_pipeline = None
             
+            # Initialize hash glyph compressor with global config
+            hash_settings = get_hash_settings()
+            self.hash_glyph_compressor = HashGlyphCompressor(config=hash_settings)
+
             logger.info("Core components initialized successfully")
-            
         except Exception as e:
             logger.error(f"Failed to initialize components: {e}")
             raise
@@ -813,6 +820,8 @@ async def main():
     parser.add_argument('--error-log', action='store_true', help='Get error log')
     parser.add_argument('--error-log-limit', type=int, default=100, help='Limit for error log entries')
     parser.add_argument('--reset-circuit-breakers', action='store_true', help='Reset all circuit breakers')
+    parser.add_argument('--truncated-hash', action='store_true', help='Enable truncated hashes for memory efficiency (auto-enabled on low-power hardware)')
+    parser.add_argument('--hash-length', type=int, default=None, help='Length of truncated hash in bytes (default: auto)')
     
     # Production trading commands
     parser.add_argument('--production', action='store_true', help='Start production trading with real API keys')
@@ -820,9 +829,15 @@ async def main():
     parser.add_argument('--stop-production', action='store_true', help='Stop production trading')
     parser.add_argument('--production-status', action='store_true', help='Get production trading status')
     parser.add_argument('--sync-portfolio', action='store_true', help='Sync production portfolio with exchange')
-    parser.add_argument('--export-report', action='store_true', help='Export production trading report')
+    parser.add_argument('--export-report', action='store_true', help='Export comprehensive trading report')
     
     args = parser.parse_args()
+    
+    # Initialize hash configuration manager with CLI options
+    hash_config_manager.initialize(
+        cli_truncated_hash=args.truncated_hash,
+        cli_hash_length=args.hash_length
+    )
     
     # Initialize CLI
     cli = SchwabotCLI()

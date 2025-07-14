@@ -30,6 +30,9 @@ import numpy as np
 import hashlib
 import json
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash_from_string
+
 # Import existing memory systems
 try:
     from core_math_restore.memory_stack.memory_key_allocator import MemoryKeyAllocator, MemoryKey, MemoryCluster
@@ -462,7 +465,7 @@ class UnifiedMemoryRegistrySystem:
         try:
             # Create hash string from pattern data and registry type
             hash_string = json.dumps(pattern_data, sort_keys=True) + registry_type.value
-            return hashlib.sha256(hash_string.encode()).hexdigest()
+            return generate_hash_from_string(hash_string)
         except Exception as e:
             self.logger.error(f"❌ Error generating pattern hash: {e}")
             return "fallback_hash"
@@ -480,7 +483,7 @@ class UnifiedMemoryRegistrySystem:
         """Generate query hash."""
         try:
             query_string = json.dumps(query_data, sort_keys=True)
-            return hashlib.sha256(query_string.encode()).hexdigest()
+            return generate_hash_from_string(query_string)
         except Exception as e:
             self.logger.error(f"❌ Error generating query hash: {e}")
             return "fallback_query_hash"

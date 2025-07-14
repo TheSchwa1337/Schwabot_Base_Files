@@ -38,6 +38,9 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
+# Import centralized hash configuration
+from core.hash_config_manager import generate_hash, get_hash_settings
+
 logger = logging.getLogger(__name__)
 
 # Import the actual mathematical infrastructure
@@ -178,6 +181,11 @@ class HashGlyphCompressor:
         self.logger = logging.getLogger(__name__)
         self.active = False
         self.initialized = False
+
+        # Use centralized hash configuration
+        hash_settings = get_hash_settings()
+        self.truncated_hash = hash_settings['truncated_hash']
+        self.hash_length = hash_settings['hash_length']
 
         # Compression state
         self.compression_metrics = CompressionMetrics()
@@ -552,7 +560,7 @@ class HashGlyphCompressor:
     def _generate_data_hash(self, data: bytes) -> str:
         """Generate hash for data."""
         try:
-            return hashlib.sha256(data).hexdigest()
+            return generate_hash(data)
         except Exception as e:
             self.logger.error(f"❌ Error generating data hash: {e}")
             return "fallback_hash"
@@ -562,7 +570,7 @@ class HashGlyphCompressor:
         try:
             # Create signature from compressed data and mathematical properties
             signature_parts = [
-                hashlib.sha256(compressed_data).hexdigest()[:16],
+                generate_hash(compressed_data),
                 f"t{data_analysis['tensor_score']:.3f}",
                 f"q{data_analysis['quantum_score']:.3f}",
                 f"e{data_analysis['entropy_value']:.3f}",
@@ -572,7 +580,7 @@ class HashGlyphCompressor:
             
             # Combine and hash
             combined_signature = "_".join(signature_parts)
-            return hashlib.sha256(combined_signature.encode()).hexdigest()
+            return generate_hash(combined_signature.encode())
 
         except Exception as e:
             self.logger.error(f"❌ Error generating hash signature: {e}")
