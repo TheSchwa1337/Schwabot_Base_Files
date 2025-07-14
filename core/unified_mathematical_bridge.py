@@ -766,13 +766,43 @@ class UnifiedMathematicalBridge:
             # Calculate overall confidence
             overall_confidence = (phantom_analysis + quantum_confidence + homology_confidence) / 3.0
             
-            return type('PhantomZone', (), {
-                'confidence': overall_confidence,
-                'zone_type': zone_type,
-                'phantom_analysis': phantom_analysis,
-                'quantum_confidence': quantum_confidence,
-                'homology_confidence': homology_confidence
-            })()
+            # Import PhantomZone from phantom_detector
+            from core.phantom_detector import PhantomZone, PhantomType, DetectionLevel
+            
+            # Create proper PhantomZone object
+            phantom_zone = PhantomZone(
+                symbol="BTC",  # Default symbol, can be updated
+                entry_tick=float(quantum_enhanced_prices[-1]) if len(quantum_enhanced_prices) > 0 else 0.0,
+                exit_tick=float(quantum_enhanced_prices[-1]) if len(quantum_enhanced_prices) > 0 else 0.0,
+                entry_time=time.time(),
+                exit_time=time.time(),
+                duration=0.0,
+                entropy_delta=phantom_analysis,
+                flatness_score=quantum_confidence,
+                similarity_score=homology_confidence,
+                phantom_potential=overall_confidence,
+                confidence_score=overall_confidence,
+                hash_signature=f"quantum_phantom_{int(time.time() * 1000)}",
+                time_of_day_hash=f"{int(time.time()) % 86400}",
+                phantom_type=PhantomType.QUANTUM_PHANTOM,
+                detection_level=DetectionLevel.HIGH if overall_confidence > 0.8 else DetectionLevel.MEDIUM,
+                mathematical_score=phantom_analysis,
+                tensor_score=quantum_confidence,
+                quantum_score=homology_confidence,
+                mathematical_analysis={
+                    'phantom_analysis': phantom_analysis,
+                    'quantum_confidence': quantum_confidence,
+                    'homology_confidence': homology_confidence,
+                    'zone_type': zone_type
+                },
+                metadata={
+                    'detection_method': 'quantum_mathematical_bridge',
+                    'quantum_enhanced': True,
+                    'homology_integration': True
+                }
+            )
+            
+            return phantom_zone
             
         except Exception as e:
             self.logger.error(f"Error detecting phantom zone: {e}")

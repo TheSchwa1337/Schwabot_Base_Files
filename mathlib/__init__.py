@@ -84,7 +84,7 @@ except ImportError:
 
 # Import dual unicore handler
 try:
-    from dual_unicore_handler import DualUnicoreHandler
+    from scripts.dual_unicore_handler import DualUnicoreHandler
     unicore = DualUnicoreHandler()
     UNICORE_AVAILABLE = True
 except ImportError:

@@ -1,0 +1,7 @@
+2025-07-01 11:50:04,456 - __main__ - INFO - 🚀 Schwabot Launcher initialized on windows
+2025-07-01 11:50:04,457 - __main__ - INFO - 📍 Project root: C:\Users\maxde\OneDrive\Documents
+2025-07-01 11:50:04,459 - __main__ - INFO - 🔍 Validating Schwabot system...
+2025-07-01 11:50:04,847 - __main__ - WARNING - ⚠️  System validation passed with warnings - MOSTLY OPERATIONAL
+2025-07-01 11:50:06,396 - __main__ - WARNING - ❌ Missing packages: pyyaml
+2025-07-01 11:50:06,396 - __main__ - ERROR - ❌ Dependencies not installed. Run with --install-deps first.
+2025-07-01 11:50:06,397 - __main__ - INFO - 💾 System status saved to C:\Users\maxde\OneDrive\Documents\system_status.json
