@@ -16,6 +16,7 @@ cohesive interface with GPU/CPU acceleration support and profit vector memory in
     - Profit vector integration for enhanced decision making
     - Entropy-corrected mathematical operations
     - Unified signal generation with historical profit memory
+    - Big Bro Logic Module integration for institutional-grade analysis
     """
 
 import logging
@@ -36,6 +37,15 @@ except ImportError:
     logger = logging.getLogger(__name__)
     logger.warning("Profit vector system not available - using fallback mode")
 
+# Import Big Bro Logic Module
+try:
+    from core.bro_logic_module import create_bro_logic_module, BroLogicResult
+    BRO_LOGIC_AVAILABLE = True
+except ImportError:
+    BRO_LOGIC_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Big Bro Logic Module not available - using fallback mode")
+
 xp = get_backend()
 
 # Log backend status
@@ -51,6 +61,11 @@ if PROFIT_VECTOR_AVAILABLE:
 else:
     logger.info("🧠 Profit vector integration: FALLBACK MODE")
 
+if BRO_LOGIC_AVAILABLE:
+    logger.info("🧠 Big Bro Logic Module integration: ENABLED")
+else:
+    logger.info("🧠 Big Bro Logic Module integration: FALLBACK MODE")
+
 
 @dataclass
 class MathResult:
@@ -64,20 +79,20 @@ class MathResult:
 
 @dataclass
 class UnifiedSignal:
-    """Unified trading signal combining mathematical analysis and profit vector insights."""
+    """Unified signal with mathematical fusion context."""
     
-    signal: str  # "BUY", "SELL", "HOLD"
+    signal: str  # 'BUY', 'SELL', 'HOLD'
     confidence: float
-    vector_confidence: float
     mathematical_confidence: float
     entropy_correction: float
+    vector_confidence: float
     profit_weight: float
-    timestamp: float = time.time()
-    metadata: Dict[str, Any] = None
+    timestamp: float
+    metadata: Dict[str, Any]
 
 
 class CleanUnifiedMathSystem:
-    """Clean unified mathematical framework for trading calculations with profit vector integration."""
+    """Clean unified mathematical framework for trading calculations with profit vector integration and Big Bro Logic Module."""
 
     def __init__(self) -> None:
         """Initialize the unified math system."""
@@ -90,6 +105,14 @@ class CleanUnifiedMathSystem:
         self.profit_weight_threshold = 0.7
         self.entropy_correction_factor = 0.1
         self.vector_confidence_decay = 0.95
+        
+        # Initialize Big Bro Logic Module
+        if BRO_LOGIC_AVAILABLE:
+            self.bro_logic = create_bro_logic_module()
+            logger.info("🧠 Big Bro Logic Module integrated into Clean Unified Math System")
+        else:
+            self.bro_logic = None
+            logger.warning("⚠️ Big Bro Logic Module not available - institutional analysis disabled")
 
     def multiply(self, a: float, b: float) -> float:
         """Multiply two numbers with caching."""
@@ -124,9 +147,8 @@ class CleanUnifiedMathSystem:
     def divide(self, a: float, b: float) -> float:
         """Divide two numbers with caching and error handling."""
         if b == 0:
-            logger.error("Division by zero attempted: {0} / {1}".format(a, b))
-            return 0.0
-
+            raise ValueError("Division by zero")
+        
         cache_key = f"divide_{a}_{b}"
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
@@ -315,38 +337,31 @@ class CleanUnifiedMathSystem:
             logger.error("Error in portfolio weight calculation: {0}".format(e))
             return 0.5
 
-    def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0.2) -> float:
-        """Calculate Sharpe ratio for a series of returns."""
-        try:
-            if len(returns) < 2:
-                logger.warning("Insufficient data for Sharpe ratio calculation")
-                return 0.0
-
-            returns_array = xp.array(returns)
-            mean_return = xp.mean(returns_array)
-            std_dev = xp.std(returns_array)
-
-            if std_dev == 0:
-                logger.warning("Zero standard deviation for Sharpe ratio")
-                return 0.0
-
-            sharpe_ratio = (mean_return - risk_free_rate) / std_dev
-
-            self._log_calculation(
-                "sharpe_ratio",
-                sharpe_ratio,
-                {
-                    "returns": returns,
-                    "risk_free_rate": risk_free_rate,
-                    "mean_return": mean_return,
-                    "std_dev": std_dev,
-                },
-            )
-
-            return sharpe_ratio
-        except Exception as e:
-            logger.error("Error calculating Sharpe ratio: {0}".format(e))
+    def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
+        """Calculate Sharpe ratio."""
+        if len(returns) < 2:
             return 0.0
+        
+        portfolio_return = np.mean(returns)
+        portfolio_volatility = np.std(returns)
+        
+        if portfolio_volatility == 0:
+            return 0.0
+        
+        return (portfolio_return - risk_free_rate) / portfolio_volatility
+
+    def calculate_var(self, returns: List[float], confidence_level: float = 0.95) -> float:
+        """Calculate Value at Risk."""
+        if len(returns) < 2:
+            return 0.0
+        
+        portfolio_mean = np.mean(returns)
+        portfolio_std = np.std(returns)
+        
+        # Z-score for confidence level
+        z_score = 1.65 if confidence_level == 0.95 else 2.33  # 95% or 99%
+        
+        return portfolio_mean - (z_score * portfolio_std)
 
     def integrate_all_systems(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Integrate all mathematical systems for comprehensive analysis."""
@@ -385,27 +400,257 @@ class CleanUnifiedMathSystem:
             logger.error("Error in system integration: {0}".format(e))
             return {"error": str(e)}
 
+    def apply_bro_logic_analysis(self, symbol: str, prices: List[float], 
+                                volumes: Optional[List[float]] = None,
+                                market_returns: Optional[List[float]] = None) -> Optional[BroLogicResult]:
+        """
+        Apply Big Bro Logic Module analysis for institutional-grade mathematical analysis.
+        
+        Args:
+            symbol: Trading symbol
+            prices: Price history
+            volumes: Volume history (optional)
+            market_returns: Market returns for CAPM (optional)
+            
+        Returns:
+            BroLogicResult with institutional analysis or None if not available
+        """
+        try:
+            if not self.bro_logic or not prices:
+                return None
+            
+            # Use default volumes if not provided
+            if volumes is None:
+                volumes = [1000000.0] * len(prices)  # Default volume
+            
+            # Perform comprehensive Big Bro analysis
+            bro_result = self.bro_logic.analyze_symbol(symbol, prices, volumes, market_returns)
+            
+            # Log the analysis
+            logger.info(f"🧠 Big Bro analysis completed for {symbol}:")
+            logger.info(f"  RSI: {bro_result.rsi_value:.2f} ({bro_result.rsi_signal})")
+            logger.info(f"  MACD Histogram: {bro_result.macd_histogram:.6f}")
+            logger.info(f"  Sharpe Ratio: {bro_result.sharpe_ratio:.4f}")
+            logger.info(f"  VaR (95%): {bro_result.var_95:.6f}")
+            logger.info(f"  Kelly Fraction: {bro_result.kelly_fraction:.4f}")
+            logger.info(f"  Confidence Score: {bro_result.confidence_score:.4f}")
+            
+            return bro_result
+            
+        except Exception as e:
+            logger.error(f"Error applying Big Bro logic analysis: {e}")
+            return None
+
+    def generate_unified_signal_with_bro_logic(self, market_data: Dict[str, Any], 
+                                             profit_vectors: List[ProfitVector]) -> UnifiedSignal:
+        """
+        Generate unified signal with Big Bro Logic Module integration.
+        
+        Args:
+            market_data: Market data dictionary
+            profit_vectors: Historical profit vectors
+            
+        Returns:
+            UnifiedSignal with mathematical fusion and Big Bro analysis
+        """
+        try:
+            symbol = market_data.get("symbol", "BTC/USDC")
+            prices = market_data.get("price_history", [market_data.get("price", 50000.0)])
+            volumes = market_data.get("volume_history", None)
+            
+            # Apply Big Bro Logic Module analysis
+            bro_result = self.apply_bro_logic_analysis(symbol, prices, volumes)
+            
+            # Calculate base confidence from profit vectors
+            if profit_vectors:
+                recent_vectors = profit_vectors[-5:]  # Last 5 vectors
+                avg_profit = np.mean([v.profit for v in recent_vectors])
+                profit_weight = min(1.0, max(0.0, avg_profit / 0.1))  # Normalize to 0-1
+            else:
+                profit_weight = 0.5
+            
+            # Calculate mathematical confidence
+            mathematical_confidence = 0.5  # Base confidence
+            
+            if bro_result:
+                # Use Big Bro analysis for enhanced confidence
+                mathematical_confidence = bro_result.confidence_score
+                
+                # Apply Kelly criterion for position sizing
+                kelly_fraction = bro_result.kelly_fraction
+                
+                # Apply risk assessment
+                var_95 = bro_result.var_95
+                sharpe_ratio = bro_result.sharpe_ratio
+                
+                # Determine signal based on Big Bro analysis
+                if bro_result.rsi_signal == "oversold" and bro_result.macd_histogram > 0:
+                    signal = "BUY"
+                elif bro_result.rsi_signal == "overbought" and bro_result.macd_histogram < 0:
+                    signal = "SELL"
+                else:
+                    signal = "HOLD"
+            else:
+                # Fallback to basic signal generation
+                signal = "HOLD"
+                kelly_fraction = 0.5
+                var_95 = 0.0
+                sharpe_ratio = 0.0
+            
+            # Calculate entropy correction
+            entropy_correction = self.entropy_correction_factor
+            
+            # Calculate vector confidence
+            vector_confidence = profit_weight * self.vector_confidence_decay
+            
+            # Create unified signal
+            unified_signal = UnifiedSignal(
+                signal=signal,
+                confidence=mathematical_confidence,
+                mathematical_confidence=mathematical_confidence,
+                entropy_correction=entropy_correction,
+                vector_confidence=vector_confidence,
+                profit_weight=profit_weight,
+                timestamp=time.time(),
+                metadata={
+                    "bro_logic_available": bro_result is not None,
+                    "kelly_fraction": kelly_fraction,
+                    "var_95": var_95,
+                    "sharpe_ratio": sharpe_ratio,
+                    "rsi_signal": bro_result.rsi_signal if bro_result else "unknown",
+                    "macd_histogram": bro_result.macd_histogram if bro_result else 0.0,
+                    "momentum_hash": bro_result.schwabot_momentum_hash if bro_result else "",
+                    "volatility_bracket": bro_result.schwabot_volatility_bracket if bro_result else "unknown",
+                    "position_quantum": bro_result.schwabot_position_quantum if bro_result else 0.5
+                }
+            )
+            
+            # Store in history
+            self.signal_history.append(unified_signal)
+            
+            logger.info(f"🧠 Unified signal generated with Big Bro integration: {signal} "
+                       f"(confidence: {mathematical_confidence:.3f}, Kelly: {kelly_fraction:.3f})")
+            
+            return unified_signal
+            
+        except Exception as e:
+            logger.error(f"Error generating unified signal with Big Bro logic: {e}")
+            # Return fallback signal
+            return UnifiedSignal(
+                signal="HOLD",
+                confidence=0.5,
+                mathematical_confidence=0.5,
+                entropy_correction=0.0,
+                vector_confidence=0.5,
+                profit_weight=0.5,
+                timestamp=time.time(),
+                metadata={"error": str(e)}
+            )
+
+    def bridge_profit_to_math(self, profit_vectors: List[ProfitVector]) -> Dict[str, Any]:
+        """
+        Bridge profit vectors to mathematical insights with Big Bro Logic Module.
+        
+        Args:
+            profit_vectors: List of profit vectors
+            
+        Returns:
+            Dictionary with mathematical insights
+        """
+        try:
+            if not profit_vectors:
+                return {"error": "No profit vectors available"}
+            
+            # Calculate basic profit metrics
+            profits = [v.profit for v in profit_vectors]
+            avg_profit = np.mean(profits)
+            profit_std = np.std(profits)
+            win_rate = len([p for p in profits if p > 0]) / len(profits)
+            
+            # Apply Big Bro Logic Module analysis if available
+            bro_insights = {}
+            if self.bro_logic:
+                # Use Kelly criterion for optimal position sizing
+                avg_win = np.mean([p for p in profits if p > 0]) if any(p > 0 for p in profits) else 0.01
+                avg_loss = abs(np.mean([p for p in profits if p < 0])) if any(p < 0 for p in profits) else 0.01
+                
+                kelly_fraction = self.bro_logic.calculate_kelly_criterion(win_rate, avg_win, avg_loss)
+                
+                # Calculate Sharpe ratio
+                sharpe_ratio = self.bro_logic.calculate_sharpe_ratio(profits)
+                
+                # Calculate VaR
+                var_95 = self.bro_logic.calculate_var(profits, 0.95)
+                var_99 = self.bro_logic.calculate_var(profits, 0.99)
+                
+                bro_insights = {
+                    "kelly_fraction": kelly_fraction,
+                    "sharpe_ratio": sharpe_ratio,
+                    "var_95": var_95,
+                    "var_99": var_99,
+                    "optimal_position_size": kelly_fraction,
+                    "risk_adjusted_return": sharpe_ratio,
+                    "max_loss_95": var_95,
+                    "max_loss_99": var_99
+                }
+            
+            return {
+                "avg_profit": avg_profit,
+                "profit_volatility": profit_std,
+                "win_rate": win_rate,
+                "total_trades": len(profit_vectors),
+                "bro_logic_insights": bro_insights,
+                "institutional_analysis": bro_insights != {}
+            }
+            
+        except Exception as e:
+            logger.error(f"Error bridging profit to math: {e}")
+            return {"error": str(e)}
+
+    def get_bro_logic_stats(self) -> Dict[str, Any]:
+        """Get Big Bro Logic Module statistics."""
+        try:
+            if not self.bro_logic:
+                return {"error": "Big Bro Logic Module not available"}
+            
+            stats = self.bro_logic.get_system_stats()
+            return {
+                "calculation_count": stats.get('calculation_count', 0),
+                "fusion_count": stats.get('fusion_count', 0),
+                "schwabot_fusion_enabled": stats.get('schwabot_fusion_enabled', False),
+                "config": stats.get('config', {}),
+                "module_status": "active"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting Big Bro Logic stats: {e}")
+            return {"error": str(e)}
+
     def _log_calculation(self, operation: str, result: float, metadata: Dict[str, Any]) -> None:
-        """Log a calculation for debugging and analysis."""
+        """Log mathematical calculation."""
         math_result = MathResult(
             value=result,
             operation=operation,
             timestamp=time.time(),
-            metadata=metadata,
+            metadata=metadata
         )
         self.calculation_history.append(math_result)
-        # Cache the result for potential reuse
-        cache_key = "{0}_{1}".format(operation, hash(str(metadata)))
+        
+        # Cache result for future use
+        cache_key = f"{operation}_{metadata.get('a', 0)}_{metadata.get('b', 0)}"
         self.operation_cache[cache_key] = result
 
-    def get_calculation_history(self) -> List[MathResult]:
+    def get_calculation_history(self, limit: Optional[int] = None) -> List[MathResult]:
         """Get calculation history."""
-        return self.calculation_history.copy()
+        history = self.calculation_history.copy()
+        if limit:
+            history = history[-limit:]
+        return history
 
     def clear_cache(self) -> None:
-        """Clear the operation cache."""
+        """Clear operation cache."""
         self.operation_cache.clear()
-        logger.info("Operation cache cleared")
+        logger.info("🧮 Mathematical operation cache cleared")
 
     def get_cache_stats(self) -> Dict[str, Any]:
         """Get statistics about the operation cache."""
@@ -608,6 +853,7 @@ class CleanUnifiedMathSystem:
                 mathematical_confidence=mathematical_confidence,
                 entropy_correction=entropy_correction,
                 profit_weight=vector_metrics["vector_strength"],
+                timestamp=time.time(),
                 metadata={
                     "momentum": optimized["momentum"],
                     "volatility": optimized["volatility"],
@@ -630,7 +876,9 @@ class CleanUnifiedMathSystem:
                 vector_confidence=0.0,
                 mathematical_confidence=0.0,
                 entropy_correction=0.0,
-                profit_weight=0.0
+                profit_weight=0.0,
+                timestamp=time.time(),
+                metadata={"error": str(e)}
             )
 
     def profit_weighted_sharpe_ratio(self, returns: List[float], 
@@ -758,78 +1006,76 @@ class CleanUnifiedMathSystem:
             logger.error(f"Error in profit-aware portfolio optimization: {e}")
             return {asset: 1.0 / len(assets) for asset in assets}
 
-    def bridge_profit_to_math(self, profit_vectors: List[ProfitVector]) -> Dict[str, float]:
-        """
-        Translate historical profit vector signals into math-usable insights.
-        
-        Args:
-            profit_vectors: Profit vectors to bridge
-            
-        Returns:
-            Dictionary of mathematical insights
-        """
-        try:
-            if not profit_vectors:
-                return {
-                    "average_volatility": 0.0,
-                    "average_drawdown": 0.0,
-                    "total_vector_strength": 0.0,
-                    "profit_trend": 0.0
-                }
-            
-            return {
-                "average_volatility": np.mean([v.volatility for v in profit_vectors]),
-                "average_drawdown": np.mean([v.drawdown for v in profit_vectors]),
-                "total_vector_strength": sum(v.vector_strength for v in profit_vectors),
-                "profit_trend": np.mean([v.profit for v in profit_vectors])
-            }
-            
-        except Exception as e:
-            logger.error(f"Error bridging profit to math: {e}")
-            return {
-                "average_volatility": 0.0,
-                "average_drawdown": 0.0,
-                "total_vector_strength": 0.0,
-                "profit_trend": 0.0
-            }
-
     def bridge_math_to_signals(self, math_results: Dict[str, float], 
                               profit_vectors: List[ProfitVector]) -> Dict[str, Any]:
         """
-        Generate signal by adjusting math output based on profit vector patterns.
+        Bridge mathematical results to trading signals with Big Bro Logic Module integration.
         
         Args:
             math_results: Mathematical analysis results
-            profit_vectors: Profit vectors for signal adjustment
+            profit_vectors: Historical profit vectors
             
         Returns:
-            Dictionary with signal and confidence
+            Dictionary with signal recommendations
         """
         try:
-            if not profit_vectors:
-                return {"signal": "HOLD", "vector_confidence": 0.0}
+            # Apply Big Bro Logic Module analysis if available
+            bro_insights = {}
+            if self.bro_logic and profit_vectors:
+                # Calculate Kelly criterion for position sizing
+                profits = [v.profit for v in profit_vectors]
+                win_rate = len([p for p in profits if p > 0]) / len(profits)
+                avg_win = np.mean([p for p in profits if p > 0]) if any(p > 0 for p in profits) else 0.01
+                avg_loss = abs(np.mean([p for p in profits if p < 0])) if any(p < 0 for p in profits) else 0.01
+                
+                kelly_fraction = self.bro_logic.calculate_kelly_criterion(win_rate, avg_win, avg_loss)
+                sharpe_ratio = self.bro_logic.calculate_sharpe_ratio(profits)
+                
+                bro_insights = {
+                    "optimal_position_size": kelly_fraction,
+                    "risk_adjusted_return": sharpe_ratio,
+                    "institutional_confidence": min(1.0, sharpe_ratio / 2.0)
+                }
             
-            avg_strength = np.mean([v.vector_strength for v in profit_vectors])
-            momentum = math_results.get("momentum", 0.0)
+            # Combine mathematical results with Big Bro insights
+            signal_strength = math_results.get("momentum", 0.0)
+            volatility = math_results.get("volatility", 0.0)
             
-            # Generate signal based on momentum and vector strength
-            if momentum * avg_strength > 0.5:
+            # Apply Big Bro position sizing if available
+            if bro_insights:
+                signal_strength *= bro_insights["optimal_position_size"]
+                confidence = bro_insights["institutional_confidence"]
+            else:
+                confidence = 0.5
+            
+            # Determine signal
+            if signal_strength > 0.7 and volatility < 0.3:
                 signal = "BUY"
-            elif momentum * avg_strength < -0.5:
+            elif signal_strength < -0.7 and volatility < 0.3:
                 signal = "SELL"
             else:
                 signal = "HOLD"
             
             return {
                 "signal": signal,
-                "vector_confidence": avg_strength,
-                "momentum": momentum,
-                "combined_strength": momentum * avg_strength
+                "confidence": confidence,
+                "signal_strength": signal_strength,
+                "volatility": volatility,
+                "bro_logic_insights": bro_insights,
+                "institutional_analysis": bro_insights != {}
             }
             
         except Exception as e:
             logger.error(f"Error bridging math to signals: {e}")
-            return {"signal": "HOLD", "vector_confidence": 0.0}
+            return {
+                "signal": "HOLD",
+                "confidence": 0.5,
+                "signal_strength": 0.0,
+                "volatility": 0.0,
+                "bro_logic_insights": {},
+                "institutional_analysis": False,
+                "error": str(e)
+            }
 
 
 def optimize_brain_profit(price: float, volume: float, confidence: float, enhancement_factor: float) -> float:
