@@ -36,9 +36,21 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Add core directory to Python path
-_core_path = Path(__file__).parent.parent / "core"
-if str(_core_path) not in sys.path:
-    sys.path.insert(0, str(_core_path))
+try:
+    _core_path = Path(__file__).parent.parent / "core"
+    if str(_core_path) not in sys.path:
+        sys.path.insert(0, str(_core_path))
+except Exception:
+    # Fallback path handling for Windows compatibility
+    try:
+        import os
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        core_path = os.path.join(os.path.dirname(current_dir), "core")
+        if core_path not in sys.path:
+            sys.path.insert(0, core_path)
+    except Exception as e:
+        # If all else fails, just continue without adding to path
+        pass
 
 # Import utilities
 try:
