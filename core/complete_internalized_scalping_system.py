@@ -186,8 +186,11 @@ class CompleteInternalizedScalpingSystem:
             )
 
     async def _collect_market_data(self) -> MarketData:
-        """Collect real-time market data."""
+        """Collect real market data for scalping analysis."""
         try:
+            # Define default symbol for scalping
+            symbol = "BTC/USDT"  # Default scalping symbol
+            
             # Get real market data instead of placeholders
             try:
                 from core.enhanced_api_integration_manager import enhanced_api_manager

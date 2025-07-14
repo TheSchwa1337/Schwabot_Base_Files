@@ -20,6 +20,17 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+# Import mathematical infrastructure
+try:
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
+
 logger = logging.getLogger(__name__)
 
 

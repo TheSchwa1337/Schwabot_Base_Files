@@ -620,8 +620,7 @@ class MultiFrequencyResonanceEngine:
             self.logger.error(f"❌ Error calculating resonance confidence: {e}")
             return 0.5
 
-    def _create_frequency_analysis(self, analysis_id: str, symbol: str, 
-                                 frequency_data: Dict[str, Any], 
+    def _create_frequency_analysis(self, analysis_id: str, symbol: str, frequency_data: Dict[str, Any],
                                  resonance_patterns: List[ResonancePattern]) -> FrequencyAnalysis:
         """Create frequency analysis result."""
         try:
@@ -634,7 +633,7 @@ class MultiFrequencyResonanceEngine:
                 avg_mathematical_score = np.mean(mathematical_scores)
                 avg_tensor_score = np.mean(tensor_scores)
                 avg_entropy_value = np.mean(entropy_values)
-        else:
+            else:
                 avg_mathematical_score = 0.5
                 avg_tensor_score = 0.5
                 avg_entropy_value = 0.5
@@ -850,7 +849,7 @@ class MultiFrequencyResonanceEngine:
             if not isinstance(data, np.ndarray):
                 data = np.array(data)
             
-        if MATH_INFRASTRUCTURE_AVAILABLE:
+            if MATH_INFRASTRUCTURE_AVAILABLE:
                 if len(data) > 0:
                     tensor_result = self.tensor_algebra.tensor_score(data)
                     advanced_result = self.advanced_tensor.tensor_score(data)

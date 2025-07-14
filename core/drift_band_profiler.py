@@ -23,18 +23,18 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-# Import existing infrastructure
+logger = logging.getLogger(__name__)
+
+# Import dependencies
 try:
-    from core.api_tick_cache import tick_cache
     from core.profit_echo_cache import profit_echo_cache
+    from core.tick_cache import tick_cache
     from core.zpe_core import ZPEMode
     from core.zbe_core import ZBEMode
     INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Some infrastructure not available")
-
-logger = logging.getLogger(__name__)
 
 
 class DriftBandProfiler:

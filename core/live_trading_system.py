@@ -658,10 +658,19 @@ class LiveTradingSystem:
             from core.clean_unified_math import CleanUnifiedMathSystem
             math_system = CleanUnifiedMathSystem()
             
+            # Get historical price data for analysis
+            price_data = self._get_historical_data("BTC/USDT")
+            if not price_data or 'prices' not in price_data:
+                return False  # No data available
+            
+            prices = price_data['prices']
+            if len(prices) < 10:  # Need minimum data points
+                return False
+            
             # Calculate decision metrics
-            volatility = math_system.calculate_volatility(price_data)
-            momentum = math_system.calculate_momentum(price_data)
-            trend_strength = math_system.calculate_trend_strength(price_data)
+            volatility = math_system.calculate_volatility(prices)
+            momentum = math_system.calculate_momentum(prices)
+            trend_strength = math_system.calculate_trend_strength(prices)
             
             # Combine metrics for decision
             decision_score = (momentum * 0.4 + trend_strength * 0.4 + (1 - volatility) * 0.2)

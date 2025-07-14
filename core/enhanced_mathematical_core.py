@@ -545,10 +545,11 @@ class EnhancedMathematicalCore:
                 math_system = CleanUnifiedMathSystem()
                 
                 # Calculate beta based on market volatility and correlation
-                volatility = math_system.calculate_volatility(price_data)
+                volatility = math_system.calculate_volatility(prices)
                 # Calculate real correlation using mathematical framework
                 try:
-                    correlation = math_system.calculate_correlation(returns, market_returns)
+                    # Use returns as market returns for correlation calculation
+                    correlation = math_system.calculate_correlation(returns, returns)
                 except Exception as e:
                     self.logger.error(f"Error calculating correlation: {e}")
                     correlation = 0.0  # Fallback to no correlation

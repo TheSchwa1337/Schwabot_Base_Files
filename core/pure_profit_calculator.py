@@ -35,7 +35,7 @@ from scipy.stats import entropy as scipy_entropy
 
 # Entropy Signal Integration
 try:
-    from core.entropy_signal_integration import EntropySignalIntegration
+    from core.entropy_signal_integration import EntropySignalIntegrator
     ENTROPY_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("🔄 Entropy Signal Integration enabled in Pure Profit Calculator")
@@ -178,7 +178,7 @@ class PureProfitCalculator:
 
         # Initialize entropy signal integration if available
         if ENTROPY_AVAILABLE:
-            self.entropy_integration = EntropySignalIntegration()
+            self.entropy_integration = EntropySignalIntegrator()
             logger.info("🔄 Entropy signal integration initialized in Pure Profit Calculator")
         else:
             self.entropy_integration = None

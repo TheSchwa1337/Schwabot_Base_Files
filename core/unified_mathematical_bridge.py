@@ -40,9 +40,16 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
-from core.math_cache import MathResultCache
-from core.math_config_manager import MathConfigManager
-from core.math_orchestrator import MathOrchestrator
+try:
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
+
 from core.mathematical_connection import (
     BridgeConnectionType, 
     MathematicalConnection, 
@@ -231,7 +238,10 @@ class UnifiedMathematicalBridge:
         self.logger.info("✅ Performance Monitor initialized")
         
         # Start performance monitoring
-        if self.config.enabled:
+        if hasattr(self.config, 'enabled') and self.config.enabled:
+            self.performance_monitor.start_monitoring()
+            self.logger.info("🔄 Real-time performance monitoring started")
+        elif isinstance(self.config, dict) and self.config.get('enabled', True):
             self.performance_monitor.start_monitoring()
             self.logger.info("🔄 Real-time performance monitoring started")
     
@@ -944,6 +954,32 @@ class UnifiedMathematicalBridge:
     
     def get_status(self) -> Dict[str, Any]:
         """Get system status."""
+        # Handle config access safely
+        if hasattr(self.config, 'enabled'):
+            config_status = {
+                'enabled': self.config.enabled,
+                'mathematical_integration': getattr(self.config, 'mathematical_integration', True),
+                'connection_monitoring': getattr(self.config, 'connection_monitoring', True),
+                'performance_optimization': getattr(self.config, 'performance_optimization', True),
+                'health_threshold': getattr(self.config, 'health_threshold', 0.7)
+            }
+        elif isinstance(self.config, dict):
+            config_status = {
+                'enabled': self.config.get('enabled', True),
+                'mathematical_integration': self.config.get('mathematical_integration', True),
+                'connection_monitoring': self.config.get('connection_monitoring', True),
+                'performance_optimization': self.config.get('performance_optimization', True),
+                'health_threshold': self.config.get('health_threshold', 0.7)
+            }
+        else:
+            config_status = {
+                'enabled': True,
+                'mathematical_integration': True,
+                'connection_monitoring': True,
+                'performance_optimization': True,
+                'health_threshold': 0.7
+            }
+        
         return {
             'active': self.active,
             'initialized': self.initialized,
@@ -954,13 +990,7 @@ class UnifiedMathematicalBridge:
             'average_connection_strength': self.metrics.average_connection_strength,
             'mathematical_analyses': self.metrics.mathematical_analyses,
             'health_metrics': self.health_metrics,
-            'config': {
-                'enabled': self.config.enabled,
-                'mathematical_integration': self.config.mathematical_integration,
-                'connection_monitoring': self.config.connection_monitoring,
-                'performance_optimization': self.config.performance_optimization,
-                'health_threshold': self.config.health_threshold
-            }
+            'config': config_status
         }
 
     def _calculate_bridge_confidence(self, connection_data: Dict[str, Any]) -> float:

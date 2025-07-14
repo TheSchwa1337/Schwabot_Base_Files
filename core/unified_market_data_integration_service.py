@@ -40,7 +40,8 @@ import json
 from .real_market_data_feed import RealMarketDataFeed, MarketDataPoint, OrderBookData, TradeData
 from .enhanced_portfolio_tracker import EnhancedPortfolioTracker, RebalancingAction
 from .risk_manager import RiskManager, PortfolioRisk, PositionRisk
-from .unified_mathematical_bridge import UnifiedMathematicalBridge
+# Fix circular import - use lazy import
+# from .unified_mathematical_bridge import UnifiedMathematicalBridge
 from .live_trading_system import LiveTradingSystem, TradingConfig
 from .pure_profit_calculator import PureProfitCalculator
 
@@ -188,6 +189,8 @@ class UnifiedMarketDataIntegrationService:
                 'enable_profit_integration': True,
                 'confidence_threshold': self.config.get('math_confidence_threshold', 0.7)
             }
+            # Lazy import to avoid circular import
+            from .unified_mathematical_bridge import UnifiedMathematicalBridge
             self.mathematical_bridge = UnifiedMathematicalBridge(math_config)
             logger.info("✅ Unified Mathematical Bridge initialized")
             

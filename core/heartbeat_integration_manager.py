@@ -40,6 +40,17 @@ from core.drift_band_profiler import DriftBandProfiler
 from core.gpu_logic_mapper import GPULogicMapper
 from core.profit_projection_engine import ProfitProjectionEngine
 
+# Import mathematical infrastructure
+try:
+    from core.math_cache import MathResultCache
+    from core.math_config_manager import MathConfigManager
+    from core.math_orchestrator import MathOrchestrator
+
+    MATH_INFRASTRUCTURE_AVAILABLE = True
+except ImportError:
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    logger.warning("Math infrastructure not available")
+
 logger = logging.getLogger(__name__)
 
 

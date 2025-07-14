@@ -31,6 +31,7 @@ try:
     from core.math_cache import MathResultCache
     from core.math_config_manager import MathConfigManager
     from core.math_orchestrator import MathOrchestrator
+    from core.enhanced_ccxt_trading_engine import TradingOrder, OrderType
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:

@@ -67,6 +67,23 @@ class DecisionType(Enum):
 
 
 @dataclass
+class TradingResult:
+    """Trading execution result with mathematical analysis."""
+    success: bool
+    order_id: Optional[str] = None
+    executed_price: float = 0.0
+    executed_quantity: float = 0.0
+    fees: float = 0.0
+    timestamp: float = field(default_factory=time.time)
+    direction: TradeDirection = TradeDirection.HOLD
+    confidence: float = 0.0
+    mathematical_score: float = 0.0
+    decision_curve: Optional[np.ndarray] = None
+    error: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class DualisticDecision:
     """Dualistic decision with mathematical analysis."""
     decision_id: str
@@ -118,6 +135,106 @@ class DualisticMetrics:
     last_updated: float = 0.0
 
 
+class DecisionCurveCalculator:
+    """Advanced decision curve calculator with mathematical optimization."""
+    
+    def __init__(self, config: Optional[DualisticConfig] = None):
+        """Initialize the decision curve calculator."""
+        self.config = config or DualisticConfig()
+        self.logger = logging.getLogger(__name__)
+        
+        # Mathematical infrastructure
+        if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.math_config = MathConfigManager()
+            self.math_cache = MathResultCache()
+            self.math_orchestrator = MathOrchestrator()
+        else:
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
+    
+    def calculate_decision_curve(self, signal_data: np.ndarray, 
+                               steepness: float = None, 
+                               bias: float = 0.0) -> np.ndarray:
+        """Calculate decision curve using sigmoid activation."""
+        try:
+            if not isinstance(signal_data, np.ndarray):
+                signal_data = np.array(signal_data)
+            
+            # Use configured steepness or default
+            alpha = steepness or self.config.sigmoid_steepness
+            
+            # Apply sigmoid transformation: D(x) = σ(α * x + β)
+            decision_curve = self._sigmoid(alpha * signal_data + bias)
+            
+            # Apply mathematical enhancement if available
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                enhanced_curve = self.math_orchestrator.process_data(decision_curve)
+                if enhanced_curve is not None:
+                    decision_curve = enhanced_curve
+            
+            return decision_curve
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating decision curve: {e}")
+            return np.zeros_like(signal_data)
+    
+    def _sigmoid(self, x: np.ndarray) -> np.ndarray:
+        """Calculate sigmoid activation function."""
+        return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))
+    
+    def calculate_confidence(self, decision_curve: np.ndarray) -> float:
+        """Calculate confidence based on decision curve stability."""
+        try:
+            if len(decision_curve) < 2:
+                return 0.5
+            
+            # Calculate curve stability
+            curve_std = np.std(decision_curve)
+            curve_mean = np.mean(decision_curve)
+            
+            # Higher stability = higher confidence
+            stability = 1.0 / (1.0 + curve_std)
+            
+            # Mathematical enhancement
+            if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
+                stability_vector = np.array([stability, curve_mean, len(decision_curve)])
+                enhanced_stability = self.math_orchestrator.process_data(stability_vector)
+                if enhanced_stability is not None:
+                    stability = float(enhanced_stability)
+            
+            return min(max(stability, 0.0), 1.0)
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating confidence: {e}")
+            return 0.5
+    
+    def determine_direction(self, decision_curve: np.ndarray, 
+                          threshold: float = None) -> TradeDirection:
+        """Determine trade direction from decision curve."""
+        try:
+            threshold = threshold or self.config.decision_threshold
+            
+            # Calculate average decision value
+            avg_decision = np.mean(decision_curve)
+            
+            # Determine direction based on threshold
+            if avg_decision > threshold + 0.2:
+                return TradeDirection.STRONG_BUY
+            elif avg_decision > threshold:
+                return TradeDirection.BUY
+            elif avg_decision < threshold - 0.2:
+                return TradeDirection.STRONG_SELL
+            elif avg_decision < threshold:
+                return TradeDirection.SELL
+            else:
+                return TradeDirection.HOLD
+                
+        except Exception as e:
+            self.logger.error(f"Error determining direction: {e}")
+            return TradeDirection.HOLD
+
+
 class AdvancedDualisticTradingExecutionSystem:
     """
     Advanced Dualistic Trading Execution System
@@ -153,6 +270,9 @@ class AdvancedDualisticTradingExecutionSystem:
             self.math_config = None
             self.math_cache = None
             self.math_orchestrator = None
+        
+        # Decision curve calculator
+        self.decision_calculator = DecisionCurveCalculator(self.config)
         
         # Performance tracking
         self.metrics = DualisticMetrics()
@@ -282,7 +402,7 @@ class AdvancedDualisticTradingExecutionSystem:
             data = np.array(signal_data)
             
             # Calculate decision curve
-            decision_curve = self._calculate_decision_curve(data)
+            decision_curve = self.decision_calculator.calculate_decision_curve(data)
             
             # Make dualistic decision
             decision = await self._make_dualistic_decision(data, decision_curve)
@@ -548,19 +668,20 @@ class ExecutionMode:
             # Resolve trade switch
             direction, confidence = self.resolve_trade_switch(decision_curve)
             
-            # Check if switch occurred
-            switch_resolved = direction != self.switch_resolver.last_direction
+            # Calculate mathematical score
+            mathematical_score = self.decision_calculator.calculate_confidence(decision_curve)
             
             return TradingResult(
                 success=True,
                 direction=direction,
                 confidence=confidence,
+                mathematical_score=mathematical_score,
                 decision_curve=decision_curve,
-                switch_resolved=switch_resolved,
-                data={
+                metadata={
                     "signal_data": signal_data,
                     "time_points": time_points,
-                    "threshold": self.config.decision_threshold
+                    "threshold": self.config.decision_threshold,
+                    "switch_resolved": direction != self.switch_resolver.last_direction
                 }
             )
             
