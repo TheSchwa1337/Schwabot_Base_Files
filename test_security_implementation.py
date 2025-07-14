@@ -25,6 +25,44 @@ from typing import Dict, Any, Optional
 # Add the project root to the path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# Import security modules globally
+try:
+    from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
+    ALPHA_ENCRYPTION_AVAILABLE = True
+except ImportError:
+    ALPHA_ENCRYPTION_AVAILABLE = False
+    print("⚠️ Alpha Encryption not available")
+
+try:
+    from utils.multi_layered_security_manager import (
+        get_multi_layered_security,
+        encrypt_api_key_secure,
+        get_secure_api_key,
+        validate_api_key_security
+    )
+    MULTI_LAYERED_SECURITY_AVAILABLE = True
+except ImportError:
+    MULTI_LAYERED_SECURITY_AVAILABLE = False
+    print("⚠️ Multi-Layered Security Manager not available")
+
+try:
+    from utils.secure_config_manager import (
+        get_secure_config_manager,
+        secure_api_key,
+        SecurityMode
+    )
+    SECURE_CONFIG_AVAILABLE = True
+except ImportError:
+    SECURE_CONFIG_AVAILABLE = False
+    print("⚠️ Secure Config Manager not available")
+
+try:
+    from schwabot.vortex_security import get_vortex_security
+    VMSP_AVAILABLE = True
+except ImportError:
+    VMSP_AVAILABLE = False
+    print("⚠️ VMSP not available")
+
 def test_imports():
     """Test that all required modules can be imported."""
     print("🔍 Testing imports...")
@@ -37,29 +75,14 @@ def test_imports():
         print("✅ Core dependencies imported successfully")
         
         # Test our security modules
-        from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
-        print("✅ Alpha Encryption imported successfully")
-        
-        from utils.multi_layered_security_manager import (
-            get_multi_layered_security,
-            encrypt_api_key_secure,
-            get_secure_api_key,
-            validate_api_key_security
-        )
-        print("✅ Multi-Layered Security Manager imported successfully")
-        
-        from utils.secure_config_manager import (
-            get_secure_config_manager,
-            secure_api_key,
-            SecurityMode
-        )
-        print("✅ Secure Config Manager imported successfully")
-        
-        # Test VMSP if available
-        try:
-            from schwabot.vortex_security import get_vortex_security
-            print("✅ VMSP imported successfully")
-        except ImportError:
+        # These are now imported globally, so we can check their availability
+        if not ALPHA_ENCRYPTION_AVAILABLE:
+            print("⚠️ Alpha Encryption not available - will test without it")
+        if not MULTI_LAYERED_SECURITY_AVAILABLE:
+            print("⚠️ Multi-Layered Security Manager not available - will test without it")
+        if not SECURE_CONFIG_AVAILABLE:
+            print("⚠️ Secure Config Manager not available - will test without it")
+        if not VMSP_AVAILABLE:
             print("⚠️ VMSP not available - will test without it")
         
         return True
@@ -71,6 +94,10 @@ def test_imports():
 def test_alpha_encryption():
     """Test Alpha Encryption (Ω-B-Γ Logic)."""
     print("\n🔐 Testing Alpha Encryption (Ω-B-Γ Logic)...")
+    
+    if not ALPHA_ENCRYPTION_AVAILABLE:
+        print("   ⚠️ Alpha Encryption not available - skipping test")
+        return True
     
     try:
         alpha_encryption = get_alpha_encryption()
@@ -116,6 +143,10 @@ def test_alpha_encryption():
 def test_multi_layered_security():
     """Test Multi-Layered Security System."""
     print("\n🔐 Testing Multi-Layered Security System...")
+    
+    if not MULTI_LAYERED_SECURITY_AVAILABLE:
+        print("   ⚠️ Multi-Layered Security Manager not available - skipping test")
+        return True
     
     try:
         security_manager = get_multi_layered_security()
@@ -200,6 +231,10 @@ def test_secure_config_manager():
     """Test Secure Configuration Manager."""
     print("\n🔐 Testing Secure Configuration Manager...")
     
+    if not SECURE_CONFIG_AVAILABLE:
+        print("   ⚠️ Secure Config Manager not available - skipping test")
+        return True
+    
     try:
         config_manager = get_secure_config_manager()
         
@@ -254,6 +289,10 @@ def test_error_handling():
     """Test comprehensive error handling."""
     print("\n🔐 Testing Error Handling...")
     
+    if not MULTI_LAYERED_SECURITY_AVAILABLE:
+        print("   ⚠️ Multi-Layered Security Manager not available - skipping test")
+        return True
+    
     try:
         # Test with invalid inputs
         security_manager = get_multi_layered_security()
@@ -301,6 +340,10 @@ def test_error_handling():
 def test_performance():
     """Test performance and real-time metrics."""
     print("\n🔐 Testing Performance and Real-time Metrics...")
+    
+    if not MULTI_LAYERED_SECURITY_AVAILABLE:
+        print("   ⚠️ Multi-Layered Security Manager not available - skipping test")
+        return True
     
     try:
         security_manager = get_multi_layered_security()

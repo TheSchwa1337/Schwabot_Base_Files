@@ -202,7 +202,7 @@ class SecureConfigManager:
                     'vmsp_score': result.vmsp_result.security_score if result.vmsp_result else 0.0,
                     'hash_score': result.hash_result.security_score,
                     'temporal_score': result.temporal_result.security_score,
-                    'layers_used': [layer.value for layer, res in {
+                    'layers_used': [layer_name for layer_name, res in {
                         'fernet': result.fernet_result,
                         'alpha': result.alpha_result,
                         'vmsp': result.vmsp_result,

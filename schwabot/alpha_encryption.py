@@ -297,8 +297,19 @@ class AlphaEncryption:
         # Convert input to time series
         data_vector = np.array([ord(c) for c in data])
         
+        # Handle empty data
+        if len(data_vector) == 0:
+            return GammaState(
+                frequency_components=[],
+                wave_entropy=0.0,
+                harmonic_coherence=1.0,
+                dominant_frequencies=[],
+                phase_relationships={},
+                timestamp=time.time()
+            )
+        
         # Pad to power of 2 for FFT
-        target_length = 2 ** int(np.ceil(np.log2(len(data_vector))))
+        target_length = 2 ** int(np.ceil(np.log2(max(len(data_vector), 1))))
         padded_data = np.pad(data_vector, (0, target_length - len(data_vector)), 'constant')
         
         # Perform FFT
@@ -322,14 +333,27 @@ class AlphaEncryption:
         
         # Calculate harmonic coherence
         if len(frequency_components) > 1:
-            harmonic_coherence = np.corrcoef(frequency_components)[0, 1] if len(frequency_components) > 1 else 0.0
+            try:
+                corr_matrix = np.corrcoef(frequency_components)
+                if corr_matrix.size > 1:
+                    harmonic_coherence = corr_matrix[0, 1]
+                else:
+                    harmonic_coherence = 1.0
+            except:
+                harmonic_coherence = 0.0
         else:
             harmonic_coherence = 1.0
         
         # Calculate phase relationships
         phase_relationships = {}
         for i, freq in enumerate(dominant_frequencies):
-            phase_relationships[f"freq_{i}"] = np.angle(fft_result[np.where(frequencies == freq)[0][0]])
+            # Find the index of this frequency in the original frequencies array
+            freq_indices = np.where(frequencies == freq)[0]
+            if len(freq_indices) > 0:
+                phase_relationships[f"freq_{i}"] = np.angle(fft_result[freq_indices[0]])
+            else:
+                # Fallback if frequency not found
+                phase_relationships[f"freq_{i}"] = 0.0
         
         return GammaState(
             frequency_components=frequency_components.tolist(),
