@@ -55,8 +55,8 @@ try:
     
     # Import trading pipeline components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.unified_trading_pipeline import UnifiedTradingPipeline
+    # Removed circular imports: UnifiedMathematicalBridge and UnifiedTradingPipeline
+    # These will be imported lazily when needed
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
     TRADING_PIPELINE_AVAILABLE = True
@@ -200,8 +200,8 @@ class AutomatedTradingPipeline:
         # Initialize trading pipeline components
         if TRADING_PIPELINE_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-            self.unified_bridge = UnifiedMathematicalBridge(self.config)
-            self.unified_pipeline = UnifiedTradingPipeline(self.config)
+            # Removed circular imports: UnifiedMathematicalBridge and UnifiedTradingPipeline
+            # These will be imported lazily when needed
 
         self._initialize_system()
 
@@ -239,8 +239,8 @@ class AutomatedTradingPipeline:
             
             if TRADING_PIPELINE_AVAILABLE:
                 self.logger.info("✅ Enhanced math-to-trade integration initialized")
-                self.logger.info("✅ Unified mathematical bridge initialized")
-                self.logger.info("✅ Unified trading pipeline initialized")
+                # Removed circular imports: UnifiedMathematicalBridge and UnifiedTradingPipeline
+                # These will be imported lazily when needed
             
             self.initialized = True
             self.logger.info(f"✅ {self.__class__.__name__} initialized successfully with full integration")

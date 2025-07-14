@@ -548,3 +548,1195 @@
 2025-07-14 15:27:06,537 - core.trade_registry - INFO - 📊 Canonical Trade Registry initialized with 4 trades
 2025-07-14 15:27:06,540 - core.registry_coordinator - INFO - 🔗 Registry Coordinator initialized
 2025-07-14 15:27:06,546 - core.soulprint_registry - INFO - 🔄 SoulprintRegistry using CPU fallback: numpy (CPU)
+2025-07-14 15:44:01,654 - core.profit_optimization_engine - INFO - ⚡ ProfitOptimizationEngine using numpy (CPU) for tensor operations
+2025-07-14 15:44:02,751 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized
+2025-07-14 15:44:03,375 - core.clean_unified_math - INFO - 🔄 Clean Unified Math using CPU fallback: NumPy (CPU)
+2025-07-14 15:44:03,375 - core.clean_unified_math - INFO - 🧠 Profit vector integration: ENABLED
+2025-07-14 15:44:03,375 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integration: ENABLED
+2025-07-14 15:44:03,376 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 15:44:03,377 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 15:44:03,451 - core.pure_profit_calculator - WARNING - ⚠️ Entropy Signal Integration not available in Pure Profit Calculator
+2025-07-14 15:44:03,466 - schwabot.alpha_encryption - WARNING - VMSP not available - Alpha Encryption will work without VMSP integration
+2025-07-14 15:44:03,470 - utils.multi_layered_security_manager - WARNING - VMSP not available
+2025-07-14 15:44:03,478 - core.btc_usdc_trading_engine - INFO - ⚡ BTCTradingEngine using numpy (CPU) for tensor operations
+2025-07-14 15:44:03,484 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-14 15:44:03,484 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-14 15:44:18,050 - core.math.entropy_math - WARNING - Math infrastructure not available
+2025-07-14 15:44:18,168 - utils.gpu_fallback_manager - INFO - CuPy not available, falling back to NumPy: No module named 'cupy'
+2025-07-14 15:44:18,169 - utils.gpu_fallback_manager - INFO - CUDA runtime not available
+2025-07-14 15:44:18,170 - utils.gpu_fallback_manager - INFO - GPU not available, using CPU fallback
+2025-07-14 15:44:18,170 - utils.gpu_fallback_manager - INFO - Using NumPy for CPU computation
+2025-07-14 15:44:18,170 - utils.gpu_fallback_manager - INFO - GPU Fallback Manager initialized with backend: numpy
+2025-07-14 15:44:18,171 - utils.gpu_fallback_manager - INFO - GPU Status: GPUStatus(cuda_available=False, cupy_available=False, gpu_memory_gb=0.0, gpu_name='Unknown', compute_capability='', driver_version='', cuda_version='', fallback_reason="CuPy not available: No module named 'cupy'")
+2025-07-14 15:44:18,268 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-14 15:44:18,274 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-14 15:44:18,279 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 15:44:18,279 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 15:44:18,962 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-14 15:44:18,962 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-14 15:44:19,334 - core.real_multi_exchange_trader - INFO - ⚡ MultiExchangeTrader using numpy (CPU) for tensor operations
+2025-07-14 15:44:19,341 - core.risk_manager - INFO - ⚡ RiskManager using numpy (CPU) for tensor operations
+2025-07-14 15:44:19,346 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 15:44:19,347 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 15:44:19,351 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 15:44:19,355 - core.secure_exchange_manager - INFO - ⚡ ExchangeManager using numpy (CPU) for tensor operations
+2025-07-14 15:44:19,360 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-14 15:44:19,386 - core.unified_pipeline_manager - INFO - ✅ Configuration loaded from config/pipeline_config.yaml
+2025-07-14 15:44:19,387 - core.unified_pipeline_manager - INFO - Initializing UnifiedPipelineManager components
+2025-07-14 15:44:19,387 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-14 15:44:19,387 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-14 15:44:19,388 - core.unified_pipeline_manager - INFO - ✅ Symbolic math engine initialized
+2025-07-14 15:44:19,388 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,389 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,389 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,390 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,390 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,390 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,391 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,391 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,391 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,392 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,393 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,393 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,394 - core.two_gram_detector - INFO - Initializing TwoGramDetector
+2025-07-14 15:44:19,394 - core.two_gram_detector - INFO - ✅ TwoGramDetector initialized successfully
+2025-07-14 15:44:19,395 - core.unified_pipeline_manager - INFO - ✅ Two-gram detector initialized
+2025-07-14 15:44:19,395 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,396 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,396 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,396 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,397 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,397 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,398 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,398 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,398 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,399 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,399 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,399 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,400 - core.unified_pipeline_manager - INFO - ✅ UnifiedPipelineManager initialized successfully
+2025-07-14 15:44:19,426 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with EIGHT_BIT
+2025-07-14 15:44:19,428 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with EIGHT_BIT
+2025-07-14 15:44:19,428 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized
+2025-07-14 15:44:19,429 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-07-14 15:44:19,434 - scripts.dual_unicore_handler - INFO - DualUnicoreHandler initialized
+2025-07-14 15:44:19,472 - core.thermal_strategy_router.ThermalEntropyEngine - INFO - ✅ Thermal entropy engine initialized
+2025-07-14 15:44:19,473 - core.bitmap_hash_folding - INFO - ✅ Bitmap Hash Folding Engine initialized
+2025-07-14 15:44:19,474 - core.matrix_mapper - INFO - Initializing Matrix Mapper...
+2025-07-14 15:44:19,474 - core.matrix_mapper - INFO - [SUCCESS] Matrix Mapper initialized successfully
+2025-07-14 15:44:19,475 - core.strategy.strategy_loader - INFO - Strategy Loader initialized
+2025-07-14 15:44:19,475 - core.strategy_bit_mapper - INFO - ✅ Strategy Bit Mapper initialized
+2025-07-14 15:44:19,475 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Infrastructure components initialized
+2025-07-14 15:44:19,476 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Thermal strategy router initialized
+2025-07-14 15:44:19,479 - core.profit_echo_cache - WARNING - Mathematical infrastructure not available: cannot import name 'UnifiedMathematicalBridge' from partially initialized module 'core.unified_mathematical_bridge' (most likely due to a circular import) (C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\core\unified_mathematical_bridge.py)
+2025-07-14 15:44:19,484 - core.profit_echo_cache.ProfitEchoCache - INFO - 📝 Creating new profit echo file at data\profit_echo.json
+2025-07-14 15:44:19,485 - core.profit_echo_cache.ProfitEchoCache - INFO - Initializing ProfitEchoCache with mathematical integration
+2025-07-14 15:44:19,491 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ Mathematical cache initialized
+2025-07-14 15:44:19,491 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ ProfitEchoCache initialized successfully with full integration
+2025-07-14 15:44:19,491 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ Profit echo cache initialized at data\profit_echo.json
+2025-07-14 15:44:19,492 - core.profit_echo_cache.ProfitEchoCache - INFO - 📊 Loaded 0 strategy tags
+2025-07-14 15:44:19,495 - core.api_tick_cache - WARNING - Mathematical infrastructure not available: cannot import name 'UnifiedMathematicalBridge' from partially initialized module 'core.unified_mathematical_bridge' (most likely due to a circular import) (C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\core\unified_mathematical_bridge.py)
+2025-07-14 15:44:19,528 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,528 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,529 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,529 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,530 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,530 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,530 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,531 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,531 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,531 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,532 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,532 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,532 - core.enhanced_ccxt_trading_engine - INFO - Initializing Enhanced CCXT Trading Engine System
+2025-07-14 15:44:19,532 - core.enhanced_ccxt_trading_engine - INFO - ✅ Enhanced CCXT Trading Engine System initialized successfully
+2025-07-14 15:44:19,533 - core.api_tick_cache.APITickCache - INFO - ✅ CCXT infrastructure integrated
+2025-07-14 15:44:19,533 - core.api_tick_cache.APITickCache - INFO - Initializing APITickCache with mathematical integration
+2025-07-14 15:44:19,534 - core.api_tick_cache.APITickCache - INFO - ✅ Mathematical cache initialized
+2025-07-14 15:44:19,534 - core.api_tick_cache.APITickCache - INFO - ✅ APITickCache initialized successfully with full integration
+2025-07-14 15:44:19,534 - core.api_tick_cache.APITickCache - INFO - ✅ Tick cache initialized with 300s TTL and mathematical integration
+2025-07-14 15:44:19,535 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,535 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,535 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,535 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,535 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,536 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,536 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,536 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,537 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,537 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,537 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,538 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,539 - core.zpe_core - INFO - Initializing ZPEMode
+2025-07-14 15:44:19,539 - core.zpe_core - INFO - ✅ ZPEMode initialized successfully
+2025-07-14 15:44:19,539 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,540 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,540 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,541 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,541 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,542 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,542 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,543 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,543 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,544 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,544 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,545 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,546 - core.zbe_core - INFO - Initializing ZBEMode
+2025-07-14 15:44:19,546 - core.zbe_core - INFO - ✅ ZBEMode initialized successfully
+2025-07-14 15:44:19,547 - core.drift_band_profiler.DriftBandProfiler - INFO - ✅ ZPE/ZBE systems integrated
+2025-07-14 15:44:19,547 - core.drift_band_profiler.DriftBandProfiler - INFO - ✅ Drift band profiler initialized
+2025-07-14 15:44:19,548 - core.autonomic_limit_layer.AutonomicLimitLayer - INFO - ✅ Autonomic limit layer initialized
+2025-07-14 15:44:19,550 - core.gpu_logic_mapper - WARNING - ⚠️ CuPy not available, using CPU fallback
+2025-07-14 15:44:19,551 - core.gpu_logic_mapper.GPULogicMapper - INFO - 🔄 Using CPU fallback mode
+2025-07-14 15:44:19,551 - core.gpu_logic_mapper.GPULogicMapper - INFO - ✅ GPU Logic Mapper initialized
+2025-07-14 15:44:19,573 - core.gpu_logic_mapper.GPULogicMapper - INFO - 🔄 Using CPU fallback mode
+2025-07-14 15:44:19,573 - core.gpu_logic_mapper.GPULogicMapper - INFO - ✅ GPU Logic Mapper initialized
+2025-07-14 15:44:19,574 - core.profit_projection_engine.ProfitProjectionEngine - INFO - ✅ GPU Logic Mapper integrated
+2025-07-14 15:44:19,574 - core.profit_projection_engine.ProfitProjectionEngine - INFO - ✅ Profit Projection Engine initialized
+2025-07-14 15:44:19,574 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 15:44:19,589 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,589 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,590 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,590 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,591 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,591 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,591 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,591 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,592 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,593 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,594 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,594 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,595 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,595 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,596 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 15:44:19,596 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,596 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 15:44:19,596 - mathlib - INFO - MathLibV3 v3.0.0 initialized
+2025-07-14 15:44:19,597 - core.unified_mathematical_bridge - INFO - ✅ MathLib systems initialized
+2025-07-14 15:44:19,597 - mathlib.quantum_strategy - INFO - Quantum Strategy Engine initialized
+2025-07-14 15:44:19,597 - core.unified_mathematical_bridge - INFO - ✅ Quantum Strategy Engine initialized
+2025-07-14 15:44:19,597 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 15:44:19,598 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 15:44:19,598 - core.unified_mathematical_bridge - INFO - ✅ Quantum Mathematical Bridge initialized
+2025-07-14 15:44:19,598 - mathlib.persistent_homology - INFO - Persistent Homology analyzer initialized
+2025-07-14 15:44:19,599 - core.unified_mathematical_bridge - INFO - ✅ Persistent Homology initialized
+2025-07-14 15:44:19,599 - core.unified_mathematical_bridge - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 15:44:19,600 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 15:44:19,600 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 15:44:19,600 - core.unified_mathematical_bridge - INFO - ✅ Clean Unified Math System initialized
+2025-07-14 15:44:19,601 - core.vault_orbital_bridge - INFO - ✅ Vault-Orbital Bridge initialized
+2025-07-14 15:44:19,601 - core.unified_mathematical_bridge - INFO - ✅ Vault Orbital Bridge initialized
+2025-07-14 15:44:19,601 - core.math_integration_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 15:44:19,601 - core.unified_mathematical_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 15:44:19,602 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,602 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,602 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,603 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,603 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,603 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,604 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,604 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,604 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,605 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,605 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,605 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,606 - core.math.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 15:44:19,606 - core.math.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 15:44:19,607 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 15:44:19,608 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 15:44:19,608 - core.math.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 15:44:19,609 - core.math.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 15:44:19,609 - core.math.advanced_tensor_algebra - INFO - Advanced Tensor Algebra initialized successfully
+2025-07-14 15:44:19,609 - core.math.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 15:44:19,609 - core.math.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 15:44:19,610 - core.enhanced_math_to_trade_integration - INFO - 🧮 Initializing ALL mathematical modules...
+2025-07-14 15:44:19,610 - core.strategy.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 15:44:19,610 - core.strategy.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 15:44:19,611 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 15:44:19,611 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 15:44:19,611 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,612 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,612 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,612 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,613 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,613 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,613 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,613 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,614 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,614 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,614 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,615 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,615 - core.strategy.multi_phase_strategy_weight_tensor - INFO - Initializing MultiPhaseStrategyWeightTensor
+2025-07-14 15:44:19,615 - core.strategy.multi_phase_strategy_weight_tensor - INFO - ✅ MultiPhaseStrategyWeightTensor initialized successfully
+2025-07-14 15:44:19,617 - core.strategy.enhanced_math_ops.EnhancedTensorCalculator - INFO - CUDA not available, using CPU operations
+2025-07-14 15:44:19,617 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,618 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,618 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,619 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,623 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,624 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,624 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,625 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,625 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,625 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,625 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,626 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,626 - core.strategy.enhanced_math_ops - INFO - Initializing EnhancedMathOps
+2025-07-14 15:44:19,626 - core.strategy.enhanced_math_ops - INFO - ✅ EnhancedMathOps initialized successfully
+2025-07-14 15:44:19,626 - core.immune.qsc_gate - INFO - Initializing QSC Gate...
+2025-07-14 15:44:19,626 - core.immune.qsc_gate - INFO - [SUCCESS] QSC Gate initialized successfully
+2025-07-14 15:44:19,626 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 15:44:19,627 - core.math.tensor_algebra.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 15:44:19,627 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 15:44:19,627 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 15:44:19,628 - core.enhanced_mathematical_core - INFO - ✅ EnhancedMathematicalCore initialized in cpu mode
+2025-07-14 15:44:19,628 - core.enhanced_mathematical_core - INFO - 📊 Mathematical dependencies: {'numpy': True, 'scipy': True, 'pandas': True, 'tensor_libs': True, 'quantum': False, 'pennylane': True}
+2025-07-14 15:44:19,629 - core.entropy.galileo_tensor_field - INFO - GalileoTensorField initialized with dimension 3
+2025-07-14 15:44:19,629 - core.entropy.galileo_tensor_field - INFO - GPU acceleration: False
+2025-07-14 15:44:19,657 - core.entropy_signal_integration - INFO - Loaded entropy signal configuration from config/entropy_signal_integration.yaml
+2025-07-14 15:44:19,658 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,659 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,659 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,660 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,660 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,661 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,661 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,662 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,662 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,663 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,663 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,664 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,664 - core.entropy_signal_integration - INFO - ⏱️ Timing cycles initialized
+2025-07-14 15:44:19,664 - core.entropy_signal_integration - INFO - 🌊 Entropy Signal Integrator initialized
+2025-07-14 15:44:19,665 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,665 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,665 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,666 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,666 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,667 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,667 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,668 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,668 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,669 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,669 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,670 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,670 - core.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 15:44:19,670 - core.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 15:44:19,671 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,671 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,672 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,673 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,674 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,674 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,675 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,675 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,675 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,676 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,676 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,676 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,677 - core.recursive_hash_echo - INFO - 🔄 Initializing RecursiveHashEcho
+2025-07-14 15:44:19,677 - core.recursive_hash_echo - INFO -    Similarity Threshold: 0.8
+2025-07-14 15:44:19,677 - core.recursive_hash_echo - INFO -    Max Recursion Depth: 5
+2025-07-14 15:44:19,677 - core.recursive_hash_echo - INFO -    Hash Algorithm: sha256
+2025-07-14 15:44:19,677 - core.recursive_hash_echo - INFO - ✅ RecursiveHashEcho initialized successfully
+2025-07-14 15:44:19,678 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,678 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,678 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,679 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,679 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,679 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,680 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,680 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,680 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,680 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,681 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,681 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,681 - core.hash_match_command_injector - INFO - 🎯 Initializing HashMatchCommandInjector
+2025-07-14 15:44:19,682 - core.hash_match_command_injector - INFO -    Min Similarity Threshold: 0.7
+2025-07-14 15:44:19,682 - core.hash_match_command_injector - INFO -    Min Confidence Threshold: 0.6
+2025-07-14 15:44:19,682 - core.hash_match_command_injector - INFO - ✅ HashMatchCommandInjector initialized successfully
+2025-07-14 15:44:19,683 - core.hash_match_command_injector - INFO - 📊 Loaded 3 default patterns
+2025-07-14 15:44:19,683 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,683 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,684 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,684 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,684 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,685 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,685 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,687 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,687 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,688 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,689 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,689 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,690 - core.profit_matrix_feedback_loop - INFO - 📊 Initializing ProfitMatrixFeedbackLoop
+2025-07-14 15:44:19,690 - core.profit_matrix_feedback_loop - INFO -    Matrix Dimension: 64
+2025-07-14 15:44:19,690 - core.profit_matrix_feedback_loop - INFO -    Feedback Strength: 0.1
+2025-07-14 15:44:19,691 - core.profit_matrix_feedback_loop - INFO - ✅ ProfitMatrixFeedbackLoop initialized successfully
+2025-07-14 15:44:19,692 - core.profit_matrix_feedback_loop - INFO - 📊 Initialized 5 trading matrices
+2025-07-14 15:44:19,692 - core.enhanced_math_to_trade_integration - INFO - ✅ All 15 mathematical modules initialized
+2025-07-14 15:44:19,692 - core.phantom_detector - INFO - Initializing PhantomDetector with mathematical integration
+2025-07-14 15:44:19,693 - core.phantom_detector - INFO - ✅ Mathematical infrastructure initialized for phantom detection
+2025-07-14 15:44:19,693 - core.phantom_detector - INFO - ✅ Volume Weighted Hash Oscillator initialized
+2025-07-14 15:44:19,693 - core.phantom_detector - INFO - ✅ Zygot-Zalgo Entropy Dual Key Gate initialized
+2025-07-14 15:44:19,694 - core.phantom_detector - INFO - ✅ QSC Quantum Signal Collapse Gate initialized
+2025-07-14 15:44:19,694 - core.phantom_detector - INFO - ✅ Unified Tensor Algebra initialized
+2025-07-14 15:44:19,694 - core.phantom_detector - INFO - ✅ Galileo Tensor Field initialized
+2025-07-14 15:44:19,695 - core.phantom_detector - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 15:44:19,695 - core.phantom_detector - INFO - ✅ Entropy Math initialized
+2025-07-14 15:44:19,695 - core.phantom_detector - INFO - ✅ Enhanced math-to-trade integration initialized
+2025-07-14 15:44:19,695 - core.phantom_detector - INFO - ✅ Initialized 8 detection parameters with mathematical optimization
+2025-07-14 15:44:19,696 - core.phantom_detector - INFO - ✅ PhantomDetector initialized successfully with full integration
+2025-07-14 15:44:19,696 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,696 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,696 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,697 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,697 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,698 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,698 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,699 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,701 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,702 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,702 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,703 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,703 - core.phantom_logger - INFO - Initializing PhantomLogger
+2025-07-14 15:44:19,703 - core.phantom_logger - INFO - ✅ PhantomLogger initialized successfully
+2025-07-14 15:44:19,703 - strategies.phantom_band_navigator - INFO - 🔮 Phantom Band Navigator initialized
+2025-07-14 15:44:19,704 - core.unified_mathematical_bridge - INFO - ✅ Phantom Band Navigator initialized
+2025-07-14 15:44:19,704 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 15:44:19,705 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 15:44:19,705 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 15:44:19,705 - core.unified_mathematical_bridge - INFO - ✅ Risk Manager initialized
+2025-07-14 15:44:19,705 - core.pure_profit_calculator - WARNING - ⚠️ Entropy signal integration not available in Pure Profit Calculator
+2025-07-14 15:44:19,706 - core.pure_profit_calculator - INFO - 🧮 Pure Profit Calculator initialized - Mathematical Mode with hybrid
+2025-07-14 15:44:19,706 - core.unified_mathematical_bridge - INFO - ✅ Pure Profit Calculator initialized
+2025-07-14 15:44:19,707 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 15:44:19,707 - core.unified_mathematical_bridge - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 15:44:19,707 - core.quantum_classical_hybrid_mathematics - INFO - 🧮 Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 15:44:19,708 - core.unified_mathematical_bridge - INFO - ✅ Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 15:44:19,708 - core.unified_mathematical_bridge - INFO - ✅ Mathematical Integration Methods initialized
+2025-07-14 15:44:19,709 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 15:44:19,709 - core.unified_mathematical_bridge - INFO - ✅ Performance Monitor initialized
+2025-07-14 15:44:19,710 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Connection strengths are below optimal levels. Review mathematical integration methods and enhance correlation calculations.
+2025-07-14 15:44:19,710 - core.unified_mathematical_performance_monitor - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 15:44:19,711 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Overall confidence is below optimal levels. Enhance mathematical validation and improve fallback systems.
+2025-07-14 15:44:19,711 - core.unified_mathematical_bridge - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 15:44:19,715 - core.unified_mathematical_bridge - INFO - Initializing Unified Mathematical Bridge System
+2025-07-14 15:44:19,712 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Mathematical consistency is below optimal levels. Review mathematical operations and ensure proper validation.
+2025-07-14 15:44:19,716 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,716 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Connection strength critical: 0.000
+2025-07-14 15:44:19,717 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,717 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Confidence critical: 0.000
+2025-07-14 15:44:19,717 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 15:44:19,718 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 15:44:19,718 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 15:44:19,718 - mathlib - INFO - MathLibV3 v3.0.0 initialized
+2025-07-14 15:44:19,718 - core.unified_mathematical_bridge - INFO - ✅ MathLib systems initialized
+2025-07-14 15:44:19,719 - mathlib.quantum_strategy - INFO - Quantum Strategy Engine initialized
+2025-07-14 15:44:19,719 - core.unified_mathematical_bridge - INFO - ✅ Quantum Strategy Engine initialized
+2025-07-14 15:44:19,719 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 15:44:19,719 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 15:44:19,720 - core.unified_mathematical_bridge - INFO - ✅ Quantum Mathematical Bridge initialized
+2025-07-14 15:44:19,720 - mathlib.persistent_homology - INFO - Persistent Homology analyzer initialized
+2025-07-14 15:44:19,720 - core.unified_mathematical_bridge - INFO - ✅ Persistent Homology initialized
+2025-07-14 15:44:19,721 - core.unified_mathematical_bridge - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 15:44:19,721 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 15:44:19,721 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 15:44:19,722 - core.unified_mathematical_bridge - INFO - ✅ Clean Unified Math System initialized
+2025-07-14 15:44:19,722 - core.vault_orbital_bridge - INFO - ✅ Vault-Orbital Bridge initialized
+2025-07-14 15:44:19,722 - core.unified_mathematical_bridge - INFO - ✅ Vault Orbital Bridge initialized
+2025-07-14 15:44:19,723 - core.math_integration_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 15:44:19,723 - core.unified_mathematical_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 15:44:19,723 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,724 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,724 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,724 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,725 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,725 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,726 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,726 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,727 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,727 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,728 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,728 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,728 - core.math.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 15:44:19,729 - core.math.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 15:44:19,729 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 15:44:19,730 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 15:44:19,730 - core.math.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 15:44:19,730 - core.math.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 15:44:19,731 - core.math.advanced_tensor_algebra - INFO - Advanced Tensor Algebra initialized successfully
+2025-07-14 15:44:19,731 - core.math.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 15:44:19,731 - core.math.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 15:44:19,732 - core.enhanced_math_to_trade_integration - INFO - 🧮 Initializing ALL mathematical modules...
+2025-07-14 15:44:19,732 - core.strategy.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 15:44:19,732 - core.strategy.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 15:44:19,733 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 15:44:19,733 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 15:44:19,733 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,733 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,734 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,734 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,734 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,735 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,735 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,735 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,735 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,736 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,736 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,736 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,737 - core.strategy.multi_phase_strategy_weight_tensor - INFO - Initializing MultiPhaseStrategyWeightTensor
+2025-07-14 15:44:19,737 - core.strategy.multi_phase_strategy_weight_tensor - INFO - ✅ MultiPhaseStrategyWeightTensor initialized successfully
+2025-07-14 15:44:19,739 - core.strategy.enhanced_math_ops.EnhancedTensorCalculator - INFO - CUDA not available, using CPU operations
+2025-07-14 15:44:19,740 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,740 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,741 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,741 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,741 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,742 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,742 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,743 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,743 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,743 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,743 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,744 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,744 - core.strategy.enhanced_math_ops - INFO - Initializing EnhancedMathOps
+2025-07-14 15:44:19,744 - core.strategy.enhanced_math_ops - INFO - ✅ EnhancedMathOps initialized successfully
+2025-07-14 15:44:19,744 - core.immune.qsc_gate - INFO - Initializing QSC Gate...
+2025-07-14 15:44:19,745 - core.immune.qsc_gate - INFO - [SUCCESS] QSC Gate initialized successfully
+2025-07-14 15:44:19,745 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 15:44:19,745 - core.math.tensor_algebra.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 15:44:19,746 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 15:44:19,747 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 15:44:19,747 - core.enhanced_mathematical_core - INFO - ✅ EnhancedMathematicalCore initialized in cpu mode
+2025-07-14 15:44:19,747 - core.enhanced_mathematical_core - INFO - 📊 Mathematical dependencies: {'numpy': True, 'scipy': True, 'pandas': True, 'tensor_libs': True, 'quantum': False, 'pennylane': True}
+2025-07-14 15:44:19,748 - core.entropy.galileo_tensor_field - INFO - GalileoTensorField initialized with dimension 3
+2025-07-14 15:44:19,748 - core.entropy.galileo_tensor_field - INFO - GPU acceleration: False
+2025-07-14 15:44:19,784 - core.entropy_signal_integration - INFO - Loaded entropy signal configuration from config/entropy_signal_integration.yaml
+2025-07-14 15:44:19,785 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,785 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,785 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,786 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,786 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,786 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,786 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,787 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,787 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,787 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,788 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,788 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,788 - core.entropy_signal_integration - INFO - ⏱️ Timing cycles initialized
+2025-07-14 15:44:19,789 - core.entropy_signal_integration - INFO - 🌊 Entropy Signal Integrator initialized
+2025-07-14 15:44:19,789 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,789 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,790 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,790 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,790 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,791 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,791 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,791 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,792 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,792 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,793 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,793 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,794 - core.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 15:44:19,795 - core.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 15:44:19,795 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,795 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,796 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,796 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,796 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,796 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,797 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,797 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,797 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,798 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,798 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,798 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,799 - core.recursive_hash_echo - INFO - 🔄 Initializing RecursiveHashEcho
+2025-07-14 15:44:19,799 - core.recursive_hash_echo - INFO -    Similarity Threshold: 0.8
+2025-07-14 15:44:19,799 - core.recursive_hash_echo - INFO -    Max Recursion Depth: 5
+2025-07-14 15:44:19,800 - core.recursive_hash_echo - INFO -    Hash Algorithm: sha256
+2025-07-14 15:44:19,800 - core.recursive_hash_echo - INFO - ✅ RecursiveHashEcho initialized successfully
+2025-07-14 15:44:19,800 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,801 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,801 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,802 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,802 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,802 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,803 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,803 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,803 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,803 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,804 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,804 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,804 - core.hash_match_command_injector - INFO - 🎯 Initializing HashMatchCommandInjector
+2025-07-14 15:44:19,805 - core.hash_match_command_injector - INFO -    Min Similarity Threshold: 0.7
+2025-07-14 15:44:19,806 - core.hash_match_command_injector - INFO -    Min Confidence Threshold: 0.6
+2025-07-14 15:44:19,806 - core.hash_match_command_injector - INFO - ✅ HashMatchCommandInjector initialized successfully
+2025-07-14 15:44:19,807 - core.hash_match_command_injector - INFO - 📊 Loaded 3 default patterns
+2025-07-14 15:44:19,807 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,807 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,808 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,809 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,809 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,810 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,810 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,810 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,811 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,811 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,811 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,812 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,812 - core.profit_matrix_feedback_loop - INFO - 📊 Initializing ProfitMatrixFeedbackLoop
+2025-07-14 15:44:19,813 - core.profit_matrix_feedback_loop - INFO -    Matrix Dimension: 64
+2025-07-14 15:44:19,813 - core.profit_matrix_feedback_loop - INFO -    Feedback Strength: 0.1
+2025-07-14 15:44:19,813 - core.profit_matrix_feedback_loop - INFO - ✅ ProfitMatrixFeedbackLoop initialized successfully
+2025-07-14 15:44:19,814 - core.profit_matrix_feedback_loop - INFO - 📊 Initialized 5 trading matrices
+2025-07-14 15:44:19,814 - core.enhanced_math_to_trade_integration - INFO - ✅ All 15 mathematical modules initialized
+2025-07-14 15:44:19,814 - core.phantom_detector - INFO - Initializing PhantomDetector with mathematical integration
+2025-07-14 15:44:19,815 - core.phantom_detector - INFO - ✅ Mathematical infrastructure initialized for phantom detection
+2025-07-14 15:44:19,815 - core.phantom_detector - INFO - ✅ Volume Weighted Hash Oscillator initialized
+2025-07-14 15:44:19,815 - core.phantom_detector - INFO - ✅ Zygot-Zalgo Entropy Dual Key Gate initialized
+2025-07-14 15:44:19,816 - core.phantom_detector - INFO - ✅ QSC Quantum Signal Collapse Gate initialized
+2025-07-14 15:44:19,816 - core.phantom_detector - INFO - ✅ Unified Tensor Algebra initialized
+2025-07-14 15:44:19,816 - core.phantom_detector - INFO - ✅ Galileo Tensor Field initialized
+2025-07-14 15:44:19,816 - core.phantom_detector - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 15:44:19,816 - core.phantom_detector - INFO - ✅ Entropy Math initialized
+2025-07-14 15:44:19,817 - core.phantom_detector - INFO - ✅ Enhanced math-to-trade integration initialized
+2025-07-14 15:44:19,817 - core.phantom_detector - INFO - ✅ Initialized 8 detection parameters with mathematical optimization
+2025-07-14 15:44:19,817 - core.phantom_detector - INFO - ✅ PhantomDetector initialized successfully with full integration
+2025-07-14 15:44:19,818 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,818 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,818 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,822 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,823 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 15:44:19,823 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 15:44:19,824 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 15:44:19,824 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 15:44:19,825 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 15:44:19,825 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 15:44:19,825 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 15:44:19,825 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 15:44:19,826 - core.phantom_logger - INFO - Initializing PhantomLogger
+2025-07-14 15:44:19,826 - core.phantom_logger - INFO - ✅ PhantomLogger initialized successfully
+2025-07-14 15:44:19,827 - strategies.phantom_band_navigator - INFO - 🔮 Phantom Band Navigator initialized
+2025-07-14 15:44:19,827 - core.unified_mathematical_bridge - INFO - ✅ Phantom Band Navigator initialized
+2025-07-14 15:44:19,827 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 15:44:19,828 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 15:44:19,828 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 15:44:19,828 - core.unified_mathematical_bridge - INFO - ✅ Risk Manager initialized
+2025-07-14 15:44:19,829 - core.pure_profit_calculator - WARNING - ⚠️ Entropy signal integration not available in Pure Profit Calculator
+2025-07-14 15:44:19,829 - core.pure_profit_calculator - INFO - 🧮 Pure Profit Calculator initialized - Mathematical Mode with hybrid
+2025-07-14 15:44:19,829 - core.unified_mathematical_bridge - INFO - ✅ Pure Profit Calculator initialized
+2025-07-14 15:44:19,830 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 15:44:19,830 - core.unified_mathematical_bridge - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 15:44:19,830 - core.quantum_classical_hybrid_mathematics - INFO - 🧮 Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 15:44:19,831 - core.unified_mathematical_bridge - INFO - ✅ Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 15:44:19,831 - core.unified_mathematical_bridge - INFO - ✅ Mathematical Integration Methods initialized
+2025-07-14 15:44:19,831 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 15:44:19,832 - core.unified_mathematical_bridge - INFO - ✅ Performance Monitor initialized
+2025-07-14 15:44:19,834 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Connection strengths are below optimal levels. Review mathematical integration methods and enhance correlation calculations.
+2025-07-14 15:44:19,834 - core.unified_mathematical_performance_monitor - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 15:44:19,835 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Overall confidence is below optimal levels. Enhance mathematical validation and improve fallback systems.
+2025-07-14 15:44:19,835 - core.unified_mathematical_bridge - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 15:44:19,835 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Mathematical consistency is below optimal levels. Review mathematical operations and ensure proper validation.
+2025-07-14 15:44:19,836 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 15:44:19,836 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Connection strength critical: 0.000
+2025-07-14 15:44:19,837 - core.unified_mathematical_bridge - INFO - ✅ Unified Mathematical Bridge System initialized successfully
+2025-07-14 15:44:19,837 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Confidence critical: 0.000
+2025-07-14 15:44:19,837 - core.unified_mathematical_bridge - INFO - ✅ Active systems: 13
+2025-07-14 15:44:19,868 - core.soulprint_registry - INFO - 🔄 SoulprintRegistry using CPU fallback: numpy (CPU)
+2025-07-14 15:44:19,872 - core.vector_registry - INFO - 🔄 VectorRegistry using CPU fallback: numpy (CPU)
+2025-07-14 16:03:09,489 - core.profit_optimization_engine - INFO - ⚡ ProfitOptimizationEngine using numpy (CPU) for tensor operations
+2025-07-14 16:03:10,335 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized
+2025-07-14 16:03:10,884 - core.clean_unified_math - INFO - 🔄 Clean Unified Math using CPU fallback: NumPy (CPU)
+2025-07-14 16:03:10,884 - core.clean_unified_math - INFO - 🧠 Profit vector integration: ENABLED
+2025-07-14 16:03:10,884 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integration: ENABLED
+2025-07-14 16:03:10,886 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 16:03:10,886 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 16:03:10,957 - core.pure_profit_calculator - WARNING - ⚠️ Entropy Signal Integration not available in Pure Profit Calculator
+2025-07-14 16:03:10,980 - core.btc_usdc_trading_engine - INFO - ⚡ BTCTradingEngine using numpy (CPU) for tensor operations
+2025-07-14 16:03:10,984 - core.btc_usdc_trading_engine - INFO - ✅ Mathematical framework initialized
+2025-07-14 16:03:10,985 - core.btc_usdc_trading_engine - INFO - ✅ BTC/USDC Trading Engine initialized
+2025-07-14 16:03:23,198 - core.math.entropy_math - WARNING - Math infrastructure not available
+2025-07-14 16:03:23,301 - utils.gpu_fallback_manager - INFO - CuPy not available, falling back to NumPy: No module named 'cupy'
+2025-07-14 16:03:23,303 - utils.gpu_fallback_manager - INFO - CUDA runtime not available
+2025-07-14 16:03:23,304 - utils.gpu_fallback_manager - INFO - GPU not available, using CPU fallback
+2025-07-14 16:03:23,304 - utils.gpu_fallback_manager - INFO - Using NumPy for CPU computation
+2025-07-14 16:03:23,304 - utils.gpu_fallback_manager - INFO - GPU Fallback Manager initialized with backend: numpy
+2025-07-14 16:03:23,305 - utils.gpu_fallback_manager - INFO - GPU Status: GPUStatus(cuda_available=False, cupy_available=False, gpu_memory_gb=0.0, gpu_name='Unknown', compute_capability='', driver_version='', cuda_version='', fallback_reason="CuPy not available: No module named 'cupy'")
+2025-07-14 16:03:23,394 - core.mathematical_framework_integrator - INFO - ⚡ MathematicalFrameworkIntegrator using numpy (CPU) for tensor operations
+2025-07-14 16:03:23,397 - core.mathematical_framework_integrator - INFO - ✅ Mathematical Framework Integrator initialized
+2025-07-14 16:03:23,401 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 16:03:23,401 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 16:03:23,978 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-14 16:03:23,979 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-14 16:03:24,293 - core.real_multi_exchange_trader - INFO - ⚡ MultiExchangeTrader using numpy (CPU) for tensor operations
+2025-07-14 16:03:24,299 - core.risk_manager - INFO - ⚡ RiskManager using numpy (CPU) for tensor operations
+2025-07-14 16:03:24,305 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 16:03:24,305 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 16:03:24,309 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 16:03:24,311 - core.secure_exchange_manager - INFO - ⚡ ExchangeManager using numpy (CPU) for tensor operations
+2025-07-14 16:03:24,316 - core.unified_btc_trading_pipeline - INFO - ⚡ UnifiedBTCTradingPipeline using numpy (CPU) for tensor operations
+2025-07-14 16:03:24,338 - core.unified_pipeline_manager - INFO - ✅ Configuration loaded from config/pipeline_config.yaml
+2025-07-14 16:03:24,339 - core.unified_pipeline_manager - INFO - Initializing UnifiedPipelineManager components
+2025-07-14 16:03:24,339 - core.symbolic_math_interface - INFO - Initializing SymbolicMathEngine
+2025-07-14 16:03:24,340 - core.symbolic_math_interface - INFO - ✅ SymbolicMathEngine initialized successfully
+2025-07-14 16:03:24,340 - core.unified_pipeline_manager - INFO - ✅ Symbolic math engine initialized
+2025-07-14 16:03:24,341 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,341 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,342 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,342 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,343 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,343 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,343 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,344 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,344 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,345 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,345 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,345 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,346 - core.two_gram_detector - INFO - Initializing TwoGramDetector
+2025-07-14 16:03:24,346 - core.two_gram_detector - INFO - ✅ TwoGramDetector initialized successfully
+2025-07-14 16:03:24,346 - core.unified_pipeline_manager - INFO - ✅ Two-gram detector initialized
+2025-07-14 16:03:24,346 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,347 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,347 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,347 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,347 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,348 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,348 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,348 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,349 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,349 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,350 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,350 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,351 - core.unified_pipeline_manager - INFO - ✅ UnifiedPipelineManager initialized successfully
+2025-07-14 16:03:24,373 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with EIGHT_BIT
+2025-07-14 16:03:24,375 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with EIGHT_BIT
+2025-07-14 16:03:24,375 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized
+2025-07-14 16:03:24,376 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-07-14 16:03:24,380 - scripts.dual_unicore_handler - INFO - DualUnicoreHandler initialized
+2025-07-14 16:03:24,415 - core.thermal_strategy_router.ThermalEntropyEngine - INFO - ✅ Thermal entropy engine initialized
+2025-07-14 16:03:24,416 - core.bitmap_hash_folding - INFO - ✅ Bitmap Hash Folding Engine initialized
+2025-07-14 16:03:24,416 - core.matrix_mapper - INFO - Initializing Matrix Mapper...
+2025-07-14 16:03:24,417 - core.matrix_mapper - INFO - [SUCCESS] Matrix Mapper initialized successfully
+2025-07-14 16:03:24,417 - core.strategy.strategy_loader - INFO - Strategy Loader initialized
+2025-07-14 16:03:24,418 - core.strategy_bit_mapper - INFO - ✅ Strategy Bit Mapper initialized
+2025-07-14 16:03:24,418 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Infrastructure components initialized
+2025-07-14 16:03:24,418 - core.thermal_strategy_router.ThermalStrategyRouter - INFO - ✅ Thermal strategy router initialized
+2025-07-14 16:03:24,422 - core.profit_echo_cache - WARNING - Mathematical infrastructure not available: cannot import name 'UnifiedMathematicalBridge' from partially initialized module 'core.unified_mathematical_bridge' (most likely due to a circular import) (C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\core\unified_mathematical_bridge.py)
+2025-07-14 16:03:24,427 - core.profit_echo_cache.ProfitEchoCache - INFO - 📝 Creating new profit echo file at data\profit_echo.json
+2025-07-14 16:03:24,428 - core.profit_echo_cache.ProfitEchoCache - INFO - Initializing ProfitEchoCache with mathematical integration
+2025-07-14 16:03:24,429 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ Mathematical cache initialized
+2025-07-14 16:03:24,429 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ ProfitEchoCache initialized successfully with full integration
+2025-07-14 16:03:24,429 - core.profit_echo_cache.ProfitEchoCache - INFO - ✅ Profit echo cache initialized at data\profit_echo.json
+2025-07-14 16:03:24,430 - core.profit_echo_cache.ProfitEchoCache - INFO - 📊 Loaded 0 strategy tags
+2025-07-14 16:03:24,432 - core.api_tick_cache - WARNING - Mathematical infrastructure not available: cannot import name 'UnifiedMathematicalBridge' from partially initialized module 'core.unified_mathematical_bridge' (most likely due to a circular import) (C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\core\unified_mathematical_bridge.py)
+2025-07-14 16:03:24,454 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,454 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,455 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,455 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,456 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,456 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,457 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,457 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,457 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,458 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,458 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,458 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,459 - core.enhanced_ccxt_trading_engine - INFO - Initializing Enhanced CCXT Trading Engine System
+2025-07-14 16:03:24,460 - core.enhanced_ccxt_trading_engine - INFO - ✅ Enhanced CCXT Trading Engine System initialized successfully
+2025-07-14 16:03:24,461 - core.api_tick_cache.APITickCache - INFO - ✅ CCXT infrastructure integrated
+2025-07-14 16:03:24,461 - core.api_tick_cache.APITickCache - INFO - Initializing APITickCache with mathematical integration
+2025-07-14 16:03:24,462 - core.api_tick_cache.APITickCache - INFO - ✅ Mathematical cache initialized
+2025-07-14 16:03:24,462 - core.api_tick_cache.APITickCache - INFO - ✅ APITickCache initialized successfully with full integration
+2025-07-14 16:03:24,463 - core.api_tick_cache.APITickCache - INFO - ✅ Tick cache initialized with 300s TTL and mathematical integration
+2025-07-14 16:03:24,463 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,464 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,464 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,465 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,465 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,465 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,466 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,466 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,466 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,466 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,467 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,467 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,467 - core.zpe_core - INFO - Initializing ZPEMode
+2025-07-14 16:03:24,468 - core.zpe_core - INFO - ✅ ZPEMode initialized successfully
+2025-07-14 16:03:24,468 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,468 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,468 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,469 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,469 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,469 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,470 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,470 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,471 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,471 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,471 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,472 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,472 - core.zbe_core - INFO - Initializing ZBEMode
+2025-07-14 16:03:24,472 - core.zbe_core - INFO - ✅ ZBEMode initialized successfully
+2025-07-14 16:03:24,473 - core.drift_band_profiler.DriftBandProfiler - INFO - ✅ ZPE/ZBE systems integrated
+2025-07-14 16:03:24,473 - core.drift_band_profiler.DriftBandProfiler - INFO - ✅ Drift band profiler initialized
+2025-07-14 16:03:24,474 - core.autonomic_limit_layer.AutonomicLimitLayer - INFO - ✅ Autonomic limit layer initialized
+2025-07-14 16:03:24,477 - core.gpu_logic_mapper - WARNING - ⚠️ CuPy not available, using CPU fallback
+2025-07-14 16:03:24,478 - core.gpu_logic_mapper.GPULogicMapper - INFO - 🔄 Using CPU fallback mode
+2025-07-14 16:03:24,478 - core.gpu_logic_mapper.GPULogicMapper - INFO - ✅ GPU Logic Mapper initialized
+2025-07-14 16:03:24,480 - core.gpu_logic_mapper.GPULogicMapper - INFO - 🔄 Using CPU fallback mode
+2025-07-14 16:03:24,480 - core.gpu_logic_mapper.GPULogicMapper - INFO - ✅ GPU Logic Mapper initialized
+2025-07-14 16:03:24,481 - core.profit_projection_engine.ProfitProjectionEngine - INFO - ✅ GPU Logic Mapper integrated
+2025-07-14 16:03:24,481 - core.profit_projection_engine.ProfitProjectionEngine - INFO - ✅ Profit Projection Engine initialized
+2025-07-14 16:03:24,481 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 16:03:24,494 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,495 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,495 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,496 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,496 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,497 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,497 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,497 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,498 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,498 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,498 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,499 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,499 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,500 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,500 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 16:03:24,500 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,500 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 16:03:24,501 - mathlib - INFO - MathLibV3 v3.0.0 initialized
+2025-07-14 16:03:24,501 - core.unified_mathematical_bridge - INFO - ✅ MathLib systems initialized
+2025-07-14 16:03:24,501 - mathlib.quantum_strategy - INFO - Quantum Strategy Engine initialized
+2025-07-14 16:03:24,502 - core.unified_mathematical_bridge - INFO - ✅ Quantum Strategy Engine initialized
+2025-07-14 16:03:24,502 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 16:03:24,502 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 16:03:24,503 - core.unified_mathematical_bridge - INFO - ✅ Quantum Mathematical Bridge initialized
+2025-07-14 16:03:24,503 - mathlib.persistent_homology - INFO - Persistent Homology analyzer initialized
+2025-07-14 16:03:24,503 - core.unified_mathematical_bridge - INFO - ✅ Persistent Homology initialized
+2025-07-14 16:03:24,504 - core.unified_mathematical_bridge - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 16:03:24,504 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 16:03:24,504 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 16:03:24,505 - core.unified_mathematical_bridge - INFO - ✅ Clean Unified Math System initialized
+2025-07-14 16:03:24,505 - core.vault_orbital_bridge - INFO - ✅ Vault-Orbital Bridge initialized
+2025-07-14 16:03:24,505 - core.unified_mathematical_bridge - INFO - ✅ Vault Orbital Bridge initialized
+2025-07-14 16:03:24,506 - core.math_integration_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 16:03:24,506 - core.unified_mathematical_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 16:03:24,506 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,507 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,507 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,507 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,508 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,508 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,508 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,509 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,509 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,509 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,509 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,510 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,510 - core.math.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 16:03:24,511 - core.math.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 16:03:24,511 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 16:03:24,512 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 16:03:24,512 - core.math.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 16:03:24,513 - core.math.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 16:03:24,513 - core.math.advanced_tensor_algebra - INFO - Advanced Tensor Algebra initialized successfully
+2025-07-14 16:03:24,514 - core.math.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 16:03:24,514 - core.math.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 16:03:24,514 - core.enhanced_math_to_trade_integration - INFO - 🧮 Initializing ALL mathematical modules...
+2025-07-14 16:03:24,515 - core.strategy.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 16:03:24,515 - core.strategy.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 16:03:24,516 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 16:03:24,516 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 16:03:24,517 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,517 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,518 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,518 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,518 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,519 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,519 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,520 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,520 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,520 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,521 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,521 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,521 - core.strategy.multi_phase_strategy_weight_tensor - INFO - Initializing MultiPhaseStrategyWeightTensor
+2025-07-14 16:03:24,522 - core.strategy.multi_phase_strategy_weight_tensor - INFO - ✅ MultiPhaseStrategyWeightTensor initialized successfully
+2025-07-14 16:03:24,523 - core.strategy.enhanced_math_ops.EnhancedTensorCalculator - INFO - CUDA not available, using CPU operations
+2025-07-14 16:03:24,523 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,524 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,524 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,525 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,525 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,526 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,526 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,527 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,527 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,527 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,528 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,528 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,529 - core.strategy.enhanced_math_ops - INFO - Initializing EnhancedMathOps
+2025-07-14 16:03:24,529 - core.strategy.enhanced_math_ops - INFO - ✅ EnhancedMathOps initialized successfully
+2025-07-14 16:03:24,530 - core.immune.qsc_gate - INFO - Initializing QSC Gate...
+2025-07-14 16:03:24,530 - core.immune.qsc_gate - INFO - [SUCCESS] QSC Gate initialized successfully
+2025-07-14 16:03:24,531 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 16:03:24,532 - core.math.tensor_algebra.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 16:03:24,532 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 16:03:24,533 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 16:03:24,533 - core.enhanced_mathematical_core - INFO - ✅ EnhancedMathematicalCore initialized in cpu mode
+2025-07-14 16:03:24,534 - core.enhanced_mathematical_core - INFO - 📊 Mathematical dependencies: {'numpy': True, 'scipy': True, 'pandas': True, 'tensor_libs': True, 'quantum': False, 'pennylane': True}
+2025-07-14 16:03:24,534 - core.entropy.galileo_tensor_field - INFO - GalileoTensorField initialized with dimension 3
+2025-07-14 16:03:24,535 - core.entropy.galileo_tensor_field - INFO - GPU acceleration: False
+2025-07-14 16:03:24,555 - core.entropy_signal_integration - INFO - Loaded entropy signal configuration from config/entropy_signal_integration.yaml
+2025-07-14 16:03:24,556 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,556 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,557 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,557 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,557 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,558 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,558 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,558 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,559 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,559 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,560 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,560 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,560 - core.entropy_signal_integration - INFO - ⏱️ Timing cycles initialized
+2025-07-14 16:03:24,561 - core.entropy_signal_integration - INFO - 🌊 Entropy Signal Integrator initialized
+2025-07-14 16:03:24,561 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,562 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,562 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,562 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,563 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,563 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,563 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,564 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,564 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,564 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,565 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,565 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,565 - core.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 16:03:24,566 - core.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 16:03:24,566 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,567 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,567 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,568 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,568 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,568 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,569 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,569 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,569 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,569 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,570 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,570 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,570 - core.recursive_hash_echo - INFO - 🔄 Initializing RecursiveHashEcho
+2025-07-14 16:03:24,571 - core.recursive_hash_echo - INFO -    Similarity Threshold: 0.8
+2025-07-14 16:03:24,571 - core.recursive_hash_echo - INFO -    Max Recursion Depth: 5
+2025-07-14 16:03:24,571 - core.recursive_hash_echo - INFO -    Hash Algorithm: sha256
+2025-07-14 16:03:24,571 - core.recursive_hash_echo - INFO - ✅ RecursiveHashEcho initialized successfully
+2025-07-14 16:03:24,572 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,572 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,572 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,573 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,573 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,574 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,574 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,574 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,574 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,575 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,575 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,575 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,576 - core.hash_match_command_injector - INFO - 🎯 Initializing HashMatchCommandInjector
+2025-07-14 16:03:24,576 - core.hash_match_command_injector - INFO -    Min Similarity Threshold: 0.7
+2025-07-14 16:03:24,576 - core.hash_match_command_injector - INFO -    Min Confidence Threshold: 0.6
+2025-07-14 16:03:24,577 - core.hash_match_command_injector - INFO - ✅ HashMatchCommandInjector initialized successfully
+2025-07-14 16:03:24,577 - core.hash_match_command_injector - INFO - 📊 Loaded 3 default patterns
+2025-07-14 16:03:24,577 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,577 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,578 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,578 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,578 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,579 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,579 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,580 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,580 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,581 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,581 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,581 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,582 - core.profit_matrix_feedback_loop - INFO - 📊 Initializing ProfitMatrixFeedbackLoop
+2025-07-14 16:03:24,582 - core.profit_matrix_feedback_loop - INFO -    Matrix Dimension: 64
+2025-07-14 16:03:24,582 - core.profit_matrix_feedback_loop - INFO -    Feedback Strength: 0.1
+2025-07-14 16:03:24,583 - core.profit_matrix_feedback_loop - INFO - ✅ ProfitMatrixFeedbackLoop initialized successfully
+2025-07-14 16:03:24,583 - core.profit_matrix_feedback_loop - INFO - 📊 Initialized 5 trading matrices
+2025-07-14 16:03:24,584 - core.enhanced_math_to_trade_integration - INFO - ✅ All 15 mathematical modules initialized
+2025-07-14 16:03:24,584 - core.phantom_detector - INFO - Initializing PhantomDetector with mathematical integration
+2025-07-14 16:03:24,584 - core.phantom_detector - INFO - ✅ Mathematical infrastructure initialized for phantom detection
+2025-07-14 16:03:24,585 - core.phantom_detector - INFO - ✅ Volume Weighted Hash Oscillator initialized
+2025-07-14 16:03:24,585 - core.phantom_detector - INFO - ✅ Zygot-Zalgo Entropy Dual Key Gate initialized
+2025-07-14 16:03:24,585 - core.phantom_detector - INFO - ✅ QSC Quantum Signal Collapse Gate initialized
+2025-07-14 16:03:24,586 - core.phantom_detector - INFO - ✅ Unified Tensor Algebra initialized
+2025-07-14 16:03:24,586 - core.phantom_detector - INFO - ✅ Galileo Tensor Field initialized
+2025-07-14 16:03:24,586 - core.phantom_detector - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 16:03:24,587 - core.phantom_detector - INFO - ✅ Entropy Math initialized
+2025-07-14 16:03:24,587 - core.phantom_detector - INFO - ✅ Enhanced math-to-trade integration initialized
+2025-07-14 16:03:24,587 - core.phantom_detector - INFO - ✅ Initialized 8 detection parameters with mathematical optimization
+2025-07-14 16:03:24,588 - core.phantom_detector - INFO - ✅ PhantomDetector initialized successfully with full integration
+2025-07-14 16:03:24,588 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,588 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,588 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,589 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,589 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,589 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,590 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,590 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,590 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,591 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,591 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,591 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,592 - core.phantom_logger - INFO - Initializing PhantomLogger
+2025-07-14 16:03:24,592 - core.phantom_logger - INFO - ✅ PhantomLogger initialized successfully
+2025-07-14 16:03:24,592 - strategies.phantom_band_navigator - INFO - 🔮 Phantom Band Navigator initialized
+2025-07-14 16:03:24,593 - core.unified_mathematical_bridge - INFO - ✅ Phantom Band Navigator initialized
+2025-07-14 16:03:24,594 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 16:03:24,594 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 16:03:24,595 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 16:03:24,595 - core.unified_mathematical_bridge - INFO - ✅ Risk Manager initialized
+2025-07-14 16:03:24,595 - core.pure_profit_calculator - WARNING - ⚠️ Entropy signal integration not available in Pure Profit Calculator
+2025-07-14 16:03:24,596 - core.pure_profit_calculator - INFO - 🧮 Pure Profit Calculator initialized - Mathematical Mode with hybrid
+2025-07-14 16:03:24,596 - core.unified_mathematical_bridge - INFO - ✅ Pure Profit Calculator initialized
+2025-07-14 16:03:24,596 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 16:03:24,597 - core.unified_mathematical_bridge - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 16:03:24,597 - core.quantum_classical_hybrid_mathematics - INFO - 🧮 Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 16:03:24,598 - core.unified_mathematical_bridge - INFO - ✅ Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 16:03:24,598 - core.unified_mathematical_bridge - INFO - ✅ Mathematical Integration Methods initialized
+2025-07-14 16:03:24,598 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 16:03:24,599 - core.unified_mathematical_bridge - INFO - ✅ Performance Monitor initialized
+2025-07-14 16:03:24,600 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Connection strengths are below optimal levels. Review mathematical integration methods and enhance correlation calculations.
+2025-07-14 16:03:24,600 - core.unified_mathematical_performance_monitor - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 16:03:24,600 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Overall confidence is below optimal levels. Enhance mathematical validation and improve fallback systems.
+2025-07-14 16:03:24,601 - core.unified_mathematical_bridge - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 16:03:24,601 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Mathematical consistency is below optimal levels. Review mathematical operations and ensure proper validation.
+2025-07-14 16:03:24,602 - core.unified_mathematical_bridge - INFO - Initializing Unified Mathematical Bridge System
+2025-07-14 16:03:24,602 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Connection strength critical: 0.000
+2025-07-14 16:03:24,602 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,603 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Confidence critical: 0.000
+2025-07-14 16:03:24,603 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,603 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 16:03:24,604 - mathlib - INFO - MathLib v1.0.0 initialized
+2025-07-14 16:03:24,604 - mathlib - INFO - MathLibV2 v2.0.0 initialized
+2025-07-14 16:03:24,604 - mathlib - INFO - MathLibV3 v3.0.0 initialized
+2025-07-14 16:03:24,604 - core.unified_mathematical_bridge - INFO - ✅ MathLib systems initialized
+2025-07-14 16:03:24,605 - mathlib.quantum_strategy - INFO - Quantum Strategy Engine initialized
+2025-07-14 16:03:24,605 - core.unified_mathematical_bridge - INFO - ✅ Quantum Strategy Engine initialized
+2025-07-14 16:03:24,605 - core.quantum_mathematical_bridge - INFO - Initializing QuantumState
+2025-07-14 16:03:24,606 - core.quantum_mathematical_bridge - INFO - ✅ QuantumState initialized successfully
+2025-07-14 16:03:24,606 - core.unified_mathematical_bridge - INFO - ✅ Quantum Mathematical Bridge initialized
+2025-07-14 16:03:24,607 - mathlib.persistent_homology - INFO - Persistent Homology analyzer initialized
+2025-07-14 16:03:24,607 - core.unified_mathematical_bridge - INFO - ✅ Persistent Homology initialized
+2025-07-14 16:03:24,608 - core.unified_mathematical_bridge - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 16:03:24,608 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 16:03:24,609 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 16:03:24,609 - core.unified_mathematical_bridge - INFO - ✅ Clean Unified Math System initialized
+2025-07-14 16:03:24,609 - core.vault_orbital_bridge - INFO - ✅ Vault-Orbital Bridge initialized
+2025-07-14 16:03:24,610 - core.unified_mathematical_bridge - INFO - ✅ Vault Orbital Bridge initialized
+2025-07-14 16:03:24,610 - core.math_integration_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 16:03:24,610 - core.unified_mathematical_bridge - INFO - ✅ Math Integration Bridge initialized
+2025-07-14 16:03:24,611 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,611 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,611 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,612 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,612 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,612 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,613 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,613 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,613 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,614 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,614 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,614 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,615 - core.math.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 16:03:24,615 - core.math.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 16:03:24,615 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 16:03:24,616 - core.math.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 16:03:24,616 - core.math.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 16:03:24,616 - core.math.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 16:03:24,617 - core.math.advanced_tensor_algebra - INFO - Advanced Tensor Algebra initialized successfully
+2025-07-14 16:03:24,617 - core.math.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 16:03:24,617 - core.math.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 16:03:24,617 - core.enhanced_math_to_trade_integration - INFO - 🧮 Initializing ALL mathematical modules...
+2025-07-14 16:03:24,618 - core.strategy.volume_weighted_hash_oscillator - INFO - Initializing Volume-Weighted Hash Oscillator...
+2025-07-14 16:03:24,618 - core.strategy.volume_weighted_hash_oscillator - INFO - [SUCCESS] Volume-Weighted Hash Oscillator initialized successfully
+2025-07-14 16:03:24,618 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - Initializing Zygot-Zalgo Entropy Dual Key Gate...
+2025-07-14 16:03:24,619 - core.strategy.zygot_zalgo_entropy_dual_key_gate - INFO - [SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully
+2025-07-14 16:03:24,619 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,620 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,620 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,621 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,621 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,622 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,622 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,622 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,623 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,623 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,624 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,624 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,624 - core.strategy.multi_phase_strategy_weight_tensor - INFO - Initializing MultiPhaseStrategyWeightTensor
+2025-07-14 16:03:24,625 - core.strategy.multi_phase_strategy_weight_tensor - INFO - ✅ MultiPhaseStrategyWeightTensor initialized successfully
+2025-07-14 16:03:24,626 - core.strategy.enhanced_math_ops.EnhancedTensorCalculator - INFO - CUDA not available, using CPU operations
+2025-07-14 16:03:24,627 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,627 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,627 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,628 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,628 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,628 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,629 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,629 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,629 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,629 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,630 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,630 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,631 - core.strategy.enhanced_math_ops - INFO - Initializing EnhancedMathOps
+2025-07-14 16:03:24,631 - core.strategy.enhanced_math_ops - INFO - ✅ EnhancedMathOps initialized successfully
+2025-07-14 16:03:24,631 - core.immune.qsc_gate - INFO - Initializing QSC Gate...
+2025-07-14 16:03:24,632 - core.immune.qsc_gate - INFO - [SUCCESS] QSC Gate initialized successfully
+2025-07-14 16:03:24,632 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Initializing Unified Tensor Algebra...
+2025-07-14 16:03:24,633 - core.math.tensor_algebra.unified_tensor_algebra - INFO - [SUCCESS] Unified Tensor Algebra initialized successfully
+2025-07-14 16:03:24,633 - core.bro_logic_module - INFO - 🧠 Big Bro Logic Module initialized - Nexus.BigBro.TheoremAlpha active
+2025-07-14 16:03:24,634 - core.clean_unified_math - INFO - 🧠 Big Bro Logic Module integrated into Clean Unified Math System
+2025-07-14 16:03:24,634 - core.enhanced_mathematical_core - INFO - ✅ EnhancedMathematicalCore initialized in cpu mode
+2025-07-14 16:03:24,635 - core.enhanced_mathematical_core - INFO - 📊 Mathematical dependencies: {'numpy': True, 'scipy': True, 'pandas': True, 'tensor_libs': True, 'quantum': False, 'pennylane': True}
+2025-07-14 16:03:24,635 - core.entropy.galileo_tensor_field - INFO - GalileoTensorField initialized with dimension 3
+2025-07-14 16:03:24,636 - core.entropy.galileo_tensor_field - INFO - GPU acceleration: False
+2025-07-14 16:03:24,656 - core.entropy_signal_integration - INFO - Loaded entropy signal configuration from config/entropy_signal_integration.yaml
+2025-07-14 16:03:24,656 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,657 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,658 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,658 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,658 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,659 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,659 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,659 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,660 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,661 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,661 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,661 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,662 - core.entropy_signal_integration - INFO - ⏱️ Timing cycles initialized
+2025-07-14 16:03:24,662 - core.entropy_signal_integration - INFO - 🌊 Entropy Signal Integrator initialized
+2025-07-14 16:03:24,662 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,663 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,663 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,664 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,664 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,664 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,665 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,665 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,665 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,666 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,666 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,666 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,667 - core.entropy_math - INFO - Initializing EntropyMath
+2025-07-14 16:03:24,667 - core.entropy_math - INFO - ✅ EntropyMath initialized successfully
+2025-07-14 16:03:24,667 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,667 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,668 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,668 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,668 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,669 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,669 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,669 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,669 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,670 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,670 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,670 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,671 - core.recursive_hash_echo - INFO - 🔄 Initializing RecursiveHashEcho
+2025-07-14 16:03:24,671 - core.recursive_hash_echo - INFO -    Similarity Threshold: 0.8
+2025-07-14 16:03:24,671 - core.recursive_hash_echo - INFO -    Max Recursion Depth: 5
+2025-07-14 16:03:24,671 - core.recursive_hash_echo - INFO -    Hash Algorithm: sha256
+2025-07-14 16:03:24,671 - core.recursive_hash_echo - INFO - ✅ RecursiveHashEcho initialized successfully
+2025-07-14 16:03:24,672 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,672 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,672 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,673 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,673 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,674 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,674 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,675 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,675 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,676 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,676 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,677 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,677 - core.hash_match_command_injector - INFO - 🎯 Initializing HashMatchCommandInjector
+2025-07-14 16:03:24,677 - core.hash_match_command_injector - INFO -    Min Similarity Threshold: 0.7
+2025-07-14 16:03:24,678 - core.hash_match_command_injector - INFO -    Min Confidence Threshold: 0.6
+2025-07-14 16:03:24,678 - core.hash_match_command_injector - INFO - ✅ HashMatchCommandInjector initialized successfully
+2025-07-14 16:03:24,678 - core.hash_match_command_injector - INFO - 📊 Loaded 3 default patterns
+2025-07-14 16:03:24,678 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,679 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,679 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,679 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,680 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,680 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,680 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,681 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,681 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,681 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,682 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,682 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,682 - core.profit_matrix_feedback_loop - INFO - 📊 Initializing ProfitMatrixFeedbackLoop
+2025-07-14 16:03:24,682 - core.profit_matrix_feedback_loop - INFO -    Matrix Dimension: 64
+2025-07-14 16:03:24,683 - core.profit_matrix_feedback_loop - INFO -    Feedback Strength: 0.1
+2025-07-14 16:03:24,683 - core.profit_matrix_feedback_loop - INFO - ✅ ProfitMatrixFeedbackLoop initialized successfully
+2025-07-14 16:03:24,684 - core.profit_matrix_feedback_loop - INFO - 📊 Initialized 5 trading matrices
+2025-07-14 16:03:24,684 - core.enhanced_math_to_trade_integration - INFO - ✅ All 15 mathematical modules initialized
+2025-07-14 16:03:24,685 - core.phantom_detector - INFO - Initializing PhantomDetector with mathematical integration
+2025-07-14 16:03:24,685 - core.phantom_detector - INFO - ✅ Mathematical infrastructure initialized for phantom detection
+2025-07-14 16:03:24,685 - core.phantom_detector - INFO - ✅ Volume Weighted Hash Oscillator initialized
+2025-07-14 16:03:24,686 - core.phantom_detector - INFO - ✅ Zygot-Zalgo Entropy Dual Key Gate initialized
+2025-07-14 16:03:24,686 - core.phantom_detector - INFO - ✅ QSC Quantum Signal Collapse Gate initialized
+2025-07-14 16:03:24,687 - core.phantom_detector - INFO - ✅ Unified Tensor Algebra initialized
+2025-07-14 16:03:24,688 - core.phantom_detector - INFO - ✅ Galileo Tensor Field initialized
+2025-07-14 16:03:24,688 - core.phantom_detector - INFO - ✅ Advanced Tensor Algebra initialized
+2025-07-14 16:03:24,688 - core.phantom_detector - INFO - ✅ Entropy Math initialized
+2025-07-14 16:03:24,688 - core.phantom_detector - INFO - ✅ Enhanced math-to-trade integration initialized
+2025-07-14 16:03:24,689 - core.phantom_detector - INFO - ✅ Initialized 8 detection parameters with mathematical optimization
+2025-07-14 16:03:24,689 - core.phantom_detector - INFO - ✅ PhantomDetector initialized successfully with full integration
+2025-07-14 16:03:24,689 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,690 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,690 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,691 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,691 - core.math.mathematical_framework_integrator - INFO - Initializing Math Config Manager
+2025-07-14 16:03:24,691 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager initialized successfully
+2025-07-14 16:03:24,692 - core.math.mathematical_framework_integrator - INFO - Initializing Math Result Cache
+2025-07-14 16:03:24,692 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache initialized successfully
+2025-07-14 16:03:24,692 - core.math.mathematical_framework_integrator - INFO - Initializing Math Orchestrator
+2025-07-14 16:03:24,693 - core.math.mathematical_framework_integrator - INFO - ✅ Math Config Manager activated
+2025-07-14 16:03:24,693 - core.math.mathematical_framework_integrator - INFO - ✅ Math Result Cache activated
+2025-07-14 16:03:24,693 - core.math.mathematical_framework_integrator - INFO - ✅ Math Orchestrator initialized successfully
+2025-07-14 16:03:24,693 - core.phantom_logger - INFO - Initializing PhantomLogger
+2025-07-14 16:03:24,694 - core.phantom_logger - INFO - ✅ PhantomLogger initialized successfully
+2025-07-14 16:03:24,694 - strategies.phantom_band_navigator - INFO - 🔮 Phantom Band Navigator initialized
+2025-07-14 16:03:24,694 - core.unified_mathematical_bridge - INFO - ✅ Phantom Band Navigator initialized
+2025-07-14 16:03:24,695 - core.risk_manager - INFO - 🛡️ RiskManager initialized with float risk_tolerance: 2.0%
+2025-07-14 16:03:24,695 - core.risk_manager - INFO -    Max portfolio risk: 5.0%
+2025-07-14 16:03:24,695 - core.risk_manager - INFO - 🔄 Enhanced error recovery system integrated
+2025-07-14 16:03:24,695 - core.unified_mathematical_bridge - INFO - ✅ Risk Manager initialized
+2025-07-14 16:03:24,696 - core.pure_profit_calculator - WARNING - ⚠️ Entropy signal integration not available in Pure Profit Calculator
+2025-07-14 16:03:24,696 - core.pure_profit_calculator - INFO - 🧮 Pure Profit Calculator initialized - Mathematical Mode with hybrid
+2025-07-14 16:03:24,696 - core.unified_mathematical_bridge - INFO - ✅ Pure Profit Calculator initialized
+2025-07-14 16:03:24,697 - core.heartbeat_integration_manager.HeartbeatIntegrationManager - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 16:03:24,697 - core.unified_mathematical_bridge - INFO - ✅ Heartbeat Integration Manager initialized
+2025-07-14 16:03:24,697 - core.quantum_classical_hybrid_mathematics - INFO - 🧮 Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 16:03:24,698 - core.unified_mathematical_bridge - INFO - ✅ Quantum-Classical Hybrid Mathematics initialized
+2025-07-14 16:03:24,698 - core.unified_mathematical_bridge - INFO - ✅ Mathematical Integration Methods initialized
+2025-07-14 16:03:24,698 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 16:03:24,699 - core.unified_mathematical_bridge - INFO - ✅ Performance Monitor initialized
+2025-07-14 16:03:24,700 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Connection strengths are below optimal levels. Review mathematical integration methods and enhance correlation calculations.
+2025-07-14 16:03:24,700 - core.unified_mathematical_performance_monitor - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 16:03:24,701 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Overall confidence is below optimal levels. Enhance mathematical validation and improve fallback systems.
+2025-07-14 16:03:24,701 - core.unified_mathematical_bridge - INFO - 🔄 Real-time performance monitoring started
+2025-07-14 16:03:24,702 - core.unified_mathematical_performance_monitor - INFO - 💡 New optimization recommendation: Mathematical consistency is below optimal levels. Review mathematical operations and ensure proper validation.
+2025-07-14 16:03:24,702 - core.unified_mathematical_performance_monitor - INFO - 📊 Unified Mathematical Performance Monitor initialized
+2025-07-14 16:03:24,702 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Connection strength critical: 0.000
+2025-07-14 16:03:24,703 - core.unified_mathematical_bridge - INFO - ✅ Unified Mathematical Bridge System initialized successfully
+2025-07-14 16:03:24,703 - core.unified_mathematical_performance_monitor - WARNING - 🚨 Critical health issue: Confidence critical: 0.000
+2025-07-14 16:03:24,703 - core.unified_mathematical_bridge - INFO - ✅ Active systems: 13
+2025-07-14 16:03:24,729 - core.soulprint_registry - INFO - 🔄 SoulprintRegistry using CPU fallback: numpy (CPU)
+2025-07-14 16:03:24,733 - core.vector_registry - INFO - 🔄 VectorRegistry using CPU fallback: numpy (CPU)

@@ -54,8 +54,8 @@ try:
     
     # Import phantom detection components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.automated_trading_pipeline import AutomatedTradingPipeline
+    # Removed circular imports: UnifiedMathematicalBridge and AutomatedTradingPipeline
+    # These will be imported lazily when needed
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
     PHANTOM_DETECTION_AVAILABLE = True
@@ -264,8 +264,8 @@ class PhantomDetector:
         # Initialize phantom detection components
         if PHANTOM_DETECTION_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-            self.unified_bridge = UnifiedMathematicalBridge(self.config)
-            self.trading_pipeline = AutomatedTradingPipeline(self.config)
+            # Removed circular imports: UnifiedMathematicalBridge and AutomatedTradingPipeline
+            # These will be imported lazily when needed
 
         self._initialize_system()
 
@@ -305,8 +305,8 @@ class PhantomDetector:
             
             if PHANTOM_DETECTION_AVAILABLE:
                 self.logger.info("✅ Enhanced math-to-trade integration initialized")
-                self.logger.info("✅ Unified mathematical bridge initialized")
-                self.logger.info("✅ Trading pipeline initialized for phantom detection")
+                # Removed circular imports: UnifiedMathematicalBridge and AutomatedTradingPipeline
+                # These will be imported lazily when needed
             
             # Initialize detection parameters
             self._initialize_detection_parameters()

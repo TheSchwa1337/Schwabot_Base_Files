@@ -38,6 +38,9 @@ import numpy as np
 import requests
 from decimal import Decimal
 
+# Set up logger first
+logger = logging.getLogger(__name__)
+
 # GPU acceleration imports
 try:
     import cupy as cp
@@ -49,8 +52,6 @@ except ImportError:
     GPU_AVAILABLE = False
     cp = None  # Define cp as None when not available
     logger.info("⚠️ GPU acceleration not available, using CPU fallback")
-
-logger = logging.getLogger(__name__)
 
 
 class APISource(Enum):

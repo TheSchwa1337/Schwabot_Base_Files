@@ -56,8 +56,8 @@ try:
     
     # Import fractal tracking components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.automated_trading_pipeline import AutomatedTradingPipeline
+    # Removed circular imports: UnifiedMathematicalBridge and AutomatedTradingPipeline
+    # These will be imported lazily when needed
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
     FRACTAL_TRACKING_AVAILABLE = True
