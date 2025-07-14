@@ -1,0 +1,13 @@
+2025-07-14 01:14:26,638 - core.hardware_auto_detector - WARNING - Configuration file not found: config/hardware_auto_config.json
+2025-07-14 01:14:26,644 - core.hardware_auto_detector - INFO - Platform: Windows
+2025-07-14 01:14:26,755 - core.hardware_auto_detector - WARNING - CPU detection failed: list index out of range
+2025-07-14 01:14:26,755 - core.hardware_auto_detector - INFO - CPU: 
+2025-07-14 01:14:26,756 - core.hardware_auto_detector - INFO - CPU Cores: 4
+2025-07-14 01:14:26,756 - core.hardware_auto_detector - INFO - CPU Frequency: 2000 MHz
+2025-07-14 01:14:26,762 - core.hardware_auto_detector - INFO - RAM: 24.0 GB (high)
+2025-07-14 01:14:26,762 - core.hardware_auto_detector - INFO - Storage: 94.8 GB
+2025-07-14 01:14:26,850 - core.hardware_auto_detector - WARNING - GPU 'NVIDIA GeForce GTX 980M' not found in database, using integrated tier
+2025-07-14 01:14:26,851 - core.hardware_auto_detector - INFO - GPU: NVIDIA GeForce GTX 980M
+2025-07-14 01:14:26,851 - core.hardware_auto_detector - INFO - GPU Memory: 4.0 GB
+2025-07-14 01:14:26,852 - core.hardware_auto_detector - INFO - GPU Tier: integrated
+2025-07-14 01:14:26,852 - core.hardware_auto_detector - INFO - Optimization Mode: balanced

@@ -1,0 +1,348 @@
+# Integrated Profit Correlation System Configuration
+# ================================================
+# Comprehensive configuration for the complete system including:
+# - Critical Error Handler settings
+# - Enhanced GPU Hash Processor parameters
+# - News Profit Mathematical Bridge configuration
+# - Thermal management and monitoring
+# - Performance optimization settings
+
+# =============================================================================
+# CRITICAL ERROR HANDLER CONFIGURATION
+# =============================================================================
+error_handler:
+  # Error tracking and history
+  max_error_history: 10000              # Maximum errors to keep in memory
+  error_correlation_window: 300         # Time window for error correlation (seconds)
+  auto_recovery_enabled: true           # Enable automatic error recovery
+  max_recovery_attempts: 3              # Maximum recovery attempts per error
+  
+  # Error escalation thresholds (errors per hour)
+  escalation_thresholds:
+    low: 10                             # Low severity escalation threshold
+    medium: 5                           # Medium severity escalation threshold
+    high: 2                             # High severity escalation threshold
+    critical: 1                         # Critical severity escalation threshold
+  
+  # Profit impact thresholds (basis points)
+  profit_impact_thresholds:
+    low: 10.0                           # Low profit impact threshold
+    medium: 50.0                        # Medium profit impact threshold
+    high: 100.0                         # High profit impact threshold
+    critical: 500.0                     # Critical profit impact threshold
+  
+  # Recovery strategy configuration
+  recovery_strategies:
+    gpu_hash_computation:
+      - fallback_cpu                    # Primary: Fall back to CPU
+      - reduce_precision                # Secondary: Reduce computation precision
+      - batch_processing                # Tertiary: Use smaller batches
+    
+    thermal_management:
+      - throttle_gpu                    # Primary: Throttle GPU usage
+      - cooldown_period                 # Secondary: Implement cooling period
+      - emergency_shutdown              # Tertiary: Emergency shutdown
+    
+    news_correlation:
+      - cached_results                  # Primary: Use cached correlations
+      - simplified_model                # Secondary: Use simplified correlation
+      - emergency_bypass                # Tertiary: Bypass correlation
+    
+    memory_allocation:
+      - garbage_collection              # Primary: Force garbage collection
+      - reduce_batch_size               # Secondary: Reduce memory usage
+      - fallback_cpu                    # Tertiary: Use CPU instead of GPU
+    
+    profit_calculation:
+      - cached_calculation              # Primary: Use cached values
+      - simplified_model                # Secondary: Use simplified model
+      - conservative_estimate           # Tertiary: Use conservative estimates
+
+# =============================================================================
+# ENHANCED GPU HASH PROCESSOR CONFIGURATION
+# =============================================================================
+gpu_processor:
+  # Queue and buffer settings
+  gpu_queue_size: 1000                  # GPU processing queue size
+  cpu_queue_size: 2000                  # CPU fallback queue size
+  result_buffer_size: 5000              # Result buffer size
+  batch_size_gpu: 100                   # GPU batch processing size
+  batch_size_cpu: 50                    # CPU batch processing size
+  
+  # Thermal management
+  thermal_monitoring_interval: 10.0     # Thermal monitoring interval (seconds)
+  max_gpu_temperature: 80.0             # Maximum safe GPU temperature (°C)
+  max_cpu_temperature: 75.0             # Maximum safe CPU temperature (°C)
+  thermal_throttle_threshold: 75.0      # Temperature threshold for throttling (°C)
+  emergency_shutdown_threshold: 85.0    # Emergency shutdown temperature (°C)
+  
+  # Performance and caching
+  correlation_cache_size: 10000         # Correlation cache size
+  performance_window: 1000              # Performance metrics window size
+  error_recovery_attempts: 3            # Error recovery attempts
+  memory_pool_size_mb: 2048             # GPU memory pool size (MB)
+  hash_precision_bits: 256              # Hash precision in bits
+  profit_correlation_threshold: 0.3     # Minimum correlation for caching
+  
+  # Processing mode preferences
+  preferred_processing_modes:
+    cool: "gpu_accelerated"             # Preferred mode when cool
+    normal: "gpu_accelerated"           # Preferred mode when normal temp
+    warm: "hybrid_processing"           # Preferred mode when warm
+    hot: "thermal_throttled"            # Preferred mode when hot
+    critical: "emergency_mode"          # Preferred mode when critical temp
+  
+  # GPU-specific settings
+  gpu_settings:
+    enable_memory_pool: true            # Enable GPU memory pooling
+    memory_cleanup_interval: 300        # Memory cleanup interval (seconds)
+    stream_count: 4                     # Number of CUDA streams
+    max_concurrent_kernels: 8           # Maximum concurrent GPU kernels
+    precision_mode: "mixed"             # Precision mode: float32, float16, mixed
+    optimization_level: "aggressive"    # Optimization level: conservative, balanced, aggressive
+
+# =============================================================================
+# NEWS PROFIT MATHEMATICAL BRIDGE CONFIGURATION
+# =============================================================================
+news_profit_bridge:
+  # Core mathematical parameters
+  correlation_threshold: 0.25           # Minimum correlation for profit signal
+  profit_crystallization_threshold: 0.15 # Minimum profit to execute trades
+  hash_window_minutes: 60               # Time window for hash correlation analysis
+  
+  # Keyword extraction limits
+  max_keywords_per_event: 10            # Maximum keywords extracted per news item
+  keyword_weight_factors:
+    crypto_core: 1.0                    # bitcoin, btc, crypto, blockchain
+    market_action: 0.8                  # buy, sell, surge, crash, pump, dump
+    institutional: 0.9                  # etf, regulation, sec, institutional
+    entities: 0.7                       # trump, musk, tesla, microstrategy
+  
+  # Hash generation parameters
+  keyword_hash_length: 32               # Length of keyword hash
+  temporal_hash_length: 32              # Length of temporal hash
+  corroboration_hash_length: 32         # Length of corroboration hash
+  
+  # Entropy classification
+  entropy_classes: 4                    # Number of entropy classes (0-3)
+  entropy_thresholds:
+    low: 0.3                            # Below this = class 0
+    medium: 0.6                         # Below this = class 1
+    high: 0.8                           # Below this = class 2
+    maximum: 1.0                        # Above high = class 3
+  
+  # Hash correlation analysis
+  correlation_analysis:
+    hamming_weight: 0.5                 # Weight for Hamming distance similarity
+    bit_pattern_weight: 0.3             # Weight for bit pattern correlation
+    temporal_weight: 0.2                # Weight for temporal correlation
+    btc_hash_buffer_size: 10            # Number of recent BTC hashes to correlate
+    mock_btc_patterns: 5                # Number of mock patterns for testing
+    base_btc_price: 42000.0            # Base BTC price for mock data
+    min_correlation_for_analysis: 0.1   # Minimum correlation to include in analysis
+    correlation_analysis_window: 100    # Number of correlations for distribution analysis
+  
+  # Profit timing calculation
+  profit_timing:
+    base_entry_delay_minutes: 10        # Base delay before entry
+    correlation_multiplier_factor: 1.0  # Factor for correlation-based timing adjustment
+    base_exit_window_minutes: 30        # Base window for exit timing
+    entropy_exit_multiplier: 1.0        # Multiplier based on entropy class
+    profit_weight_multiplier: 1.0       # Multiplier based on profit weight
+    min_confidence_threshold: 0.3       # Minimum confidence for valid timing
+    max_risk_factor: 0.7                # Maximum acceptable risk factor
+    confidence_boost_correlation: 0.5   # Boost confidence by correlation strength
+    confidence_boost_profit_weight: 0.5 # Boost confidence by profit weight
+
+# =============================================================================
+# INTEGRATED SYSTEM CONFIGURATION
+# =============================================================================
+integrated_system:
+  # Processing and queuing
+  processing_queue_size: 5000           # Main processing queue size
+  result_history_size: 10000            # Result history size
+  max_processing_workers: 4             # Maximum processing worker threads
+  processing_timeout_seconds: 30.0      # Processing timeout per event
+  correlation_batch_size: 50            # Batch size for correlation processing
+  
+  # Profit and risk management
+  profit_threshold_basis_points: 25.0   # Minimum profit threshold (basis points)
+  risk_tolerance: 0.7                   # Maximum acceptable risk factor
+  profit_opportunity_confidence_min: 0.6 # Minimum confidence for profit opportunities
+  
+  # System monitoring and performance
+  monitoring_interval_seconds: 10.0     # System monitoring interval
+  performance_window_size: 1000         # Performance metrics window size
+  error_escalation_threshold: 10        # Error escalation threshold (errors per hour)
+  
+  # Feature flags
+  thermal_monitoring_enabled: true      # Enable thermal monitoring
+  gpu_fallback_enabled: true           # Enable GPU to CPU fallback
+  correlation_caching_enabled: true     # Enable correlation result caching
+  performance_logging_enabled: true     # Enable performance logging
+  adaptive_batch_sizing: true          # Enable adaptive batch size adjustment
+  predictive_thermal_management: true   # Enable predictive thermal management
+  
+  # Advanced optimization settings
+  optimization:
+    enable_predictive_caching: true     # Enable predictive correlation caching
+    enable_load_balancing: true         # Enable dynamic load balancing
+    enable_priority_queuing: true       # Enable priority-based event queuing
+    cache_optimization_interval: 300    # Cache optimization interval (seconds)
+    performance_analysis_window: 3600   # Performance analysis window (seconds)
+    adaptive_threshold_adjustment: true # Enable adaptive threshold adjustment
+    
+  # Integration points
+  integration:
+    btc_processor_enabled: true         # Enable BTC processor integration
+    fractal_controller_enabled: true    # Enable fractal controller integration
+    profit_navigator_enabled: true      # Enable profit navigator integration
+    vault_system_enabled: true          # Enable vault system integration
+    
+  # Resource management
+  resource_limits:
+    max_memory_usage_mb: 8192           # Maximum memory usage (MB)
+    max_cpu_utilization: 0.8            # Maximum CPU utilization
+    max_gpu_utilization: 0.9            # Maximum GPU utilization
+    disk_space_threshold_gb: 10.0       # Minimum free disk space (GB)
+    
+  # Logging and debugging
+  logging:
+    level: "INFO"                       # Logging level
+    file_rotation_size_mb: 100          # Log file rotation size (MB)
+    max_log_files: 10                   # Maximum number of log files
+    performance_log_interval: 60        # Performance log interval (seconds)
+    error_log_detail_level: "DETAILED"  # Error logging detail level
+    
+  # Security and safety
+  safety:
+    enable_circuit_breaker: true        # Enable circuit breaker pattern
+    circuit_breaker_threshold: 50       # Circuit breaker error threshold
+    enable_rate_limiting: true          # Enable request rate limiting
+    max_requests_per_minute: 1000       # Maximum requests per minute
+    enable_input_validation: true       # Enable strict input validation
+    enable_output_sanitization: true    # Enable output sanitization
+
+# =============================================================================
+# THERMAL MANAGEMENT CONFIGURATION
+# =============================================================================
+thermal_management:
+  # Thermal integration settings
+  thermal_integration_enabled: true     # Enable thermal management integration
+  thermal_monitoring_interval: 10.0     # Seconds between thermal state updates
+  thermal_history_retention: 100        # Number of thermal states to retain
+  
+  # Temperature thresholds for processing allocation
+  cpu_temperature_thresholds:
+    normal: 65.0                        # Below this = normal CPU allocation
+    warm: 75.0                          # Above this = reduce CPU allocation
+    hot: 80.0                           # Above this = significant CPU reduction
+    critical: 85.0                      # Above this = emergency CPU reduction
+  
+  gpu_temperature_thresholds:
+    normal: 60.0                        # Below this = normal GPU allocation  
+    warm: 70.0                          # Above this = reduce GPU allocation
+    hot: 75.0                           # Above this = significant GPU reduction
+    critical: 83.0                      # Above this = emergency GPU reduction
+  
+  # Thermal scaling factors (multipliers for allocation)
+  thermal_scaling_factors:
+    normal: 1.0                         # No scaling at normal temps
+    warm: 0.8                           # 20% reduction at warm temps
+    hot: 0.5                            # 50% reduction at hot temps
+    critical: 0.2                       # 80% reduction at critical temps
+  
+  # Emergency thermal protection
+  emergency_thermal_threshold: 85.0     # Emergency shutdown threshold
+  thermal_emergency_cpu_allocation: 10.0 # Emergency CPU allocation
+  thermal_emergency_gpu_allocation: 5.0  # Emergency GPU allocation
+  thermal_cooldown_seconds: 60          # Cooldown period after thermal emergency
+  
+  # Predictive thermal management
+  predictive_thermal:
+    enable_prediction: true             # Enable thermal prediction
+    prediction_window_seconds: 300      # Thermal prediction window
+    temperature_trend_threshold: 2.0    # Temperature trend threshold (°C/min)
+    preemptive_throttling: true         # Enable preemptive throttling
+    thermal_model_learning: true        # Enable thermal model learning
+
+# =============================================================================
+# PERFORMANCE TUNING
+# =============================================================================
+performance:
+  # CPU optimization
+  cpu_optimization:
+    enable_multiprocessing: true        # Enable multiprocessing
+    max_cpu_workers: 8                  # Maximum CPU worker processes
+    cpu_affinity_enabled: false         # Enable CPU affinity (system dependent)
+    numa_awareness: false               # Enable NUMA awareness (system dependent)
+  
+  # Memory optimization
+  memory_optimization:
+    enable_memory_mapping: true         # Enable memory mapping for large data
+    garbage_collection_threshold: 0.8   # GC threshold (memory usage percentage)
+    memory_pool_enabled: true           # Enable memory pooling
+    large_object_threshold_mb: 10       # Large object threshold (MB)
+  
+  # I/O optimization
+  io_optimization:
+    enable_async_io: true               # Enable asynchronous I/O
+    io_buffer_size_kb: 64               # I/O buffer size (KB)
+    concurrent_io_operations: 4         # Maximum concurrent I/O operations
+  
+  # Network optimization (if applicable)
+  network_optimization:
+    connection_pool_size: 20            # Connection pool size
+    request_timeout_seconds: 30         # Request timeout
+    retry_attempts: 3                   # Network retry attempts
+    backoff_multiplier: 2.0             # Exponential backoff multiplier
+
+# =============================================================================
+# MONITORING AND ALERTING
+# =============================================================================
+monitoring:
+  # Health check configuration
+  health_checks:
+    enabled: true                       # Enable health checks
+    interval_seconds: 30                # Health check interval
+    timeout_seconds: 10                 # Health check timeout
+    failure_threshold: 3                # Failures before marking unhealthy
+    
+  # Metrics collection
+  metrics:
+    enabled: true                       # Enable metrics collection
+    collection_interval_seconds: 60     # Metrics collection interval
+    retention_hours: 168                # Metrics retention period (1 week)
+    aggregation_window_minutes: 5       # Metrics aggregation window
+    
+  # Alerting configuration
+  alerting:
+    enabled: false                      # Enable alerting (requires external service)
+    webhook_url: ""                     # Webhook URL for alerts
+    alert_levels:
+      warning_threshold: 0.7            # Warning threshold for metrics
+      critical_threshold: 0.9           # Critical threshold for metrics
+    cooldown_minutes: 15                # Alert cooldown period
+
+# =============================================================================
+# DEVELOPMENT AND TESTING
+# =============================================================================
+development:
+  # Debug settings
+  debug_mode: false                     # Enable debug mode
+  verbose_logging: false                # Enable verbose logging
+  profiling_enabled: false             # Enable performance profiling
+  
+  # Testing configuration
+  testing:
+    mock_data_enabled: false            # Enable mock data generation
+    simulation_mode: false              # Enable simulation mode
+    test_data_size: 1000                # Test data size
+    performance_testing: false          # Enable performance testing
+    
+  # Development tools
+  dev_tools:
+    enable_hot_reload: false            # Enable hot reload (development only)
+    enable_debug_endpoints: false       # Enable debug API endpoints
+    memory_profiling: false             # Enable memory profiling
+    cpu_profiling: false                # Enable CPU profiling 

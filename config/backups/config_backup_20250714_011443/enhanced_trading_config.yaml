@@ -1,0 +1,412 @@
+# Enhanced Trading Configuration - Production-Grade Setup
+# ======================================================
+# 
+# This configuration file contains all settings for the Schwabot trading system
+# including API keys, trading parameters, risk management, and GPU acceleration.
+#
+# IMPORTANT: Replace placeholder values with your actual API keys and settings
+# before using in production.
+
+version: "2.0.0"
+created_at: "2025-01-02"
+description: "Enhanced trading configuration with real API integrations"
+
+# =============================================================================
+# API CREDENTIALS (REPLACE WITH YOUR ACTUAL KEYS)
+# =============================================================================
+
+api_credentials:
+  # CoinMarketCap API (Premium - requires paid subscription)
+  coinmarketcap:
+    enabled: true
+    api_key: "YOUR_COINMARKETCAP_API_KEY_HERE"  # Get from https://coinmarketcap.com/api/
+    base_url: "https://pro-api.coinmarketcap.com/v1"
+    rate_limit: 30  # requests per minute
+    timeout: 30
+    priority: 1  # Highest priority for market data
+    
+  # CoinGecko API (Free tier - no API key required)
+  coingecko:
+    enabled: true
+    api_key: ""  # Free tier doesn't require API key
+    base_url: "https://api.coingecko.com/api/v3"
+    rate_limit: 50  # requests per minute
+    timeout: 30
+    priority: 2  # Secondary priority
+    
+  # Alpha Vantage API (Financial data)
+  alpha_vantage:
+    enabled: true
+    api_key: "YOUR_ALPHA_VANTAGE_API_KEY_HERE"  # Get from https://www.alphavantage.co/
+    base_url: "https://www.alphavantage.co/query"
+    rate_limit: 5  # requests per minute (free tier)
+    timeout: 30
+    priority: 3  # Tertiary priority
+    
+  # Glassnode API (On-chain metrics)
+  glassnode:
+    enabled: true
+    api_key: "YOUR_GLASSNODE_API_KEY_HERE"  # Get from https://glassnode.com/
+    base_url: "https://api.glassnode.com/v1/metrics"
+    rate_limit: 10  # requests per minute
+    timeout: 30
+    priority: 4
+    
+  # Fear & Greed Index (Free)
+  fear_greed:
+    enabled: true
+    api_key: ""  # Free API
+    base_url: "https://api.alternative.me/fng/"
+    rate_limit: 60  # requests per minute
+    timeout: 30
+    priority: 5
+
+# =============================================================================
+# EXCHANGE CONFIGURATION (TRADING EXECUTION)
+# =============================================================================
+
+exchanges:
+  # Binance Exchange
+  binance:
+    enabled: true
+    api_key: "YOUR_BINANCE_API_KEY_HERE"
+    secret_key: "YOUR_BINANCE_SECRET_KEY_HERE"
+    testnet: true  # Set to false for live trading
+    sandbox: true   # Set to false for live trading
+    rate_limit: 1200  # requests per minute
+    timeout: 30000
+    websocket_enabled: true
+    trading_pairs: ["BTC/USDT", "ETH/USDT", "SOL/USDT", "ADA/USDT"]
+    
+  # Coinbase Pro Exchange
+  coinbase_pro:
+    enabled: true
+    api_key: "YOUR_COINBASE_API_KEY_HERE"
+    secret: "YOUR_COINBASE_SECRET_KEY_HERE"
+    passphrase: "YOUR_COINBASE_PASSPHRASE_HERE"
+    sandbox: true  # Set to false for live trading
+    rate_limit: 100  # requests per minute
+    timeout: 30000
+    websocket_enabled: true
+    trading_pairs: ["BTC/USDC", "ETH/USDC", "SOL/USDC"]
+    
+  # Kraken Exchange
+  kraken:
+    enabled: true
+    api_key: "YOUR_KRAKEN_API_KEY_HERE"
+    secret: "YOUR_KRAKEN_SECRET_KEY_HERE"
+    sandbox: true  # Set to false for live trading
+    rate_limit: 15  # requests per 15 seconds
+    timeout: 30000
+    websocket_enabled: true
+    trading_pairs: ["BTC/USD", "ETH/USD", "SOL/USD"]
+
+# =============================================================================
+# TRADING PARAMETERS & RISK MANAGEMENT
+# =============================================================================
+
+trading_parameters:
+  # Position Sizing
+  max_position_size_pct: 10.0      # Maximum 10% of portfolio per position
+  max_total_exposure_pct: 30.0     # Maximum 30% total exposure across all positions
+  min_order_size_usd: 10.0         # Minimum $10 orders
+  max_order_size_usd: 1000.0       # Maximum $1000 orders per trade
+  
+  # Risk Management
+  stop_loss_pct: 2.0               # 2% stop loss
+  take_profit_pct: 5.0             # 5% take profit
+  max_daily_loss_pct: 5.0          # 5% maximum daily loss
+  max_drawdown_pct: 15.0           # 15% maximum drawdown before halt
+  volatility_threshold: 0.8        # Volatility threshold for position sizing
+  
+  # Execution Parameters
+  slippage_tolerance: 0.001        # 0.1% slippage tolerance
+  execution_timeout: 30.0          # 30 seconds execution timeout
+  retry_attempts: 3                # Number of retry attempts
+  order_timeout: 60.0              # 60 seconds order timeout
+  
+  # Circuit Breakers
+  enable_circuit_breakers: true
+  consecutive_losses_limit: 5      # Stop trading after 5 consecutive losses
+  daily_loss_limit_usd: 1000.0     # Stop trading if daily loss exceeds $1000
+  max_open_positions: 5            # Maximum number of open positions
+  
+  # Dynamic Risk Adjustment
+  enable_dynamic_risk: true
+  volatility_adjustment: true      # Adjust position size based on volatility
+  high_volatility_threshold: 0.05  # 5% volatility threshold
+  volatility_position_reduction: 0.5  # Reduce position size by 50% in high volatility
+
+# =============================================================================
+# GPU ACCELERATION CONFIGURATION
+# =============================================================================
+
+gpu_acceleration:
+  enabled: true                    # Enable GPU acceleration
+  device_id: 0                     # GPU device ID (0 for first GPU)
+  memory_limit_gb: 4.0             # Maximum GPU memory usage in GB
+  compute_capability: "7.5"        # CUDA compute capability
+  enable_tensor_cores: true        # Enable Tensor Cores (RTX series)
+  enable_mixed_precision: true     # Enable mixed precision for faster computation
+  batch_size: 1024                 # Batch size for GPU operations
+  max_concurrent_kernels: 4        # Maximum concurrent GPU kernels
+  
+  # Mathematical Operations
+  enable_gpu_indicators: true      # Compute technical indicators on GPU
+  enable_gpu_optimization: true    # Enable GPU-optimized mathematical operations
+  enable_gpu_backtesting: true     # Enable GPU-accelerated backtesting
+  
+  # Performance Tuning
+  memory_pool_size_gb: 2.0         # GPU memory pool size
+  enable_memory_pool: true         # Enable GPU memory pooling
+  enable_async_operations: true    # Enable asynchronous GPU operations
+
+# =============================================================================
+# MATHEMATICAL FRAMEWORK CONFIGURATION
+# =============================================================================
+
+mathematical_framework:
+  # Core Mathematical Libraries
+  enable_tensor_algebra: true      # Enable tensor algebra operations
+  enable_quantum_simulation: true  # Enable quantum simulation features
+  enable_entropy_analysis: true    # Enable entropy-based analysis
+  enable_persistent_homology: true # Enable persistent homology analysis
+  
+  # Advanced Features
+  enable_fractal_analysis: true    # Enable fractal dimension analysis
+  enable_waveform_analysis: true   # Enable waveform pattern analysis
+  enable_memory_key_management: true  # Enable memory key management
+  enable_flow_order_booking: true  # Enable flow order booking system
+  
+  # Performance Settings
+  computation_precision: "double"  # double, float, mixed
+  enable_parallel_processing: true # Enable parallel mathematical computations
+  max_threads: 8                   # Maximum number of computation threads
+  
+  # Memory Management
+  enable_memory_optimization: true # Enable memory optimization
+  cache_size_mb: 512               # Mathematical cache size in MB
+  enable_result_caching: true      # Cache mathematical results
+
+# =============================================================================
+# MARKET DATA CONFIGURATION
+# =============================================================================
+
+market_data:
+  # Data Sources Priority
+  primary_source: "coinmarketcap"  # Primary data source
+  fallback_sources: ["coingecko", "alpha_vantage"]  # Fallback sources in order
+  
+  # Data Quality Settings
+  min_data_quality: "good"         # Minimum acceptable data quality
+  enable_data_validation: true     # Enable data validation
+  enable_cross_reference: true     # Cross-reference data from multiple sources
+  
+  # Caching Configuration
+  cache_duration: 60               # Cache duration in seconds
+  max_cache_size_mb: 256           # Maximum cache size in MB
+  enable_intelligent_caching: true # Enable intelligent caching
+  
+  # Real-time Data
+  enable_websocket_feeds: true     # Enable WebSocket data feeds
+  enable_real_time_processing: true # Enable real-time data processing
+  update_interval_ms: 100          # Data update interval in milliseconds
+  
+  # Historical Data
+  enable_historical_data: true     # Enable historical data fetching
+  max_history_days: 365            # Maximum historical data days
+  enable_data_compression: true    # Enable data compression
+
+# =============================================================================
+# STRATEGY CONFIGURATION
+# =============================================================================
+
+strategies:
+  # Active Strategies
+  active_strategies:
+    - "volume_weighted_hash_oscillator"
+    - "zygot_zalgo_entropy_dual_key_gate"
+    - "multi_phase_strategy_weight_tensor"
+    - "quantum_strategy_calculator"
+    - "entropy_enhanced_trading_executor"
+  
+  # Strategy Weights
+  strategy_weights:
+    volume_weighted_hash_oscillator: 0.25
+    zygot_zalgo_entropy_dual_key_gate: 0.25
+    multi_phase_strategy_weight_tensor: 0.20
+    quantum_strategy_calculator: 0.15
+    entropy_enhanced_trading_executor: 0.15
+  
+  # Strategy Parameters
+  confidence_threshold: 0.7        # Minimum confidence for signal execution
+  signal_strength_threshold: 0.6   # Minimum signal strength
+  enable_strategy_optimization: true # Enable strategy optimization
+  optimization_interval_hours: 24  # Strategy optimization interval
+  
+  # Risk-Adjusted Strategy Selection
+  enable_risk_adjusted_selection: true
+  max_strategy_correlation: 0.8    # Maximum correlation between strategies
+  enable_dynamic_weighting: true   # Enable dynamic strategy weighting
+
+# =============================================================================
+# PERFORMANCE MONITORING & LOGGING
+# =============================================================================
+
+monitoring:
+  # Performance Metrics
+  enable_performance_tracking: true
+  metrics_collection_interval: 60  # Metrics collection interval in seconds
+  enable_real_time_dashboard: true # Enable real-time performance dashboard
+  
+  # Logging Configuration
+  log_level: "INFO"                # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_file: "logs/schwabot_enhanced.log"
+  max_log_file_size_mb: 100
+  backup_count: 10
+  enable_structured_logging: true
+  
+  # Alerts and Notifications
+  enable_alerts: true
+  alert_channels: ["console", "file"]  # console, file, email, slack
+  alert_thresholds:
+    drawdown_warning: 0.1          # 10% drawdown warning
+    drawdown_critical: 0.2         # 20% drawdown critical
+    profit_target: 0.05            # 5% profit target
+    loss_limit: 0.15               # 15% loss limit
+    
+  # Health Monitoring
+  enable_health_checks: true
+  health_check_interval: 300       # Health check interval in seconds
+  enable_system_metrics: true      # Enable system resource monitoring
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+
+security:
+  # API Key Security
+  enable_api_key_encryption: true  # Encrypt API keys in storage
+  enable_key_rotation: true        # Enable automatic API key rotation
+  key_rotation_interval_days: 90   # Key rotation interval
+  
+  # Access Control
+  enable_rate_limiting: true       # Enable API rate limiting
+  max_requests_per_minute: 1000    # Maximum requests per minute
+  enable_ip_whitelist: false       # Enable IP whitelisting
+  allowed_ips: []                  # List of allowed IP addresses
+  
+  # Session Management
+  session_timeout_seconds: 3600    # Session timeout in seconds
+  enable_session_encryption: true  # Encrypt session data
+  
+  # Audit Logging
+  enable_audit_logging: true       # Enable audit logging
+  audit_log_file: "logs/audit.log"
+  log_sensitive_operations: true   # Log sensitive operations
+
+# =============================================================================
+# BACKTESTING & SIMULATION
+# =============================================================================
+
+backtesting:
+  enabled: true                    # Enable backtesting capabilities
+  default_period_days: 30          # Default backtesting period
+  enable_forward_testing: true     # Enable forward testing
+  enable_walk_forward_analysis: true # Enable walk-forward analysis
+  
+  # Performance Metrics
+  enable_sharpe_ratio: true        # Calculate Sharpe ratio
+  enable_max_drawdown: true        # Calculate maximum drawdown
+  enable_win_rate: true            # Calculate win rate
+  enable_profit_factor: true       # Calculate profit factor
+  
+  # Simulation Settings
+  enable_monte_carlo: true         # Enable Monte Carlo simulation
+  monte_carlo_iterations: 1000     # Number of Monte Carlo iterations
+  enable_stress_testing: true      # Enable stress testing
+
+# =============================================================================
+# SYSTEM OPTIMIZATION
+# =============================================================================
+
+optimization:
+  # Performance Optimization
+  enable_memory_optimization: true # Enable memory optimization
+  enable_cpu_optimization: true    # Enable CPU optimization
+  enable_network_optimization: true # Enable network optimization
+  
+  # Resource Limits
+  max_memory_usage_gb: 8.0         # Maximum memory usage in GB
+  max_cpu_usage_percent: 80        # Maximum CPU usage percentage
+  max_disk_usage_gb: 50.0          # Maximum disk usage in GB
+  
+  # Caching Strategy
+  enable_multi_level_caching: true # Enable multi-level caching
+  l1_cache_size_mb: 64             # L1 cache size (RAM)
+  l2_cache_size_mb: 512            # L2 cache size (SSD)
+  
+  # Database Optimization
+  enable_database_optimization: true
+  enable_indexing: true            # Enable database indexing
+  enable_connection_pooling: true  # Enable connection pooling
+
+# =============================================================================
+# ENVIRONMENT-SPECIFIC SETTINGS
+# =============================================================================
+
+environment:
+  # Development Environment
+  development:
+    debug_mode: true
+    enable_detailed_logging: true
+    enable_mock_data: false        # Use mock data for testing
+    enable_slow_execution: false   # Enable slow execution for debugging
+    
+  # Production Environment
+  production:
+    debug_mode: false
+    enable_detailed_logging: false
+    enable_mock_data: false
+    enable_slow_execution: false
+    enable_high_performance: true  # Enable high-performance mode
+    
+  # Testing Environment
+  testing:
+    debug_mode: true
+    enable_detailed_logging: true
+    enable_mock_data: true
+    enable_slow_execution: true
+    enable_high_performance: false
+
+# =============================================================================
+# DEPLOYMENT CONFIGURATION
+# =============================================================================
+
+deployment:
+  # Container Configuration
+  container:
+    image_name: "schwabot-enhanced"
+    container_name: "schwabot-trading"
+    restart_policy: "unless-stopped"
+    enable_health_checks: true
+    
+  # Scaling Configuration
+  scaling:
+    enable_auto_scaling: false     # Enable auto-scaling
+    min_instances: 1               # Minimum number of instances
+    max_instances: 3               # Maximum number of instances
+    target_cpu_utilization: 70     # Target CPU utilization percentage
+    
+  # Monitoring and Logging
+  monitoring:
+    enable_prometheus: true        # Enable Prometheus metrics
+    enable_grafana: true           # Enable Grafana dashboards
+    enable_jaeger: true            # Enable distributed tracing
+    
+  # Backup and Recovery
+  backup:
+    enable_automated_backup: true  # Enable automated backups
+    backup_interval_hours: 24      # Backup interval in hours
+    backup_retention_days: 30      # Backup retention period
+    enable_point_in_time_recovery: true # Enable point-in-time recovery 
