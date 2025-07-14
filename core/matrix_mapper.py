@@ -42,6 +42,15 @@ class XiRingLevel(Enum):
     RING_5 = "ring_5"  # Reactivation
 
 
+class FallbackDecision(Enum):
+    """Fallback decision types for matrix mapping."""
+    EXECUTE_CURRENT = "execute_current"
+    FALLBACK_ORBITAL = "fallback_orbital"
+    GHOST_REACTIVATION = "ghost_reactivation"
+    EMERGENCY_STABILIZATION = "emergency_stabilization"
+    ABORT_STRATEGY = "abort_strategy"
+
+
 @dataclass
 class Matrix:
     """Matrix structure for classification."""
