@@ -8,6 +8,12 @@ de-synced execution, and independent profit opportunities.
 
 Mathematical Core:
 Strategy_Profile(t, Pᵢ) = ƒ(Hashₜᵢ, Assetsᵢ, Holdingsᵢ, Profit_Zonesᵢ)
+
+Lantern Core Integration:
+- Ghost reentry signal processing
+- Echo-based strategy activation
+- Soulprint memory integration
+- Triplet pattern matching
 """
 
 import asyncio
@@ -21,6 +27,14 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 from datetime import datetime, timedelta
+
+# Import Lantern Core for ghost reentry logic
+try:
+    from core.lantern_core import LanternCore
+    LANTERN_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Lantern Core not available: {e}")
+    LANTERN_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -155,6 +169,11 @@ class StrategyMapper:
         
         # System state
         self.initialized = False
+        
+        # Lantern Core integration
+        self.lantern_core = LanternCore() if LANTERN_AVAILABLE else None
+        self.ghost_reentry_queue: List['EchoSignal'] = []
+        self.echo_activation_history: List[Dict[str, Any]] = []
         
         self.logger.info("Strategy Mapper initialized")
     
@@ -588,3 +607,337 @@ class StrategyMapper:
         except Exception as e:
             self.logger.error(f"Error getting system status: {e}")
             return {} 
+
+    # =========================
+    # Lantern Core Integration Methods
+    # =========================
+    
+    async def process_lantern_echo_signals(
+        self,
+        current_tick: int,
+        current_prices: Dict[str, float],
+        tick_data: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Process Lantern Core echo signals for ghost reentry opportunities.
+        
+        Args:
+            current_tick: Current tick number
+            current_prices: Current prices for all assets
+            tick_data: Additional tick data for triplet matching
+            
+        Returns:
+            List of processed echo activations
+        """
+        if not LANTERN_AVAILABLE or not self.lantern_core:
+            return []
+        
+        try:
+            # Scan for reentry opportunities
+            echo_signals = self.lantern_core.scan_for_reentry_opportunity(
+                current_tick, current_prices, tick_data
+            )
+            
+            activations = []
+            
+            for echo_signal in echo_signals:
+                # Check if reentry should be triggered
+                should_trigger = self.lantern_core.should_trigger_reentry(
+                    echo_signal, current_prices
+                )
+                
+                if should_trigger:
+                    # Queue ghost reentry
+                    self.ghost_reentry_queue.append(echo_signal)
+                    
+                    # Create activation record
+                    activation = {
+                        'echo_type': echo_signal.echo_type.value,
+                        'symbol': echo_signal.symbol,
+                        'strength': echo_signal.strength,
+                        'hash_value': echo_signal.hash_value,
+                        'timestamp': echo_signal.timestamp.isoformat(),
+                        'confidence': echo_signal.confidence,
+                        'metadata': echo_signal.metadata,
+                        'triggered': True
+                    }
+                    
+                    activations.append(activation)
+                    self.echo_activation_history.append(activation)
+                    
+                    self.logger.info(f"🎯 Lantern echo triggered: {echo_signal.echo_type.value} for {echo_signal.symbol}")
+                    print(f"[LANTERN] Ghost reentry triggered for {echo_signal.symbol} (strength: {echo_signal.strength:.3f})")
+            
+            return activations
+            
+        except Exception as e:
+            self.logger.error(f"Error processing Lantern echo signals: {e}")
+            return []
+    
+    async def queue_ghost_trade(
+        self,
+        symbol: str,
+        reentry_hash: str,
+        mode: str = "lantern_ghost",
+        echo_signal: Optional['EchoSignal'] = None
+    ) -> bool:
+        """
+        Queue a ghost trade based on Lantern echo signal.
+        
+        Args:
+            symbol: Asset symbol
+            reentry_hash: Reentry hash for identification
+            mode: Trade mode (lantern_ghost, triplet_match, silent_escape)
+            echo_signal: Original echo signal (optional)
+            
+        Returns:
+            True if queued successfully, False otherwise
+        """
+        try:
+            # Create ghost trade record
+            ghost_trade = {
+                'symbol': symbol,
+                'reentry_hash': reentry_hash,
+                'mode': mode,
+                'timestamp': datetime.now().isoformat(),
+                'echo_signal': echo_signal.metadata if echo_signal else {},
+                'status': 'queued'
+            }
+            
+            # Add to ghost reentry queue
+            if echo_signal:
+                self.ghost_reentry_queue.append(echo_signal)
+            
+            self.logger.info(f"👻 Queued ghost trade: {symbol} ({mode})")
+            print(f"[LANTERN] Ghost trade queued for {symbol} ({mode})")
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error queuing ghost trade: {e}")
+            return False
+    
+    async def activate_triplet_strategy(self, tick_data: Dict[str, Any]) -> bool:
+        """
+        Activate triplet-based strategy when pattern match is detected.
+        
+        Args:
+            tick_data: Current tick data with triplet information
+            
+        Returns:
+            True if activated successfully, False otherwise
+        """
+        try:
+            if not LANTERN_AVAILABLE or not self.lantern_core:
+                return False
+            
+            # Check for triplet matches
+            current_time = datetime.utcnow()
+            triplet_signals = self.lantern_core._check_triplet_matches(tick_data, current_time)
+            
+            if triplet_signals:
+                # Activate triplet strategy for all profiles
+                for profile_id in self.profile_strategies:
+                    profile_config = {'strategy_config': {'enable_triplet': True}}
+                    
+                    # Generate triplet-based strategy
+                    strategy_matrix = await self.generate_profile_strategy(
+                        profile_id, profile_config, tick_data.get('hash', '')
+                    )
+                    
+                    if strategy_matrix:
+                        # Mark as triplet-activated
+                        strategy_matrix.metadata = getattr(strategy_matrix, 'metadata', {})
+                        strategy_matrix.metadata['triplet_activated'] = True
+                        strategy_matrix.metadata['triplet_signals'] = len(triplet_signals)
+                
+                self.logger.info(f"🎯 Triplet strategy activated with {len(triplet_signals)} signals")
+                print(f"[LANTERN] Triplet strategy activated across all profiles")
+                
+                return True
+            
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Error activating triplet strategy: {e}")
+            return False
+    
+    async def activate_fallback_matrix(self) -> bool:
+        """
+        Activate fallback matrix during silent zones.
+        
+        Returns:
+            True if activated successfully, False otherwise
+        """
+        try:
+            # Activate fallback strategies for all profiles
+            for profile_id in self.profile_strategies:
+                profile_config = {
+                    'strategy_config': {
+                        'enable_fallback': True,
+                        'fallback_assets': ['ETH', 'XRP', 'ADA', 'DOT', 'LINK']
+                    }
+                }
+                
+                # Generate fallback strategy
+                fallback_hash = hashlib.sha256(f"fallback_{profile_id}".encode()).hexdigest()
+                strategy_matrix = await self.generate_profile_strategy(
+                    profile_id, profile_config, fallback_hash
+                )
+                
+                if strategy_matrix:
+                    # Mark as fallback-activated
+                    strategy_matrix.metadata = getattr(strategy_matrix, 'metadata', {})
+                    strategy_matrix.metadata['fallback_activated'] = True
+                    strategy_matrix.metadata['silent_zone_escape'] = True
+            
+            self.logger.info("🔄 Fallback matrix activated for silent zone escape")
+            print(f"[LANTERN] Fallback matrix activated across all profiles")
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error activating fallback matrix: {e}")
+            return False
+    
+    def record_exit_soulprint(
+        self,
+        symbol: str,
+        exit_price: float,
+        volume: float,
+        tick_delta: float,
+        context_id: str,
+        profit: Optional[float] = None
+    ) -> Optional[str]:
+        """
+        Record a soulprint for a profitable exit using Lantern Core.
+        
+        Args:
+            symbol: Asset symbol
+            exit_price: Exit price
+            volume: Volume at exit
+            tick_delta: Tick delta at exit
+            context_id: Context identifier
+            profit: Profit from the trade (optional)
+            
+        Returns:
+            Soulprint hash if recorded successfully, None otherwise
+        """
+        try:
+            if not LANTERN_AVAILABLE or not self.lantern_core:
+                return None
+            
+            # Record soulprint in Lantern Core
+            soulprint_hash = self.lantern_core.record_exit_soulprint(
+                symbol, exit_price, volume, tick_delta, context_id, profit
+            )
+            
+            self.logger.info(f"💾 Recorded soulprint for {symbol}: {soulprint_hash[:8]}...")
+            return soulprint_hash
+            
+        except Exception as e:
+            self.logger.error(f"Error recording soulprint: {e}")
+            return None
+    
+    def get_lantern_metrics(self) -> Dict[str, Any]:
+        """
+        Get Lantern Core integration metrics.
+        
+        Returns:
+            Dictionary of Lantern metrics
+        """
+        if not LANTERN_AVAILABLE or not self.lantern_core:
+            return {'lantern_available': False}
+        
+        try:
+            lantern_metrics = self.lantern_core.get_integration_metrics()
+            
+            return {
+                'lantern_available': True,
+                'lantern_metrics': lantern_metrics,
+                'ghost_reentry_queue_size': len(self.ghost_reentry_queue),
+                'echo_activation_count': len(self.echo_activation_history),
+                'last_echo_activation': self.echo_activation_history[-1] if self.echo_activation_history else None
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error getting Lantern metrics: {e}")
+            return {'lantern_available': False, 'error': str(e)}
+    
+    def export_lantern_data(self) -> Dict[str, Any]:
+        """
+        Export Lantern Core data for persistence.
+        
+        Returns:
+            Dictionary containing Lantern data
+        """
+        if not LANTERN_AVAILABLE or not self.lantern_core:
+            return {'lantern_available': False}
+        
+        try:
+            return {
+                'lantern_available': True,
+                'soulprint_data': self.lantern_core.export_soulprint_data(),
+                'ghost_reentry_queue': [
+                    {
+                        'symbol': signal.symbol,
+                        'echo_type': signal.echo_type.value,
+                        'strength': signal.strength,
+                        'hash_value': signal.hash_value,
+                        'timestamp': signal.timestamp.isoformat(),
+                        'metadata': signal.metadata
+                    }
+                    for signal in self.ghost_reentry_queue
+                ],
+                'echo_activation_history': self.echo_activation_history
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error exporting Lantern data: {e}")
+            return {'lantern_available': False, 'error': str(e)}
+    
+    def import_lantern_data(self, data: Dict[str, Any]) -> bool:
+        """
+        Import Lantern Core data from persistence.
+        
+        Args:
+            data: Dictionary containing Lantern data
+            
+        Returns:
+            True if imported successfully, False otherwise
+        """
+        if not LANTERN_AVAILABLE or not self.lantern_core:
+            return False
+        
+        try:
+            if not data.get('lantern_available', False):
+                return False
+            
+            # Import soulprint data
+            if 'soulprint_data' in data:
+                self.lantern_core.import_soulprint_data(data['soulprint_data'])
+            
+            # Import ghost reentry queue
+            if 'ghost_reentry_queue' in data:
+                self.ghost_reentry_queue = []
+                for queue_item in data['ghost_reentry_queue']:
+                    echo_signal = EchoSignal(
+                        echo_type=EchoType(queue_item['echo_type']),
+                        symbol=queue_item['symbol'],
+                        strength=queue_item['strength'],
+                        hash_value=queue_item['hash_value'],
+                        timestamp=datetime.fromisoformat(queue_item['timestamp']),
+                        metadata=queue_item['metadata']
+                    )
+                    self.ghost_reentry_queue.append(echo_signal)
+            
+            # Import echo activation history
+            if 'echo_activation_history' in data:
+                self.echo_activation_history = data['echo_activation_history']
+            
+            self.logger.info("📥 Lantern Core data imported successfully")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error importing Lantern data: {e}")
+            return False 
