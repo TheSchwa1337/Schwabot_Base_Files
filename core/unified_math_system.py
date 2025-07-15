@@ -202,27 +202,83 @@ class UnifiedMathSystem:
             
             # Execute based on operation type
             if operation == MathOperation.ADD:
+                result = self.add(*args)
             elif operation == MathOperation.SUBTRACT:
+                if len(args) != 2:
+                    raise ValueError("Subtract operation requires exactly 2 arguments")
+                result = self.subtract(args[0], args[1])
             elif operation == MathOperation.MULTIPLY:
+                result = self.multiply(*args)
             elif operation == MathOperation.DIVIDE:
+                if len(args) != 2:
+                    raise ValueError("Divide operation requires exactly 2 arguments")
+                result = self.divide(args[0], args[1])
             elif operation == MathOperation.POWER:
+                if len(args) != 2:
+                    raise ValueError("Power operation requires exactly 2 arguments")
+                result = self.power(args[0], args[1])
             elif operation == MathOperation.SQRT:
+                if len(args) != 1:
+                    raise ValueError("Sqrt operation requires exactly 1 argument")
+                result = self.sqrt(args[0])
             elif operation == MathOperation.LOG:
+                if len(args) < 1 or len(args) > 2:
+                    raise ValueError("Log operation requires 1 or 2 arguments")
+                result = self.log(args[0], args[1] if len(args) == 2 else np.e)
             elif operation == MathOperation.EXP:
+                if len(args) != 1:
+                    raise ValueError("Exp operation requires exactly 1 argument")
+                result = self.exp(args[0])
             elif operation == MathOperation.SIN:
+                if len(args) != 1:
+                    raise ValueError("Sin operation requires exactly 1 argument")
+                result = self.sin(args[0])
             elif operation == MathOperation.COS:
+                if len(args) != 1:
+                    raise ValueError("Cos operation requires exactly 1 argument")
+                result = self.cos(args[0])
             elif operation == MathOperation.TAN:
+                if len(args) != 1:
+                    raise ValueError("Tan operation requires exactly 1 argument")
+                result = self.tan(args[0])
             elif operation == MathOperation.ABS:
+                if len(args) != 1:
+                    raise ValueError("Abs operation requires exactly 1 argument")
+                result = self.abs(args[0])
             elif operation == MathOperation.MAX:
+                result = self.max(*args)
             elif operation == MathOperation.MIN:
+                result = self.min(*args)
             elif operation == MathOperation.MEAN:
+                result = self.mean(*args)
             elif operation == MathOperation.STD:
+                if len(args) != 1:
+                    raise ValueError("Std operation requires exactly 1 argument")
+                result = self.std(args[0])
             elif operation == MathOperation.VAR:
+                if len(args) != 1:
+                    raise ValueError("Var operation requires exactly 1 argument")
+                result = self.var(args[0])
             elif operation == MathOperation.DOT_PRODUCT:
+                if len(args) != 2:
+                    raise ValueError("Dot product operation requires exactly 2 arguments")
+                result = self.dot_product(args[0], args[1])
             elif operation == MathOperation.MATRIX_MULTIPLY:
+                if len(args) != 2:
+                    raise ValueError("Matrix multiply operation requires exactly 2 arguments")
+                result = self.matrix_multiply(args[0], args[1])
             elif operation == MathOperation.EIGENVALUES:
+                if len(args) != 1:
+                    raise ValueError("Eigenvalues operation requires exactly 1 argument")
+                result = self.eigenvalues(args[0])
             elif operation == MathOperation.EIGENVECTORS:
+                if len(args) != 1:
+                    raise ValueError("Eigenvectors operation requires exactly 1 argument")
+                result = self.eigenvectors(args[0])
             elif operation == MathOperation.SVD:
+                if len(args) != 1:
+                    raise ValueError("SVD operation requires exactly 1 argument")
+                result = self.svd(args[0])
             else:
                 raise ValueError(f"Unsupported operation: {operation}")
             
