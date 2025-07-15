@@ -349,7 +349,7 @@ def main():
     print(report)
     
     # Save report to file
-    with open("comprehensive_validation_report.txt", "w") as f:
+    with open("comprehensive_validation_report.txt", "w", encoding="utf-8") as f:
         f.write(report)
         
     logger.info("📄 Report saved to comprehensive_validation_report.txt")

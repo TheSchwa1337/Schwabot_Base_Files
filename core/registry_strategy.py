@@ -26,12 +26,30 @@ try:
     from core.math_cache import MathResultCache
     from core.math_config_manager import MathConfigManager
     from core.math_orchestrator import MathOrchestrator
-    from core.quad_bit_strategy_array import TradingPair
     
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Math infrastructure not available")
+
+# Import TradingPair separately to avoid circular imports
+try:
+    from core.quad_bit_strategy_array import TradingPair
+    TRADING_PAIR_AVAILABLE = True
+except ImportError:
+    TRADING_PAIR_AVAILABLE = False
+    logger.warning("TradingPair not available, using string fallback")
+    # Create a fallback TradingPair enum
+    from enum import Enum
+    class TradingPair(Enum):
+        BTC_USDC = "BTC/USDC"
+        ETH_USDC = "ETH/USDC"
+        XRP_USDC = "XRP/USDC"
+        SOL_USDC = "SOL/USDC"
+        USDC_USD = "USDC/USD"
+        USDT_USD = "USDT/USD"
+        BTC_USDT = "BTC/USDT"
+        ETH_USDT = "ETH/USDT"
 
 
 @dataclass
