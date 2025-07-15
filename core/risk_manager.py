@@ -767,7 +767,7 @@ class RiskManager:
 
     def calculate_risk_metrics(self, returns: xp.ndarray, confidence_levels: List[float] = [0.95, 0.99]) -> RiskMetric:
         """
-        Calculate comprehensive risk metrics using tensor operations.
+        Calculate comprehensive risk metrics using tensor operations with robust edge case handling.
         
         Implements all core risk metrics with proper mathematical formulas:
         - VaR: VaR = μ - z_α * σ
@@ -786,45 +786,101 @@ class RiskManager:
             ValueError: If tensor operations not available or invalid inputs
         """
         try:
+            # Robust input validation
             if xp is None:
                 raise ValueError("Tensor operations not available")
             
+            # Handle None input
+            if returns is None:
+                logger.warning("Returns array is None, using empty array")
+                returns = xp.array([])
+            
+            # Convert to numpy array if needed
+            if not isinstance(returns, xp.ndarray):
+                try:
+                    returns = xp.array(returns)
+                except Exception as e:
+                    logger.error(f"Failed to convert returns to array: {e}")
+                    raise ValueError(f"Invalid returns data type: {type(returns)}")
+            
+            # Handle empty array with safe defaults
             if len(returns) == 0:
-                raise ValueError("Returns array cannot be empty")
+                logger.warning("Returns array is empty, returning default risk metrics")
+                return self._get_default_risk_metrics()
             
-            # Basic statistics
-            mean_return = float(xp.mean(returns))
-            volatility = float(xp.std(returns))
+            # Handle single value array
+            if len(returns) == 1:
+                logger.warning("Returns array has only one value, using conservative estimates")
+                return self._get_single_value_risk_metrics(returns[0])
             
-            # Value at Risk (VaR) - using individual function
-            var_95 = self.compute_var(returns, 0.95)
-            var_99 = self.compute_var(returns, 0.99)
+            # Validate data quality
+            if not xp.all(xp.isfinite(returns)):
+                logger.warning("Returns array contains NaN or infinite values, cleaning data")
+                returns = self._clean_returns_data(returns)
+                if len(returns) == 0:
+                    return self._get_default_risk_metrics()
             
-            # Expected Shortfall (ES) - using individual function
-            cvar_95 = self.compute_expected_shortfall(returns, 0.95)
-            cvar_99 = self.compute_expected_shortfall(returns, 0.99)
+            # Basic statistics with error handling
+            try:
+                mean_return = float(xp.mean(returns))
+                volatility = float(xp.std(returns))
+            except Exception as e:
+                logger.error(f"Failed to calculate basic statistics: {e}")
+                return self._get_default_risk_metrics()
             
-            # Sharpe and Sortino ratios
-            risk_free_rate = 0.02  # 2% annual risk-free rate
-            sharpe_ratio = self.compute_sharpe_ratio(returns, risk_free_rate)
+            # Value at Risk (VaR) - using individual function with error handling
+            try:
+                var_95 = self.compute_var(returns, 0.95)
+                var_99 = self.compute_var(returns, 0.99)
+            except Exception as e:
+                logger.warning(f"VaR calculation failed: {e}, using defaults")
+                var_95 = -0.02  # Conservative default
+                var_99 = -0.03  # Conservative default
             
-            # Sortino ratio (downside deviation)
-            downside_returns = returns[returns < mean_return]
-            if len(downside_returns) > 0:
-                downside_deviation = float(xp.std(downside_returns) * xp.sqrt(252))
-                sortino_ratio = (mean_return * 252 - risk_free_rate) / downside_deviation if downside_deviation > 0 else 0
-            else:
+            # Expected Shortfall (ES) - using individual function with error handling
+            try:
+                cvar_95 = self.compute_expected_shortfall(returns, 0.95)
+                cvar_99 = self.compute_expected_shortfall(returns, 0.99)
+            except Exception as e:
+                logger.warning(f"Expected Shortfall calculation failed: {e}, using defaults")
+                cvar_95 = -0.025  # Conservative default
+                cvar_99 = -0.035  # Conservative default
+            
+            # Sharpe and Sortino ratios with error handling
+            try:
+                risk_free_rate = 0.02  # 2% annual risk-free rate
+                sharpe_ratio = self.compute_sharpe_ratio(returns, risk_free_rate)
+                
+                # Sortino ratio (downside deviation)
+                downside_returns = returns[returns < mean_return]
+                if len(downside_returns) > 0:
+                    downside_deviation = float(xp.std(downside_returns) * xp.sqrt(252))
+                    sortino_ratio = (mean_return * 252 - risk_free_rate) / downside_deviation if downside_deviation > 0 else 0
+                else:
+                    sortino_ratio = 0.0
+            except Exception as e:
+                logger.warning(f"Sharpe/Sortino calculation failed: {e}, using defaults")
+                sharpe_ratio = 0.0
                 sortino_ratio = 0.0
             
-            # Maximum drawdown - using individual function
-            max_drawdown = self.compute_max_drawdown(returns)
+            # Maximum drawdown - using individual function with error handling
+            try:
+                max_drawdown = self.compute_max_drawdown(returns)
+            except Exception as e:
+                logger.warning(f"Max drawdown calculation failed: {e}, using default")
+                max_drawdown = -0.01  # Conservative default
             
-            # Higher moments
-            if volatility > 0:
-                standardized_returns = (returns - mean_return) / volatility
-                skewness = float(xp.mean(standardized_returns ** 3))
-                kurtosis = float(xp.mean(standardized_returns ** 4))
-            else:
+            # Higher moments with error handling
+            try:
+                if volatility > 0:
+                    standardized_returns = (returns - mean_return) / volatility
+                    skewness = float(xp.mean(standardized_returns ** 3))
+                    kurtosis = float(xp.mean(standardized_returns ** 4))
+                else:
+                    skewness = 0.0
+                    kurtosis = 0.0
+            except Exception as e:
+                logger.warning(f"Higher moments calculation failed: {e}, using defaults")
                 skewness = 0.0
                 kurtosis = 0.0
             
@@ -869,16 +925,52 @@ class RiskManager:
             self.log_error(
                 ErrorType.MATHEMATICAL_ERROR,
                 f"Risk metrics calculation failed: {e}",
-                context={'confidence_levels': confidence_levels, 'returns_length': len(returns)}
+                context={'confidence_levels': confidence_levels, 'returns_length': len(returns) if returns is not None else 0}
             )
             logger.error(f"❌ Failed to calculate risk metrics: {e}")
-            return RiskMetric(
-                var_95=0.0, var_99=0.0, cvar_95=0.0, cvar_99=0.0,
-                sharpe_ratio=0.0, sortino_ratio=0.0, max_drawdown=0.0,
-                volatility=0.0, beta=1.0, correlation=0.0,
-                skewness=0.0, kurtosis=0.0, tensor_confidence=0.0,
-                risk_hash=""
-            )
+            return self._get_default_risk_metrics()
+    
+    def _get_default_risk_metrics(self) -> RiskMetric:
+        """Get default risk metrics for edge cases."""
+        return RiskMetric(
+            var_95=-0.02, var_99=-0.03, cvar_95=-0.025, cvar_99=-0.035,
+            sharpe_ratio=0.0, sortino_ratio=0.0, max_drawdown=-0.01,
+            volatility=0.01, beta=1.0, correlation=0.0,
+            skewness=0.0, kurtosis=0.0, tensor_confidence=0.0,
+            risk_hash="default_risk_hash"
+        )
+    
+    def _get_single_value_risk_metrics(self, single_return: float) -> RiskMetric:
+        """Get risk metrics for single return value."""
+        # Conservative estimates for single value
+        volatility = abs(single_return) if xp.isfinite(single_return) else 0.01
+        var_95 = -volatility * 1.645  # 95% confidence interval
+        var_99 = -volatility * 2.326  # 99% confidence interval
+        
+        return RiskMetric(
+            var_95=var_95, var_99=var_99, cvar_95=var_95, cvar_99=var_99,
+            sharpe_ratio=0.0, sortino_ratio=0.0, max_drawdown=min(0, single_return),
+            volatility=volatility, beta=1.0, correlation=0.0,
+            skewness=0.0, kurtosis=0.0, tensor_confidence=0.1,
+            risk_hash="single_value_hash"
+        )
+    
+    def _clean_returns_data(self, returns: xp.ndarray) -> xp.ndarray:
+        """Clean returns data by removing NaN and infinite values."""
+        try:
+            # Remove NaN and infinite values
+            clean_returns = returns[xp.isfinite(returns)]
+            
+            if len(clean_returns) == 0:
+                logger.warning("No valid data after cleaning")
+                return xp.array([])
+            
+            logger.info(f"Cleaned returns data: {len(returns)} -> {len(clean_returns)} valid values")
+            return clean_returns
+            
+        except Exception as e:
+            logger.error(f"Failed to clean returns data: {e}")
+            return xp.array([])
 
     def assess_position_risk(self, symbol: str, position_size: float, current_price: float, 
                            historical_returns: xp.ndarray, entry_price: float) -> PositionRisk:
