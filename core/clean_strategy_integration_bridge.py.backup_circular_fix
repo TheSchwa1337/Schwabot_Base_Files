@@ -54,8 +54,7 @@ try:
     
     # Import strategy integration components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    # Lazy import to avoid circular dependency
-    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
     from core.automated_strategy_engine import AutomatedStrategyEngine
 
@@ -74,16 +73,6 @@ class Status(Enum):
     INACTIVE = "inactive"
     ERROR = "error"
     PROCESSING = "processing"
-
-
-def _get_unified_mathematical_bridge():
-    """Lazy import to avoid circular dependency."""
-    try:
-        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-        return UnifiedMathematicalBridge
-    except ImportError:
-        logger.warning("UnifiedMathematicalBridge not available due to circular import")
-        return None
 
 
 class Mode(Enum):

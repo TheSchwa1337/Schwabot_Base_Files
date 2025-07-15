@@ -56,7 +56,8 @@ try:
     
     # Import trading pipeline components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    # Lazy import to avoid circular dependency
+    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
     
     MATH_INFRASTRUCTURE_AVAILABLE = True
@@ -75,6 +76,16 @@ try:
 except ImportError:
     CCXT_INFRASTRUCTURE_AVAILABLE = False
     logger.warning("CCXT infrastructure not available")
+
+
+def _get_unified_mathematical_bridge():
+    """Lazy import to avoid circular dependency."""
+    try:
+        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+        return UnifiedMathematicalBridge
+    except ImportError:
+        logger.warning("UnifiedMathematicalBridge not available due to circular import")
+        return None
 
 
 class Status(Enum):
@@ -219,7 +230,11 @@ class APITickCache:
         # Initialize trading pipeline components
         if TRADING_PIPELINE_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-            self.unified_bridge = UnifiedMathematicalBridge(self.config)
+            UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
+            if UnifiedMathematicalBridgeClass:
+                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
+            else:
+                self.unified_bridge = None
             self.trading_pipeline = AutomatedTradingPipeline(self.config)
         
         # Initialize CCXT infrastructure if available

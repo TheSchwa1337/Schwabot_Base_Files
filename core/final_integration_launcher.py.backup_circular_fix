@@ -49,8 +49,7 @@ except ImportError:
 # Import system components
 try:
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    # Lazy import to avoid circular dependency
-    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.unified_trading_pipeline import UnifiedTradingPipeline
     from core.automated_trading_pipeline import AutomatedTradingPipeline
     from core.advanced_settings_engine import ConfigFormat as AdvancedSettingsEngine
@@ -77,16 +76,6 @@ class Status(Enum):
     STARTING = "starting"
     RUNNING = "running"
     STOPPING = "stopping"
-
-
-def _get_unified_mathematical_bridge():
-    """Lazy import to avoid circular dependency."""
-    try:
-        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-        return UnifiedMathematicalBridge
-    except ImportError:
-        logger.warning("UnifiedMathematicalBridge not available due to circular import")
-        return None
 
 
 class Mode(Enum):
@@ -221,9 +210,7 @@ class FinalIntegrationLauncher:
         # System components
         if SYSTEM_COMPONENTS_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config.__dict__)
-                        UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
-            if UnifiedMathematicalBridgeClass:
-                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config.__dict__)
+            self.unified_bridge = UnifiedMathematicalBridge(self.config.__dict__)
             self.unified_pipeline = UnifiedTradingPipeline(self.config.__dict__)
             self.trading_pipeline = AutomatedTradingPipeline(self.config.__dict__)
             self.settings_engine = AdvancedSettingsEngine(self.config.__dict__)

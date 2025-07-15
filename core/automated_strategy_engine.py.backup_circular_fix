@@ -44,8 +44,7 @@ try:
     
     # Import the actual mathematical modules for trading
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    # Lazy import to avoid circular dependency
-    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.unified_trading_pipeline import UnifiedTradingPipeline
     
     # Import mathematical modules
@@ -71,16 +70,6 @@ class Status(Enum):
     INACTIVE = "inactive"
     ERROR = "error"
     PROCESSING = "processing"
-
-
-def _get_unified_mathematical_bridge():
-    """Lazy import to avoid circular dependency."""
-    try:
-        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-        return UnifiedMathematicalBridge
-    except ImportError:
-        logger.warning("UnifiedMathematicalBridge not available due to circular import")
-        return None
 
 
 class Mode(Enum):
@@ -133,11 +122,7 @@ class StrategyPattern:
             
             # Initialize the actual mathematical trading integration
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-                        UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
-            if UnifiedMathematicalBridgeClass:
-                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
-            else:
-                self.unified_bridge = None
+            self.unified_bridge = UnifiedMathematicalBridge(self.config)
             
             # Initialize mathematical modules
             self.vwho = VolumeWeightedHashOscillator()

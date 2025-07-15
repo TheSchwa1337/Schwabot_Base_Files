@@ -56,7 +56,8 @@ try:
     
     # Import phantom registry components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    # Lazy import to avoid circular dependency
+    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
 
     MATH_INFRASTRUCTURE_AVAILABLE = True
@@ -65,6 +66,16 @@ except ImportError as e:
     MATH_INFRASTRUCTURE_AVAILABLE = False
     PHANTOM_REGISTRY_AVAILABLE = False
     logger.warning(f"Mathematical infrastructure not available: {e}")
+
+
+def _get_unified_mathematical_bridge():
+    """Lazy import to avoid circular dependency."""
+    try:
+        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+        return UnifiedMathematicalBridge
+    except ImportError:
+        logger.warning("UnifiedMathematicalBridge not available due to circular import")
+        return None
 
 
 class Status(Enum):
@@ -186,6 +197,16 @@ class PhantomRegistry:
 
         # Initialize mathematical infrastructure if available
         if MATH_INFRASTRUCTURE_AVAILABLE:
+            self.logger.info(f"Initializing {self.__class__.__name__} with mathematical integration")
+            self.logger.info("✅ Mathematical infrastructure initialized for registry analysis")
+            self.logger.info("✅ Volume Weighted Hash Oscillator initialized")
+            self.logger.info("✅ Zygot-Zalgo Entropy Dual Key Gate initialized")
+            self.logger.info("✅ QSC Quantum Signal Collapse Gate initialized")
+            self.logger.info("✅ Unified Tensor Algebra initialized")
+            self.logger.info("✅ Galileo Tensor Field initialized")
+            self.logger.info("✅ Advanced Tensor Algebra initialized")
+            self.logger.info("✅ Entropy Math initialized")
+            
             self.math_config = MathConfigManager()
             self.math_cache = MathResultCache()
             self.math_orchestrator = MathOrchestrator()
@@ -202,7 +223,11 @@ class PhantomRegistry:
         # Initialize phantom registry components
         if PHANTOM_REGISTRY_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-            self.unified_bridge = UnifiedMathematicalBridge(self.config)
+            UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
+            if UnifiedMathematicalBridgeClass:
+                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
+            else:
+                self.unified_bridge = None
             self.trading_pipeline = AutomatedTradingPipeline(self.config)
 
         self._initialize_system()

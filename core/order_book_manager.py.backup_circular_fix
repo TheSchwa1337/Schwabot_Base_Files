@@ -28,24 +28,13 @@ logger = logging.getLogger(__name__)
 
 # Import mathematical infrastructure
 try:
-    # Lazy import to avoid circular dependency
-    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
     from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
     MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
     MATH_INFRASTRUCTURE_AVAILABLE = False
     logger.warning("Mathematical infrastructure not available - using fallback")
-
-
-def _get_unified_mathematical_bridge():
-    """Lazy import to avoid circular dependency."""
-    try:
-        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-        return UnifiedMathematicalBridge
-    except ImportError:
-        logger.warning("UnifiedMathematicalBridge not available due to circular import")
-        return None
 
 
 class OrderBookLevel(Enum):
@@ -129,9 +118,7 @@ class OrderBookManager:
         
         # Mathematical infrastructure
         if MATH_INFRASTRUCTURE_AVAILABLE:
-            UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
-            if UnifiedMathematicalBridgeClass:
-                self.math_bridge = UnifiedMathematicalBridgeClass()
+            self.math_bridge = UnifiedMathematicalBridge()
             self.math_integration = UnifiedMathematicalIntegrationMethods()
             self.math_monitor = UnifiedMathematicalPerformanceMonitor()
         else:

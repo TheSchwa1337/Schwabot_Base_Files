@@ -45,6 +45,23 @@ except ImportError:
     BRO_LOGIC_AVAILABLE = False
     logger = logging.getLogger(__name__)
     logger.warning("Big Bro Logic Module not available - using fallback mode")
+    
+    # Fallback definition for BroLogicResult
+    from dataclasses import dataclass
+    from typing import Any, Dict
+    
+    @dataclass
+    class BroLogicResult:
+        """Fallback BroLogicResult when bro_logic_module is not available."""
+        logic_type: str = "fallback"
+        symbol: str = ""
+        timestamp: float = 0.0
+        confidence_score: float = 0.0
+        metadata: Dict[str, Any] = None
+        
+        def __post_init__(self):
+            if self.metadata is None:
+                self.metadata = {}
 
 xp = get_backend()
 

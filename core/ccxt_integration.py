@@ -52,17 +52,28 @@ try:
     from core.math.advanced_tensor_algebra import AdvancedTensorAlgebra
     from core.math.entropy_math import EntropyMath
     
-    # Import exchange integration components
+    # Import trading pipeline components
     from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+    # Lazy import to avoid circular dependency
+    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
     from core.automated_trading_pipeline import AutomatedTradingPipeline
-
+    
     MATH_INFRASTRUCTURE_AVAILABLE = True
-    EXCHANGE_INTEGRATION_AVAILABLE = True
+    TRADING_PIPELINE_AVAILABLE = True
 except ImportError as e:
     MATH_INFRASTRUCTURE_AVAILABLE = False
-    EXCHANGE_INTEGRATION_AVAILABLE = False
+    TRADING_PIPELINE_AVAILABLE = False
     logger.warning(f"Mathematical infrastructure not available: {e}")
+
+
+def _get_unified_mathematical_bridge():
+    """Lazy import to avoid circular dependency."""
+    try:
+        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+        return UnifiedMathematicalBridge
+    except ImportError:
+        logger.warning("UnifiedMathematicalBridge not available due to circular import")
+        return None
 
 
 class Status(Enum):
@@ -192,9 +203,13 @@ class CCXTIntegration:
             self.entropy_math = EntropyMath()
 
         # Initialize exchange integration components
-        if EXCHANGE_INTEGRATION_AVAILABLE:
+        if TRADING_PIPELINE_AVAILABLE:
             self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-            self.unified_bridge = UnifiedMathematicalBridge(self.config)
+            UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
+            if UnifiedMathematicalBridgeClass:
+                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
+            else:
+                self.unified_bridge = None
             self.trading_pipeline = AutomatedTradingPipeline(self.config)
 
         self._initialize_system()
@@ -231,7 +246,7 @@ class CCXTIntegration:
                 self.logger.info("✅ Advanced Tensor Algebra initialized")
                 self.logger.info("✅ Entropy Math initialized")
             
-            if EXCHANGE_INTEGRATION_AVAILABLE:
+            if TRADING_PIPELINE_AVAILABLE:
                 self.logger.info("✅ Enhanced math-to-trade integration initialized")
                 self.logger.info("✅ Unified mathematical bridge initialized")
                 self.logger.info("✅ Trading pipeline initialized for exchange integration")
@@ -305,7 +320,7 @@ class CCXTIntegration:
             'initialized': self.initialized,
             'config': self.config,
             'mathematical_integration': MATH_INFRASTRUCTURE_AVAILABLE,
-            'exchange_integration_available': EXCHANGE_INTEGRATION_AVAILABLE,
+            'exchange_integration_available': TRADING_PIPELINE_AVAILABLE,
             'exchanges_count': len(self.exchanges),
             'order_book_cache_size': len(self.order_book_cache),
             'average_health': np.mean(list(self.exchange_health_metrics.values())) if self.exchange_health_metrics else 0.0,

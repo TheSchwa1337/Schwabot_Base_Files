@@ -66,25 +66,59 @@ def _get_mathematical_connection():
         logger.warning("Mathematical connection module not available")
         return None, None, None, None, None
 
-# Import other modules
-try:
-    from mathlib import MathLib, MathLibV2, MathLibV3
-    from mathlib.quantum_strategy import QuantumStrategyEngine
-    from mathlib.persistent_homology import PersistentHomology
-    from core.advanced_tensor_algebra import AdvancedTensorAlgebra
-    from core.clean_unified_math import CleanUnifiedMathSystem
-    from core.vault_orbital_bridge import VaultOrbitalBridge
-    from core.math_integration_bridge import MathIntegrationBridge
-    from core.quantum_mathematical_bridge import QuantumState
-    from strategies.phantom_band_navigator import PhantomBandNavigator
-    from core.risk_manager import RiskManager
-    from core.pure_profit_calculator import PureProfitCalculator
-    from core.heartbeat_integration_manager import HeartbeatIntegrationManager
-    from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
-    from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
-    from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
-except ImportError as e:
-    logger.warning(f"Some mathematical modules not available: {e}")
+# Lazy imports for all mathematical modules to avoid circular dependencies
+def _get_mathlib_modules():
+    """Lazy import mathlib modules."""
+    try:
+        from mathlib import MathLib, MathLibV2, MathLibV3
+        from mathlib.quantum_strategy import QuantumStrategyEngine
+        from mathlib.persistent_homology import PersistentHomology
+        return MathLib, MathLibV2, MathLibV3, QuantumStrategyEngine, PersistentHomology
+    except ImportError:
+        logger.warning("Mathlib modules not available")
+        return None, None, None, None, None
+
+def _get_core_modules():
+    """Lazy import core modules."""
+    try:
+        from core.advanced_tensor_algebra import AdvancedTensorAlgebra
+        from core.clean_unified_math import CleanUnifiedMathSystem
+        from core.vault_orbital_bridge import VaultOrbitalBridge
+        from core.math_integration_bridge import MathIntegrationBridge
+        from core.quantum_mathematical_bridge import QuantumState
+        from core.risk_manager import RiskManager
+        from core.pure_profit_calculator import PureProfitCalculator
+        # Lazy import to avoid circular dependency
+        # from core.heartbeat_integration_manager import HeartbeatIntegrationManager
+        from core.quantum_classical_hybrid_mathematics import QuantumClassicalHybridMathematics
+        from core.unified_mathematical_integration_methods import UnifiedMathematicalIntegrationMethods
+        from core.unified_mathematical_performance_monitor import UnifiedMathematicalPerformanceMonitor
+        return (AdvancedTensorAlgebra, CleanUnifiedMathSystem, VaultOrbitalBridge, 
+                MathIntegrationBridge, QuantumState, RiskManager, PureProfitCalculator,
+                None, QuantumClassicalHybridMathematics,
+                UnifiedMathematicalIntegrationMethods, UnifiedMathematicalPerformanceMonitor)
+    except ImportError as e:
+        logger.warning(f"Some core modules not available: {e}")
+        return (None, None, None, None, None, None, None, None, None, None, None)
+
+def _get_strategy_modules():
+    """Lazy import strategy modules."""
+    try:
+        from strategies.phantom_band_navigator import PhantomBandNavigator
+        return PhantomBandNavigator
+    except ImportError:
+        logger.warning("Strategy modules not available")
+        return None
+
+
+def _get_heartbeat_integration_manager():
+    """Lazy import to avoid circular dependency."""
+    try:
+        from core.heartbeat_integration_manager import HeartbeatIntegrationManager
+        return HeartbeatIntegrationManager
+    except ImportError:
+        logger.warning("HeartbeatIntegrationManager not available due to circular import")
+        return None
 
 
 class UnifiedMathematicalBridge:
@@ -132,8 +166,10 @@ class UnifiedMathematicalBridge:
             self.math_cache = None
             self.math_orchestrator = None
         
-        # Initialize ALL mathematical systems
-        self._initialize_mathematical_systems()
+        # Initialize lazy-loaded modules
+        self._mathlib_modules = None
+        self._core_modules = None
+        self._strategy_modules = None
         
         # Connection tracking
         self.mathematical_connections: Dict[str, 'MathematicalConnection'] = {}
@@ -169,6 +205,24 @@ class UnifiedMathematicalBridge:
         
         self._initialize_system()
     
+    def _get_mathlib_modules(self):
+        """Get mathlib modules with lazy loading."""
+        if self._mathlib_modules is None:
+            self._mathlib_modules = _get_mathlib_modules()
+        return self._mathlib_modules
+    
+    def _get_core_modules(self):
+        """Get core modules with lazy loading."""
+        if self._core_modules is None:
+            self._core_modules = _get_core_modules()
+        return self._core_modules
+    
+    def _get_strategy_modules(self):
+        """Get strategy modules with lazy loading."""
+        if self._strategy_modules is None:
+            self._strategy_modules = _get_strategy_modules()
+        return self._strategy_modules
+    
     def _initialize_system(self) -> None:
         """Initialize the unified mathematical bridge system."""
         try:
@@ -177,11 +231,18 @@ class UnifiedMathematicalBridge:
             # Initialize mathematical systems
             self._initialize_mathematical_systems()
             
-            # Initialize integration methods
-            self.integration_methods = UnifiedMathematicalIntegrationMethods(self)
+            # Initialize integration methods with lazy loading
+            core_modules = self._get_core_modules()
+            if core_modules[9] is not None:  # UnifiedMathematicalIntegrationMethods
+                self.integration_methods = core_modules[9](self)
+            else:
+                self.integration_methods = None
             
-            # Initialize performance monitor
-            self.performance_monitor = UnifiedMathematicalPerformanceMonitor(self)
+            # Initialize performance monitor with lazy loading
+            if core_modules[10] is not None:  # UnifiedMathematicalPerformanceMonitor
+                self.performance_monitor = core_modules[10](self)
+            else:
+                self.performance_monitor = None
             
             self.initialized = True
             self.logger.info("✅ Unified Mathematical Bridge System initialized successfully")
@@ -219,65 +280,136 @@ class UnifiedMathematicalBridge:
         """Initialize ALL mathematical systems following your patterns."""
         
         # Core mathematical libraries
-        self.math_lib = MathLib()
-        self.math_lib_v2 = MathLibV2()
-        self.math_lib_v3 = MathLibV3()
-        self.logger.info("✅ MathLib systems initialized")
+        mathlib_modules = self._get_mathlib_modules()
+        if mathlib_modules:
+            self.math_lib = mathlib_modules[0]()
+            self.math_lib_v2 = mathlib_modules[1]()
+            self.math_lib_v3 = mathlib_modules[2]()
+            self.logger.info("✅ MathLib systems initialized")
+        else:
+            self.math_lib = None
+            self.math_lib_v2 = None
+            self.math_lib_v3 = None
+            self.logger.warning("MathLib systems not initialized due to missing modules.")
         
         # Quantum systems
-        self.quantum_engine = QuantumStrategyEngine()
-        self.logger.info("✅ Quantum Strategy Engine initialized")
+        quantum_engine = self._get_core_modules()[1]() # QuantumStrategyEngine
+        if quantum_engine:
+            self.quantum_engine = quantum_engine
+            self.logger.info("✅ Quantum Strategy Engine initialized")
+        else:
+            self.quantum_engine = None
+            self.logger.warning("Quantum Strategy Engine not initialized due to missing modules.")
         
-        self.quantum_math_bridge = QuantumState()
-        self.logger.info("✅ Quantum Mathematical Bridge initialized")
+        self.quantum_math_bridge = self._get_core_modules()[3]() # QuantumState
+        if self.quantum_math_bridge:
+            self.logger.info("✅ Quantum Mathematical Bridge initialized")
+        else:
+            self.logger.warning("Quantum Mathematical Bridge not initialized due to missing modules.")
         
         # Persistent homology
-        self.persistent_homology = PersistentHomology()
-        self.logger.info("✅ Persistent Homology initialized")
+        persistent_homology = self._get_core_modules()[2]() # PersistentHomology
+        if persistent_homology:
+            self.persistent_homology = persistent_homology
+            self.logger.info("✅ Persistent Homology initialized")
+        else:
+            self.persistent_homology = None
+            self.logger.warning("Persistent Homology not initialized due to missing modules.")
         
         # Tensor algebra
-        self.tensor_algebra = AdvancedTensorAlgebra()
-        self.logger.info("✅ Advanced Tensor Algebra initialized")
+        tensor_algebra = self._get_core_modules()[0]() # AdvancedTensorAlgebra
+        if tensor_algebra:
+            self.tensor_algebra = tensor_algebra
+            self.logger.info("✅ Advanced Tensor Algebra initialized")
+        else:
+            self.tensor_algebra = None
+            self.logger.warning("Advanced Tensor Algebra not initialized due to missing modules.")
         
         # Unified math system
-        self.unified_math = CleanUnifiedMathSystem()
-        self.logger.info("✅ Clean Unified Math System initialized")
+        unified_math = self._get_core_modules()[1]() # CleanUnifiedMathSystem
+        if unified_math:
+            self.unified_math = unified_math
+            self.logger.info("✅ Clean Unified Math System initialized")
+        else:
+            self.unified_math = None
+            self.logger.warning("Clean Unified Math System not initialized due to missing modules.")
         
         # Vault orbital bridge
-        self.vault_orbital_bridge = VaultOrbitalBridge()
-        self.logger.info("✅ Vault Orbital Bridge initialized")
+        vault_orbital_bridge = self._get_core_modules()[2]() # VaultOrbitalBridge
+        if vault_orbital_bridge:
+            self.vault_orbital_bridge = vault_orbital_bridge
+            self.logger.info("✅ Vault Orbital Bridge initialized")
+        else:
+            self.vault_orbital_bridge = None
+            self.logger.warning("Vault Orbital Bridge not initialized due to missing modules.")
         
         # Math integration bridge
-        self.math_integration_bridge = MathIntegrationBridge()
-        self.logger.info("✅ Math Integration Bridge initialized")
+        math_integration_bridge = self._get_core_modules()[3]() # MathIntegrationBridge
+        if math_integration_bridge:
+            self.math_integration_bridge = math_integration_bridge
+            self.logger.info("✅ Math Integration Bridge initialized")
+        else:
+            self.math_integration_bridge = None
+            self.logger.warning("Math Integration Bridge not initialized due to missing modules.")
         
         # Phantom math
-        self.phantom_navigator = PhantomBandNavigator()
-        self.logger.info("✅ Phantom Band Navigator initialized")
+        phantom_navigator = self._get_strategy_modules() # PhantomBandNavigator
+        if phantom_navigator:
+            self.phantom_navigator = phantom_navigator
+            self.logger.info("✅ Phantom Band Navigator initialized")
+        else:
+            self.phantom_navigator = None
+            self.logger.warning("Phantom Band Navigator not initialized due to missing modules.")
         
         # Risk management
-        self.risk_manager = RiskManager()
-        self.logger.info("✅ Risk Manager initialized")
+        risk_manager = self._get_core_modules()[5]() # RiskManager
+        if risk_manager:
+            self.risk_manager = risk_manager
+            self.logger.info("✅ Risk Manager initialized")
+        else:
+            self.risk_manager = None
+            self.logger.warning("Risk Manager not initialized due to missing modules.")
         
         # Profit calculator
-        self.profit_calculator = PureProfitCalculator({})
-        self.logger.info("✅ Pure Profit Calculator initialized")
+        profit_calculator = self._get_core_modules()[6]() # PureProfitCalculator
+        if profit_calculator:
+            self.profit_calculator = profit_calculator
+            self.logger.info("✅ Pure Profit Calculator initialized")
+        else:
+            self.profit_calculator = None
+            self.logger.warning("Pure Profit Calculator not initialized due to missing modules.")
         
         # Heartbeat integration
-        self.heartbeat_manager = HeartbeatIntegrationManager()
-        self.logger.info("✅ Heartbeat Integration Manager initialized")
+        heartbeat_manager = _get_heartbeat_integration_manager()
+        if heartbeat_manager:
+            self.heartbeat_manager = heartbeat_manager(self.config)
+            self.logger.info("✅ Heartbeat Integration Manager initialized")
+        else:
+            self.heartbeat_manager = None
+            self.logger.warning("Heartbeat Integration Manager not initialized due to missing modules.")
         
         # NEW: Quantum-Classical Hybrid Mathematics
-        self.quantum_classical_hybrid = QuantumClassicalHybridMathematics()
-        self.logger.info("✅ Quantum-Classical Hybrid Mathematics initialized")
+        quantum_classical_hybrid = self._get_core_modules()[8]() # QuantumClassicalHybridMathematics
+        if quantum_classical_hybrid:
+            self.quantum_classical_hybrid = quantum_classical_hybrid
+            self.logger.info("✅ Quantum-Classical Hybrid Mathematics initialized")
+        else:
+            self.quantum_classical_hybrid = None
+            self.logger.warning("Quantum-Classical Hybrid Mathematics not initialized due to missing modules.")
         
         # Initialize integration methods
-        self.integration_methods = UnifiedMathematicalIntegrationMethods(self)
-        self.logger.info("✅ Mathematical Integration Methods initialized")
+        if self.integration_methods:
+            self.integration_methods.initialize_methods(self)
+            self.logger.info("✅ Mathematical Integration Methods initialized")
+        else:
+            self.logger.warning("Mathematical Integration Methods not initialized due to missing modules.")
         
         # Initialize performance monitor
-        self.performance_monitor = UnifiedMathematicalPerformanceMonitor(self)
-        self.logger.info("✅ Performance Monitor initialized")
+        if self.performance_monitor:
+            self.performance_monitor.initialize_monitor(self)
+            self.logger.info("✅ Performance Monitor initialized")
+        else:
+            self.logger.warning("Performance Monitor not initialized due to missing modules.")
         
         # Start performance monitoring
         if hasattr(self.config, 'enabled') and self.config.enabled:
