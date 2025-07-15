@@ -202,49 +202,27 @@ class UnifiedMathSystem:
             
             # Execute based on operation type
             if operation == MathOperation.ADD:
-                result = self.add(*args)
             elif operation == MathOperation.SUBTRACT:
-                result = self.subtract(*args)
             elif operation == MathOperation.MULTIPLY:
-                result = self.multiply(*args)
             elif operation == MathOperation.DIVIDE:
-                result = self.divide(*args)
             elif operation == MathOperation.POWER:
-                result = self.power(*args)
             elif operation == MathOperation.SQRT:
-                result = self.sqrt(*args)
             elif operation == MathOperation.LOG:
-                result = self.log(*args)
             elif operation == MathOperation.EXP:
-                result = self.exp(*args)
             elif operation == MathOperation.SIN:
-                result = self.sin(*args)
             elif operation == MathOperation.COS:
-                result = self.cos(*args)
             elif operation == MathOperation.TAN:
-                result = self.tan(*args)
             elif operation == MathOperation.ABS:
-                result = self.abs(*args)
             elif operation == MathOperation.MAX:
-                result = self.max(*args)
             elif operation == MathOperation.MIN:
-                result = self.min(*args)
             elif operation == MathOperation.MEAN:
-                result = self.mean(*args)
             elif operation == MathOperation.STD:
-                result = self.std(*args)
             elif operation == MathOperation.VAR:
-                result = self.var(*args)
             elif operation == MathOperation.DOT_PRODUCT:
-                result = self.dot_product(*args)
             elif operation == MathOperation.MATRIX_MULTIPLY:
-                result = self.matrix_multiply(*args)
             elif operation == MathOperation.EIGENVALUES:
-                result = self.eigenvalues(*args)
             elif operation == MathOperation.EIGENVECTORS:
-                result = self.eigenvectors(*args)
             elif operation == MathOperation.SVD:
-                result = self.svd(*args)
             else:
                 raise ValueError(f"Unsupported operation: {operation}")
             
@@ -260,7 +238,6 @@ class UnifiedMathSystem:
                 },
             )
             
-            return result
             
         except Exception as e:
             logger.error(f"Operation {operation.value} failed: {e}")

@@ -583,7 +583,6 @@ if __name__ == "__main__":
     print("Testing Autonomic Limit Layer...")
     
     # Test strategy processing
-    result = autonomic_limit_layer.process_strategy("btc_usdc_snipe")
     print(f"✅ Strategy processing: {result['status']}")
     
     # Test recall and compare

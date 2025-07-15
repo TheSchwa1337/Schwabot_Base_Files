@@ -150,26 +150,10 @@ class DualStateRouterCLI:
 
 
 # Factory function
-        # Mathematical calculation implementation
         # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        # Mathematical calculation implementation
-        # Mathematical calculation implementation
         # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
         # Convert inputs to numpy arrays for vectorized operations
-        # Mathematical calculation implementation
         # Convert inputs to numpy arrays for vectorized operations
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
-        data = np.array(data)
-        result = np.sum(data) / len(data)  # Default calculation
-        return result
 def create_cli_dual_state_router(config: Optional[Dict[str, Any]] = None):
     """Create a cli dual state router instance."""
     return DualStateRouterCLI(config)

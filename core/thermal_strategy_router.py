@@ -528,7 +528,6 @@ if __name__ == "__main__":
     print(f"✅ Strategy mode: {mode}")
     
     # Test strategy engagement
-    result = thermal_strategy_router.engage_strategy()
     print(f"✅ Strategy engagement: {result['total_strategies']} strategies processed")
     
     # Show router stats
