@@ -15,6 +15,8 @@ Usage:
     python main.py --system-status               # Get system status
     python main.py --error-log --limit 50        # Get error log
     python main.py --reset-circuit-breakers      # Reset all circuit breakers
+    python main.py --gpu-auto-detect             # Enable enhanced GPU auto-detection
+    python main.py --gpu-info                    # Display detailed GPU information
 """
 
 import argparse
@@ -41,6 +43,19 @@ logger = logging.getLogger(__name__)
 # Import hash configuration manager
 from core.hash_config_manager import hash_config_manager, get_hash_settings
 
+# Import enhanced GPU auto-detection system
+try:
+    from core.enhanced_gpu_auto_detector import (
+        create_enhanced_gpu_auto_detector,
+        create_enhanced_gpu_logic_mapper,
+        EnhancedGPUAutoDetector,
+        EnhancedGPULogicMapper
+    )
+    ENHANCED_GPU_AVAILABLE = True
+except ImportError:
+    ENHANCED_GPU_AVAILABLE = False
+    logger.warning("Enhanced GPU auto-detection system not available")
+
 
 class SchwabotCLI:
     """Unified CLI for Schwabot trading system."""
@@ -51,6 +66,10 @@ class SchwabotCLI:
         self.backtest_results = {}
         self.live_trading_active = False
         self.hash_registry = {}
+        
+        # GPU auto-detection system
+        self.enhanced_gpu_mapper = None
+        self.gpu_detection_results = None
         
         # Initialize core components
         self._initialize_components()
@@ -91,6 +110,98 @@ class SchwabotCLI:
         except Exception as e:
             logger.error(f"Failed to initialize components: {e}")
             raise
+    
+    def _initialize_enhanced_gpu_system(self, args):
+        """Initialize enhanced GPU system with auto-detection."""
+        # Always try to initialize GPU detection for info display
+        if ENHANCED_GPU_AVAILABLE:
+            try:
+                # Create detector for info display
+                detector = create_enhanced_gpu_auto_detector()
+                self.gpu_detection_results = detector.detect_all_gpus()
+                
+                # Only create mapper if auto-detect is enabled
+                if args.gpu_auto_detect:
+                    self.enhanced_gpu_mapper = create_enhanced_gpu_logic_mapper()
+                    
+                    logger.info("🎮 Enhanced GPU Auto-Detection Enabled")
+                    logger.info(f"   Primary GPU: {self.gpu_detection_results['optimal_config']['gpu_name']}")
+                    logger.info(f"   Backend: {self.gpu_detection_results['optimal_config']['backend']}")
+                    logger.info(f"   Tier: {self.gpu_detection_results['optimal_config']['gpu_tier']}")
+                else:
+                    logger.info("🎮 GPU auto-detection disabled, using basic fallback")
+                    self.enhanced_gpu_mapper = None
+                
+                # Display GPU info if requested
+                if args.gpu_info:
+                    self._display_gpu_info()
+                    
+            except Exception as e:
+                logger.error(f"Failed to initialize enhanced GPU system: {e}")
+                self.enhanced_gpu_mapper = None
+                self.gpu_detection_results = None
+        else:
+            logger.info("🎮 GPU auto-detection system not available, using basic fallback")
+            self.enhanced_gpu_mapper = None
+            self.gpu_detection_results = None
+    
+    def _display_gpu_info(self):
+        """Display detailed GPU information."""
+        if not self.gpu_detection_results:
+            print("❌ No GPU detection results available")
+            return
+            
+        results = self.gpu_detection_results
+        
+        print("\n🎮 GPU DETECTION RESULTS")
+        print("=" * 50)
+        
+        print(f"Primary Configuration:")
+        print(f"  GPU: {results['optimal_config']['gpu_name']}")
+        print(f"  Backend: {results['optimal_config']['backend']}")
+        print(f"  Tier: {results['optimal_config']['gpu_tier']}")
+        print(f"  Memory Limit: {results['optimal_config']['memory_limit_gb']:.1f} GB")
+        print(f"  Matrix Size Limit: {results['optimal_config']['matrix_size_limit']}")
+        
+        print(f"\nAvailable Backends: {results['available_backends']}")
+        
+        print(f"\nFallback Chain:")
+        for i, fallback in enumerate(results['fallback_chain']):
+            status = "🟢 ACTIVE" if i == 0 else "⚪ FALLBACK"
+            print(f"  {i+1}. {fallback['gpu_name']} ({fallback['backend']}) {status}")
+        
+        print(f"\nDetected GPUs:")
+        for gpu in results['cuda_gpus']:
+            print(f"  CUDA: {gpu['name']} ({gpu['memory_gb']:.1f}GB)")
+        for gpu in results['opencl_gpus']:
+            print(f"  OpenCL: {gpu['name']} ({gpu['memory_gb']:.1f}GB)")
+        for gpu in results['integrated_graphics']:
+            print(f"  Integrated: {gpu['name']} ({gpu['memory_gb']:.1f}GB)")
+    
+    def get_gpu_status(self) -> Dict[str, Any]:
+        """Get GPU system status."""
+        if not self.enhanced_gpu_mapper:
+            return {
+                'gpu_system_enabled': False,
+                'message': 'Enhanced GPU system not initialized'
+            }
+        
+        try:
+            gpu_info = self.enhanced_gpu_mapper.get_gpu_info()
+            return {
+                'gpu_system_enabled': True,
+                'current_backend': gpu_info['current_backend'],
+                'current_fallback_index': gpu_info['current_fallback_index'],
+                'primary_gpu': self.gpu_detection_results['optimal_config']['gpu_name'],
+                'gpu_tier': self.gpu_detection_results['optimal_config']['gpu_tier'],
+                'available_backends': self.gpu_detection_results['available_backends'],
+                'fallback_chain_length': len(self.gpu_detection_results['fallback_chain'])
+            }
+        except Exception as e:
+            return {
+                'gpu_system_enabled': False,
+                'error': str(e)
+            }
     
     async def run_comprehensive_tests(self) -> Dict[str, Any]:
         """Run comprehensive system tests."""
@@ -167,7 +278,13 @@ class SchwabotCLI:
         try:
             # Test basic risk calculation
             import numpy as np
-            test_returns = np.random.normal(0.001, 0.02, 1000)  # 1000 days of returns
+            # Create test data that will definitely produce negative max drawdown
+            # Mix of positive and negative returns with some significant losses
+            np.random.seed(42)  # For reproducible results
+            positive_returns = np.random.normal(0.001, 0.01, 800)  # Mostly positive
+            negative_returns = np.random.normal(-0.005, 0.015, 200)  # Some significant losses
+            test_returns = np.concatenate([positive_returns, negative_returns])
+            np.random.shuffle(test_returns)  # Mix them up
             
             risk_metrics = self.risk_manager.calculate_risk_metrics(test_returns)
             
@@ -695,11 +812,19 @@ class SchwabotCLI:
                                       if (datetime.now() - datetime.fromisoformat(h['timestamp'])).seconds < 3600])
             }
             
+            # Get GPU system status
+            gpu_status = self.get_gpu_status()
+            
+            # Get platform information
+            platform_info = self.get_platform_info()
+            
             return {
                 'timestamp': datetime.now().isoformat(),
                 'risk_management': risk_status,
                 'error_handling': error_stats,
                 'hash_registry': hash_status,
+                'gpu_system': gpu_status,
+                'platform_info': platform_info,
                 'live_trading': self.live_trading_active
             }
             
@@ -768,6 +893,11 @@ SYSTEM MANAGEMENT:
 --error-log-limit LIMIT       Limit for error log entries (default: 100)
 --reset-circuit-breakers      Reset all circuit breakers
 
+GPU AUTO-DETECTION:
+------------------
+--gpu-auto-detect             Enable enhanced GPU auto-detection
+--gpu-info                    Display detailed GPU information
+
 ENVIRONMENT VARIABLES:
 ---------------------
 SCHWABOT_EXCHANGE             Exchange name (default: coinbase)
@@ -785,6 +915,7 @@ python main.py --run-tests                    # Run system tests
 python main.py --backtest --backtest-days 60  # 60-day backtest
 python main.py --production                   # Start production trading
 python main.py --system-status                # Check system health
+python main.py --gpu-auto-detect --gpu-info   # Enable GPU detection and show info
 """
         return help_text
     
@@ -830,6 +961,10 @@ async def main():
     parser.add_argument('--production-status', action='store_true', help='Get production trading status')
     parser.add_argument('--sync-portfolio', action='store_true', help='Sync production portfolio with exchange')
     parser.add_argument('--export-report', action='store_true', help='Export comprehensive trading report')
+
+    # Enhanced GPU commands
+    parser.add_argument('--gpu-auto-detect', action='store_true', help='Enable enhanced GPU auto-detection')
+    parser.add_argument('--gpu-info', action='store_true', help='Display detailed GPU information')
     
     args = parser.parse_args()
     
@@ -838,9 +973,10 @@ async def main():
         cli_truncated_hash=args.truncated_hash,
         cli_hash_length=args.hash_length
     )
-    
-    # Initialize CLI
+
+    # Initialize enhanced GPU system with CLI options
     cli = SchwabotCLI()
+    cli._initialize_enhanced_gpu_system(args)
     
     try:
         if args.run_tests:

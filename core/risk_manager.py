@@ -203,6 +203,12 @@ class RiskManager:
     - Kelly Criterion: f* = (bp - q) / b
     """
     
+    # Class attributes for enum access
+    ErrorType = ErrorType
+    SafeMode = SafeMode
+    RiskLevel = RiskLevel
+    ProcessingMode = ProcessingMode
+    
     def __init__(self, risk_tolerance: Union[float, str, Dict[str, Any]] = 0.02, max_portfolio_risk: float = 0.05):
         """
         Initialize RiskManager with Schwabot-compatible configuration.
