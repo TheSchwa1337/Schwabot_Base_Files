@@ -1,3 +1,5 @@
+"""Module for Schwabot trading system."""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,900 +7,911 @@ Live API Backtesting Module
 ============================
 Provides live API backtesting functionality for the Schwabot trading system.
 
-This module manages live API integration and comprehensive backtesting with mathematical analysis:
-- BacktestMode: Core backtest mode with mathematical validation
-- LiveAPIConfig: Core live API configuration with mathematical optimization
-- LiveMarketData: Core live market data with mathematical analysis
-- LiveAPIBacktesting: Core live API backtesting system with mathematical integration
-
-Key Functions:
-- __init__:   init   operation
-- _setup_directories:  setup directories operation
-- enable_trading: enable trading operation
-- disable_trading: disable trading operation
-- get_status: get status operation
-- run_backtest: run backtest with mathematical analysis
-- connect_live_api: connect live API with mathematical validation
-- get_market_data: get market data with mathematical integration
-- create_live_api_backtesting: create live API backtesting with mathematical setup
-
-"""
-
-import logging
-import time
-import asyncio
-import os
-import json
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-import numpy as np
-import pandas as pd
-
-logger = logging.getLogger(__name__)
-
-# Import the actual mathematical infrastructure
-try:
-    from core.math_cache import MathResultCache
-    from core.math_config_manager import MathConfigManager
-    from core.math_orchestrator import MathOrchestrator
-    
-    # Import mathematical modules for backtesting analysis
-    from core.math.volume_weighted_hash_oscillator import VolumeWeightedHashOscillator
-    from core.math.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
-    from core.math.qsc_quantum_signal_collapse_gate import QSCGate
-    from core.math.unified_tensor_algebra import UnifiedTensorAlgebra
-    from core.math.galileo_tensor_field_entropy_drift import GalileoTensorField
-    from core.math.advanced_tensor_algebra import AdvancedTensorAlgebra
-    from core.math.entropy_math import EntropyMath
-    
-    # Import backtesting components
-    from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
-    # Lazy import to avoid circular dependency
-    # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-    from core.automated_trading_pipeline import AutomatedTradingPipeline
-
-    MATH_INFRASTRUCTURE_AVAILABLE = True
-    BACKTESTING_AVAILABLE = True
-except ImportError as e:
-    MATH_INFRASTRUCTURE_AVAILABLE = False
-    BACKTESTING_AVAILABLE = False
-    logger.warning(f"Mathematical infrastructure not available: {e}")
-
-
-class Status(Enum):
-    """System status enumeration."""
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    ERROR = "error"
-    PROCESSING = "processing"
-    BACKTESTING = "backtesting"
-    LIVE_TRADING = "live_trading"
-
-def _get_unified_mathematical_bridge():
-    """Lazy import to avoid circular dependency."""
-    try:
-        from core.unified_mathematical_bridge import UnifiedMathematicalBridge
-        return UnifiedMathematicalBridge
-    except ImportError:
-        logger.warning("UnifiedMathematicalBridge not available due to circular import")
-        return None
-
-
-class Mode(Enum):
-    """Operation mode enumeration."""
-    NORMAL = "normal"
-    DEBUG = "debug"
-    TEST = "test"
-    PRODUCTION = "production"
-    BACKTEST = "backtest"
-    LIVE = "live"
-
-class BacktestMode(Enum):
-    """Backtest mode enumeration."""
-    HISTORICAL = "historical"
-    WALK_FORWARD = "walk_forward"
-    MONTE_CARLO = "monte_carlo"
-    STRESS_TEST = "stress_test"
-    OPTIMIZATION = "optimization"
-
-class APIType(Enum):
-    """API type enumeration."""
-    CCXT = "ccxt"
-    BINANCE = "binance"
-    COINBASE = "coinbase"
-    KRAKEN = "kraken"
-    SIMULATED = "simulated"
-
-@dataclass
-class Config:
-    """Configuration data class."""
-    enabled: bool = True
-    timeout: float = 30.0
-    retries: int = 3
-    debug: bool = False
-    mathematical_integration: bool = True
-    backtesting_enabled: bool = True
-    live_api_enabled: bool = True
-
-@dataclass
-class Result:
-    """Result data class."""
-    success: bool = False
-    data: Optional[Dict[str, Any]] = None
-    error: Optional[str] = None
-    timestamp: float = field(default_factory=time.time)
-
-@dataclass
-class BacktestResult:
-    """Backtest result with mathematical analysis."""
-    backtest_id: str
-    mode: BacktestMode
-    start_date: str
-    end_date: str
-    total_return: float
-    sharpe_ratio: float
-    max_drawdown: float
-    mathematical_score: float
-    tensor_score: float
-    entropy_value: float
-    win_rate: float
-    profit_factor: float
-    timestamp: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class LiveAPIConfig:
-    """Live API configuration with mathematical optimization."""
-    api_type: APIType
-    api_key: str
-    api_secret: str
-    sandbox: bool = True
-    timeout: float = 30.0
-    rate_limit: int = 100
-    mathematical_optimization: bool = True
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class LiveMarketData:
-    """Live market data with mathematical analysis."""
-    symbol: str
-    price: float
-    volume: float
-    timestamp: float
-    mathematical_score: float
-    tensor_score: float
-    entropy_value: float
-    volatility: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class BacktestingMetrics:
-    """Backtesting metrics with mathematical analysis."""
-    total_backtests: int = 0
-    successful_backtests: int = 0
-    average_return: float = 0.0
-    average_sharpe: float = 0.0
-    mathematical_accuracy: float = 0.0
-    average_tensor_score: float = 0.0
-    average_entropy: float = 0.0
-    live_api_connections: int = 0
-    last_updated: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-class LiveAPIBacktesting:
-    """
-    LiveAPIBacktesting Implementation
-    Provides core live API backtesting functionality with mathematical integration.
-    """
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
-        """Initialize LiveAPIBacktesting with configuration and mathematical integration."""
-        self.config = config or self._default_config()
-        self.logger = logging.getLogger(__name__)
-        self.active = False
-        self.initialized = False
-
-        # Backtesting state
-        self.backtesting_metrics = BacktestingMetrics()
-        self.backtest_results: List[BacktestResult] = []
-        self.live_api_configs: Dict[str, LiveAPIConfig] = {}
-        self.market_data_cache: Dict[str, LiveMarketData] = {}
-        self.current_mode = Mode.BACKTEST
-        
-        # Initialize mathematical infrastructure if available
-        if MATH_INFRASTRUCTURE_AVAILABLE:
-            self.math_config = MathConfigManager()
-            self.math_cache = MathResultCache()
-            self.math_orchestrator = MathOrchestrator()
-            self.vwho = VolumeWeightedHashOscillator()
-            self.zygot_zalgo = ZygotZalgoEntropyDualKeyGate()
-            self.qsc = QSCGate()
-            self.tensor_algebra = UnifiedTensorAlgebra()
-            self.galileo = GalileoTensorField()
-            self.advanced_tensor = AdvancedTensorAlgebra()
-            self.entropy_math = EntropyMath()
-
-        # Initialize backtesting components
-        if BACKTESTING_AVAILABLE:
-            self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
-                        UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
-            if UnifiedMathematicalBridgeClass:
-                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
-            else:
-                self.unified_bridge = None
-            self.trading_pipeline = AutomatedTradingPipeline(self.config)
-
-        self._initialize_system()
-
-    def _default_config(self) -> Dict[str, Any]:
-        """Default configuration with mathematical backtesting settings."""
-        return {
-            'enabled': True,
-            'timeout': 30.0,
-            'retries': 3,
-            'debug': False,
-            'log_level': 'INFO',
-            'mathematical_integration': True,
-            'backtesting_enabled': True,
-            'live_api_enabled': True,
-            'backtest_data_dir': 'data/backtest',
-            'results_dir': 'results/backtest',
-            'max_backtest_days': 365,
-            'min_data_points': 1000,
-            'confidence_threshold': 0.7,
-        }
-
-    def _initialize_system(self) -> None:
-        """Initialize the system with mathematical integration."""
-        try:
-            self.logger.info(f"Initializing {self.__class__.__name__} with mathematical integration")
-            
-            if MATH_INFRASTRUCTURE_AVAILABLE:
-                self.logger.info("✅ Mathematical infrastructure initialized for backtesting analysis")
-                self.logger.info("✅ Volume Weighted Hash Oscillator initialized")
-                self.logger.info("✅ Zygot-Zalgo Entropy Dual Key Gate initialized")
-                self.logger.info("✅ QSC Quantum Signal Collapse Gate initialized")
-                self.logger.info("✅ Unified Tensor Algebra initialized")
-                self.logger.info("✅ Galileo Tensor Field initialized")
-                self.logger.info("✅ Advanced Tensor Algebra initialized")
-                self.logger.info("✅ Entropy Math initialized")
-            
-            if BACKTESTING_AVAILABLE:
-                self.logger.info("✅ Enhanced math-to-trade integration initialized")
-                self.logger.info("✅ Unified mathematical bridge initialized")
-                self.logger.info("✅ Trading pipeline initialized for backtesting")
-            
-            # Setup directories
-            self._setup_directories()
-            
-            # Initialize default API configs
-            self._initialize_default_apis()
-            
-            self.initialized = True
-            self.logger.info(f"✅ {self.__class__.__name__} initialized successfully with full integration")
-        except Exception as e:
-            self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
-            self.initialized = False
-
-    def _setup_directories(self) -> None:
-        """Setup necessary directories for backtesting."""
-        try:
-            directories = [
-                self.config.get('backtest_data_dir', 'data/backtest'),
-                self.config.get('results_dir', 'results/backtest'),
-                'logs/backtest',
-                'cache/backtest',
-            ]
-            
-            for directory in directories:
-                os.makedirs(directory, exist_ok=True)
-            
-            self.logger.info(f"✅ Backtesting directories setup complete")
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error setting up directories: {e}")
-
-    def _initialize_default_apis(self) -> None:
-        """Initialize default API configurations."""
-        try:
-            # Simulated API for testing
-            simulated_config = LiveAPIConfig(
-                api_type=APIType.SIMULATED,
-                api_key="simulated_key",
-                api_secret="simulated_secret",
-                sandbox=True,
-                mathematical_optimization=True
-            )
-            self.live_api_configs['simulated'] = simulated_config
-            
-            self.logger.info(f"✅ Initialized default API configurations")
-            
-        except Exception as e:
-            self.logger.error(f"❌ Error initializing default APIs: {e}")
-
-    def activate(self) -> bool:
-        """Activate the system."""
-        if not self.initialized:
-            self.logger.error("System not initialized")
-            return False
-
-        try:
-            self.active = True
-            self.logger.info(f"✅ {self.__class__.__name__} activated with mathematical integration")
-            return True
-        except Exception as e:
-            self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
-            return False
-
-    def deactivate(self) -> bool:
-        """Deactivate the system."""
-        try:
-            self.active = False
-            self.logger.info(f"✅ {self.__class__.__name__} deactivated")
-            return True
-        except Exception as e:
-            self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
-            return False
-
-    def get_status(self) -> Dict[str, Any]:
-        """Get system status with mathematical integration status."""
-        return {
-            'active': self.active,
-            'initialized': self.initialized,
-            'config': self.config,
-            'mathematical_integration': MATH_INFRASTRUCTURE_AVAILABLE,
-            'backtesting_available': BACKTESTING_AVAILABLE,
-            'current_mode': self.current_mode.value,
-            'backtest_results_count': len(self.backtest_results),
-            'live_api_configs_count': len(self.live_api_configs),
-            'market_data_cache_size': len(self.market_data_cache),
-            'backtesting_metrics': {
-                'total_backtests': self.backtesting_metrics.total_backtests,
-                'successful_backtests': self.backtesting_metrics.successful_backtests,
-                'average_return': self.backtesting_metrics.average_return,
-                'mathematical_accuracy': self.backtesting_metrics.mathematical_accuracy,
-            }
-        }
-
-    async def run_backtest(self, strategy_config: Dict[str, Any], 
-                          start_date: str, end_date: str, 
-                          mode: BacktestMode = BacktestMode.HISTORICAL) -> Result:
-        """Run backtest with mathematical analysis."""
-        try:
-            if not MATH_INFRASTRUCTURE_AVAILABLE:
-                return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
-
-            backtest_id = f"backtest_{int(time.time() * 1000)}"
-            self.logger.info(f"🚀 Starting backtest: {backtest_id} (Mode: {mode.value})")
-
-            # Generate historical data
-            historical_data = await self._generate_historical_data(start_date, end_date)
-            
-            if not historical_data['success']:
-                return Result(success=False, error=f"Failed to generate historical data: {historical_data['error']}", timestamp=time.time())
-
-            # Run strategy backtest
-            backtest_result = await self._execute_strategy_backtest(
-                backtest_id, strategy_config, historical_data['data'], mode
-            )
-
-            if not backtest_result['success']:
-                return Result(success=False, error=f"Backtest execution failed: {backtest_result['error']}", timestamp=time.time())
-
-            # Analyze results mathematically
-            mathematical_analysis = await self._analyze_backtest_mathematically(backtest_result['data'])
-
-            # Create backtest result
-            result = self._create_backtest_result(
-                backtest_id, mode, start_date, end_date, backtest_result['data'], mathematical_analysis
-            )
-
-            # Store result
-            self.backtest_results.append(result)
-            
-            # Update metrics
-            self._update_backtesting_metrics(result)
-
-            self.logger.info(f"✅ Backtest completed: {backtest_id} (Return: {result.total_return:.2f}%, Sharpe: {result.sharpe_ratio:.3f})")
-
-            return Result(success=True, data={
-                'backtest_id': backtest_id,
-                'total_return': result.total_return,
-                'sharpe_ratio': result.sharpe_ratio,
-                'max_drawdown': result.max_drawdown,
-                'mathematical_score': result.mathematical_score,
-                'tensor_score': result.tensor_score,
-                'entropy_value': result.entropy_value,
-                'win_rate': result.win_rate,
-                'profit_factor': result.profit_factor,
-                'timestamp': time.time()
-            }, timestamp=time.time())
-
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-    async def _generate_historical_data(self, start_date: str, end_date: str) -> Result:
-        """Generate historical data for backtesting."""
-        try:
-            # Simulate historical data generation
-            dates = pd.date_range(start=start_date, end=end_date, freq='1H')
-            n_points = len(dates)
-            
-            # Generate realistic price data
-            base_price = 50000
-            price_changes = np.random.normal(0, 0.02, n_points)  # 2% daily volatility
-            prices = [base_price]
-            
-            for change in price_changes[1:]:
-                new_price = prices[-1] * (1 + change)
-                prices.append(max(new_price, 1000))  # Minimum price $1000
-            
-            # Generate volume data
-            volumes = np.random.uniform(100, 10000, n_points)
-            
-            # Create market data
-            market_data = {
-                'dates': dates.tolist(),
-                'prices': prices,
-                'volumes': volumes.tolist(),
-                'returns': np.diff(prices) / prices[:-1],
-            }
-
-            return Result(success=True, data=market_data, timestamp=time.time())
-
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-    async def _execute_strategy_backtest(self, backtest_id: str, strategy_config: Dict[str, Any], 
-                                       historical_data: Dict[str, Any], mode: BacktestMode) -> Result:
-        """Execute strategy backtest with mathematical validation."""
-        try:
-            prices = historical_data['prices']
-            volumes = historical_data['volumes']
-            returns = historical_data['returns']
-            
-            # Simulate trading strategy
-            initial_capital = 100000
-            current_capital = initial_capital
-            positions = []
-            trades = []
-            
-            # Simple moving average strategy simulation
-            for i in range(20, len(prices)):
-                # Calculate moving averages
-                short_ma = np.mean(prices[i-10:i])
-                long_ma = np.mean(prices[i-20:i])
-                
-                # Trading signals
-                if short_ma > long_ma and current_capital > 0:
-                    # Buy signal
-                    position_size = current_capital * 0.1  # 10% of capital
-                    shares = position_size / prices[i]
-                    positions.append({
-                        'type': 'buy',
-                        'price': prices[i],
-                        'shares': shares,
-                        'timestamp': i
-                    })
-                    current_capital -= position_size
-                    trades.append({
-                        'type': 'buy',
-                        'price': prices[i],
-                        'amount': position_size,
-                        'timestamp': i
-                    })
-                
-                elif short_ma < long_ma and len(positions) > 0:
-                    # Sell signal
-                    for position in positions:
-                        if position['type'] == 'buy':
-                            sell_value = position['shares'] * prices[i]
-                            current_capital += sell_value
-                            trades.append({
-                                'type': 'sell',
-                                'price': prices[i],
-                                'amount': sell_value,
-                                'timestamp': i
-                            })
-                    positions = []
-            
-            # Calculate final capital (close all positions)
-            for position in positions:
-                if position['type'] == 'buy':
-                    sell_value = position['shares'] * prices[-1]
-                    current_capital += sell_value
-            
-            # Calculate metrics
-            total_return = ((current_capital - initial_capital) / initial_capital) * 100
-            returns_series = np.array([(t['amount'] if t['type'] == 'sell' else -t['amount']) for t in trades])
-            
-            if len(returns_series) > 0:
-                sharpe_ratio = np.mean(returns_series) / np.std(returns_series) if np.std(returns_series) > 0 else 0
-                max_drawdown = self._calculate_max_drawdown(returns_series)
-                win_rate = len(returns_series[returns_series > 0]) / len(returns_series) if len(returns_series) > 0 else 0
-                profit_factor = np.sum(returns_series[returns_series > 0]) / abs(np.sum(returns_series[returns_series < 0])) if np.sum(returns_series[returns_series < 0]) != 0 else float('inf')
-            else:
-                sharpe_ratio = 0
-                max_drawdown = 0
-                win_rate = 0
-                profit_factor = 0
-
-            return Result(success=True, data={
-                'initial_capital': initial_capital,
-                'final_capital': current_capital,
-                'total_return': total_return,
-                'sharpe_ratio': sharpe_ratio,
-                'max_drawdown': max_drawdown,
-                'win_rate': win_rate,
-                'profit_factor': profit_factor,
-                'trades': trades,
-                'positions': positions,
-            }, timestamp=time.time())
-
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-    def _calculate_max_drawdown(self, returns: np.ndarray) -> float:
-        """Calculate maximum drawdown from returns."""
-        try:
-            cumulative = np.cumprod(1 + returns)
-            running_max = np.maximum.accumulate(cumulative)
-            drawdown = (cumulative - running_max) / running_max
-            return float(np.min(drawdown))
-        except Exception as e:
-            self.logger.error(f"❌ Error calculating max drawdown: {e}")
-            return 0.0
-
-    async def _analyze_backtest_mathematically(self, backtest_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze backtest results using mathematical modules."""
-        try:
-            # Extract key metrics
-            total_return = backtest_data['total_return']
-            sharpe_ratio = backtest_data['sharpe_ratio']
-            max_drawdown = backtest_data['max_drawdown']
-            win_rate = backtest_data['win_rate']
-            
-            # Create metrics vector
-            metrics_vector = np.array([total_return, sharpe_ratio, abs(max_drawdown), win_rate])
-            
-            # Use mathematical modules for analysis
-            tensor_score = self.tensor_algebra.tensor_score(metrics_vector)
-            quantum_score = self.advanced_tensor.tensor_score(metrics_vector)
-            entropy_value = self.entropy_math.calculate_entropy(metrics_vector)
-            
-            # VWHO analysis
-            vwho_result = self.vwho.calculate_vwap_oscillator(metrics_vector, metrics_vector)
-            
-            # Zygot-Zalgo analysis
-            zygot_result = self.zygot_zalgo.calculate_dual_entropy(np.mean(metrics_vector), np.std(metrics_vector))
-            
-            # QSC analysis
-            qsc_result = self.qsc.calculate_quantum_collapse(np.mean(metrics_vector), np.std(metrics_vector))
-            qsc_score = float(qsc_result) if hasattr(qsc_result, 'real') else float(qsc_result)
-            
-            # Calculate overall mathematical score
-            mathematical_score = (
-                tensor_score + 
-                quantum_score + 
-                vwho_result + 
-                qsc_score + 
-                (1 - entropy_value) +
-                (sharpe_ratio / 10) +  # Normalize Sharpe ratio
-                (win_rate * 0.5)       # Weight win rate
-            ) / 7.0
-            
-            return {
-                'mathematical_score': mathematical_score,
-                'tensor_score': tensor_score,
-                'quantum_score': quantum_score,
-                'entropy_value': entropy_value,
-                'vwho_score': vwho_result,
-                'qsc_score': qsc_score,
-                'zygot_entropy': zygot_result.get('zygot_entropy', 0.0),
-                'zalgo_entropy': zygot_result.get('zalgo_entropy', 0.0),
-            }
-
-        except Exception as e:
-            self.logger.error(f"❌ Error analyzing backtest mathematically: {e}")
-            return {
-                'mathematical_score': 0.5,
-                'tensor_score': 0.5,
-                'quantum_score': 0.5,
-                'entropy_value': 0.5,
-                'vwho_score': 0.5,
-                'qsc_score': 0.5,
-                'zygot_entropy': 0.5,
-                'zalgo_entropy': 0.5,
-            }
-
-    def _create_backtest_result(self, backtest_id: str, mode: BacktestMode, 
-                               start_date: str, end_date: str, backtest_data: Dict[str, Any],
-                               mathematical_analysis: Dict[str, Any]) -> BacktestResult:
-        """Create backtest result from analysis."""
-        try:
-            return BacktestResult(
-                backtest_id=backtest_id,
-                mode=mode,
-                start_date=start_date,
-                end_date=end_date,
-                total_return=backtest_data['total_return'],
-                sharpe_ratio=backtest_data['sharpe_ratio'],
-                max_drawdown=backtest_data['max_drawdown'],
-                mathematical_score=mathematical_analysis['mathematical_score'],
-                tensor_score=mathematical_analysis['tensor_score'],
-                entropy_value=mathematical_analysis['entropy_value'],
-                win_rate=backtest_data['win_rate'],
-                profit_factor=backtest_data['profit_factor'],
-                timestamp=time.time(),
-                metadata={
-                    'mode': mode.value,
-                    'initial_capital': backtest_data['initial_capital'],
-                    'final_capital': backtest_data['final_capital'],
-                    'trade_count': len(backtest_data['trades']),
-                }
-            )
-
-        except Exception as e:
-            self.logger.error(f"❌ Error creating backtest result: {e}")
-            # Return fallback result
-            return BacktestResult(
-                backtest_id=f"fallback_{int(time.time() * 1000)}",
-                mode=mode,
-                start_date=start_date,
-                end_date=end_date,
-                total_return=0.0,
-                sharpe_ratio=0.0,
-                max_drawdown=0.0,
-                mathematical_score=0.5,
-                tensor_score=0.5,
-                entropy_value=0.5,
-                win_rate=0.0,
-                profit_factor=0.0,
-                timestamp=time.time(),
-                metadata={'fallback_result': True}
-            )
-
-    async def connect_live_api(self, api_config: LiveAPIConfig) -> Result:
-        """Connect to live API with mathematical validation."""
-        try:
-            if not MATH_INFRASTRUCTURE_AVAILABLE:
-                return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
-
-            # Simulate API connection
-            await asyncio.sleep(0.1)  # Simulate connection time
-            
-            # Validate API configuration mathematically
-            config_vector = np.array([
-                len(api_config.api_key),
-                len(api_config.api_secret),
-                float(api_config.timeout),
-                float(api_config.rate_limit),
-                float(api_config.sandbox)
-            ])
-            
-            tensor_score = self.tensor_algebra.tensor_score(config_vector)
-            quantum_score = self.advanced_tensor.tensor_score(config_vector)
-            entropy_value = self.entropy_math.calculate_entropy(config_vector)
-            
-            # Determine connection success
-            mathematical_score = (tensor_score + quantum_score + (1 - entropy_value)) / 3.0
-            success = mathematical_score > 0.6
-            
-            if success:
-                # Store API configuration
-                config_id = f"api_{api_config.api_type.value}_{int(time.time() * 1000)}"
-                self.live_api_configs[config_id] = api_config
-                self.backtesting_metrics.live_api_connections += 1
-                
-                self.logger.info(f"🔗 Live API connected: {config_id} (Type: {api_config.api_type.value})")
-                
-                return Result(success=True, data={
-                    'config_id': config_id,
-                    'api_type': api_config.api_type.value,
-                    'mathematical_score': mathematical_score,
-                    'tensor_score': tensor_score,
-                    'entropy_value': entropy_value,
-                    'timestamp': time.time()
-                }, timestamp=time.time())
-            else:
-                return Result(success=False, error="API connection validation failed", timestamp=time.time())
-
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-    async def get_market_data(self, symbol: str = "BTC/USD") -> Result:
-        """Get market data with mathematical integration."""
-        try:
-            if not MATH_INFRASTRUCTURE_AVAILABLE:
-                return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
-
-            # Simulate market data retrieval
-            price = np.random.uniform(20000, 60000)
-            volume = np.random.uniform(10, 1000)
-            
-            # Calculate volatility (simplified)
-            volatility = np.random.uniform(0.01, 0.05)
-            
-            # Analyze market data mathematically
-            market_vector = np.array([price, volume, volatility])
-            tensor_score = self.tensor_algebra.tensor_score(market_vector)
-            quantum_score = self.advanced_tensor.tensor_score(market_vector)
-            entropy_value = self.entropy_math.calculate_entropy(market_vector)
-            mathematical_score = (tensor_score + quantum_score + (1 - entropy_value)) / 3.0
-            
-            # Create market data object
-            market_data = LiveMarketData(
-                symbol=symbol,
-                price=price,
-                volume=volume,
-                timestamp=time.time(),
-                mathematical_score=mathematical_score,
-                tensor_score=tensor_score,
-                entropy_value=entropy_value,
-                volatility=volatility,
-                metadata={
-                    'source': 'simulated',
-                    'quality': 'high' if mathematical_score > 0.7 else 'medium'
-                }
-            )
-            
-            # Cache market data
-            self.market_data_cache[symbol] = market_data
-            
-            self.logger.info(f"📊 Market data retrieved: {symbol}, Price: {price:.2f}, Volume: {volume:.2f}")
-            
-            return Result(success=True, data={
-                'symbol': symbol,
-                'price': price,
-                'volume': volume,
-                'volatility': volatility,
-                'mathematical_score': mathematical_score,
-                'tensor_score': tensor_score,
-                'entropy_value': entropy_value,
-                'timestamp': time.time()
-            }, timestamp=time.time())
-
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-    def enable_trading(self) -> bool:
-        """Enable live trading mode."""
-        try:
-            if not self.active:
-                self.logger.error("System not active")
-                return False
-            
-            self.current_mode = Mode.LIVE
-            self.logger.info(f"✅ Live trading enabled")
-            return True
-        except Exception as e:
-            self.logger.error(f"❌ Error enabling trading: {e}")
-            return False
-
-    def disable_trading(self) -> bool:
-        """Disable live trading mode."""
-        try:
-            self.current_mode = Mode.BACKTEST
-            self.logger.info(f"✅ Live trading disabled, switched to backtest mode")
-            return True
-        except Exception as e:
-            self.logger.error(f"❌ Error disabling trading: {e}")
-            return False
-
-    def _update_backtesting_metrics(self, backtest_result: BacktestResult) -> None:
-        """Update backtesting metrics with new result."""
-        try:
-            self.backtesting_metrics.total_backtests += 1
-            
-            # Update averages
-            n = self.backtesting_metrics.total_backtests
-            
-            if n == 1:
-                self.backtesting_metrics.average_return = backtest_result.total_return
-                self.backtesting_metrics.average_sharpe = backtest_result.sharpe_ratio
-                self.backtesting_metrics.average_tensor_score = backtest_result.tensor_score
-                self.backtesting_metrics.average_entropy = backtest_result.entropy_value
-            else:
-                # Rolling average update
-                self.backtesting_metrics.average_return = (
-                    (self.backtesting_metrics.average_return * (n - 1) + backtest_result.total_return) / n
-                )
-                self.backtesting_metrics.average_sharpe = (
-                    (self.backtesting_metrics.average_sharpe * (n - 1) + backtest_result.sharpe_ratio) / n
-                )
-                self.backtesting_metrics.average_tensor_score = (
-                    (self.backtesting_metrics.average_tensor_score * (n - 1) + backtest_result.tensor_score) / n
-                )
-                self.backtesting_metrics.average_entropy = (
-                    (self.backtesting_metrics.average_entropy * (n - 1) + backtest_result.entropy_value) / n
-                )
-
-            # Update mathematical accuracy
-            if backtest_result.mathematical_score > 0.7:
-                self.backtesting_metrics.successful_backtests += 1
-                self.backtesting_metrics.mathematical_accuracy = (
-                    (self.backtesting_metrics.mathematical_accuracy * (n - 1) + 1.0) / n
-                )
-            else:
-                self.backtesting_metrics.mathematical_accuracy = (
-                    (self.backtesting_metrics.mathematical_accuracy * (n - 1) + 0.0) / n
-                )
-
-            self.backtesting_metrics.last_updated = time.time()
-
-        except Exception as e:
-            self.logger.error(f"❌ Error updating backtesting metrics: {e}")
-
-    def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
-        """Calculate mathematical result with proper data handling and backtesting integration."""
-        try:
-            if not isinstance(data, np.ndarray):
-                data = np.array(data)
-            
-            if MATH_INFRASTRUCTURE_AVAILABLE:
-                if len(data) > 0:
-                    tensor_result = self.tensor_algebra.tensor_score(data)
-                    advanced_result = self.advanced_tensor.tensor_score(data)
-                    entropy_result = self.entropy_math.calculate_entropy(data)
-                    result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
-                    return float(result)
-                else:
-                    return 0.0
-            else:
-                result = np.sum(data) / len(data) if len(data) > 0 else 0.0
-                return float(result)
-        except Exception as e:
-            self.logger.error(f"Mathematical calculation error: {e}")
-            return 0.0
-
-    def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
-        """Process trading data with backtesting integration and mathematical analysis."""
-        try:
-            if not MATH_INFRASTRUCTURE_AVAILABLE:
-                prices = market_data.get('prices', [])
-                volumes = market_data.get('volumes', [])
-                price_result = self.calculate_mathematical_result(prices)
-                volume_result = self.calculate_mathematical_result(volumes)
-                return Result(success=True, data={
-                    'price_analysis': price_result,
-                    'volume_analysis': volume_result,
-                    'backtesting_integration': False,
-                    'timestamp': time.time()
-                })
-
-            price = market_data.get('price', 0.0)
-            volume = market_data.get('volume', 0.0)
-            symbol = market_data.get('symbol', 'BTC/USD')
-            
-            total_backtests = self.backtesting_metrics.total_backtests
-            mathematical_accuracy = self.backtesting_metrics.mathematical_accuracy
-            
-            market_vector = np.array([price, volume, total_backtests, mathematical_accuracy])
-            
-            tensor_score = self.tensor_algebra.tensor_score(market_vector)
-            quantum_score = self.advanced_tensor.tensor_score(market_vector)
-            entropy_value = self.entropy_math.calculate_entropy(market_vector)
-            
-            backtest_adjusted_score = tensor_score * mathematical_accuracy
-            accuracy_adjusted_score = quantum_score * (1 + total_backtests * 0.01)
-            
-            return Result(success=True, data={
-                'backtesting_integration': True,
-                'symbol': symbol,
-                'total_backtests': total_backtests,
-                'mathematical_accuracy': mathematical_accuracy,
-                'tensor_score': tensor_score,
-                'quantum_score': quantum_score,
-                'entropy_value': entropy_value,
-                'backtest_adjusted_score': backtest_adjusted_score,
-                'accuracy_adjusted_score': accuracy_adjusted_score,
-                'mathematical_integration': True,
-                'timestamp': time.time()
-            })
-        except Exception as e:
-            return Result(success=False, error=str(e), timestamp=time.time())
-
-# Factory function
-def create_live_api_backtesting(config: Optional[Dict[str, Any]] = None):
-    """Create a live API backtesting instance with mathematical integration."""
-    return LiveAPIBacktesting(config)
+    This module manages live API integration and comprehensive backtesting with mathematical analysis:
+    - BacktestMode: Core backtest mode with mathematical validation
+    - LiveAPIConfig: Core live API configuration with mathematical optimization
+    - LiveMarketData: Core live market data with mathematical analysis
+    - LiveAPIBacktesting: Core live API backtesting system with mathematical integration
+
+        Key Functions:
+        - __init__:   init   operation
+        - _setup_directories:  setup directories operation
+        - enable_trading: enable trading operation
+        - disable_trading: disable trading operation
+        - get_status: get status operation
+        - run_backtest: run backtest with mathematical analysis
+        - connect_live_api: connect live API with mathematical validation
+        - get_market_data: get market data with mathematical integration
+        - create_live_api_backtesting: create live API backtesting with mathematical setup
+
+        """
+
+        import logging
+        import time
+        import asyncio
+        import os
+        import json
+        from dataclasses import dataclass, field
+        from enum import Enum
+        from typing import Any, Dict, List, Optional, Tuple, Union
+        import numpy as np
+        import pandas as pd
+
+        logger = logging.getLogger(__name__)
+
+        # Import the actual mathematical infrastructure
+            try:
+            from core.math_cache import MathResultCache
+            from core.math_config_manager import MathConfigManager
+            from core.math_orchestrator import MathOrchestrator
+
+            # Import mathematical modules for backtesting analysis
+            from core.math.volume_weighted_hash_oscillator import VolumeWeightedHashOscillator
+            from core.math.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+            from core.math.qsc_quantum_signal_collapse_gate import QSCGate
+            from core.math.unified_tensor_algebra import UnifiedTensorAlgebra
+            from core.math.galileo_tensor_field_entropy_drift import GalileoTensorField
+            from core.math.advanced_tensor_algebra import AdvancedTensorAlgebra
+            from core.math.entropy_math import EntropyMath
+
+            # Import backtesting components
+            from core.enhanced_math_to_trade_integration import EnhancedMathToTradeIntegration
+            # Lazy import to avoid circular dependency
+            # from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+            from core.automated_trading_pipeline import AutomatedTradingPipeline
+
+            MATH_INFRASTRUCTURE_AVAILABLE = True
+            BACKTESTING_AVAILABLE = True
+                except ImportError as e:
+                MATH_INFRASTRUCTURE_AVAILABLE = False
+                BACKTESTING_AVAILABLE = False
+                logger.warning(f"Mathematical infrastructure not available: {e}")
+
+
+                    class Status(Enum):
+    """Class for Schwabot trading functionality."""
+                    """System status enumeration."""
+                    ACTIVE = "active"
+                    INACTIVE = "inactive"
+                    ERROR = "error"
+                    PROCESSING = "processing"
+                    BACKTESTING = "backtesting"
+                    LIVE_TRADING = "live_trading"
+
+                        def _get_unified_mathematical_bridge():
+                        """Lazy import to avoid circular dependency."""
+                            try:
+                            from core.unified_mathematical_bridge import UnifiedMathematicalBridge
+                        return UnifiedMathematicalBridge
+                            except ImportError:
+                            logger.warning("UnifiedMathematicalBridge not available due to circular import")
+                        return None
+
+
+                            class Mode(Enum):
+    """Class for Schwabot trading functionality."""
+                            """Operation mode enumeration."""
+                            NORMAL = "normal"
+                            DEBUG = "debug"
+                            TEST = "test"
+                            PRODUCTION = "production"
+                            BACKTEST = "backtest"
+                            LIVE = "live"
+
+                                class BacktestMode(Enum):
+    """Class for Schwabot trading functionality."""
+                                """Backtest mode enumeration."""
+                                HISTORICAL = "historical"
+                                WALK_FORWARD = "walk_forward"
+                                MONTE_CARLO = "monte_carlo"
+                                STRESS_TEST = "stress_test"
+                                OPTIMIZATION = "optimization"
+
+                                    class APIType(Enum):
+    """Class for Schwabot trading functionality."""
+                                    """API type enumeration."""
+                                    CCXT = "ccxt"
+                                    BINANCE = "binance"
+                                    COINBASE = "coinbase"
+                                    KRAKEN = "kraken"
+                                    SIMULATED = "simulated"
+
+                                    @dataclass
+                                        class Config:
+    """Class for Schwabot trading functionality."""
+                                        """Configuration data class."""
+                                        enabled: bool = True
+                                        timeout: float = 30.0
+                                        retries: int = 3
+                                        debug: bool = False
+                                        mathematical_integration: bool = True
+                                        backtesting_enabled: bool = True
+                                        live_api_enabled: bool = True
+
+                                        @dataclass
+                                            class Result:
+    """Class for Schwabot trading functionality."""
+                                            """Result data class."""
+                                            success: bool = False
+                                            data: Optional[Dict[str, Any]] = None
+                                            error: Optional[str] = None
+                                            timestamp: float = field(default_factory=time.time)
+
+                                            @dataclass
+                                                class BacktestResult:
+    """Class for Schwabot trading functionality."""
+                                                """Backtest result with mathematical analysis."""
+                                                backtest_id: str
+                                                mode: BacktestMode
+                                                start_date: str
+                                                end_date: str
+                                                total_return: float
+                                                sharpe_ratio: float
+                                                max_drawdown: float
+                                                mathematical_score: float
+                                                tensor_score: float
+                                                entropy_value: float
+                                                win_rate: float
+                                                profit_factor: float
+                                                timestamp: float
+                                                metadata: Dict[str, Any] = field(default_factory=dict)
+
+                                                @dataclass
+                                                    class LiveAPIConfig:
+    """Class for Schwabot trading functionality."""
+                                                    """Live API configuration with mathematical optimization."""
+                                                    api_type: APIType
+                                                    api_key: str
+                                                    api_secret: str
+                                                    sandbox: bool = True
+                                                    timeout: float = 30.0
+                                                    rate_limit: int = 100
+                                                    mathematical_optimization: bool = True
+                                                    metadata: Dict[str, Any] = field(default_factory=dict)
+
+                                                    @dataclass
+                                                        class LiveMarketData:
+    """Class for Schwabot trading functionality."""
+                                                        """Live market data with mathematical analysis."""
+                                                        symbol: str
+                                                        price: float
+                                                        volume: float
+                                                        timestamp: float
+                                                        mathematical_score: float
+                                                        tensor_score: float
+                                                        entropy_value: float
+                                                        volatility: float
+                                                        metadata: Dict[str, Any] = field(default_factory=dict)
+
+                                                        @dataclass
+                                                            class BacktestingMetrics:
+    """Class for Schwabot trading functionality."""
+                                                            """Backtesting metrics with mathematical analysis."""
+                                                            total_backtests: int = 0
+                                                            successful_backtests: int = 0
+                                                            average_return: float = 0.0
+                                                            average_sharpe: float = 0.0
+                                                            mathematical_accuracy: float = 0.0
+                                                            average_tensor_score: float = 0.0
+                                                            average_entropy: float = 0.0
+                                                            live_api_connections: int = 0
+                                                            last_updated: float = field(default_factory=time.time)
+                                                            metadata: Dict[str, Any] = field(default_factory=dict)
+
+                                                                class LiveAPIBacktesting:
+    """Class for Schwabot trading functionality."""
+                                                                """
+                                                                LiveAPIBacktesting Implementation
+                                                                Provides core live API backtesting functionality with mathematical integration.
+                                                                """
+                                                                    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+                                                                    """Initialize LiveAPIBacktesting with configuration and mathematical integration."""
+                                                                    self.config = config or self._default_config()
+                                                                    self.logger = logging.getLogger(__name__)
+                                                                    self.active = False
+                                                                    self.initialized = False
+
+                                                                    # Backtesting state
+                                                                    self.backtesting_metrics = BacktestingMetrics()
+                                                                    self.backtest_results: List[BacktestResult] = []
+                                                                    self.live_api_configs: Dict[str, LiveAPIConfig] = {}
+                                                                    self.market_data_cache: Dict[str, LiveMarketData] = {}
+                                                                    self.current_mode = Mode.BACKTEST
+
+                                                                    # Initialize mathematical infrastructure if available
+                                                                        if MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                        self.math_config = MathConfigManager()
+                                                                        self.math_cache = MathResultCache()
+                                                                        self.math_orchestrator = MathOrchestrator()
+                                                                        self.vwho = VolumeWeightedHashOscillator()
+                                                                        self.zygot_zalgo = ZygotZalgoEntropyDualKeyGate()
+                                                                        self.qsc = QSCGate()
+                                                                        self.tensor_algebra = UnifiedTensorAlgebra()
+                                                                        self.galileo = GalileoTensorField()
+                                                                        self.advanced_tensor = AdvancedTensorAlgebra()
+                                                                        self.entropy_math = EntropyMath()
+
+                                                                        # Initialize backtesting components
+                                                                            if BACKTESTING_AVAILABLE:
+                                                                            self.enhanced_math_integration = EnhancedMathToTradeIntegration(self.config)
+                                                                            UnifiedMathematicalBridgeClass = _get_unified_mathematical_bridge()
+                                                                                if UnifiedMathematicalBridgeClass:
+                                                                                self.unified_bridge = UnifiedMathematicalBridgeClass(self.config)
+                                                                                    else:
+                                                                                    self.unified_bridge = None
+                                                                                    self.trading_pipeline = AutomatedTradingPipeline(self.config)
+
+                                                                                    self._initialize_system()
+
+                                                                                        def _default_config(self) -> Dict[str, Any]:
+                                                                                        """Default configuration with mathematical backtesting settings."""
+                                                                                    return {
+                                                                                    'enabled': True,
+                                                                                    'timeout': 30.0,
+                                                                                    'retries': 3,
+                                                                                    'debug': False,
+                                                                                    'log_level': 'INFO',
+                                                                                    'mathematical_integration': True,
+                                                                                    'backtesting_enabled': True,
+                                                                                    'live_api_enabled': True,
+                                                                                    'backtest_data_dir': 'data/backtest',
+                                                                                    'results_dir': 'results/backtest',
+                                                                                    'max_backtest_days': 365,
+                                                                                    'min_data_points': 1000,
+                                                                                    'confidence_threshold': 0.7,
+                                                                                    }
+
+                                                                                        def _initialize_system(self) -> None:
+                                                                                        """Initialize the system with mathematical integration."""
+                                                                                            try:
+                                                                                            self.logger.info(f"Initializing {self.__class__.__name__} with mathematical integration")
+
+                                                                                                if MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                self.logger.info("✅ Mathematical infrastructure initialized for backtesting analysis")
+                                                                                                self.logger.info("✅ Volume Weighted Hash Oscillator initialized")
+                                                                                                self.logger.info("✅ Zygot-Zalgo Entropy Dual Key Gate initialized")
+                                                                                                self.logger.info("✅ QSC Quantum Signal Collapse Gate initialized")
+                                                                                                self.logger.info("✅ Unified Tensor Algebra initialized")
+                                                                                                self.logger.info("✅ Galileo Tensor Field initialized")
+                                                                                                self.logger.info("✅ Advanced Tensor Algebra initialized")
+                                                                                                self.logger.info("✅ Entropy Math initialized")
+
+                                                                                                    if BACKTESTING_AVAILABLE:
+                                                                                                    self.logger.info("✅ Enhanced math-to-trade integration initialized")
+                                                                                                    self.logger.info("✅ Unified mathematical bridge initialized")
+                                                                                                    self.logger.info("✅ Trading pipeline initialized for backtesting")
+
+                                                                                                    # Setup directories
+                                                                                                    self._setup_directories()
+
+                                                                                                    # Initialize default API configs
+                                                                                                    self._initialize_default_apis()
+
+                                                                                                    self.initialized = True
+                                                                                                    self.logger.info(f"✅ {self.__class__.__name__} initialized successfully with full integration")
+                                                                                                        except Exception as e:
+                                                                                                        self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
+                                                                                                        self.initialized = False
+
+                                                                                                            def _setup_directories(self) -> None:
+                                                                                                            """Setup necessary directories for backtesting."""
+                                                                                                                try:
+                                                                                                                directories = [
+                                                                                                                self.config.get('backtest_data_dir', 'data/backtest'),
+                                                                                                                self.config.get('results_dir', 'results/backtest'),
+                                                                                                                'logs/backtest',
+                                                                                                                'cache/backtest',
+                                                                                                                ]
+
+                                                                                                                    for directory in directories:
+                                                                                                                    os.makedirs(directory, exist_ok=True)
+
+                                                                                                                    self.logger.info(f"✅ Backtesting directories setup complete")
+
+                                                                                                                        except Exception as e:
+                                                                                                                        self.logger.error(f"❌ Error setting up directories: {e}")
+
+                                                                                                                            def _initialize_default_apis(self) -> None:
+                                                                                                                            """Initialize default API configurations."""
+                                                                                                                                try:
+                                                                                                                                # Simulated API for testing
+                                                                                                                                simulated_config = LiveAPIConfig(
+                                                                                                                                api_type=APIType.SIMULATED,
+                                                                                                                                api_key="simulated_key",
+                                                                                                                                api_secret="simulated_secret",
+                                                                                                                                sandbox=True,
+                                                                                                                                mathematical_optimization=True
+                                                                                                                                )
+                                                                                                                                self.live_api_configs['simulated'] = simulated_config
+
+                                                                                                                                self.logger.info(f"✅ Initialized default API configurations")
+
+                                                                                                                                    except Exception as e:
+                                                                                                                                    self.logger.error(f"❌ Error initializing default APIs: {e}")
+
+                                                                                                                                        def activate(self) -> bool:
+                                                                                                                                        """Activate the system."""
+                                                                                                                                            if not self.initialized:
+                                                                                                                                            self.logger.error("System not initialized")
+                                                                                                                                        return False
+
+                                                                                                                                            try:
+                                                                                                                                            self.active = True
+                                                                                                                                            self.logger.info(f"✅ {self.__class__.__name__} activated with mathematical integration")
+                                                                                                                                        return True
+                                                                                                                                            except Exception as e:
+                                                                                                                                            self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
+                                                                                                                                        return False
+
+                                                                                                                                            def deactivate(self) -> bool:
+                                                                                                                                            """Deactivate the system."""
+                                                                                                                                                try:
+                                                                                                                                                self.active = False
+                                                                                                                                                self.logger.info(f"✅ {self.__class__.__name__} deactivated")
+                                                                                                                                            return True
+                                                                                                                                                except Exception as e:
+                                                                                                                                                self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
+                                                                                                                                            return False
+
+                                                                                                                                                def get_status(self) -> Dict[str, Any]:
+                                                                                                                                                """Get system status with mathematical integration status."""
+                                                                                                                                            return {
+                                                                                                                                            'active': self.active,
+                                                                                                                                            'initialized': self.initialized,
+                                                                                                                                            'config': self.config,
+                                                                                                                                            'mathematical_integration': MATH_INFRASTRUCTURE_AVAILABLE,
+                                                                                                                                            'backtesting_available': BACKTESTING_AVAILABLE,
+                                                                                                                                            'current_mode': self.current_mode.value,
+                                                                                                                                            'backtest_results_count': len(self.backtest_results),
+                                                                                                                                            'live_api_configs_count': len(self.live_api_configs),
+                                                                                                                                            'market_data_cache_size': len(self.market_data_cache),
+                                                                                                                                            'backtesting_metrics': {
+                                                                                                                                            'total_backtests': self.backtesting_metrics.total_backtests,
+                                                                                                                                            'successful_backtests': self.backtesting_metrics.successful_backtests,
+                                                                                                                                            'average_return': self.backtesting_metrics.average_return,
+                                                                                                                                            'mathematical_accuracy': self.backtesting_metrics.mathematical_accuracy,
+                                                                                                                                            }
+                                                                                                                                            }
+
+                                                                                                                                            async def run_backtest(self, strategy_config: Dict[str, Any],
+                                                                                                                                            start_date: str, end_date: str,
+                                                                                                                                                mode: BacktestMode = BacktestMode.HISTORICAL) -> Result:
+                                                                                                                                                """Run backtest with mathematical analysis."""
+                                                                                                                                                    try:
+                                                                                                                                                        if not MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                                                                    return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
+
+                                                                                                                                                    backtest_id = f"backtest_{int(time.time() * 1000)}"
+                                                                                                                                                    self.logger.info(f"🚀 Starting backtest: {backtest_id} (Mode: {mode.value})")
+
+                                                                                                                                                    # Generate historical data
+                                                                                                                                                    historical_data = await self._generate_historical_data(start_date, end_date)
+
+                                                                                                                                                        if not historical_data['success']:
+                                                                                                                                                    return Result(success=False, error=f"Failed to generate historical data: {historical_data['error']}", timestamp=time.time())
+
+                                                                                                                                                    # Run strategy backtest
+                                                                                                                                                    backtest_result = await self._execute_strategy_backtest(
+                                                                                                                                                    backtest_id, strategy_config, historical_data['data'], mode
+                                                                                                                                                    )
+
+                                                                                                                                                        if not backtest_result['success']:
+                                                                                                                                                    return Result(success=False, error=f"Backtest execution failed: {backtest_result['error']}", timestamp=time.time())
+
+                                                                                                                                                    # Analyze results mathematically
+                                                                                                                                                    mathematical_analysis = await self._analyze_backtest_mathematically(backtest_result['data'])
+
+                                                                                                                                                    # Create backtest result
+                                                                                                                                                    result = self._create_backtest_result(
+                                                                                                                                                    backtest_id, mode, start_date, end_date, backtest_result['data'], mathematical_analysis
+                                                                                                                                                    )
+
+                                                                                                                                                    # Store result
+                                                                                                                                                    self.backtest_results.append(result)
+
+                                                                                                                                                    # Update metrics
+                                                                                                                                                    self._update_backtesting_metrics(result)
+
+                                                                                                                                                    self.logger.info(f"✅ Backtest completed: {backtest_id} (Return: {result.total_return:.2f}%, Sharpe: {result.sharpe_ratio:.3f})")
+
+                                                                                                                                                return Result(success=True, data={
+                                                                                                                                                'backtest_id': backtest_id,
+                                                                                                                                                'total_return': result.total_return,
+                                                                                                                                                'sharpe_ratio': result.sharpe_ratio,
+                                                                                                                                                'max_drawdown': result.max_drawdown,
+                                                                                                                                                'mathematical_score': result.mathematical_score,
+                                                                                                                                                'tensor_score': result.tensor_score,
+                                                                                                                                                'entropy_value': result.entropy_value,
+                                                                                                                                                'win_rate': result.win_rate,
+                                                                                                                                                'profit_factor': result.profit_factor,
+                                                                                                                                                'timestamp': time.time()
+                                                                                                                                                }, timestamp=time.time())
+
+                                                                                                                                                    except Exception as e:
+                                                                                                                                                return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                    async def _generate_historical_data(self, start_date: str, end_date: str) -> Result:
+                                                                                                                                                    """Generate historical data for backtesting."""
+                                                                                                                                                        try:
+                                                                                                                                                        # Simulate historical data generation
+                                                                                                                                                        dates = pd.date_range(start=start_date, end=end_date, freq='1H')
+                                                                                                                                                        n_points = len(dates)
+
+                                                                                                                                                        # Generate realistic price data
+                                                                                                                                                        base_price = 50000
+                                                                                                                                                        price_changes = np.random.normal(0, 0.02, n_points)  # 2% daily volatility
+                                                                                                                                                        prices = [base_price]
+
+                                                                                                                                                            for change in price_changes[1:]:
+                                                                                                                                                            new_price = prices[-1] * (1 + change)
+                                                                                                                                                            prices.append(max(new_price, 1000))  # Minimum price $1000
+
+                                                                                                                                                            # Generate volume data
+                                                                                                                                                            volumes = np.random.uniform(100, 10000, n_points)
+
+                                                                                                                                                            # Create market data
+                                                                                                                                                            market_data = {
+                                                                                                                                                            'dates': dates.tolist(),
+                                                                                                                                                            'prices': prices,
+                                                                                                                                                            'volumes': volumes.tolist(),
+                                                                                                                                                            'returns': np.diff(prices) / prices[:-1],
+                                                                                                                                                            }
+
+                                                                                                                                                        return Result(success=True, data=market_data, timestamp=time.time())
+
+                                                                                                                                                            except Exception as e:
+                                                                                                                                                        return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                        async def _execute_strategy_backtest(self, backtest_id: str, strategy_config: Dict[str, Any],
+                                                                                                                                                            historical_data: Dict[str, Any], mode: BacktestMode) -> Result:
+                                                                                                                                                            """Execute strategy backtest with mathematical validation."""
+                                                                                                                                                                try:
+                                                                                                                                                                prices = historical_data['prices']
+                                                                                                                                                                volumes = historical_data['volumes']
+                                                                                                                                                            returns = historical_data['returns']
+
+                                                                                                                                                            # Simulate trading strategy
+                                                                                                                                                            initial_capital = 100000
+                                                                                                                                                            current_capital = initial_capital
+                                                                                                                                                            positions = []
+                                                                                                                                                            trades = []
+
+                                                                                                                                                            # Simple moving average strategy simulation
+                                                                                                                                                                for i in range(20, len(prices)):
+                                                                                                                                                                # Calculate moving averages
+                                                                                                                                                                short_ma = np.mean(prices[i-10:i])
+                                                                                                                                                                long_ma = np.mean(prices[i-20:i])
+
+                                                                                                                                                                # Trading signals
+                                                                                                                                                                    if short_ma > long_ma and current_capital > 0:
+                                                                                                                                                                    # Buy signal
+                                                                                                                                                                    position_size = current_capital * 0.1  # 10% of capital
+                                                                                                                                                                    shares = position_size / prices[i]
+                                                                                                                                                                    positions.append({
+                                                                                                                                                                    'type': 'buy',
+                                                                                                                                                                    'price': prices[i],
+                                                                                                                                                                    'shares': shares,
+                                                                                                                                                                    'timestamp': i
+                                                                                                                                                                    })
+                                                                                                                                                                    current_capital -= position_size
+                                                                                                                                                                    trades.append({
+                                                                                                                                                                    'type': 'buy',
+                                                                                                                                                                    'price': prices[i],
+                                                                                                                                                                    'amount': position_size,
+                                                                                                                                                                    'timestamp': i
+                                                                                                                                                                    })
+
+                                                                                                                                                                        elif short_ma < long_ma and len(positions) > 0:
+                                                                                                                                                                        # Sell signal
+                                                                                                                                                                            for position in positions:
+                                                                                                                                                                                if position['type'] == 'buy':
+                                                                                                                                                                                sell_value = position['shares'] * prices[i]
+                                                                                                                                                                                current_capital += sell_value
+                                                                                                                                                                                trades.append({
+                                                                                                                                                                                'type': 'sell',
+                                                                                                                                                                                'price': prices[i],
+                                                                                                                                                                                'amount': sell_value,
+                                                                                                                                                                                'timestamp': i
+                                                                                                                                                                                })
+                                                                                                                                                                                positions = []
+
+                                                                                                                                                                                # Calculate final capital (close all positions)
+                                                                                                                                                                                    for position in positions:
+                                                                                                                                                                                        if position['type'] == 'buy':
+                                                                                                                                                                                        sell_value = position['shares'] * prices[-1]
+                                                                                                                                                                                        current_capital += sell_value
+
+                                                                                                                                                                                        # Calculate metrics
+                                                                                                                                                                                        total_return = ((current_capital - initial_capital) / initial_capital) * 100
+                                                                                                                                                                                    returns_series = np.array([(t['amount'] if t['type'] == 'sell' else -t['amount']) for t in trades])
+
+                                                                                                                                                                                        if len(returns_series) > 0:
+                                                                                                                                                                                        sharpe_ratio = np.mean(returns_series) / np.std(returns_series) if np.std(returns_series) > 0 else 0
+                                                                                                                                                                                        max_drawdown = self._calculate_max_drawdown(returns_series)
+                                                                                                                                                                                        win_rate = len(returns_series[returns_series > 0]) / len(returns_series) if len(returns_series) > 0 else 0
+                                                                                                                                                                                        profit_factor = np.sum(returns_series[returns_series > 0]) / abs(np.sum(returns_series[returns_series < 0])) if np.sum(returns_series[returns_series < 0]) != 0 else float('inf')
+                                                                                                                                                                                            else:
+                                                                                                                                                                                            sharpe_ratio = 0
+                                                                                                                                                                                            max_drawdown = 0
+                                                                                                                                                                                            win_rate = 0
+                                                                                                                                                                                            profit_factor = 0
+
+                                                                                                                                                                                        return Result(success=True, data={
+                                                                                                                                                                                        'initial_capital': initial_capital,
+                                                                                                                                                                                        'final_capital': current_capital,
+                                                                                                                                                                                        'total_return': total_return,
+                                                                                                                                                                                        'sharpe_ratio': sharpe_ratio,
+                                                                                                                                                                                        'max_drawdown': max_drawdown,
+                                                                                                                                                                                        'win_rate': win_rate,
+                                                                                                                                                                                        'profit_factor': profit_factor,
+                                                                                                                                                                                        'trades': trades,
+                                                                                                                                                                                        'positions': positions,
+                                                                                                                                                                                        }, timestamp=time.time())
+
+                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                        return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                                                            def _calculate_max_drawdown(self, returns: np.ndarray) -> float:
+                                                                                                                                                                                            """Calculate maximum drawdown from returns."""
+                                                                                                                                                                                                try:
+                                                                                                                                                                                                cumulative = np.cumprod(1 + returns)
+                                                                                                                                                                                                running_max = np.maximum.accumulate(cumulative)
+                                                                                                                                                                                                drawdown = (cumulative - running_max) / running_max
+                                                                                                                                                                                            return float(np.min(drawdown))
+                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                self.logger.error(f"❌ Error calculating max drawdown: {e}")
+                                                                                                                                                                                            return 0.0
+
+                                                                                                                                                                                                async def _analyze_backtest_mathematically(self, backtest_data: Dict[str, Any]) -> Dict[str, Any]:
+                                                                                                                                                                                                """Analyze backtest results using mathematical modules."""
+                                                                                                                                                                                                    try:
+                                                                                                                                                                                                    # Extract key metrics
+                                                                                                                                                                                                    total_return = backtest_data['total_return']
+                                                                                                                                                                                                    sharpe_ratio = backtest_data['sharpe_ratio']
+                                                                                                                                                                                                    max_drawdown = backtest_data['max_drawdown']
+                                                                                                                                                                                                    win_rate = backtest_data['win_rate']
+
+                                                                                                                                                                                                    # Create metrics vector
+                                                                                                                                                                                                    metrics_vector = np.array([total_return, sharpe_ratio, abs(max_drawdown), win_rate])
+
+                                                                                                                                                                                                    # Use mathematical modules for analysis
+                                                                                                                                                                                                    tensor_score = self.tensor_algebra.tensor_score(metrics_vector)
+                                                                                                                                                                                                    quantum_score = self.advanced_tensor.tensor_score(metrics_vector)
+                                                                                                                                                                                                    entropy_value = self.entropy_math.calculate_entropy(metrics_vector)
+
+                                                                                                                                                                                                    # VWHO analysis
+                                                                                                                                                                                                    vwho_result = self.vwho.calculate_vwap_oscillator(metrics_vector, metrics_vector)
+
+                                                                                                                                                                                                    # Zygot-Zalgo analysis
+                                                                                                                                                                                                    zygot_result = self.zygot_zalgo.calculate_dual_entropy(np.mean(metrics_vector), np.std(metrics_vector))
+
+                                                                                                                                                                                                    # QSC analysis
+                                                                                                                                                                                                    qsc_result = self.qsc.calculate_quantum_collapse(np.mean(metrics_vector), np.std(metrics_vector))
+                                                                                                                                                                                                    qsc_score = float(qsc_result) if hasattr(qsc_result, 'real') else float(qsc_result)
+
+                                                                                                                                                                                                    # Calculate overall mathematical score
+                                                                                                                                                                                                    mathematical_score = (
+                                                                                                                                                                                                    tensor_score +
+                                                                                                                                                                                                    quantum_score +
+                                                                                                                                                                                                    vwho_result +
+                                                                                                                                                                                                    qsc_score +
+                                                                                                                                                                                                    (1 - entropy_value) +
+                                                                                                                                                                                                    (sharpe_ratio / 10) +  # Normalize Sharpe ratio
+                                                                                                                                                                                                    (win_rate * 0.5)       # Weight win rate
+                                                                                                                                                                                                    ) / 7.0
+
+                                                                                                                                                                                                return {
+                                                                                                                                                                                                'mathematical_score': mathematical_score,
+                                                                                                                                                                                                'tensor_score': tensor_score,
+                                                                                                                                                                                                'quantum_score': quantum_score,
+                                                                                                                                                                                                'entropy_value': entropy_value,
+                                                                                                                                                                                                'vwho_score': vwho_result,
+                                                                                                                                                                                                'qsc_score': qsc_score,
+                                                                                                                                                                                                'zygot_entropy': zygot_result.get('zygot_entropy', 0.0),
+                                                                                                                                                                                                'zalgo_entropy': zygot_result.get('zalgo_entropy', 0.0),
+                                                                                                                                                                                                }
+
+                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                    self.logger.error(f"❌ Error analyzing backtest mathematically: {e}")
+                                                                                                                                                                                                return {
+                                                                                                                                                                                                'mathematical_score': 0.5,
+                                                                                                                                                                                                'tensor_score': 0.5,
+                                                                                                                                                                                                'quantum_score': 0.5,
+                                                                                                                                                                                                'entropy_value': 0.5,
+                                                                                                                                                                                                'vwho_score': 0.5,
+                                                                                                                                                                                                'qsc_score': 0.5,
+                                                                                                                                                                                                'zygot_entropy': 0.5,
+                                                                                                                                                                                                'zalgo_entropy': 0.5,
+                                                                                                                                                                                                }
+
+def _create_backtest_result(self, backtest_id: str, mode: BacktestMode, -> None
+                                                                                                                                                                                                start_date: str, end_date: str, backtest_data: Dict[str, Any],
+                                                                                                                                                                                                    mathematical_analysis: Dict[str, Any]) -> BacktestResult:
+                                                                                                                                                                                                    """Create backtest result from analysis."""
+                                                                                                                                                                                                        try:
+                                                                                                                                                                                                    return BacktestResult(
+                                                                                                                                                                                                    backtest_id=backtest_id,
+                                                                                                                                                                                                    mode=mode,
+                                                                                                                                                                                                    start_date=start_date,
+                                                                                                                                                                                                    end_date=end_date,
+                                                                                                                                                                                                    total_return=backtest_data['total_return'],
+                                                                                                                                                                                                    sharpe_ratio=backtest_data['sharpe_ratio'],
+                                                                                                                                                                                                    max_drawdown=backtest_data['max_drawdown'],
+                                                                                                                                                                                                    mathematical_score=mathematical_analysis['mathematical_score'],
+                                                                                                                                                                                                    tensor_score=mathematical_analysis['tensor_score'],
+                                                                                                                                                                                                    entropy_value=mathematical_analysis['entropy_value'],
+                                                                                                                                                                                                    win_rate=backtest_data['win_rate'],
+                                                                                                                                                                                                    profit_factor=backtest_data['profit_factor'],
+                                                                                                                                                                                                    timestamp=time.time(),
+                                                                                                                                                                                                    metadata={
+                                                                                                                                                                                                    'mode': mode.value,
+                                                                                                                                                                                                    'initial_capital': backtest_data['initial_capital'],
+                                                                                                                                                                                                    'final_capital': backtest_data['final_capital'],
+                                                                                                                                                                                                    'trade_count': len(backtest_data['trades']),
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                    )
+
+                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                        self.logger.error(f"❌ Error creating backtest result: {e}")
+                                                                                                                                                                                                        # Return fallback result
+                                                                                                                                                                                                    return BacktestResult(
+                                                                                                                                                                                                    backtest_id=f"fallback_{int(time.time() * 1000)}",
+                                                                                                                                                                                                    mode=mode,
+                                                                                                                                                                                                    start_date=start_date,
+                                                                                                                                                                                                    end_date=end_date,
+                                                                                                                                                                                                    total_return=0.0,
+                                                                                                                                                                                                    sharpe_ratio=0.0,
+                                                                                                                                                                                                    max_drawdown=0.0,
+                                                                                                                                                                                                    mathematical_score=0.5,
+                                                                                                                                                                                                    tensor_score=0.5,
+                                                                                                                                                                                                    entropy_value=0.5,
+                                                                                                                                                                                                    win_rate=0.0,
+                                                                                                                                                                                                    profit_factor=0.0,
+                                                                                                                                                                                                    timestamp=time.time(),
+                                                                                                                                                                                                    metadata={'fallback_result': True}
+                                                                                                                                                                                                    )
+
+                                                                                                                                                                                                        async def connect_live_api(self, api_config: LiveAPIConfig) -> Result:
+                                                                                                                                                                                                        """Connect to live API with mathematical validation."""
+                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                if not MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                                                                                                                            return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
+
+                                                                                                                                                                                                            # Simulate API connection
+                                                                                                                                                                                                            await asyncio.sleep(0.1)  # Simulate connection time
+
+                                                                                                                                                                                                            # Validate API configuration mathematically
+                                                                                                                                                                                                            config_vector = np.array([
+                                                                                                                                                                                                            len(api_config.api_key),
+                                                                                                                                                                                                            len(api_config.api_secret),
+                                                                                                                                                                                                            float(api_config.timeout),
+                                                                                                                                                                                                            float(api_config.rate_limit),
+                                                                                                                                                                                                            float(api_config.sandbox)
+                                                                                                                                                                                                            ])
+
+                                                                                                                                                                                                            tensor_score = self.tensor_algebra.tensor_score(config_vector)
+                                                                                                                                                                                                            quantum_score = self.advanced_tensor.tensor_score(config_vector)
+                                                                                                                                                                                                            entropy_value = self.entropy_math.calculate_entropy(config_vector)
+
+                                                                                                                                                                                                            # Determine connection success
+                                                                                                                                                                                                            mathematical_score = (tensor_score + quantum_score + (1 - entropy_value)) / 3.0
+                                                                                                                                                                                                            success = mathematical_score > 0.6
+
+                                                                                                                                                                                                                if success:
+                                                                                                                                                                                                                # Store API configuration
+                                                                                                                                                                                                                config_id = f"api_{api_config.api_type.value}_{int(time.time() * 1000)}"
+                                                                                                                                                                                                                self.live_api_configs[config_id] = api_config
+                                                                                                                                                                                                                self.backtesting_metrics.live_api_connections += 1
+
+                                                                                                                                                                                                                self.logger.info(f"🔗 Live API connected: {config_id} (Type: {api_config.api_type.value})")
+
+                                                                                                                                                                                                            return Result(success=True, data={
+                                                                                                                                                                                                            'config_id': config_id,
+                                                                                                                                                                                                            'api_type': api_config.api_type.value,
+                                                                                                                                                                                                            'mathematical_score': mathematical_score,
+                                                                                                                                                                                                            'tensor_score': tensor_score,
+                                                                                                                                                                                                            'entropy_value': entropy_value,
+                                                                                                                                                                                                            'timestamp': time.time()
+                                                                                                                                                                                                            }, timestamp=time.time())
+                                                                                                                                                                                                                else:
+                                                                                                                                                                                                            return Result(success=False, error="API connection validation failed", timestamp=time.time())
+
+                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                            return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                                                                                async def get_market_data(self, symbol: str = "BTC/USD") -> Result:
+                                                                                                                                                                                                                """Get market data with mathematical integration."""
+                                                                                                                                                                                                                    try:
+                                                                                                                                                                                                                        if not MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                                                                                                                                    return Result(success=False, error="Mathematical infrastructure not available", timestamp=time.time())
+
+                                                                                                                                                                                                                    # Simulate market data retrieval
+                                                                                                                                                                                                                    price = np.random.uniform(20000, 60000)
+                                                                                                                                                                                                                    volume = np.random.uniform(10, 1000)
+
+                                                                                                                                                                                                                    # Calculate volatility (simplified)
+                                                                                                                                                                                                                    volatility = np.random.uniform(0.01, 0.05)
+
+                                                                                                                                                                                                                    # Analyze market data mathematically
+                                                                                                                                                                                                                    market_vector = np.array([price, volume, volatility])
+                                                                                                                                                                                                                    tensor_score = self.tensor_algebra.tensor_score(market_vector)
+                                                                                                                                                                                                                    quantum_score = self.advanced_tensor.tensor_score(market_vector)
+                                                                                                                                                                                                                    entropy_value = self.entropy_math.calculate_entropy(market_vector)
+                                                                                                                                                                                                                    mathematical_score = (tensor_score + quantum_score + (1 - entropy_value)) / 3.0
+
+                                                                                                                                                                                                                    # Create market data object
+                                                                                                                                                                                                                    market_data = LiveMarketData(
+                                                                                                                                                                                                                    symbol=symbol,
+                                                                                                                                                                                                                    price=price,
+                                                                                                                                                                                                                    volume=volume,
+                                                                                                                                                                                                                    timestamp=time.time(),
+                                                                                                                                                                                                                    mathematical_score=mathematical_score,
+                                                                                                                                                                                                                    tensor_score=tensor_score,
+                                                                                                                                                                                                                    entropy_value=entropy_value,
+                                                                                                                                                                                                                    volatility=volatility,
+                                                                                                                                                                                                                    metadata={
+                                                                                                                                                                                                                    'source': 'simulated',
+                                                                                                                                                                                                                    'quality': 'high' if mathematical_score > 0.7 else 'medium'
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                    )
+
+                                                                                                                                                                                                                    # Cache market data
+                                                                                                                                                                                                                    self.market_data_cache[symbol] = market_data
+
+                                                                                                                                                                                                                    self.logger.info(f"📊 Market data retrieved: {symbol}, Price: {price:.2f}, Volume: {volume:.2f}")
+
+                                                                                                                                                                                                                return Result(success=True, data={
+                                                                                                                                                                                                                'symbol': symbol,
+                                                                                                                                                                                                                'price': price,
+                                                                                                                                                                                                                'volume': volume,
+                                                                                                                                                                                                                'volatility': volatility,
+                                                                                                                                                                                                                'mathematical_score': mathematical_score,
+                                                                                                                                                                                                                'tensor_score': tensor_score,
+                                                                                                                                                                                                                'entropy_value': entropy_value,
+                                                                                                                                                                                                                'timestamp': time.time()
+                                                                                                                                                                                                                }, timestamp=time.time())
+
+                                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                                return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                                                                                    def enable_trading(self) -> bool:
+                                                                                                                                                                                                                    """Enable live trading mode."""
+                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                            if not self.active:
+                                                                                                                                                                                                                            self.logger.error("System not active")
+                                                                                                                                                                                                                        return False
+
+                                                                                                                                                                                                                        self.current_mode = Mode.LIVE
+                                                                                                                                                                                                                        self.logger.info(f"✅ Live trading enabled")
+                                                                                                                                                                                                                    return True
+                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                        self.logger.error(f"❌ Error enabling trading: {e}")
+                                                                                                                                                                                                                    return False
+
+                                                                                                                                                                                                                        def disable_trading(self) -> bool:
+                                                                                                                                                                                                                        """Disable live trading mode."""
+                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                            self.current_mode = Mode.BACKTEST
+                                                                                                                                                                                                                            self.logger.info(f"✅ Live trading disabled, switched to backtest mode")
+                                                                                                                                                                                                                        return True
+                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                            self.logger.error(f"❌ Error disabling trading: {e}")
+                                                                                                                                                                                                                        return False
+
+                                                                                                                                                                                                                            def _update_backtesting_metrics(self, backtest_result: BacktestResult) -> None:
+                                                                                                                                                                                                                            """Update backtesting metrics with new result."""
+                                                                                                                                                                                                                                try:
+                                                                                                                                                                                                                                self.backtesting_metrics.total_backtests += 1
+
+                                                                                                                                                                                                                                # Update averages
+                                                                                                                                                                                                                                n = self.backtesting_metrics.total_backtests
+
+                                                                                                                                                                                                                                    if n == 1:
+                                                                                                                                                                                                                                    self.backtesting_metrics.average_return = backtest_result.total_return
+                                                                                                                                                                                                                                    self.backtesting_metrics.average_sharpe = backtest_result.sharpe_ratio
+                                                                                                                                                                                                                                    self.backtesting_metrics.average_tensor_score = backtest_result.tensor_score
+                                                                                                                                                                                                                                    self.backtesting_metrics.average_entropy = backtest_result.entropy_value
+                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                        # Rolling average update
+                                                                                                                                                                                                                                        self.backtesting_metrics.average_return = (
+                                                                                                                                                                                                                                        (self.backtesting_metrics.average_return * (n - 1) + backtest_result.total_return) / n
+                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                                        self.backtesting_metrics.average_sharpe = (
+                                                                                                                                                                                                                                        (self.backtesting_metrics.average_sharpe * (n - 1) + backtest_result.sharpe_ratio) / n
+                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                                        self.backtesting_metrics.average_tensor_score = (
+                                                                                                                                                                                                                                        (self.backtesting_metrics.average_tensor_score * (n - 1) + backtest_result.tensor_score) / n
+                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                                        self.backtesting_metrics.average_entropy = (
+                                                                                                                                                                                                                                        (self.backtesting_metrics.average_entropy * (n - 1) + backtest_result.entropy_value) / n
+                                                                                                                                                                                                                                        )
+
+                                                                                                                                                                                                                                        # Update mathematical accuracy
+                                                                                                                                                                                                                                            if backtest_result.mathematical_score > 0.7:
+                                                                                                                                                                                                                                            self.backtesting_metrics.successful_backtests += 1
+                                                                                                                                                                                                                                            self.backtesting_metrics.mathematical_accuracy = (
+                                                                                                                                                                                                                                            (self.backtesting_metrics.mathematical_accuracy * (n - 1) + 1.0) / n
+                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                else:
+                                                                                                                                                                                                                                                self.backtesting_metrics.mathematical_accuracy = (
+                                                                                                                                                                                                                                                (self.backtesting_metrics.mathematical_accuracy * (n - 1) + 0.0) / n
+                                                                                                                                                                                                                                                )
+
+                                                                                                                                                                                                                                                self.backtesting_metrics.last_updated = time.time()
+
+                                                                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                                                                    self.logger.error(f"❌ Error updating backtesting metrics: {e}")
+
+                                                                                                                                                                                                                                                        def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
+                                                                                                                                                                                                                                                        """Calculate mathematical result with proper data handling and backtesting integration."""
+                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                if not isinstance(data, np.ndarray):
+                                                                                                                                                                                                                                                                data = np.array(data)
+
+                                                                                                                                                                                                                                                                    if MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                                                                                                                                                                                        if len(data) > 0:
+                                                                                                                                                                                                                                                                        tensor_result = self.tensor_algebra.tensor_score(data)
+                                                                                                                                                                                                                                                                        advanced_result = self.advanced_tensor.tensor_score(data)
+                                                                                                                                                                                                                                                                        entropy_result = self.entropy_math.calculate_entropy(data)
+                                                                                                                                                                                                                                                                        result = (tensor_result + advanced_result + (1 - entropy_result)) / 3.0
+                                                                                                                                                                                                                                                                    return float(result)
+                                                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                                                    return 0.0
+                                                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                                                        result = np.sum(data) / len(data) if len(data) > 0 else 0.0
+                                                                                                                                                                                                                                                                    return float(result)
+                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                        self.logger.error(f"Mathematical calculation error: {e}")
+                                                                                                                                                                                                                                                                    return 0.0
+
+                                                                                                                                                                                                                                                                        def process_trading_data(self, market_data: Dict[str, Any]) -> Result:
+                                                                                                                                                                                                                                                                        """Process trading data with backtesting integration and mathematical analysis."""
+                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                if not MATH_INFRASTRUCTURE_AVAILABLE:
+                                                                                                                                                                                                                                                                                prices = market_data.get('prices', [])
+                                                                                                                                                                                                                                                                                volumes = market_data.get('volumes', [])
+                                                                                                                                                                                                                                                                                price_result = self.calculate_mathematical_result(prices)
+                                                                                                                                                                                                                                                                                volume_result = self.calculate_mathematical_result(volumes)
+                                                                                                                                                                                                                                                                            return Result(success=True, data={
+                                                                                                                                                                                                                                                                            'price_analysis': price_result,
+                                                                                                                                                                                                                                                                            'volume_analysis': volume_result,
+                                                                                                                                                                                                                                                                            'backtesting_integration': False,
+                                                                                                                                                                                                                                                                            'timestamp': time.time()
+                                                                                                                                                                                                                                                                            })
+
+                                                                                                                                                                                                                                                                            price = market_data.get('price', 0.0)
+                                                                                                                                                                                                                                                                            volume = market_data.get('volume', 0.0)
+                                                                                                                                                                                                                                                                            symbol = market_data.get('symbol', 'BTC/USD')
+
+                                                                                                                                                                                                                                                                            total_backtests = self.backtesting_metrics.total_backtests
+                                                                                                                                                                                                                                                                            mathematical_accuracy = self.backtesting_metrics.mathematical_accuracy
+
+                                                                                                                                                                                                                                                                            market_vector = np.array([price, volume, total_backtests, mathematical_accuracy])
+
+                                                                                                                                                                                                                                                                            tensor_score = self.tensor_algebra.tensor_score(market_vector)
+                                                                                                                                                                                                                                                                            quantum_score = self.advanced_tensor.tensor_score(market_vector)
+                                                                                                                                                                                                                                                                            entropy_value = self.entropy_math.calculate_entropy(market_vector)
+
+                                                                                                                                                                                                                                                                            backtest_adjusted_score = tensor_score * mathematical_accuracy
+                                                                                                                                                                                                                                                                            accuracy_adjusted_score = quantum_score * (1 + total_backtests * 0.01)
+
+                                                                                                                                                                                                                                                                        return Result(success=True, data={
+                                                                                                                                                                                                                                                                        'backtesting_integration': True,
+                                                                                                                                                                                                                                                                        'symbol': symbol,
+                                                                                                                                                                                                                                                                        'total_backtests': total_backtests,
+                                                                                                                                                                                                                                                                        'mathematical_accuracy': mathematical_accuracy,
+                                                                                                                                                                                                                                                                        'tensor_score': tensor_score,
+                                                                                                                                                                                                                                                                        'quantum_score': quantum_score,
+                                                                                                                                                                                                                                                                        'entropy_value': entropy_value,
+                                                                                                                                                                                                                                                                        'backtest_adjusted_score': backtest_adjusted_score,
+                                                                                                                                                                                                                                                                        'accuracy_adjusted_score': accuracy_adjusted_score,
+                                                                                                                                                                                                                                                                        'mathematical_integration': True,
+                                                                                                                                                                                                                                                                        'timestamp': time.time()
+                                                                                                                                                                                                                                                                        })
+                                                                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                                                                        return Result(success=False, error=str(e), timestamp=time.time())
+
+                                                                                                                                                                                                                                                                        # Factory function
+                                                                                                                                                                                                                                                                            def create_live_api_backtesting(config: Optional[Dict[str, Any]] = None):
+                                                                                                                                                                                                                                                                            """Create a live API backtesting instance with mathematical integration."""
+                                                                                                                                                                                                                                                                        return LiveAPIBacktesting(config)

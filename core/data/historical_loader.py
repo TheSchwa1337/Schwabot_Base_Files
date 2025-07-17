@@ -34,23 +34,23 @@ Date commented out: 2025-7-2 19:37:5
 
 
 
-The clean implementation has been preserved in the following files:
+    The clean implementation has been preserved in the following files:
 
 
 
-- core/clean_math_foundation.py (mathematical, foundation)
+    - core/clean_math_foundation.py (mathematical, foundation)
 
 
 
-- core/clean_profit_vectorization.py (profit, calculations)
+    - core/clean_profit_vectorization.py (profit, calculations)
 
 
 
-- core/clean_trading_pipeline.py (trading, logic)
+    - core/clean_trading_pipeline.py (trading, logic)
 
 
 
-- core/clean_unified_math.py (unified, mathematics)
+    - core/clean_unified_math.py (unified, mathematics)
 
 
 
@@ -58,15 +58,15 @@ The clean implementation has been preserved in the following files:
 
 
 
-All core functionality has been reimplemented in clean, production-ready files.
+    All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-"""
+    """
 
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
+        # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
+        """
 
 
 
@@ -88,11 +88,11 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-HIST_DIR = Path(core/data/historical)
+        HIST_DIR = Path(core/data/historical)
 
 
 
-PREPROC_DIR = Path(core/data/preprocessed)
+        PREPROC_DIR = Path(core/data/preprocessed)
 
 
 
@@ -104,16 +104,16 @@ PREPROC_DIR = Path(core/data/preprocessed)
 
 
 
-def concat_csv_to_parquet():Concatenates CSV files for a given asset into a single Parquet
-file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
+        def concat_csv_to_parquet():Concatenates CSV files for a given asset into a single Parquet
+        file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
-if not folder.exists():
+            if not folder.exists():
 
 
 
-    raise FileNotFoundError(fNo folder found for {asset.upper()}_{quote.upper()} history.)
+        raise FileNotFoundError(fNo folder found for {asset.upper()}_{quote.upper()} history.)
 
 
 
@@ -121,11 +121,11 @@ if not folder.exists():
 
 
 
-    all_csvs = sorted(folder.glob(*.csv))
+        all_csvs = sorted(folder.glob(*.csv))
 
 
 
-if not all_csvs:
+            if not all_csvs:
 
 
 
@@ -181,7 +181,7 @@ if not all_csvs:
 
 
 
-        return out_path
+    return out_path
 
 
 
@@ -193,28 +193,28 @@ if not all_csvs:
 
 
 
-def load_historical_data():-> pd.DataFrame:
+        def load_historical_data():-> pd.DataFrame:
 
 
 
-Loads historical data for a given asset, either from Parquet or by concatenating CSVs.parquet_file =
-PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
+        Loads historical data for a given asset, either from Parquet or by concatenating CSVs.parquet_file =
+        PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
 
 
 
-if not parquet_file.exists():
+            if not parquet_file.exists():
 
 
 
-    print(f[!] Parquet not found, creating for {asset.upper()}...)
+            print(f[!] Parquet not found, creating for {asset.upper()}...)
 
 
 
-    concat_csv_to_parquet(asset, quote)
+            concat_csv_to_parquet(asset, quote)
 
 
 
-    return pd.read_parquet(parquet_file)
+        return pd.read_parquet(parquet_file)
 
 
 
@@ -222,4 +222,4 @@ if not parquet_file.exists():
 
 
 
-    """
+        """

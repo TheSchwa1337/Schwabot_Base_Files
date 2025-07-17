@@ -21,8 +21,8 @@ from pathlib import Path as _Path
 _pkg_path = _Path(__file__).parent
 
 # Import all modules in this directory
-for _, _module_name, _ in _iter_modules([_pkg_path]):
-    if not _module_name.startswith("_"):
+    for _, _module_name, _ in _iter_modules([_pkg_path]):
+        if not _module_name.startswith("_"):
         importlib.import_module(".{0}".format(_module_name), __package__)
 
         del importlib, _Path, _pkg_path  # Cleanup namespace

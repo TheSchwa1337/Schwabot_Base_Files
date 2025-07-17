@@ -1,3 +1,5 @@
+"""Module for Schwabot trading system."""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,1095 +10,1098 @@ This module handles the execution of trading strategies, signal generation,
 and coordination between different strategies with full integration of the
 Math + Memory Fusion Core for enhanced decision making.
 
-Features:
-- Unified signal generation with profit vector integration
-- Entropy-corrected strategy execution
-- Signal lineage tracking for recursive learning
-- Bridge functions between strategy and mathematical confidence
-- Real-time market data analysis with mathematical context
-"""
-
-import asyncio
-import logging
-import time
-import numpy as np
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Protocol
-from dataclasses import dataclass
-
-# Define a simple protocol for trading strategies
-class TradingStrategy(Protocol):
-    """Protocol for trading strategies."""
-    is_initialized: bool
-    
-    async def generate_signals(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Generate trading signals."""
-        ...
-
-# Import Math + Memory Fusion Core
-try:
-    from core.clean_unified_math import CleanUnifiedMathSystem, UnifiedSignal
-    from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem, ProfitVector
-    from core.profit_scaling_optimizer import create_profit_scaling_optimizer, RiskProfile
-    from core.schwafit_overfitting_prevention import create_schwafit_overfitting_prevention, SanitizationLevel
-    MATH_FUSION_AVAILABLE = True
-except ImportError:
-    MATH_FUSION_AVAILABLE = False
-    logger = logging.getLogger(__name__)
-    logger.warning("Math + Memory Fusion Core not available - using fallback mode")
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
-class EnhancedTradingSignal:
-    """Enhanced trading signal with mathematical fusion context."""
-    
-    # Basic signal data
-    symbol: str
-    action: str  # 'buy', 'sell', 'hold'
-    entry_price: float
-    amount: float
-    strategy_id: str
-    
-    # Mathematical fusion context
-    unified_signal: Optional[UnifiedSignal] = None
-    profit_vectors: List[ProfitVector] = None
-    mathematical_confidence: float = 0.0
-    entropy_correction: float = 0.0
-    vector_confidence: float = 0.0
-    
-    # Market context
-    volatility: float = 0.0
-    volume: float = 0.0
-    market_conditions: Dict[str, Any] = None
-    
-    # Signal lineage
-    timestamp: float = time.time()
-    signal_hash: Optional[str] = None
-    parent_signals: List[str] = None
-    metadata: Dict[str, Any] = None # Added for profit scaling metadata
-
-
-class StrategyExecutor:
+    Features:
+    - Unified signal generation with profit vector integration
+    - Entropy-corrected strategy execution
+    - Signal lineage tracking for recursive learning
+    - Bridge functions between strategy and mathematical confidence
+    - Real-time market data analysis with mathematical context
     """
-    Execute trading strategies and generate signals with Math + Memory Fusion Core.
-    
-    This class coordinates the execution of multiple trading strategies,
-    combines their signals with mathematical fusion, and provides a unified
-    interface for enhanced signal generation with profit vector memory.
-    """
-    
-    def __init__(self):
-        """Initialize the strategy executor with Math + Memory Fusion Core."""
-        self.active_strategies: Dict[str, TradingStrategy] = {}
-        self.strategy_weights: Dict[str, float] = {}
-        self.is_running = False
-        self.is_initialized = False
-        self.execution_task: Optional[asyncio.Task] = None
-        
-        # Math + Memory Fusion Core integration
-        if MATH_FUSION_AVAILABLE:
-            self.math_system = CleanUnifiedMathSystem()
-            self.profit_system = UnifiedProfitVectorizationSystem()
-            self.profit_scaling_optimizer = create_profit_scaling_optimizer()
-            self.overfitting_prevention_system = create_schwafit_overfitting_prevention()
-            logger.info("🧠 Math + Memory Fusion Core integrated")
-        else:
-            self.math_system = None
-            self.profit_system = None
-            self.profit_scaling_optimizer = None
-            self.overfitting_prevention_system = None
-            logger.warning("🧠 Math + Memory Fusion Core not available")
-        
-        # Enhanced signal tracking
-        self.signal_history: List[EnhancedTradingSignal] = []
-        self.profit_vector_history: List[ProfitVector] = []
-        self.max_signal_history = 1000
-        self.max_profit_history = 500
-        
-        # Integration parameters
-        self.min_unified_confidence = 0.6
-        self.entropy_correction_threshold = 0.3
-        self.vector_confidence_weight = 0.4
-        self.mathematical_confidence_weight = 0.6
-        
-        logger.info("Strategy Executor initialized with enhanced capabilities")
-    
-    async def initialize(self) -> bool:
-        """Initialize the strategy executor with Math + Memory Fusion Core."""
-        try:
-            logger.info("Initializing Enhanced Strategy Executor...")
-            
-            # Set default strategy weights
-            self.strategy_weights = {
-                "ExampleStrategy": 1.0,
-                "VolumeWeightedHashOscillator": 0.8,
-                "MultiPhaseStrategyWeightTensor": 0.9,
-                "ZygotZalgoEntropyDualKeyGate": 0.7
-            }
-            
-            # Initialize Math + Memory Fusion Core if available
-            if MATH_FUSION_AVAILABLE:
-                logger.info("🧠 Initializing Math + Memory Fusion Core...")
-                # Load historical profit vectors if available
-                await self._load_historical_profit_vectors()
-            
-            self.is_initialized = True
-            logger.info("Enhanced Strategy Executor initialized successfully")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize Enhanced Strategy Executor: {e}")
-            return False
 
-    async def _load_historical_profit_vectors(self):
-        """Load historical profit vectors for mathematical context."""
-        try:
-            # Generate some sample profit vectors for testing
-            # In production, this would load from persistent storage
-            sample_vectors = []
-            for i in range(10):
-                vector = self.profit_system.generate_profit_vector(
-                    entry_tick=1000 + i * 100,
-                    profit=0.02 + (i % 3) * 0.01,
-                    strategy_hash=f"historical_{i}",
-                    drawdown=0.01 + (i % 2) * 0.005,
-                    entropy_delta=0.1 + (i % 3) * 0.05,
-                    exit_type="stack_hold",
-                    risk_profile="low"
-                )
-                sample_vectors.append(vector)
-            
-            self.profit_vector_history.extend(sample_vectors)
-            logger.info(f"📊 Loaded {len(sample_vectors)} historical profit vectors")
-            
-        except Exception as e:
-            logger.error(f"Error loading historical profit vectors: {e}")
+    import asyncio
+    import logging
+    import time
+    import numpy as np
+    from datetime import datetime
+    from typing import Any, Dict, List, Optional, Protocol
+    from dataclasses import dataclass
 
-    async def generate_unified_signals(self, market_data: Dict[str, Any]) -> List[EnhancedTradingSignal]:
-        """
-        Generate unified trading signals using Math + Memory Fusion Core.
-        
-        Args:
-            market_data: Market data for analysis
-            
-        Returns:
-            List of enhanced trading signals with mathematical fusion
-        """
-        try:
-            if not MATH_FUSION_AVAILABLE:
-                logger.warning("Math + Memory Fusion Core not available, using fallback")
-                return await self.generate_signals(market_data)
-            
-            enhanced_signals = []
-            
-            # Generate unified signal using Math + Memory Fusion Core
-            unified_signal = self.math_system.generate_unified_signal(
-                market_data, 
-                self.profit_vector_history
-            )
-            
-            # Apply overfitting prevention
-            sanitized_unified_signal = self.overfitting_prevention_system.sanitize_signal(unified_signal)
+    # Define a simple protocol for trading strategies
+        class TradingStrategy(Protocol):
+    """Class for Schwabot trading functionality."""
+        """Protocol for trading strategies."""
+        is_initialized: bool
 
-            # Convert unified signal to enhanced trading signal
-            if sanitized_unified_signal.signal != "HOLD":
-                enhanced_signal = EnhancedTradingSignal(
-                    symbol=market_data.get("symbol", "BTC/USDC"),
-                    action=sanitized_unified_signal.signal.lower(),
-                    entry_price=market_data.get("price", 50000.0),
-                    amount=self._calculate_position_size(sanitized_unified_signal),
-                    strategy_id="unified_math_fusion",
-                    unified_signal=sanitized_unified_signal,
-                    profit_vectors=self.profit_vector_history[-5:],  # Last 5 vectors
-                    mathematical_confidence=sanitized_unified_signal.mathematical_confidence,
-                    entropy_correction=sanitized_unified_signal.entropy_correction,
-                    vector_confidence=sanitized_unified_signal.vector_confidence,
-                    volatility=market_data.get("volatility", 0.0),
-                    volume=market_data.get("volume", 0.0),
-                    market_conditions=market_data,
-                    signal_hash=self._generate_signal_hash(sanitized_unified_signal)
-                )
-                enhanced_signals.append(enhanced_signal)
-            
-            # Generate signals from individual strategies with mathematical enhancement
-            strategy_signals = await self._generate_enhanced_strategy_signals(market_data, sanitized_unified_signal)
-            enhanced_signals.extend(strategy_signals)
-            
-            # Store signals in history
-            self._store_enhanced_signals(enhanced_signals)
-            
-            return enhanced_signals
-            
-        except Exception as e:
-            logger.error(f"Error generating unified signals: {e}")
-            return []
+            async def generate_signals(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+            """Generate trading signals."""
+            ...
 
-    async def _generate_enhanced_strategy_signals(self, market_data: Dict[str, Any], 
-                                                 unified_signal: UnifiedSignal) -> List[EnhancedTradingSignal]:
-        """Generate enhanced signals from individual strategies with mathematical fusion."""
-        enhanced_signals = []
-        
-        for strategy_name, strategy in self.active_strategies.items():
-            try:
-                # Generate base signals from strategy
-                base_signals = await strategy.generate_signals(market_data)
-                
-                for base_signal in base_signals:
-                    # Enhance signal with mathematical fusion
-                    enhanced_signal = self._enhance_strategy_signal(
-                        base_signal, strategy_name, unified_signal
-                    )
-                    
-                    if enhanced_signal:
-                        enhanced_signals.append(enhanced_signal)
-                        
-            except Exception as e:
-                logger.error(f"Error generating enhanced signals for {strategy_name}: {e}")
-        
-        return enhanced_signals
-
-    def _enhance_strategy_signal(self, base_signal: Dict[str, Any], strategy_name: str, 
-                                unified_signal: UnifiedSignal) -> Optional[EnhancedTradingSignal]:
-        """Enhance a strategy signal with mathematical fusion context."""
-        try:
-            # Extract base signal data
-            action = base_signal.get("action", "hold")
-            if action == "hold":
-                return None
-            
-            # Calculate mathematical enhancement
-            strategy_weight = self.strategy_weights.get(strategy_name, 1.0)
-            enhanced_confidence = (
-                base_signal.get("confidence", 0.5) * strategy_weight * 
-                self.mathematical_confidence_weight +
-                unified_signal.confidence * self.vector_confidence_weight
-            )
-            
-            # Apply entropy correction
-            entropy_correction = 1 - unified_signal.entropy_correction
-            final_confidence = enhanced_confidence * entropy_correction
-            
-            # Create enhanced signal
-            enhanced_signal = EnhancedTradingSignal(
-                symbol=base_signal.get("symbol", "BTC/USDC"),
-                action=action,
-                entry_price=base_signal.get("entry_price", 50000.0),
-                amount=base_signal.get("amount", 0.0),
-                strategy_id=strategy_name,
-                unified_signal=unified_signal,
-                profit_vectors=self.profit_vector_history[-3:],  # Last 3 vectors
-                mathematical_confidence=enhanced_confidence,
-                entropy_correction=entropy_correction,
-                vector_confidence=unified_signal.vector_confidence,
-                volatility=base_signal.get("volatility", 0.0),
-                volume=base_signal.get("volume", 0.0),
-                market_conditions=base_signal.get("market_conditions", {}),
-                signal_hash=self._generate_signal_hash(base_signal)
-            )
-            
-            return enhanced_signal
-            
-        except Exception as e:
-            logger.error(f"Error enhancing strategy signal: {e}")
-            return None
-
-    def _calculate_position_size(self, unified_signal: UnifiedSignal) -> float:
-        """Calculate position size based on unified signal confidence."""
-        try:
-            base_amount = 1000.0  # Base position size
-            confidence_multiplier = unified_signal.confidence
-            vector_multiplier = unified_signal.vector_confidence
-            
-            # Apply profit vector insights
-            if unified_signal.profit_weight > 0.5:
-                profit_multiplier = 1.2
-            else:
-                profit_multiplier = 0.8
-            
-            final_amount = base_amount * confidence_multiplier * vector_multiplier * profit_multiplier
-            
-            return max(100.0, min(5000.0, final_amount))  # Clamp between 100 and 5000
-            
-        except Exception as e:
-            logger.error(f"Error calculating position size: {e}")
-            return 1000.0
-
-    def _generate_signal_hash(self, signal_data: Any) -> str:
-        """Generate a unique hash for signal tracking."""
-        try:
-            import hashlib
-            signal_str = str(signal_data) + str(time.time())
-            return hashlib.md5(signal_str.encode()).hexdigest()[:8]
-        except Exception as e:
-            logger.error(f"Error generating signal hash: {e}")
-            return "unknown"
-
-    def _store_enhanced_signals(self, signals: List[EnhancedTradingSignal]):
-        """Store enhanced signals in history."""
-        try:
-            self.signal_history.extend(signals)
-            
-            # Keep history within limits
-            if len(self.signal_history) > self.max_signal_history:
-                excess = len(self.signal_history) - self.max_signal_history
-                self.signal_history = self.signal_history[excess:]
-            
-            logger.debug(f"Stored {len(signals)} enhanced signals")
-            
-        except Exception as e:
-            logger.error(f"Error storing enhanced signals: {e}")
-
-    async def update_profit_vectors(self, trade_result: Dict[str, Any]):
-        """Update profit vectors with new trade results."""
-        try:
-            if not MATH_FUSION_AVAILABLE:
-                return
-            
-            # Generate new profit vector from trade result
-            new_vector = self.profit_system.generate_profit_vector(
-                entry_tick=int(time.time()),
-                profit=trade_result.get("profit", 0.0),
-                strategy_hash=trade_result.get("strategy_id", "unknown"),
-                drawdown=trade_result.get("drawdown", 0.0),
-                entropy_delta=trade_result.get("volatility", 0.1),
-                exit_type=trade_result.get("exit_type", "unknown"),
-                risk_profile=trade_result.get("risk_profile", "medium")
-            )
-            
-            # Add to history
-            self.profit_vector_history.append(new_vector)
-            
-            # Keep history within limits
-            if len(self.profit_vector_history) > self.max_profit_history:
-                excess = len(self.profit_vector_history) - self.max_profit_history
-                self.profit_vector_history = self.profit_vector_history[excess:]
-            
-            # Update win rate data in profit scaling optimizer
-            if self.profit_scaling_optimizer:
-                strategy_id = trade_result.get("strategy_id", "unknown")
-                self.profit_scaling_optimizer.update_win_rate_data(strategy_id, trade_result)
-            
-            logger.info(f"📊 Updated profit vectors with new trade result")
-            
-        except Exception as e:
-            logger.error(f"Error updating profit vectors: {e}")
-
-    def get_mathematical_insights(self) -> Dict[str, Any]:
-        """Get mathematical insights from the fusion core."""
-        try:
-            if not MATH_FUSION_AVAILABLE:
-                return {"error": "Math + Memory Fusion Core not available"}
-            
-            # Get profit vector insights
-            profit_insights = self.math_system.bridge_profit_to_math(self.profit_vector_history)
-            
-            # Get signal history insights
-            recent_signals = self.signal_history[-10:] if self.signal_history else []
-            signal_confidence_avg = np.mean([s.mathematical_confidence for s in recent_signals]) if recent_signals else 0.0
-            
-            return {
-                "profit_insights": profit_insights,
-                "signal_confidence_avg": signal_confidence_avg,
-                "total_signals": len(self.signal_history),
-                "total_profit_vectors": len(self.profit_vector_history),
-                "fusion_core_status": "active"
-            }
-            
-        except Exception as e:
-            logger.error(f"Error getting mathematical insights: {e}")
-            return {"error": str(e)}
-    
-    async def start(self) -> bool:
-        """Start the strategy executor."""
-        if not self.is_initialized:
-            logger.error("Strategy Executor not initialized")
-            return False
-        
-        try:
-            logger.info("Starting Strategy Executor...")
-            
-            self.is_running = True
-            
-            # Start execution task
-            self.execution_task = asyncio.create_task(self._execution_loop())
-            
-            logger.info("Strategy Executor started successfully")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to start Strategy Executor: {e}")
-            return False
-    
-    async def stop(self):
-        """Stop the strategy executor."""
-        if not self.is_running:
-            return
-        
-        logger.info("Stopping Strategy Executor...")
-        
-        try:
-            self.is_running = False
-            
-            # Cancel execution task
-            if self.execution_task:
-                self.execution_task.cancel()
+            # Import Math + Memory Fusion Core
                 try:
-                    await self.execution_task
-                except asyncio.CancelledError:
-                    pass
-            
-            logger.info("Strategy Executor stopped")
-            
-        except Exception as e:
-            logger.error(f"Error stopping Strategy Executor: {e}")
-    
-    async def _execution_loop(self):
-        """Main execution loop for strategies with Math + Memory Fusion Core."""
-        logger.info("Enhanced strategy execution loop started")
-        
-        try:
-            while self.is_running:
-                # Generate market data
-                market_data = await self._generate_market_data()
-                
-                # Protect pipeline with Schwafit overfitting prevention
-                if self.overfitting_prevention_system:
-                    protected_data, _ = self.overfitting_prevention_system.protect_pipeline(market_data, [])
-                    market_data = protected_data
-                
-                # Generate unified signals using Math + Memory Fusion Core
-                unified_signals = await self.generate_unified_signals(market_data)
-                
-                # Process enhanced strategies
-                await self._process_enhanced_strategies(market_data, unified_signals)
-                
-                # Sleep for next iteration
-                await asyncio.sleep(1)  # 1 second interval
-                
-        except asyncio.CancelledError:
-            logger.info("Enhanced strategy execution loop cancelled")
-        except Exception as e:
-            logger.error(f"Error in enhanced strategy execution loop: {e}")
+                from core.clean_unified_math import CleanUnifiedMathSystem, UnifiedSignal
+                from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem, ProfitVector
+                from core.profit_scaling_optimizer import create_profit_scaling_optimizer, RiskProfile
+                from core.schwafit_overfitting_prevention import create_schwafit_overfitting_prevention, SanitizationLevel
+                MATH_FUSION_AVAILABLE = True
+                    except ImportError:
+                    MATH_FUSION_AVAILABLE = False
+                    logger = logging.getLogger(__name__)
+                    logger.warning("Math + Memory Fusion Core not available - using fallback mode")
 
-    async def _generate_market_data(self) -> Dict[str, Any]:
-        """Fetch real market data for analysis."""
-        try:
-            # Real market data integration using enhanced API integration manager
-            try:
-                from core.enhanced_api_integration_manager import enhanced_api_manager
-                
-                # Fetch real market data for BTC/USDC
-                market_data = await enhanced_api_manager.get_market_data('BTC')
-                
-                if market_data:
-                    return {
-                        'symbol': 'BTC/USDC',
-                        'price': market_data.price,
-                        'volume': market_data.volume_24h,
-                        'change_24h': market_data.price_change_percent_24h,
-                        'volatility': market_data.volatility or 0.02,
-                        'timestamp': market_data.timestamp,
-                        'bid': market_data.bid,
-                        'ask': market_data.ask,
-                        'spread': market_data.ask - market_data.bid if market_data.ask and market_data.bid else 0.0,
-                        'market_cap': market_data.market_cap,
-                        'circulating_supply': market_data.circulating_supply
-                    }
-                else:
-                    # Fallback to simulated data with realistic BTC/USDC values
-                    return self._generate_simulated_market_data()
-                    
-            except Exception as e:
-                logger.warning(f"Real market data fetching failed, using simulation: {e}")
-                return self._generate_simulated_market_data()
-            
-        except Exception as e:
-            logger.error(f"Error fetching market data: {e}")
-            raise
-    
-    def _generate_simulated_market_data(self) -> Dict[str, Any]:
-        """Generate realistic simulated market data for BTC/USDC."""
-        import random
-        
-        # Realistic BTC price range
-        base_price = 50000.0
-        price_variation = random.uniform(-0.02, 0.02)  # ±2% variation
-        current_price = base_price * (1 + price_variation)
-        
-        # Realistic volume (24h volume in USD)
-        base_volume = 2_000_000_000  # 2B USD daily volume
-        volume_variation = random.uniform(0.8, 1.2)
-        current_volume = base_volume * volume_variation
-        
-        # Realistic volatility
-        volatility = random.uniform(0.015, 0.035)  # 1.5-3.5% volatility
-        
-        # Realistic spread
-        spread_pct = random.uniform(0.0001, 0.001)  # 0.01-0.1% spread
-        spread = current_price * spread_pct
-        
-        return {
-            'symbol': 'BTC/USDC',
-            'price': current_price,
-            'volume': current_volume,
-            'change_24h': random.uniform(-0.05, 0.05),  # ±5% daily change
-            'volatility': volatility,
-            'timestamp': time.time(),
-            'bid': current_price - spread/2,
-            'ask': current_price + spread/2,
-            'spread': spread,
-            'market_cap': current_price * 19_000_000,  # ~19M BTC in circulation
-            'circulating_supply': 19_000_000
-        }
+                    logger = logging.getLogger(__name__)
 
-    async def _process_enhanced_strategies(self, market_data: Dict[str, Any], 
-                                         unified_signals: List[EnhancedTradingSignal]):
-        """Process enhanced strategies with mathematical fusion and profit scaling."""
-        try:
-            # Process unified signals with profit scaling
-            for signal in unified_signals:
-                if signal.mathematical_confidence > self.min_unified_confidence:
-                    logger.info(f"🔗 Processing unified signal: {signal.action} {signal.symbol} "
-                              f"(confidence: {signal.mathematical_confidence:.3f})")
-                    
-                    # Apply profit scaling based on mathematical confidence
-                    scaled_signal = self._apply_profit_scaling(signal, market_data)
-                    
-                    # Execute trade with scaled parameters
-                    execution_result = await self._execute_scaled_trade(scaled_signal, market_data)
-                    
-                    # Update profit vectors with execution result
-                    if execution_result.get('success'):
-                        await self.update_profit_vectors(execution_result)
-                        logger.info(f"✅ Scaled trade executed: {signal.symbol} {signal.action} "
-                                  f"Profit: {execution_result.get('profit', 0):.4f}")
-                    else:
-                        logger.warning(f"⚠️ Scaled trade failed: {execution_result.get('error_message', 'Unknown error')}")
-            
-            # Process individual strategies with mathematical context
-            for strategy_name, strategy in self.active_strategies.items():
-                try:
-                    # Check if strategy is still valid
-                    if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
-                        logger.warning(f"Strategy {strategy_name} not initialized, skipping")
-                        continue
-                    
-                    # Generate strategy-specific signals
-                    strategy_signals = await strategy.generate_signals(market_data)
-                    
-                    # Process each signal with profit scaling
-                    for base_signal in strategy_signals:
-                        enhanced_signal = self._enhance_strategy_signal(
-                            base_signal, strategy_name, None  # No unified signal for individual strategies
-                        )
-                        
-                        if enhanced_signal and enhanced_signal.mathematical_confidence > 0.6:
-                            # Apply profit scaling
-                            scaled_signal = self._apply_profit_scaling(enhanced_signal, market_data)
-                            
-                            # Execute scaled trade
-                            execution_result = await self._execute_scaled_trade(scaled_signal, market_data)
-                            
-                            if execution_result.get('success'):
-                                await self.update_profit_vectors(execution_result)
-                    
-                except Exception as e:
-                    logger.error(f"Error processing enhanced strategy {strategy_name}: {e}")
-                    
-        except Exception as e:
-            logger.error(f"Error in enhanced strategy processing: {e}")
-    
-    def _apply_profit_scaling(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> EnhancedTradingSignal:
-        """Apply profit scaling based on mathematical confidence and win rate optimization."""
-        try:
-            if not self.profit_scaling_optimizer:
-                logger.warning("Profit scaling optimizer not available, using fallback")
-                return signal
-            
-            # Use mathematical profit scaling optimizer
-            scaling_result = self.profit_scaling_optimizer.optimize_position_size(
-                base_amount=signal.amount,
-                confidence=signal.mathematical_confidence,
-                strategy_id=signal.strategy_id,
-                market_data=market_data,
-                risk_profile=RiskProfile.MEDIUM
-            )
-            
-            # Create scaled signal with optimized parameters
-            scaled_signal = EnhancedTradingSignal(
-                symbol=signal.symbol,
-                action=signal.action,
-                entry_price=signal.entry_price,
-                amount=scaling_result.scaled_amount,
-                strategy_id=signal.strategy_id,
-                unified_signal=signal.unified_signal,
-                profit_vectors=signal.profit_vectors,
-                mathematical_confidence=signal.mathematical_confidence,
-                entropy_correction=signal.entropy_correction,
-                vector_confidence=signal.vector_confidence,
-                volatility=signal.volatility,
-                volume=signal.volume,
-                market_conditions=signal.market_conditions,
-                signal_hash=signal.signal_hash,
-                parent_signals=signal.parent_signals
-            )
-            
-            # Add comprehensive scaling metadata
-            scaled_signal.metadata = {
-                'original_amount': scaling_result.original_amount,
-                'scaled_amount': scaling_result.scaled_amount,
-                'scaling_factor': scaling_result.scaling_factor,
-                'kelly_fraction': scaling_result.kelly_fraction,
-                'confidence_factor': scaling_result.confidence_factor,
-                'volatility_adjustment': scaling_result.volatility_adjustment,
-                'volume_factor': scaling_result.volume_factor,
-                'win_rate_factor': scaling_result.win_rate_factor,
-                'risk_score': scaling_result.risk_score,
-                'expected_profit': scaling_result.expected_profit,
-                'max_loss': scaling_result.max_loss,
-                'scaling_mode': scaling_result.scaling_mode.value,
-                'optimization_time': scaling_result.optimization_time,
-                'scaling_applied': True,
-                'mathematical_optimization': True
-            }
-            
-            logger.info(f"📊 Mathematical profit scaling applied: {scaling_result.original_amount:.4f} → {scaling_result.scaled_amount:.4f} "
-                       f"(Kelly: {scaling_result.kelly_fraction:.3f}, Risk: {scaling_result.risk_score:.3f}, "
-                       f"Mode: {scaling_result.scaling_mode.value})")
-            
-            return scaled_signal
-            
-        except Exception as e:
-            logger.error(f"Error applying mathematical profit scaling: {e}")
-            return signal
-    
-    async def _execute_scaled_trade(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute trade with scaled parameters using real exchange integration."""
-        try:
-            # Real trade execution using enhanced CCXT trading engine
-            from core.enhanced_ccxt_trading_engine import create_enhanced_ccxt_trading_engine
-            from core.enhanced_ccxt_trading_engine import TradingOrder, OrderSide, OrderType
-            
-            # Initialize trading engine if not already done
-            if not hasattr(self, 'trading_engine'):
-                self.trading_engine = create_enhanced_ccxt_trading_engine()
-                await self.trading_engine.start_trading_engine()
-            
-            # Convert signal to trading order with scaled parameters
-            order_side = OrderSide.BUY if signal.action == 'buy' else OrderSide.SELL
-            
-            # Use scaled amount from profit scaling
-            scaled_amount = signal.amount
-            
-            # Calculate optimal order type based on market conditions
-            spread = market_data.get('spread', 0.0)
-            volatility = market_data.get('volatility', 0.02)
-            
-            # Use limit orders for tight spreads, market orders for wide spreads
-            if spread < 0.001:  # Tight spread
-                order_type = OrderType.LIMIT
-                price = market_data.get('price', signal.entry_price)
-            else:  # Wide spread
-                order_type = OrderType.MARKET
-                price = None
-            
-            trading_order = TradingOrder(
-                order_id=f"scaled_{signal.signal_hash}_{int(time.time())}",
-                symbol=signal.symbol,
-                side=order_side,
-                order_type=order_type,
-                quantity=scaled_amount,
-                price=price,
-                mathematical_signature=f"scaled_{signal.signal_hash}"
-            )
-            
-            # Execute on default exchange
-            exchange_name = 'binance'  # Default exchange
-            
-            # Check if exchange is connected
-            if exchange_name not in self.trading_engine.exchanges:
-                # Try to connect to exchange (would need API keys in production)
-                await self.trading_engine.connect_exchange(exchange_name)
-            
-            # Execute the order
-            execution_result = await self.trading_engine._execute_order(exchange_name, trading_order)
-            
-            # Calculate profit/loss
-            profit = 0.0
-            if execution_result.success:
-                # Calculate profit based on execution
-                if signal.action == 'buy':
-                    # For buy orders, profit is realized on sell
-                    profit = 0.0  # Will be calculated on sell
-                else:
-                    # For sell orders, calculate profit from entry to exit
-                    entry_price = signal.entry_price
-                    exit_price = execution_result.average_price
-                    profit = (exit_price - entry_price) * execution_result.filled_quantity
-            
-            # Convert to result format
-            result = {
-                'success': execution_result.success,
-                'order_id': execution_result.order_id,
-                'symbol': signal.symbol,
-                'action': signal.action,
-                'quantity': execution_result.filled_quantity,
-                'price': execution_result.average_price,
-                'execution_time': execution_result.execution_time,
-                'slippage': execution_result.slippage,
-                'fees': execution_result.fees,
-                'status': execution_result.status.value,
-                'error_message': execution_result.error_message,
-                'mathematical_signature': execution_result.mathematical_signature,
-                'signal_hash': signal.signal_hash,
-                'profit': profit,
-                'scaling_metadata': signal.metadata,
-                'timestamp': time.time()
-            }
-            
-            if result['success']:
-                logger.info(f"✅ Scaled trade executed successfully: {signal.symbol} {signal.action} "
-                          f"{result['quantity']:.4f} @ {result['price']:.2f}")
-            else:
-                logger.warning(f"⚠️ Scaled trade execution failed: {result['order_id']} - {result['error_message']}")
-            
-            return result
-            
-        except Exception as e:
-            logger.error(f"Error executing scaled trade: {e}")
-            # Fallback to simulation
-            return self._simulate_scaled_trade_execution(signal, market_data)
-    
-    def _simulate_scaled_trade_execution(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Simulate scaled trade execution for testing/fallback purposes."""
-        try:
-            import random
-            
-            # Simulate execution with realistic parameters
-            execution_time = random.uniform(0.1, 1.0)
-            fill_ratio = random.uniform(0.9, 1.0)
-            filled_quantity = signal.amount * fill_ratio
-            
-            # Simulate price impact based on volatility
-            volatility = market_data.get('volatility', 0.02)
-            price_impact = random.uniform(-volatility * 0.1, volatility * 0.1)
-            execution_price = signal.entry_price * (1 + price_impact)
-            
-            # Calculate slippage
-            slippage = abs(price_impact)
-            
-            # Simulate fees (0.1% typical)
-            fees = filled_quantity * execution_price * 0.001
-            
-            # Calculate profit/loss
-            profit = 0.0
-            if signal.action == 'sell':
-                profit = (execution_price - signal.entry_price) * filled_quantity
-            
-            success = fill_ratio > 0.8  # Success if >80% filled
-            
-            logger.info(f"🔄 Simulated scaled trade execution: {signal.symbol} {signal.action} {filled_quantity:.4f}")
-            
-            return {
-                'success': success,
-                'order_id': f"sim_scaled_{signal.signal_hash}_{int(time.time())}",
-                'symbol': signal.symbol,
-                'action': signal.action,
-                'quantity': filled_quantity,
-                'price': execution_price,
-                'execution_time': execution_time,
-                'slippage': slippage,
-                'fees': fees,
-                'status': 'filled' if success else 'partial',
-                'error_message': None if success else "Partial fill in simulation",
-                'mathematical_signature': signal.signal_hash or "",
-                'signal_hash': signal.signal_hash,
-                'profit': profit,
-                'scaling_metadata': signal.metadata,
-                'timestamp': time.time()
-            }
-            
-        except Exception as e:
-            logger.error(f"Error in scaled trade simulation: {e}")
-            return {
-                'success': False,
-                'order_id': f"error_{int(time.time())}",
-                'symbol': signal.symbol,
-                'action': signal.action,
-                'quantity': 0.0,
-                'price': 0.0,
-                'execution_time': 0.0,
-                'slippage': 0.0,
-                'fees': 0.0,
-                'status': 'rejected',
-                'error_message': f"Simulation failed: {str(e)}",
-                'mathematical_signature': "",
-                'signal_hash': signal.signal_hash,
-                'profit': 0.0,
-                'scaling_metadata': {},
-                'timestamp': time.time()
-            }
 
-    async def _process_strategies(self):
-        """Process all active strategies (legacy method for compatibility)."""
-        for strategy_name, strategy in self.active_strategies.items():
-            try:
-                # Check if strategy is still valid
-                if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
-                    logger.warning(f"Strategy {strategy_name} not initialized, skipping")
-                    continue
-                
-                # Process strategy (this would typically involve getting market data)
-                # For now, we'll just log that we're processing
-                logger.debug(f"Processing strategy: {strategy_name}")
-                
-            except Exception as e:
-                logger.error(f"Error processing strategy {strategy_name}: {e}")
+                    @dataclass
+                        class EnhancedTradingSignal:
+    """Class for Schwabot trading functionality."""
+                        """Enhanced trading signal with mathematical fusion context."""
 
-    def add_strategy(self, strategy_name: str, strategy: TradingStrategy, weight: float = 1.0) -> bool:
-        """Add a strategy to the executor."""
-        try:
-            if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
-                logger.error(f"Strategy {strategy_name} is not initialized")
-                return False
-            
-            self.active_strategies[strategy_name] = strategy
-            self.strategy_weights[strategy_name] = weight
-            
-            logger.info(f"Added strategy: {strategy_name} with weight {weight}")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to add strategy {strategy_name}: {e}")
-            return False
-    
-    def remove_strategy(self, strategy_name: str) -> bool:
-        """Remove a strategy from the executor."""
-        try:
-            if strategy_name in self.active_strategies:
-                del self.active_strategies[strategy_name]
-                if strategy_name in self.strategy_weights:
-                    del self.strategy_weights[strategy_name]
-                
-                logger.info(f"Removed strategy: {strategy_name}")
-                return True
-            else:
-                logger.warning(f"Strategy {strategy_name} not found")
-                return False
-                
-        except Exception as e:
-            logger.error(f"Failed to remove strategy {strategy_name}: {e}")
-            return False
-    
-    def set_strategy_weight(self, strategy_name: str, weight: float) -> bool:
-        """Set the weight for a strategy."""
-        try:
-            if strategy_name in self.active_strategies:
-                self.strategy_weights[strategy_name] = weight
-                logger.info(f"Set weight for {strategy_name}: {weight}")
-                return True
-            else:
-                logger.warning(f"Strategy {strategy_name} not found")
-                return False
-                
-        except Exception as e:
-            logger.error(f"Failed to set weight for strategy {strategy_name}: {e}")
-            return False
-    
-    async def generate_signals(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Generate trading signals from all active strategies."""
-        try:
-            all_signals = []
-            
-            for strategy_name, strategy in self.active_strategies.items():
-                try:
-                    # Generate signals from this strategy
-                    strategy_signals = await strategy.generate_signals(analysis)
-                    
-                    # Apply strategy weight
-                    weight = self.strategy_weights.get(strategy_name, 1.0)
-                    for signal in strategy_signals:
-                        signal['strategy'] = strategy_name
-                        signal['weight'] = weight
-                        signal['confidence'] = signal.get('confidence', 0.5) * weight
-                        all_signals.append(signal)
-                    
-                except Exception as e:
-                    logger.error(f"Error generating signals from strategy {strategy_name}: {e}")
-            
-            # Combine and rank signals
-            combined_signals = await self._combine_signals(all_signals)
-            
-            # Store in history
-            self._store_signals(combined_signals)
-            
-            return combined_signals
-            
-        except Exception as e:
-            logger.error(f"Error generating signals: {e}")
-            return []
-    
-    async def _combine_signals(self, signals: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Combine and rank signals from multiple strategies."""
-        try:
-            if not signals:
-                return []
-            
-            # Group signals by symbol and type
-            signal_groups = {}
-            for signal in signals:
-                key = (signal.get('symbol', 'UNKNOWN'), signal.get('type', 'UNKNOWN'))
-                if key not in signal_groups:
-                    signal_groups[key] = []
-                signal_groups[key].append(signal)
-            
-            # Combine signals for each group
-            combined_signals = []
-            for (symbol, signal_type), group_signals in signal_groups.items():
-                if len(group_signals) == 1:
-                    # Single signal, use as is
-                    combined_signals.append(group_signals[0])
-                else:
-                    # Multiple signals, combine them
-                    combined_signal = await self._combine_signal_group(group_signals)
-                    combined_signals.append(combined_signal)
-            
-            # Sort by confidence
-            combined_signals.sort(key=lambda x: x.get('confidence', 0), reverse=True)
-            
-            return combined_signals
-            
-        except Exception as e:
-            logger.error(f"Error combining signals: {e}")
-            return signals
-    
-    async def _combine_signal_group(self, signals: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Combine a group of signals for the same symbol and type."""
-        try:
-            if not signals:
-                return {}
-            
-            # Weighted average of quantities and confidences
-            total_weight = sum(signal.get('weight', 1.0) for signal in signals)
-            weighted_quantity = sum(
-                signal.get('quantity', 0) * signal.get('weight', 1.0) 
-                for signal in signals
-            ) / total_weight if total_weight > 0 else 0
-            
-            weighted_confidence = sum(
-                signal.get('confidence', 0) * signal.get('weight', 1.0) 
-                for signal in signals
-            ) / total_weight if total_weight > 0 else 0
-            
-            # Use the first signal as base and update with combined values
-            combined_signal = signals[0].copy()
-            combined_signal['quantity'] = weighted_quantity
-            combined_signal['confidence'] = weighted_confidence
-            combined_signal['strategies'] = [s.get('strategy', 'unknown') for s in signals]
-            combined_signal['combined_from'] = len(signals)
-            
-            return combined_signal
-            
-        except Exception as e:
-            logger.error(f"Error combining signal group: {e}")
-            return signals[0] if signals else {}
-    
-    def _store_signals(self, signals: List[Dict[str, Any]]):
-        """Store signals in history."""
-        try:
-            timestamp = datetime.now()
-            
-            for signal in signals:
-                signal_record = {
-                    'timestamp': timestamp,
-                    'signal': signal.copy()
-                }
-                
-                self.signal_history.append(signal_record)
-            
-            # Trim history if too long
-            if len(self.signal_history) > self.max_signal_history:
-                self.signal_history = self.signal_history[-self.max_signal_history:]
-                
-        except Exception as e:
-            logger.error(f"Error storing signals: {e}")
-    
-    def get_signal_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
-        """Get signal history."""
-        try:
-            history = self.signal_history.copy()
-            if limit:
-                history = history[-limit:]
-            return history
-            
-        except Exception as e:
-            logger.error(f"Error getting signal history: {e}")
-            return []
-    
-    def get_active_strategies(self) -> Dict[str, TradingStrategy]:
-        """Get all active strategies."""
-        return self.active_strategies.copy()
-    
-    def get_strategy_weights(self) -> Dict[str, float]:
-        """Get strategy weights."""
-        return self.strategy_weights.copy()
-    
-    def get_executor_status(self) -> Dict[str, Any]:
-        """Get executor status."""
-        return {
-            "is_running": self.is_running,
-            "is_initialized": self.is_initialized,
-            "active_strategies": list(self.active_strategies.keys()),
-            "strategy_weights": self.strategy_weights.copy(),
-            "signal_history_count": len(self.signal_history),
-            "execution_task_running": self.execution_task is not None and not self.execution_task.done()
-        }
-    
-    async def test_strategy(self, strategy_name: str, test_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Test a specific strategy with test data."""
-        try:
-            if strategy_name not in self.active_strategies:
-                return {"error": f"Strategy {strategy_name} not found"}
-            
-            strategy = self.active_strategies[strategy_name]
-            
-            # Analyze test data
-            analysis = await strategy.generate_signals(test_data) # Changed from analyze to generate_signals
-            
-            # Generate signals
-            signals = await strategy.generate_signals(analysis)
-            
-            return {
-                "strategy_name": strategy_name,
-                "analysis": analysis,
-                "signals": signals,
-                "signal_count": len(signals)
-            }
-            
-        except Exception as e:
-            logger.error(f"Error testing strategy {strategy_name}: {e}")
-            return {"error": str(e)}
-    
-    async def cleanup(self):
-        """Clean up resources."""
-        try:
-            logger.info("Cleaning up Strategy Executor...")
-            
-            # Stop executor
-            await self.stop()
-            
-            # Clean up strategies
-            for strategy in self.active_strategies.values():
-                if hasattr(strategy, 'cleanup'):
-                    await strategy.cleanup()
-            
-            self.active_strategies.clear()
-            self.strategy_weights.clear()
-            self.signal_history.clear()
-            
-            logger.info("Strategy Executor cleanup completed")
-            
-        except Exception as e:
-            logger.error(f"Error during Strategy Executor cleanup: {e}") 
+                        # Basic signal data
+                        symbol: str
+                        action: str  # 'buy', 'sell', 'hold'
+                        entry_price: float
+                        amount: float
+                        strategy_id: str
+
+                        # Mathematical fusion context
+                        unified_signal: Optional[UnifiedSignal] = None
+                        profit_vectors: List[ProfitVector] = None
+                        mathematical_confidence: float = 0.0
+                        entropy_correction: float = 0.0
+                        vector_confidence: float = 0.0
+
+                        # Market context
+                        volatility: float = 0.0
+                        volume: float = 0.0
+                        market_conditions: Dict[str, Any] = None
+
+                        # Signal lineage
+                        timestamp: float = time.time()
+                        signal_hash: Optional[str] = None
+                        parent_signals: List[str] = None
+                        metadata: Dict[str, Any] = None # Added for profit scaling metadata
+
+
+                            class StrategyExecutor:
+    """Class for Schwabot trading functionality."""
+                            """
+                            Execute trading strategies and generate signals with Math + Memory Fusion Core.
+
+                            This class coordinates the execution of multiple trading strategies,
+                            combines their signals with mathematical fusion, and provides a unified
+                            interface for enhanced signal generation with profit vector memory.
+                            """
+
+def __init__(self) -> None:
+                                """Initialize the strategy executor with Math + Memory Fusion Core."""
+                                self.active_strategies: Dict[str, TradingStrategy] = {}
+                                self.strategy_weights: Dict[str, float] = {}
+                                self.is_running = False
+                                self.is_initialized = False
+                                self.execution_task: Optional[asyncio.Task] = None
+
+                                # Math + Memory Fusion Core integration
+                                    if MATH_FUSION_AVAILABLE:
+                                    self.math_system = CleanUnifiedMathSystem()
+                                    self.profit_system = UnifiedProfitVectorizationSystem()
+                                    self.profit_scaling_optimizer = create_profit_scaling_optimizer()
+                                    self.overfitting_prevention_system = create_schwafit_overfitting_prevention()
+                                    logger.info("🧠 Math + Memory Fusion Core integrated")
+                                        else:
+                                        self.math_system = None
+                                        self.profit_system = None
+                                        self.profit_scaling_optimizer = None
+                                        self.overfitting_prevention_system = None
+                                        logger.warning("🧠 Math + Memory Fusion Core not available")
+
+                                        # Enhanced signal tracking
+                                        self.signal_history: List[EnhancedTradingSignal] = []
+                                        self.profit_vector_history: List[ProfitVector] = []
+                                        self.max_signal_history = 1000
+                                        self.max_profit_history = 500
+
+                                        # Integration parameters
+                                        self.min_unified_confidence = 0.6
+                                        self.entropy_correction_threshold = 0.3
+                                        self.vector_confidence_weight = 0.4
+                                        self.mathematical_confidence_weight = 0.6
+
+                                        logger.info("Strategy Executor initialized with enhanced capabilities")
+
+                                            async def initialize(self) -> bool:
+                                            """Initialize the strategy executor with Math + Memory Fusion Core."""
+                                                try:
+                                                logger.info("Initializing Enhanced Strategy Executor...")
+
+                                                # Set default strategy weights
+                                                self.strategy_weights = {
+                                                "ExampleStrategy": 1.0,
+                                                "VolumeWeightedHashOscillator": 0.8,
+                                                "MultiPhaseStrategyWeightTensor": 0.9,
+                                                "ZygotZalgoEntropyDualKeyGate": 0.7
+                                                }
+
+                                                # Initialize Math + Memory Fusion Core if available
+                                                    if MATH_FUSION_AVAILABLE:
+                                                    logger.info("🧠 Initializing Math + Memory Fusion Core...")
+                                                    # Load historical profit vectors if available
+                                                    await self._load_historical_profit_vectors()
+
+                                                    self.is_initialized = True
+                                                    logger.info("Enhanced Strategy Executor initialized successfully")
+                                                return True
+
+                                                    except Exception as e:
+                                                    logger.error(f"Failed to initialize Enhanced Strategy Executor: {e}")
+                                                return False
+
+                                                    async def _load_historical_profit_vectors(self):
+                                                    """Load historical profit vectors for mathematical context."""
+                                                        try:
+                                                        # Generate some sample profit vectors for testing
+                                                        # In production, this would load from persistent storage
+                                                        sample_vectors = []
+                                                            for i in range(10):
+                                                            vector = self.profit_system.generate_profit_vector(
+                                                            entry_tick=1000 + i * 100,
+                                                            profit=0.02 + (i % 3) * 0.01,
+                                                            strategy_hash=f"historical_{i}",
+                                                            drawdown=0.01 + (i % 2) * 0.005,
+                                                            entropy_delta=0.1 + (i % 3) * 0.05,
+                                                            exit_type="stack_hold",
+                                                            risk_profile="low"
+                                                            )
+                                                            sample_vectors.append(vector)
+
+                                                            self.profit_vector_history.extend(sample_vectors)
+                                                            logger.info(f"📊 Loaded {len(sample_vectors)} historical profit vectors")
+
+                                                                except Exception as e:
+                                                                logger.error(f"Error loading historical profit vectors: {e}")
+
+                                                                    async def generate_unified_signals(self, market_data: Dict[str, Any]) -> List[EnhancedTradingSignal]:
+                                                                    """
+                                                                    Generate unified trading signals using Math + Memory Fusion Core.
+
+                                                                        Args:
+                                                                        market_data: Market data for analysis
+
+                                                                            Returns:
+                                                                            List of enhanced trading signals with mathematical fusion
+                                                                            """
+                                                                                try:
+                                                                                    if not MATH_FUSION_AVAILABLE:
+                                                                                    logger.warning("Math + Memory Fusion Core not available, using fallback")
+                                                                                return await self.generate_signals(market_data)
+
+                                                                                enhanced_signals = []
+
+                                                                                # Generate unified signal using Math + Memory Fusion Core
+                                                                                unified_signal = self.math_system.generate_unified_signal(
+                                                                                market_data,
+                                                                                self.profit_vector_history
+                                                                                )
+
+                                                                                # Apply overfitting prevention
+                                                                                sanitized_unified_signal = self.overfitting_prevention_system.sanitize_signal(unified_signal)
+
+                                                                                # Convert unified signal to enhanced trading signal
+                                                                                    if sanitized_unified_signal.signal != "HOLD":
+                                                                                    enhanced_signal = EnhancedTradingSignal(
+                                                                                    symbol=market_data.get("symbol", "BTC/USDC"),
+                                                                                    action=sanitized_unified_signal.signal.lower(),
+                                                                                    entry_price=market_data.get("price", 50000.0),
+                                                                                    amount=self._calculate_position_size(sanitized_unified_signal),
+                                                                                    strategy_id="unified_math_fusion",
+                                                                                    unified_signal=sanitized_unified_signal,
+                                                                                    profit_vectors=self.profit_vector_history[-5:],  # Last 5 vectors
+                                                                                    mathematical_confidence=sanitized_unified_signal.mathematical_confidence,
+                                                                                    entropy_correction=sanitized_unified_signal.entropy_correction,
+                                                                                    vector_confidence=sanitized_unified_signal.vector_confidence,
+                                                                                    volatility=market_data.get("volatility", 0.0),
+                                                                                    volume=market_data.get("volume", 0.0),
+                                                                                    market_conditions=market_data,
+                                                                                    signal_hash=self._generate_signal_hash(sanitized_unified_signal)
+                                                                                    )
+                                                                                    enhanced_signals.append(enhanced_signal)
+
+                                                                                    # Generate signals from individual strategies with mathematical enhancement
+                                                                                    strategy_signals = await self._generate_enhanced_strategy_signals(market_data, sanitized_unified_signal)
+                                                                                    enhanced_signals.extend(strategy_signals)
+
+                                                                                    # Store signals in history
+                                                                                    self._store_enhanced_signals(enhanced_signals)
+
+                                                                                return enhanced_signals
+
+                                                                                    except Exception as e:
+                                                                                    logger.error(f"Error generating unified signals: {e}")
+                                                                                return []
+
+                                                                                async def _generate_enhanced_strategy_signals(self, market_data: Dict[str, Any],
+                                                                                    unified_signal: UnifiedSignal) -> List[EnhancedTradingSignal]:
+                                                                                    """Generate enhanced signals from individual strategies with mathematical fusion."""
+                                                                                    enhanced_signals = []
+
+                                                                                        for strategy_name, strategy in self.active_strategies.items():
+                                                                                            try:
+                                                                                            # Generate base signals from strategy
+                                                                                            base_signals = await strategy.generate_signals(market_data)
+
+                                                                                                for base_signal in base_signals:
+                                                                                                # Enhance signal with mathematical fusion
+                                                                                                enhanced_signal = self._enhance_strategy_signal(
+                                                                                                base_signal, strategy_name, unified_signal
+                                                                                                )
+
+                                                                                                    if enhanced_signal:
+                                                                                                    enhanced_signals.append(enhanced_signal)
+
+                                                                                                        except Exception as e:
+                                                                                                        logger.error(f"Error generating enhanced signals for {strategy_name}: {e}")
+
+                                                                                                    return enhanced_signals
+
+def _enhance_strategy_signal(self, base_signal: Dict[str, Any], strategy_name: str, -> None
+                                                                                                        unified_signal: UnifiedSignal) -> Optional[EnhancedTradingSignal]:
+                                                                                                        """Enhance a strategy signal with mathematical fusion context."""
+                                                                                                            try:
+                                                                                                            # Extract base signal data
+                                                                                                            action = base_signal.get("action", "hold")
+                                                                                                                if action == "hold":
+                                                                                                            return None
+
+                                                                                                            # Calculate mathematical enhancement
+                                                                                                            strategy_weight = self.strategy_weights.get(strategy_name, 1.0)
+                                                                                                            enhanced_confidence = (
+                                                                                                            base_signal.get("confidence", 0.5) * strategy_weight *
+                                                                                                            self.mathematical_confidence_weight +
+                                                                                                            unified_signal.confidence * self.vector_confidence_weight
+                                                                                                            )
+
+                                                                                                            # Apply entropy correction
+                                                                                                            entropy_correction = 1 - unified_signal.entropy_correction
+                                                                                                            final_confidence = enhanced_confidence * entropy_correction
+
+                                                                                                            # Create enhanced signal
+                                                                                                            enhanced_signal = EnhancedTradingSignal(
+                                                                                                            symbol=base_signal.get("symbol", "BTC/USDC"),
+                                                                                                            action=action,
+                                                                                                            entry_price=base_signal.get("entry_price", 50000.0),
+                                                                                                            amount=base_signal.get("amount", 0.0),
+                                                                                                            strategy_id=strategy_name,
+                                                                                                            unified_signal=unified_signal,
+                                                                                                            profit_vectors=self.profit_vector_history[-3:],  # Last 3 vectors
+                                                                                                            mathematical_confidence=enhanced_confidence,
+                                                                                                            entropy_correction=entropy_correction,
+                                                                                                            vector_confidence=unified_signal.vector_confidence,
+                                                                                                            volatility=base_signal.get("volatility", 0.0),
+                                                                                                            volume=base_signal.get("volume", 0.0),
+                                                                                                            market_conditions=base_signal.get("market_conditions", {}),
+                                                                                                            signal_hash=self._generate_signal_hash(base_signal)
+                                                                                                            )
+
+                                                                                                        return enhanced_signal
+
+                                                                                                            except Exception as e:
+                                                                                                            logger.error(f"Error enhancing strategy signal: {e}")
+                                                                                                        return None
+
+                                                                                                            def _calculate_position_size(self, unified_signal: UnifiedSignal) -> float:
+                                                                                                            """Calculate position size based on unified signal confidence."""
+                                                                                                                try:
+                                                                                                                base_amount = 1000.0  # Base position size
+                                                                                                                confidence_multiplier = unified_signal.confidence
+                                                                                                                vector_multiplier = unified_signal.vector_confidence
+
+                                                                                                                # Apply profit vector insights
+                                                                                                                    if unified_signal.profit_weight > 0.5:
+                                                                                                                    profit_multiplier = 1.2
+                                                                                                                        else:
+                                                                                                                        profit_multiplier = 0.8
+
+                                                                                                                        final_amount = base_amount * confidence_multiplier * vector_multiplier * profit_multiplier
+
+                                                                                                                    return max(100.0, min(5000.0, final_amount))  # Clamp between 100 and 5000
+
+                                                                                                                        except Exception as e:
+                                                                                                                        logger.error(f"Error calculating position size: {e}")
+                                                                                                                    return 1000.0
+
+                                                                                                                        def _generate_signal_hash(self, signal_data: Any) -> str:
+                                                                                                                        """Generate a unique hash for signal tracking."""
+                                                                                                                            try:
+                                                                                                                            import hashlib
+                                                                                                                            signal_str = str(signal_data) + str(time.time())
+                                                                                                                        return hashlib.md5(signal_str.encode()).hexdigest()[:8]
+                                                                                                                            except Exception as e:
+                                                                                                                            logger.error(f"Error generating signal hash: {e}")
+                                                                                                                        return "unknown"
+
+def _store_enhanced_signals(self, signals: List[EnhancedTradingSignal]) -> None:
+                                                                                                                            """Store enhanced signals in history."""
+                                                                                                                                try:
+                                                                                                                                self.signal_history.extend(signals)
+
+                                                                                                                                # Keep history within limits
+                                                                                                                                    if len(self.signal_history) > self.max_signal_history:
+                                                                                                                                    excess = len(self.signal_history) - self.max_signal_history
+                                                                                                                                    self.signal_history = self.signal_history[excess:]
+
+                                                                                                                                    logger.debug(f"Stored {len(signals)} enhanced signals")
+
+                                                                                                                                        except Exception as e:
+                                                                                                                                        logger.error(f"Error storing enhanced signals: {e}")
+
+                                                                                                                                            async def update_profit_vectors(self, trade_result: Dict[str, Any]):
+                                                                                                                                            """Update profit vectors with new trade results."""
+                                                                                                                                                try:
+                                                                                                                                                    if not MATH_FUSION_AVAILABLE:
+                                                                                                                                                return
+
+                                                                                                                                                # Generate new profit vector from trade result
+                                                                                                                                                new_vector = self.profit_system.generate_profit_vector(
+                                                                                                                                                entry_tick=int(time.time()),
+                                                                                                                                                profit=trade_result.get("profit", 0.0),
+                                                                                                                                                strategy_hash=trade_result.get("strategy_id", "unknown"),
+                                                                                                                                                drawdown=trade_result.get("drawdown", 0.0),
+                                                                                                                                                entropy_delta=trade_result.get("volatility", 0.1),
+                                                                                                                                                exit_type=trade_result.get("exit_type", "unknown"),
+                                                                                                                                                risk_profile=trade_result.get("risk_profile", "medium")
+                                                                                                                                                )
+
+                                                                                                                                                # Add to history
+                                                                                                                                                self.profit_vector_history.append(new_vector)
+
+                                                                                                                                                # Keep history within limits
+                                                                                                                                                    if len(self.profit_vector_history) > self.max_profit_history:
+                                                                                                                                                    excess = len(self.profit_vector_history) - self.max_profit_history
+                                                                                                                                                    self.profit_vector_history = self.profit_vector_history[excess:]
+
+                                                                                                                                                    # Update win rate data in profit scaling optimizer
+                                                                                                                                                        if self.profit_scaling_optimizer:
+                                                                                                                                                        strategy_id = trade_result.get("strategy_id", "unknown")
+                                                                                                                                                        self.profit_scaling_optimizer.update_win_rate_data(strategy_id, trade_result)
+
+                                                                                                                                                        logger.info(f"📊 Updated profit vectors with new trade result")
+
+                                                                                                                                                            except Exception as e:
+                                                                                                                                                            logger.error(f"Error updating profit vectors: {e}")
+
+                                                                                                                                                                def get_mathematical_insights(self) -> Dict[str, Any]:
+                                                                                                                                                                """Get mathematical insights from the fusion core."""
+                                                                                                                                                                    try:
+                                                                                                                                                                        if not MATH_FUSION_AVAILABLE:
+                                                                                                                                                                    return {"error": "Math + Memory Fusion Core not available"}
+
+                                                                                                                                                                    # Get profit vector insights
+                                                                                                                                                                    profit_insights = self.math_system.bridge_profit_to_math(self.profit_vector_history)
+
+                                                                                                                                                                    # Get signal history insights
+                                                                                                                                                                    recent_signals = self.signal_history[-10:] if self.signal_history else []
+                                                                                                                                                                    signal_confidence_avg = np.mean([s.mathematical_confidence for s in recent_signals]) if recent_signals else 0.0
+
+                                                                                                                                                                return {
+                                                                                                                                                                "profit_insights": profit_insights,
+                                                                                                                                                                "signal_confidence_avg": signal_confidence_avg,
+                                                                                                                                                                "total_signals": len(self.signal_history),
+                                                                                                                                                                "total_profit_vectors": len(self.profit_vector_history),
+                                                                                                                                                                "fusion_core_status": "active"
+                                                                                                                                                                }
+
+                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                    logger.error(f"Error getting mathematical insights: {e}")
+                                                                                                                                                                return {"error": str(e)}
+
+                                                                                                                                                                    async def start(self) -> bool:
+                                                                                                                                                                    """Start the strategy executor."""
+                                                                                                                                                                        if not self.is_initialized:
+                                                                                                                                                                        logger.error("Strategy Executor not initialized")
+                                                                                                                                                                    return False
+
+                                                                                                                                                                        try:
+                                                                                                                                                                        logger.info("Starting Strategy Executor...")
+
+                                                                                                                                                                        self.is_running = True
+
+                                                                                                                                                                        # Start execution task
+                                                                                                                                                                        self.execution_task = asyncio.create_task(self._execution_loop())
+
+                                                                                                                                                                        logger.info("Strategy Executor started successfully")
+                                                                                                                                                                    return True
+
+                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                        logger.error(f"Failed to start Strategy Executor: {e}")
+                                                                                                                                                                    return False
+
+                                                                                                                                                                        async def stop(self):
+                                                                                                                                                                        """Stop the strategy executor."""
+                                                                                                                                                                            if not self.is_running:
+                                                                                                                                                                        return
+
+                                                                                                                                                                        logger.info("Stopping Strategy Executor...")
+
+                                                                                                                                                                            try:
+                                                                                                                                                                            self.is_running = False
+
+                                                                                                                                                                            # Cancel execution task
+                                                                                                                                                                                if self.execution_task:
+                                                                                                                                                                                self.execution_task.cancel()
+                                                                                                                                                                                    try:
+                                                                                                                                                                                    await self.execution_task
+                                                                                                                                                                                        except asyncio.CancelledError:
+                                                                                                                                                                                    pass
+
+                                                                                                                                                                                    logger.info("Strategy Executor stopped")
+
+                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                        logger.error(f"Error stopping Strategy Executor: {e}")
+
+                                                                                                                                                                                            async def _execution_loop(self):
+                                                                                                                                                                                            """Main execution loop for strategies with Math + Memory Fusion Core."""
+                                                                                                                                                                                            logger.info("Enhanced strategy execution loop started")
+
+                                                                                                                                                                                                try:
+                                                                                                                                                                                                    while self.is_running:
+                                                                                                                                                                                                    # Generate market data
+                                                                                                                                                                                                    market_data = await self._generate_market_data()
+
+                                                                                                                                                                                                    # Protect pipeline with Schwafit overfitting prevention
+                                                                                                                                                                                                        if self.overfitting_prevention_system:
+                                                                                                                                                                                                        protected_data, _ = self.overfitting_prevention_system.protect_pipeline(market_data, [])
+                                                                                                                                                                                                        market_data = protected_data
+
+                                                                                                                                                                                                        # Generate unified signals using Math + Memory Fusion Core
+                                                                                                                                                                                                        unified_signals = await self.generate_unified_signals(market_data)
+
+                                                                                                                                                                                                        # Process enhanced strategies
+                                                                                                                                                                                                        await self._process_enhanced_strategies(market_data, unified_signals)
+
+                                                                                                                                                                                                        # Sleep for next iteration
+                                                                                                                                                                                                        await asyncio.sleep(1)  # 1 second interval
+
+                                                                                                                                                                                                            except asyncio.CancelledError:
+                                                                                                                                                                                                            logger.info("Enhanced strategy execution loop cancelled")
+                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                logger.error(f"Error in enhanced strategy execution loop: {e}")
+
+                                                                                                                                                                                                                    async def _generate_market_data(self) -> Dict[str, Any]:
+                                                                                                                                                                                                                    """Fetch real market data for analysis."""
+                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                        # Real market data integration using enhanced API integration manager
+                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                            from core.enhanced_api_integration_manager import enhanced_api_manager
+
+                                                                                                                                                                                                                            # Fetch real market data for BTC/USDC
+                                                                                                                                                                                                                            market_data = await enhanced_api_manager.get_market_data('BTC')
+
+                                                                                                                                                                                                                                if market_data:
+                                                                                                                                                                                                                            return {
+                                                                                                                                                                                                                            'symbol': 'BTC/USDC',
+                                                                                                                                                                                                                            'price': market_data.price,
+                                                                                                                                                                                                                            'volume': market_data.volume_24h,
+                                                                                                                                                                                                                            'change_24h': market_data.price_change_percent_24h,
+                                                                                                                                                                                                                            'volatility': market_data.volatility or 0.02,
+                                                                                                                                                                                                                            'timestamp': market_data.timestamp,
+                                                                                                                                                                                                                            'bid': market_data.bid,
+                                                                                                                                                                                                                            'ask': market_data.ask,
+                                                                                                                                                                                                                            'spread': market_data.ask - market_data.bid if market_data.ask and market_data.bid else 0.0,
+                                                                                                                                                                                                                            'market_cap': market_data.market_cap,
+                                                                                                                                                                                                                            'circulating_supply': market_data.circulating_supply
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                else:
+                                                                                                                                                                                                                                # Fallback to simulated data with realistic BTC/USDC values
+                                                                                                                                                                                                                            return self._generate_simulated_market_data()
+
+                                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                                logger.warning(f"Real market data fetching failed, using simulation: {e}")
+                                                                                                                                                                                                                            return self._generate_simulated_market_data()
+
+                                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                                logger.error(f"Error fetching market data: {e}")
+                                                                                                                                                                                                                            raise
+
+                                                                                                                                                                                                                                def _generate_simulated_market_data(self) -> Dict[str, Any]:
+                                                                                                                                                                                                                                """Generate realistic simulated market data for BTC/USDC."""
+                                                                                                                                                                                                                                import random
+
+                                                                                                                                                                                                                                # Realistic BTC price range
+                                                                                                                                                                                                                                base_price = 50000.0
+                                                                                                                                                                                                                                price_variation = random.uniform(-0.02, 0.02)  # ±2% variation
+                                                                                                                                                                                                                                current_price = base_price * (1 + price_variation)
+
+                                                                                                                                                                                                                                # Realistic volume (24h volume in USD)
+                                                                                                                                                                                                                                base_volume = 2_000_000_000  # 2B USD daily volume
+                                                                                                                                                                                                                                volume_variation = random.uniform(0.8, 1.2)
+                                                                                                                                                                                                                                current_volume = base_volume * volume_variation
+
+                                                                                                                                                                                                                                # Realistic volatility
+                                                                                                                                                                                                                                volatility = random.uniform(0.015, 0.035)  # 1.5-3.5% volatility
+
+                                                                                                                                                                                                                                # Realistic spread
+                                                                                                                                                                                                                                spread_pct = random.uniform(0.0001, 0.001)  # 0.01-0.1% spread
+                                                                                                                                                                                                                                spread = current_price * spread_pct
+
+                                                                                                                                                                                                                            return {
+                                                                                                                                                                                                                            'symbol': 'BTC/USDC',
+                                                                                                                                                                                                                            'price': current_price,
+                                                                                                                                                                                                                            'volume': current_volume,
+                                                                                                                                                                                                                            'change_24h': random.uniform(-0.05, 0.05),  # ±5% daily change
+                                                                                                                                                                                                                            'volatility': volatility,
+                                                                                                                                                                                                                            'timestamp': time.time(),
+                                                                                                                                                                                                                            'bid': current_price - spread/2,
+                                                                                                                                                                                                                            'ask': current_price + spread/2,
+                                                                                                                                                                                                                            'spread': spread,
+                                                                                                                                                                                                                            'market_cap': current_price * 19_000_000,  # ~19M BTC in circulation
+                                                                                                                                                                                                                            'circulating_supply': 19_000_000
+                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                            async def _process_enhanced_strategies(self, market_data: Dict[str, Any],
+                                                                                                                                                                                                                                unified_signals: List[EnhancedTradingSignal]):
+                                                                                                                                                                                                                                """Process enhanced strategies with mathematical fusion and profit scaling."""
+                                                                                                                                                                                                                                    try:
+                                                                                                                                                                                                                                    # Process unified signals with profit scaling
+                                                                                                                                                                                                                                        for signal in unified_signals:
+                                                                                                                                                                                                                                            if signal.mathematical_confidence > self.min_unified_confidence:
+                                                                                                                                                                                                                                            logger.info(f"🔗 Processing unified signal: {signal.action} {signal.symbol} "
+                                                                                                                                                                                                                                            f"(confidence: {signal.mathematical_confidence:.3f})")
+
+                                                                                                                                                                                                                                            # Apply profit scaling based on mathematical confidence
+                                                                                                                                                                                                                                            scaled_signal = self._apply_profit_scaling(signal, market_data)
+
+                                                                                                                                                                                                                                            # Execute trade with scaled parameters
+                                                                                                                                                                                                                                            execution_result = await self._execute_scaled_trade(scaled_signal, market_data)
+
+                                                                                                                                                                                                                                            # Update profit vectors with execution result
+                                                                                                                                                                                                                                                if execution_result.get('success'):
+                                                                                                                                                                                                                                                await self.update_profit_vectors(execution_result)
+                                                                                                                                                                                                                                                logger.info(f"✅ Scaled trade executed: {signal.symbol} {signal.action} "
+                                                                                                                                                                                                                                                f"Profit: {execution_result.get('profit', 0):.4f}")
+                                                                                                                                                                                                                                                    else:
+                                                                                                                                                                                                                                                    logger.warning(f"⚠️ Scaled trade failed: {execution_result.get('error_message', 'Unknown error')}")
+
+                                                                                                                                                                                                                                                    # Process individual strategies with mathematical context
+                                                                                                                                                                                                                                                        for strategy_name, strategy in self.active_strategies.items():
+                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                            # Check if strategy is still valid
+                                                                                                                                                                                                                                                                if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
+                                                                                                                                                                                                                                                                logger.warning(f"Strategy {strategy_name} not initialized, skipping")
+                                                                                                                                                                                                                                                            continue
+
+                                                                                                                                                                                                                                                            # Generate strategy-specific signals
+                                                                                                                                                                                                                                                            strategy_signals = await strategy.generate_signals(market_data)
+
+                                                                                                                                                                                                                                                            # Process each signal with profit scaling
+                                                                                                                                                                                                                                                                for base_signal in strategy_signals:
+                                                                                                                                                                                                                                                                enhanced_signal = self._enhance_strategy_signal(
+                                                                                                                                                                                                                                                                base_signal, strategy_name, None  # No unified signal for individual strategies
+                                                                                                                                                                                                                                                                )
+
+                                                                                                                                                                                                                                                                    if enhanced_signal and enhanced_signal.mathematical_confidence > 0.6:
+                                                                                                                                                                                                                                                                    # Apply profit scaling
+                                                                                                                                                                                                                                                                    scaled_signal = self._apply_profit_scaling(enhanced_signal, market_data)
+
+                                                                                                                                                                                                                                                                    # Execute scaled trade
+                                                                                                                                                                                                                                                                    execution_result = await self._execute_scaled_trade(scaled_signal, market_data)
+
+                                                                                                                                                                                                                                                                        if execution_result.get('success'):
+                                                                                                                                                                                                                                                                        await self.update_profit_vectors(execution_result)
+
+                                                                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                                                                            logger.error(f"Error processing enhanced strategy {strategy_name}: {e}")
+
+                                                                                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                                                                                logger.error(f"Error in enhanced strategy processing: {e}")
+
+                                                                                                                                                                                                                                                                                    def _apply_profit_scaling(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> EnhancedTradingSignal:
+                                                                                                                                                                                                                                                                                    """Apply profit scaling based on mathematical confidence and win rate optimization."""
+                                                                                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                                                                                            if not self.profit_scaling_optimizer:
+                                                                                                                                                                                                                                                                                            logger.warning("Profit scaling optimizer not available, using fallback")
+                                                                                                                                                                                                                                                                                        return signal
+
+                                                                                                                                                                                                                                                                                        # Use mathematical profit scaling optimizer
+                                                                                                                                                                                                                                                                                        scaling_result = self.profit_scaling_optimizer.optimize_position_size(
+                                                                                                                                                                                                                                                                                        base_amount=signal.amount,
+                                                                                                                                                                                                                                                                                        confidence=signal.mathematical_confidence,
+                                                                                                                                                                                                                                                                                        strategy_id=signal.strategy_id,
+                                                                                                                                                                                                                                                                                        market_data=market_data,
+                                                                                                                                                                                                                                                                                        risk_profile=RiskProfile.MEDIUM
+                                                                                                                                                                                                                                                                                        )
+
+                                                                                                                                                                                                                                                                                        # Create scaled signal with optimized parameters
+                                                                                                                                                                                                                                                                                        scaled_signal = EnhancedTradingSignal(
+                                                                                                                                                                                                                                                                                        symbol=signal.symbol,
+                                                                                                                                                                                                                                                                                        action=signal.action,
+                                                                                                                                                                                                                                                                                        entry_price=signal.entry_price,
+                                                                                                                                                                                                                                                                                        amount=scaling_result.scaled_amount,
+                                                                                                                                                                                                                                                                                        strategy_id=signal.strategy_id,
+                                                                                                                                                                                                                                                                                        unified_signal=signal.unified_signal,
+                                                                                                                                                                                                                                                                                        profit_vectors=signal.profit_vectors,
+                                                                                                                                                                                                                                                                                        mathematical_confidence=signal.mathematical_confidence,
+                                                                                                                                                                                                                                                                                        entropy_correction=signal.entropy_correction,
+                                                                                                                                                                                                                                                                                        vector_confidence=signal.vector_confidence,
+                                                                                                                                                                                                                                                                                        volatility=signal.volatility,
+                                                                                                                                                                                                                                                                                        volume=signal.volume,
+                                                                                                                                                                                                                                                                                        market_conditions=signal.market_conditions,
+                                                                                                                                                                                                                                                                                        signal_hash=signal.signal_hash,
+                                                                                                                                                                                                                                                                                        parent_signals=signal.parent_signals
+                                                                                                                                                                                                                                                                                        )
+
+                                                                                                                                                                                                                                                                                        # Add comprehensive scaling metadata
+                                                                                                                                                                                                                                                                                        scaled_signal.metadata = {
+                                                                                                                                                                                                                                                                                        'original_amount': scaling_result.original_amount,
+                                                                                                                                                                                                                                                                                        'scaled_amount': scaling_result.scaled_amount,
+                                                                                                                                                                                                                                                                                        'scaling_factor': scaling_result.scaling_factor,
+                                                                                                                                                                                                                                                                                        'kelly_fraction': scaling_result.kelly_fraction,
+                                                                                                                                                                                                                                                                                        'confidence_factor': scaling_result.confidence_factor,
+                                                                                                                                                                                                                                                                                        'volatility_adjustment': scaling_result.volatility_adjustment,
+                                                                                                                                                                                                                                                                                        'volume_factor': scaling_result.volume_factor,
+                                                                                                                                                                                                                                                                                        'win_rate_factor': scaling_result.win_rate_factor,
+                                                                                                                                                                                                                                                                                        'risk_score': scaling_result.risk_score,
+                                                                                                                                                                                                                                                                                        'expected_profit': scaling_result.expected_profit,
+                                                                                                                                                                                                                                                                                        'max_loss': scaling_result.max_loss,
+                                                                                                                                                                                                                                                                                        'scaling_mode': scaling_result.scaling_mode.value,
+                                                                                                                                                                                                                                                                                        'optimization_time': scaling_result.optimization_time,
+                                                                                                                                                                                                                                                                                        'scaling_applied': True,
+                                                                                                                                                                                                                                                                                        'mathematical_optimization': True
+                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                        logger.info(f"📊 Mathematical profit scaling applied: {scaling_result.original_amount:.4f} → {scaling_result.scaled_amount:.4f} "
+                                                                                                                                                                                                                                                                                        f"(Kelly: {scaling_result.kelly_fraction:.3f}, Risk: {scaling_result.risk_score:.3f}, "
+                                                                                                                                                                                                                                                                                        f"Mode: {scaling_result.scaling_mode.value})")
+
+                                                                                                                                                                                                                                                                                    return scaled_signal
+
+                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                        logger.error(f"Error applying mathematical profit scaling: {e}")
+                                                                                                                                                                                                                                                                                    return signal
+
+                                                                                                                                                                                                                                                                                        async def _execute_scaled_trade(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> Dict[str, Any]:
+                                                                                                                                                                                                                                                                                        """Execute trade with scaled parameters using real exchange integration."""
+                                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                            # Real trade execution using enhanced CCXT trading engine
+                                                                                                                                                                                                                                                                                            from core.enhanced_ccxt_trading_engine import create_enhanced_ccxt_trading_engine
+                                                                                                                                                                                                                                                                                            from core.enhanced_ccxt_trading_engine import TradingOrder, OrderSide, OrderType
+
+                                                                                                                                                                                                                                                                                            # Initialize trading engine if not already done
+                                                                                                                                                                                                                                                                                                if not hasattr(self, 'trading_engine'):
+                                                                                                                                                                                                                                                                                                self.trading_engine = create_enhanced_ccxt_trading_engine()
+                                                                                                                                                                                                                                                                                                await self.trading_engine.start_trading_engine()
+
+                                                                                                                                                                                                                                                                                                # Convert signal to trading order with scaled parameters
+                                                                                                                                                                                                                                                                                                order_side = OrderSide.BUY if signal.action == 'buy' else OrderSide.SELL
+
+                                                                                                                                                                                                                                                                                                # Use scaled amount from profit scaling
+                                                                                                                                                                                                                                                                                                scaled_amount = signal.amount
+
+                                                                                                                                                                                                                                                                                                # Calculate optimal order type based on market conditions
+                                                                                                                                                                                                                                                                                                spread = market_data.get('spread', 0.0)
+                                                                                                                                                                                                                                                                                                volatility = market_data.get('volatility', 0.02)
+
+                                                                                                                                                                                                                                                                                                # Use limit orders for tight spreads, market orders for wide spreads
+                                                                                                                                                                                                                                                                                                if spread < 0.001:  # Tight spread
+                                                                                                                                                                                                                                                                                                order_type = OrderType.LIMIT
+                                                                                                                                                                                                                                                                                                price = market_data.get('price', signal.entry_price)
+                                                                                                                                                                                                                                                                                                else:  # Wide spread
+                                                                                                                                                                                                                                                                                                order_type = OrderType.MARKET
+                                                                                                                                                                                                                                                                                                price = None
+
+                                                                                                                                                                                                                                                                                                trading_order = TradingOrder(
+                                                                                                                                                                                                                                                                                                order_id=f"scaled_{signal.signal_hash}_{int(time.time())}",
+                                                                                                                                                                                                                                                                                                symbol=signal.symbol,
+                                                                                                                                                                                                                                                                                                side=order_side,
+                                                                                                                                                                                                                                                                                                order_type=order_type,
+                                                                                                                                                                                                                                                                                                quantity=scaled_amount,
+                                                                                                                                                                                                                                                                                                price=price,
+                                                                                                                                                                                                                                                                                                mathematical_signature=f"scaled_{signal.signal_hash}"
+                                                                                                                                                                                                                                                                                                )
+
+                                                                                                                                                                                                                                                                                                # Execute on default exchange
+                                                                                                                                                                                                                                                                                                exchange_name = 'binance'  # Default exchange
+
+                                                                                                                                                                                                                                                                                                # Check if exchange is connected
+                                                                                                                                                                                                                                                                                                    if exchange_name not in self.trading_engine.exchanges:
+                                                                                                                                                                                                                                                                                                    # Try to connect to exchange (would need API keys in production)
+                                                                                                                                                                                                                                                                                                    await self.trading_engine.connect_exchange(exchange_name)
+
+                                                                                                                                                                                                                                                                                                    # Execute the order
+                                                                                                                                                                                                                                                                                                    execution_result = await self.trading_engine._execute_order(exchange_name, trading_order)
+
+                                                                                                                                                                                                                                                                                                    # Calculate profit/loss
+                                                                                                                                                                                                                                                                                                    profit = 0.0
+                                                                                                                                                                                                                                                                                                        if execution_result.success:
+                                                                                                                                                                                                                                                                                                        # Calculate profit based on execution
+                                                                                                                                                                                                                                                                                                            if signal.action == 'buy':
+                                                                                                                                                                                                                                                                                                            # For buy orders, profit is realized on sell
+                                                                                                                                                                                                                                                                                                            profit = 0.0  # Will be calculated on sell
+                                                                                                                                                                                                                                                                                                                else:
+                                                                                                                                                                                                                                                                                                                # For sell orders, calculate profit from entry to exit
+                                                                                                                                                                                                                                                                                                                entry_price = signal.entry_price
+                                                                                                                                                                                                                                                                                                                exit_price = execution_result.average_price
+                                                                                                                                                                                                                                                                                                                profit = (exit_price - entry_price) * execution_result.filled_quantity
+
+                                                                                                                                                                                                                                                                                                                # Convert to result format
+                                                                                                                                                                                                                                                                                                                result = {
+                                                                                                                                                                                                                                                                                                                'success': execution_result.success,
+                                                                                                                                                                                                                                                                                                                'order_id': execution_result.order_id,
+                                                                                                                                                                                                                                                                                                                'symbol': signal.symbol,
+                                                                                                                                                                                                                                                                                                                'action': signal.action,
+                                                                                                                                                                                                                                                                                                                'quantity': execution_result.filled_quantity,
+                                                                                                                                                                                                                                                                                                                'price': execution_result.average_price,
+                                                                                                                                                                                                                                                                                                                'execution_time': execution_result.execution_time,
+                                                                                                                                                                                                                                                                                                                'slippage': execution_result.slippage,
+                                                                                                                                                                                                                                                                                                                'fees': execution_result.fees,
+                                                                                                                                                                                                                                                                                                                'status': execution_result.status.value,
+                                                                                                                                                                                                                                                                                                                'error_message': execution_result.error_message,
+                                                                                                                                                                                                                                                                                                                'mathematical_signature': execution_result.mathematical_signature,
+                                                                                                                                                                                                                                                                                                                'signal_hash': signal.signal_hash,
+                                                                                                                                                                                                                                                                                                                'profit': profit,
+                                                                                                                                                                                                                                                                                                                'scaling_metadata': signal.metadata,
+                                                                                                                                                                                                                                                                                                                'timestamp': time.time()
+                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                    if result['success']:
+                                                                                                                                                                                                                                                                                                                    logger.info(f"✅ Scaled trade executed successfully: {signal.symbol} {signal.action} "
+                                                                                                                                                                                                                                                                                                                    f"{result['quantity']:.4f} @ {result['price']:.2f}")
+                                                                                                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                                                                                                        logger.warning(f"⚠️ Scaled trade execution failed: {result['order_id']} - {result['error_message']}")
+
+                                                                                                                                                                                                                                                                                                                    return result
+
+                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                        logger.error(f"Error executing scaled trade: {e}")
+                                                                                                                                                                                                                                                                                                                        # Fallback to simulation
+                                                                                                                                                                                                                                                                                                                    return self._simulate_scaled_trade_execution(signal, market_data)
+
+                                                                                                                                                                                                                                                                                                                        def _simulate_scaled_trade_execution(self, signal: EnhancedTradingSignal, market_data: Dict[str, Any]) -> Dict[str, Any]:
+                                                                                                                                                                                                                                                                                                                        """Simulate scaled trade execution for testing/fallback purposes."""
+                                                                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                                                            import random
+
+                                                                                                                                                                                                                                                                                                                            # Simulate execution with realistic parameters
+                                                                                                                                                                                                                                                                                                                            execution_time = random.uniform(0.1, 1.0)
+                                                                                                                                                                                                                                                                                                                            fill_ratio = random.uniform(0.9, 1.0)
+                                                                                                                                                                                                                                                                                                                            filled_quantity = signal.amount * fill_ratio
+
+                                                                                                                                                                                                                                                                                                                            # Simulate price impact based on volatility
+                                                                                                                                                                                                                                                                                                                            volatility = market_data.get('volatility', 0.02)
+                                                                                                                                                                                                                                                                                                                            price_impact = random.uniform(-volatility * 0.1, volatility * 0.1)
+                                                                                                                                                                                                                                                                                                                            execution_price = signal.entry_price * (1 + price_impact)
+
+                                                                                                                                                                                                                                                                                                                            # Calculate slippage
+                                                                                                                                                                                                                                                                                                                            slippage = abs(price_impact)
+
+                                                                                                                                                                                                                                                                                                                            # Simulate fees (0.1% typical)
+                                                                                                                                                                                                                                                                                                                            fees = filled_quantity * execution_price * 0.001
+
+                                                                                                                                                                                                                                                                                                                            # Calculate profit/loss
+                                                                                                                                                                                                                                                                                                                            profit = 0.0
+                                                                                                                                                                                                                                                                                                                                if signal.action == 'sell':
+                                                                                                                                                                                                                                                                                                                                profit = (execution_price - signal.entry_price) * filled_quantity
+
+                                                                                                                                                                                                                                                                                                                                success = fill_ratio > 0.8  # Success if >80% filled
+
+                                                                                                                                                                                                                                                                                                                                logger.info(f"🔄 Simulated scaled trade execution: {signal.symbol} {signal.action} {filled_quantity:.4f}")
+
+                                                                                                                                                                                                                                                                                                                            return {
+                                                                                                                                                                                                                                                                                                                            'success': success,
+                                                                                                                                                                                                                                                                                                                            'order_id': f"sim_scaled_{signal.signal_hash}_{int(time.time())}",
+                                                                                                                                                                                                                                                                                                                            'symbol': signal.symbol,
+                                                                                                                                                                                                                                                                                                                            'action': signal.action,
+                                                                                                                                                                                                                                                                                                                            'quantity': filled_quantity,
+                                                                                                                                                                                                                                                                                                                            'price': execution_price,
+                                                                                                                                                                                                                                                                                                                            'execution_time': execution_time,
+                                                                                                                                                                                                                                                                                                                            'slippage': slippage,
+                                                                                                                                                                                                                                                                                                                            'fees': fees,
+                                                                                                                                                                                                                                                                                                                            'status': 'filled' if success else 'partial',
+                                                                                                                                                                                                                                                                                                                            'error_message': None if success else "Partial fill in simulation",
+                                                                                                                                                                                                                                                                                                                            'mathematical_signature': signal.signal_hash or "",
+                                                                                                                                                                                                                                                                                                                            'signal_hash': signal.signal_hash,
+                                                                                                                                                                                                                                                                                                                            'profit': profit,
+                                                                                                                                                                                                                                                                                                                            'scaling_metadata': signal.metadata,
+                                                                                                                                                                                                                                                                                                                            'timestamp': time.time()
+                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                                                                                                                                logger.error(f"Error in scaled trade simulation: {e}")
+                                                                                                                                                                                                                                                                                                                            return {
+                                                                                                                                                                                                                                                                                                                            'success': False,
+                                                                                                                                                                                                                                                                                                                            'order_id': f"error_{int(time.time())}",
+                                                                                                                                                                                                                                                                                                                            'symbol': signal.symbol,
+                                                                                                                                                                                                                                                                                                                            'action': signal.action,
+                                                                                                                                                                                                                                                                                                                            'quantity': 0.0,
+                                                                                                                                                                                                                                                                                                                            'price': 0.0,
+                                                                                                                                                                                                                                                                                                                            'execution_time': 0.0,
+                                                                                                                                                                                                                                                                                                                            'slippage': 0.0,
+                                                                                                                                                                                                                                                                                                                            'fees': 0.0,
+                                                                                                                                                                                                                                                                                                                            'status': 'rejected',
+                                                                                                                                                                                                                                                                                                                            'error_message': f"Simulation failed: {str(e)}",
+                                                                                                                                                                                                                                                                                                                            'mathematical_signature': "",
+                                                                                                                                                                                                                                                                                                                            'signal_hash': signal.signal_hash,
+                                                                                                                                                                                                                                                                                                                            'profit': 0.0,
+                                                                                                                                                                                                                                                                                                                            'scaling_metadata': {},
+                                                                                                                                                                                                                                                                                                                            'timestamp': time.time()
+                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                async def _process_strategies(self):
+                                                                                                                                                                                                                                                                                                                                """Process all active strategies (legacy method for compatibility)."""
+                                                                                                                                                                                                                                                                                                                                    for strategy_name, strategy in self.active_strategies.items():
+                                                                                                                                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                                                                                                                                        # Check if strategy is still valid
+                                                                                                                                                                                                                                                                                                                                            if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
+                                                                                                                                                                                                                                                                                                                                            logger.warning(f"Strategy {strategy_name} not initialized, skipping")
+                                                                                                                                                                                                                                                                                                                                        continue
+
+                                                                                                                                                                                                                                                                                                                                        # Process strategy (this would typically involve getting market data)
+                                                                                                                                                                                                                                                                                                                                        # For now, we'll just log that we're processing
+                                                                                                                                                                                                                                                                                                                                        logger.debug(f"Processing strategy: {strategy_name}")
+
+                                                                                                                                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                                                                                                                                            logger.error(f"Error processing strategy {strategy_name}: {e}")
+
+                                                                                                                                                                                                                                                                                                                                                def add_strategy(self, strategy_name: str, strategy: TradingStrategy, weight: float = 1.0) -> bool:
+                                                                                                                                                                                                                                                                                                                                                """Add a strategy to the executor."""
+                                                                                                                                                                                                                                                                                                                                                    try:
+                                                                                                                                                                                                                                                                                                                                                        if not hasattr(strategy, 'is_initialized') or not strategy.is_initialized:
+                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Strategy {strategy_name} is not initialized")
+                                                                                                                                                                                                                                                                                                                                                    return False
+
+                                                                                                                                                                                                                                                                                                                                                    self.active_strategies[strategy_name] = strategy
+                                                                                                                                                                                                                                                                                                                                                    self.strategy_weights[strategy_name] = weight
+
+                                                                                                                                                                                                                                                                                                                                                    logger.info(f"Added strategy: {strategy_name} with weight {weight}")
+                                                                                                                                                                                                                                                                                                                                                return True
+
+                                                                                                                                                                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                    logger.error(f"Failed to add strategy {strategy_name}: {e}")
+                                                                                                                                                                                                                                                                                                                                                return False
+
+                                                                                                                                                                                                                                                                                                                                                    def remove_strategy(self, strategy_name: str) -> bool:
+                                                                                                                                                                                                                                                                                                                                                    """Remove a strategy from the executor."""
+                                                                                                                                                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                                                                                                                                                            if strategy_name in self.active_strategies:
+                                                                                                                                                                                                                                                                                                                                                            del self.active_strategies[strategy_name]
+                                                                                                                                                                                                                                                                                                                                                                if strategy_name in self.strategy_weights:
+                                                                                                                                                                                                                                                                                                                                                                del self.strategy_weights[strategy_name]
+
+                                                                                                                                                                                                                                                                                                                                                                logger.info(f"Removed strategy: {strategy_name}")
+                                                                                                                                                                                                                                                                                                                                                            return True
+                                                                                                                                                                                                                                                                                                                                                                else:
+                                                                                                                                                                                                                                                                                                                                                                logger.warning(f"Strategy {strategy_name} not found")
+                                                                                                                                                                                                                                                                                                                                                            return False
+
+                                                                                                                                                                                                                                                                                                                                                                except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                logger.error(f"Failed to remove strategy {strategy_name}: {e}")
+                                                                                                                                                                                                                                                                                                                                                            return False
+
+                                                                                                                                                                                                                                                                                                                                                                def set_strategy_weight(self, strategy_name: str, weight: float) -> bool:
+                                                                                                                                                                                                                                                                                                                                                                """Set the weight for a strategy."""
+                                                                                                                                                                                                                                                                                                                                                                    try:
+                                                                                                                                                                                                                                                                                                                                                                        if strategy_name in self.active_strategies:
+                                                                                                                                                                                                                                                                                                                                                                        self.strategy_weights[strategy_name] = weight
+                                                                                                                                                                                                                                                                                                                                                                        logger.info(f"Set weight for {strategy_name}: {weight}")
+                                                                                                                                                                                                                                                                                                                                                                    return True
+                                                                                                                                                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                                                                                                                                                        logger.warning(f"Strategy {strategy_name} not found")
+                                                                                                                                                                                                                                                                                                                                                                    return False
+
+                                                                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Failed to set weight for strategy {strategy_name}: {e}")
+                                                                                                                                                                                                                                                                                                                                                                    return False
+
+                                                                                                                                                                                                                                                                                                                                                                        async def generate_signals(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+                                                                                                                                                                                                                                                                                                                                                                        """Generate trading signals from all active strategies."""
+                                                                                                                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                                                                                                            all_signals = []
+
+                                                                                                                                                                                                                                                                                                                                                                                for strategy_name, strategy in self.active_strategies.items():
+                                                                                                                                                                                                                                                                                                                                                                                    try:
+                                                                                                                                                                                                                                                                                                                                                                                    # Generate signals from this strategy
+                                                                                                                                                                                                                                                                                                                                                                                    strategy_signals = await strategy.generate_signals(analysis)
+
+                                                                                                                                                                                                                                                                                                                                                                                    # Apply strategy weight
+                                                                                                                                                                                                                                                                                                                                                                                    weight = self.strategy_weights.get(strategy_name, 1.0)
+                                                                                                                                                                                                                                                                                                                                                                                        for signal in strategy_signals:
+                                                                                                                                                                                                                                                                                                                                                                                        signal['strategy'] = strategy_name
+                                                                                                                                                                                                                                                                                                                                                                                        signal['weight'] = weight
+                                                                                                                                                                                                                                                                                                                                                                                        signal['confidence'] = signal.get('confidence', 0.5) * weight
+                                                                                                                                                                                                                                                                                                                                                                                        all_signals.append(signal)
+
+                                                                                                                                                                                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                            logger.error(f"Error generating signals from strategy {strategy_name}: {e}")
+
+                                                                                                                                                                                                                                                                                                                                                                                            # Combine and rank signals
+                                                                                                                                                                                                                                                                                                                                                                                            combined_signals = await self._combine_signals(all_signals)
+
+                                                                                                                                                                                                                                                                                                                                                                                            # Store in history
+                                                                                                                                                                                                                                                                                                                                                                                            self._store_signals(combined_signals)
+
+                                                                                                                                                                                                                                                                                                                                                                                        return combined_signals
+
+                                                                                                                                                                                                                                                                                                                                                                                            except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                            logger.error(f"Error generating signals: {e}")
+                                                                                                                                                                                                                                                                                                                                                                                        return []
+
+                                                                                                                                                                                                                                                                                                                                                                                            async def _combine_signals(self, signals: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+                                                                                                                                                                                                                                                                                                                                                                                            """Combine and rank signals from multiple strategies."""
+                                                                                                                                                                                                                                                                                                                                                                                                try:
+                                                                                                                                                                                                                                                                                                                                                                                                    if not signals:
+                                                                                                                                                                                                                                                                                                                                                                                                return []
+
+                                                                                                                                                                                                                                                                                                                                                                                                # Group signals by symbol and type
+                                                                                                                                                                                                                                                                                                                                                                                                signal_groups = {}
+                                                                                                                                                                                                                                                                                                                                                                                                    for signal in signals:
+                                                                                                                                                                                                                                                                                                                                                                                                    key = (signal.get('symbol', 'UNKNOWN'), signal.get('type', 'UNKNOWN'))
+                                                                                                                                                                                                                                                                                                                                                                                                        if key not in signal_groups:
+                                                                                                                                                                                                                                                                                                                                                                                                        signal_groups[key] = []
+                                                                                                                                                                                                                                                                                                                                                                                                        signal_groups[key].append(signal)
+
+                                                                                                                                                                                                                                                                                                                                                                                                        # Combine signals for each group
+                                                                                                                                                                                                                                                                                                                                                                                                        combined_signals = []
+                                                                                                                                                                                                                                                                                                                                                                                                            for (symbol, signal_type), group_signals in signal_groups.items():
+                                                                                                                                                                                                                                                                                                                                                                                                                if len(group_signals) == 1:
+                                                                                                                                                                                                                                                                                                                                                                                                                # Single signal, use as is
+                                                                                                                                                                                                                                                                                                                                                                                                                combined_signals.append(group_signals[0])
+                                                                                                                                                                                                                                                                                                                                                                                                                    else:
+                                                                                                                                                                                                                                                                                                                                                                                                                    # Multiple signals, combine them
+                                                                                                                                                                                                                                                                                                                                                                                                                    combined_signal = await self._combine_signal_group(group_signals)
+                                                                                                                                                                                                                                                                                                                                                                                                                    combined_signals.append(combined_signal)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    # Sort by confidence
+                                                                                                                                                                                                                                                                                                                                                                                                                    combined_signals.sort(key=lambda x: x.get('confidence', 0), reverse=True)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                return combined_signals
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                    logger.error(f"Error combining signals: {e}")
+                                                                                                                                                                                                                                                                                                                                                                                                                return signals
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    async def _combine_signal_group(self, signals: List[Dict[str, Any]]) -> Dict[str, Any]:
+                                                                                                                                                                                                                                                                                                                                                                                                                    """Combine a group of signals for the same symbol and type."""
+                                                                                                                                                                                                                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                                                                                                                                                                                                                            if not signals:
+                                                                                                                                                                                                                                                                                                                                                                                                                        return {}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        # Weighted average of quantities and confidences
+                                                                                                                                                                                                                                                                                                                                                                                                                        total_weight = sum(signal.get('weight', 1.0) for signal in signals)
+                                                                                                                                                                                                                                                                                                                                                                                                                        weighted_quantity = sum(
+                                                                                                                                                                                                                                                                                                                                                                                                                        signal.get('quantity', 0) * signal.get('weight', 1.0)
+                                                                                                                                                                                                                                                                                                                                                                                                                        for signal in signals
+                                                                                                                                                                                                                                                                                                                                                                                                                        ) / total_weight if total_weight > 0 else 0
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        weighted_confidence = sum(
+                                                                                                                                                                                                                                                                                                                                                                                                                        signal.get('confidence', 0) * signal.get('weight', 1.0)
+                                                                                                                                                                                                                                                                                                                                                                                                                        for signal in signals
+                                                                                                                                                                                                                                                                                                                                                                                                                        ) / total_weight if total_weight > 0 else 0
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        # Use the first signal as base and update with combined values
+                                                                                                                                                                                                                                                                                                                                                                                                                        combined_signal = signals[0].copy()
+                                                                                                                                                                                                                                                                                                                                                                                                                        combined_signal['quantity'] = weighted_quantity
+                                                                                                                                                                                                                                                                                                                                                                                                                        combined_signal['confidence'] = weighted_confidence
+                                                                                                                                                                                                                                                                                                                                                                                                                        combined_signal['strategies'] = [s.get('strategy', 'unknown') for s in signals]
+                                                                                                                                                                                                                                                                                                                                                                                                                        combined_signal['combined_from'] = len(signals)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    return combined_signal
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Error combining signal group: {e}")
+                                                                                                                                                                                                                                                                                                                                                                                                                    return signals[0] if signals else {}
+
+def _store_signals(self, signals: List[Dict[str, Any]]) -> None:
+                                                                                                                                                                                                                                                                                                                                                                                                                        """Store signals in history."""
+                                                                                                                                                                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                                                                                                                                                            timestamp = datetime.now()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                for signal in signals:
+                                                                                                                                                                                                                                                                                                                                                                                                                                signal_record = {
+                                                                                                                                                                                                                                                                                                                                                                                                                                'timestamp': timestamp,
+                                                                                                                                                                                                                                                                                                                                                                                                                                'signal': signal.copy()
+                                                                                                                                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                self.signal_history.append(signal_record)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                # Trim history if too long
+                                                                                                                                                                                                                                                                                                                                                                                                                                    if len(self.signal_history) > self.max_signal_history:
+                                                                                                                                                                                                                                                                                                                                                                                                                                    self.signal_history = self.signal_history[-self.max_signal_history:]
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Error storing signals: {e}")
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                            def get_signal_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+                                                                                                                                                                                                                                                                                                                                                                                                                                            """Get signal history."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                try:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                history = self.signal_history.copy()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    if limit:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    history = history[-limit:]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                return history
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    logger.error(f"Error getting signal history: {e}")
+                                                                                                                                                                                                                                                                                                                                                                                                                                                return []
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    def get_active_strategies(self) -> Dict[str, TradingStrategy]:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    """Get all active strategies."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                return self.active_strategies.copy()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    def get_strategy_weights(self) -> Dict[str, float]:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    """Get strategy weights."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                return self.strategy_weights.copy()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    def get_executor_status(self) -> Dict[str, Any]:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    """Get executor status."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                return {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "is_running": self.is_running,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "is_initialized": self.is_initialized,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "active_strategies": list(self.active_strategies.keys()),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "strategy_weights": self.strategy_weights.copy(),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "signal_history_count": len(self.signal_history),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                "execution_task_running": self.execution_task is not None and not self.execution_task.done()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    async def test_strategy(self, strategy_name: str, test_data: Dict[str, Any]) -> Dict[str, Any]:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    """Test a specific strategy with test data."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        try:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            if strategy_name not in self.active_strategies:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        return {"error": f"Strategy {strategy_name} not found"}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        strategy = self.active_strategies[strategy_name]
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        # Analyze test data
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        analysis = await strategy.generate_signals(test_data) # Changed from analyze to generate_signals
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        # Generate signals
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        signals = await strategy.generate_signals(analysis)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    return {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    "strategy_name": strategy_name,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    "analysis": analysis,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    "signals": signals,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    "signal_count": len(signals)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Error testing strategy {strategy_name}: {e}")
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    return {"error": str(e)}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        async def cleanup(self):
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        """Clean up resources."""
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            try:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            logger.info("Cleaning up Strategy Executor...")
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            # Stop executor
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            await self.stop()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            # Clean up strategies
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                for strategy in self.active_strategies.values():
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    if hasattr(strategy, 'cleanup'):
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    await strategy.cleanup()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    self.active_strategies.clear()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    self.strategy_weights.clear()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    self.signal_history.clear()
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    logger.info("Strategy Executor cleanup completed")
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        except Exception as e:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        logger.error(f"Error during Strategy Executor cleanup: {e}")
