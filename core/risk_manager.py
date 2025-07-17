@@ -1,37 +1,9 @@
-"""Module for Schwabot trading system."""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Risk Manager 🛡️ - GODMODE ENHANCED
+Schwabot Risk Management System with Tensor Math Integration
 
-    Comprehensive risk assessment and management for Schwabot trading system:
-    • Real-time risk assessment and position sizing
-    • Portfolio risk monitoring and alerts
-    • GPU/CPU tensor operations for risk calculations
-    • Multi-dimensional risk metrics (VaR, CVaR, Sharpe ratio, MDD)
-    • Dynamic risk limits and circuit breakers
-    • Schwabot strategy integration with hash outputs
-    • 🆕 ROBUST ERROR HANDLING & RECOVERY
-    • 🆕 PER-SYMBOL ERROR TRACKING
-    • 🆕 CONFIGURABLE CIRCUIT BREAKERS
-    • 🆕 SAFE MODE TOGGLES
-
-        Mathematical Foundation:
-        - Value at Risk (VaR): VaR = μ - z_α * σ
-        - Expected Shortfall (ES): ES = E[X|X > VaR]
-        - Sharpe Ratio: Sharpe = (R_p - R_f) / σ_p
-        - Maximum Drawdown: MDD = max((Peak - Trough) / Peak)
-        - Kelly Criterion: f* = (bp - q) / b
+Advanced risk management with real-time monitoring, fault tolerance, and Schwabot strategy integration.
 
             Features:
-            - GPU-accelerated risk calculations with automatic CPU fallback
-            - Real-time portfolio monitoring and risk alerts
-            - Advanced risk metrics (VaR, CVaR, maximum drawdown)
-            - Position sizing based on risk tolerance
-            - Circuit breakers and emergency stops
-            - JSON-compatible risk flags for strategy integration
-            - Hash-based risk state tracking for Schwabot decision logic
             - 🆕 Real-time error log accumulator (in-memory + to-disk optional)
             - 🆕 Trade-by-trade fault classification
             - 🆕 Per-symbol error tracking and circuit breakers
@@ -71,7 +43,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
 
                                         class RiskLevel(Enum):
-    """Class for Schwabot trading functionality."""
                                         """Risk level enumeration for Schwabot decision logic."""
                                         LOW = "low"
                                         MEDIUM = "medium"
@@ -80,7 +51,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
 
                                             class ProcessingMode(Enum):
-    """Class for Schwabot trading functionality."""
                                             """Processing mode for risk calculations."""
                                             GPU_ACCELERATED = "gpu_accelerated"
                                             CPU_FALLBACK = "cpu_fallback"
@@ -89,7 +59,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
 
                                                 class ErrorType(Enum):
-    """Class for Schwabot trading functionality."""
                                                 """Error types for fault classification."""
                                                 TIMEOUT = "timeout"
                                                 LOGIC_REJECTION = "logic_rejection"
@@ -102,7 +71,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
 
                                                     class SafeMode(Enum):
-    """Class for Schwabot trading functionality."""
                                                     """Safe mode states."""
                                                     NORMAL = "normal"
                                                     DEGRADED = "degraded"
@@ -112,7 +80,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
                                                     @dataclass
                                                         class ErrorLogEntry:
-    """Class for Schwabot trading functionality."""
                                                         """Error log entry for fault tracking."""
                                                         timestamp: datetime
                                                         error_type: ErrorType
@@ -127,7 +94,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
                                                         @dataclass
                                                             class CircuitBreakerState:
-    """Class for Schwabot trading functionality."""
                                                             """Circuit breaker state for symbols and system."""
                                                             symbol: str
                                                             error_count: int = 0
@@ -140,7 +106,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
                                                             @dataclass
                                                                 class RiskMetric:
-    """Class for Schwabot trading functionality."""
                                                                 """
                                                                 Risk metric with tensor math integration and Schwabot compatibility.
 
@@ -169,7 +134,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
                                                                     @dataclass
                                                                         class PositionRisk:
-    """Class for Schwabot trading functionality."""
                                                                         """Position-specific risk assessment with Schwabot integration."""
                                                                         symbol: str
                                                                         position_size: float
@@ -186,7 +150,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
                                                                         @dataclass
                                                                             class PortfolioRisk:
-    """Class for Schwabot trading functionality."""
                                                                             """Portfolio-level risk assessment with Schwabot integration."""
                                                                             total_value: float
                                                                             total_pnl: float
@@ -200,7 +163,6 @@ Risk Manager 🛡️ - GODMODE ENHANCED
 
 
                                                                                 class RiskManager:
-    """Class for Schwabot trading functionality."""
                                                                                 """
                                                                                 Comprehensive risk management system with tensor math integration and Schwabot strategy compatibility.
 
@@ -297,8 +259,7 @@ def __init__(self, risk_tolerance: Union[float, str, Dict[str, Any]] = 0.02, max
                                                                                                                     self.error_recovery = None
                                                                                                                     logger.warning("⚠️ Enhanced error recovery system not available")
 
-def log_error(self, error_type: ErrorType, error_message: str, symbol: Optional[str] = None, -> None
-                                                                                                                        trade_id: Optional[str] = None, context: Dict[str, Any] = None) -> None:
+    def log_error(self, error_type: ErrorType, error_message: str, symbol: Optional[str] = None, trade_id: Optional[str] = None, context: Dict[str, Any] = None) -> None:
                                                                                                                         """
                                                                                                                         🆕 Log an error with comprehensive tracking.
 
@@ -472,7 +433,6 @@ def log_error(self, error_type: ErrorType, error_message: str, symbol: Optional[
                                                                                                                                                                                                                                             logger.info(f"✅ Circuit breaker reset for {symbol} ({'manual' if manual else 'automatic'})")
                                                                                                                                                                                                                                         return True
                                                                                                                                                                                                                                     return False
-
                                                                                                                                                                                                                                         except Exception as e:
                                                                                                                                                                                                                                         logger.error(f"❌ Failed to reset circuit breaker: {e}")
                                                                                                                                                                                                                                     return False
@@ -984,8 +944,7 @@ def log_error(self, error_type: ErrorType, error_message: str, symbol: Optional[
                                                                                                                                                                                                                                                                                                                                                                                                                                             logger.error(f"Failed to clean returns data: {e}")
                                                                                                                                                                                                                                                                                                                                                                                                                                         return xp.array([])
 
-def assess_position_risk(self, symbol: str, position_size: float, current_price: float, -> None
-                                                                                                                                                                                                                                                                                                                                                                                                                                            historical_returns: xp.ndarray, entry_price: float) -> PositionRisk:
+    def assess_position_risk(self, symbol: str, position_size: float, current_price: float, historical_returns: xp.ndarray, entry_price: float) -> PositionRisk:
                                                                                                                                                                                                                                                                                                                                                                                                                                             """
                                                                                                                                                                                                                                                                                                                                                                                                                                             Assess risk for a specific position with Schwabot integration.
 

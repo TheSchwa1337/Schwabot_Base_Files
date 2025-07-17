@@ -560,8 +560,8 @@ class SchwabotCLI:
         
         try:
             # Import backtesting components
-            from backtesting.simple_backtester import SimpleBacktester
-            from backtesting.historical_data_manager import HistoricalDataManager
+            from .backtesting.simple_backtester import SimpleBacktester
+            from .backtesting.historical_data_manager import HistoricalDataManager
             
             # Initialize backtester
             backtester = SimpleBacktester()

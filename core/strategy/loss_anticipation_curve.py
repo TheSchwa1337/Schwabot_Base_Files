@@ -36,7 +36,6 @@ Integrated into the phantom detector and fallback systems.
                     - integrate_loss_curve: Integrate loss curve over time
                     - predict_time_to_bounce: Predict time-to-bounce from fallback module
                     - update_entropy_matrix: Update entropy matrix for time-warp logic
-
                     """
 
                     import numpy as np
@@ -56,10 +55,8 @@ Integrated into the phantom detector and fallback systems.
                             MATH_INFRASTRUCTURE_AVAILABLE = False
                             logger.warning("Math infrastructure not available")
 
-
                             @dataclass
                                 class LossCurveConfig:
-    """Class for Schwabot trading functionality."""
                                 """Configuration data class for loss anticipation curve."""
                                 enabled: bool = True
                                 timeout: float = 30.0
@@ -71,10 +68,8 @@ Integrated into the phantom detector and fallback systems.
                                 integration_steps: int = 100  # Steps for curve integration
                                 fallback_threshold: float = 0.05  # Threshold for fallback activation
 
-
                                 @dataclass
                                     class LossCurveResult:
-    """Class for Schwabot trading functionality."""
                                     """Result data class for loss curve calculations."""
                                     success: bool = False
                                     anticipated_loss_vector: Optional[np.ndarray] = None
@@ -85,9 +80,7 @@ Integrated into the phantom detector and fallback systems.
                                     error: Optional[str] = None
                                     timestamp: float = field(default_factory=time.time)
 
-
                                         class LossVectorCalculator:
-    """Class for Schwabot trading functionality."""
                                         """Anticipated Loss Vector Calculator implementing the mathematical framework."""
 
 def __init__(self, config: Optional[LossCurveConfig] = None) -> None:
@@ -96,7 +89,7 @@ def __init__(self, config: Optional[LossCurveConfig] = None) -> None:
                                             self.price_history = []
                                             self.volume_history = []
 
-def calculate_price_velocity(self, prices: np.ndarray, -> None
+    def calculate_price_velocity(self, prices: np.ndarray,
                                                 window: int = None) -> np.ndarray:
                                                 """
                                                 Calculate price velocity ∂p/∂t.
@@ -136,7 +129,7 @@ def calculate_price_velocity(self, prices: np.ndarray, -> None
                                                                                 self.logger.error(f"Error calculating price velocity: {e}")
                                                                             return np.zeros_like(prices)
 
-def calculate_volatility(self, prices: np.ndarray, -> None
+    def calculate_volatility(self, prices: np.ndarray,
                                                                                 window: int = None) -> np.ndarray:
                                                                                 """
                                                                                 Calculate price volatility σ(t) using rolling standard deviation.
@@ -174,7 +167,7 @@ def calculate_volatility(self, prices: np.ndarray, -> None
                                                                                                         self.logger.error(f"Error calculating volatility: {e}")
                                                                                                     return np.zeros_like(prices)
 
-def predict_time_to_bounce(self, prices: np.ndarray, -> None
+    def predict_time_to_bounce(self, prices: np.ndarray,
                                                                                                         volumes: np.ndarray = None) -> float:
                                                                                                         """
                                                                                                         Predict normalized time-to-bounce estimate τ from fallback module.
@@ -212,7 +205,7 @@ def predict_time_to_bounce(self, prices: np.ndarray, -> None
                                                                                                                         self.logger.error(f"Error predicting time to bounce: {e}")
                                                                                                                     return 1.0
 
-def calculate_anticipated_loss_vector(self, prices: np.ndarray, -> None
+    def calculate_anticipated_loss_vector(self, prices: np.ndarray,
                                                                                                                     volumes: np.ndarray = None,
                                                                                                                         entropy_decay: float = None) -> np.ndarray:
                                                                                                                         """
@@ -252,23 +245,22 @@ def calculate_anticipated_loss_vector(self, prices: np.ndarray, -> None
                                                                                                                                         self.logger.error(f"Error calculating anticipated loss vector: {e}")
                                                                                                                                     return np.zeros_like(prices)
 
-
                                                                                                                                         class CurveIntegrator:
-    """Class for Schwabot trading functionality."""
-                                                                                                                                        """Composite Curve Integrator for loss curve modeling."""
+    """Composite curve modeling and integration."""
 
 def __init__(self, config: Optional[LossCurveConfig] = None) -> None:
                                                                                                                                             self.config = config or LossCurveConfig()
                                                                                                                                             self.logger = logging.getLogger(f"{__name__}.CurveIntegrator")
+        self.entropy_matrix = None
 
-def integrate_loss_curve(self, loss_vector: np.ndarray, -> None
-                                                                                                                                                time_points: Optional[np.ndarray] = None) -> np.ndarray:
+    def integrate_loss_curve(self, loss_vector: np.ndarray,
+                           time_points: np.ndarray = None) -> np.ndarray:
                                                                                                                                                 """
                                                                                                                                                 Integrate loss curve: LossCurve(t) = ∫₀ᵗ L(s) ds
 
                                                                                                                                                     Args:
                                                                                                                                                     loss_vector: Anticipated loss vector L(t)
-                                                                                                                                                    time_points: Time points for integration (optional)
+            time_points: Time points for integration
 
                                                                                                                                                         Returns:
                                                                                                                                                         Integrated loss curve
@@ -277,10 +269,8 @@ def integrate_loss_curve(self, loss_vector: np.ndarray, -> None
                                                                                                                                                                 if time_points is None:
                                                                                                                                                                 time_points = np.linspace(0, 1, len(loss_vector))
 
-                                                                                                                                                                # Use cumulative sum as approximation of integration
-                                                                                                                                                                # LossCurve(t) = ∫₀ᵗ L(s) ds ≈ Σᵢ₌₀ᵗ L(i) ⋅ Δt
-                                                                                                                                                                dt = time_points[1] - time_points[0] if len(time_points) > 1 else 1.0
-                                                                                                                                                                loss_curve = np.cumsum(loss_vector) * dt
+            # Use trapezoidal integration
+            loss_curve = np.cumsum(loss_vector) * (time_points[1] - time_points[0])
 
                                                                                                                                                                 self.logger.debug(f"Loss curve integrated: final value={loss_curve[-1]:.6f}")
                                                                                                                                                             return loss_curve
@@ -289,8 +279,8 @@ def integrate_loss_curve(self, loss_vector: np.ndarray, -> None
                                                                                                                                                                 self.logger.error(f"Error integrating loss curve: {e}")
                                                                                                                                                             return np.zeros_like(loss_vector)
 
-def update_entropy_matrix(self, loss_curve: np.ndarray, -> None
-                                                                                                                                                                time_points: np.ndarray) -> np.ndarray:
+    def update_entropy_matrix(self, loss_curve: np.ndarray,
+                            time_points: np.ndarray = None) -> np.ndarray:
                                                                                                                                                                 """
                                                                                                                                                                 Update entropy matrix for time-warp logic prediction.
 
@@ -302,50 +292,61 @@ def update_entropy_matrix(self, loss_curve: np.ndarray, -> None
                                                                                                                                                                         Updated entropy matrix
                                                                                                                                                                         """
                                                                                                                                                                             try:
-                                                                                                                                                                            # Create entropy matrix with loss curve and time information
-                                                                                                                                                                            entropy_matrix = np.zeros((len(loss_curve), 3))
-                                                                                                                                                                            entropy_matrix[:, 0] = time_points  # Time dimension
-                                                                                                                                                                            entropy_matrix[:, 1] = loss_curve   # Loss dimension
-                                                                                                                                                                            entropy_matrix[:, 2] = np.gradient(loss_curve)  # Loss gradient
+            if time_points is None:
+                time_points = np.linspace(0, 1, len(loss_curve))
 
-                                                                                                                                                                            self.logger.debug(f"Entropy matrix updated: shape {entropy_matrix.shape}")
+            # Create entropy matrix from loss curve
+            # This is a simplified version - in practice, this would be more complex
+            entropy_matrix = np.outer(loss_curve, loss_curve)
+
+            # Apply time-warp correction
+            time_warp_factor = np.exp(-self.config.entropy_decay_coefficient * time_points)
+            entropy_matrix *= np.outer(time_warp_factor, time_warp_factor)
+
+            self.entropy_matrix = entropy_matrix
+
+            self.logger.debug(f"Entropy matrix updated: shape={entropy_matrix.shape}")
                                                                                                                                                                         return entropy_matrix
 
                                                                                                                                                                             except Exception as e:
                                                                                                                                                                             self.logger.error(f"Error updating entropy matrix: {e}")
-                                                                                                                                                                        return np.zeros((len(loss_curve), 3))
-
+            return np.zeros((len(loss_curve), len(loss_curve)))
 
                                                                                                                                                                             class LossAnticipationCurve:
-    """Class for Schwabot trading functionality."""
-                                                                                                                                                                            """
-                                                                                                                                                                            LossAnticipationCurve Implementation
-                                                                                                                                                                            Provides core loss anticipation curve functionality with mathematical framework.
-                                                                                                                                                                            """
+    """Core loss anticipation curve functionality."""
 
-                                                                                                                                                                                def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
-                                                                                                                                                                                self.config = LossCurveConfig(**(config or {}))
+    def __init__(self, config: Optional[LossCurveConfig] = None) -> None:
+        self.config = config or LossCurveConfig()
                                                                                                                                                                                 self.logger = logging.getLogger(__name__)
                                                                                                                                                                                 self.active = False
                                                                                                                                                                                 self.initialized = False
 
-                                                                                                                                                                                # Initialize calculators
-                                                                                                                                                                                self.loss_calculator = LossVectorCalculator(self.config)
-                                                                                                                                                                                self.curve_integrator = CurveIntegrator(self.config)
+        # Initialize components
+        self.loss_calculator = LossVectorCalculator(config)
+        self.curve_integrator = CurveIntegrator(config)
 
-                                                                                                                                                                                # Data storage
-                                                                                                                                                                                self.historical_losses: List[float] = []
-                                                                                                                                                                                self.curve: Optional[np.ndarray] = None
-                                                                                                                                                                                self.entropy_matrix: Optional[np.ndarray] = None
+        # Performance tracking
+        self.metrics = {
+            'total_calculations': 0,
+            'successful_calculations': 0,
+            'failed_calculations': 0,
+            'last_calculation_time': time.time()
+        }
 
+        # Initialize math infrastructure if available
                                                                                                                                                                                     if MATH_INFRASTRUCTURE_AVAILABLE:
                                                                                                                                                                                     self.math_config = MathConfigManager()
                                                                                                                                                                                     self.math_cache = MathResultCache()
                                                                                                                                                                                     self.math_orchestrator = MathOrchestrator()
+        else:
+            self.math_config = None
+            self.math_cache = None
+            self.math_orchestrator = None
 
                                                                                                                                                                                     self._initialize_system()
 
                                                                                                                                                                                         def _initialize_system(self) -> None:
+        """Initialize the loss anticipation curve system."""
                                                                                                                                                                                             try:
                                                                                                                                                                                             self.logger.info(f"Initializing {self.__class__.__name__}")
                                                                                                                                                                                             self.initialized = True
@@ -355,9 +356,11 @@ def update_entropy_matrix(self, loss_curve: np.ndarray, -> None
                                                                                                                                                                                                 self.initialized = False
 
                                                                                                                                                                                                     def activate(self) -> bool:
+        """Activate the system."""
                                                                                                                                                                                                         if not self.initialized:
                                                                                                                                                                                                         self.logger.error("System not initialized")
                                                                                                                                                                                                     return False
+
                                                                                                                                                                                                         try:
                                                                                                                                                                                                         self.active = True
                                                                                                                                                                                                         self.logger.info(f"✅ {self.__class__.__name__} activated")
@@ -367,6 +370,7 @@ def update_entropy_matrix(self, loss_curve: np.ndarray, -> None
                                                                                                                                                                                                     return False
 
                                                                                                                                                                                                         def deactivate(self) -> bool:
+        """Deactivate the system."""
                                                                                                                                                                                                             try:
                                                                                                                                                                                                             self.active = False
                                                                                                                                                                                                             self.logger.info(f"✅ {self.__class__.__name__} deactivated")
@@ -375,122 +379,76 @@ def update_entropy_matrix(self, loss_curve: np.ndarray, -> None
                                                                                                                                                                                                             self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
                                                                                                                                                                                                         return False
 
-def calculate_loss_anticipation(self, prices: Union[List, np.ndarray], -> None
-                                                                                                                                                                                                        volumes: Union[List, np.ndarray] = None,
-                                                                                                                                                                                                            time_points: Union[List, np.ndarray] = None) -> LossCurveResult:
-                                                                                                                                                                                                            """
-                                                                                                                                                                                                            Calculate complete loss anticipation according to mathematical framework.
+    def calculate_loss_anticipation(self, prices: np.ndarray,
+                                  volumes: np.ndarray = None,
+                                  entropy_decay: float = None) -> LossCurveResult:
+        """
+        Calculate complete loss anticipation curve.
 
                                                                                                                                                                                                                 Args:
                                                                                                                                                                                                                 prices: Price data array
                                                                                                                                                                                                                 volumes: Volume data array (optional)
-                                                                                                                                                                                                                time_points: Time points for integration (optional)
+            entropy_decay: Entropy decay coefficient
 
                                                                                                                                                                                                                     Returns:
-                                                                                                                                                                                                                    Loss curve result with all calculations
+            LossCurveResult with all calculations
                                                                                                                                                                                                                     """
                                                                                                                                                                                                                         try:
                                                                                                                                                                                                                             if not self.active:
                                                                                                                                                                                                                         return LossCurveResult(success=False, error="System not active")
 
-                                                                                                                                                                                                                        # Convert to numpy arrays
-                                                                                                                                                                                                                        price_array = np.array(prices)
-                                                                                                                                                                                                                        volume_array = np.array(volumes) if volumes is not None else None
+            self.metrics['total_calculations'] += 1
 
-                                                                                                                                                                                                                            if time_points is None:
-                                                                                                                                                                                                                            time_array = np.linspace(0, 1, len(price_array))
-                                                                                                                                                                                                                                else:
-                                                                                                                                                                                                                                time_array = np.array(time_points)
-
-                                                                                                                                                                                                                                # Calculate Anticipated Loss Vector: L(t) = -|∂p/∂t| ⋅ σ(t) ⋅ e^(-λ⋅τ)
+            # Calculate anticipated loss vector
                                                                                                                                                                                                                                 loss_vector = self.loss_calculator.calculate_anticipated_loss_vector(
-                                                                                                                                                                                                                                price_array, volume_array, self.config.entropy_decay_coefficient)
+                prices, volumes, entropy_decay
+            )
 
-                                                                                                                                                                                                                                # Integrate loss curve: LossCurve(t) = ∫₀ᵗ L(s) ds
-                                                                                                                                                                                                                                loss_curve = self.curve_integrator.integrate_loss_curve(loss_vector, time_array)
+            # Integrate loss curve
+            loss_curve = self.curve_integrator.integrate_loss_curve(loss_vector)
 
-                                                                                                                                                                                                                                # Predict time-to-bounce
-                                                                                                                                                                                                                                time_to_bounce = self.loss_calculator.predict_time_to_bounce(price_array, volume_array)
+            # Update entropy matrix
+            entropy_matrix = self.curve_integrator.update_entropy_matrix(loss_curve)
 
-                                                                                                                                                                                                                                # Update entropy matrix for time-warp logic
-                                                                                                                                                                                                                                entropy_matrix = self.curve_integrator.update_entropy_matrix(loss_curve, time_array)
+            # Predict time to bounce
+            time_to_bounce = self.loss_calculator.predict_time_to_bounce(prices, volumes)
 
-                                                                                                                                                                                                                                # Store results
-                                                                                                                                                                                                                                self.curve = loss_curve
-                                                                                                                                                                                                                                self.entropy_matrix = entropy_matrix
-                                                                                                                                                                                                                                self.historical_losses.extend(loss_vector.tolist())
-
-                                                                                                                                                                                                                            return LossCurveResult(
+            # Prepare result
+            result = LossCurveResult(
                                                                                                                                                                                                                             success=True,
                                                                                                                                                                                                                             anticipated_loss_vector=loss_vector,
                                                                                                                                                                                                                             loss_curve=loss_curve,
                                                                                                                                                                                                                             time_to_bounce=time_to_bounce,
                                                                                                                                                                                                                             entropy_matrix=entropy_matrix,
                                                                                                                                                                                                                             data={
-                                                                                                                                                                                                                            'prices': prices,
-                                                                                                                                                                                                                            'volumes': volumes,
-                                                                                                                                                                                                                            'time_points': time_points,
-                                                                                                                                                                                                                            'entropy_decay': self.config.entropy_decay_coefficient
-                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                            )
+                    'prices': prices.tolist(),
+                    'volumes': volumes.tolist() if volumes is not None else None,
+                    'entropy_decay': entropy_decay or self.config.entropy_decay_coefficient
+                }
+            )
+
+            self.metrics['successful_calculations'] += 1
+            self.metrics['last_calculation_time'] = time.time()
+
+            self.logger.info(f"Loss anticipation calculation completed successfully")
+            return result
 
                                                                                                                                                                                                                                 except Exception as e:
-                                                                                                                                                                                                                                self.logger.error(f"Error in loss anticipation calculation: {e}")
+            self.logger.error(f"Error calculating loss anticipation: {e}")
+            self.metrics['failed_calculations'] += 1
                                                                                                                                                                                                                             return LossCurveResult(success=False, error=str(e))
 
-                                                                                                                                                                                                                                def update_historical_losses(self, losses: List[float]) -> None:
-                                                                                                                                                                                                                                """Update historical losses and recalculate curve."""
-                                                                                                                                                                                                                                self.historical_losses.extend(losses)
-                                                                                                                                                                                                                                self.logger.info(f"Updated historical losses: {len(losses)} new entries")
-                                                                                                                                                                                                                                self._update_curve()
-
-                                                                                                                                                                                                                                    def _update_curve(self) -> None:
-                                                                                                                                                                                                                                    """Update loss curve from historical data."""
-                                                                                                                                                                                                                                        if self.historical_losses:
-                                                                                                                                                                                                                                        # Use polynomial fitting for curve approximation
-                                                                                                                                                                                                                                        x = np.arange(len(self.historical_losses))
-                                                                                                                                                                                                                                        y = np.array(self.historical_losses)
-                                                                                                                                                                                                                                        self.curve = np.polyfit(x, y, min(2, len(self.historical_losses) - 1))
-                                                                                                                                                                                                                                        self.logger.info(f"Updated loss anticipation curve: {self.curve}")
-                                                                                                                                                                                                                                            else:
-                                                                                                                                                                                                                                            self.curve = None
-
-                                                                                                                                                                                                                                                def anticipate_losses(self, steps: int = 1) -> Optional[List[float]]:
-                                                                                                                                                                                                                                                """Anticipate future losses using current curve."""
-                                                                                                                                                                                                                                                    if self.curve is not None:
-                                                                                                                                                                                                                                                    poly = np.poly1d(self.curve)
-                                                                                                                                                                                                                                                    start = len(self.historical_losses)
-                                                                                                                                                                                                                                                return [float(poly(start + i)) for i in range(steps)]
-                                                                                                                                                                                                                                            return None
-
-                                                                                                                                                                                                                                                def get_current_curve(self) -> Optional[np.ndarray]:
-                                                                                                                                                                                                                                                """Get current loss curve."""
-                                                                                                                                                                                                                                            return self.curve
-
-                                                                                                                                                                                                                                                def get_entropy_matrix(self) -> Optional[np.ndarray]:
-                                                                                                                                                                                                                                                """Get current entropy matrix for time-warp logic."""
-                                                                                                                                                                                                                                            return self.entropy_matrix
-
                                                                                                                                                                                                                                                 def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
                                                                                                                                                                                                                                             return {
                                                                                                                                                                                                                                             'active': self.active,
                                                                                                                                                                                                                                             'initialized': self.initialized,
                                                                                                                                                                                                                                             'config': self.config.__dict__,
-                                                                                                                                                                                                                                            'num_historical_losses': len(self.historical_losses),
-                                                                                                                                                                                                                                            'curve_available': self.curve is not None,
-                                                                                                                                                                                                                                            'entropy_matrix_available': self.entropy_matrix is not None,
-                                                                                                                                                                                                                                            }
+            'metrics': self.metrics,
+            'entropy_matrix_shape': self.curve_integrator.entropy_matrix.shape if self.curve_integrator.entropy_matrix is not None else None
+        }
 
-                                                                                                                                                                                                                                                def get_metrics(self) -> Dict[str, Any]:
-                                                                                                                                                                                                                                            return {
-                                                                                                                                                                                                                                            'num_losses': len(self.historical_losses),
-                                                                                                                                                                                                                                            'curve': self.curve.tolist() if self.curve is not None else None,
-                                                                                                                                                                                                                                            'entropy_matrix_shape': self.entropy_matrix.shape if self.entropy_matrix is not None else None,
-                                                                                                                                                                                                                                            'mean_loss': np.mean(self.historical_losses) if self.historical_losses else 0.0,
-                                                                                                                                                                                                                                            'max_loss': np.max(self.historical_losses) if self.historical_losses else 0.0,
-                                                                                                                                                                                                                                            }
-
-
-                                                                                                                                                                                                                                                def create_loss_anticipation_curve(config: Optional[Dict[str, Any]] = None) -> LossAnticipationCurve:
-                                                                                                                                                                                                                                                """Create a loss anticipation curve instance."""
+# Factory function
+def create_loss_anticipation_curve(config: Optional[LossCurveConfig] = None) -> LossAnticipationCurve:
+    """Create a Loss Anticipation Curve instance."""
                                                                                                                                                                                                                                             return LossAnticipationCurve(config)

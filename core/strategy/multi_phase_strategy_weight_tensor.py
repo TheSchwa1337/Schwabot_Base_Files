@@ -45,9 +45,7 @@ past performance, predictive vector fields, and momentum deviation logic.
                         MathResultCache = None
                         MathOrchestrator = None
 
-
                             class MarketPhase(Enum):
-    """Class for Schwabot trading functionality."""
                             """Market phase enumeration."""
                             BULL = "bull"
                             BEAR = "bear"
@@ -55,19 +53,15 @@ past performance, predictive vector fields, and momentum deviation logic.
                             VOLATILE = "volatile"
                             TRENDING = "trending"
 
-
                                 class Status(Enum):
-    """Class for Schwabot trading functionality."""
                                 """System status enumeration."""
                                 ACTIVE = "active"
                                 INACTIVE = "inactive"
                                 ERROR = "error"
                                 PROCESSING = "processing"
 
-
                                 @dataclass
                                     class PhaseTensorConfig:
-    """Class for Schwabot trading functionality."""
                                     """Configuration data class for phase tensor operations."""
                                     enabled: bool = True
                                     timeout: float = 30.0
@@ -79,10 +73,8 @@ past performance, predictive vector fields, and momentum deviation logic.
                                     entropy_correction_factor: float = 0.05  # For entropy-corrected time states
                                     ferris_tick_window: int = 100  # Window for Ferris tick mapping
 
-
                                     @dataclass
                                         class PhaseTensorResult:
-    """Class for Schwabot trading functionality."""
                                         """Result data class for phase tensor operations."""
                                         success: bool = False
                                         phase_tensor: Optional[np.ndarray] = None
@@ -93,9 +85,7 @@ past performance, predictive vector fields, and momentum deviation logic.
                                         error: Optional[str] = None
                                         timestamp: float = field(default_factory=time.time)
 
-
                                             class PhaseTensorCalculator:
-    """Class for Schwabot trading functionality."""
                                             """Phase Tensor Calculator implementing the mathematical framework."""
 
 def __init__(self, config: Optional[PhaseTensorConfig] = None) -> None:
@@ -104,7 +94,7 @@ def __init__(self, config: Optional[PhaseTensorConfig] = None) -> None:
                                                 self.previous_phase_signals = None
                                                 self.ferris_tick_history = []
 
-def calculate_momentum_drift_correction(self, current_time: float, -> None
+    def calculate_momentum_drift_correction(self, current_time: float,
                                                     phase_signals: np.ndarray) -> float:
                                                     """
                                                     Calculate momentum drift correction ΔΨ(t) from Ferris tick mapping.
@@ -147,7 +137,7 @@ def calculate_momentum_drift_correction(self, current_time: float, -> None
                                                                     self.logger.error(f"Error calculating momentum drift: {e}")
                                                                 return 0.0
 
-def calculate_phase_tensor(self, phase_signals: np.ndarray, -> None
+    def calculate_phase_tensor(self, phase_signals: np.ndarray,
                                                                 weight_matrix: np.ndarray,
                                                                     current_time: float) -> np.ndarray:
                                                                     """
@@ -179,7 +169,7 @@ def calculate_phase_tensor(self, phase_signals: np.ndarray, -> None
                                                                                 self.logger.error(f"Error calculating phase tensor: {e}")
                                                                             return np.zeros((len(phase_signals), len(phase_signals)))
 
-def update_weights_recursively(self, current_weights: np.ndarray, -> None
+    def update_weights_recursively(self, current_weights: np.ndarray,
                                                                             phase_signals: np.ndarray,
                                                                                 learning_rate: float = None) -> np.ndarray:
                                                                                 """
@@ -227,7 +217,7 @@ def update_weights_recursively(self, current_weights: np.ndarray, -> None
                                                                                                         self.logger.error(f"Error updating weights recursively: {e}")
                                                                                                     return current_weights
 
-def calculate_composite_signal(self, phase_tensor: np.ndarray, -> None
+    def calculate_composite_signal(self, phase_tensor: np.ndarray,
                                                                                                         profit_vectors: np.ndarray) -> float:
                                                                                                         """
                                                                                                         Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
@@ -255,240 +245,80 @@ def calculate_composite_signal(self, phase_tensor: np.ndarray, -> None
                                                                                                                     self.logger.error(f"Error calculating composite signal: {e}")
                                                                                                                 return 0.0
 
-
-                                                                                                                    class MultiPhaseStrategyWeightTensor:
-    """Class for Schwabot trading functionality."""
-                                                                                                                    """
-                                                                                                                    MultiPhaseStrategyWeightTensor Implementation
-                                                                                                                    Manages strategy weights across different market phases with recursive tensor operations.
-                                                                                                                    """
-
-                                                                                                                        def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
-                                                                                                                        self.config = PhaseTensorConfig(**(config or {}))
-                                                                                                                        self.logger = logging.getLogger(__name__)
-                                                                                                                        self.active = False
-                                                                                                                        self.initialized = False
-
-                                                                                                                        # Strategy and phase management
-                                                                                                                        self.strategy_ids: List[str] = []
-                                                                                                                        self.num_strategies: int = 0
-                                                                                                                        self.num_phases: int = len(MarketPhase)
-                                                                                                                        self.weight_tensor: Optional[np.ndarray] = None
-                                                                                                                        self.phase_to_index: Dict[str, int] = {phase.value: i for i, phase in enumerate(MarketPhase)}
-                                                                                                                        self.current_phase: Optional[MarketPhase] = None
-
-                                                                                                                        # Phase tensor calculator
-                                                                                                                        self.phase_calculator = PhaseTensorCalculator(self.config)
-
-                                                                                                                        # Performance tracking
-                                                                                                                        self.metrics: Dict[str, Any] = {
-                                                                                                                        'total_updates': 0,
-                                                                                                                        'phase_transitions': 0,
-                                                                                                                        'last_update_time': time.time(),
-                                                                                                                        'active_phase': None,
-                                                                                                                        'tensor_operations': 0,
-                                                                                                                        'composite_signals': 0
-                                                                                                                        }
-
-                                                                                                                        # Initialize math infrastructure if available
-                                                                                                                            if MATH_INFRASTRUCTURE_AVAILABLE:
-                                                                                                                            self.math_config = MathConfigManager()
-                                                                                                                            self.math_cache = MathResultCache()
-                                                                                                                            self.math_orchestrator = MathOrchestrator()
-
-                                                                                                                            self._initialize_system()
-
-                                                                                                                                def _initialize_system(self) -> None:
-                                                                                                                                    try:
-                                                                                                                                    self.logger.info(f"Initializing {self.__class__.__name__}")
-                                                                                                                                    self.initialized = True
-                                                                                                                                    self.logger.info(f"✅ {self.__class__.__name__} initialized successfully")
-                                                                                                                                        except Exception as e:
-                                                                                                                                        self.logger.error(f"❌ Error initializing {self.__class__.__name__}: {e}")
-                                                                                                                                        self.initialized = False
-
-                                                                                                                                            def activate(self) -> bool:
-                                                                                                                                                if not self.initialized:
-                                                                                                                                                self.logger.error("System not initialized")
-                                                                                                                                            return False
-
-                                                                                                                                                try:
-                                                                                                                                                self.active = True
-                                                                                                                                                self.logger.info(f"✅ {self.__class__.__name__} activated")
-                                                                                                                                            return True
-                                                                                                                                                except Exception as e:
-                                                                                                                                                self.logger.error(f"❌ Error activating {self.__class__.__name__}: {e}")
-                                                                                                                                            return False
-
-                                                                                                                                                def deactivate(self) -> bool:
-                                                                                                                                                    try:
-                                                                                                                                                    self.active = False
-                                                                                                                                                    self.logger.info(f"✅ {self.__class__.__name__} deactivated")
-                                                                                                                                                return True
-                                                                                                                                                    except Exception as e:
-                                                                                                                                                    self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
-                                                                                                                                                return False
-
-                                                                                                                                                    def initialize_strategies(self, strategy_ids: List[str]) -> None:
-                                                                                                                                                    """Initialize the weight tensor with strategy IDs."""
-                                                                                                                                                    self.strategy_ids = strategy_ids
-                                                                                                                                                    self.num_strategies = len(strategy_ids)
-
-                                                                                                                                                    # Initialize weight tensor with equal weights
-                                                                                                                                                    self.weight_tensor = np.ones((self.num_strategies, self.num_strategies)) / self.num_strategies
-                                                                                                                                                    self._normalize_weights()
-
-                                                                                                                                                        def _normalize_weights(self) -> None:
-                                                                                                                                                        """Normalize weights to ensure they sum to 1 for each phase."""
-                                                                                                                                                            if self.weight_tensor is None:
-                                                                                                                                                        return
-
-                                                                                                                                                        # Avoid division by zero if a column sums to 0
-                                                                                                                                                        col_sums = self.weight_tensor.sum(axis=0, keepdims=True)
-
-                                                                                                                                                        # Prevent division by zero if a column is all zeros
-                                                                                                                                                        col_sums[col_sums == 0] = 1.0
-
-                                                                                                                                                        self.weight_tensor = self.weight_tensor / col_sums
-
-                                                                                                                                                            def get_strategy_weights_for_phase(self, phase: MarketPhase) -> Dict[str, float]:
-                                                                                                                                                            """Retrieves the weights for all strategies given a specific market phase."""
-                                                                                                                                                                if phase.value not in self.phase_to_index:
-                                                                                                                                                            raise ValueError(f"Unknown market phase: {phase.value}")
-
-                                                                                                                                                            phase_idx = self.phase_to_index[phase.value]
-                                                                                                                                                            weights = self.weight_tensor[:, phase_idx]
-
-                                                                                                                                                        return {self.strategy_ids[i]: weights[i] for i in range(self.num_strategies)}
-
-                                                                                                                                                            def update_weights(self, identified_phase: MarketPhase, performance_feedback: Dict[str, Dict[str, float]]) -> None:
-                                                                                                                                                            """Adjusts strategy weights based on the identified market phase and performance feedback."""
-                                                                                                                                                            self.metrics['total_updates'] += 1
-                                                                                                                                                            self.metrics['last_update_time'] = time.time()
-
-                                                                                                                                                                if identified_phase != self.current_phase:
-                                                                                                                                                                self.metrics['phase_transitions'] += 1
-                                                                                                                                                                self.current_phase = identified_phase
-                                                                                                                                                                self.metrics['active_phase'] = self.current_phase.value
-                                                                                                                                                                self.logger.info(f"Market phase transitioned to: {identified_phase.value}")
-
-                                                                                                                                                                phase_idx = self.phase_to_index[identified_phase.value]
-
-                                                                                                                                                                # Apply decay to existing weights in the current phase
-                                                                                                                                                                self.weight_tensor[:, phase_idx] *= self.config.decay_factor
-
-                                                                                                                                                                # Update weights based on performance feedback
-                                                                                                                                                                    for strategy_id, feedback in performance_feedback.items():
-                                                                                                                                                                        if strategy_id in self.strategy_ids:
-                                                                                                                                                                        strategy_idx = self.strategy_ids.index(strategy_id)
-                                                                                                                                                                        performance_score = feedback.get('performance', 0.0)
-
-                                                                                                                                                                        # Update weight based on performance
-                                                                                                                                                                        self.weight_tensor[strategy_idx, phase_idx] += performance_score * self.config.learning_rate
-
-                                                                                                                                                                        # Normalize weights after updates
-                                                                                                                                                                        self._normalize_weights()
-
-def calculate_phase_tensor_signal(self, phase_signals: Union[List, np.ndarray], -> None
-                                                                                                                                                                        profit_vectors: Union[List, np.ndarray],
+    def process_phase_tensor_operation(self, phase_signals: np.ndarray,
+                                     weight_matrix: np.ndarray,
+                                     profit_vectors: np.ndarray,
                                                                                                                                                                             current_time: float = None) -> PhaseTensorResult:
                                                                                                                                                                             """
-                                                                                                                                                                            Calculate phase tensor and composite signal according to the mathematical framework.
+        Process complete phase tensor operation.
 
                                                                                                                                                                                 Args:
                                                                                                                                                                                 phase_signals: Strategy phase signals Φᵢ(t)
+            weight_matrix: Weight matrix ωᵢⱼ(t)
                                                                                                                                                                                 profit_vectors: Positional profit vectors Pᵢ(t)
                                                                                                                                                                                 current_time: Current time t
 
                                                                                                                                                                                     Returns:
-                                                                                                                                                                                    Phase tensor result with all calculations
+            PhaseTensorResult with all calculations
                                                                                                                                                                                     """
                                                                                                                                                                                         try:
-                                                                                                                                                                                            if not self.active:
-                                                                                                                                                                                        return PhaseTensorResult(success=False, error="System not active")
-
                                                                                                                                                                                             if current_time is None:
                                                                                                                                                                                             current_time = time.time()
 
-                                                                                                                                                                                            # Convert to numpy arrays
-                                                                                                                                                                                            phase_array = np.array(phase_signals)
-                                                                                                                                                                                            profit_array = np.array(profit_vectors)
+            # Calculate phase tensor
+            phase_tensor = self.calculate_phase_tensor(phase_signals, weight_matrix, current_time)
 
-                                                                                                                                                                                            # Ensure arrays have correct dimensions
-                                                                                                                                                                                                if len(phase_array) != self.num_strategies:
-                                                                                                                                                                                            return PhaseTensorResult(success=False, error="Phase signals dimension mismatch")
+            # Calculate momentum drift
+            momentum_drift = self.calculate_momentum_drift_correction(current_time, phase_signals)
 
-                                                                                                                                                                                                if len(profit_array) != self.num_strategies:
-                                                                                                                                                                                            return PhaseTensorResult(success=False, error="Profit vectors dimension mismatch")
+            # Update weights recursively
+            updated_weights = self.update_weights_recursively(weight_matrix, phase_signals)
 
-                                                                                                                                                                                            # Calculate phase tensor: Tᵢⱼ(t) = Φᵢ(t) ⋅ ωᵢⱼ(t) + ΔΨ(t)
-                                                                                                                                                                                            phase_tensor = self.phase_calculator.calculate_phase_tensor(
-                                                                                                                                                                                            phase_array, self.weight_tensor, current_time)
+            # Calculate composite signal
+            composite_signal = self.calculate_composite_signal(phase_tensor, profit_vectors)
 
-                                                                                                                                                                                            # Update weights recursively: ωᵢⱼ(t+1) = ωᵢⱼ(t) + α ⋅ (dΦⱼ/dt - dΦᵢ/dt)
-                                                                                                                                                                                            updated_weights = self.phase_calculator.update_weights_recursively(
-                                                                                                                                                                                            self.weight_tensor, phase_array, self.config.learning_rate)
-
-                                                                                                                                                                                            # Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
-                                                                                                                                                                                            composite_signal = self.phase_calculator.calculate_composite_signal(
-                                                                                                                                                                                            phase_tensor, profit_array)
-
-                                                                                                                                                                                            # Update metrics
-                                                                                                                                                                                            self.metrics['tensor_operations'] += 1
-                                                                                                                                                                                            self.metrics['composite_signals'] += 1
-
-                                                                                                                                                                                            # Update weight tensor
-                                                                                                                                                                                            self.weight_tensor = updated_weights
-
-                                                                                                                                                                                        return PhaseTensorResult(
+            # Prepare result
+            result = PhaseTensorResult(
                                                                                                                                                                                         success=True,
                                                                                                                                                                                         phase_tensor=phase_tensor,
                                                                                                                                                                                         composite_signal=composite_signal,
-                                                                                                                                                                                        momentum_drift=self.phase_calculator.calculate_momentum_drift_correction(current_time, phase_array),
-                                                                                                                                                                                        weight_updates=updated_weights - self.weight_tensor,
+                momentum_drift=momentum_drift,
+                weight_updates=updated_weights - weight_matrix,
                                                                                                                                                                                         data={
-                                                                                                                                                                                        'phase_signals': phase_signals,
-                                                                                                                                                                                        'profit_vectors': profit_vectors,
-                                                                                                                                                                                        'current_time': current_time,
-                                                                                                                                                                                        'num_strategies': self.num_strategies
-                                                                                                                                                                                        }
-                                                                                                                                                                                        )
+                    'phase_signals': phase_signals.tolist(),
+                    'original_weights': weight_matrix.tolist(),
+                    'updated_weights': updated_weights.tolist(),
+                    'profit_vectors': profit_vectors.tolist()
+                }
+            )
+
+            self.logger.info(f"Phase tensor operation completed successfully")
+            return result
 
                                                                                                                                                                                             except Exception as e:
-                                                                                                                                                                                            self.logger.error(f"Error in phase tensor calculation: {e}")
+            self.logger.error(f"Error processing phase tensor operation: {e}")
                                                                                                                                                                                         return PhaseTensorResult(success=False, error=str(e))
 
-                                                                                                                                                                                            def get_status(self) -> Dict[str, Any]:
+    def get_phase_tensor_status(self) -> Dict[str, Any]:
+        """Get phase tensor calculator status."""
+        try:
                                                                                                                                                                                         return {
-                                                                                                                                                                                        'active': self.active,
-                                                                                                                                                                                        'initialized': self.initialized,
-                                                                                                                                                                                        'config': self.config.__dict__,
-                                                                                                                                                                                        'metrics': self.metrics,
-                                                                                                                                                                                        'current_phase': self.current_phase.value if self.current_phase else None,
-                                                                                                                                                                                        'num_strategies': self.num_strategies,
-                                                                                                                                                                                        'weight_tensor_shape': self.weight_tensor.shape if self.weight_tensor is not None else None,
-                                                                                                                                                                                        }
-
-                                                                                                                                                                                            def process_strategy_data(self, data: Union[List, Tuple, np.ndarray]) -> float:
-                                                                                                                                                                                            """Process strategy data and return a composite signal."""
-                                                                                                                                                                                                try:
-                                                                                                                                                                                                # This is a simplified interface for backward compatibility
-                                                                                                                                                                                                    if isinstance(data, (list, tuple)) and len(data) >= 2:
-                                                                                                                                                                                                    phase_signals = data[0]
-                                                                                                                                                                                                    profit_vectors = data[1]
-                                                                                                                                                                                                    current_time = data[2] if len(data) > 2 else time.time()
-
-                                                                                                                                                                                                    result = self.calculate_phase_tensor_signal(phase_signals, profit_vectors, current_time)
-                                                                                                                                                                                                return result.composite_signal if result.success else 0.0
-                                                                                                                                                                                                    else:
-                                                                                                                                                                                                    self.logger.warning("Invalid data format for process_strategy_data")
-                                                                                                                                                                                                return 0.0
+                'enabled': self.config.enabled,
+                'ferris_tick_history_size': len(self.ferris_tick_history),
+                'has_previous_signals': self.previous_phase_signals is not None,
+                'config': {
+                    'learning_rate': self.config.learning_rate,
+                    'momentum_drift_coefficient': self.config.momentum_drift_coefficient,
+                    'entropy_correction_factor': self.config.entropy_correction_factor,
+                    'ferris_tick_window': self.config.ferris_tick_window
+                }
+            }
 
                                                                                                                                                                                                     except Exception as e:
-                                                                                                                                                                                                    self.logger.error(f"Error processing strategy data: {e}")
-                                                                                                                                                                                                return 0.0
+            self.logger.error(f"Error getting phase tensor status: {e}")
+            return {'error': str(e)}
 
-
-                                                                                                                                                                                                    def create_multi_phase_strategy_weight_tensor(config: Optional[Dict[str, Any]] = None) -> MultiPhaseStrategyWeightTensor:
-                                                                                                                                                                                                    """Create a multi-phase strategy weight tensor instance."""
-                                                                                                                                                                                                return MultiPhaseStrategyWeightTensor(config)
+# Factory function
+def create_phase_tensor_calculator(config: Optional[PhaseTensorConfig] = None) -> PhaseTensorCalculator:
+    """Create a Phase Tensor Calculator instance."""
+    return PhaseTensorCalculator(config)

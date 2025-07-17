@@ -25,9 +25,7 @@ Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
 
     logger = logging.getLogger(__name__)
 
-
         class GateState(Enum):
-    """Class for Schwabot trading functionality."""
         """Zygot-Zalgo gate states."""
         CLOSED = "closed"           # Gate is closed
         OPEN = "open"              # Gate is open
@@ -35,17 +33,13 @@ Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
         CONFLICTED = "conflicted"  # Key conflict detected
         RESET = "reset"            # Gate reset required
 
-
             class KeyType(Enum):
-    """Class for Schwabot trading functionality."""
             """Key types for dual-key system."""
             ZYGOT = "zygot"    # Recursive root entropy stabilizer
             ZALGO = "zalgo"    # Phase inversion entropy spike detector
 
-
             @dataclass
                 class DualKeyResult:
-    """Class for Schwabot trading functionality."""
                 """Result of dual-key gate evaluation."""
                 timestamp: float
                 gate_state: GateState
@@ -56,10 +50,8 @@ Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
                 confidence: float
                 metadata: Dict[str, Any] = field(default_factory=dict)
 
-
                 @dataclass
                     class HashEchoResult:
-    """Class for Schwabot trading functionality."""
                     """Result of hash echo mirroring."""
                     timestamp: float
                     volume_hash: str
@@ -69,9 +61,7 @@ Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
                     phase_alignment: float
                     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
                         class ZygotZalgoEntropyDualKeyGate:
-    """Class for Schwabot trading functionality."""
                         """
                         Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
 
@@ -80,7 +70,6 @@ Zygot-Zalgo Entropy Dual Key Gate - Zygotic Hash Duality & Zalgo Field Access
                             - Hash Echo Mirror: H_echo_zygot = SHA256(H_volume) ⊕ SHA256(H_momentum)
                             - Forms recursive security lock + prediction logic layer using 2-key entropy mirroring
                             """
-
 def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
                                 """Initialize the Zygot-Zalgo Entropy Dual Key Gate."""
                                 self.config = config or self._default_config()
@@ -144,7 +133,6 @@ def _initialize_gate(self) -> None:
 
                                         self.initialized = True
                                         self.logger.info("[SUCCESS] Zygot-Zalgo Entropy Dual Key Gate initialized successfully")
-
                                             except Exception as e:
                                             self.logger.error(f"[FAIL] Error initializing Zygot-Zalgo Entropy Dual Key Gate: {e}")
                                             self.initialized = False
@@ -190,57 +178,42 @@ def _initialize_gate(self) -> None:
                                                                     zk_entropy /= total_points
 
                                                                 return zk_entropy
-
                                                                     except Exception as e:
                                                                     self.logger.error(f"Error computing dual key collapse gate: {e}")
                                                                 return 0.0
 
-def compute_hash_echo_mirror(self, volume_data: np.ndarray, -> None
-                                                                    momentum_data: np.ndarray) -> HashEchoResult:
+    def compute_hash_echo_mirror(self, volume_data: np.ndarray, momentum_data: np.ndarray) -> HashEchoResult:
                                                                     """
                                                                     Compute hash echo mirror: H_echo_zygot = SHA256(H_volume) ⊕ SHA256(H_momentum)
 
                                                                         Args:
-                                                                        volume_data: Volume data array
-                                                                        momentum_data: Momentum data array
+            volume_data: Input volume data array
+            momentum_data: Input momentum data array
 
                                                                             Returns:
-                                                                            Hash echo mirror result
+            HashEchoResult with echo hash and related metrics
                                                                             """
                                                                                 try:
-                                                                                # Compute volume hash: SHA256(H_volume)
-                                                                                volume_str = f"{np.mean(volume_data):.6f}{np.std(volume_data):.6f}{len(volume_data)}"
-                                                                                self.zygot_sha256.update(volume_str.encode())
-                                                                                volume_hash = self.zygot_sha256.hexdigest()
-
-                                                                                # Compute momentum hash: SHA256(H_momentum)
-                                                                                momentum_str = f"{np.mean(momentum_data):.6f}{np.std(momentum_data):.6f}{len(momentum_data)}"
-                                                                                self.zalgo_sha256.update(momentum_str.encode())
-                                                                                momentum_hash = self.zalgo_sha256.hexdigest()
-
-                                                                                # Compute XOR of hashes: H_echo_zygot = SHA256(H_volume) ⊕ SHA256(H_momentum)
-                                                                                volume_int = int(volume_hash[:16], 16)
-                                                                                momentum_int = int(momentum_hash[:16], 16)
-                                                                                echo_int = volume_int ^ momentum_int
-                                                                                echo_hash = f"{echo_int:016x}"
-
-                                                                                # Compute echo strength (normalized)
-                                                                                echo_strength = (echo_int / (16 ** 16)) % 1.0
-
-                                                                                # Compute phase alignment between volume and momentum
-                                                                                volume_phase = np.angle(np.mean(volume_data) + 1j * np.std(volume_data))
-                                                                                momentum_phase = np.angle(np.mean(momentum_data) + 1j * np.std(momentum_data))
-                                                                                phase_alignment = np.cos(volume_phase - momentum_phase)
-
+            timestamp = time.time()
+            # Hash volume and momentum data
+            volume_hash = hashlib.sha256(volume_data.tobytes()).hexdigest()
+            momentum_hash = hashlib.sha256(momentum_data.tobytes()).hexdigest()
+            # XOR the hashes (as integers)
+            echo_hash_int = int(volume_hash, 16) ^ int(momentum_hash, 16)
+            echo_hash = f"{echo_hash_int:064x}"
+            # Echo strength: normalized hamming weight
+            echo_strength = bin(echo_hash_int).count('1') / 256.0
+            # Phase alignment: normalized dot product
+            phase_alignment = float(np.dot(volume_data, momentum_data) / (np.linalg.norm(volume_data) * np.linalg.norm(momentum_data) + 1e-8))
                                                                             return HashEchoResult(
-                                                                            timestamp=time.time(),
+                timestamp=timestamp,
                                                                             volume_hash=volume_hash,
                                                                             momentum_hash=momentum_hash,
                                                                             echo_hash=echo_hash,
                                                                             echo_strength=echo_strength,
-                                                                            phase_alignment=phase_alignment
+                phase_alignment=phase_alignment,
+                metadata={}
                                                                             )
-
                                                                                 except Exception as e:
                                                                                 self.logger.error(f"Error computing hash echo mirror: {e}")
                                                                             return HashEchoResult(
@@ -249,201 +222,11 @@ def compute_hash_echo_mirror(self, volume_data: np.ndarray, -> None
                                                                             momentum_hash="",
                                                                             echo_hash="",
                                                                             echo_strength=0.0,
-                                                                            phase_alignment=0.0
-                                                                            )
-
-                                                                                def evaluate_zygot_entropy(self, data: np.ndarray) -> float:
-                                                                                """
-                                                                                Evaluate Zygot entropy (recursive root entropy stabilizer).
-
-                                                                                    Args:
-                                                                                    data: Input data array
-
-                                                                                        Returns:
-                                                                                        Zygot entropy value
-                                                                                        """
-                                                                                            try:
-                                                                                            # Compute Shannon entropy for Zygot
-                                                                                                if len(data) == 0:
-                                                                                            return 0.0
-
-                                                                                            # Normalize data to [0, 1]
-                                                                                            data_normalized = (data - np.min(data)) / (np.max(data) - np.min(data) + 1e-8)
-
-                                                                                            # Compute histogram
-                                                                                            hist, _ = np.histogram(data_normalized, bins=min(20, len(data)), range=(0, 1))
-                                                                                            hist = hist / np.sum(hist)
-
-                                                                                            # Compute Shannon entropy: S = -Σ pᵢ log(pᵢ)
-                                                                                            entropy = -np.sum(hist * np.log2(hist + 1e-8))
-
-                                                                                            # Normalize to [0, 1]
-                                                                                            max_entropy = np.log2(len(hist))
-                                                                                            normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
-
-                                                                                        return normalized_entropy
-
-                                                                                            except Exception as e:
-                                                                                            self.logger.error(f"Error evaluating Zygot entropy: {e}")
-                                                                                        return 0.0
-
-                                                                                            def evaluate_zalgo_entropy(self, data: np.ndarray) -> float:
-                                                                                            """
-                                                                                            Evaluate Zalgo entropy (phase inversion entropy spike detector).
-
-                                                                                                Args:
-                                                                                                data: Input data array
-
-                                                                                                    Returns:
-                                                                                                    Zalgo entropy value
-                                                                                                    """
-                                                                                                        try:
-                                                                                                            if len(data) < 2:
-                                                                                                        return 0.0
-
-                                                                                                        # Compute phase differences
-                                                                                                        phase_diffs = np.diff(data)
-
-                                                                                                        # Detect spikes (sudden changes)
-                                                                                                        spike_threshold = np.std(phase_diffs) * 2
-                                                                                                        spikes = np.abs(phase_diffs) > spike_threshold
-
-                                                                                                        # Compute spike entropy
-                                                                                                        spike_ratio = np.sum(spikes) / len(spikes)
-
-                                                                                                        # Compute phase inversion entropy
-                                                                                                        # Higher entropy when there are many phase inversions
-                                                                                                        inversions = np.sum(np.diff(np.sign(phase_diffs)) != 0)
-                                                                                                        inversion_entropy = inversions / len(phase_diffs)
-
-                                                                                                        # Combine spike and inversion entropy
-                                                                                                        zalgo_entropy = (spike_ratio + inversion_entropy) / 2.0
-
-                                                                                                    return zalgo_entropy
-
-                                                                                                        except Exception as e:
-                                                                                                        self.logger.error(f"Error evaluating Zalgo entropy: {e}")
-                                                                                                    return 0.0
-
-def evaluate_dual_key_gate(self, volume_data: np.ndarray, -> None
-                                                                                                        momentum_data: np.ndarray) -> DualKeyResult:
-                                                                                                        """
-                                                                                                        Evaluate the dual-key gate with volume and momentum data.
-
-                                                                                                            Args:
-                                                                                                            volume_data: Volume data array
-                                                                                                            momentum_data: Momentum data array
-
-                                                                                                                Returns:
-                                                                                                                Dual key evaluation result
-                                                                                                                """
-                                                                                                                    try:
-                                                                                                                    # Evaluate Zygot entropy
-                                                                                                                    zygot_entropy = self.evaluate_zygot_entropy(volume_data)
-
-                                                                                                                    # Evaluate Zalgo entropy
-                                                                                                                    zalgo_entropy = self.evaluate_zalgo_entropy(momentum_data)
-
-                                                                                                                    # Compute dual key collapse gate
-                                                                                                                    combined_data = np.concatenate([volume_data, momentum_data])
-                                                                                                                    dual_key_entropy = self.compute_dual_key_collapse_gate(combined_data)
-
-                                                                                                                    # Compute combined entropy
-                                                                                                                    combined_entropy = (zygot_entropy + zalgo_entropy + dual_key_entropy) / 3.0
-
-                                                                                                                    # Determine gate state
-                                                                                                                    if (zygot_entropy >= self.zygot_entropy_threshold and
-                                                                                                                    zalgo_entropy >= self.zalgo_entropy_threshold and
-                                                                                                                        combined_entropy >= self.combined_threshold):
-                                                                                                                        gate_state = GateState.OPEN
-                                                                                                                        access_granted = True
-                                                                                                                        elif (zygot_entropy >= self.zygot_entropy_threshold or
-                                                                                                                            zalgo_entropy >= self.zalgo_entropy_threshold):
-                                                                                                                            gate_state = GateState.PARTIAL
-                                                                                                                            access_granted = False
-                                                                                                                                elif abs(zygot_entropy - zalgo_entropy) > 0.5:
-                                                                                                                                gate_state = GateState.CONFLICTED
-                                                                                                                                access_granted = False
-                                                                                                                                    else:
-                                                                                                                                    gate_state = GateState.CLOSED
-                                                                                                                                    access_granted = False
-
-                                                                                                                                    # Compute confidence
-                                                                                                                                    confidence = min(1.0, combined_entropy)
-
-                                                                                                                                    # Create result
-                                                                                                                                    result = DualKeyResult(
-                                                                                                                                    timestamp=time.time(),
-                                                                                                                                    gate_state=gate_state,
-                                                                                                                                    zygot_entropy=zygot_entropy,
-                                                                                                                                    zalgo_entropy=zalgo_entropy,
-                                                                                                                                    combined_entropy=combined_entropy,
-                                                                                                                                    access_granted=access_granted,
-                                                                                                                                    confidence=confidence
-                                                                                                                                    )
-
-                                                                                                                                    # Store result
-                                                                                                                                    self.evaluation_history.append(result)
-                                                                                                                                    self.gate_state = gate_state
-
-                                                                                                                                    # Keep history manageable
-                                                                                                                                    max_history = 1000
-                                                                                                                                        if len(self.evaluation_history) > max_history:
-                                                                                                                                        self.evaluation_history = self.evaluation_history[-max_history:]
-
-                                                                                                                                    return result
-
-                                                                                                                                        except Exception as e:
-                                                                                                                                        self.logger.error(f"Error evaluating dual key gate: {e}")
-                                                                                                                                    return DualKeyResult(
-                                                                                                                                    timestamp=time.time(),
-                                                                                                                                    gate_state=GateState.CLOSED,
-                                                                                                                                    zygot_entropy=0.0,
-                                                                                                                                    zalgo_entropy=0.0,
-                                                                                                                                    combined_entropy=0.0,
-                                                                                                                                    access_granted=False,
-                                                                                                                                    confidence=0.0
-                                                                                                                                    )
-
-                                                                                                                                        def get_gate_summary(self) -> Dict[str, Any]:
-                                                                                                                                        """Get comprehensive gate summary."""
-                                                                                                                                            if not self.evaluation_history:
-                                                                                                                                        return {'status': 'no_evaluations'}
-
-                                                                                                                                        # Compute gate statistics
-                                                                                                                                        zygot_entropies = [r.zygot_entropy for r in self.evaluation_history]
-                                                                                                                                        zalgo_entropies = [r.zalgo_entropy for r in self.evaluation_history]
-                                                                                                                                        combined_entropies = [r.combined_entropy for r in self.evaluation_history]
-                                                                                                                                        confidences = [r.confidence for r in self.evaluation_history]
-
-                                                                                                                                        # Count gate states
-                                                                                                                                        state_counts = {}
-                                                                                                                                            for state in GateState:
-                                                                                                                                            state_counts[state.value] = sum(1 for r in self.evaluation_history if r.gate_state == state)
-
-                                                                                                                                        return {
-                                                                                                                                        'total_evaluations': len(self.evaluation_history),
-                                                                                                                                        'current_gate_state': self.gate_state.value,
-                                                                                                                                        'mean_zygot_entropy': np.mean(zygot_entropies),
-                                                                                                                                        'mean_zalgo_entropy': np.mean(zalgo_entropies),
-                                                                                                                                        'mean_combined_entropy': np.mean(combined_entropies),
-                                                                                                                                        'mean_confidence': np.mean(confidences),
-                                                                                                                                        'state_distribution': state_counts,
-                                                                                                                                        'access_granted_ratio': sum(1 for r in self.evaluation_history if r.access_granted) / len(self.evaluation_history),
-                                                                                                                                        'initialized': self.initialized
-                                                                                                                                        }
-
-def reset_gate(self) -> None:
-                                                                                                                                            """Reset the dual-key gate."""
-                                                                                                                                            self.gate_state = GateState.RESET
-                                                                                                                                            self.evaluation_history.clear()
-                                                                                                                                            self.echo_history.clear()
-                                                                                                                                            self.zygot_key = self._generate_key()
-                                                                                                                                            self.zalgo_key = self._generate_key()
-                                                                                                                                            self.logger.info("Zygot-Zalgo Entropy Dual Key Gate reset")
-
+                phase_alignment=0.0,
+                metadata={"error": str(e)}
+            )
 
                                                                                                                                             # Factory function
                                                                                                                                                 def create_zygot_zalgo_entropy_dual_key_gate(config: Optional[Dict[str, Any]] = None) -> ZygotZalgoEntropyDualKeyGate:
-                                                                                                                                                """Create a Zygot-Zalgo Entropy Dual Key Gate instance."""
+    """Create a ZygotZalgoEntropyDualKeyGate instance."""
                                                                                                                                             return ZygotZalgoEntropyDualKeyGate(config)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Phantom Band Navigator Strategy
 ==============================
@@ -92,7 +93,7 @@ class PhantomBandNavigator:
             "volatile": 0
         }
         
-        logger.info("🔮 Phantom Band Navigator initialized")
+        logger.info("Phantom Band Navigator initialized")
     
     def analyze_market_condition(self, tick_prices: List[float]) -> str:
         """Analyze current market condition based on price action."""
@@ -198,98 +199,65 @@ class PhantomBandNavigator:
                 return None
             
             # Check confidence threshold
-            if phantom_zone.confidence_score < self.phantom_threshold:
-                logger.debug(f"🔮 Phantom detected but confidence too low: {phantom_zone.confidence_score:.4f}")
+            if phantom_zone.confidence < self.phantom_threshold:
                 return None
             
-            # Find similar patterns
-            similar_phantoms = self.detector.find_similar_phantoms(tick_window, top_k=3)
-            
-            # Check if similar patterns were profitable
-            profitable_similar = 0
-            total_similar = len(similar_phantoms)
-            
-            for phantom, similarity in similar_phantoms:
-                if similarity > self.similarity_threshold and phantom.profit_actual > 0:
-                    profitable_similar += 1
-            
-            # Require at least 2/3 similar patterns to be profitable
-            if total_similar > 0 and profitable_similar / total_similar < 0.67:
-                logger.debug(f"🔮 Similar patterns not profitable enough: {profitable_similar}/{total_similar}")
-                return None
-            
-            # Calculate entry price (current tick)
+            # Calculate entry price
             entry_price = tick_window[-1]
             
             # Calculate stop loss and take profit
             stop_loss, take_profit = self.calculate_stop_loss_take_profit(
-                entry_price, phantom_zone.confidence_score, market_condition
+                entry_price, phantom_zone.confidence, market_condition
             )
             
             # Calculate position size
             position_size = self.calculate_position_size(
-                entry_price, stop_loss, phantom_zone.confidence_score, available_balance
+                entry_price, stop_loss, phantom_zone.confidence, available_balance
             )
             
-            if position_size <= 0:
-                logger.debug("🔮 Position size too small")
-                return None
+            # Determine risk level
+            risk_level = self._determine_risk_level(phantom_zone.confidence)
             
-            # Determine signal type based on Phantom analysis
-            signal_type = "BUY"  # Default to BUY for Phantom zones
-            
-            # Create Phantom Signal
+            # Create signal
             signal = PhantomSignal(
                 symbol=symbol,
-                signal_type=signal_type,
+                signal_type="BUY",  # Default to BUY for Phantom strategy
                 entry_price=entry_price,
-                exit_price=entry_price,  # Will be updated on exit
-                confidence=phantom_zone.confidence_score,
+                exit_price=take_profit,
+                confidence=phantom_zone.confidence,
                 phantom_zone=phantom_zone,
                 timestamp=time.time(),
-                risk_level=self._determine_risk_level(phantom_zone.confidence_score),
+                risk_level=risk_level,
                 position_size=position_size,
                 stop_loss=stop_loss,
                 take_profit=take_profit,
                 market_condition=market_condition,
                 strategy_metadata={
-                    "similar_phantoms": len(similar_phantoms),
-                    "profitable_similar": profitable_similar,
-                    "entropy_delta": phantom_zone.entropy_delta,
-                    "flatness_score": phantom_zone.flatness_score,
+                    "phantom_zone_id": phantom_zone.zone_id,
                     "similarity_score": phantom_zone.similarity_score,
-                    "phantom_potential": phantom_zone.phantom_potential
+                    "entropy_value": phantom_zone.entropy_value
                 }
             )
-            
-            logger.info(f"🔮 Phantom Signal generated for {symbol}")
-            logger.info(f"  Entry: ${entry_price:.2f}, Confidence: {phantom_zone.confidence_score:.4f}")
-            logger.info(f"  Stop Loss: ${stop_loss:.2f}, Take Profit: ${take_profit:.2f}")
-            logger.info(f"  Position Size: {position_size:.4f}")
             
             return signal
             
         except Exception as e:
-            logger.error(f"❌ Error in Phantom Band Navigator: {e}")
+            logger.error(f"Error in phantom band navigator: {e}")
             return None
     
     def _determine_risk_level(self, confidence: float) -> str:
-        """Determine risk level based on confidence score."""
+        """Determine risk level based on confidence."""
         if confidence > 0.9:
-            return "very_low"
-        elif confidence > 0.8:
             return "low"
         elif confidence > 0.7:
             return "medium"
-        elif confidence > 0.6:
-            return "high"
         else:
-            return "very_high"
+            return "high"
     
     def execute_signal(self, signal: PhantomSignal, current_price: float) -> Dict[str, Any]:
-        """Execute a Phantom trading signal."""
+        """Execute a trading signal."""
         try:
-            # Check if we should exit existing position
+            # Check existing positions
             if signal.symbol in self.active_positions:
                 position = self.active_positions[signal.symbol]
                 
@@ -312,7 +280,7 @@ class PhantomBandNavigator:
             return {"action": "none", "reason": "no_action_taken"}
             
         except Exception as e:
-            logger.error(f"❌ Error executing signal: {e}")
+            logger.error(f"Error executing signal: {e}")
             return {"action": "error", "reason": str(e)}
     
     def _enter_position(self, signal: PhantomSignal, current_price: float) -> Dict[str, Any]:
@@ -331,7 +299,7 @@ class PhantomBandNavigator:
             self.active_positions[signal.symbol] = position
             self.signal_history.append(signal)
             
-            logger.info(f"🔮 Entered position for {signal.symbol} at ${current_price:.2f}")
+            logger.info(f"Entered position for {signal.symbol} at ${current_price:.2f}")
             
             return {
                 "action": "enter",
@@ -343,7 +311,7 @@ class PhantomBandNavigator:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error entering position: {e}")
+            logger.error(f"Error entering position: {e}")
             return {"action": "error", "reason": str(e)}
     
     def _exit_position(self, symbol: str, current_price: float, exit_reason: str) -> Dict[str, Any]:
@@ -388,7 +356,7 @@ class PhantomBandNavigator:
             # Remove from active positions
             del self.active_positions[symbol]
             
-            logger.info(f"🔮 Exited position for {symbol} at ${current_price:.2f}")
+            logger.info(f"Exited position for {symbol} at ${current_price:.2f}")
             logger.info(f"  Profit: ${profit:.4f}, Reason: {exit_reason}")
             
             return {
@@ -400,7 +368,7 @@ class PhantomBandNavigator:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error exiting position: {e}")
+            logger.error(f"Error exiting position: {e}")
             return {"action": "error", "reason": str(e)}
     
     def _should_exit_phantom(self, position: Dict[str, Any], current_price: float) -> bool:
@@ -425,7 +393,7 @@ class PhantomBandNavigator:
             return False
             
         except Exception as e:
-            logger.error(f"❌ Error checking Phantom exit: {e}")
+            logger.error(f"Error checking Phantom exit: {e}")
             return False
     
     def get_strategy_statistics(self) -> Dict[str, Any]:
@@ -459,7 +427,7 @@ class PhantomBandNavigator:
         for condition in self.market_conditions:
             self.market_conditions[condition] = 0
         
-        logger.info("🔮 Strategy state reset")
+        logger.info("Strategy state reset")
 
 def main():
     """Test the Phantom Band Navigator strategy."""
@@ -484,7 +452,7 @@ def main():
         ticks.append(new_price)
     
     # Test strategy
-    print("🔮 Testing Phantom Band Navigator")
+    print("Testing Phantom Band Navigator")
     print("=" * 50)
     
     available_balance = 10000.0
@@ -497,22 +465,10 @@ def main():
         signal = navigator.phantom_band_navigator("BTC", window, available_balance)
         
         if signal:
-            # Execute signal
-            result = navigator.execute_signal(signal, current_price)
-            print(f"Signal executed: {result['action']}")
-            
-            if result['action'] == 'enter':
-                print(f"  Entry: ${result['price']:.2f}")
-                print(f"  Size: {result['size']:.4f}")
-            elif result['action'] == 'exit':
-                print(f"  Exit: ${result['price']:.2f}")
-                print(f"  Profit: ${result['profit']:.4f}")
-    
-    # Get statistics
-    stats = navigator.get_strategy_statistics()
-    print("\n📊 Strategy Statistics:")
-    for key, value in stats.items():
-        print(f"  {key}: {value}")
+            print(f"Signal generated: {signal.signal_type} at ${current_price:.2f}")
+            print(f"Confidence: {signal.confidence:.3f}")
+            print(f"Position size: {signal.position_size:.4f}")
+            print("-" * 30)
 
 if __name__ == "__main__":
     main() 

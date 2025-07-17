@@ -3,22 +3,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Lantern Core Integration Module
-================================
-Provides lantern core integration functionality for the Schwabot trading system.
+Lantern Core Integration - Advanced Signal Processing
+====================================================
 
-    Main Classes:
-    - LanternMode: Core lanternmode functionality
-    - ZoneType: Core zonetype functionality
-    - TickZone: Core tickzone functionality
-
-        Key Functions:
-        - __init__:   init   operation
-        - _default_config:  default config operation
-        - create_tick_zone: create tick zone operation
-        - _calculate_zone_strength:  calculate zone strength operation
+    Implements lantern-based signal processing for trading:
+    - detect_signal_pattern: detect signal pattern operation
         - detect_dip_pattern: detect dip pattern operation
-
         """
 
         import logging
@@ -42,29 +32,21 @@ Provides lantern core integration functionality for the Schwabot trading system.
                 MATH_INFRASTRUCTURE_AVAILABLE = False
                 logger.warning("Math infrastructure not available")
 
-
                     class Status(Enum):
-    """Class for Schwabot trading functionality."""
                     """System status enumeration."""
-
                     ACTIVE = "active"
                     INACTIVE = "inactive"
                     ERROR = "error"
                     PROCESSING = "processing"
 
-
                         class Mode(Enum):
-    """Class for Schwabot trading functionality."""
                         """Operation mode enumeration."""
-
                         NORMAL = "normal"
                         DEBUG = "debug"
                         TEST = "test"
                         PRODUCTION = "production"
 
-
                             class LanternState(Enum):
-    """Class for Schwabot trading functionality."""
                             """Lantern state enumeration."""
                             DARK = "dark"
                             DIM = "dim"
@@ -72,41 +54,31 @@ Provides lantern core integration functionality for the Schwabot trading system.
                             FLASHING = "flashing"
                             PULSING = "pulsing"
 
-
                                 class ZoneType(Enum):
-    """Class for Schwabot trading functionality."""
                                 """Zone type enumeration."""
                                 SUPPORT = "support"
                                 RESISTANCE = "resistance"
                                 NEUTRAL = "neutral"
                                 BREAKOUT = "breakout"
 
-
                                 @dataclass
                                     class Config:
-    """Class for Schwabot trading functionality."""
                                     """Configuration data class."""
-
                                     enabled: bool = True
                                     timeout: float = 30.0
                                     retries: int = 3
                                     debug: bool = False
 
-
                                     @dataclass
                                         class Result:
-    """Class for Schwabot trading functionality."""
                                         """Result data class."""
-
                                         success: bool = False
                                         data: Optional[Dict[str, Any]] = None
                                         error: Optional[str] = None
                                         timestamp: float = field(default_factory=time.time)
 
-
                                         @dataclass
                                             class LanternComponent:
-    """Class for Schwabot trading functionality."""
                                             """Individual lantern component."""
                                             name: str
                                             state: LanternState = LanternState.DARK
@@ -116,10 +88,8 @@ Provides lantern core integration functionality for the Schwabot trading system.
                                             last_updated: float = 0.0
                                             signal_strength: float = 0.0
 
-
                                             @dataclass
                                                 class TickZone:
-    """Class for Schwabot trading functionality."""
                                                 """Tick zone data structure."""
                                                 zone_type: ZoneType
                                                 price_level: float
@@ -128,10 +98,8 @@ Provides lantern core integration functionality for the Schwabot trading system.
                                                 timestamp: float
                                                 duration: float = 0.0
 
-
                                                 @dataclass
                                                     class LanternMetrics:
-    """Class for Schwabot trading functionality."""
                                                     """Lantern core integration metrics."""
                                                     total_lanterns: int = 0
                                                     active_lanterns: int = 0
@@ -141,9 +109,7 @@ Provides lantern core integration functionality for the Schwabot trading system.
                                                     total_signal_strength: float = 0.0
                                                     last_updated: float = 0.0
 
-
                                                         class LanternMode:
-    """Class for Schwabot trading functionality."""
                                                         """
                                                         LanternMode Implementation
                                                         Provides core lantern core integration functionality.
@@ -223,12 +189,6 @@ Provides lantern core integration functionality for the Schwabot trading system.
 
                                                                                                 try:
                                                                                                 self.active = True
-                                                                                                # Activate all lanterns
-                                                                                                    for lantern in self.lanterns.values():
-                                                                                                    lantern.state = LanternState.DIM
-                                                                                                    lantern.brightness = 0.3
-                                                                                                    lantern.last_updated = time.time()
-
                                                                                                     self.logger.info(f"✅ {self.__class__.__name__} activated")
                                                                                                 return True
                                                                                                     except Exception as e:
@@ -239,244 +199,222 @@ Provides lantern core integration functionality for the Schwabot trading system.
                                                                                                     """Deactivate the system."""
                                                                                                         try:
                                                                                                         self.active = False
-                                                                                                        # Deactivate all lanterns
-                                                                                                            for lantern in self.lanterns.values():
-                                                                                                            lantern.state = LanternState.DARK
-                                                                                                            lantern.brightness = 0.0
-                                                                                                            lantern.last_updated = time.time()
-
                                                                                                             self.logger.info(f"✅ {self.__class__.__name__} deactivated")
                                                                                                         return True
                                                                                                             except Exception as e:
                                                                                                             self.logger.error(f"❌ Error deactivating {self.__class__.__name__}: {e}")
                                                                                                         return False
 
-                                                                                                            def get_status(self) -> Dict[str, Any]:
-                                                                                                            """Get system status."""
-                                                                                                            self._update_metrics()
-                                                                                                        return {
-                                                                                                        'active': self.active,
-                                                                                                        'initialized': self.initialized,
-                                                                                                        'config': self.config,
-                                                                                                        'metrics': {
-                                                                                                        'total_lanterns': self.metrics.total_lanterns,
-                                                                                                        'active_lanterns': self.metrics.active_lanterns,
-                                                                                                        'bright_lanterns': self.metrics.bright_lanterns,
-                                                                                                        'flashing_lanterns': self.metrics.flashing_lanterns,
-                                                                                                        'average_brightness': self.metrics.average_brightness,
-                                                                                                        'total_signal_strength': self.metrics.total_signal_strength,
-                                                                                                        },
-                                                                                                        'lanterns': {
-                                                                                                        name: {
-                                                                                                        'state': lantern.state.value,
-                                                                                                        'brightness': lantern.brightness,
-                                                                                                        'energy_level': lantern.energy_level,
-                                                                                                        'pulse_rate': lantern.pulse_rate,
-                                                                                                        'last_updated': lantern.last_updated,
-                                                                                                        'signal_strength': lantern.signal_strength
-                                                                                                        }
-                                                                                                        for name, lantern in self.lanterns.items()
-                                                                                                        },
-                                                                                                        'tick_zones': len(self.tick_zones)
-                                                                                                        }
-
-                                                                                                            def add_lantern(self, lantern_name: str) -> bool:
+    def add_lantern(self, name: str) -> bool:
                                                                                                             """Add a new lantern component."""
                                                                                                                 try:
-                                                                                                                    if lantern_name not in self.lanterns:
-                                                                                                                    self.lanterns[lantern_name] = LanternComponent(name=lantern_name)
+            if name in self.lanterns:
+                self.logger.warning(f"Lantern {name} already exists")
+                return False
+
+            lantern = LanternComponent(name=name)
+            self.lanterns[name] = lantern
                                                                                                                     self.metrics.total_lanterns += 1
-                                                                                                                    self.logger.info(f"✅ Added lantern: {lantern_name}")
+
+            self.logger.info(f"✅ Added lantern: {name}")
                                                                                                                 return True
-                                                                                                                    else:
-                                                                                                                    self.logger.warning(f"Lantern {lantern_name} already exists")
-                                                                                                                return False
+
                                                                                                                     except Exception as e:
-                                                                                                                    self.logger.error(f"❌ Error adding lantern {lantern_name}: {e}")
+            self.logger.error(f"❌ Error adding lantern {name}: {e}")
                                                                                                                 return False
 
-                                                                                                                    def remove_lantern(self, lantern_name: str) -> bool:
+    def remove_lantern(self, name: str) -> bool:
                                                                                                                     """Remove a lantern component."""
                                                                                                                         try:
-                                                                                                                            if lantern_name in self.lanterns:
-                                                                                                                            del self.lanterns[lantern_name]
+            if name not in self.lanterns:
+                self.logger.warning(f"Lantern {name} not found")
+                return False
+
+            del self.lanterns[name]
                                                                                                                             self.metrics.total_lanterns -= 1
-                                                                                                                            self.logger.info(f"✅ Removed lantern: {lantern_name}")
+
+            self.logger.info(f"✅ Removed lantern: {name}")
                                                                                                                         return True
-                                                                                                                            else:
-                                                                                                                            self.logger.warning(f"Lantern {lantern_name} not found")
-                                                                                                                        return False
+
                                                                                                                             except Exception as e:
-                                                                                                                            self.logger.error(f"❌ Error removing lantern {lantern_name}: {e}")
+            self.logger.error(f"❌ Error removing lantern {name}: {e}")
                                                                                                                         return False
 
-def update_lantern_state(self, lantern_name: str, state: LanternState, brightness: float = None, -> None
-                                                                                                                            signal_strength: float = None) -> bool:
-                                                                                                                            """Update lantern state and properties."""
-                                                                                                                                try:
-                                                                                                                                    if lantern_name in self.lanterns:
-                                                                                                                                    lantern = self.lanterns[lantern_name]
+    def update_lantern_state(self, name: str, state: LanternState, brightness: float = None) -> bool:
+        """Update lantern state and brightness."""
+        try:
+            if name not in self.lanterns:
+                self.logger.warning(f"Lantern {name} not found")
+                return False
+
+            lantern = self.lanterns[name]
                                                                                                                                     lantern.state = state
+            lantern.last_updated = time.time()
 
                                                                                                                                         if brightness is not None:
                                                                                                                                         lantern.brightness = max(0.0, min(1.0, brightness))
 
-                                                                                                                                            if signal_strength is not None:
-                                                                                                                                            lantern.signal_strength = max(0.0, signal_strength)
-
-                                                                                                                                            lantern.last_updated = time.time()
-
-                                                                                                                                            # Handle state-specific behaviors
-                                                                                                                                                if state == LanternState.FLASHING:
-                                                                                                                                                lantern.pulse_rate = 2.0
-                                                                                                                                                    elif state == LanternState.PULSING:
-                                                                                                                                                    lantern.pulse_rate = 1.5
-                                                                                                                                                        else:
-                                                                                                                                                        lantern.pulse_rate = 1.0
+            # Update metrics
+            self._update_metrics()
 
                                                                                                                                                     return True
-                                                                                                                                                        else:
-                                                                                                                                                        self.logger.warning(f"Lantern {lantern_name} not found")
-                                                                                                                                                    return False
+
                                                                                                                                                         except Exception as e:
-                                                                                                                                                        self.logger.error(f"❌ Error updating lantern {lantern_name}: {e}")
+            self.logger.error(f"❌ Error updating lantern {name}: {e}")
                                                                                                                                                     return False
 
-                                                                                                                                                        def create_tick_zone(self, zone_type: ZoneType, price_level: float, volume: float) -> TickZone:
-                                                                                                                                                        """Create a new tick zone."""
-                                                                                                                                                        strength = self._calculate_zone_strength(price_level, volume)
-                                                                                                                                                        zone = TickZone(
-                                                                                                                                                        zone_type=zone_type,
-                                                                                                                                                        price_level=price_level,
-                                                                                                                                                        strength=strength,
-                                                                                                                                                        volume=volume,
-                                                                                                                                                        timestamp=time.time()
-                                                                                                                                                        )
-                                                                                                                                                        self.tick_zones.append(zone)
-                                                                                                                                                    return zone
+    def detect_signal_pattern(self, price_data: List[float], volume_data: List[float]) -> Result:
+        """Detect signal patterns using lantern analysis."""
+        try:
+            if not self.active:
+                return Result(success=False, error="System not active")
 
-                                                                                                                                                        def _calculate_zone_strength(self, price_level: float, volume: float) -> float:
-                                                                                                                                                        """Calculate zone strength based on price and volume."""
-                                                                                                                                                            try:
-                                                                                                                                                            # Normalize volume and price factors
-                                                                                                                                                            volume_factor = min(volume / 1000000, 1.0)  # Normalize to 1M volume
-                                                                                                                                                            price_factor = min(abs(price_level) / 100000, 1.0)  # Normalize to 100k price
+            if len(price_data) < 10 or len(volume_data) < 10:
+                return Result(success=False, error="Insufficient data")
 
-                                                                                                                                                            # Calculate strength using mathematical infrastructure if available
-                                                                                                                                                                if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                                                                                                                                                                data = np.array([volume_factor, price_factor])
-                                                                                                                                                                strength = self.math_orchestrator.process_data(data)
-                                                                                                                                                            return float(strength)
-                                                                                                                                                                else:
-                                                                                                                                                                # Fallback calculation
-                                                                                                                                                                strength = (volume_factor + price_factor) / 2.0
-                                                                                                                                                            return float(strength)
+            # Analyze price and volume patterns
+            price_changes = np.diff(price_data)
+            volume_changes = np.diff(volume_data)
+
+            # Calculate signal strength
+            signal_strength = np.mean(np.abs(price_changes)) * np.mean(volume_changes)
+            signal_strength = min(1.0, signal_strength / 1000.0)  # Normalize
+
+            # Update signal lantern
+            self.update_lantern_state('signal_lantern', LanternState.BRIGHT, signal_strength)
+
+            # Determine pattern type
+            pattern_type = self._classify_pattern(price_changes, volume_changes)
+
+            result_data = {
+                'signal_strength': signal_strength,
+                'pattern_type': pattern_type,
+                'confidence': min(1.0, signal_strength * 2.0),
+                'timestamp': time.time()
+            }
+
+            return Result(success=True, data=result_data)
+
                                                                                                                                                                 except Exception as e:
-                                                                                                                                                                self.logger.error(f"Error calculating zone strength: {e}")
-                                                                                                                                                            return 0.5
+            self.logger.error(f"❌ Error detecting signal pattern: {e}")
+            return Result(success=False, error=str(e))
 
-                                                                                                                                                                def detect_dip_pattern(self, price_data: List[float], volume_data: List[float]) -> Dict[str, Any]:
-                                                                                                                                                                """Detect dip patterns in price and volume data."""
-                                                                                                                                                                    try:
-                                                                                                                                                                        if len(price_data) < 3 or len(volume_data) < 3:
-                                                                                                                                                                    return {'pattern_found': False, 'confidence': 0.0}
+    def detect_dip_pattern(self, price_data: List[float], volume_data: List[float]) -> Result:
+        """Detect dip patterns using lantern analysis."""
+        try:
+            if not self.active:
+                return Result(success=False, error="System not active")
 
-                                                                                                                                                                    # Convert to numpy arrays
-                                                                                                                                                                    prices = np.array(price_data)
-                                                                                                                                                                    volumes = np.array(volume_data)
+            if len(price_data) < 20 or len(volume_data) < 20:
+                return Result(success=False, error="Insufficient data")
 
-                                                                                                                                                                    # Calculate price changes
-                                                                                                                                                                    price_changes = np.diff(prices)
+            # Calculate moving averages
+            short_ma = np.mean(price_data[-10:])
+            long_ma = np.mean(price_data[-20:])
 
-                                                                                                                                                                    # Look for dip pattern (consecutive negative changes)
-                                                                                                                                                                    dip_count = np.sum(price_changes < 0)
-                                                                                                                                                                    total_changes = len(price_changes)
+            # Detect dip
+            current_price = price_data[-1]
+            dip_threshold = 0.02  # 2% dip threshold
 
-                                                                                                                                                                    # Calculate dip confidence
-                                                                                                                                                                    dip_confidence = dip_count / total_changes if total_changes > 0 else 0.0
+            is_dip = current_price < short_ma * (1 - dip_threshold)
+            dip_strength = (short_ma - current_price) / short_ma if is_dip else 0.0
 
-                                                                                                                                                                    # Use mathematical infrastructure for pattern analysis
-                                                                                                                                                                        if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                                                                                                                                                                        pattern_data = np.concatenate([prices, volumes])
-                                                                                                                                                                        pattern_strength = self.math_orchestrator.process_data(pattern_data)
+            # Update warning lantern
+            if is_dip:
+                self.update_lantern_state('warning_lantern', LanternState.FLASHING, dip_strength)
                                                                                                                                                                             else:
-                                                                                                                                                                            # Fallback pattern strength calculation
-                                                                                                                                                                            pattern_strength = dip_confidence * np.mean(volumes) / np.max(volumes)
+                self.update_lantern_state('warning_lantern', LanternState.DARK, 0.0)
 
-                                                                                                                                                                        return {
-                                                                                                                                                                        'pattern_found': dip_confidence > 0.5,
-                                                                                                                                                                        'confidence': float(dip_confidence),
-                                                                                                                                                                        'pattern_strength': float(pattern_strength),
-                                                                                                                                                                        'dip_count': int(dip_count),
-                                                                                                                                                                        'total_changes': int(total_changes)
-                                                                                                                                                                        }
+            result_data = {
+                'is_dip': is_dip,
+                'dip_strength': dip_strength,
+                'current_price': current_price,
+                'short_ma': short_ma,
+                'long_ma': long_ma,
+                'confidence': min(1.0, dip_strength * 5.0),
+                'timestamp': time.time()
+            }
+
+            return Result(success=True, data=result_data)
 
                                                                                                                                                                             except Exception as e:
-                                                                                                                                                                            self.logger.error(f"Error detecting dip pattern: {e}")
-                                                                                                                                                                        return {'pattern_found': False, 'confidence': 0.0, 'error': str(e)}
+            self.logger.error(f"❌ Error detecting dip pattern: {e}")
+            return Result(success=False, error=str(e))
 
-                                                                                                                                                                            def calculate_mathematical_result(self, data: Union[List, np.ndarray]) -> float:
-                                                                                                                                                                            """Calculate mathematical result with proper data handling and lantern core integration."""
-                                                                                                                                                                                try:
-                                                                                                                                                                                    if not isinstance(data, np.ndarray):
-                                                                                                                                                                                    data = np.array(data)
+    def _classify_pattern(self, price_changes: np.ndarray, volume_changes: np.ndarray) -> str:
+        """Classify price and volume patterns."""
+        try:
+            # Calculate pattern metrics
+            price_volatility = np.std(price_changes)
+            volume_volatility = np.std(volume_changes)
+            price_trend = np.mean(price_changes)
+            volume_trend = np.mean(volume_changes)
 
-                                                                                                                                                                                        if MATH_INFRASTRUCTURE_AVAILABLE and self.math_orchestrator:
-                                                                                                                                                                                        # Use the actual mathematical modules for calculation
-                                                                                                                                                                                            if len(data) > 0:
-                                                                                                                                                                                            # Use mathematical orchestration for lantern analysis
-                                                                                                                                                                                            result = self.math_orchestrator.process_data(data)
-                                                                                                                                                                                        return float(result)
+            # Classify pattern
+            if price_trend > 0 and volume_trend > 0:
+                return "bullish_breakout"
+            elif price_trend < 0 and volume_trend > 0:
+                return "bearish_breakout"
+            elif abs(price_trend) < 0.001 and volume_volatility > 0.5:
+                return "consolidation"
+            elif price_volatility > 0.01:
+                return "volatile"
                                                                                                                                                                                             else:
-                                                                                                                                                                                        return 0.0
-                                                                                                                                                                                            else:
-                                                                                                                                                                                            # Fallback to basic calculation
-                                                                                                                                                                                            result = np.sum(data) / len(data) if len(data) > 0 else 0.0
-                                                                                                                                                                                        return float(result)
+                return "neutral"
+
                                                                                                                                                                                             except Exception as e:
-                                                                                                                                                                                            self.logger.error(f"Mathematical calculation error: {e}")
-                                                                                                                                                                                        return 0.0
-
-                                                                                                                                                                                            def simulate_lantern_cycle(self) -> None:
-                                                                                                                                                                                            """Simulate one cycle of lantern activity."""
-                                                                                                                                                                                                if not self.active:
-                                                                                                                                                                                            return
-
-                                                                                                                                                                                                for lantern in self.lanterns.values():
-                                                                                                                                                                                                # Energy decay
-                                                                                                                                                                                                lantern.energy_level -= self.config['energy_decay_rate']
-                                                                                                                                                                                                lantern.energy_level = max(0.0, lantern.energy_level)
-
-                                                                                                                                                                                                # State transitions based on energy and brightness
-                                                                                                                                                                                                    if lantern.energy_level <= 0.1:
-                                                                                                                                                                                                    lantern.state = LanternState.DARK
-                                                                                                                                                                                                    lantern.brightness = 0.0
-                                                                                                                                                                                                        elif lantern.brightness >= self.config['brightness_threshold'] and lantern.state == LanternState.DIM:
-                                                                                                                                                                                                        lantern.state = LanternState.BRIGHT
-
-                                                                                                                                                                                                        # Update signal strength based on brightness and energy
-                                                                                                                                                                                                        lantern.signal_strength = lantern.brightness * lantern.energy_level
-
-                                                                                                                                                                                                        lantern.last_updated = time.time()
+            self.logger.error(f"❌ Error classifying pattern: {e}")
+            return "unknown"
 
                                                                                                                                                                                                             def _update_metrics(self) -> None:
                                                                                                                                                                                                             """Update lantern metrics."""
-                                                                                                                                                                                                            active_count = sum(1 for lantern in self.lanterns.values() if lantern.state != LanternState.DARK)
-                                                                                                                                                                                                            bright_count = sum(1 for lantern in self.lanterns.values() if lantern.state == LanternState.BRIGHT)
-                                                                                                                                                                                                            flashing_count = sum(1 for lantern in self.lanterns.values() if lantern.state == LanternState.FLASHING)
+        try:
+            active_count = 0
+            bright_count = 0
+            flashing_count = 0
+            total_brightness = 0.0
+            total_signal_strength = 0.0
 
+            for lantern in self.lanterns.values():
+                if lantern.state != LanternState.DARK:
+                    active_count += 1
+                if lantern.state == LanternState.BRIGHT:
+                    bright_count += 1
+                if lantern.state == LanternState.FLASHING:
+                    flashing_count += 1
+
+                total_brightness += lantern.brightness
+                total_signal_strength += lantern.signal_strength
+
+            # Update metrics
                                                                                                                                                                                                             self.metrics.active_lanterns = active_count
                                                                                                                                                                                                             self.metrics.bright_lanterns = bright_count
                                                                                                                                                                                                             self.metrics.flashing_lanterns = flashing_count
-
-                                                                                                                                                                                                                if self.metrics.total_lanterns > 0:
-                                                                                                                                                                                                                self.metrics.average_brightness = sum(lantern.brightness for lantern in self.lanterns.values()) / self.metrics.total_lanterns
-                                                                                                                                                                                                                self.metrics.total_signal_strength = sum(lantern.signal_strength for lantern in self.lanterns.values())
-
+            self.metrics.average_brightness = total_brightness / len(self.lanterns) if self.lanterns else 0.0
+            self.metrics.total_signal_strength = total_signal_strength
                                                                                                                                                                                                                 self.metrics.last_updated = time.time()
 
+        except Exception as e:
+            self.logger.error(f"❌ Error updating metrics: {e}")
+
+    def get_status(self) -> Dict[str, Any]:
+        """Get system status."""
+        return {
+            'active': self.active,
+            'initialized': self.initialized,
+            'lanterns_count': len(self.lanterns),
+            'metrics': {
+                'total_lanterns': self.metrics.total_lanterns,
+                'active_lanterns': self.metrics.active_lanterns,
+                'bright_lanterns': self.metrics.bright_lanterns,
+                'flashing_lanterns': self.metrics.flashing_lanterns,
+                'average_brightness': self.metrics.average_brightness,
+                'total_signal_strength': self.metrics.total_signal_strength
+            },
+            'config': self.config
+        }
 
                                                                                                                                                                                                                 # Factory function
-                                                                                                                                                                                                                    def create_lantern_core_integration(config: Optional[Dict[str, Any]] = None):
-                                                                                                                                                                                                                    """Create a lantern core integration instance."""
+def create_lantern_mode(config: Optional[Dict[str, Any]] = None) -> LanternMode:
+    """Create a LanternMode instance."""
                                                                                                                                                                                                                 return LanternMode(config)

@@ -3,10 +3,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Vault-to-Orbital Strategy Bridge for Schwabot
-=============================================
-    Maps vault logic into orbital logic for emergent trade cycles:
-    • Vault state ↔ Orbital state mapping
+Vault Orbital Bridge - Liquidity Management & Quantum Classification
+===================================================================
+
+    Implements vault-orbital bridge for:
     • Liquidity phase transitions
     • Entropy-driven strategy routing
     • Cross-layer strategy coordination
@@ -18,11 +18,11 @@ Vault-to-Orbital Strategy Bridge for Schwabot
     from typing import Any, Dict, List, Optional, Tuple, Union
 
     import numpy as np
+import time
 
     logger = logging.getLogger(__name__)
 
         class VaultState(Enum):
-    """Class for Schwabot trading functionality."""
         """Vault states for liquidity management."""
         EMPTY = "empty"
         LOW = "low"
@@ -33,7 +33,6 @@ Vault-to-Orbital Strategy Bridge for Schwabot
         LOCKED = "locked"
 
             class OrbitalState(Enum):
-    """Class for Schwabot trading functionality."""
             """Orbital states for quantum-inspired classification."""
             S = "s"      # Sharp/stable
             P = "p"      # Phase/periodic
@@ -43,7 +42,6 @@ Vault-to-Orbital Strategy Bridge for Schwabot
 
             @dataclass
                 class VaultOrbitalMapping:
-    """Class for Schwabot trading functionality."""
                 """Mapping between vault and orbital states."""
                 vault_state: VaultState
                 orbital_state: OrbitalState
@@ -54,7 +52,6 @@ Vault-to-Orbital Strategy Bridge for Schwabot
 
                 @dataclass
                     class BridgeResult:
-    """Class for Schwabot trading functionality."""
                     """Result of vault-orbital bridge operation."""
                     vault_state: VaultState
                     orbital_state: OrbitalState
@@ -65,7 +62,6 @@ Vault-to-Orbital Strategy Bridge for Schwabot
                     entropy_level: float
 
                         class VaultOrbitalBridge:
-    """Class for Schwabot trading functionality."""
                         """Bridge between vault and orbital logic systems."""
 
 def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
@@ -189,7 +185,7 @@ def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
                             return mappings
 
-def determine_vault_state(self, liquidity_level: float, -> None
+    def determine_vault_state(self, liquidity_level: float,
                             entropy_level: float,
                                 phantom_detected: bool = False) -> VaultState:
                                 """Determine vault state based on liquidity and entropy."""
@@ -208,219 +204,129 @@ def determine_vault_state(self, liquidity_level: float, -> None
                                     return VaultState.STABLE
                                         elif liquidity_level <= thresholds['high']:
                                     return VaultState.HIGH
-                                        elif liquidity_level >= thresholds['overflow']:
+            else:
                                     return VaultState.OVERFLOW
-                                        else:
-                                    return VaultState.STABLE
 
                                         except Exception as e:
                                         self.logger.error(f"Error determining vault state: {e}")
                                     return VaultState.STABLE
 
-def determine_orbital_state(self, entropy_level: float, -> None
-                                    volatility: float,
-                                        phase_consistency: float) -> OrbitalState:
-                                        """Determine orbital state based on entropy and market conditions."""
-                                            try:
-                                            # Combine entropy, volatility, and phase consistency
-                                            combined_score = (entropy_level * 0.4 +
-                                            volatility * 0.4 +
-                                            (1 - phase_consistency) * 0.2)
+    def determine_orbital_state(self, entropy_level: float,
+                              volatility_level: float) -> OrbitalState:
+        """Determine orbital state based on entropy and volatility."""
+        try:
+            # Check entropy thresholds
+            thresholds = self.config['entropy_thresholds']
 
-                                            # Map to orbital states
-                                                if combined_score <= 0.2:
-                                            return OrbitalState.S  # Sharp/stable
-                                                elif combined_score <= 0.4:
-                                            return OrbitalState.P  # Phase/periodic
-                                                elif combined_score <= 0.6:
-                                            return OrbitalState.D  # Drift/diffuse
-                                                elif combined_score <= 0.8:
-                                            return OrbitalState.F  # Fast/volatile
+            if entropy_level <= thresholds['s']:
+                return OrbitalState.S
+            elif entropy_level <= thresholds['p']:
+                return OrbitalState.P
+            elif entropy_level <= thresholds['d']:
+                return OrbitalState.D
+            elif entropy_level <= thresholds['f']:
+                return OrbitalState.F
                                                 else:
-                                            return OrbitalState.NULL  # No orbital
+                return OrbitalState.NULL
 
                                                 except Exception as e:
                                                 self.logger.error(f"Error determining orbital state: {e}")
                                             return OrbitalState.S
 
-def bridge_states(self, liquidity_level: float, -> None
+    def find_mapping(self, vault_state: VaultState, orbital_state: OrbitalState) -> Optional[VaultOrbitalMapping]:
+        """Find mapping for given vault and orbital states."""
+        try:
+            for mapping in self.vault_orbital_mappings:
+                if mapping.vault_state == vault_state and mapping.orbital_state == orbital_state:
+                    return mapping
+            return None
+
+        except Exception as e:
+            self.logger.error(f"Error finding mapping: {e}")
+            return None
+
+    def process_bridge_operation(self, liquidity_level: float,
                                             entropy_level: float,
-                                            volatility: float = 0.0,
-                                            phase_consistency: float = 1.0,
                                                 phantom_detected: bool = False) -> BridgeResult:
-                                                """Bridge vault and orbital states to determine strategy."""
+        """Process vault-orbital bridge operation."""
                                                     try:
                                                     # Determine states
                                                     vault_state = self.determine_vault_state(liquidity_level, entropy_level, phantom_detected)
-                                                    orbital_state = self.determine_orbital_state(entropy_level, volatility, phase_consistency)
+            orbital_state = self.determine_orbital_state(entropy_level, 0.5)  # Default volatility
 
-                                                    # Find matching mapping
-                                                    mapping = self._find_mapping(vault_state, orbital_state)
+            # Find mapping
+            mapping = self.find_mapping(vault_state, orbital_state)
 
-                                                    # Calculate confidence based on how well states match
-                                                    confidence = self._calculate_confidence(vault_state, orbital_state, mapping)
+            # Determine if transition should occur
+            transition_triggered = False
+            if mapping and mapping.transition_probability > self.config['transition_threshold']:
+                transition_triggered = True
 
-                                                    # Determine if transition should be triggered
-                                                    transition_triggered = self._should_trigger_transition(
-                                                    vault_state, orbital_state, mapping, confidence
-                                                    )
+            # Calculate confidence
+            confidence = mapping.transition_probability if mapping else 0.0
 
-                                                    # Get recommended strategy
-                                                    recommended_strategy = self._get_recommended_strategy(
-                                                    vault_state, orbital_state, mapping, transition_triggered
-                                                    )
-
-                                                    # Update current states
-                                                        if transition_triggered:
-                                                        self.current_vault_state = vault_state
-                                                        self.current_orbital_state = orbital_state
-                                                        self.transition_history.append((vault_state, orbital_state, entropy_level))
-
-                                                    return BridgeResult(
+            # Create result
+            result = BridgeResult(
                                                     vault_state=vault_state,
                                                     orbital_state=orbital_state,
-                                                    recommended_strategy=recommended_strategy,
+                recommended_strategy=mapping.strategy_trigger if mapping else "hold",
                                                     confidence=confidence,
                                                     transition_triggered=transition_triggered,
                                                     liquidity_level=liquidity_level,
                                                     entropy_level=entropy_level
                                                     )
 
+            # Update current states if transition triggered
+            if transition_triggered:
+                self.current_vault_state = vault_state
+                self.current_orbital_state = orbital_state
+                self.transition_history.append((vault_state, orbital_state, time.time()))
+
+            return result
+
                                                         except Exception as e:
-                                                        self.logger.error(f"Error bridging states: {e}")
+            self.logger.error(f"Error processing bridge operation: {e}")
                                                     return BridgeResult(
                                                     vault_state=VaultState.STABLE,
                                                     orbital_state=OrbitalState.S,
-                                                    recommended_strategy="error_fallback",
+                recommended_strategy="hold",
                                                     confidence=0.0,
                                                     transition_triggered=False,
                                                     liquidity_level=liquidity_level,
                                                     entropy_level=entropy_level
                                                     )
 
-def _find_mapping(self, vault_state: VaultState, -> None
-                                                        orbital_state: OrbitalState) -> Optional[VaultOrbitalMapping]:
-                                                        """Find mapping for vault-orbital state combination."""
-                                                            for mapping in self.vault_orbital_mappings:
-                                                                if mapping.vault_state == vault_state and mapping.orbital_state == orbital_state:
-                                                            return mapping
-                                                        return None
+    def get_transition_history(self) -> List[Tuple[VaultState, OrbitalState, float]]:
+        """Get transition history."""
+        return self.transition_history.copy()
 
-def _calculate_confidence(self, vault_state: VaultState, -> None
-                                                        orbital_state: OrbitalState,
-                                                            mapping: Optional[VaultOrbitalMapping]) -> float:
-                                                            """Calculate confidence in state mapping."""
-                                                                if not mapping:
-                                                            return 0.0
+    def get_current_states(self) -> Tuple[VaultState, OrbitalState]:
+        """Get current vault and orbital states."""
+        return self.current_vault_state, self.current_orbital_state
 
-                                                            # Base confidence from mapping probability
-                                                            confidence = mapping.transition_probability
+    def reset_states(self) -> None:
+        """Reset to default states."""
+        self.current_vault_state = VaultState.STABLE
+        self.current_orbital_state = OrbitalState.S
+        self.transition_history.clear()
+        self.logger.info("✅ States reset to default")
 
-                                                            # Adjust based on state consistency
-                                                                if vault_state == self.current_vault_state:
-                                                                confidence *= 1.1  # Boost for state consistency
-
-                                                                    if orbital_state == self.current_orbital_state:
-                                                                    confidence *= 1.1  # Boost for orbital consistency
-
-                                                                    # Penalize for extreme states
-                                                                        if vault_state in [VaultState.EMPTY, VaultState.OVERFLOW]:
-                                                                        confidence *= 0.9
-
-                                                                            if orbital_state == OrbitalState.NULL:
-                                                                            confidence *= 0.8
-
-                                                                        return min(1.0, confidence)
-
-def _should_trigger_transition(self, vault_state: VaultState, -> None
-                                                                        orbital_state: OrbitalState,
-                                                                        mapping: Optional[VaultOrbitalMapping],
-                                                                            confidence: float) -> bool:
-                                                                            """Determine if state transition should be triggered."""
-                                                                                if not self.config['enable_automatic_transitions']:
-                                                                            return False
-
-                                                                                if not mapping:
-                                                                            return False
-
-                                                                            # Check if states have changed
-                                                                            state_changed = (vault_state != self.current_vault_state or
-                                                                            orbital_state != self.current_orbital_state)
-
-                                                                            # Check confidence threshold
-                                                                            confidence_sufficient = confidence >= self.config['transition_threshold']
-
-                                                                        return state_changed and confidence_sufficient
-
-def _get_recommended_strategy(self, vault_state: VaultState, -> None
-                                                                        orbital_state: OrbitalState,
-                                                                        mapping: Optional[VaultOrbitalMapping],
-                                                                            transition_triggered: bool) -> str:
-                                                                            """Get recommended strategy based on state mapping."""
-                                                                                if mapping:
-                                                                            return mapping.strategy_trigger
-
-                                                                            # Fallback strategies based on individual states
-                                                                                if vault_state == VaultState.OVERFLOW:
-                                                                            return "emergency_exit"
-                                                                                elif vault_state == VaultState.EMPTY:
-                                                                            return "emergency_recovery"
-                                                                                elif orbital_state == OrbitalState.F:
-                                                                            return "volatility_management"
-                                                                                elif orbital_state == OrbitalState.NULL:
-                                                                            return "wait_for_signal"
-                                                                                else:
-                                                                            return "hold_maintain"
-
-                                                                                def get_transition_statistics(self) -> Dict[str, Any]:
-                                                                                """Get statistics about state transitions."""
-                                                                                    try:
-                                                                                        if not self.transition_history:
+    def get_bridge_status(self) -> Dict[str, Any]:
+        """Get bridge status and statistics."""
+        try:
                                                                                     return {
-                                                                                    'total_transitions': 0,
-                                                                                    'vault_state_distribution': {},
-                                                                                    'orbital_state_distribution': {},
-                                                                                    'average_entropy': 0.0
-                                                                                    }
-
-                                                                                    vault_counts = {}
-                                                                                    orbital_counts = {}
-                                                                                    entropies = []
-
-                                                                                        for vault_state, orbital_state, entropy in self.transition_history:
-                                                                                        vault_counts[vault_state.value] = vault_counts.get(vault_state.value, 0) + 1
-                                                                                        orbital_counts[orbital_state.value] = orbital_counts.get(orbital_state.value, 0) + 1
-                                                                                        entropies.append(entropy)
-
-                                                                                    return {
+                'current_vault_state': self.current_vault_state.value,
+                'current_orbital_state': self.current_orbital_state.value,
                                                                                     'total_transitions': len(self.transition_history),
-                                                                                    'vault_state_distribution': vault_counts,
-                                                                                    'orbital_state_distribution': orbital_counts,
-                                                                                    'average_entropy': np.mean(entropies) if entropies else 0.0,
-                                                                                    'entropy_std': np.std(entropies) if entropies else 0.0
+                'mappings_count': len(self.vault_orbital_mappings),
+                'config': self.config
                                                                                     }
 
                                                                                         except Exception as e:
-                                                                                        self.logger.error(f"Error getting transition statistics: {e}")
-                                                                                    return {}
-
-                                                                                        def get_current_state_summary(self) -> Dict[str, Any]:
-                                                                                        """Get current state summary."""
-                                                                                    return {
-                                                                                    'vault_state': self.current_vault_state.value,
-                                                                                    'orbital_state': self.current_orbital_state.value,
-                                                                                    'transition_count': len(self.transition_history),
-                                                                                    'last_transition': self.transition_history[-1] if self.transition_history else None
-                                                                                    }
-
-                                                                                        def reset_states(self) -> None:
-                                                                                        """Reset current states to defaults."""
-                                                                                        self.current_vault_state = VaultState.STABLE
-                                                                                        self.current_orbital_state = OrbitalState.S
-                                                                                        self.transition_history.clear()
-                                                                                        self.logger.info("States reset to defaults")
+            self.logger.error(f"Error getting bridge status: {e}")
+            return {'error': str(e)}
 
                                                                                         # Factory function
                                                                                             def create_vault_orbital_bridge(config: Optional[Dict[str, Any]] = None) -> VaultOrbitalBridge:
-                                                                                            """Create a vault-orbital bridge instance."""
+    """Create a Vault Orbital Bridge instance."""
                                                                                         return VaultOrbitalBridge(config)
