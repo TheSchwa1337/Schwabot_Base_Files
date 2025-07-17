@@ -9,7 +9,7 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-def compute_stability_index():-> float:
+def compute_stability_index(Z: float, N: float, params: Optional[Dict[str, float]] = None) -> float:
     """
     Compute nuclear-inspired stability index for trade logic.
     Mathematical Logic: PnL / A = StabilityIndex (derived from semi-empirical mass formula)
@@ -51,7 +51,7 @@ def compute_stability_index():-> float:
     return stability_index
 
 
-def check_shell_trade_signal():-> str:
+def check_shell_trade_signal(volume_signal: float, volatility_map: float, config: Optional[Dict[str, Any]] = None) -> str:
     """
     Decides whether to enter a trade using post-Euler stability logic.
 

@@ -136,13 +136,12 @@ try:
 
 # Define what's available for import
 __all__ = 
-  CORE_SYSTEM_AVAILABLE,MATH_INFRASTRUCTURE_AVAILABLE,TRADING_COMPONENTS_AVAILABLE,
-  STRATEGY_COMPONENTS_AVAILABLE,MARKET_DATA_AVAILABLE,PORTFOLIO_COMPONENTS_AVAILABLE,
+  CORE_SYSTEM_AVAILABLE,MATH_INFRASTRUCTURE_AVAILABLE, TRADING_COMPONENTS_AVAILABLE,
+  STRATEGY_COMPONENTS_AVAILABLE", "MARKET_DATA_AVAILABLE,PORTFOLIO_COMPONENTS_AVAILABLE,
   REGISTRY_COMPONENTS_AVAILABLE,AI_COMPONENTS_AVAILABLE,INTEGRATION_COMPONENTS_AVAILABLE,
-  ADVANCED_SYSTEMS_AVAILABLE,GPU_COMPONENTS_AVAILABLE,get_system_status,
-  create_core_system,initialize_core_system"
+    ADVANCED_SYSTEMS_AVAILABLE, "GPU_COMPONENTS_AVAILABLE", get_system_status", 
+create_core_system, initialize_core_system"
 ]
-
 
 def get_system_status() -> Dict[str, Any]:
    Get the status of all core systems."""
@@ -156,7 +155,6 @@ registry_components: REGISTRY_COMPONENTS_AVAILABLE,
        advanced_systems: ADVANCED_SYSTEMS_AVAILABLE,
        gpu_components:GPU_COMPONENTS_AVAILABLE,
     }
-
 
 def create_core_system(config: Optional[Dictstr, Any]] = None) -> Dict[str, Any]:
     Create a complete core system with all available components."" system = {}
@@ -239,7 +237,6 @@ def create_core_system(config: Optional[Dictstr, Any]] = None) -> Dict[str, Any]
         system["gpu_dna"] = GPUDNAAutodetect()
     
     return system
-
 
 def initialize_core_system(config: Optional[Dictstr, Any]] = None) -> bool:
    nitialize the core system with all available components.

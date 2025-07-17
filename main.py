@@ -41,11 +41,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Import hash configuration manager
-from core.hash_config_manager import hash_config_manager, get_hash_settings
+from .core.hash_config_manager import hash_config_manager, get_hash_settings
 
 # Import enhanced GPU auto-detection system
 try:
-    from core.enhanced_gpu_auto_detector import (
+    from .core.enhanced_gpu_auto_detector import (
         create_enhanced_gpu_auto_detector,
         create_enhanced_gpu_logic_mapper,
         EnhancedGPUAutoDetector,
@@ -78,12 +78,12 @@ class SchwabotCLI:
         """Initialize all major system components."""
         try:
             # Import core components
-            from core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
-            from core.risk_manager import RiskManager
-            from core.unified_btc_trading_pipeline import create_btc_trading_pipeline
-            from core.pure_profit_calculator import PureProfitCalculator
-            from core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
-            from core.hash_glyph_compression import HashGlyphCompressor
+            from .core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
+            from .core.risk_manager import RiskManager
+            from .core.unified_btc_trading_pipeline import create_btc_trading_pipeline
+            from .core.pure_profit_calculator import PureProfitCalculator
+            from .core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
+            from .core.hash_glyph_compression import HashGlyphCompressor
             
             # Initialize components
             self.trading_executor = None
@@ -438,7 +438,7 @@ class SchwabotCLI:
         """Test profit calculator."""
         try:
             # Test profit calculation
-            from core.pure_profit_calculator import MarketData, HistoryState
+            from .core.pure_profit_calculator import MarketData, HistoryState
             
             market_data = MarketData(
                 timestamp=time.time(),
@@ -602,7 +602,7 @@ class SchwabotCLI:
                 config = self._get_default_config()
             
             # Initialize trading executor
-            from core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
+            from .core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
             
             self.trading_executor = EntropyEnhancedTradingExecutor(
                 exchange_config=config['exchange'],

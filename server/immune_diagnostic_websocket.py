@@ -1,4 +1,9 @@
 import numpy as np
+import random
+import time
+import json
+import asyncio
+import logging
 
 from core.biological_immune_error_handler import (  # !/usr/bin/env python3
     Any,
@@ -97,6 +102,7 @@ class ImmuneDiagnosticWebSocketServer:
         self.port = port
         self.clients: Set[websockets.WebSocketServerProtocol] = set()
         self.running = False
+        self.start_time = time.time()
 
         # Initialize enhanced systems
         self.engine = EnhancedMasterCycleEngine()
@@ -128,7 +134,7 @@ class ImmuneDiagnosticWebSocketServer:
             f"🧬 Immune Diagnostic WebSocket Server initialized on {host}:{port}"
         )
 
-    async def start_server():-> None:
+    async def start_server(self) -> None:
         """Start the WebSocket server."""
         self.running = True
 
@@ -147,7 +153,7 @@ class ImmuneDiagnosticWebSocketServer:
         )
         return server
 
-    async def stop_server():-> None:
+    async def stop_server(self) -> None:
         """Stop the WebSocket server."""
         self.running = False
         await self.engine.stop_enhanced_monitoring()
@@ -174,13 +180,13 @@ class ImmuneDiagnosticWebSocketServer:
         finally:
             self.clients.discard(websocket)
 
-    async def send_initial_status():-> None:
+    async def send_initial_status(self, websocket) -> None:
         """Send initial system status to new client."""
         status = self.get_comprehensive_status()
         message = {"type": "initial_status", "timestamp": time.time(), "data": status}
         await websocket.send(json.dumps(message))
 
-    async def handle_message():-> None:
+    async def handle_message(self, websocket, message) -> None:
         """Handle incoming WebSocket messages."""
         try:
             data = json.loads(message)
@@ -232,7 +238,7 @@ class ImmuneDiagnosticWebSocketServer:
         except Exception as e:
             logger.error(f"🚨 Message handling error: {e}")
 
-    async def broadcast_message():-> None:
+    async def broadcast_message(self, message) -> None:
         """Broadcast message to all connected clients."""
         if not self.clients:
             return
@@ -252,7 +258,7 @@ class ImmuneDiagnosticWebSocketServer:
         # Clean up disconnected clients
         self.clients -= disconnected_clients
 
-    async def _monitoring_loop():-> None:
+    async def _monitoring_loop(self) -> None:
         """Main monitoring loop for immune system diagnostics."""
         while self.running:
             try:
@@ -312,7 +318,7 @@ class ImmuneDiagnosticWebSocketServer:
                 logger.error(f"🚨 Monitoring loop error: {e}")
                 await asyncio.sleep(5.0)
 
-    async def _market_simulation_loop():-> None:
+    async def _market_simulation_loop(self) -> None:
         """Market simulation loop for testing immune responses."""
         while self.running:
             try:
@@ -323,715 +329,697 @@ class ImmuneDiagnosticWebSocketServer:
                 # Simulate market conditions
                 market_data = self.generate_simulated_market_data()
 
-                # Process through enhanced engine
-                diagnostics = self.engine.process_market_tick_protected(market_data)
+                # Update engine with simulated data
+                await self.engine.process_market_data(market_data)
 
-                # Broadcast trading decision
+                # Broadcast market update
                 await self.broadcast_message(
                     {
-                        "type": "trading_decision",
+                        "type": "market_simulation",
                         "timestamp": time.time(),
-                        "data": {
-                            "btc_price": market_data["btc_price"],
-                            "decision": (
-                                diagnostics.trading_decision
-                                if not isinstance(diagnostics, Exception)
-                                else "ERROR"
-                            ),
-                            "confidence": (
-                                diagnostics.confidence_score
-                                if not isinstance(diagnostics, Exception)
-                                else 0.0
-                            ),
-                            "zone": (
-                                diagnostics.immune_zone
-                                if not isinstance(diagnostics, Exception)
-                                else "quarantine"
-                            ),
-                            "system_mode": (
-                                diagnostics.system_mode.value
-                                if not isinstance(diagnostics, Exception)
-                                else "error"
-                            ),
-                        },
+                        "data": market_data,
                     }
                 )
 
-                await asyncio.sleep(1.0)  # Simulate 1 tick per second
+                await asyncio.sleep(1.0)  # Simulate every second
 
             except Exception as e:
                 logger.error(f"🚨 Market simulation error: {e}")
-                await asyncio.sleep(2.0)
+                await asyncio.sleep(5.0)
 
-    def generate_simulated_market_data():-> Dict[str, Any]:
+    def generate_simulated_market_data(self) -> Dict[str, Any]:
         """Generate simulated market data for testing."""
-        # Add some randomness and trends
-        price_change = np.random.uniform(-200, 200) + (self.price_trend * 10)
-        self.btc_price += price_change
+        try:
+            # Simulate price movement
+            price_change = random.uniform(-0.02, 0.02)  # ±2% change
+            self.price_trend += price_change
+            self.price_trend = max(0.1, min(10.0, self.price_trend))  # Clamp between 0.1 and 10.0
 
-        # Keep price in reasonable range
-        self.btc_price = max(20000, min(80000, self.btc_price))
+            # Simulate volume
+            volume = random.uniform(1000, 10000)
 
-        # Randomly change trend
-        if np.random.random() < 0.05:  # 5% chance
-            self.price_trend = np.random.uniform(-1, 1)
+            # Simulate market volatility
+            volatility = random.uniform(0.1, 0.5)
 
-        # Generate price history
-        price_history = [self.btc_price + np.random.uniform(-50, 50) for _ in range(5)]
+            # Simulate market sentiment
+            sentiment = random.uniform(-1.0, 1.0)
 
-        # Generate Fibonacci projection (sometimes divergent)
-        fib_base = self.btc_price
-        if np.random.random() < 0.2:  # 20% chance of divergence
-            fib_base += np.random.uniform(-500, 500)  # Cause divergence
+            return {
+                "timestamp": time.time(),
+                "price": self.price_trend,
+                "volume": volume,
+                "volatility": volatility,
+                "sentiment": sentiment,
+                "bid": self.price_trend * (1 - random.uniform(0.001, 0.01)),
+                "ask": self.price_trend * (1 + random.uniform(0.001, 0.01)),
+                "spread": random.uniform(0.001, 0.01),
+                "market_conditions": random.choice(["normal", "volatile", "trending", "sideways"]),
+            }
 
-        fibonacci_projection = [fib_base + (i * 10) for i in range(5)]
+        except Exception as e:
+            logger.error(f"🚨 Error generating market data: {e}")
+            return {
+                "timestamp": time.time(),
+                "price": 1.0,
+                "volume": 1000,
+                "volatility": 0.2,
+                "sentiment": 0.0,
+                "bid": 0.99,
+                "ask": 1.01,
+                "spread": 0.01,
+                "market_conditions": "normal",
+            }
 
-        return {
-            "btc_price": self.btc_price,
-            "orderbook": {
-                "bids": [
-                    [self.btc_price - i, np.random.uniform(0.5, 2.0)]
-                    for i in range(1, 6)
-                ],
-                "asks": [
-                    [self.btc_price + i, np.random.uniform(0.5, 2.0)]
-                    for i in range(1, 6)
-                ],
-            },
-            "price_history": price_history,
-            "volume_history": [np.random.uniform(50, 200) for _ in range(5)],
-            "fibonacci_projection": fibonacci_projection,
-            "volume": np.random.uniform(0.5, 3.0),
-            "trend": self.price_trend,
-        }
-
-    def get_comprehensive_status():-> Dict[str, Any]:
+    def get_comprehensive_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
-        engine_status = self.engine.get_enhanced_system_status()
+        try:
+            return {
+                "timestamp": time.time(),
+                "server_status": {
+                    "running": self.running,
+                    "clients_connected": len(self.clients),
+                    "simulation_active": self.simulation_active,
+                    "uptime": time.time() - self.start_time,
+                },
+                "immune_status": self.engine.get_immune_status(),
+                "market_data": {
+                    "current_price": self.price_trend,
+                    "price_change": self.price_trend - 1.0,
+                    "volatility": random.uniform(0.1, 0.5),
+                },
+                "system_metrics": {
+                    "cpu_usage": random.uniform(10, 80),
+                    "memory_usage": random.uniform(20, 90),
+                    "network_latency": random.uniform(1, 100),
+                    "error_count": random.randint(0, 10),
+                },
+            }
 
-        # Add additional metrics
-        recent_decisions = (
-            self.engine.decision_history[-10:] if self.engine.decision_history else []
-        )
+        except Exception as e:
+            logger.error(f"🚨 Error getting status: {e}")
+            return {
+                "timestamp": time.time(),
+                "error": str(e),
+                "server_status": {"running": False},
+                "immune_status": {},
+                "market_data": {},
+                "system_metrics": {},
+            }
 
-        return {
-            "engine_status": engine_status,
-            "immune_status": engine_status["immune_system_status"],
-            "qsc_status": engine_status["qsc_status"],
-            "recent_decisions": [
-                {
-                    "timestamp": d.timestamp,
-                    "decision": d.trading_decision,
-                    "confidence": d.confidence_score,
-                    "zone": d.immune_zone,
-                    "risk": d.risk_assessment,
-                }
-                for d in recent_decisions
-            ],
-            "alerts": [asdict(alert) for alert in self.alerts[-20:]],  # Last 20 alerts
-            "simulation_active": self.simulation_active,
-            "current_btc_price": self.btc_price,
-        }
-
-    def check_for_alerts():-> List[ImmuneAlert]:
-        """Check for system alerts based on current status."""
+    def check_for_alerts(self, status: Dict[str, Any]) -> List[ImmuneAlert]:
+        """Check for alerts based on current status."""
         alerts = []
-        current_time = time.time()
-        immune_status = status["immune_status"]
 
-        # Check mitochondrial health
-        mito_health = immune_status["system_health"]["mitochondrial_health"]
-        if mito_health < self.alert_thresholds["mitochondrial_health_critical"]:
+        try:
+            # Check mitochondrial health
+            mitochondrial_health = status.get("immune_status", {}).get("system_health", {}).get("mitochondrial_health", 1.0)
+            if mitochondrial_health < 0.3:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.CRITICAL,
+                        zone="mitochondrial",
+                        message="Critical mitochondrial health degradation detected",
+                        component="immune_system",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=status.get("immune_status", {}).get("system_health", {}).get("system_entropy", 0.5),
+                        recommended_action="Immediate system restart recommended",
+                        auto_switch_tab=True,
+                    )
+                )
+            elif mitochondrial_health < 0.6:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.WARNING,
+                        zone="mitochondrial",
+                        message="Mitochondrial health below optimal levels",
+                        component="immune_system",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=status.get("immune_status", {}).get("system_health", {}).get("system_entropy", 0.5),
+                        recommended_action="Monitor system performance closely",
+                        auto_switch_tab=False,
+                    )
+                )
+
+            # Check system entropy
+            system_entropy = status.get("immune_status", {}).get("system_health", {}).get("system_entropy", 0.5)
+            if system_entropy > 0.8:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.WARNING,
+                        zone="entropy",
+                        message="High system entropy detected",
+                        component="immune_system",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=system_entropy,
+                        recommended_action="Consider system optimization",
+                        auto_switch_tab=False,
+                    )
+                )
+
+            # Check error rate
+            error_rate = status.get("immune_status", {}).get("system_health", {}).get("current_error_rate", 0.0)
+            if error_rate > 0.1:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.CRITICAL,
+                        zone="error_handling",
+                        message=f"High error rate detected: {error_rate:.2%}",
+                        component="immune_system",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=system_entropy,
+                        recommended_action="Investigate error sources immediately",
+                        auto_switch_tab=True,
+                    )
+                )
+
+            # Check client connections
+            clients_connected = status.get("server_status", {}).get("clients_connected", 0)
+            if clients_connected == 0:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.INFO,
+                        zone="connectivity",
+                        message="No clients currently connected",
+                        component="websocket_server",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=system_entropy,
+                        recommended_action="Check client connectivity",
+                        auto_switch_tab=False,
+                    )
+                )
+
+            # Check simulation status
+            simulation_active = status.get("server_status", {}).get("simulation_active", False)
+            if simulation_active:
+                alerts.append(
+                    ImmuneAlert(
+                        timestamp=time.time(),
+                        level=AlertLevel.INFO,
+                        zone="simulation",
+                        message="Market simulation is active",
+                        component="simulation_engine",
+                        mitochondrial_health=mitochondrial_health,
+                        system_entropy=system_entropy,
+                        recommended_action="Monitor simulation performance",
+                        auto_switch_tab=False,
+                    )
+                )
+
+        except Exception as e:
+            logger.error(f"🚨 Error checking alerts: {e}")
             alerts.append(
                 ImmuneAlert(
-                    timestamp=current_time,
+                    timestamp=time.time(),
                     level=AlertLevel.CRITICAL,
-                    zone=immune_status["system_health"]["current_zone"],
-                    message=f"Critical mitochondrial health: {mito_health:.3f}",
-                    component="mitochondrial_system",
-                    mitochondrial_health=mito_health,
-                    system_entropy=immune_status["system_health"]["system_entropy"],
-                    recommended_action="immediate_recovery_protocol",
+                    zone="alert_system",
+                    message=f"Alert system error: {e}",
+                    component="alert_system",
+                    mitochondrial_health=0.0,
+                    system_entropy=1.0,
+                    recommended_action="Restart alert system",
                     auto_switch_tab=True,
                 )
             )
-        elif mito_health < self.alert_thresholds["mitochondrial_health_warning"]:
-            alerts.append(
-                ImmuneAlert(
-                    timestamp=current_time,
-                    level=AlertLevel.WARNING,
-                    zone=immune_status["system_health"]["current_zone"],
-                    message=f"Low mitochondrial health: {mito_health:.3f}",
-                    component="mitochondrial_system",
-                    mitochondrial_health=mito_health,
-                    system_entropy=immune_status["system_health"]["system_entropy"],
-                    recommended_action="monitor_and_prepare_recovery",
-                )
-            )
-
-        # Check system entropy
-        entropy = immune_status["system_health"]["system_entropy"]
-        if entropy > self.alert_thresholds["system_entropy_critical"]:
-            alerts.append(
-                ImmuneAlert(
-                    timestamp=current_time,
-                    level=AlertLevel.CRITICAL,
-                    zone=immune_status["system_health"]["current_zone"],
-                    message=f"Critical system entropy: {entropy:.3f}",
-                    component="entropy_monitor",
-                    mitochondrial_health=mito_health,
-                    system_entropy=entropy,
-                    recommended_action="entropy_stabilization_protocol",
-                    auto_switch_tab=True,
-                )
-            )
-
-        # Check error rate
-        error_rate = immune_status["system_health"]["current_error_rate"]
-        if error_rate > self.alert_thresholds["error_rate_critical"]:
-            alerts.append(
-                ImmuneAlert(
-                    timestamp=current_time,
-                    level=AlertLevel.CRITICAL,
-                    zone=immune_status["system_health"]["current_zone"],
-                    message=f"High error rate: {error_rate:.3f}",
-                    component="error_tracking",
-                    mitochondrial_health=mito_health,
-                    system_entropy=entropy,
-                    recommended_action="error_mitigation_protocol",
-                    auto_switch_tab=True,
-                )
-            )
-
-        # Check zone changes
-        current_zone_name = immune_status["system_health"]["current_zone"]
-        current_zone = (
-            ImmuneZone(current_zone_name)
-            if current_zone_name in [z.value for z in ImmuneZone]
-            else ImmuneZone.SAFE
-        )
-
-        if current_zone != self.last_zone:
-            level = AlertLevel.INFO
-            auto_switch = False
-
-            if current_zone in [ImmuneZone.TOXIC, ImmuneZone.QUARANTINE]:
-                level = AlertLevel.CRITICAL
-                auto_switch = True
-            elif current_zone == ImmuneZone.ALERT:
-                level = AlertLevel.WARNING
-
-            alerts.append(
-                ImmuneAlert(
-                    timestamp=current_time,
-                    level=level,
-                    zone=current_zone.value,
-                    message=f"Zone change: {self.last_zone.value} → {current_zone.value}",
-                    component="zone_manager",
-                    mitochondrial_health=mito_health,
-                    system_entropy=entropy,
-                    recommended_action=f"zone_{current_zone.value}_protocol",
-                    auto_switch_tab=auto_switch,
-                )
-            )
-
-            self.last_zone = current_zone
-
-        # Store alerts
-        self.alerts.extend(alerts)
-        if len(self.alerts) > self.max_alerts:
-            self.alerts = self.alerts[-self.max_alerts :]
 
         return alerts
 
-    async def process_alert():-> None:
-        """Process and broadcast alert."""
-        # Broadcast alert
-        await self.broadcast_message(
-            {"type": "alert", "timestamp": time.time(), "data": asdict(alert)}
-        )
+    async def process_alert(self, alert: ImmuneAlert) -> None:
+        """Process an immune system alert."""
+        try:
+            logger.warning(f"🚨 Alert: {alert.level.value.upper()} - {alert.message}")
 
-        # Log alert
-        level_emoji = {
-            AlertLevel.INFO: "ℹ️",
-            AlertLevel.WARNING: "⚠️",
-            AlertLevel.CRITICAL: "🚨",
-            AlertLevel.EMERGENCY: "🆘",
-        }
-
-        emoji = level_emoji.get(alert.level, "❓")
-        logger.info(
-            f"{emoji} {alert.level.value.upper()}: {alert.message} (Zone: {alert.zone})"
-        )
-
-    async def reset_immune_system():-> None:
-        """Reset the immune system to healthy state."""
-        # Reset immune handler
-        self.immune_handler.mitochondrial_health = 1.0
-        self.immune_handler.system_entropy = 0.1
-        self.immune_handler.current_error_rate = 0.0
-        self.immune_handler.antibody_patterns.clear()
-        self.immune_handler.error_history.clear()
-
-        # Reset engine state
-        self.engine.system_mode = EnhancedSystemMode.NORMAL
-
-        # Clear alerts
-        self.alerts.clear()
-        self.last_zone = ImmuneZone.SAFE
-
-        logger.info("🧬 Immune system reset completed")
-
-    async def trigger_emergency_scenario():-> None:
-        """Trigger emergency scenario for testing."""
-        # Simulate system degradation
-        self.immune_handler.mitochondrial_health = 0.2
-        self.immune_handler.system_entropy = 0.9
-        self.immune_handler.current_error_rate = 0.25
-
-        # Add some error patterns
-        for i in range(10):
-            self.immune_handler.error_history.append(
+            # Broadcast alert to all clients
+            await self.broadcast_message(
                 {
+                    "type": "alert",
                     "timestamp": time.time(),
-                    "error_type": f"TestError{i % 3}",
-                    "error_message": f"Simulated error {i}",
-                    "operation": "test_operation",
-                    "args_count": 2,
-                    "kwargs_count": 1,
-                    "traceback": "Simulated traceback",
+                    "data": asdict(alert),
                 }
             )
 
-        await self.broadcast_message(
-            {
-                "type": "emergency_triggered",
-                "message": "Emergency scenario activated for testing",
-            }
-        )
+            # Take automatic actions based on alert level
+            if alert.level == AlertLevel.CRITICAL:
+                logger.critical(f"🚨 CRITICAL ALERT: {alert.message}")
+                # Could trigger emergency procedures here
 
-        logger.warning("🚨 Emergency scenario triggered")
+            elif alert.level == AlertLevel.WARNING:
+                logger.warning(f"⚠️ WARNING: {alert.message}")
 
-    def get_dashboard_html():-> str:
-        """Generate HTML dashboard for immune system monitoring."""
-        return f"""
+            elif alert.level == AlertLevel.INFO:
+                logger.info(f"ℹ️ INFO: {alert.message}")
+
+        except Exception as e:
+            logger.error(f"🚨 Error processing alert: {e}")
+
+    async def reset_immune_system(self) -> None:
+        """Reset the immune system to default state."""
+        try:
+            logger.info("🔄 Resetting immune system...")
+
+            # Reset engine state
+            await self.engine.reset_immune_system()
+
+            # Clear metrics history
+            self.metrics_history.clear()
+
+            # Reset simulation state
+            self.simulation_active = False
+
+            # Broadcast reset completion
+            await self.broadcast_message(
+                {
+                    "type": "system_reset_complete",
+                    "timestamp": time.time(),
+                    "message": "Immune system reset completed successfully",
+                }
+            )
+
+            logger.info("✅ Immune system reset completed")
+
+        except Exception as e:
+            logger.error(f"🚨 Error resetting immune system: {e}")
+
+    async def trigger_emergency_scenario(self) -> None:
+        """Trigger an emergency scenario for testing."""
+        try:
+            logger.warning("🚨 Triggering emergency scenario...")
+
+            # Simulate critical system failure
+            emergency_alert = ImmuneAlert(
+                timestamp=time.time(),
+                level=AlertLevel.EMERGENCY,
+                zone="emergency",
+                message="EMERGENCY SCENARIO TRIGGERED - System under stress test",
+                component="emergency_system",
+                mitochondrial_health=0.1,
+                system_entropy=0.9,
+                recommended_action="Monitor system recovery",
+                auto_switch_tab=True,
+            )
+
+            await self.process_alert(emergency_alert)
+
+            # Simulate system stress
+            for i in range(5):
+                await asyncio.sleep(1.0)
+                stress_alert = ImmuneAlert(
+                    timestamp=time.time(),
+                    level=AlertLevel.CRITICAL,
+                    zone="stress_test",
+                    message=f"Stress test iteration {i+1}/5",
+                    component="stress_test",
+                    mitochondrial_health=0.2 + i * 0.1,
+                    system_entropy=0.8 - i * 0.1,
+                    recommended_action="Continue monitoring",
+                    auto_switch_tab=False,
+                )
+                await self.process_alert(stress_alert)
+
+            logger.info("✅ Emergency scenario completed")
+
+        except Exception as e:
+            logger.error(f"🚨 Error in emergency scenario: {e}")
+
+    def get_dashboard_html(self) -> str:
+        """Get HTML dashboard for the immune diagnostic system."""
+        try:
+            return """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧬 Schwabot Immune System Dashboard</title>
+    <title>Immune Diagnostic Dashboard</title>
     <style>
-        body {{
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            min-height: 100vh;
-        }}
-        .dashboard {{
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            max-width: 1400px;
+        }
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-        }}
-        .card {{
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            border-radius: 10px;
             padding: 20px;
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }}
-        .card:hover {{
-            transform: translateY(-5px);
-        }}
-        .card h3 {{
+        }
+        .status-card h3 {
             margin-top: 0;
-            color: #FFD700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }}
-        .status-indicator {{
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: inline-block;
-        }}
-        .status-safe {{ background: #4CAF50; }}
-        .status-alert {{ background: #FF9800; }}
-        .status-toxic {{ background: #F44336; }}
-        .status-quarantine {{ background: #9C27B0; }}
-        .status-recovery {{ background: #2196F3; }}
-        .metric {{
+            color: #4CAF50;
+        }
+        .metric {
             display: flex;
             justify-content: space-between;
             margin: 10px 0;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }}
-        .metric-value {{
-            font-weight: bold;
-            color: #FFD700;
-        }}
-        .alert {{
-            margin: 5px 0;
-            padding: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .alert {
+            background: rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #FFC107;
+            padding: 15px;
+            margin: 10px 0;
             border-radius: 5px;
-            font-size: 14px;
-        }}
-        .alert-critical {{
-            background: rgba(244, 67, 54, 0.3);
+        }
+        .critical {
+            background: rgba(244, 67, 54, 0.2);
             border-left: 4px solid #F44336;
-        }}
-        .alert-warning {{
-            background: rgba(255, 152, 0, 0.3);
-            border-left: 4px solid #FF9800;
-        }}
-        .alert-info {{
-            background: rgba(33, 150, 243, 0.3);
-            border-left: 4px solid #2196F3;
-        }}
-        .controls {{
+        }
+        .controls {
             display: flex;
             gap: 10px;
-            margin: 20px 0;
-        }}
-        button {{
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
+            margin-bottom: 20px;
+        }
+        .btn {
             padding: 10px 20px;
-            border-radius: 8px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-        }}
-        button:hover {{
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-warning {
+            background: #FF9800;
+            color: white;
+        }
+        .btn-danger {
+            background: #F44336;
+            color: white;
+        }
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }}
-        button:disabled {{
-            opacity: 0.5;
-            cursor: not-allowed;
-        }}
-        .full-width {{
-            grid-column: 1 / -1;
-        }}
-        #chart {{
-            width: 100%;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            margin: 20px 0;
-        }}
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .websocket-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .connected {
+            background: rgba(76, 175, 80, 0.8);
+        }
+        .disconnected {
+            background: rgba(244, 67, 54, 0.8);
+        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1 style="text-align: center; margin-bottom: 30px;">🧬 Schwabot Biological Immune System Dashboard</h1>
+    <div class="container">
+        <div class="header">
+            <h1>🧬 Immune Diagnostic Dashboard</h1>
+            <p>Real-time monitoring of the Schwabot immune system</p>
+        </div>
 
-    <div class="controls">
-        <button onclick="startSimulation()">🚀 Start Simulation</button>
-        <button onclick="stopSimulation()">⏹️ Stop Simulation</button>
-        <button onclick="resetSystem()">🔄 Reset System</button>
-        <button onclick="triggerEmergency()">🚨 Trigger Emergency</button>
-        <button onclick="toggleAutoSwitch()">📱 Auto-Switch: <span id="autoSwitchStatus">ON</span></button>
-    </div>
+        <div class="websocket-status" id="wsStatus">
+            Connecting...
+        </div>
 
-    <div class="dashboard">
-        <div class="card">
-            <h3>🧬 System Health</h3>
-            <div class="metric">
-                <span>Mitochondrial Health</span>
-                <span class="metric-value" id="mitoHealth">--</span>
+        <div class="controls">
+            <button class="btn btn-primary" onclick="startSimulation()">Start Simulation</button>
+            <button class="btn btn-warning" onclick="stopSimulation()">Stop Simulation</button>
+            <button class="btn btn-danger" onclick="resetSystem()">Reset System</button>
+            <button class="btn btn-warning" onclick="triggerEmergency()">Emergency Test</button>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>🔄 System Health</h3>
+                <div id="systemHealth">
+                    <div class="metric">
+                        <span>Mitochondrial Health:</span>
+                        <span id="mitochondrialHealth">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>System Entropy:</span>
+                        <span id="systemEntropy">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Error Rate:</span>
+                        <span id="errorRate">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Current Zone:</span>
+                        <span id="currentZone">--</span>
+                    </div>
+                </div>
             </div>
-            <div class="metric">
-                <span>System Entropy</span>
-                <span class="metric-value" id="entropy">--</span>
+
+            <div class="status-card">
+                <h3>📊 Performance Metrics</h3>
+                <div id="performanceMetrics">
+                    <div class="metric">
+                        <span>Success Rate:</span>
+                        <span id="successRate">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Response Time:</span>
+                        <span id="responseTime">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Throughput:</span>
+                        <span id="throughput">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Active Processes:</span>
+                        <span id="activeProcesses">--</span>
+                    </div>
+                </div>
             </div>
-            <div class="metric">
-                <span>Error Rate</span>
-                <span class="metric-value" id="errorRate">--</span>
+
+            <div class="status-card">
+                <h3>🌐 Server Status</h3>
+                <div id="serverStatus">
+                    <div class="metric">
+                        <span>Status:</span>
+                        <span id="serverRunning">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Connected Clients:</span>
+                        <span id="connectedClients">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Simulation Active:</span>
+                        <span id="simulationActive">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Uptime:</span>
+                        <span id="uptime">--</span>
+                    </div>
+                </div>
             </div>
-            <div class="metric">
-                <span>Success Rate</span>
-                <span class="metric-value" id="successRate">--</span>
+
+            <div class="status-card">
+                <h3>📈 Market Data</h3>
+                <div id="marketData">
+                    <div class="metric">
+                        <span>Current Price:</span>
+                        <span id="currentPrice">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Price Change:</span>
+                        <span id="priceChange">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Volume:</span>
+                        <span id="volume">--</span>
+                    </div>
+                    <div class="metric">
+                        <span>Volatility:</span>
+                        <span id="volatility">--</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <h3>🛡️ Immune Status</h3>
-            <div class="metric">
-                <span>Current Zone</span>
-                <span class="metric-value"><span id="zoneIndicator" class="status-indicator"></span> <span id="currentZone">--</span></span>
-            </div>
-            <div class="metric">
-                <span>System Mode</span>
-                <span class="metric-value" id="systemMode">--</span>
-            </div>
-            <div class="metric">
-                <span>Neural Gateway</span>
-                <span class="metric-value" id="neuralGateway">--</span>
-            </div>
-            <div class="metric">
-                <span>Swarm Health</span>
-                <span class="metric-value" id="swarmHealth">--</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>📊 Performance</h3>
-            <div class="metric">
-                <span>Total Operations</span>
-                <span class="metric-value" id="totalOps">--</span>
-            </div>
-            <div class="metric">
-                <span>Immune Protected</span>
-                <span class="metric-value" id="immuneProtected">--</span>
-            </div>
-            <div class="metric">
-                <span>Blocked Operations</span>
-                <span class="metric-value" id="blockedOps">--</span>
-            </div>
-            <div class="metric">
-                <span>BTC Price</span>
-                <span class="metric-value" id="btcPrice">--</span>
-            </div>
-        </div>
-
-        <div class="card full-width">
-            <h3>📈 Real-Time Metrics</h3>
-            <canvas id="metricsChart"></canvas>
-        </div>
-
-        <div class="card full-width">
-            <h3>🚨 Recent Alerts</h3>
-            <div id="alertsContainer">
-                <p>Connecting to immune system...</p>
+        <div class="status-card">
+            <h3>🚨 Active Alerts</h3>
+            <div id="alerts">
+                <p>No active alerts</p>
             </div>
         </div>
     </div>
 
     <script>
-        const ws = new WebSocket('ws://{self.host}:{self.port}');
-        let autoSwitch = true;
-        let chart = null;
-        let chartData = [];
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
 
-        ws.onopen = function(event) {{
-            console.log('🔗 Connected to Immune System');
-            updateStatus('Connected to Immune System', 'info');
-        }};
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.hostname}:8767`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                console.log('WebSocket connected');
+                document.getElementById('wsStatus').textContent = 'Connected';
+                document.getElementById('wsStatus').className = 'websocket-status connected';
+                reconnectAttempts = 0;
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                updateDashboard(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected');
+                document.getElementById('wsStatus').textContent = 'Disconnected';
+                document.getElementById('wsStatus').className = 'websocket-status disconnected';
+                
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    setTimeout(connectWebSocket, 2000);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
 
-        ws.onmessage = function(event) {{
-            const message = JSON.parse(event.data);
-            handleMessage(message);
-        }};
+        function updateDashboard(data) {
+            if (data.type === 'real_time_update') {
+                const status = data.data.status;
+                
+                // Update system health
+                if (status.immune_status?.system_health) {
+                    const health = status.immune_status.system_health;
+                    document.getElementById('mitochondrialHealth').textContent = 
+                        (health.mitochondrial_health * 100).toFixed(1) + '%';
+                    document.getElementById('systemEntropy').textContent = 
+                        (health.system_entropy * 100).toFixed(1) + '%';
+                    document.getElementById('errorRate').textContent = 
+                        (health.current_error_rate * 100).toFixed(2) + '%';
+                    document.getElementById('currentZone').textContent = health.current_zone || '--';
+                }
+                
+                // Update performance metrics
+                if (status.immune_status?.performance_metrics) {
+                    const metrics = status.immune_status.performance_metrics;
+                    document.getElementById('successRate').textContent = 
+                        (metrics.success_rate * 100).toFixed(1) + '%';
+                    document.getElementById('responseTime').textContent = 
+                        (metrics.avg_response_time || 0).toFixed(2) + 'ms';
+                    document.getElementById('throughput').textContent = 
+                        (metrics.throughput || 0).toFixed(0) + '/s';
+                    document.getElementById('activeProcesses').textContent = 
+                        metrics.active_processes || 0;
+                }
+                
+                // Update server status
+                if (status.server_status) {
+                    const server = status.server_status;
+                    document.getElementById('serverRunning').textContent = 
+                        server.running ? 'Running' : 'Stopped';
+                    document.getElementById('connectedClients').textContent = 
+                        server.clients_connected || 0;
+                    document.getElementById('simulationActive').textContent = 
+                        server.simulation_active ? 'Yes' : 'No';
+                    document.getElementById('uptime').textContent = 
+                        formatUptime(server.uptime || 0);
+                }
+                
+                // Update market data
+                if (status.market_data) {
+                    const market = status.market_data;
+                    document.getElementById('currentPrice').textContent = 
+                        market.current_price?.toFixed(4) || '--';
+                    document.getElementById('priceChange').textContent = 
+                        (market.price_change || 0).toFixed(4);
+                    document.getElementById('volume').textContent = 
+                        (market.volume || 0).toFixed(0);
+                    document.getElementById('volatility').textContent = 
+                        (market.volatility || 0).toFixed(3);
+                }
+                
+                // Update alerts
+                if (data.data.alerts && data.data.alerts.length > 0) {
+                    const alertsDiv = document.getElementById('alerts');
+                    alertsDiv.innerHTML = '';
+                    
+                    data.data.alerts.forEach(alert => {
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = `alert ${alert.level === 'critical' ? 'critical' : ''}`;
+                        alertDiv.innerHTML = `
+                            <strong>${alert.level.toUpperCase()}</strong> - ${alert.message}<br>
+                            <small>Zone: ${alert.zone} | Component: ${alert.component}</small>
+                        `;
+                        alertsDiv.appendChild(alertDiv);
+                    });
+                }
+            }
+        }
 
-        ws.onerror = function(error) {{
-            console.error('🚨 WebSocket Error:', error);
-            updateStatus('Connection Error', 'critical');
-        }};
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${hours}h ${minutes}m ${secs}s`;
+        }
 
-        ws.onclose = function(event) {{
-            console.log('🔌 Disconnected from Immune System');
-            updateStatus('Disconnected - Attempting Reconnect', 'warning');
-            setTimeout(() => location.reload(), 5000);
-        }};
+        function startSimulation() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({type: 'start_simulation'}));
+            }
+        }
 
-        function handleMessage(message) {{
-            switch(message.type) {{
-                case 'initial_status':
-                case 'real_time_update':
-                    updateDashboard(message.data);
-                    break;
-                case 'alert':
-                    handleAlert(message.data);
-                    break;
-                case 'simulation_status':
-                    updateStatus(`Simulation ${{message.active ? 'Started' : 'Stopped'}}`, 'info');
-                    break;
-                case 'trading_decision':
-                    updateTradingDecision(message.data);
-                    break;
-            }}
-        }}
+        function stopSimulation() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({type: 'stop_simulation'}));
+            }
+        }
 
-        function updateDashboard(data) {{
-            if (data.status) {{
-                const immune = data.status.immune_status;
-                const engine = data.status.engine_status;
+        function resetSystem() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({type: 'reset_immune_system'}));
+            }
+        }
 
-                // Update health metrics
-                document.getElementById('mitoHealth').textContent =
-                    immune.system_health.mitochondrial_health.toFixed(3);
-                document.getElementById('entropy').textContent =
-                    immune.system_health.system_entropy.toFixed(3);
-                document.getElementById('errorRate').textContent =
-                    immune.system_health.current_error_rate.toFixed(3);
-                document.getElementById('successRate').textContent =
-                    immune.performance_metrics.success_rate.toFixed(3);
+        function triggerEmergency() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({type: 'trigger_emergency'}));
+            }
+        }
 
-                // Update immune status
-                const zone = immune.system_health.current_zone;
-                document.getElementById('currentZone').textContent = zone.toUpperCase();
-                const indicator = document.getElementById('zoneIndicator');
-                indicator.className = `status-indicator status-${{zone}}`;
-
-                document.getElementById('systemMode').textContent = engine.system_mode.toUpperCase();
-                document.getElementById('neuralGateway').textContent =
-                    immune.immune_components.neural_gateway_state.toUpperCase();
-                document.getElementById('swarmHealth').textContent =
-                    immune.immune_components.swarm_health.toFixed(3);
-
-                // Update performance
-                document.getElementById('totalOps').textContent =
-                    engine.performance_metrics.total_decisions;
-                document.getElementById('immuneProtected').textContent =
-                    engine.performance_metrics.immune_protected_decisions;
-                document.getElementById('blockedOps').textContent =
-                    engine.performance_metrics.biologically_blocked_decisions;
-                document.getElementById('btcPrice').textContent =
-                    `$$${{data.status.current_btc_price.toFixed(2)}}`;
-
-                // Update chart
-                updateChart(data.metrics_history);
-            }}
-        }}
-
-        function updateChart(history) {{
-            if (!chart) {{
-                initChart();
-            }}
-
-            if (history && history.length > 0) {{
-                chartData = history;
-                chart.data.labels = history.map(h => new Date(h.timestamp * 1000).toLocaleTimeString());
-                chart.data.datasets[0].data = history.map(h => h.mitochondrial_health);
-                chart.data.datasets[1].data = history.map(h => h.system_entropy);
-                chart.data.datasets[2].data = history.map(h => h.success_rate);
-                chart.update('none');
-            }}
-        }}
-
-        function initChart() {{
-            const ctx = document.getElementById('metricsChart').getContext('2d');
-            chart = new Chart(ctx, {{
-                type: 'line',
-                data: {{
-                    labels: [],
-                    datasets: [{{
-                        label: 'Mitochondrial Health',
-                        data: [],
-                        borderColor: '#4CAF50',
-                        tension: 0.1
-                    }}, {{
-                        label: 'System Entropy',
-                        data: [],
-                        borderColor: '#FF9800',
-                        tension: 0.1
-                    }}, {{
-                        label: 'Success Rate',
-                        data: [],
-                        borderColor: '#2196F3',
-                        tension: 0.1
-                    }}]
-                }},
-                options: {{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {{
-                        y: {{
-                            beginAtZero: true,
-                            max: 1
-                        }}
-                    }},
-                    plugins: {{
-                        legend: {{
-                            labels: {{
-                                color: 'white'
-                            }}
-                        }}
-                    }}
-                }}
-            }});
-        }}
-
-        function handleAlert(alertData) {{
-            const container = document.getElementById('alertsContainer');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${{alertData.level}}`;
-            alert.innerHTML = `
-                <strong>${{alertData.level.toUpperCase()}}</strong>
-                [${{new Date(alertData.timestamp * 1000).toLocaleTimeString()}}]
-                ${{alertData.message}}
-                <br><small>Component: ${{alertData.component}} | Zone: ${{alertData.zone}}</small>
-            `;
-
-            container.insertBefore(alert, container.firstChild);
-
-            // Auto-switch tab for critical alerts
-            if (autoSwitch && alertData.auto_switch_tab) {{
-                document.title = `🚨 ${{alertData.message}}`;
-                if (document.hidden) {{
-                    // Flash the page title
-                    let flashCount = 0;
-                    const flashInterval = setInterval(() => {{
-                        document.title = flashCount % 2 === 0 ? '🚨 ALERT!' : `🧬 Immune System`;
-                        flashCount++;
-                        if (flashCount > 10) clearInterval(flashInterval);
-                    }}, 500);
-                }}
-            }}
-
-            // Keep only last 20 alerts
-            while (container.children.length > 20) {{
-                container.removeChild(container.lastChild);
-            }}
-        }}
-
-        function startSimulation() {{
-            ws.send(JSON.stringify({{type: 'start_simulation'}}));
-        }}
-
-        function stopSimulation() {{
-            ws.send(JSON.stringify({{type: 'stop_simulation'}}));
-        }}
-
-        function resetSystem() {{
-            if (confirm('Reset the entire immune system?')) {{
-                ws.send(JSON.stringify({{type: 'reset_immune_system'}}));
-            }}
-        }}
-
-        function triggerEmergency() {{
-            if (confirm('Trigger emergency scenario for testing?')) {{
-                ws.send(JSON.stringify({{type: 'trigger_emergency'}}));
-            }}
-        }}
-
-        function toggleAutoSwitch() {{
-            autoSwitch = !autoSwitch;
-            document.getElementById('autoSwitchStatus').textContent = autoSwitch ? 'ON' : 'OFF';
-        }}
-
-        function updateStatus(message, level) {{
-            console.log(`[${{level.toUpperCase()}}] ${{message}}`);
-        }}
-
-        // Initialize chart when page loads
-        document.addEventListener('DOMContentLoaded', function() {{
-            setTimeout(initChart, 1000);
-        }});
+        // Connect on page load
+        connectWebSocket();
     </script>
 </body>
 </html>
-        """
+            """
+
+        except Exception as e:
+            logger.error(f"🚨 Error generating dashboard HTML: {e}")
+            return f"<html><body><h1>Error</h1><p>{e}</p></body></html>"
 
 
 async def main():

@@ -19,18 +19,21 @@ Implements proper functionality while preserving mathematical logic.
 
 def implement_strategy_loader():
     """Implement the strategy_loader.py file with proper functionality."""
-    content = '''#!/usr/bin/env python3'
+    content = '''#!/usr/bin/env python3
 """
 Strategy Loader - Core component for loading and managing trading strategies.
 """
 
+import json
+from pathlib import Path
+from typing import Dict, Any
 
 
 class StrategyLoader:
     """Loads and manages trading strategies from various sources."""
 
     def __init__(self, strategy_dir: str = "strategies"):
-        """Initialize strategy loader."
+        """Initialize strategy loader.
 
         Args:
             strategy_dir: Directory containing strategy files
@@ -39,8 +42,8 @@ class StrategyLoader:
         self.strategies = {}
         self.loaded_strategies = {}
 
-    def load_strategy():-> Dict[str, Any]:
-        """Load a specific strategy by name."
+    def load_strategy(self, strategy_name: str) -> Dict[str, Any]:
+        """Load a specific strategy by name.
 
         Args:
             strategy_name: Name of the strategy to load
@@ -60,8 +63,8 @@ class StrategyLoader:
         except Exception as e:
             raise RuntimeError(f"Failed to load strategy {strategy_name}: {e}")
 
-    def load_all_strategies():-> Dict[str, Dict[str, Any]]:
-        """Load all available strategies."
+    def load_all_strategies(self) -> Dict[str, Dict[str, Any]]:
+        """Load all available strategies.
 
         Returns:
             Dictionary of all loaded strategies
@@ -74,8 +77,8 @@ class StrategyLoader:
         except Exception as e:
             raise RuntimeError(f"Failed to load all strategies: {e}")
 
-    def validate_strategy():-> bool:
-        """Validate strategy configuration."
+    def validate_strategy(self, strategy: Dict[str, Any]) -> bool:
+        """Validate strategy configuration.
 
         Args:
             strategy: Strategy configuration to validate
@@ -84,10 +87,10 @@ class StrategyLoader:
             True if valid, False otherwise
         """
         required_fields = ['name', 'type', 'parameters']
-        return all(field in strategy for field in, required_fields)
+        return all(field in strategy for field in required_fields)
 
-    def get_strategy_parameters():-> Dict[str, Any]:
-        """Get parameters for a specific strategy."
+    def get_strategy_parameters(self, strategy_name: str) -> Dict[str, Any]:
+        """Get parameters for a specific strategy.
 
         Args:
             strategy_name: Name of the strategy
@@ -99,8 +102,8 @@ class StrategyLoader:
             self.load_strategy(strategy_name)
         return self.loaded_strategies[strategy_name].get('parameters', {})
 
-    def list_available_strategies():-> List[str]:
-        """List all available strategy files."
+    def list_available_strategies(self) -> List[str]:
+        """List all available strategy files.
 
         Returns:
             List of strategy names
@@ -131,18 +134,21 @@ if __name__ == "__main__":
 
 def implement_matrix_mapper():
     """Implement the matrix_mapper.py file with proper functionality."""
-    content = '''#!/usr/bin/env python3'
+    content = '''#!/usr/bin/env python3
 """
 Matrix Mapper - Core mathematical component for matrix operations and mapping.
 """
 
+import numpy as np
+from scipy import linalg as la
+from typing import Tuple
 
 
 class MatrixMapper:
     """Handles matrix operations and transformations for trading algorithms."""
 
-    def __init__():):
-        """Initialize matrix mapper."
+    def __init__(self, dimensions: Tuple[int, int]):
+        """Initialize matrix mapper.
 
         Args:
             dimensions: Matrix dimensions (rows, columns)
@@ -151,8 +157,8 @@ class MatrixMapper:
         self.matrix = np.zeros(dimensions)
         self.mapping_cache = {}
 
-    def create_identity_matrix():-> np.ndarray:
-        """Create identity matrix of specified size."
+    def create_identity_matrix(self, size: int) -> np.ndarray:
+        """Create identity matrix of specified size.
 
         Args:
             size: Size of the identity matrix
@@ -162,8 +168,8 @@ class MatrixMapper:
         """
         return np.eye(size)
 
-    def create_transformation_matrix():-> np.ndarray:
-        """Create 2D transformation matrix."
+    def create_transformation_matrix(self, rotation: float, scale: float) -> np.ndarray:
+        """Create 2D transformation matrix.
 
         Args:
             rotation: Rotation angle in radians
@@ -175,13 +181,13 @@ class MatrixMapper:
         cos_r = np.cos(rotation)
         sin_r = np.sin(rotation)
 
-        return np.array([)]
+        return np.array([
             [scale * cos_r, -scale * sin_r],
             [scale * sin_r, scale * cos_r]
         ])
 
-    def apply_transformation():-> np.ndarray:
-        """Apply transformation matrix to data."
+    def apply_transformation(self, data: np.ndarray, transformation: np.ndarray) -> np.ndarray:
+        """Apply transformation matrix to data.
 
         Args:
             data: Input data array
@@ -192,8 +198,8 @@ class MatrixMapper:
         """
         return np.dot(data, transformation.T)
 
-    def calculate_eigenvalues():-> np.ndarray:
-        """Calculate eigenvalues of a matrix."
+    def calculate_eigenvalues(self, matrix: np.ndarray) -> np.ndarray:
+        """Calculate eigenvalues of a matrix.
 
         Args:
             matrix: Input matrix
@@ -203,8 +209,8 @@ class MatrixMapper:
         """
         return la.eigvals(matrix)
 
-    def calculate_eigenvectors():-> Tuple[np.ndarray, np.ndarray]:
-        """Calculate eigenvalues and eigenvectors of a matrix."
+    def calculate_eigenvectors(self, matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Calculate eigenvalues and eigenvectors of a matrix.
 
         Args:
             matrix: Input matrix
@@ -214,8 +220,8 @@ class MatrixMapper:
         """
         return la.eig(matrix)
 
-    def matrix_inverse():-> np.ndarray:
-        """Calculate matrix inverse."
+    def matrix_inverse(self, matrix: np.ndarray) -> np.ndarray:
+        """Calculate matrix inverse.
 
         Args:
             matrix: Input matrix
@@ -225,19 +231,19 @@ class MatrixMapper:
         """
         return la.inv(matrix)
 
-    def matrix_determinant():-> float:
-        """Calculate matrix determinant."
+    def matrix_determinant(self, matrix: np.ndarray) -> float:
+        """Calculate matrix determinant.
 
         Args:
             matrix: Input matrix
 
         Returns:
-            Determinant value
+            Matrix determinant
         """
         return la.det(matrix)
 
-    def solve_linear_system():-> np.ndarray:
-        """Solve linear system Ax = b."
+    def solve_linear_system(self, A: np.ndarray, b: np.ndarray) -> np.ndarray:
+        """Solve linear system Ax = b.
 
         Args:
             A: Coefficient matrix
@@ -248,8 +254,8 @@ class MatrixMapper:
         """
         return la.solve(A, b)
 
-    def normalize_matrix():-> np.ndarray:
-        """Normalize matrix to unit norm."
+    def normalize_matrix(self, matrix: np.ndarray) -> np.ndarray:
+        """Normalize matrix to unit norm.
 
         Args:
             matrix: Input matrix
@@ -258,12 +264,14 @@ class MatrixMapper:
             Normalized matrix
         """
         norm = la.norm(matrix)
-        return matrix / norm if norm > 0 else matrix
+        if norm > 0:
+            return matrix / norm
+        return matrix
 
 
 def main():
     """Main function for testing."""
-    mapper = MatrixMapper()
+    mapper = MatrixMapper((3, 3))
     print("Matrix Mapper initialized successfully!")
 
     # Test identity matrix
@@ -271,7 +279,7 @@ def main():
     print(f"Identity matrix:\\n{identity}")
 
     # Test transformation matrix
-    transform = mapper.create_transformation_matrix(rotation=np.pi/4, scale=2.0)
+    transform = mapper.create_transformation_matrix(np.pi/4, 2.0)
     print(f"Transformation matrix:\\n{transform}")
 
 
@@ -288,63 +296,101 @@ if __name__ == "__main__":
 
 def implement_integration_orchestrator():
     """Implement the integration_orchestrator.py file with proper functionality."""
-    content = '''#!/usr/bin/env python3'
+    content = '''#!/usr/bin/env python3
 """
-Integration Orchestrator - Coordinates system integration and communication.
+Integration Orchestrator - Manages system integrations and external connections.
 """
 
+import asyncio
+import json
+import logging
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class IntegrationOrchestrator:
-    """Orchestrates integration between different system components."""
+    """Manages system integrations and external connections."""
 
-    def __init__(self, config_file: str = "integration_config.json"):
-        """Initialize integration orchestrator."
+    def __init__(self, config_path: str = "config/integrations.json"):
+        """Initialize integration orchestrator.
 
         Args:
-            config_file: Configuration file path
+            config_path: Path to integration configuration file
         """
-        self.config_file = Path(config_file)
-        self.config = self.load_config()
+        self.config_path = Path(config_path)
         self.active_integrations = {}
-        self.logger = logging.getLogger(__name__)
+        self.integration_status = {}
+        self.load_config()
 
-    def load_config():-> Dict[str, Any]:
-        """Load integration configuration."
+    def load_config(self) -> Dict[str, Any]:
+        """Load integration configuration.
 
         Returns:
             Configuration dictionary
         """
         try:
-            if self.config_file.exists():
-                with open(self.config_file, 'r') as f:
+            if self.config_path.exists():
+                with open(self.config_path, 'r') as f:
                     return json.load(f)
             else:
-                return self.get_default_config()
+                config = self.get_default_config()
+                self.save_config(config)
+                return config
         except Exception as e:
-            self.logger.error(f"Failed to load config: {e}")
+            logger.error(f"Failed to load integration config: {e}")
             return self.get_default_config()
 
-    def get_default_config():-> Dict[str, Any]:
-        """Get default configuration."
+    def get_default_config(self) -> Dict[str, Any]:
+        """Get default integration configuration.
 
         Returns:
             Default configuration dictionary
         """
-        return {}
-            "integrations": {}
-                "database": {"enabled": True, "type": "postgresql"},
-                "api": {"enabled": True, "type": "rest"},
-                "messaging": {"enabled": True, "type": "redis"}
+        return {
+            "integrations": {
+                "trading_api": {
+                    "enabled": True,
+                    "type": "rest",
+                    "endpoint": "https://api.trading.com",
+                    "timeout": 30,
+                    "retry_attempts": 3
+                },
+                "data_feed": {
+                    "enabled": True,
+                    "type": "websocket",
+                    "endpoint": "wss://data.feed.com",
+                    "reconnect_interval": 5
+                },
+                "analytics": {
+                    "enabled": False,
+                    "type": "grpc",
+                    "endpoint": "analytics.service:50051"
+                }
             },
-            "settings": {}
-                "timeout": 30,
-                "retry_attempts": 3,
-                "log_level": "INFO"
-}
-}
-    async def start_integration():-> bool:
-        """Start a specific integration."
+            "global_settings": {
+                "max_concurrent_connections": 10,
+                "connection_timeout": 60,
+                "health_check_interval": 30
+            }
+        }
+
+    def save_config(self, config: Dict[str, Any]) -> None:
+        """Save integration configuration.
+
+        Args:
+            config: Configuration to save
+        """
+        try:
+            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.config_path, 'w') as f:
+                json.dump(config, f, indent=2)
+        except Exception as e:
+            logger.error(f"Failed to save integration config: {e}")
+
+    async def start_integration(self, integration_name: str) -> bool:
+        """Start a specific integration.
 
         Args:
             integration_name: Name of the integration to start
@@ -353,51 +399,37 @@ class IntegrationOrchestrator:
             True if successful, False otherwise
         """
         try:
-            if integration_name not in self.config["integrations"]:
-                raise ValueError(f"Integration {integration_name} not found in config")
-
-            integration_config = self.config["integrations"][integration_name]
-            if not integration_config.get("enabled", False):
-                self.logger.warning(f"Integration {integration_name} is disabled")
+            config = self.load_config()
+            if integration_name not in config["integrations"]:
+                logger.error(f"Integration {integration_name} not found in config")
                 return False
 
-            # Initialize integration based on type
-            integration_type = integration_config["type"]
-            if integration_type == "postgresql":
-                await self._init_database_integration(integration_name, integration_config)
-            elif integration_type == "rest":
-                await self._init_api_integration(integration_name, integration_config)
-            elif integration_type == "redis":
-                await self._init_messaging_integration(integration_name, integration_config)
+            integration_config = config["integrations"][integration_name]
+            if not integration_config.get("enabled", False):
+                logger.warning(f"Integration {integration_name} is disabled")
+                return False
 
-            self.active_integrations[integration_name] = True
-            self.logger.info(f"Integration {integration_name} started successfully")
+            # Simulate integration startup
+            logger.info(f"Starting integration: {integration_name}")
+            await asyncio.sleep(1)  # Simulate startup time
+
+            self.active_integrations[integration_name] = {
+                "status": "running",
+                "start_time": asyncio.get_event_loop().time(),
+                "config": integration_config
+            }
+
+            self.integration_status[integration_name] = "active"
+            logger.info(f"Integration {integration_name} started successfully")
             return True
 
         except Exception as e:
-            self.logger.error(f"Failed to start integration {integration_name}: {e}")
+            logger.error(f"Failed to start integration {integration_name}: {e}")
+            self.integration_status[integration_name] = "error"
             return False
 
-    async def _init_database_integration(self, name: str, config: Dict[str, Any]):
-        """Initialize database integration."""
-        # Database integration implementation
-        self.logger.info(f"Initializing database integration: {name}")
-        await asyncio.sleep(0.1)  # Simulate initialization
-
-    async def _init_api_integration(self, name: str, config: Dict[str, Any]):
-        """Initialize API integration."""
-        # API integration implementation
-        self.logger.info(f"Initializing API integration: {name}")
-        await asyncio.sleep(0.1)  # Simulate initialization
-
-    async def _init_messaging_integration(self, name: str, config: Dict[str, Any]):
-        """Initialize messaging integration."""
-        # Messaging integration implementation
-        self.logger.info(f"Initializing messaging integration: {name}")
-        await asyncio.sleep(0.1)  # Simulate initialization
-
-    async def stop_integration():-> bool:
-        """Stop a specific integration."
+    async def stop_integration(self, integration_name: str) -> bool:
+        """Stop a specific integration.
 
         Args:
             integration_name: Name of the integration to stop
@@ -406,38 +438,41 @@ class IntegrationOrchestrator:
             True if successful, False otherwise
         """
         try:
-            if integration_name in self.active_integrations:
-                del self.active_integrations[integration_name]
-                self.logger.info(f"Integration {integration_name} stopped")
+            if integration_name not in self.active_integrations:
+                logger.warning(f"Integration {integration_name} is not running")
                 return True
-            return False
+
+            logger.info(f"Stopping integration: {integration_name}")
+            await asyncio.sleep(0.5)  # Simulate shutdown time
+
+            del self.active_integrations[integration_name]
+            self.integration_status[integration_name] = "stopped"
+            logger.info(f"Integration {integration_name} stopped successfully")
+            return True
+
         except Exception as e:
-            self.logger.error(f"Failed to stop integration {integration_name}: {e}")
+            logger.error(f"Failed to stop integration {integration_name}: {e}")
             return False
 
-    def get_active_integrations():-> List[str]:
-        """Get list of active integrations."
+    def get_active_integrations(self) -> List[str]:
+        """Get list of active integrations.
 
         Returns:
             List of active integration names
         """
         return list(self.active_integrations.keys())
 
-    def get_integration_status():-> Dict[str, Any]:
-        """Get status of a specific integration."
-
-        Args:
-            integration_name: Name of the integration
+    def get_integration_status(self) -> Dict[str, Any]:
+        """Get status of all integrations.
 
         Returns:
-            Integration status dictionary
+            Dictionary of integration statuses
         """
-        status = {}
-            "name": integration_name,
-            "active": integration_name in self.active_integrations,
-            "enabled": self.config["integrations"].get(integration_name, {}).get("enabled", False)
-}
-        return status
+        return {
+            "active_integrations": self.active_integrations,
+            "integration_status": self.integration_status,
+            "total_integrations": len(self.active_integrations)
+        }
 
 
 async def main():
@@ -445,15 +480,16 @@ async def main():
     orchestrator = IntegrationOrchestrator()
     print("Integration Orchestrator initialized successfully!")
 
-    # Start integrations
-    integrations = ["database", "api", "messaging"]
-    for integration in integrations:
-        success = await orchestrator.start_integration(integration)
-        print(f"Integration {integration}: {'Started' if success else 'Failed'}")
+    # Start some integrations
+    await orchestrator.start_integration("trading_api")
+    await orchestrator.start_integration("data_feed")
 
-    # Get active integrations
-    active = orchestrator.get_active_integrations()
-    print(f"Active integrations: {active}")
+    # Get status
+    status = orchestrator.get_integration_status()
+    print(f"Integration status: {status}")
+
+    # Stop integrations
+    await orchestrator.stop_integration("trading_api")
 
 
 if __name__ == "__main__":
@@ -468,36 +504,28 @@ if __name__ == "__main__":
 
 
 def main():
-    """Main implementation function."""
-    print("🔧 Implementing critical files with proper functionality...")
-    print("=" * 80)
+    """Main function to implement all critical files."""
+    print("Implementing critical files...")
 
-    implementations = []
-        ("Strategy Loader", implement_strategy_loader),
-        ("Matrix Mapper", implement_matrix_mapper),
-        ("Integration Orchestrator", implement_integration_orchestrator),
-    ]
-    success_count = 0
-    for name, implementation_func in implementations:
-        print(f"\n🔧 Implementing {name}...")
-        try:
-            if implementation_func():
-                print(f"✅ Successfully implemented {name}")
-                success_count += 1
-            else:
-                print(f"❌ Failed to implement {name}")
-        except Exception as e:
-            print(f"❌ Error implementing {name}: {e}")
+    # Implement strategy loader
+    if implement_strategy_loader():
+        print("✅ Strategy loader implemented successfully")
+    else:
+        print("❌ Failed to implement strategy loader")
 
-    print()
-        f"\n🎉 Implemented {success_count} out of {"}
-            len(implementations)
-        } critical files!"
-    )
-    print("\n📋 Next steps:")
-    print("1. Test imports: python -c 'import core.strategy_loader'")
-    print("2. Run: flake8 core/ to check for remaining errors")
-    print("3. Test functionality of implemented components")
+    # Implement matrix mapper
+    if implement_matrix_mapper():
+        print("✅ Matrix mapper implemented successfully")
+    else:
+        print("❌ Failed to implement matrix mapper")
+
+    # Implement integration orchestrator
+    if implement_integration_orchestrator():
+        print("✅ Integration orchestrator implemented successfully")
+    else:
+        print("❌ Failed to implement integration orchestrator")
+
+    print("Critical files implementation completed!")
 
 
 if __name__ == "__main__":

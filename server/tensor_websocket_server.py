@@ -62,7 +62,7 @@ class TensorWebSocketServer:
             f"🌐 Tensor WebSocket Server initialized on port {self.config.get('port', 8765)}"
         )
 
-    def _default_config():-> Dict[str, Any]:
+    def _default_config(self) -> Dict[str, Any]:
         """Default configuration."""
         return {
             "host": "localhost",
@@ -191,7 +191,7 @@ class TensorWebSocketServer:
         except Exception as e:
             logger.error(f"Error handling client message: {e}")
 
-    async def run_analysis():-> Dict[str, Any]:
+    async def run_analysis(self, btc_price: float) -> Dict[str, Any]:
         """Run tensor analysis in executor to avoid blocking."""
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(
@@ -199,7 +199,7 @@ class TensorWebSocketServer:
         )
         return self.tensor_bridge.get_analysis_for_react()
 
-    def simulate_btc_price():-> float:
+    def simulate_btc_price(self) -> float:
         """Simulate BTC price movement."""
 
         price_range = self.config.get("btc_price_range", (40000, 70000))
@@ -305,7 +305,7 @@ class TensorWebSocketServer:
         self.executor.shutdown(wait=True)
         logger.info("🛑 WebSocket server stopped")
 
-    def get_server_stats():-> Dict[str, Any]:
+    def get_server_stats(self) -> Dict[str, Any]:
         """Get server statistics."""
         return {
             "active_connections": self.active_connections,

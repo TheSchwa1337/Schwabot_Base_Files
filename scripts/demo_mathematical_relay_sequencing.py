@@ -41,7 +41,7 @@ class MathematicalRelaySequencingDemo:
         self.demo_results=[]
         self.start_time=datetime.now()
 
-    def initialize_system(): -> bool:
+    def initialize_system(self) -> bool:
         """Initialize the mathematical relay sequencer."""
         print("🔧 Initializing Mathematical Relay Sequencing System")
         print("=" * 60)
@@ -79,7 +79,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error initializing system: {e}")
             return False
 
-    def demo_btc_price_hash_sequencing():-> Dict[str, Any]:
+    def demo_btc_price_hash_sequencing(self) -> Dict[str, Any]:
         """Demonstrate BTC price hash sequencing with precise timing."""
         print("\n🪙 BTC Price Hash Sequencing Demo")
         print("=" * 40)
@@ -172,9 +172,7 @@ class MathematicalRelaySequencingDemo:
             # Calculate statistics
             successful_results = [r for r in results if r["success"]]
             if successful_results:
-                avg_duration = sum(r["duration"] for r in, successful_results) / len()
-                    successful_results
-                )
+                avg_duration = sum(r["duration"] for r in successful_results) / len(successful_results)
                 print("\n📈 BTC Sequencing Statistics:")
                 print()
                     f"   Successful scenarios: {len(successful_results)}/{len(btc_scenarios)}"
@@ -191,7 +189,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in BTC price hash sequencing demo: {e}")
             return {"type": "btc_price_hash", "error": str(e), "success": False}
 
-    def demo_bit_depth_switching():-> Dict[str, Any]:
+    def demo_bit_depth_switching(self) -> Dict[str, Any]:
         """Demonstrate bit depth switching with phase tracking."""
         print("\n🔄 Bit Depth Switching Demo")
         print("=" * 35)
@@ -281,9 +279,7 @@ class MathematicalRelaySequencingDemo:
             # Calculate statistics
             successful_results = [r for r in results if r["success"]]
             if successful_results:
-                avg_duration = sum(r["duration"] for r in, successful_results) / len()
-                    successful_results
-                )
+                avg_duration = sum(r["duration"] for r in successful_results) / len(successful_results)
                 print("\n📈 Bit Depth Switching Statistics:")
                 print()
                     f"   Successful switches: {len(successful_results)}/{len(bit_depth_scenarios)}"
@@ -300,7 +296,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in bit depth switching demo: {e}")
             return {"type": "bit_depth_switch", "error": str(e), "success": False}
 
-    def demo_profit_optimization():-> Dict[str, Any]:
+    def demo_profit_optimization(self) -> Dict[str, Any]:
         """Demonstrate profit optimization with basket-tier navigation."""
         print("\n💰 Profit Optimization Demo")
         print("=" * 35)
@@ -390,9 +386,7 @@ class MathematicalRelaySequencingDemo:
             # Calculate statistics
             successful_results = [r for r in results if r["success"]]
             if successful_results:
-                avg_duration = sum(r["duration"] for r in, successful_results) / len()
-                    successful_results
-                )
+                avg_duration = sum(r["duration"] for r in successful_results) / len(successful_results)
                 print("\n📈 Profit Optimization Statistics:")
                 print()
                     f"   Successful optimizations: {len(successful_results)}/{len(profit_scenarios)}"
@@ -409,7 +403,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in profit optimization demo: {e}")
             return {"type": "profit_optimization", "error": str(e), "success": False}
 
-    def demo_quicktime_events():-> Dict[str, Any]:
+    def demo_quicktime_events(self) -> Dict[str, Any]:
         """Demonstrate QuickTime event handling with sequencing."""
         print("\n⚡ QuickTime Events Demo")
         print("=" * 30)
@@ -502,7 +496,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in QuickTime events demo: {e}")
             return {"type": "quicktime_events", "error": str(e), "success": False}
 
-    def demo_time_log_analysis():-> Dict[str, Any]:
+    def demo_time_log_analysis(self) -> Dict[str, Any]:
         """Demonstrate comprehensive time log analysis."""
         print("\n⏱️ Time Log Analysis Demo")
         print("=" * 35)
@@ -566,9 +560,7 @@ class MathematicalRelaySequencingDemo:
                     total_duration += duration
 
                 # Show operation distribution
-                for operation, count in sorted()
-                    operation_counts.items(), key=lambda x: x[1], reverse=True
-                ):
+                for operation, count in sorted(operation_counts.items(), key=lambda x: x[1], reverse=True):
                     print(f"   {operation}: {count} times")
 
                 avg_duration = total_duration / len(recent_logs) if recent_logs else 0
@@ -584,7 +576,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in time log analysis demo: {e}")
             return {"type": "time_log_analysis", "error": str(e), "success": False}
 
-    def demo_data_export():-> Dict[str, Any]:
+    def demo_data_export(self) -> Dict[str, Any]:
         """Demonstrate data export and persistence."""
         print("\n💾 Data Export Demo")
         print("=" * 25)
@@ -609,9 +601,7 @@ class MathematicalRelaySequencingDemo:
                 print(f"   File size: {os.path.getsize(export_filename)} bytes")
                 print(f"   Mode: {sequencer_info.get('mode', 'unknown')}")
                 print()
-                    f"   Time log level: {"}
-                        sequencer_info.get('time_log_level', 'unknown')
-                    }"
+                    f"   Time log level: {sequencer_info.get('time_log_level', 'unknown')}"
                 )
                 print(f"   Uptime: {sequencer_info.get('uptime_seconds', 0):.1f}s")
                 print(f"   Total sequences: {statistics.get('total_sequences', 0)}")
@@ -631,27 +621,27 @@ class MathematicalRelaySequencingDemo:
                 os.remove(export_filename)
                 print("\n✅ Export file cleaned up")
 
-                return {}
-                    "type": "data_export",
-                    "filename": export_filename,
-                    "file_size": os.path.getsize(export_filename)
+                return {
+                "type": "data_export",
+                "filename": export_filename,
+                "file_size": os.path.getsize(export_filename)
                     if os.path.exists(export_filename)
                     else 0,
-                    "success": True,
+                "success": True,
                 }
             else:
                 print(f"❌ Export file not created: {export_filename}")
-                return {}
-                    "type": "data_export",
-                    "error": "Export file not created",
-                    "success": False,
+                return {
+                "type": "data_export",
+                "error": "Export file not created",
+                "success": False,
                 }
 
         except Exception as e:
             print(f"❌ Error in data export demo: {e}")
             return {"type": "data_export", "error": str(e), "success": False}
 
-    def run_comprehensive_demo():-> bool:
+    def run_comprehensive_demo(self) -> bool:
         """Run the comprehensive mathematical relay sequencing demo."""
         print("🧮 Mathematical Relay Sequencing Demo")
         print("=" * 60)
@@ -664,7 +654,7 @@ class MathematicalRelaySequencingDemo:
             return False
 
         # Run all demos
-        demos = []
+        demos = [
             ("BTC Price Hash Sequencing", self.demo_btc_price_hash_sequencing),
             ("Bit Depth Switching", self.demo_bit_depth_switching),
             ("Profit Optimization", self.demo_profit_optimization),
@@ -684,18 +674,14 @@ class MathematicalRelaySequencingDemo:
                 if result.get("success", False):
                     print(f"✅ {demo_name} completed successfully")
                 else:
-                    print()
+                    print(
                         f"❌ {demo_name} failed: {result.get('error', 'Unknown error')}"
                     )
 
             except Exception as e:
                 print(f"❌ {demo_name} crashed: {e}")
-                self.demo_results.append()
-                    {}
-                        "type": demo_name.lower().replace(" ", "_"),
-                        "error": str(e),
-                        "success": False,
-                    }
+                self.demo_results.append(
+                    {"type": demo_name.lower().replace(" ", "_"), "error": str(e), "success": False}
                 )
 
             time.sleep(0.5)  # Brief pause between demos
@@ -713,9 +699,7 @@ class MathematicalRelaySequencingDemo:
 
         # Calculate overall statistics
         total_demos = len(self.demo_results)
-        successful_demos = len()
-            [r for r in self.demo_results if r.get("success", False)]
-        )
+        successful_demos = len([r for r in self.demo_results if r.get("success", False)])
         failed_demos = total_demos - successful_demos
 
         print("🎯 Overall Results:")
@@ -733,9 +717,7 @@ class MathematicalRelaySequencingDemo:
 
             if success and "results" in result:
                 results = result["results"]
-                successful_results = len()
-                    [r for r in results if r.get("success", False)]
-                )
+                successful_results = len([r for r in results if r.get("success", False)])
                 total_results = len(results)
                 print()
                     f"   {status} {demo_type}: {successful_results}/{total_results} scenarios"

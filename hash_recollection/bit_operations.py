@@ -113,7 +113,7 @@ class BitOperations:
 
         logger.info("🔢 Bit Operations initialized")
 
-    def _default_config():-> Dict[str, Any]:
+    def _default_config(self) -> Dict[str, Any]:
         """Default configuration."""
         return {
             "max_history_size": 1000,
@@ -128,60 +128,51 @@ class BitOperations:
             "pattern_detection_window": 32,
         }
 
-    def analyze_bit_phase():-> BitPhase:
-        """
-        Analyze bit phase from a continuous value.
-
-        Args:
-            value: Continuous value to convert to bit phase
-
-        Returns:
-            BitPhase object with analysis results
-        """
+    def analyze_bit_phase(self, value: float) -> BitPhase:
+        """Analyze bit phase from a continuous value."""
+        if value < 0 or value > 1:
+            return self._create_default_bit_phase()
+        
         try:
-            # Normalize value to [0, 1]
-            normalized_value = np.clip(value, 0.0, 1.0)
-
-            # Determine bit value (0 or 1)
-            bit_value = 1 if normalized_value > 0.5 else 0
-
-            # Calculate phase state
             thresholds = self.config["phase_thresholds"]
-
-            if normalized_value < thresholds["zero_threshold"]:
+            
+            # Determine phase state
+            if value < thresholds["zero_threshold"]:
                 phase_state = PhaseState.ZERO
-            elif normalized_value > thresholds["one_threshold"]:
+                bit_value = 0
+            elif value > thresholds["one_threshold"]:
                 phase_state = PhaseState.ONE
-            elif abs(normalized_value - 0.5) < thresholds["transition_threshold"]:
+                bit_value = 1
+            elif abs(value - 0.5) < thresholds["transition_threshold"]:
                 phase_state = PhaseState.TRANSITION
+                bit_value = 1 if value > 0.5 else 0
             else:
                 phase_state = PhaseState.UNCERTAIN
-
+                bit_value = 1 if value > 0.5 else 0
+            
             # Calculate confidence and transition probability
-            confidence = self._calculate_phase_confidence(normalized_value, phase_state)
-            transition_probability = self._calculate_transition_probability(
-                normalized_value
-            )
-
+            confidence = self._calculate_phase_confidence(value, phase_state)
+            transition_probability = self._calculate_transition_probability(value)
+            
             bit_phase = BitPhase(
                 timestamp=time.time(),
                 phase_state=phase_state,
                 bit_value=bit_value,
                 confidence=confidence,
                 transition_probability=transition_probability,
+                metadata={"raw_value": value}
             )
-
-            # Update history
+            
             self._update_history(bit_phase)
             self.total_bit_operations += 1
-
+            
             return bit_phase
-
+            
         except Exception as e:
             logger.error(f"Error analyzing bit phase: {e}")
             return self._create_default_bit_phase()
 
-    def _create_default_bit_phase():-> BitPhase:
+    def _create_default_bit_phase(self) -> BitPhase:
         """Create default bit phase."""
         return BitPhase(
             timestamp=time.time(),
@@ -189,23 +180,47 @@ class BitOperations:
             bit_value=0,
             confidence=0.5,
             transition_probability=0.5,
+            metadata={"default": True}
         )
 
-    def _calculate_phase_confidence():-> float:
+    def _calculate_phase_confidence(self, value: float, phase_state: PhaseState) -> float:
         """Calculate confidence in phase state."""
-        if phase_state == PhaseState.ZERO:
-            return 1.0 - value
-        elif phase_state == PhaseState.ONE:
-            return value
-        elif phase_state == PhaseState.TRANSITION:
-            return 1.0 - abs(value - 0.5) * 2
-        else:
+        try:
+            thresholds = self.config["phase_thresholds"]
+            
+            if phase_state == PhaseState.ZERO:
+                # Higher confidence when closer to 0
+                confidence = 1.0 - (value / thresholds["zero_threshold"])
+            elif phase_state == PhaseState.ONE:
+                # Higher confidence when closer to 1
+                confidence = (value - thresholds["one_threshold"]) / (1.0 - thresholds["one_threshold"])
+            elif phase_state == PhaseState.TRANSITION:
+                # Lower confidence during transitions
+                confidence = 0.5 - abs(value - 0.5) / thresholds["transition_threshold"]
+            else:  # UNCERTAIN
+                confidence = 0.5
+            
+            return max(0.0, min(1.0, confidence))
+            
+        except Exception as e:
+            logger.error(f"Error calculating phase confidence: {e}")
             return 0.5
 
-    def _calculate_transition_probability():-> float:
+    def _calculate_transition_probability(self, value: float) -> float:
         """Calculate probability of phase transition."""
-        # Higher probability near 0.5
-        return 1.0 - abs(value - 0.5) * 2
+        try:
+            # Higher probability near 0.5 (transition zone)
+            distance_from_center = abs(value - 0.5)
+            transition_prob = max(0.0, 1.0 - (distance_from_center / 0.5))
+            
+            # Add some randomness for realistic transitions
+            transition_prob *= 0.8 + 0.2 * (time.time() % 1.0)
+            
+            return max(0.0, min(1.0, transition_prob))
+            
+        except Exception as e:
+            logger.error(f"Error calculating transition probability: {e}")
+            return 0.5
 
     def _update_history(self, bit_phase: BitPhase):
         """Update bit history."""
@@ -216,216 +231,233 @@ class BitOperations:
         self.current_phase = bit_phase.phase_state
         self.last_update = bit_phase.timestamp
 
-    def create_bit_sequence():-> BitSequence:
-        """
-        Create bit sequence from continuous values.
-
-        Args:
-            values: List of continuous values
-
-        Returns:
-            BitSequence object
-        """
+    def create_bit_sequence(self, values: List[float]) -> BitSequence:
+        """Create bit sequence from continuous values."""
         try:
+            sequence_id = f"bit_seq_{int(time.time() * 1000)}"
             bits = []
             phases = []
-
+            
             for value in values:
                 bit_phase = self.analyze_bit_phase(value)
                 bits.append(bit_phase.bit_value)
                 phases.append(bit_phase)
-
+            
             sequence = BitSequence(
-                sequence_id=f"seq_{int(time.time() * 1000)}",
+                sequence_id=sequence_id,
                 bits=bits,
                 phases=phases,
                 length=len(bits),
                 timestamp=time.time(),
+                metadata={"source_values_count": len(values)}
             )
-
+            
             return sequence
-
+            
         except Exception as e:
             logger.error(f"Error creating bit sequence: {e}")
             return BitSequence(
-                sequence_id="error", bits=[], phases=[], length=0, timestamp=time.time()
+                sequence_id=f"error_seq_{int(time.time() * 1000)}",
+                bits=[],
+                phases=[],
+                length=0,
+                timestamp=time.time(),
+                metadata={"error": str(e)}
             )
 
-    def detect_patterns():-> List[BitPattern]:
-        """
-        Detect patterns in bit sequence.
-
-        Args:
-            bit_sequence: List of bits (0s and 1s)
-
-        Returns:
-            List of detected patterns
-        """
-        patterns = []
-
+    def detect_patterns(self, bit_sequence: List[int]) -> List[BitPattern]:
+        """Detect patterns in bit sequence."""
         try:
-            if len(bit_sequence) < 4:
-                return patterns
-
-            # Detect common patterns
-            patterns.extend(self._detect_repeating_patterns(bit_sequence))
-            patterns.extend(self._detect_alternating_patterns(bit_sequence))
-            patterns.extend(self._detect_trend_patterns(bit_sequence))
-
+            patterns = []
+            
+            # Detect different types of patterns
+            repeating_patterns = self._detect_repeating_patterns(bit_sequence)
+            alternating_patterns = self._detect_alternating_patterns(bit_sequence)
+            trend_patterns = self._detect_trend_patterns(bit_sequence)
+            
+            patterns.extend(repeating_patterns)
+            patterns.extend(alternating_patterns)
+            patterns.extend(trend_patterns)
+            
+            # Filter by confidence threshold
+            threshold = self.config["pattern_confidence_threshold"]
+            filtered_patterns = [p for p in patterns if p.confidence >= threshold]
+            
             # Update pattern history
-            for pattern in patterns:
+            for pattern in filtered_patterns:
                 self.pattern_history.append(pattern)
                 if len(self.pattern_history) > self.max_patterns:
                     self.pattern_history.pop(0)
-
-            self.total_patterns_found += len(patterns)
-
+            
+            self.total_patterns_found += len(filtered_patterns)
+            
+            return filtered_patterns
+            
         except Exception as e:
             logger.error(f"Error detecting patterns: {e}")
+            return []
 
-        return patterns
-
-    def _detect_repeating_patterns():-> List[BitPattern]:
+    def _detect_repeating_patterns(self, bits: List[int]) -> List[BitPattern]:
         """Detect repeating patterns in bit sequence."""
         patterns = []
-
-        for pattern_length in range(2, min(8, len(bits) // 2)):
-            for start in range(len(bits) - pattern_length * 2):
-                pattern = bits[start : start + pattern_length]
-                next_pattern = bits[start + pattern_length : start + pattern_length * 2]
-
-                if pattern == next_pattern:
-                    # Check if pattern continues
-                    repeat_count = 1
-                    for i in range(
-                        start + pattern_length * 2,
-                        len(bits) - pattern_length + 1,
-                        pattern_length,
-                    ):
-                        if bits[i : i + pattern_length] == pattern:
-                            repeat_count += 1
-                        else:
-                            break
-
-                    if repeat_count >= 2:
-                        confidence = min(repeat_count / 4.0, 1.0)
-                        patterns.append(
-                            BitPattern(
-                                pattern_id=f"repeat_{start}_{pattern_length}",
-                                pattern_type="repeating",
-                                confidence=confidence,
-                                start_index=start,
-                                end_index=start + repeat_count * pattern_length,
-                                bit_sequence=pattern * repeat_count,
-                            )
+        
+        try:
+            min_pattern_length = 2
+            max_pattern_length = min(8, len(bits) // 2)
+            
+            for pattern_length in range(min_pattern_length, max_pattern_length + 1):
+                for start_idx in range(len(bits) - pattern_length * 2 + 1):
+                    pattern = bits[start_idx:start_idx + pattern_length]
+                    next_pattern = bits[start_idx + pattern_length:start_idx + pattern_length * 2]
+                    
+                    if pattern == next_pattern:
+                        # Calculate confidence based on pattern repetition
+                        repetitions = 1
+                        for i in range(start_idx + pattern_length * 2, len(bits) - pattern_length + 1, pattern_length):
+                            if bits[i:i + pattern_length] == pattern:
+                                repetitions += 1
+                            else:
+                                break
+                        
+                        confidence = min(1.0, repetitions / 3.0)  # Max confidence at 3+ repetitions
+                        
+                        pattern_obj = BitPattern(
+                            pattern_id=f"repeat_{start_idx}_{pattern_length}_{int(time.time() * 1000)}",
+                            pattern_type="repeating",
+                            confidence=confidence,
+                            start_index=start_idx,
+                            end_index=start_idx + pattern_length * repetitions,
+                            bit_sequence=pattern * repetitions,
+                            metadata={"pattern_length": pattern_length, "repetitions": repetitions}
                         )
-
+                        patterns.append(pattern_obj)
+                        
+        except Exception as e:
+            logger.error(f"Error detecting repeating patterns: {e}")
+        
         return patterns
 
-    def _detect_alternating_patterns():-> List[BitPattern]:
+    def _detect_alternating_patterns(self, bits: List[int]) -> List[BitPattern]:
         """Detect alternating patterns in bit sequence."""
         patterns = []
-
-        for start in range(len(bits) - 3):
-            # Check for 0101 or 1010 patterns
-            if len(bits) >= start + 4:
-                segment = bits[start : start + 4]
-                if segment in [[0, 1, 0, 1], [1, 0, 1, 0]]:
-                    # Count alternating sequence
-                    alt_count = 4
-                    expected_next = 1 if segment[-1] == 0 else 0
-
-                    for i in range(start + 4, len(bits)):
-                        if bits[i] == expected_next:
-                            alt_count += 1
-                            expected_next = 1 if bits[i] == 0 else 0
-                        else:
+        
+        try:
+            min_length = 4
+            
+            for start_idx in range(len(bits) - min_length + 1):
+                for length in range(min_length, min(16, len(bits) - start_idx + 1)):
+                    sequence = bits[start_idx:start_idx + length]
+                    
+                    # Check for alternating 0-1 pattern
+                    is_alternating = True
+                    for i in range(1, len(sequence)):
+                        if sequence[i] == sequence[i-1]:
+                            is_alternating = False
                             break
-
-                    if alt_count >= 4:
-                        confidence = min(alt_count / 8.0, 1.0)
-                        patterns.append(
-                            BitPattern(
-                                pattern_id=f"alt_{start}",
-                                pattern_type="alternating",
-                                confidence=confidence,
-                                start_index=start,
-                                end_index=start + alt_count,
-                                bit_sequence=bits[start : start + alt_count],
-                            )
+                    
+                    if is_alternating and len(sequence) >= min_length:
+                        confidence = min(1.0, len(sequence) / 8.0)  # Higher confidence for longer patterns
+                        
+                        pattern_obj = BitPattern(
+                            pattern_id=f"alt_{start_idx}_{length}_{int(time.time() * 1000)}",
+                            pattern_type="alternating",
+                            confidence=confidence,
+                            start_index=start_idx,
+                            end_index=start_idx + length,
+                            bit_sequence=sequence,
+                            metadata={"pattern_length": length}
                         )
-
+                        patterns.append(pattern_obj)
+                        
+        except Exception as e:
+            logger.error(f"Error detecting alternating patterns: {e}")
+        
         return patterns
 
-    def _detect_trend_patterns():-> List[BitPattern]:
+    def _detect_trend_patterns(self, bits: List[int]) -> List[BitPattern]:
         """Detect trend patterns in bit sequence."""
         patterns = []
-
-        # Detect runs of 0s or 1s
-        current_bit = bits[0]
-        run_start = 0
-        run_length = 1
-
-        for i in range(1, len(bits)):
-            if bits[i] == current_bit:
-                run_length += 1
-            else:
-                if run_length >= 3:  # Minimum run length
-                    confidence = min(run_length / 10.0, 1.0)
-                    patterns.append(
-                        BitPattern(
-                            pattern_id=f"run_{run_start}_{current_bit}",
-                            pattern_type=f"run_of_{current_bit}s",
-                            confidence=confidence,
-                            start_index=run_start,
-                            end_index=run_start + run_length,
-                            bit_sequence=bits[run_start : run_start + run_length],
-                        )
-                    )
-
-                current_bit = bits[i]
-                run_start = i
-                run_length = 1
-
-        # Check final run
-        if run_length >= 3:
-            confidence = min(run_length / 10.0, 1.0)
-            patterns.append(
-                BitPattern(
-                    pattern_id=f"run_{run_start}_{current_bit}",
-                    pattern_type=f"run_of_{current_bit}s",
-                    confidence=confidence,
-                    start_index=run_start,
-                    end_index=run_start + run_length,
-                    bit_sequence=bits[run_start : run_start + run_length],
-                )
-            )
-
+        
+        try:
+            min_length = 3
+            
+            for start_idx in range(len(bits) - min_length + 1):
+                for length in range(min_length, min(12, len(bits) - start_idx + 1)):
+                    sequence = bits[start_idx:start_idx + length]
+                    
+                    # Check for upward trend (increasing 1s)
+                    ones_count = sum(sequence)
+                    if ones_count > length / 2 and ones_count < length:
+                        # Check if 1s are generally increasing
+                        trend_score = 0
+                        for i in range(1, len(sequence)):
+                            if sequence[i] >= sequence[i-1]:
+                                trend_score += 1
+                        
+                        if trend_score >= len(sequence) * 0.7:  # 70% of transitions are non-decreasing
+                            confidence = min(1.0, (ones_count / length) * (trend_score / len(sequence)))
+                            
+                            pattern_obj = BitPattern(
+                                pattern_id=f"trend_up_{start_idx}_{length}_{int(time.time() * 1000)}",
+                                pattern_type="trend_up",
+                                confidence=confidence,
+                                start_index=start_idx,
+                                end_index=start_idx + length,
+                                bit_sequence=sequence,
+                                metadata={"ones_count": ones_count, "trend_score": trend_score}
+                            )
+                            patterns.append(pattern_obj)
+                    
+                    # Check for downward trend (decreasing 1s)
+                    zeros_count = length - ones_count
+                    if zeros_count > length / 2 and zeros_count < length:
+                        # Check if 0s are generally increasing
+                        trend_score = 0
+                        for i in range(1, len(sequence)):
+                            if sequence[i] <= sequence[i-1]:
+                                trend_score += 1
+                        
+                        if trend_score >= len(sequence) * 0.7:  # 70% of transitions are non-increasing
+                            confidence = min(1.0, (zeros_count / length) * (trend_score / len(sequence)))
+                            
+                            pattern_obj = BitPattern(
+                                pattern_id=f"trend_down_{start_idx}_{length}_{int(time.time() * 1000)}",
+                                pattern_type="trend_down",
+                                confidence=confidence,
+                                start_index=start_idx,
+                                end_index=start_idx + length,
+                                bit_sequence=sequence,
+                                metadata={"zeros_count": zeros_count, "trend_score": trend_score}
+                            )
+                            patterns.append(pattern_obj)
+                        
+        except Exception as e:
+            logger.error(f"Error detecting trend patterns: {e}")
+        
         return patterns
 
-    def get_bit_summary():-> Dict[str, Any]:
+    def get_bit_summary(self) -> Dict[str, Any]:
         """Get summary of bit operations."""
         if not self.bit_history:
             return {"status": "no_data"}
-
+        
         recent_phases = self.bit_history[-10:]
-
+        
         return {
             "current_phase": self.current_phase.value,
             "last_update": self.last_update,
             "total_operations": self.total_bit_operations,
             "total_patterns": self.total_patterns_found,
-            "recent_confidence_avg": np.mean([p.confidence for p in recent_phases]),
-            "recent_transition_prob_avg": np.mean(
-                [p.transition_probability for p in recent_phases]
-            ),
+            "recent_confidence_avg": sum(p.confidence for p in recent_phases) / len(recent_phases),
+            "recent_transition_prob_avg": sum(p.transition_probability for p in recent_phases) / len(recent_phases),
             "history_size": len(self.bit_history),
             "pattern_history_size": len(self.pattern_history),
         }
 
-    def get_recent_patterns():-> List[Dict[str, Any]]:
+    def get_recent_patterns(self, count: int = 10) -> List[Dict[str, Any]]:
         """Get recent detected patterns."""
         recent_patterns = self.pattern_history[-count:]
+        
         return [
             {
                 "pattern_id": pattern.pattern_id,
@@ -434,6 +466,7 @@ class BitOperations:
                 "start_index": pattern.start_index,
                 "end_index": pattern.end_index,
                 "bit_sequence": pattern.bit_sequence,
+                "metadata": pattern.metadata,
             }
             for pattern in recent_patterns
         ]

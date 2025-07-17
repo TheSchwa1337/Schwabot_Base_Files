@@ -24,20 +24,21 @@ as in the legacy system.
 # Add the project root to the path
 sys.path.insert(0, ".")
 
+from core.gpu_cpu_bridge import (
     get_gpu_cpu_bridge,
     ExecutionPath,
     ThermalState,
 )
 
 # Configure logging
-logging.basicConfig()
+logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class TestResult:
+class TestResult:
     """Test result data structure."""
 
     test_name: str
@@ -62,12 +63,12 @@ class ConnectivityCompatibilityTester:
         self.gpu_manager = GPUOffloadManager()
         self.test_results: List[TestResult] = []
 
-    def run_all_tests():-> Dict[str, Any]:
+    def run_all_tests(self) -> Dict[str, Any]:
         """Run all connectivity and compatibility tests."""
         safe_print("🔗 Starting Connectivity and Compatibility Test Suite")
         safe_print("=" * 60)
 
-        test_functions = []
+        test_functions = [
             self.test_calculation_consistency,
             self.test_thermal_state_integration,
             self.test_error_recovery,
@@ -89,7 +90,7 @@ class ConnectivityCompatibilityTester:
                 result = test_func()
                 execution_time = (time.time() - start_time) * 1000
 
-                results[test_name] = {}
+                results[test_name] = {
                     "success": result,
                     "execution_time_ms": execution_time,
                 }
@@ -100,7 +101,7 @@ class ConnectivityCompatibilityTester:
 
             except Exception as e:
                 error(f"❌ {test_func.__name__} ERROR: {e}")
-                results[test_func.__name__] = {}
+                results[test_func.__name__] = {
                     "success": False,
                     "execution_time_ms": 0,
                     "error": str(e),
@@ -108,17 +109,17 @@ class ConnectivityCompatibilityTester:
         self._print_summary(results)
         return results
 
-    def test_calculation_consistency():-> bool:
+    def test_calculation_consistency(self) -> bool:
         """Test that GPU and CPU calculations produce consistent results."""
         try:
             # Test matrix multiplication
             test_matrix = np.random.rand(10, 10)
 
             # Execute on both GPU and CPU
-            gpu_result = self.bridge.execute_calculation()
+            gpu_result = self.bridge.execute_calculation(
                 "matrix_multiply", test_matrix, force_path=ExecutionPath.GPU_ONLY
             )
-            cpu_result = self.bridge.execute_calculation()
+            cpu_result = self.bridge.execute_calculation(
                 "matrix_multiply", test_matrix, force_path=ExecutionPath.CPU_ONLY
             )
 
@@ -127,12 +128,12 @@ class ConnectivityCompatibilityTester:
                 return False
 
             # Check if results are consistent
-            validation = self.bridge.consistency_validator.validate_calculation()
+            validation = self.bridge.consistency_validator.validate_calculation(
                 gpu_result.result, cpu_result.result, "matrix_multiply"
             )
 
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="calculation_consistency",
                     success=validation.is_consistent,
                     execution_time_ms=gpu_result.execution_time_ms
@@ -150,7 +151,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in calculation consistency test: {e}")
             return False
 
-    def test_thermal_state_integration():-> bool:
+    def test_thermal_state_integration(self) -> bool:
         """Test thermal state management integration."""
         try:
             # Test thermal state updates
@@ -158,7 +159,7 @@ class ConnectivityCompatibilityTester:
 
             # Simulate different temperatures
             test_temperatures = [45.0, 65.0, 75.0, 85.0]
-            expected_states = []
+            expected_states = [
                 ThermalState.COOL,
                 ThermalState.WARM,
                 ThermalState.HOT,
@@ -168,33 +169,33 @@ class ConnectivityCompatibilityTester:
             for temp, expected_state in zip(test_temperatures, expected_states):
                 actual_state = thermal_manager.update_thermal_state(temp)
                 if actual_state != expected_state:
-                    logger.error()
+                    logger.error(
                         f"Thermal state mismatch: expected {expected_state}, got {actual_state}"
                     )
                     return False
 
             # Test calculation strategy based on thermal state
-            np.random.rand(100, 100)
+            test_matrix = np.random.rand(100, 100)
 
             # Cool state should prefer GPU
             thermal_manager.update_thermal_state(45.0)
-            cool_strategy = thermal_manager.get_calculation_strategy()
+            cool_strategy = thermal_manager.get_calculation_strategy(
                 "matrix_multiply", 10000
             )
 
             # Critical state should prefer CPU
             thermal_manager.update_thermal_state(85.0)
-            critical_strategy = thermal_manager.get_calculation_strategy()
+            critical_strategy = thermal_manager.get_calculation_strategy(
                 "matrix_multiply", 10000
             )
 
-            success = ()
+            success = (
                 cool_strategy == ExecutionPath.GPU_ONLY
                 and critical_strategy == ExecutionPath.CPU_ONLY
             )
 
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="thermal_state_integration",
                     success=success,
                     execution_time_ms=0.0,
@@ -210,28 +211,28 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in thermal state integration test: {e}")
             return False
 
-    def test_error_recovery():-> bool:
+    def test_error_recovery(self) -> bool:
         """Test error recovery mechanisms."""
         try:
             # Test GPU fallback when GPU is not available
             test_data = np.random.rand(5, 5)
 
             # Force CPU fallback
-            result = self.bridge.execute_calculation()
+            result = self.bridge.execute_calculation(
                 "matrix_multiply", test_data, force_path=ExecutionPath.CPU_ONLY
             )
 
             # Test with invalid data
             invalid_data = None
-            error_result = self.bridge.execute_calculation()
+            error_result = self.bridge.execute_calculation(
                 "matrix_multiply", invalid_data, force_path=ExecutionPath.FALLBACK
             )
 
             # Both should handle errors gracefully
             success = result.success and not error_result.success
 
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="error_recovery",
                     success=success,
                     execution_time_ms=result.execution_time_ms,
@@ -247,7 +248,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in error recovery test: {e}")
             return False
 
-    def test_memory_management():-> bool:
+    def test_memory_management(self) -> bool:
         """Test memory management functionality."""
         try:
             # Test GPU memory usage tracking
@@ -260,51 +261,61 @@ class ConnectivityCompatibilityTester:
 
             gpu_memory_after = self.gpu_manager._get_gpu_memory_usage()
 
-            # Memory should be tracked (even if not, available)
-            memory_tracked = gpu_memory_after >= gpu_memory_before
+            # Check if memory usage is tracked
+            memory_tracked = gpu_memory_after > gpu_memory_before
 
-            self.test_results.append()
-                TestResult()
+            # Test memory cleanup
+            self.gpu_manager.cleanup_gpu_memory()
+            gpu_memory_cleanup = self.gpu_manager._get_gpu_memory_usage()
+
+            # Memory should be reduced after cleanup
+            memory_cleanup_works = gpu_memory_cleanup < gpu_memory_after
+
+            success = memory_tracked and memory_cleanup_works
+
+            self.test_results.append(
+                TestResult(
                     test_name="memory_management",
-                    success=memory_tracked,
+                    success=success,
                     execution_time_ms=0.0,
-                    gpu_result=gpu_memory_before,
-                    cpu_result=gpu_memory_after,
-                    consistency_score=1.0 if memory_tracked else 0.0,
+                    gpu_result=gpu_memory_after,
+                    cpu_result=gpu_memory_cleanup,
+                    consistency_score=1.0 if success else 0.0,
+                    metadata={
+                        "memory_before": gpu_memory_before,
+                        "memory_after": gpu_memory_after,
+                        "memory_cleanup": gpu_memory_cleanup,
+                    },
                 )
             )
 
-            return memory_tracked
+            return success
 
         except Exception as e:
             logger.error(f"Error in memory management test: {e}")
             return False
 
-    def test_legacy_compatibility():-> bool:
-        """Test legacy system compatibility."""
+    def test_legacy_compatibility(self) -> bool:
+        """Test compatibility with legacy systems."""
         try:
-            # Test that unified math system still works
-            test_data = np.random.rand(10, 10)
+            # Test legacy API compatibility
+            legacy_data = {"legacy_format": True, "data": [1, 2, 3, 4, 5]}
 
-            # Test basic operations
-            add_result = unified_math.add(1.0, 2.0)
-            multiply_result = unified_math.multiply(3.0, 4.0)
-            matrix_result = unified_math.matrix_multiply(test_data, test_data)
+            # Convert to new format
+            converted_data = self.bridge.convert_legacy_format(legacy_data)
 
-            # All should work as expected
-            success = ()
-                add_result == 3.0
-                and multiply_result == 12.0
-                and matrix_result is not None
-            )
+            # Test backward compatibility
+            backward_compatible = self.bridge.is_backward_compatible(converted_data)
 
-            self.test_results.append()
-                TestResult()
+            success = backward_compatible
+
+            self.test_results.append(
+                TestResult(
                     test_name="legacy_compatibility",
                     success=success,
                     execution_time_ms=0.0,
-                    gpu_result=add_result,
-                    cpu_result=multiply_result,
+                    gpu_result=converted_data,
+                    cpu_result=backward_compatible,
                     consistency_score=1.0 if success else 0.0,
                 )
             )
@@ -315,201 +326,229 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in legacy compatibility test: {e}")
             return False
 
-    def test_performance_monitoring():-> bool:
-        """Test performance monitoring functionality."""
+    def test_performance_monitoring(self) -> bool:
+        """Test performance monitoring capabilities."""
         try:
-            # Get initial performance stats
-            initial_stats = self.bridge.get_performance_stats()
+            # Test performance metrics collection
+            start_time = time.time()
+            test_matrix = np.random.rand(100, 100)
 
-            # Perform some operations
-            test_data = np.random.rand(20, 20)
-            for _ in range(5):
-                self.bridge.execute_calculation("matrix_multiply", test_data)
-
-            # Get updated performance stats
-            updated_stats = self.bridge.get_performance_stats()
-
-            # Stats should be updated
-            stats_updated = ()
-                updated_stats["total_calculations"]
-                > initial_stats["total_calculations"]
+            # Perform operation with monitoring
+            result = self.bridge.execute_calculation(
+                "matrix_multiply", test_matrix, enable_monitoring=True
             )
 
-            self.test_results.append()
-                TestResult()
+            end_time = time.time()
+            execution_time = (end_time - start_time) * 1000
+
+            # Check if performance metrics are available
+            metrics_available = hasattr(result, "performance_metrics")
+            if metrics_available:
+                metrics = result.performance_metrics
+                has_gpu_metrics = "gpu_utilization" in metrics
+                has_cpu_metrics = "cpu_utilization" in metrics
+                has_memory_metrics = "memory_usage" in metrics
+            else:
+                has_gpu_metrics = has_cpu_metrics = has_memory_metrics = False
+
+            success = metrics_available and has_gpu_metrics and has_cpu_metrics and has_memory_metrics
+
+            self.test_results.append(
+                TestResult(
                     test_name="performance_monitoring",
-                    success=stats_updated,
-                    execution_time_ms=0.0,
-                    gpu_result=initial_stats["total_calculations"],
-                    cpu_result=updated_stats["total_calculations"],
-                    consistency_score=1.0 if stats_updated else 0.0,
+                    success=success,
+                    execution_time_ms=execution_time,
+                    gpu_result=has_gpu_metrics,
+                    cpu_result=has_cpu_metrics,
+                    consistency_score=1.0 if success else 0.0,
+                    metadata={"metrics_available": metrics_available},
                 )
             )
 
-            return stats_updated
+            return success
 
         except Exception as e:
             logger.error(f"Error in performance monitoring test: {e}")
             return False
 
-    def test_gpu_cpu_fallback():-> bool:
+    def test_gpu_cpu_fallback(self) -> bool:
         """Test GPU to CPU fallback mechanisms."""
         try:
-            # Test bit phase resolution
-            test_hashes = ["a1b2c3d4", "e5f6g7h8", "i9j0k1l2"]
+            # Test automatic fallback when GPU is unavailable
+            test_data = np.random.rand(10, 10)
 
-            # Test GPU path
-            gpu_phases = self.gpu_manager.resolve_bit_phase_gpu(test_hashes, "8bit")
+            # Simulate GPU unavailability
+            self.bridge.simulate_gpu_unavailable()
 
-            # Test CPU fallback
-            cpu_phases = self.gpu_manager._resolve_bit_phase_cpu(test_hashes, "8bit")
+            # Execute calculation (should fallback to CPU)
+            result = self.bridge.execute_calculation(
+                "matrix_multiply", test_data, force_path=ExecutionPath.AUTO
+            )
 
-            # Results should be consistent
-            phases_consistent = gpu_phases == cpu_phases
+            # Should succeed with CPU fallback
+            fallback_success = result.success and result.execution_path == ExecutionPath.CPU_ONLY
 
-            self.test_results.append()
-                TestResult()
+            # Restore GPU availability
+            self.bridge.restore_gpu_availability()
+
+            # Test with GPU available
+            gpu_result = self.bridge.execute_calculation(
+                "matrix_multiply", test_data, force_path=ExecutionPath.AUTO
+            )
+
+            gpu_success = gpu_result.success and gpu_result.execution_path == ExecutionPath.GPU_ONLY
+
+            success = fallback_success and gpu_success
+
+            self.test_results.append(
+                TestResult(
                     test_name="gpu_cpu_fallback",
-                    success=phases_consistent,
-                    execution_time_ms=0.0,
-                    gpu_result=gpu_phases,
-                    cpu_result=cpu_phases,
-                    consistency_score=1.0 if phases_consistent else 0.0,
+                    success=success,
+                    execution_time_ms=result.execution_time_ms + gpu_result.execution_time_ms,
+                    gpu_result=fallback_success,
+                    cpu_result=gpu_success,
+                    consistency_score=1.0 if success else 0.0,
                 )
             )
 
-            return phases_consistent
+            return success
 
         except Exception as e:
             logger.error(f"Error in GPU-CPU fallback test: {e}")
             return False
 
-    def test_matrix_operations():-> bool:
-        """Test matrix operations consistency."""
+    def test_matrix_operations(self) -> bool:
+        """Test matrix operations on both GPU and CPU."""
         try:
-            test_matrix = np.random.rand(15, 15)
+            # Test various matrix operations
+            test_matrix_a = np.random.rand(20, 20)
+            test_matrix_b = np.random.rand(20, 20)
 
-            # Test different matrix operations
-            operations = ["multiply", "eigenvalues", "transpose"]
+            operations = ["multiply", "add", "subtract", "transpose"]
+            results = {}
 
             for operation in operations:
-                # GPU result
-                gpu_result = self.gpu_manager.matrix_operation_gpu()
-                    [test_matrix], operation
+                # GPU operation
+                gpu_result = self.bridge.execute_calculation(
+                    f"matrix_{operation}", [test_matrix_a, test_matrix_b], force_path=ExecutionPath.GPU_ONLY
                 )
 
-                # CPU result
-                cpu_result = self.gpu_manager._matrix_operation_cpu()
-                    [test_matrix], operation
+                # CPU operation
+                cpu_result = self.bridge.execute_calculation(
+                    f"matrix_{operation}", [test_matrix_a, test_matrix_b], force_path=ExecutionPath.CPU_ONLY
                 )
 
                 # Validate consistency
-                if len(gpu_result) != len(cpu_result):
-                    return False
+                if gpu_result.success and cpu_result.success:
+                    validation = self.bridge.consistency_validator.validate_calculation(
+                        gpu_result.result, cpu_result.result, f"matrix_{operation}"
+                    )
+                    results[operation] = validation.is_consistent
+                else:
+                    results[operation] = False
 
-                for gpu_res, cpu_res in zip(gpu_result, cpu_result):
-                    if gpu_res is None or cpu_res is None:
-                        continue
+            # All operations should be consistent
+            all_consistent = all(results.values())
 
-                    if gpu_res.shape != cpu_res.shape:
-                        return False
-
-                    # Check if results are close (within, tolerance)
-                    if not np.allclose(gpu_res, cpu_res, rtol=1e-5, atol=1e-8):
-                        return False
-
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="matrix_operations",
-                    success=True,
+                    success=all_consistent,
                     execution_time_ms=0.0,
-                    gpu_result="consistent",
-                    cpu_result="consistent",
-                    consistency_score=1.0,
+                    gpu_result=results,
+                    cpu_result=all_consistent,
+                    consistency_score=sum(results.values()) / len(results),
+                    metadata={"operation_results": results},
                 )
             )
 
-            return True
+            return all_consistent
 
         except Exception as e:
             logger.error(f"Error in matrix operations test: {e}")
             return False
 
-    def test_wave_entropy():-> bool:
-        """Test wave entropy calculation consistency."""
+    def test_wave_entropy(self) -> bool:
+        """Test wave entropy calculations."""
         try:
-            test_sequences = [[1.0, 2.0, 3.0, 4.0], [0.5, 1.5, 2.5, 3.5]]
+            # Test wave entropy calculation
+            test_signal = np.random.rand(1000)
 
             # GPU calculation
-            gpu_entropies = self.gpu_manager.wave_entropy_gpu(test_sequences)
+            gpu_result = self.bridge.execute_calculation(
+                "wave_entropy", test_signal, force_path=ExecutionPath.GPU_ONLY
+            )
 
             # CPU calculation
-            cpu_entropies = self.gpu_manager._wave_entropy_cpu(test_sequences)
+            cpu_result = self.bridge.execute_calculation(
+                "wave_entropy", test_signal, force_path=ExecutionPath.CPU_ONLY
+            )
 
-            # Results should be consistent
-            entropies_consistent = len(gpu_entropies) == len(cpu_entropies)
+            # Validate consistency
+            if gpu_result.success and cpu_result.success:
+                validation = self.bridge.consistency_validator.validate_calculation(
+                    gpu_result.result, cpu_result.result, "wave_entropy"
+                )
+                success = validation.is_consistent
+            else:
+                success = False
 
-            if entropies_consistent:
-                for gpu_ent, cpu_ent in zip(gpu_entropies, cpu_entropies):
-                    if abs(gpu_ent - cpu_ent) > 1e-6:
-                        entropies_consistent = False
-                        break
-
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="wave_entropy",
-                    success=entropies_consistent,
-                    execution_time_ms=0.0,
-                    gpu_result=gpu_entropies,
-                    cpu_result=cpu_entropies,
-                    consistency_score=1.0 if entropies_consistent else 0.0,
+                    success=success,
+                    execution_time_ms=gpu_result.execution_time_ms + cpu_result.execution_time_ms,
+                    gpu_result=gpu_result.result if gpu_result.success else None,
+                    cpu_result=cpu_result.result if cpu_result.success else None,
+                    consistency_score=validation.is_consistent if success else 0.0,
+                    metadata={"max_difference": validation.max_difference if success else None},
                 )
             )
 
-            return entropies_consistent
+            return success
 
         except Exception as e:
             logger.error(f"Error in wave entropy test: {e}")
             return False
 
-    def test_tensor_scores():-> bool:
-        """Test tensor score calculation consistency."""
+    def test_tensor_scores(self) -> bool:
+        """Test tensor score calculations."""
         try:
-            entry_prices = [100.0, 200.0, 300.0]
-            current_prices = [110.0, 190.0, 320.0]
-            phases = [1, 2, 3]
+            # Test tensor score calculation
+            test_tensor = np.random.rand(10, 10, 10)
 
             # GPU calculation
-            gpu_scores = self.gpu_manager.tensor_score_gpu()
-                entry_prices, current_prices, phases
+            gpu_result = self.bridge.execute_calculation(
+                "tensor_score", test_tensor, force_path=ExecutionPath.GPU_ONLY
             )
 
             # CPU calculation
-            cpu_scores = self.gpu_manager._tensor_score_cpu()
-                entry_prices, current_prices, phases
+            cpu_result = self.bridge.execute_calculation(
+                "tensor_score", test_tensor, force_path=ExecutionPath.CPU_ONLY
             )
 
-            # Results should be consistent
-            scores_consistent = len(gpu_scores) == len(cpu_scores)
+            # Validate consistency
+            if gpu_result.success and cpu_result.success:
+                validation = self.bridge.consistency_validator.validate_calculation(
+                    gpu_result.result, cpu_result.result, "tensor_score"
+                )
+                success = validation.is_consistent
+            else:
+                success = False
 
-            if scores_consistent:
-                for gpu_score, cpu_score in zip(gpu_scores, cpu_scores):
-                    if abs(gpu_score - cpu_score) > 1e-6:
-                        scores_consistent = False
-                        break
-
-            self.test_results.append()
-                TestResult()
+            self.test_results.append(
+                TestResult(
                     test_name="tensor_scores",
-                    success=scores_consistent,
-                    execution_time_ms=0.0,
-                    gpu_result=gpu_scores,
-                    cpu_result=cpu_scores,
-                    consistency_score=1.0 if scores_consistent else 0.0,
+                    success=success,
+                    execution_time_ms=gpu_result.execution_time_ms + cpu_result.execution_time_ms,
+                    gpu_result=gpu_result.result if gpu_result.success else None,
+                    cpu_result=cpu_result.result if cpu_result.success else None,
+                    consistency_score=validation.is_consistent if success else 0.0,
+                    metadata={"max_difference": validation.max_difference if success else None},
                 )
             )
 
-            return scores_consistent
+            return success
 
         except Exception as e:
             logger.error(f"Error in tensor scores test: {e}")
@@ -522,9 +561,7 @@ class ConnectivityCompatibilityTester:
         safe_print("=" * 60)
 
         total_tests = len(results)
-        passed_tests = sum()
-            1 for result in results.values() if result.get("success", False)
-        )
+        passed_tests = sum(1 for result in results.values() if result.get("success", False))
         failed_tests = total_tests - passed_tests
 
         safe_print(f"Total Tests: {total_tests}")
@@ -550,15 +587,15 @@ class ConnectivityCompatibilityTester:
 
         # Overall assessment
         if passed_tests == total_tests:
-            success()
+            success(
                 "\n🎉 ALL TESTS PASSED! System connectivity and compatibility verified."
             )
         elif passed_tests >= total_tests * 0.8:
-            warn()
+            warn(
                 f"\n⚠️  MOST TESTS PASSED ({passed_tests}/{total_tests}). Minor issues detected."
             )
         else:
-            error()
+            error(
                 f"\n🚨 MANY TESTS FAILED ({failed_tests}/{total_tests}). Critical issues detected."
             )
 
@@ -571,9 +608,7 @@ def main():
 
         # Return exit code based on results
         total_tests = len(results)
-        passed_tests = sum()
-            1 for result in results.values() if result.get("success", False)
-        )
+        passed_tests = sum(1 for result in results.values() if result.get("success", False))
 
         if passed_tests == total_tests:
             return 0  # All tests passed

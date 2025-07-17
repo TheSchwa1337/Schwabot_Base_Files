@@ -4,6 +4,7 @@ import logging
 import math
 import random
 import time
+import asyncio
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -44,7 +45,7 @@ class LanternMemoryType(Enum):
     RECURSIVE_LOOP = "recursive_loop"
 
 @dataclass
-    class LanternMemoryEntry:
+class LanternMemoryEntry:
     """Represents a Lantern memory entry for profit vaulting"""
     memory_type: LanternMemoryType
     symbol: str
@@ -58,7 +59,7 @@ class LanternMemoryType(Enum):
     recursive_count: int
 
 @dataclass
-    class TriggerGlyph:
+class TriggerGlyph:
     """Represents a trigger glyph with symbolic logic"""
     symbol: str
     bit_state: str
@@ -86,14 +87,14 @@ class TriggerGlyphEngine:
         self.lambda_decay = 0.1
 
         # Profit tier thresholds
-        self.tier_thresholds = {}
+        self.tier_thresholds = {
             'T1': 0.05,  # 0.5%
             'T2': 0.20,  # 2.0%
             'T3': 0.75,  # 7.5%
             'T4': 0.150  # 15%
-}
+        }
         # Symbolic trigger mapping
-        self.symbolic_triggers = {}
+        self.symbolic_triggers = {
             'bullish_momentum': 'bullish_momentum',
             'fractal_convergence': 'fractal_convergence',
             'hash_symmetry': 'hash_symmetry',
@@ -102,12 +103,9 @@ class TriggerGlyphEngine:
             '[BRAIN]': 'ai_logic',
             'fast_execution': 'fast_execution',
             'target_hit': 'target_hit'
-}
-    def extract_2bit_state():-> str:
-        """
-        Extract 2 - bit state from Unicode symbol
-
-        Mathematical: 2 - bit = (ord(emoji) & 0b11)"""
+        }
+    def extract_2bit_state(self, emoji: str) -> str:
+        """Extract 2-bit state from Unicode symbol."""
         try:
             val = ord(emoji)
             bit_state = val & 0b11
@@ -116,17 +114,14 @@ class TriggerGlyphEngine:
             logger.error(f"Error extracting 2 - bit from {emoji}: {e}")
             return "0"
 
-    def generate_sha_signature():-> str:
-        """
-        Generate SHA signature for emoji with context
-
-        Mathematical: SHA = SHA256(emoji + context + timestamp)"""
+    def generate_sha_signature(self, emoji: str, context: str) -> str:
+        """Generate SHA signature for emoji with context."""
         timestamp = str(int(time.time()))
         signature_data = f"{emoji}{context}{timestamp}"
         return hashlib.sha256(signature_data.encode('utf - 8')).hexdigest()
 
-    def calculate_profit_tier():-> str:
-        """Calculate profit tier based on profit value"""
+    def calculate_profit_tier(self, profit_value: float) -> str:
+        """Calculate profit tier based on profit value."""
         if profit_value >= self.tier_thresholds['T4']:
             return 'T4'
         elif profit_value >= self.tier_thresholds['T3']:
@@ -138,14 +133,8 @@ class TriggerGlyphEngine:
         else:
             return 'T0'
 
-    def calculate_entropy_vector():-> float:
-        """
-        Calculate entropy vector for symbol / SHA combination
-
-        Mathematical: E = Sigma(bit_entropy) / hash_complexity"""
-        try:
-            pass # Function implementation pending.
-
+    def calculate_entropy_vector(self, emoji: str, sha_signature: str) -> float:
+        """Calculate entropy vector for symbol/SHA combination."""
         # Calculate bit-level entropy if emoji has a known bit state
         bit_entropy = 0.0
         if emoji in self.symbolic_triggers:
@@ -166,11 +155,8 @@ class TriggerGlyphEngine:
         entropy_score = (bit_entropy * 10) / hash_complexity # Scale bit_entropy to be more impactful
         return entropy_score
 
-    def calculate_trust_score():-> float:
-        """
-        Calculate trust score for a trigger glyph.
-
-        Mathematical: Trust = (Profit / MaxProfit) * (1 - Entropy)"""
+    def calculate_trust_score(self, profit_value: float, entropy_score: float) -> float:
+        """Calculate trust score for a trigger glyph."""
         max_profit_expected = self.tier_thresholds['T4'] * 2 # A heuristic max profit
         if max_profit_expected == 0:
             return 0.0
@@ -179,28 +165,17 @@ class TriggerGlyphEngine:
         trust_score = profit_ratio * (1 - entropy_score)
         return max(0.0, min(1.0, trust_score)) # Clamp between 0 and 1
 
-    def create_trigger_glyph():-> Optional[TriggerGlyph]:
-        """
-        Creates and registers a new trigger glyph.
-
-        Args:
-            symbol (str): The Unicode symbol for the glyph.
-            profit_value (float): The profit value associated with this glyph's trigger.'
-            context (str, optional): Additional context for SHA signature. Defaults to "".
-
-        Returns:
-            Optional[TriggerGlyph]: The created TriggerGlyph object, or None if creation fails.
-        """
+    def create_trigger_glyph(self, symbol: str, profit_value: float, context: str = "") -> Optional[TriggerGlyph]:
+        """Create a new TriggerGlyph object."""
         try:
             bit_state = self.extract_2bit_state(symbol)
             sha_signature = self.generate_sha_signature(symbol, context)
             profit_tier = self.calculate_profit_tier(profit_value)
             entropy_vector = self.calculate_entropy_vector(symbol, sha_signature)
             trust_score = self.calculate_trust_score(profit_value, entropy_vector)
-
             lantern_key = f"{symbol}-{profit_tier}-{sha_signature[:8]}"
-
-            trigger_glyph = TriggerGlyph()
+            
+            trigger_glyph = TriggerGlyph(
                 symbol=symbol,
                 bit_state=bit_state,
                 sha_signature=sha_signature,
@@ -208,7 +183,7 @@ class TriggerGlyphEngine:
                 entropy_vector=entropy_vector,
                 trust_score=trust_score,
                 lantern_key=lantern_key,
-                recursive_trigger=False  # Default to False, can be set later
+                recursive_trigger=False
             )
             self.trigger_glyphs[lantern_key] = trigger_glyph
             logger.info(f"Created Trigger Glyph: {symbol} (Bit: {bit_state}, Tier: {profit_tier}, Trust: {trust_score:.2f})")
@@ -217,15 +192,10 @@ class TriggerGlyphEngine:
             logger.error(f"Error creating trigger glyph for {symbol}: {e}")
             return None
 
-    def vault_lantern_memory():-> Optional[LanternMemoryEntry]:
-        """
-        Vaults a trigger glyph into Lantern memory.
-
-        Mathematical: L = Sum(G * H_alpha * T_omega)
-        Where G is glyph state, H_alpha is historical alpha, T_omega is temporal weighting
-        """
+    def vault_lantern_memory(self, trigger_glyph: 'TriggerGlyph', memory_type: 'LanternMemoryType') -> Optional['LanternMemoryEntry']:
+        """Vaults a trigger glyph into Lantern memory."""
         try:
-            lantern_entry = LanternMemoryEntry()
+            lantern_entry = LanternMemoryEntry(
                 memory_type=memory_type,
                 symbol=trigger_glyph.symbol,
                 sha_hash=trigger_glyph.sha_signature,
@@ -244,7 +214,7 @@ class TriggerGlyphEngine:
             logger.error(f"Error vaulting Lantern memory for {trigger_glyph.symbol}: {e}")
             return None
 
-    def retrieve_lantern_memory():-> Optional[LanternMemoryEntry]:
+    def retrieve_lantern_memory(self, lantern_key: str) -> Optional['LanternMemoryEntry']:
         """Retrieves a Lantern memory entry by its key."""
         return self.lantern_memory.get(lantern_key)
 
@@ -254,12 +224,8 @@ class TriggerGlyphEngine:
             self.lantern_memory[lantern_key].recursive_count += count
             logger.debug(f"Updated recursive count for {lantern_key} to {self.lantern_memory[lantern_key].recursive_count}")
 
-    def get_profit_flip_score():-> float:
-        """
-        Calculates a profit flip score for a symbol based on current profit context.
-
-        Mathematical: FlipScore = (P_current - P_history) * TriggerConfidence
-        """
+    def get_profit_flip_score(self, symbol: str, profit_context: float) -> float:
+        """Calculates a profit flip score for a symbol based on current profit context."""
         # Retrieve historical profit values associated with the symbol
         relevant_entries = [entry for entry in self.lantern_memory.values() if entry.symbol == symbol and entry.memory_type == LanternMemoryType.PROFIT_SEQUENCE]
 
@@ -289,12 +255,8 @@ class TriggerGlyphEngine:
         self.recursive_loops[loop_id] = glyph_sequence
         logger.info(f"Created recursive loop '{loop_id}' with sequence: {glyph_sequence}")
 
-    def activate_autoflip_trigger():-> bool:
-        """
-        Activates an autoflip trigger based on a recursive loop.
-
-        Mathematical: Trigger = Sigmoid(Sum(FlipScores for glyphs in, loop))
-        """
+    def activate_autoflip_trigger(self, loop_id: str) -> bool:
+        """Activate autoflip trigger for a symbol."""
         if loop_id not in self.recursive_loops:
             logger.warning(f"Recursive loop '{loop_id}' not found. Cannot activate autoflip.")
             return False
@@ -315,20 +277,20 @@ class TriggerGlyphEngine:
             logger.debug(f"Autoflip for loop '{loop_id}' not activated (probability {trigger_probability:.2f})")
             return False
 
-    def get_system_status():-> Dict[str, Any]:
-        """Returns the current status of the trigger glyph engine."""
-        return {}
+    def get_system_status(self) -> Dict[str, Any]:
+        """Get system status for the trigger glyph engine."""
+        return {
             "total_glyphs": len(self.trigger_glyphs),
             "total_memory_entries": len(self.lantern_memory),
             "total_recursive_loops": len(self.recursive_loops),
             "cycle_counter": self.cycle_counter,
             "last_update": time.time()
-}
+        }
     def export_lantern_memory(self, filename: str = "lantern_memory_data.json"):
         """Exports the current Lantern memory to a JSON file."""
         serializable_memory = {}
         for key, entry in self.lantern_memory.items():
-            serializable_memory[key] = {}
+            serializable_memory[key] = {
                 "memory_type": entry.memory_type.value,
                 "symbol": entry.symbol,
                 "sha_hash": entry.sha_hash,
@@ -339,7 +301,7 @@ class TriggerGlyphEngine:
                 "entropy_score": entry.entropy_score,
                 "trust_level": entry.trust_level,
                 "recursive_count": entry.recursive_count
-}
+            }
         try:
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(serializable_memory, f, indent=4)
@@ -375,7 +337,7 @@ async def main():
 
     # Example 3: Test profit flip score calculation
     print("\nTesting profit flip score calculation:")
-    flip_score_profit = engine.get_profit_flip_score("profit_portal", 0.12)
+    flip_score_profit = engine.get_profit_flip_score("profit_portal", 0.10) # Pass a dummy profit_context
     print(f"Profit Portal Flip Score: {flip_score_profit:.4f}")
 
     # Example 4: Create and activate recursive loops (autoflip)

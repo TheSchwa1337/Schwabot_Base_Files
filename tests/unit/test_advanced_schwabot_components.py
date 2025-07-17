@@ -32,22 +32,19 @@ sys.path.insert(0, str(current_dir))
 # Import existing components
 
 # Configure logging
-logging.basicConfig()
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def generate_test_signal():-> np.ndarray:
+def generate_test_signal(length: int, signal_type: str) -> np.ndarray:
     """Generate test signal for component testing."""
     if signal_type == "random":
         return np.random.random(length)
     elif signal_type == "trending":
         return np.linspace(0, 1, length) + np.random.normal(0, 0.1, length)
     elif signal_type == "oscillatory":
-        return np.sin(np.linspace(0, 4 * np.pi, length)) + np.random.normal()
-            0, 0.1, length
-        )
+        return np.sin(np.linspace(0, 4 * np.pi, length)) + np.random.normal(0, 0.1, length)
     elif signal_type == "chaotic":
         return np.cumsum(np.random.normal(0, 0.1, length))
     else:
@@ -87,9 +84,7 @@ def test_drift_phase_weighter():
         # Test phase transition detection
         transition = weighter.detect_phase_transition(signal, "consolidation")
         if transition:
-            print()
-                f"  Phase Transition: {transition.from_phase} -> {transition.to_phase}"
-            )
+            print(f"  Phase Transition: {transition.from_phase} -> {transition.to_phase}")
             print(f"  Tension Score: {transition.tension_score:.3f}")
             print(f"  Confidence: {transition.confidence:.3f}")
         else:
@@ -128,9 +123,7 @@ def test_ghost_field_stabilizer():
         report = stabilizer.evaluate_stability(signal)
         print(f"  Stability Level: {report.stability_level.value}")
         print(f"  Entropy Score: {report.entropy_score:.4f}")
-        print()
-            f"  Entropy Bounds: ({report.entropy_bounds[0]:.4f}, {report.entropy_bounds[1]:.4f})"
-        )
+        print(f"  Entropy Bounds: ({report.entropy_bounds[0]:.4f}, {report.entropy_bounds[1]:.4f})")
         print(f"  Slope Estimate: {report.slope_estimate:.4f}")
         print(f"  Field Integrity: {report.field_integrity:.4f}")
         print(f"  Confidence: {report.confidence:.4f}")
@@ -161,7 +154,7 @@ def test_truth_lattice_math():
     consensus = TruthLatticeMath()
 
     # Test different signal combinations
-    test_cases = []
+    test_cases = [
         ("High Agreement", [0.8, 0.82, 0.79, 0.81, 0.83]),
         ("Medium Agreement", [0.6, 0.7, 0.5, 0.8, 0.6]),
         ("Low Agreement", [0.2, 0.8, 0.1, 0.9, 0.3]),
@@ -253,7 +246,7 @@ def test_aleph_overlay_mapper():
     mapper = AlephOverlayMapper()
 
     # Test different hash signals
-    hash_signals = []
+    hash_signals = [
         "BTC_45000_2024_01_15",
         "ETH_3000_2024_01_15",
         "XRP_0.5_2024_01_15",
@@ -313,9 +306,7 @@ def test_phase_transition_monitor():
         print(f"  Phase State: {phase_state.value}")
 
         # Check transition likelihood
-        transition_likely = monitor.is_phase_transition_likely()
-            phase_state, drift_weight
-        )
+        transition_likely = monitor.is_phase_transition_likely(phase_state, drift_weight)
         print(f"  Transition Likely: {transition_likely}")
 
     # Get summary
@@ -392,7 +383,7 @@ def test_integration():
 
     print("\nIntegration test completed successfully!")
 
-    return {}
+    return {
         "weighter": weighter,
         "stabilizer": stabilizer,
         "consensus": consensus,
@@ -411,34 +402,22 @@ def export_test_results(components):
     results = {"test_timestamp": time.time(), "components": {}}
     # Export component summaries
     if "weighter" in components:
-        results["components"]["drift_phase_weighter"] = components[]
-            "weighter"
-        ].get_drift_summary()
+        results["components"]["drift_phase_weighter"] = components["weighter"].get_drift_summary()
 
     if "stabilizer" in components:
-        results["components"]["ghost_field_stabilizer"] = components[]
-            "stabilizer"
-        ].get_stability_summary()
+        results["components"]["ghost_field_stabilizer"] = components["stabilizer"].get_stability_summary()
 
     if "consensus" in components:
-        results["components"]["truth_lattice_math"] = components[]
-            "consensus"
-        ].get_consensus_summary()
+        results["components"]["truth_lattice_math"] = components["consensus"].get_consensus_summary()
 
     if "propagator" in components:
-        results["components"]["bit_wave_propagator"] = components[]
-            "propagator"
-        ].get_propagation_summary()
+        results["components"]["bit_wave_propagator"] = components["propagator"].get_propagation_summary()
 
     if "mapper" in components:
-        results["components"]["aleph_overlay_mapper"] = components[]
-            "mapper"
-        ].get_overlay_summary()
+        results["components"]["aleph_overlay_mapper"] = components["mapper"].get_overlay_summary()
 
     if "monitor" in components:
-        results["components"]["phase_transition_monitor"] = components[]
-            "monitor"
-        ].get_phase_summary()
+        results["components"]["phase_transition_monitor"] = components["monitor"].get_phase_summary()
 
     # Save to file
     output_file = "advanced_schwabot_test_results.json"
