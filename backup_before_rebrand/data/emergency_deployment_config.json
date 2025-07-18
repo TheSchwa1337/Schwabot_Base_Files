@@ -1,0 +1,8 @@
+{
+  "platform": "cross-platform",
+  "python_version": ">=3.8",
+  "encoding": "utf-8",
+  "mathematical_precision": "float64",
+  "btc_trading_enabled": true,
+  "emergency_fixes_applied": 1648
+}

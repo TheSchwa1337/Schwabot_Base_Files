@@ -1,0 +1,8 @@
+{
+  "platform": "windows",
+  "python_version": "sys.version_info(major=3, minor=12, micro=10, releaselevel='final', serial=0)",
+  "project_root": "C:\\Users\\maxde\\OneDrive\\Documents",
+  "dependencies_installed": false,
+  "system_validated": true,
+  "last_validation": 1751385004.8471427
+}

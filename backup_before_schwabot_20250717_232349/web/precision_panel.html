@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BTC Price Precision Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #282c34; color: #f5f5f5; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .controls { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: #3c4049; padding: 15px; border-radius: 8px; }
+        .slider-container { flex-grow: 1; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="range"] { width: 100%; }
+        #chart-container { background: #3c4049; padding: 20px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BTC Price Precision Dashboard</h1>
+        <div class="controls">
+            <div>
+                <label for="auto-mode">Autotune Mode</label>
+                <input type="checkbox" id="auto-mode" checked>
+            </div>
+            <div class="slider-container">
+                <label for="precision-slider">Manual Precision: <span id="slider-value">8</span></label>
+                <input type="range" id="precision-slider" min="2" max="8" value="8" disabled>
+            </div>
+        </div>
+        <div id="chart-container">
+            <canvas id="pnl-chart"></canvas>
+        </div>
+    </div>
+
+<script>
+    const API_URL = 'http://localhost:8008';
+    const autoModeCheckbox = document.getElementById('auto-mode');
+    const precisionSlider = document.getElementById('precision-slider');
+    const sliderValueSpan = document.getElementById('slider-value');
+
+    let pnlChart;
+
+    // --- Chart Setup ---
+    function setupChart() {
+        const ctx = document.getElementById('pnl-chart').getContext('2d');
+        pnlChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [], // e.g., ['2', '3', '4', ...]
+                datasets: [{
+                    label: 'Mean Price Δ (Profit Proxy)',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: '#f5f5f5' } },
+                    x: { ticks: { color: '#f5f5f5' } }
+                },
+                plugins: { legend: { labels: { color: '#f5f5f5' } } }
+            }
+        });
+    }
+
+    // --- API Interaction ---
+    async function fetchStats() {
+        try {
+            const response = await fetch(`${API_URL}/precision/stats`);
+            const data = await response.json();
+            
+            // Update UI state
+            autoModeCheckbox.checked = data.is_auto;
+            precisionSlider.disabled = data.is_auto;
+            sliderValueSpan.innerText = data.active_decimals;
+            if (!data.is_auto) {
+                precisionSlider.value = data.active_decimals;
+            }
+
+            // Update chart
+            const pnlData = data.pnl_proxy || {};
+            pnlChart.data.labels = Object.keys(pnlData);
+            pnlChart.data.datasets[0].data = Object.values(pnlData);
+            pnlChart.update();
+
+        } catch (error) {
+            console.error('Error fetching stats:', error);
+        }
+    }
+
+    async function postOverride(isAuto, decimals) {
+        try {
+            await fetch(`${API_URL}/precision/override`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ auto: isAuto, decimals: decimals })
+            });
+            fetchStats(); // Refresh state after posting
+        } catch (error) {
+            console.error('Error setting override:', error);
+        }
+    }
+
+    // --- Event Listeners ---
+    autoModeCheckbox.addEventListener('change', () => {
+        const isAuto = autoModeCheckbox.checked;
+        precisionSlider.disabled = isAuto;
+        postOverride(isAuto, isAuto ? null : parseInt(precisionSlider.value, 10));
+    });
+
+    precisionSlider.addEventListener('input', () => {
+        sliderValueSpan.innerText = precisionSlider.value;
+    });
+
+    precisionSlider.addEventListener('change', () => {
+        postOverride(false, parseInt(precisionSlider.value, 10));
+    });
+
+    // --- Initialization ---
+    window.onload = () => {
+        setupChart();
+        fetchStats();
+        setInterval(fetchStats, 5000); // Poll for new stats every 5 seconds
+    };
+</script>
+</body>
+</html> 

@@ -1,0 +1,163 @@
+# ==============================================================================
+# SCHWABOT MATHEMATICAL INTEGRITY PROTECTION
+# ==============================================================================
+# This .gitattributes file ensures that critical mathematical components
+# maintain their exact formatting and line endings to preserve the integrity
+# of the chrono resonance mathematics and two-gram weighted logic systems.
+
+# ------------------------------------------------------------------------------
+# CHRONO RESONANCE MATHEMATICS - CRITICAL PRESERVATION
+# ------------------------------------------------------------------------------
+# These files contain sophisticated mathematical formulas and temporal calculations
+# that rely on precise line endings and formatting for proper functioning.
+core/chrono_recursive_logic_function.py text eol=crlf
+core/chrono_resonance_weather_mapper.py text eol=crlf
+core/temporal_warp_engine.py text eol=crlf
+core/fractal_memory_tracker.py text eol=crlf
+core/clean_math_foundation.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# TWO-GRAM WEIGHTED LOGIC SYSTEM - MATHEMATICAL PRESERVATION
+# ------------------------------------------------------------------------------
+# The two-gram detector implements advanced weighted logic that goes beyond
+# simple binary logic - it uses probabilistic, frequency-based pattern recognition
+# with Shannon entropy calculations and cosine similarity matching.
+core/two_gram_detector.py text eol=crlf
+core/strategy_trigger_router.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# ADVANCED MATHEMATICAL ENGINES - PRECISION REQUIRED
+# ------------------------------------------------------------------------------
+# These components perform sophisticated mathematical operations including
+# vectorized profit calculations, multi-frequency resonance, and quantum bridges.
+core/vectorized_profit_orchestrator.py text eol=crlf
+core/multi_frequency_resonance_engine.py text eol=crlf
+core/master_profit_coordination_system.py text eol=crlf
+core/quantum_mathematical_bridge.py text eol=crlf
+core/unified_math_system.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# MATHEMATICAL FOUNDATION MODULES
+# ------------------------------------------------------------------------------
+# Core mathematical utilities and validation systems
+core/advanced_tensor_algebra.py text eol=crlf
+core/matrix_math_utils.py text eol=crlf
+core/entropy_math.py text eol=crlf
+newmath/ text eol=crlf
+utils/math_utils.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# ENTRY/EXIT CALCULATION SYSTEMS
+# ------------------------------------------------------------------------------
+# Critical for trade flow, strategy pulses, and order cycle management
+core/btc_usdc_trading_integration.py text eol=crlf
+core/algorithmic_portfolio_balancer.py text eol=crlf
+core/automated_trading_pipeline.py text eol=crlf
+core/clean_trading_pipeline.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# INTEGRITY VALIDATION SYSTEMS
+# ------------------------------------------------------------------------------
+# Files that validate and protect the mathematical integrity
+chrono_resonance_integrity_checker.py text eol=crlf
+utils/structure_validator.py text eol=crlf
+utils/file_integrity_checker.py text eol=crlf
+
+# ------------------------------------------------------------------------------
+# CONFIGURATION AND CRITICAL DATA
+# ------------------------------------------------------------------------------
+# Configuration files that contain mathematical constants and parameters
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+
+# ------------------------------------------------------------------------------
+# STANDARD PYTHON FILES - LF ENDINGS
+# ------------------------------------------------------------------------------
+# Non-critical Python files use standard LF endings
+*.py text eol=lf
+!core/chrono_*.py
+!core/two_gram_detector.py
+!core/strategy_trigger_router.py
+!core/vectorized_profit_orchestrator.py
+!core/multi_frequency_resonance_engine.py
+!core/master_profit_coordination_system.py
+!core/quantum_mathematical_bridge.py
+!core/unified_math_system.py
+!core/advanced_tensor_algebra.py
+!core/matrix_math_utils.py
+!core/entropy_math.py
+!core/btc_usdc_trading_integration.py
+!core/algorithmic_portfolio_balancer.py
+!core/automated_trading_pipeline.py
+!core/clean_trading_pipeline.py
+!chrono_resonance_integrity_checker.py
+
+# ------------------------------------------------------------------------------
+# DOCUMENTATION AND MARKUP
+# ------------------------------------------------------------------------------
+*.md text eol=lf
+*.rst text eol=lf
+*.txt text eol=lf
+
+# ------------------------------------------------------------------------------
+# BINARY FILES - NO CONVERSION
+# ------------------------------------------------------------------------------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.whl binary
+*.egg binary
+
+# ------------------------------------------------------------------------------
+# JUPYTER NOTEBOOKS - PRESERVE STRUCTURE
+# ------------------------------------------------------------------------------
+*.ipynb text eol=lf
+
+# ------------------------------------------------------------------------------
+# SHELL SCRIPTS - PLATFORM SPECIFIC
+# ------------------------------------------------------------------------------
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# ------------------------------------------------------------------------------
+# DATA FILES - PRESERVE AS-IS
+# ------------------------------------------------------------------------------
+*.csv text eol=lf
+*.tsv text eol=lf
+*.sql text eol=lf
+
+# ==============================================================================
+# MATHEMATICAL INTEGRITY NOTICE
+# ==============================================================================
+# WARNING: The files marked with eol=crlf contain sophisticated mathematical
+# algorithms including:
+# 
+# 1. Chrono-Recursive Logic Functions with temporal resonance calculations
+# 2. Two-gram weighted logic systems with Shannon entropy and cosine similarity
+# 3. Multi-frequency resonance engines with harmonic interference patterns
+# 4. Quantum mathematical bridges with superposition and entanglement
+# 5. Vectorized profit orchestration with dynamic state transitions
+#
+# These systems use weighted logic that goes beyond simple binary (two-bit) 
+# operations. The two-gram system implements probabilistic pattern recognition
+# with frequency analysis, burst detection, and fractal memory integration.
+#
+# CRITICAL: Changing line endings or formatting in these files can:
+# - Break pattern matching algorithms that expect specific character sequences
+# - Disrupt mathematical formula parsing and evaluation
+# - Cause subtle calculation errors in temporal and frequency analysis
+# - Compromise the integrity of the chrono resonance weather forecasting
+# - Interfere with entry/exit calculations and trade flow management
+#
+# ALWAYS run chrono_resonance_integrity_checker.py after any modifications
+# to verify mathematical integrity is preserved.
+# ==============================================================================

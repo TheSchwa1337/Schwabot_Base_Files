@@ -1,0 +1,233 @@
+development:
+  debug_mode: false
+  dev_tools:
+    cpu_profiling: false
+    enable_debug_endpoints: false
+    enable_hot_reload: false
+    memory_profiling: false
+  profiling_enabled: false
+  testing:
+    mock_data_enabled: false
+    performance_testing: false
+    simulation_mode: false
+    test_data_size: 1000
+  verbose_logging: false
+error_handler:
+  auto_recovery_enabled: true
+  error_correlation_window: 300
+  escalation_thresholds:
+    critical: 1
+    high: 2
+    low: 10
+    medium: 5
+  max_error_history: 10000
+  max_recovery_attempts: 3
+  profit_impact_thresholds:
+    critical: 500.0
+    high: 100.0
+    low: 10.0
+    medium: 50.0
+  recovery_strategies:
+    gpu_hash_computation:
+    - fallback_cpu
+    - reduce_precision
+    - batch_processing
+    memory_allocation:
+    - garbage_collection
+    - reduce_batch_size
+    - fallback_cpu
+    news_correlation:
+    - cached_results
+    - simplified_model
+    - emergency_bypass
+    profit_calculation:
+    - cached_calculation
+    - simplified_model
+    - conservative_estimate
+    thermal_management:
+    - throttle_gpu
+    - cooldown_period
+    - emergency_shutdown
+gpu_processor:
+  batch_size_cpu: 50
+  batch_size_gpu: 100
+  correlation_cache_size: 250
+  cpu_queue_size: 500
+  emergency_shutdown_threshold: 85.0
+  error_recovery_attempts: 3
+  gpu_queue_size: 250
+  gpu_settings:
+    enable_memory_pool: true
+    max_concurrent_kernels: 8
+    memory_cleanup_interval: 300
+    optimization_level: aggressive
+    precision_mode: mixed
+    stream_count: 4
+  hash_precision_bits: 256
+  max_cpu_temperature: 75.0
+  max_gpu_temperature: 80.0
+  memory_pool_size_mb: 1024
+  performance_window: 1000
+  preferred_processing_modes:
+    cool: gpu_accelerated
+    critical: emergency_mode
+    hot: thermal_throttled
+    normal: gpu_accelerated
+    warm: hybrid_processing
+  profit_correlation_threshold: 0.3
+  result_buffer_size: 1000
+  thermal_monitoring_interval: 10.0
+  thermal_throttle_threshold: 75.0
+integrated_system:
+  adaptive_batch_sizing: true
+  correlation_batch_size: 50
+  correlation_caching_enabled: true
+  error_escalation_threshold: 10
+  gpu_fallback_enabled: true
+  integration:
+    btc_processor_enabled: true
+    fractal_controller_enabled: true
+    profit_navigator_enabled: true
+    vault_system_enabled: true
+  logging:
+    error_log_detail_level: DETAILED
+    file_rotation_size_mb: 100
+    level: INFO
+    max_log_files: 10
+    performance_log_interval: 60
+  max_processing_workers: 4
+  monitoring_interval_seconds: 10.0
+  optimization:
+    adaptive_threshold_adjustment: true
+    cache_optimization_interval: 300
+    enable_load_balancing: true
+    enable_predictive_caching: true
+    enable_priority_queuing: true
+    performance_analysis_window: 3600
+  performance_logging_enabled: true
+  performance_window_size: 1000
+  predictive_thermal_management: true
+  processing_queue_size: 5000
+  processing_timeout_seconds: 30.0
+  profit_opportunity_confidence_min: 0.6
+  profit_threshold_basis_points: 25.0
+  resource_limits:
+    disk_space_threshold_gb: 10.0
+    max_cpu_utilization: 0.8
+    max_gpu_utilization: 0.9
+    max_memory_usage_mb: 8192
+  result_history_size: 10000
+  risk_tolerance: 0.7
+  safety:
+    circuit_breaker_threshold: 50
+    enable_circuit_breaker: true
+    enable_input_validation: true
+    enable_output_sanitization: true
+    enable_rate_limiting: true
+    max_requests_per_minute: 1000
+  thermal_monitoring_enabled: true
+monitoring:
+  alerting:
+    alert_levels:
+      critical_threshold: 0.9
+      warning_threshold: 0.7
+    cooldown_minutes: 15
+    enabled: false
+    webhook_url: ''
+  health_checks:
+    enabled: true
+    failure_threshold: 3
+    interval_seconds: 30
+    timeout_seconds: 10
+  metrics:
+    aggregation_window_minutes: 5
+    collection_interval_seconds: 60
+    enabled: true
+    retention_hours: 168
+news_profit_bridge:
+  correlation_analysis:
+    base_btc_price: 42000.0
+    bit_pattern_weight: 0.3
+    btc_hash_buffer_size: 10
+    correlation_analysis_window: 100
+    hamming_weight: 0.5
+    min_correlation_for_analysis: 0.1
+    mock_btc_patterns: 5
+    temporal_weight: 0.2
+  correlation_threshold: 0.25
+  corroboration_hash_length: 32
+  entropy_classes: 4
+  entropy_thresholds:
+    high: 0.8
+    low: 0.3
+    maximum: 1.0
+    medium: 0.6
+  hash_window_minutes: 60
+  keyword_hash_length: 32
+  keyword_weight_factors:
+    crypto_core: 1.0
+    entities: 0.7
+    institutional: 0.9
+    market_action: 0.8
+  max_keywords_per_event: 10
+  profit_crystallization_threshold: 0.15
+  profit_timing:
+    base_entry_delay_minutes: 10
+    base_exit_window_minutes: 30
+    confidence_boost_correlation: 0.5
+    confidence_boost_profit_weight: 0.5
+    correlation_multiplier_factor: 1.0
+    entropy_exit_multiplier: 1.0
+    max_risk_factor: 0.7
+    min_confidence_threshold: 0.3
+    profit_weight_multiplier: 1.0
+  temporal_hash_length: 32
+performance:
+  cpu_optimization:
+    cpu_affinity_enabled: false
+    enable_multiprocessing: true
+    max_cpu_workers: 4
+    numa_awareness: false
+  io_optimization:
+    concurrent_io_operations: 4
+    enable_async_io: true
+    io_buffer_size_kb: 64
+  memory_optimization:
+    enable_memory_mapping: true
+    garbage_collection_threshold: 0.8
+    large_object_threshold_mb: 10
+    memory_pool_enabled: true
+  network_optimization:
+    backoff_multiplier: 2.0
+    connection_pool_size: 20
+    request_timeout_seconds: 30
+    retry_attempts: 3
+thermal_management:
+  cpu_temperature_thresholds:
+    critical: 85.0
+    hot: 80.0
+    normal: 65.0
+    warm: 75.0
+  emergency_thermal_threshold: 85.0
+  gpu_temperature_thresholds:
+    critical: 83.0
+    hot: 75.0
+    normal: 60.0
+    warm: 70.0
+  predictive_thermal:
+    enable_prediction: true
+    prediction_window_seconds: 300
+    preemptive_throttling: true
+    temperature_trend_threshold: 2.0
+    thermal_model_learning: true
+  thermal_cooldown_seconds: 60
+  thermal_emergency_cpu_allocation: 10.0
+  thermal_emergency_gpu_allocation: 5.0
+  thermal_history_retention: 100
+  thermal_integration_enabled: true
+  thermal_monitoring_interval: 10.0
+  thermal_scaling_factors:
+    critical: 0.2
+    hot: 0.5
+    normal: 1.0
+    warm: 0.8

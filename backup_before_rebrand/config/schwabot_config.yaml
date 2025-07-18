@@ -1,0 +1,160 @@
+# Schwabot Configuration File
+# ===========================
+# 
+# Centralized configuration for the Schwabot mathematical trading system
+# with integrated GAN filtering capabilities.
+#
+# This configuration demonstrates how the GAN system is now fully integrated
+# with the centralized configuration management system.
+
+# System-level configuration
+system:
+  environment: development
+  debug: true
+  log_level: INFO
+  log_file: null
+  
+  # Performance settings
+  max_workers: 4
+  memory_limit_mb: 2048
+  cpu_usage_limit: 0.8
+  
+  # Security settings
+  encryption_enabled: true
+  api_rate_limit: 1000
+  session_timeout: 3600
+  
+  # Windows CLI compatibility
+  force_ascii_output: false
+  enable_emoji_fallback: true
+  cli_compatibility_mode: true
+
+# Mathematical library configuration
+mathlib:
+  # Precision settings
+  decimal_precision: 18
+  floating_point_precision: double
+  numerical_tolerance: 1.0e-10
+  
+  # Optimization settings
+  optimization_algorithm: adam
+  learning_rate: 0.001
+  max_iterations: 10000
+  convergence_threshold: 1.0e-08
+  
+  # Automatic differentiation
+  enable_auto_diff: true
+  dual_number_precision: 16
+  gradient_check_enabled: true
+  
+  # Matrix operations
+  matrix_backend: numpy
+  enable_gpu_acceleration: false
+  gpu_device_id: 0
+
+# Trading system configuration
+trading:
+  # Exchange settings
+  default_exchange: coinbase
+  sandbox_mode: true
+  api_timeout: 30
+  retry_attempts: 3
+  
+  # Order management
+  default_order_type: limit
+  max_order_size: 1000.0
+  min_order_size: 0.001
+  
+  # Risk management
+  max_position_size: 10000.0
+  max_daily_loss: 500.0
+  risk_tolerance: 0.02
+  
+  # Strategy settings
+  enable_backtesting: true
+  backtest_period_days: 30
+  strategy_timeout: 300
+
+# Real-time processing configuration
+realtime:
+  # Data feed settings
+  tick_buffer_size: 10000
+  max_tick_age_seconds: 60
+  data_compression_enabled: true
+  
+  # Processing settings
+  processing_threads: 2
+  batch_size: 100
+  processing_interval_ms: 100
+  
+  # Monitoring settings
+  health_check_interval: 30
+  performance_monitoring: true
+  alert_thresholds:
+    cpu_usage: 0.8
+    memory_usage: 0.8
+    error_rate: 0.05
+
+# Advanced features configuration
+# This section now includes the integrated GAN system settings
+advanced:
+  # ============================================
+  # GAN FILTERING SYSTEM CONFIGURATION
+  # ============================================
+  
+  # Enable/disable GAN filtering system
+  gan_enabled: true
+  
+  # Path to trained GAN model (null = train new model)
+  gan_model_path: ./models/entropy_gan.pth
+  
+  # Confidence threshold for signal filtering (0.0 - 1.0)
+  # Higher values = more strict filtering
+  gan_confidence_threshold: 0.75
+  
+  # Batch size for GAN processing
+  # Larger batches = better GPU utilization, more memory usage
+  gan_batch_size: 64
+  
+  # ============================================
+  # OTHER ADVANCED FEATURES
+  # ============================================
+  
+  # Quantum operations
+  quantum_enabled: false
+  quantum_backend: simulator
+  quantum_shots: 1024
+  
+  # Visualization settings
+  visualization_enabled: true
+  chart_update_interval: 1000
+  max_chart_points: 10000
+  
+  # GPU acceleration
+  gpu_enabled: false
+  gpu_memory_fraction: 0.5
+  gpu_allow_growth: true
+
+# Integration and external service configuration
+integration:
+  # Database settings
+  database_url: null
+  database_pool_size: 10
+  database_timeout: 30
+  
+  # API settings
+  external_apis: {}
+  webhook_endpoints: []
+  
+  # Notification settings
+  email_enabled: false
+  email_smtp_host: null
+  email_smtp_port: 587
+  
+  # Backup settings
+  backup_enabled: true
+  backup_interval_hours: 24
+  backup_retention_days: 30
+
+# Configuration metadata
+version: "1.0.0" 

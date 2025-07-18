@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "description": "Lantern External Echoes - Global sentiment-aware signal storage",
+    "version": "1.0.0",
+    "created": "2025-01-14T15:30:00Z",
+    "last_updated": "2025-01-14T15:30:00Z",
+    "total_signals": 0,
+    "sources": ["twitter", "google_news", "reddit", "hacker_news", "coinbase_sentiment", "glassnode", "webhook", "manual"],
+    "intents": ["panic", "pump", "ghost_return", "mass_fear", "fomo", "dump", "neutral", "bullish", "bearish"]
+  },
+  "signals": [],
+  "ghost_patterns": {
+    "ghost_return": [
+      "return", "back", "again", "reappear", "resurface", "comeback",
+      "bounce back", "recovery", "rebound", "resurrection"
+    ],
+    "mass_fear": [
+      "panic", "fear", "dump", "crash", "sell off", "mass selling",
+      "capitulation", "bloodbath", "red", "bear market"
+    ],
+    "fomo": [
+      "moon", "pump", "bull run", "fomo", "buying", "accumulation",
+      "green", "bull market", "rally", "surge"
+    ]
+  },
+  "crypto_symbols": {
+    "BTC": ["bitcoin", "btc", "bitcoin", "satoshi"],
+    "ETH": ["ethereum", "eth", "ether"],
+    "XRP": ["ripple", "xrp", "xrp"],
+    "ADA": ["cardano", "ada"],
+    "DOT": ["polkadot", "dot"],
+    "LINK": ["chainlink", "link"],
+    "SOL": ["solana", "sol"],
+    "USDC": ["usdc", "usd coin"],
+    "USDT": ["tether", "usdt"],
+    "BNB": ["binance coin", "bnb"],
+    "MATIC": ["polygon", "matic"],
+    "AVAX": ["avalanche", "avax"],
+    "UNI": ["uniswap", "uni"],
+    "ATOM": ["cosmos", "atom"],
+    "LTC": ["litecoin", "ltc"]
+  },
+  "processing_stats": {
+    "total_processed": 0,
+    "high_priority_signals": 0,
+    "ghost_pattern_matches": 0,
+    "lantern_integrations": 0,
+    "signals_by_source": {},
+    "signals_by_intent": {},
+    "signals_by_symbol": {}
+  },
+  "example_signals": [
+    {
+      "content": "Bitcoin just dropped 15%! Mass panic selling happening! #BTC #crypto",
+      "source": "twitter",
+      "symbol": "BTC",
+      "intent": "mass_fear",
+      "priority": 0.85,
+      "timestamp": "2025-01-14T15:30:00Z",
+      "hash_value": "a1b2c3d4e5f6...",
+      "metadata": {
+        "engagement": 500,
+        "sentiment_score": -0.8,
+        "user_followers": 10000
+      },
+      "processed": true
+    },
+    {
+      "content": "Ethereum looking bullish again, time to buy the dip! #ETH #moon",
+      "source": "twitter",
+      "symbol": "ETH",
+      "intent": "fomo",
+      "priority": 0.75,
+      "timestamp": "2025-01-14T15:31:00Z",
+      "hash_value": "b2c3d4e5f6g7...",
+      "metadata": {
+        "engagement": 300,
+        "sentiment_score": 0.7,
+        "user_followers": 5000
+      },
+      "processed": true
+    },
+    {
+      "content": "Bitcoin crashes 20% as market fears intensify",
+      "source": "google_news",
+      "symbol": "BTC",
+      "intent": "panic",
+      "priority": 0.90,
+      "timestamp": "2025-01-14T15:32:00Z",
+      "hash_value": "c3d4e5f6g7h8...",
+      "metadata": {
+        "sentiment_score": -0.9,
+        "source_url": "https://example.com/news/article1"
+      },
+      "processed": true
+    },
+    {
+      "content": "Just sold all my BTC at a loss, this market is dead",
+      "source": "reddit",
+      "symbol": "BTC",
+      "intent": "mass_fear",
+      "priority": 0.80,
+      "timestamp": "2025-01-14T15:33:00Z",
+      "hash_value": "d4e5f6g7h8i9...",
+      "metadata": {
+        "upvotes": 100,
+        "subreddit": "cryptocurrency",
+        "sentiment_score": -0.6
+      },
+      "processed": true
+    },
+    {
+      "content": "ETH looking ready for a massive pump!",
+      "source": "reddit",
+      "symbol": "ETH",
+      "intent": "pump",
+      "priority": 0.70,
+      "timestamp": "2025-01-14T15:34:00Z",
+      "hash_value": "e5f6g7h8i9j0...",
+      "metadata": {
+        "upvotes": 50,
+        "subreddit": "ethereum",
+        "sentiment_score": 0.8
+      },
+      "processed": true
+    }
+  ],
+  "lantern_core_integration": {
+    "enabled": true,
+    "last_sync": "2025-01-14T15:30:00Z",
+    "soulprint_matches": 0,
+    "ghost_reentries_triggered": 0,
+    "echo_resonance_activations": 0
+  },
+  "api_endpoints": {
+    "echo_signal": "POST /api/echo",
+    "batch_signals": "POST /api/echo/batch",
+    "status": "GET /api/echo/status",
+    "metrics": "GET /api/echo/metrics",
+    "health": "GET /api/echo/health",
+    "config": "GET /api/echo/config"
+  },
+  "system_flow": {
+    "description": "External signals flow through the system",
+    "steps": [
+      "1. External sources (Twitter, News, Reddit) send signals",
+      "2. EXO Echo Signals processes and classifies intent",
+      "3. Signals are hashed and prioritized",
+      "4. High-priority signals are sent to Lantern Core",
+      "5. Lantern Core matches against soulprint memory",
+      "6. Ghost reentry opportunities trigger trades",
+      "7. Strategy Mapper executes ghost trades"
+    ]
+  }
+} 

@@ -1,0 +1,39 @@
+{
+  "execution_summary": {
+    "total_executions": 2,
+    "latest_execution_time": 1751179076.6120553,
+    "average_chrono_bias": 3.0878077872387166e-16,
+    "average_stability_factor": 1.0,
+    "warp_speed": 10000,
+    "system_status": {
+      "warp_speed": 10000,
+      "cycles_completed": 2048,
+      "chrono_bias": 3.0878077872387166e-16,
+      "stability_factor": 1.0,
+      "vault_sync": true,
+      "echo_pulse_active": true,
+      "fractal_feedback_loop": true,
+      "phase_lock": "\u03a9-Phase-Locked",
+      "containment_zone": "ECHO_CROWN",
+      "resonance_history_size": 376,
+      "feedback_state_size": 1672,
+      "delta_maps_count": 2
+    }
+  },
+  "execution_history": [
+    {
+      "timestamp": 1751179075.932273,
+      "warp_result": {
+        "cycle_results": [
+          {
+            "tick": 0,
+            "shift_pattern": "ShiftPattern(tick=0, delta_t=np.float64(0.0), delta_psi=np.float64(0.04), vault_sync=True, action_trigger='Profit Lock', phase_lock='\u03a9Phase')",
+            "chrono_result": {
+              "anchor_bias": 3.0878077872387166e-16,
+              "action": "Recursion sustained",
+              "chrono_bias": 3.0878077872387166e-16,
+              "stability_factor": 1.0
+            },
+            "containment_zone": "ChronoBiasLevel.ECHO_CROWN",
+            "anchor_points": {
+              

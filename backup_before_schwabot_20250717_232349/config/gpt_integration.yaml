@@ -1,0 +1,204 @@
+# Schwabot GPT Integration Configuration
+# Version: v0.42f
+# AI Consciousness Integration Settings
+
+# Command processing settings
+command_processing:
+  max_recursive_depth: 5
+  command_timeout: 30.0
+  validation_required: true
+  memory_sync_interval: 60
+  max_concurrent_commands: 10
+  command_retry_limit: 3
+  retry_delay: 1.0
+
+# Trust thresholds for different AI agents
+trust_thresholds:
+  gpt: 0.8
+  claude: 0.7
+  r1: 0.6
+  schwabot: 1.0
+  hybrid: 0.75
+
+# Domain expertise requirements
+domain_expertise:
+  strategy: 0.3
+  profit: 0.4
+  matrix: 0.5
+  hash: 0.3
+  tick: 0.2
+  wallet: 0.3
+  validation: 0.4
+  memory: 0.3
+  system: 0.6
+
+# Consciousness profile settings
+consciousness_profiles:
+  max_command_history: 100
+  success_rate_decay: 0.95
+  trust_level_adjustment: 0.05
+  expertise_learning_rate: 0.1
+  memory_signature_length: 16
+
+# Hash registry settings
+hash_registry:
+  max_entries: 10000
+  cleanup_interval: 3600  # 1 hour
+  pattern_window_size: 100
+  pattern_similarity_threshold: 0.8
+  recursive_depth_limit: 10
+  validation_rules:
+    min_confidence_score: 0.3
+    max_recursive_depth: 10
+    require_payload_structure: true
+    check_failure_patterns: true
+
+# API gateway settings
+api_gateway:
+  host: "0.0.0.0"
+  port: 8000
+  cors_enabled: true
+  rate_limit_enabled: true
+  rate_limit_requests: 100
+  rate_limit_window: 60
+  websocket_enabled: true
+  max_websocket_connections: 50
+
+# Fault handling settings
+fault_handling:
+  enable_fault_bus_integration: true
+  fault_reporting_threshold: 0.7
+  automatic_recovery: true
+  recovery_timeout: 30.0
+
+# Logging settings
+logging:
+  log_level: "INFO"
+  log_file: "logs/gpt_integration.log"
+  max_log_size: 10485760  # 10MB
+  log_rotation: true
+  log_retention_days: 7
+
+# Security settings
+security:
+  command_validation: true
+  hash_signature_validation: true
+  agent_authentication: false
+  rate_limiting: true
+  input_sanitization: true
+
+# Performance settings
+performance:
+  async_execution: true
+  command_batching: true
+  memory_optimization: true
+  cache_enabled: true
+  cache_ttl: 300  # 5 minutes
+
+# Integration settings
+integrations:
+  fault_bus:
+    enabled: true
+    auto_report_errors: true
+    severity_threshold: 0.5
+  
+  strategy_loader:
+    enabled: true
+    auto_load_strategies: true
+    strategy_validation: true
+  
+  profit_allocator:
+    enabled: true
+    auto_allocation: false
+    risk_management: true
+  
+  hash_evaluator:
+    enabled: true
+    auto_evaluation: true
+    confidence_threshold: 0.5
+  
+  matrix_allocator:
+    enabled: true
+    auto_generation: false
+    validation_required: true
+
+# Memory management
+memory_management:
+  max_memory_usage_mb: 1024
+  garbage_collection_interval: 300  # 5 minutes
+  memory_cleanup_threshold: 0.8
+  persistent_storage: true
+  backup_enabled: true
+  backup_interval: 3600  # 1 hour
+
+# Pattern detection
+pattern_detection:
+  enabled: true
+  min_pattern_length: 3
+  max_pattern_length: 20
+  pattern_confidence_threshold: 0.6
+  auto_pattern_learning: true
+  pattern_validation: true
+
+# Recursive execution
+recursive_execution:
+  enabled: true
+  max_recursion_depth: 5
+  recursion_timeout: 60.0
+  recursion_validation: true
+  parent_child_tracking: true
+  recursion_metrics: true
+
+# Validation rules
+validation_rules:
+  command_structure:
+    required_fields: ["agent_type", "domain", "payload"]
+    optional_fields: ["context", "priority", "parent_command_id"]
+  
+  payload_validation:
+    strategy:
+      required: ["strategy_name", "parameters"]
+      optional: ["target_profit"]
+    profit:
+      required: ["allocation_amount", "risk_level"]
+      optional: ["timeframe"]
+    matrix:
+      required: ["matrix_type", "dimensions"]
+      optional: ["logic_weights"]
+    hash:
+      required: ["hash_value", "confidence_score"]
+      optional: ["validation_data"]
+
+# Error handling
+error_handling:
+  graceful_degradation: true
+  error_recovery: true
+  error_logging: true
+  error_notification: false
+  max_error_retries: 3
+  error_backoff_factor: 2.0
+
+# Monitoring and metrics
+monitoring:
+  enabled: true
+  metrics_collection: true
+  performance_monitoring: true
+  health_checks: true
+  alerting: false
+  dashboard_enabled: false
+
+# Development settings
+development:
+  debug_mode: false
+  test_mode: false
+  profiling: false
+  hot_reload: false
+  verbose_logging: false
+
+# Production settings
+production:
+  optimized_mode: true
+  security_enforced: true
+  monitoring_enabled: true
+  backup_enabled: true
+  error_reporting: true 

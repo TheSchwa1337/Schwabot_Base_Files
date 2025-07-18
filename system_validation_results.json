@@ -1,68 +1,86 @@
 {
-  "timestamp": "2025-07-17T11:18:40.295355",
-  "duration_seconds": 3.9587879180908203,
-  "total_tests_passed": 9,
-  "total_tests_failed": 14,
-  "success_rate": 0.391304347826087,
+  "timestamp": "2025-07-17T23:34:16.103119",
+  "duration_seconds": 0.39083361625671387,
+  "total_tests_passed": 0,
+  "total_tests_failed": 23,
+  "success_rate": 0.0,
   "all_errors": [
-    "core.tcell_survival_engine: name 'TCellSurvivalEngine' is not defined",
-    "core.symbolic_registry: unexpected indent (symbolic_registry.py, line 15)",
-    "core.phantom_registry: unexpected indent (phantom_registry.py, line 31)",
-    "core.risk_manager: unexpected indent (risk_manager.py, line 41)",
-    "core.unified_btc_trading_pipeline: unexpected indent (unified_btc_trading_pipeline.py, line 25)",
-    "core.enhanced_gpu_auto_detector: unexpected indent (enhanced_gpu_auto_detector.py, line 29)",
-    "strategies.phantom_band_navigator: unexpected indent (multi_phase_strategy_weight_tensor.py, line 28)",
-    "Symbolic Registry: unexpected indent (symbolic_registry.py, line 15)",
-    "MathLib: cannot import name 'MathLibV2' from 'mathlib' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\mathlib\\__init__.py)",
-    "Risk Manager: unexpected indent (risk_manager.py, line 41)",
-    "Profit Calculator: PureProfitCalculator.calculate_profit() missing 1 required positional argument: 'history_state'",
-    "Quantum Strategy: 'QuantumStrategyEngine' object has no attribute 'create_superposition_strategy'",
-    "Persistent Homology: 'PersistentHomology' object has no attribute 'build_simplicial_complex'",
-    "GPU Auto-Detection: unexpected indent (enhanced_gpu_auto_detector.py, line 29)"
+    "core.hash_config_manager: expected an indented block after class definition on line 36 (hash_config_manager.py, line 37)",
+    "core.unified_mathematical_bridge: expected an indented block after 'try' statement on line 32 (unified_mathematical_bridge.py, line 33)",
+    "core.lantern_core_integration: expected an indented block after 'try' statement on line 24 (lantern_core_integration.py, line 25)",
+    "core.vault_orbital_bridge: expected an indented block after class definition on line 23 (vault_orbital_bridge.py, line 24)",
+    "core.tcell_survival_engine: expected an indented block after class definition on line 31 (tcell_survival_engine.py, line 32)",
+    "core.symbolic_registry: expected an indented block after class definition on line 25 (symbolic_registry.py, line 26)",
+    "core.phantom_registry: expected an indented block after 'try' statement on line 45 (phantom_registry.py, line 46)",
+    "core.risk_manager: expected an indented block after 'try' statement on line 22 (risk_manager.py, line 23)",
+    "core.pure_profit_calculator: expected an indented block after 'try' statement on line 39 (pure_profit_calculator.py, line 40)",
+    "core.unified_btc_trading_pipeline: expected an indented block after 'try' statement on line 32 (unified_btc_trading_pipeline.py, line 33)",
+    "core.enhanced_gpu_auto_detector: expected an indented block after class definition on line 20 (enhanced_gpu_auto_detector.py, line 21)",
+    "mathlib: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "mathlib.quantum_strategy: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "mathlib.persistent_homology: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "strategies.phantom_band_navigator: expected an indented block after 'try' statement on line 39 (phantom_detector.py, line 40)",
+    "Hash Config Manager: expected an indented block after class definition on line 36 (hash_config_manager.py, line 37)",
+    "Symbolic Registry: expected an indented block after class definition on line 25 (symbolic_registry.py, line 26)",
+    "MathLib: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "Risk Manager: expected an indented block after 'try' statement on line 22 (risk_manager.py, line 23)",
+    "Profit Calculator: expected an indented block after 'try' statement on line 39 (pure_profit_calculator.py, line 40)",
+    "Quantum Strategy: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "Persistent Homology: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+    "GPU Auto-Detection: expected an indented block after class definition on line 20 (enhanced_gpu_auto_detector.py, line 21)"
   ],
   "test_details": {
     "core_imports": {
-      "passed": 8,
-      "failed": 7,
+      "passed": 0,
+      "failed": 15,
       "errors": [
-        "core.tcell_survival_engine: name 'TCellSurvivalEngine' is not defined",
-        "core.symbolic_registry: unexpected indent (symbolic_registry.py, line 15)",
-        "core.phantom_registry: unexpected indent (phantom_registry.py, line 31)",
-        "core.risk_manager: unexpected indent (risk_manager.py, line 41)",
-        "core.unified_btc_trading_pipeline: unexpected indent (unified_btc_trading_pipeline.py, line 25)",
-        "core.enhanced_gpu_auto_detector: unexpected indent (enhanced_gpu_auto_detector.py, line 29)",
-        "strategies.phantom_band_navigator: unexpected indent (multi_phase_strategy_weight_tensor.py, line 28)"
+        "core.hash_config_manager: expected an indented block after class definition on line 36 (hash_config_manager.py, line 37)",
+        "core.unified_mathematical_bridge: expected an indented block after 'try' statement on line 32 (unified_mathematical_bridge.py, line 33)",
+        "core.lantern_core_integration: expected an indented block after 'try' statement on line 24 (lantern_core_integration.py, line 25)",
+        "core.vault_orbital_bridge: expected an indented block after class definition on line 23 (vault_orbital_bridge.py, line 24)",
+        "core.tcell_survival_engine: expected an indented block after class definition on line 31 (tcell_survival_engine.py, line 32)",
+        "core.symbolic_registry: expected an indented block after class definition on line 25 (symbolic_registry.py, line 26)",
+        "core.phantom_registry: expected an indented block after 'try' statement on line 45 (phantom_registry.py, line 46)",
+        "core.risk_manager: expected an indented block after 'try' statement on line 22 (risk_manager.py, line 23)",
+        "core.pure_profit_calculator: expected an indented block after 'try' statement on line 39 (pure_profit_calculator.py, line 40)",
+        "core.unified_btc_trading_pipeline: expected an indented block after 'try' statement on line 32 (unified_btc_trading_pipeline.py, line 33)",
+        "core.enhanced_gpu_auto_detector: expected an indented block after class definition on line 20 (enhanced_gpu_auto_detector.py, line 21)",
+        "mathlib: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+        "mathlib.quantum_strategy: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+        "mathlib.persistent_homology: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+        "strategies.phantom_band_navigator: expected an indented block after 'try' statement on line 39 (phantom_detector.py, line 40)"
       ]
     },
     "mathematical_systems": {
-      "passed": 1,
-      "failed": 2,
+      "passed": 0,
+      "failed": 3,
       "errors": [
-        "Symbolic Registry: unexpected indent (symbolic_registry.py, line 15)",
-        "MathLib: cannot import name 'MathLibV2' from 'mathlib' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\mathlib\\__init__.py)"
+        "Hash Config Manager: expected an indented block after class definition on line 36 (hash_config_manager.py, line 37)",
+        "Symbolic Registry: expected an indented block after class definition on line 25 (symbolic_registry.py, line 26)",
+        "MathLib: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)"
       ]
     },
     "trading_systems": {
       "passed": 0,
       "failed": 2,
       "errors": [
-        "Risk Manager: unexpected indent (risk_manager.py, line 41)",
-        "Profit Calculator: PureProfitCalculator.calculate_profit() missing 1 required positional argument: 'history_state'"
+        "Risk Manager: expected an indented block after 'try' statement on line 22 (risk_manager.py, line 23)",
+        "Profit Calculator: expected an indented block after 'try' statement on line 39 (pure_profit_calculator.py, line 40)"
       ]
     },
     "advanced_systems": {
       "passed": 0,
       "failed": 2,
       "errors": [
-        "Quantum Strategy: 'QuantumStrategyEngine' object has no attribute 'create_superposition_strategy'",
-        "Persistent Homology: 'PersistentHomology' object has no attribute 'build_simplicial_complex'"
+        "Quantum Strategy: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)",
+        "Persistent Homology: expected an indented block after class definition on line 20 (mathlib_v4.py, line 21)"
       ]
     },
     "gpu_system": {
       "passed": 0,
       "failed": 1,
       "errors": [
-        "GPU Auto-Detection: unexpected indent (enhanced_gpu_auto_detector.py, line 29)"
+        "GPU Auto-Detection: expected an indented block after class definition on line 20 (enhanced_gpu_auto_detector.py, line 21)"
       ]
     }
   }

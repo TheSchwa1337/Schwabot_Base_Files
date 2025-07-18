@@ -1,0 +1,106 @@
+{
+  "timestamp": 1751397323.8325894,
+  "test_results": {
+    "config_loading": true,
+    "brain_engine": true,
+    "brain_results": [
+      {
+        "scenario": "Strong Bull",
+        "confidence": 0.4491750020796812,
+        "profit_score": 242665.4983223905,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Bear Market",
+        "confidence": 0.44831251779762626,
+        "profit_score": 79645.49530142666,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Sideways",
+        "confidence": 0.44850001249987503,
+        "profit_score": 110549.9954167125,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Volatile",
+        "confidence": 0.46513333574429916,
+        "profit_score": 210645.17591201531,
+        "action": "HOLD",
+        "position_size": 0.0
+      }
+    ],
+    "symbolic_router": true,
+    "router_results": [
+      {
+        "symbol": "[BRAIN]",
+        "profit": 242.66549832239048,
+        "tier": "tier_4",
+        "vault_stored": true,
+        "bit_state": "11"
+      },
+      {
+        "symbol": "\ud83e\udde0",
+        "profit": 79.64549530142666,
+        "tier": "tier_4",
+        "vault_stored": true,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\ud83d\udcb0",
+        "profit": 110.54999541671249,
+        "tier": "tier_4",
+        "vault_stored": true,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\ud83d\udcc8",
+        "profit": 210.6451759120153,
+        "tier": "tier_3",
+        "vault_stored": true,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\u26a1",
+        "profit": 0.13,
+        "tier": "tier_2",
+        "vault_stored": true,
+        "bit_state": "01"
+      }
+    ],
+    "math_system": true,
+    "math_results": [
+      {
+        "scenario": "Strong Bull",
+        "optimized_profit": 16138.417263383675,
+        "sharpe_ratio": 1.5515838457795457e-17,
+        "position_size": 3010.394194138244
+      },
+      {
+        "scenario": "Bear Market",
+        "optimized_profit": 16052.932543964067,
+        "sharpe_ratio": 1.5515838457795457e-17,
+        "position_size": 3001.7277360153366
+      },
+      {
+        "scenario": "Sideways",
+        "optimized_profit": 16071.48888351879,
+        "sharpe_ratio": 1.5515838457795457e-17,
+        "position_size": 3003.6110212231906
+      }
+    ],
+    "integration_orchestrator": false,
+    "api_security": false,
+    "cross_layer_comm": false
+  },
+  "summary": {
+    "passed": 4,
+    "total": 7,
+    "success_rate": 57.14285714285714
+  },
+  "data_flow_validated": true,
+  "ready_for_production": false
+}

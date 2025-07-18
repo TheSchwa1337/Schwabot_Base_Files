@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Public Schwabot integration facade.
+
+This *tiny* module exists so that high-level scripts can simply do::
+
+    from schwabot_integration import SchwabotOrchestrator
+
+without worrying about the internal package layout.
+
+The actual implementation lives in
+``core.schwabot_integration_orchestrator.SchwabotIntegrationOrchestrator`` –
+we just import it and re-export under the traditional name expected by older
+call-sites.
+"""
+
+from __future__ import annotations
+
+from core.schwabot_integration_orchestrator import SchwabotIntegrationOrchestrator as SchwabotOrchestrator
+
+__all__: list[str] = ["SchwabotOrchestrator"]

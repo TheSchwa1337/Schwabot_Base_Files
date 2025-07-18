@@ -1,0 +1,185 @@
+{
+  "timestamp": 1751398551.3995802,
+  "test_type": "core_integration",
+  "test_results": {
+    "brain_engine": true,
+    "brain_results": [
+      {
+        "scenario": "Strong Bull",
+        "price": 55000,
+        "volume": 2000,
+        "confidence": 0.4491750020796812,
+        "profit_score": 242665.4983223905,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Bear Market",
+        "price": 45000,
+        "volume": 800,
+        "confidence": 0.44831251779762626,
+        "profit_score": 79645.49530142666,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Sideways",
+        "price": 50000,
+        "volume": 1000,
+        "confidence": 0.44850001249987503,
+        "profit_score": 110549.9954167125,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "Volatile",
+        "price": 52000,
+        "volume": 1800,
+        "confidence": 0.46513333574429916,
+        "profit_score": 210645.17591201531,
+        "action": "HOLD",
+        "position_size": 0.0
+      },
+      {
+        "scenario": "High Volume",
+        "price": 51500,
+        "volume": 2500,
+        "confidence": 0.7893820008741802,
+        "profit_score": 404462.7291988453,
+        "action": "BUY",
+        "position_size": 0.1
+      }
+    ],
+    "symbolic_router": true,
+    "router_results": [
+      {
+        "symbol": "[BRAIN]",
+        "profit": 0.0022060499847490044,
+        "tier": "tier_4",
+        "trust_score": 0.9,
+        "entropy": 0.875,
+        "vault_stored": false,
+        "bit_state": "11"
+      },
+      {
+        "symbol": "\ud83e\udde0",
+        "profit": 0.002212374869484074,
+        "tier": "tier_4",
+        "trust_score": 0.9,
+        "entropy": 0.875,
+        "vault_stored": false,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\ud83d\udcb0",
+        "profit": 0.0022109999083342498,
+        "tier": "tier_4",
+        "trust_score": 0.9,
+        "entropy": 0.812,
+        "vault_stored": false,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\ud83d\udcc8",
+        "profit": 0.0022504826486326422,
+        "tier": "tier_3",
+        "trust_score": 0.7,
+        "entropy": 0.781,
+        "vault_stored": false,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\u26a1",
+        "profit": 0.0031414580908648176,
+        "tier": "tier_2",
+        "trust_score": 0.5,
+        "entropy": 0.844,
+        "vault_stored": false,
+        "bit_state": "01"
+      },
+      {
+        "symbol": "\ud83d\ude80",
+        "profit": 0.125,
+        "tier": "tier_3",
+        "trust_score": 0.7,
+        "entropy": 0.781,
+        "vault_stored": true,
+        "bit_state": "00"
+      },
+      {
+        "symbol": "\ud83d\udc8e",
+        "profit": 0.14,
+        "tier": "tier_2",
+        "trust_score": 0.5,
+        "entropy": 0.781,
+        "vault_stored": true,
+        "bit_state": "10"
+      }
+    ],
+    "math_system": true,
+    "math_results": [
+      {
+        "scenario": "Strong Bull",
+        "price": 55000,
+        "volume": 2000,
+        "confidence": 0.4491750020796812,
+        "optimized_profit": 23633.961074672945,
+        "sharpe_ratio": -0.031830350703961514,
+        "position_size": 3010.394194138244
+      },
+      {
+        "scenario": "Bear Market",
+        "price": 45000,
+        "volume": 800,
+        "confidence": 0.44831251779762626,
+        "optimized_profit": 7700.37122348542,
+        "sharpe_ratio": -0.031830350703961514,
+        "position_size": 3001.7277360153366
+      },
+      {
+        "scenario": "Sideways",
+        "price": 50000,
+        "volume": 1000,
+        "confidence": 0.44850001249987503,
+        "optimized_profit": 11268.767869570067,
+        "sharpe_ratio": -0.031830350703961514,
+        "position_size": 3003.6110212231906
+      },
+      {
+        "scenario": "Volatile",
+        "price": 52000,
+        "volume": 1800,
+        "confidence": 0.46513333574429916,
+        "optimized_profit": 22495.99190337145,
+        "sharpe_ratio": -0.031830350703961514,
+        "position_size": 3172.2411851434094
+      },
+      {
+        "scenario": "High Volume",
+        "price": 51500,
+        "volume": 2500,
+        "confidence": 0.7893820008741802,
+        "optimized_profit": 108215.31576383178,
+        "sharpe_ratio": -0.031830350703961514,
+        "position_size": 7013.4358566826495
+      }
+    ],
+    "data_flow": true,
+    "performance_metrics": {
+      "avg_brain_profit": 209593.77883027805,
+      "max_brain_profit": 404462.7291988453,
+      "avg_confidence": 0.5201005737991323,
+      "total_allocation": 19201.40999320283,
+      "symbols_processed": 7,
+      "vault_success_rate": 0.2857142857142857
+    },
+    "performance_test": true
+  },
+  "summary": {
+    "passed": 5,
+    "total": 5,
+    "success_rate": 100.0
+  },
+  "pipeline_operational": true,
+  "ready_for_production": true
+}

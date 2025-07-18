@@ -1,0 +1,18 @@
+{
+  "system_name": "Schwabot AI",
+  "version": "2.0.0",
+  "description": "Advanced AI-Powered Trading System",
+  "author": "Schwabot Development Team",
+  "website": "https://schwabot.ai",
+  "support_email": "support@schwabot.ai",
+  "colors": {
+    "primary": "#1E3A8A",
+    "secondary": "#059669",
+    "accent": "#DC2626",
+    "warning": "#D97706",
+    "success": "#059669",
+    "info": "#2563EB"
+  },
+  "created_date": "2025-07-17T23:14:33.819145",
+  "rebranded_from": "koboldcpp"
+}

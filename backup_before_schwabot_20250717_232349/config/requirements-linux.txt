@@ -1,0 +1,4 @@
+# Requirements for linux
+# Install with: pip install -r requirements-linux.txt
+
+psutil>=5.9.0

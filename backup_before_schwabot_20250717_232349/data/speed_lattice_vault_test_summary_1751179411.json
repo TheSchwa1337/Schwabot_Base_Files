@@ -1,0 +1,13 @@
+{
+  "test_status": "ALL_PASSED",
+  "timestamp": 1751179411.6876938,
+  "export_files": {
+    "delta_map": "speed_lattice_vault_delta_map_1751179411.json",
+    "report": "speed_lattice_vault_report_1751179411.json"
+  },
+  "performance_results": {
+    "1000": 0.03511643409729004,
+    "5000": 0.03575849533081055,
+    "10000": 0.03333330154418945
+  }
+}

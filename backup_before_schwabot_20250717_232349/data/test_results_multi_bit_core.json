@@ -1,0 +1,45 @@
+{
+  "test_results": {
+    "mathematical_tests": {
+      "ferris_wheel": true,
+      "quantum_thermal": true,
+      "void_well": true,
+      "profit_state": true,
+      "kelly_metrics": true
+    },
+    "multi_bit_logic_tests": {
+      "bit_depth_determination": true,
+      "processing_mode_selection": true,
+      "state_transitions": true,
+      "memory_management": false,
+      "performance_tracking": false
+    },
+    "trading_signal_tests": {
+      "signal_creation": true,
+      "confidence_calculation": true,
+      "risk_management": true,
+      "position_sizing": true,
+      "mathematical_integration": true
+    }
+  },
+  "success_rates": {
+    "mathematical_tests": {
+      "passed": 5,
+      "total": 5,
+      "success_rate": 100.0
+    },
+    "multi_bit_logic_tests": {
+      "passed": 3,
+      "total": 5,
+      "success_rate": 60.0
+    },
+    "trading_signal_tests": {
+      "passed": 5,
+      "total": 5,
+      "success_rate": 100.0
+    }
+  },
+  "overall_success_rate": 86.66666666666667,
+  "total_passed": 13,
+  "total_tests": 15
+}

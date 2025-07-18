@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-12T18:40:41.179831",
+  "project_root": "C:\\Users\\maxde\\OneDrive\\Documents",
+  "python_version": "3.12.10",
+  "directories_created": [
+    "C:\\Users\\maxde\\OneDrive\\Documents\\config",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\config\\schemas",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\tests",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\logs",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\data",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\data\\matrix_logs",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\tests"
+  ],
+  "config_files_present": [
+    "tesseract_enhanced.yaml",
+    "fractal_core.yaml",
+    "matrix_response_paths.yaml",
+    "risk_config.yaml"
+  ],
+  "setup_status": "completed"
+}

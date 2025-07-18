@@ -1,0 +1,117 @@
+{
+  "curves": [
+    {
+      "curve_id": "btc_price_1h_2024",
+      "curve_type": "btc_price",
+      "asset": "BTC",
+      "timeframe": "1h",
+      "start_time": "2024-01-01T00:00:00",
+      "end_time": "2024-12-31T23:59:59",
+      "confidence_score": 0.85,
+      "data_points": [
+        {
+          "timestamp": 1704067200,
+          "price": 45000.0,
+          "volume": 1200.0,
+          "volatility": 0.02
+        },
+        {
+          "timestamp": 1704070800,
+          "price": 45200.0,
+          "volume": 1150.0,
+          "volatility": 0.018
+        },
+        {
+          "timestamp": 1704074400,
+          "price": 44800.0,
+          "volume": 1300.0,
+          "volatility": 0.025
+        }
+      ],
+      "metadata": {
+        "model_version": "prophet_v1.0",
+        "training_data_points": 8760,
+        "seasonality_detected": true,
+        "trend_direction": "upward"
+      }
+    },
+    {
+      "curve_id": "btc_volume_4h_2024",
+      "curve_type": "btc_volume",
+      "asset": "BTC",
+      "timeframe": "4h",
+      "start_time": "2024-01-01T00:00:00",
+      "end_time": "2024-12-31T23:59:59",
+      "confidence_score": 0.78,
+      "data_points": [
+        {
+          "timestamp": 1704067200,
+          "volume": 4800.0,
+          "price": 45000.0,
+          "volatility": 0.02
+        },
+        {
+          "timestamp": 1704081600,
+          "volume": 5200.0,
+          "price": 45200.0,
+          "volatility": 0.018
+        },
+        {
+          "timestamp": 1704096000,
+          "volume": 4600.0,
+          "price": 44800.0,
+          "volatility": 0.025
+        }
+      ],
+      "metadata": {
+        "model_version": "prophet_v1.0",
+        "training_data_points": 2190,
+        "seasonality_detected": true,
+        "trend_direction": "stable"
+      }
+    },
+    {
+      "curve_id": "btc_volatility_1d_2024",
+      "curve_type": "btc_volatility",
+      "asset": "BTC",
+      "timeframe": "1d",
+      "start_time": "2024-01-01T00:00:00",
+      "end_time": "2024-12-31T23:59:59",
+      "confidence_score": 0.72,
+      "data_points": [
+        {
+          "timestamp": 1704067200,
+          "volatility": 0.025,
+          "price": 45000.0,
+          "volume": 12000.0
+        },
+        {
+          "timestamp": 1704153600,
+          "volatility": 0.030,
+          "price": 44800.0,
+          "volume": 11500.0
+        },
+        {
+          "timestamp": 1704240000,
+          "volatility": 0.020,
+          "price": 45500.0,
+          "volume": 12500.0
+        }
+      ],
+      "metadata": {
+        "model_version": "prophet_v1.0",
+        "training_data_points": 365,
+        "seasonality_detected": false,
+        "trend_direction": "variable"
+      }
+    }
+  ],
+  "last_updated": "2024-01-01T00:00:00",
+  "total_curves": 3,
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Prophet curve map for Schwabot UROS v1.0",
+    "created_by": "Schwabot System",
+    "update_frequency": "daily"
+  }
+} 

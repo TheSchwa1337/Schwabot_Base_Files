@@ -1,0 +1,149 @@
+{
+  "includePaths": [
+    "core/",
+    "config/",
+    "utils/",
+    "schwabot/"
+  ],
+  "excludePaths": [
+    "__pycache__/",
+    "*.pyc",
+    "*.pyo",
+    "*.pyd",
+    ".git/",
+    "logs/",
+    "backups/"
+  ],
+  "symbolicAliases": {
+    "gradient": "∇",
+    "phase": "Ω",
+    "signal": "ψ",
+    "entropy": "λ",
+    "drift": "D",
+    "noise": "Σ",
+    "time": "t",
+    "lambda": "λ"
+  },
+  "mathFramework": {
+    "symbolicOperators": [
+      "EntropicGradient.derive",
+      "PhaseOmega.compute",
+      "SignalPsi.extract_field",
+      "DriftField.compute_drift",
+      "NoiseField.sum_noise"
+    ],
+    "typeAliases": {
+      "SignalField": "np.ndarray",
+      "TimeIndex": "int",
+      "PhaseValue": "float",
+      "DriftCoefficient": "float",
+      "EntropyWeight": "float",
+      "SignalVector": "np.ndarray",
+      "SignalMatrix": "np.ndarray",
+      "SignalTensor": "np.ndarray",
+      "TimeStamp": "float",
+      "CycleIndex": "int",
+      "EntropyIndex": "int",
+      "EntropyValue": "float",
+      "DriftFactor": "float",
+      "NoiseFactor": "float",
+      "GradientValue": "float",
+      "VaultState": "str",
+      "StrategyID": "str",
+      "HashValue": "str",
+      "PatternTuple": "Tuple"
+    }
+  },
+  "pipelineComponents": {
+    "core": [
+      "symbolic_math_interface.py",
+      "two_gram_detector.py",
+      "unified_pipeline_manager.py",
+      "math_config_manager.py",
+      "math_orchestrator.py",
+      "math_cache.py"
+    ],
+    "config": [
+      "pipeline_config.yaml",
+      "math_core.yaml",
+      "pipeline.yaml",
+      "mathematical_framework_config.py",
+      "config_loader.py"
+    ],
+    "utils": [
+      "type_aliases.py",
+      "cpu_fallback.py",
+      "gpu_acceleration.py"
+    ]
+  },
+  "codeStyle": {
+    "preferModularCalls": true,
+    "useTypeHints": true,
+    "useDocstrings": true,
+    "avoidDeepNesting": true,
+    "preferNamedFunctions": true
+  },
+  "mathematicalPatterns": {
+    "phaseOmega": "Ω = ∇ψ(t) * D",
+    "gradientComputation": "EntropicGradient.derive(field, time_idx)",
+    "signalExtraction": "SignalPsi.extract_field(signal_data, entropy_index)",
+    "driftComputation": "DriftField.compute_drift(signal_history)",
+    "noiseComputation": "NoiseField.sum_noise(signal_field)",
+    "entropyComputation": "SignalPsi.compute_entropy_weight(signal_field, time_idx)"
+  },
+  "contextAwareness": {
+    "enablePhantomLayer": true,
+    "enableVaultState": true,
+    "enableEntropyIndex": true,
+    "enableCycleId": true,
+    "enableTimestamp": true
+  },
+  "hardwareOptimization": {
+    "preference": "auto",
+    "enableGPU": true,
+    "enableCPU": true,
+    "batchProcessing": true,
+    "fallbackToCPU": true
+  },
+  "configurationManagement": {
+    "yamlConfigs": [
+      "config/math_core.yaml",
+      "config/pipeline.yaml",
+      "config/pipeline_config.yaml"
+    ],
+    "configLoader": "config/config_loader.py",
+    "dotNotation": true,
+    "typeSafeAccess": true,
+    "hotReload": true
+  },
+  "utilityModules": {
+    "typeAliases": "utils/type_aliases.py",
+    "cpuFallback": "utils/cpu_fallback.py",
+    "gpuAcceleration": "utils/gpu_acceleration.py"
+  },
+  "documentation": {
+    "symbolicMath": "core/symbolic_math_interface.py",
+    "twoGram": "core/two_gram_detector.py",
+    "pipeline": "core/unified_pipeline_manager.py",
+    "config": "config/pipeline_config.yaml",
+    "mathCore": "config/math_core.yaml",
+    "pipelineYaml": "config/pipeline.yaml",
+    "configLoader": "config/config_loader.py",
+    "typeAliases": "utils/type_aliases.py",
+    "cpuFallback": "utils/cpu_fallback.py",
+    "gpuAcceleration": "utils/gpu_acceleration.py"
+  },
+  "excludedSymbols": ["Ω", "∇", "λ", "ψ", "D", "Σ", "t"],
+  "performanceOptimization": {
+    "enableCaching": true,
+    "enableProfiling": false,
+    "enableMonitoring": true,
+    "memoryManagement": true
+  },
+  "errorHandling": {
+    "enableExceptionLogging": true,
+    "enableErrorRecovery": true,
+    "enableGracefulDegradation": true,
+    "maxRetryAttempts": 3
+  }
+} 

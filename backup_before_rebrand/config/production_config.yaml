@@ -1,0 +1,126 @@
+# Production Trading Configuration
+# ================================
+# This file configures the Schwabot production trading system
+# for live cryptocurrency trading with real API keys.
+
+# Exchange Configuration
+# ----------------------
+exchange_name: "coinbase"  # Supported: coinbase, binance, kraken, etc.
+api_key: "your_api_key_here"  # Replace with your actual API key
+secret: "your_secret_here"    # Replace with your actual secret
+sandbox: true  # Set to false for live trading
+
+# Trading Configuration
+# ---------------------
+symbols:
+  - "BTC/USDC"
+  - "ETH/USDC"
+  # Add more symbols as needed
+
+base_currency: "USDC"
+
+# Risk Management
+# ---------------
+risk_tolerance: 0.2        # 20% risk tolerance
+max_position_size: 0.1     # 10% max position size
+max_daily_loss: 0.05       # 5% max daily loss
+enable_circuit_breakers: true
+
+# Portfolio Management
+# -------------------
+portfolio_sync_interval: 30  # Sync portfolio every 30 seconds
+price_update_interval: 5     # Update prices every 5 seconds
+
+# Initial Balances (optional)
+# ---------------------------
+initial_balance:
+  USDC: 1000.0
+  BTC: 0.0
+  ETH: 0.0
+
+# Strategy Configuration
+# ----------------------
+strategy:
+  type: "entropy_enhanced"
+  timeframe: "1m"
+  entropy_threshold: 0.7
+  signal_strength_min: 0.3
+  timing_window: 300
+
+# Risk Manager Configuration
+# --------------------------
+risk_manager:
+  error_handling:
+    max_errors_per_symbol: 3
+    max_errors_per_timeframe: 10
+    error_timeframe_seconds: 60
+    circuit_breaker_cooldown_seconds: 300
+    safe_mode_error_threshold: 5
+  
+  circuit_breakers:
+    max_drawdown: 0.1
+    max_consecutive_losses: 5
+    max_daily_errors: 10
+
+# Logging Configuration
+# ---------------------
+logging:
+  level: "INFO"
+  file: "production_trading.log"
+  max_file_size: "10MB"
+  backup_count: 5
+
+# Performance Monitoring
+# ----------------------
+monitoring:
+  performance_history_size: 1000
+  error_log_size: 100
+  report_interval: 300  # 5 minutes
+
+# Safety Features
+# ---------------
+safety:
+  emergency_stop_loss: 0.15    # 15% emergency stop loss
+  max_open_positions: 5        # Maximum 5 open positions
+  position_timeout: 3600       # Close positions after 1 hour
+  auto_rebalance: true         # Auto-rebalance portfolio
+
+# API Rate Limiting
+# -----------------
+rate_limiting:
+  requests_per_minute: 60
+  requests_per_second: 10
+  enable_rate_limit: true
+
+# WebSocket Configuration (if supported)
+# -------------------------------------
+websocket:
+  enabled: true
+  reconnect_attempts: 5
+  reconnect_delay: 5
+
+# Notification Settings
+# ---------------------
+notifications:
+  email_enabled: false
+  email_address: ""
+  slack_enabled: false
+  slack_webhook: ""
+  telegram_enabled: false
+  telegram_bot_token: ""
+  telegram_chat_id: ""
+
+# Backup and Recovery
+# -------------------
+backup:
+  auto_backup: true
+  backup_interval: 3600  # 1 hour
+  backup_retention: 7    # Keep 7 days of backups
+  backup_path: "./backups/"
+
+# Development and Testing
+# -----------------------
+development:
+  dry_run: false          # Set to true for testing without real trades
+  simulation_mode: false  # Use simulated market data
+  debug_mode: false       # Enable debug logging 

@@ -1,0 +1,170 @@
+# T-Cell Survival Configuration for Schwabot
+# ==========================================
+# Biological immune system parameters for front-running strategy management
+# Strategy hashes = T-cell receptors (TCR)
+# Signal patterns = Antigens
+# Profit/Loss = Clonal expansion/Apoptosis
+
+tcell_survival:
+  # Core activation parameters
+  activation_threshold: 0.76          # Minimum probability for T-cell activation
+  survival_threshold: 0.3             # Minimum survival score to avoid apoptosis
+  clonal_expansion_threshold: 0.7     # Threshold for successful strategy replication
+  apoptosis_threshold: 0.1            # Threshold for strategy removal
+  
+  # Mutation and adaptation
+  mutation_rate: 0.1                  # Base mutation rate for failed strategies
+  enable_mutations: true              # Enable somatic hypermutation
+  enable_clonal_expansion: true       # Enable successful strategy replication
+  memory_decay_rate: 0.95             # Decay rate for memory T-cells
+  
+  # Population management
+  max_population_size: 1000           # Maximum number of T-cell strategies
+  dna_sequence_length: 64             # Length of DNA-like strategy encoding
+  tcell_registry_file: "tcell_strategy_registry.json"
+  
+  # MHC correlation matrix (cross-asset delays)
+  mhc_correlation_matrix:
+    BTC:
+      ETH: 2      # ETH follows BTC by 2 ticks
+      XRP: -1     # XRP leads BTC by 1 tick
+      SOL: 1      # SOL follows BTC by 1 tick
+      USDC: 0     # USDC is stable reference
+    ETH:
+      BTC: -2     # BTC leads ETH by 2 ticks
+      XRP: -3     # XRP leads ETH by 3 ticks
+      SOL: -1     # SOL leads ETH by 1 tick
+      USDC: -2    # USDC reference
+    XRP:
+      BTC: 1      # XRP leads BTC by 1 tick
+      ETH: 3      # XRP leads ETH by 3 ticks
+      SOL: 2      # XRP leads SOL by 2 ticks
+      USDC: 1     # USDC reference
+    SOL:
+      BTC: -1     # SOL follows BTC by 1 tick
+      ETH: 1      # SOL follows ETH by 1 tick
+      XRP: -2     # SOL follows XRP by 2 ticks
+      USDC: -1    # USDC reference
+  
+  # Default T-cell strategies
+  default_strategies:
+    - source: "BTC"
+      target: "ETH"
+      delta_t: 2
+      omega_weight: 0.4
+      xi_weight: 0.3
+      phi_weight: 0.3
+    - source: "BTC"
+      target: "XRP"
+      delta_t: -1
+      omega_weight: 0.4
+      xi_weight: 0.3
+      phi_weight: 0.3
+    - source: "ETH"
+      target: "SOL"
+      delta_t: 1
+      omega_weight: 0.4
+      xi_weight: 0.3
+      phi_weight: 0.3
+    - source: "XRP"
+      target: "USDC"
+      delta_t: 3
+      omega_weight: 0.4
+      xi_weight: 0.3
+      phi_weight: 0.3
+  
+  # T-cell state management
+  state_transitions:
+    naive_to_activated:
+      threshold: 0.76
+      decay_rate: 0.95
+    activated_to_memory:
+      success_threshold: 0.7
+      roi_threshold: 0.05
+    activated_to_exhausted:
+      failure_threshold: 0.3
+      consecutive_failures: 3
+    memory_to_exhausted:
+      decay_threshold: 0.1
+      time_decay_days: 30
+  
+  # Clonal expansion parameters
+  clonal_expansion:
+    max_clones: 10                    # Maximum clones per strategy
+    clone_survival_boost: 0.1         # Survival score boost per clone
+    clone_mutation_rate: 0.05         # Mutation rate for clones
+    clone_decay_rate: 0.98            # Decay rate for clone survival scores
+  
+  # Apoptosis and cleanup
+  apoptosis:
+    cleanup_interval_hours: 24        # How often to clean up exhausted T-cells
+    min_survival_score: 0.1           # Minimum survival score before removal
+    max_age_days: 90                  # Maximum age before forced removal
+    failed_activation_threshold: 5    # Max failed activations before apoptosis
+  
+  # Performance tracking
+  performance_tracking:
+    enable_roi_tracking: true
+    enable_success_rate_tracking: true
+    enable_mutation_tracking: true
+    enable_clonal_tracking: true
+    performance_window_days: 30       # Window for performance calculations
+  
+  # Integration settings
+  integration:
+    enable_strategy_bit_mapper: true  # Integrate with strategy bit mapper
+    enable_entropy_drift: true        # Use entropy drift for activation
+    enable_orbital_energy: true       # Use orbital energy for survival
+    enable_bitmap_folding: true       # Use bitmap folding for pattern recognition
+    
+  # Logging and monitoring
+  logging:
+    log_level: "INFO"
+    log_activations: true
+    log_mutations: true
+    log_clonal_expansions: true
+    log_apoptosis: true
+    log_performance_metrics: true
+    
+  # Advanced biological parameters
+  biological_parameters:
+    # TCR affinity maturation
+    affinity_maturation_rate: 0.02    # Rate of affinity improvement
+    affinity_threshold: 0.8           # Minimum affinity for activation
+    
+    # Antigen presentation
+    antigen_presentation_threshold: 0.6  # Minimum antigen strength
+    antigen_decay_rate: 0.99          # Rate of antigen decay
+    
+    # Immune memory
+    memory_cell_lifespan_days: 365    # Lifespan of memory T-cells
+    memory_cell_proliferation_rate: 0.1  # Rate of memory cell proliferation
+    
+    # Tolerance mechanisms
+    self_tolerance_threshold: 0.9     # Threshold for self-tolerance
+    tolerance_decay_rate: 0.995       # Rate of tolerance decay
+
+# Front-running strategy labels
+strategy_labels:
+  FR_BTC_ETH_2: "Front-run ETH 2 ticks after BTC"
+  FR_XRP_BTC_M1: "Front-run BTC 1 tick behind XRP"
+  FR_SOL_ETH_1: "SOL ride-up on ETH move"
+  FR_USDC_XRP_3: "Vault rotation from XRP signal"
+  FR_ETH_SOL_1: "SOL follows ETH by 1 tick"
+  FR_BTC_SOL_1: "SOL follows BTC by 1 tick"
+  FR_XRP_ETH_3: "XRP leads ETH by 3 ticks"
+  FR_ETH_BTC_M2: "BTC leads ETH by 2 ticks"
+
+# Mathematical constants for T-cell calculations
+mathematical_constants:
+  epsilon: 1e-6                       # Small stabilizer for division
+  sigmoid_steepness: 1.0              # Steepness of sigmoid activation
+  activation_smoothing: 0.1            # Smoothing factor for activation
+  survival_smoothing: 0.05             # Smoothing factor for survival scores
+  
+# Performance thresholds
+performance_thresholds:
+  min_roi_for_clonal_expansion: 0.05  # Minimum ROI for clonal expansion
+  min_success_rate_for_memory: 0.6    # Minimum success rate for memory state
+  max_failure_rate_for_apoptosis: 0.7  # Maximum failure rate before apoptosis
+  min_activation_frequency: 0.1        # Minimum activation frequency to survive 

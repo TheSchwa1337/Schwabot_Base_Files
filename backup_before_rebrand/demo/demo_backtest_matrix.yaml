@@ -1,0 +1,375 @@
+# Schwabot Demo Backtest Matrix Configuration
+# Defines overlay conditions, trade sequences, and logic flow routing
+# This file orchestrates the complete demo testing framework
+
+# Matrix Overlay Conditions
+matrix_overlays:
+  # Entry Logic Overlays
+  entry_overlays:
+    momentum_based:
+      name: "Momentum Entry Overlay"
+      conditions:
+        - price_velocity > 0.02
+        - volume_spike > 1.5
+        - rsi_oversold < 30
+        - macd_crossover: "bullish"
+      weight: 0.8
+      confidence_threshold: 0.7
+      
+    reversal_based:
+      name: "Reversal Entry Overlay"
+      conditions:
+        - price_velocity < -0.02
+        - volume_spike > 2.0
+        - rsi_overbought > 70
+        - macd_crossover: "bearish"
+      weight: 0.6
+      confidence_threshold: 0.8
+      
+    breakout_based:
+      name: "Breakout Entry Overlay"
+      conditions:
+        - price_above_resistance: true
+        - volume_breakout > 2.5
+        - volatility_increase > 0.5
+        - support_resistance_clearance: 0.02
+      weight: 0.9
+      confidence_threshold: 0.75
+      
+    fractal_based:
+      name: "Fractal Entry Overlay"
+      conditions:
+        - fractal_dimension > 1.4
+        - self_similarity_score > 0.8
+        - pattern_recognition_confidence > 0.85
+        - ghost_vector_alignment > 0.7
+      weight: 0.85
+      confidence_threshold: 0.8
+
+  # Exit Logic Overlays
+  exit_overlays:
+    profit_target:
+      name: "Profit Target Exit"
+      conditions:
+        - profit_percentage > 0.15
+        - time_in_trade > 300  # 5 minutes
+        - momentum_fading: true
+      weight: 0.9
+      confidence_threshold: 0.8
+      
+    stop_loss:
+      name: "Stop Loss Exit"
+      conditions:
+        - loss_percentage < -0.05
+        - price_below_support: true
+        - volume_increase > 1.5
+      weight: 1.0
+      confidence_threshold: 0.9
+      
+    time_based:
+      name: "Time-Based Exit"
+      conditions:
+        - time_in_trade > 1800  # 30 minutes
+        - profit_percentage < 0.05
+        - momentum_stagnant: true
+      weight: 0.7
+      confidence_threshold: 0.6
+      
+    technical_reversal:
+      name: "Technical Reversal Exit"
+      conditions:
+        - rsi_extreme: true
+        - macd_divergence: true
+        - volume_spike > 2.0
+        - price_reversal_signal: true
+      weight: 0.8
+      confidence_threshold: 0.75
+
+# Trade Sequence Definitions
+trade_sequences:
+  # Conservative Strategy Sequence
+  conservative:
+    name: "Conservative Trade Sequence"
+    entry_logic:
+      - overlay: "momentum_based"
+      - overlay: "fractal_based"
+      - validation: "vector_validator"
+      - allocation: "matrix_allocator"
+    exit_logic:
+      - overlay: "profit_target"
+      - overlay: "stop_loss"
+      - overlay: "time_based"
+    risk_parameters:
+      max_position_size: 0.02
+      max_drawdown: 0.05
+      target_profit: 0.15
+      max_trade_duration: 1800
+      
+  # Moderate Strategy Sequence
+  moderate:
+    name: "Moderate Trade Sequence"
+    entry_logic:
+      - overlay: "breakout_based"
+      - overlay: "momentum_based"
+      - validation: "vector_validator"
+      - allocation: "matrix_allocator"
+    exit_logic:
+      - overlay: "profit_target"
+      - overlay: "technical_reversal"
+      - overlay: "stop_loss"
+    risk_parameters:
+      max_position_size: 0.03
+      max_drawdown: 0.08
+      target_profit: 0.25
+      max_trade_duration: 3600
+      
+  # Aggressive Strategy Sequence
+  aggressive:
+    name: "Aggressive Trade Sequence"
+    entry_logic:
+      - overlay: "breakout_based"
+      - overlay: "reversal_based"
+      - validation: "vector_validator"
+      - allocation: "matrix_allocator"
+    exit_logic:
+      - overlay: "profit_target"
+      - overlay: "technical_reversal"
+      - overlay: "stop_loss"
+    risk_parameters:
+      max_position_size: 0.05
+      max_drawdown: 0.12
+      target_profit: 0.35
+      max_trade_duration: 7200
+
+# Logic Flow Routing
+logic_flow:
+  # Entry Flow
+  entry_flow:
+    step_1:
+      name: "Market Analysis"
+      component: "dlt_waveform_engine"
+      output: "market_state"
+      next_step: "step_2"
+      
+    step_2:
+      name: "Overlay Application"
+      component: "matrix_overlays"
+      input: "market_state"
+      output: "overlay_signals"
+      next_step: "step_3"
+      
+    step_3:
+      name: "Vector Validation"
+      component: "vector_validator"
+      input: "overlay_signals"
+      output: "validated_vectors"
+      next_step: "step_4"
+      
+    step_4:
+      name: "Matrix Allocation"
+      component: "matrix_allocator"
+      input: "validated_vectors"
+      output: "allocation_decision"
+      next_step: "step_5"
+      
+    step_5:
+      name: "Trade Execution"
+      component: "demo_entry_simulator"
+      input: "allocation_decision"
+      output: "trade_executed"
+      next_step: "exit_flow"
+
+  # Exit Flow
+  exit_flow:
+    step_1:
+      name: "Position Monitoring"
+      component: "position_tracker"
+      output: "position_state"
+      next_step: "step_2"
+      
+    step_2:
+      name: "Exit Overlay Application"
+      component: "matrix_overlays"
+      input: "position_state"
+      output: "exit_signals"
+      next_step: "step_3"
+      
+    step_3:
+      name: "Exit Decision"
+      component: "exit_decision_engine"
+      input: "exit_signals"
+      output: "exit_decision"
+      next_step: "step_4"
+      
+    step_4:
+      name: "Position Closure"
+      component: "demo_exit_simulator"
+      input: "exit_decision"
+      output: "position_closed"
+      next_step: "step_5"
+      
+    step_5:
+      name: "Performance Recording"
+      component: "performance_tracker"
+      input: "position_closed"
+      output: "performance_metrics"
+      next_step: "reinforcement_learning"
+
+  # Reinforcement Learning Flow
+  reinforcement_learning:
+    step_1:
+      name: "Performance Analysis"
+      component: "performance_analyzer"
+      output: "performance_analysis"
+      next_step: "step_2"
+      
+    step_2:
+      name: "Vector Learning"
+      component: "vector_validator"
+      input: "performance_analysis"
+      output: "learned_vectors"
+      next_step: "step_3"
+      
+    step_3:
+      name: "Matrix Optimization"
+      component: "matrix_allocator"
+      input: "learned_vectors"
+      output: "optimized_matrices"
+      next_step: "step_4"
+      
+    step_4:
+      name: "Settings Update"
+      component: "settings_controller"
+      input: "optimized_matrices"
+      output: "updated_settings"
+      next_step: "step_5"
+      
+    step_5:
+      name: "Knowledge Base Update"
+      component: "knowledge_base"
+      input: "updated_settings"
+      output: "knowledge_updated"
+      next_step: "entry_flow"
+
+# Backtest Integration
+backtest_integration:
+  # Demo Backtest Runner Integration
+  demo_backtest_runner:
+    enabled: true
+    integration_points:
+      - "entry_flow"
+      - "exit_flow"
+      - "reinforcement_learning"
+    data_collection:
+      - "trade_sequences"
+      - "performance_metrics"
+      - "vector_validation_results"
+      - "matrix_allocation_decisions"
+    reporting:
+      - "comprehensive_analysis"
+      - "strategy_performance"
+      - "matrix_performance"
+      - "reinforcement_learning_progress"
+
+  # Settings Controller Integration
+  settings_controller:
+    enabled: true
+    integration_points:
+      - "reinforcement_learning"
+      - "matrix_optimization"
+      - "parameter_adaptation"
+    data_collection:
+      - "mathematical_flow_params"
+      - "reinforcement_learning_params"
+      - "demo_backtest_params"
+    reporting:
+      - "parameter_optimization"
+      - "learning_progress"
+      - "failure_analysis"
+
+  # Vector Validator Integration
+  vector_validator:
+    enabled: true
+    integration_points:
+      - "entry_flow"
+      - "reinforcement_learning"
+    data_collection:
+      - "vector_validation_results"
+      - "known_bad_vectors"
+      - "validation_metrics"
+    reporting:
+      - "validation_performance"
+      - "bad_vector_avoidance"
+      - "learning_effectiveness"
+
+  # Matrix Allocator Integration
+  matrix_allocator:
+    enabled: true
+    integration_points:
+      - "entry_flow"
+      - "reinforcement_learning"
+    data_collection:
+      - "allocation_decisions"
+      - "matrix_performance"
+      - "basket_optimization"
+    reporting:
+      - "allocation_performance"
+      - "matrix_optimization"
+      - "basket_effectiveness"
+
+# Performance Monitoring
+performance_monitoring:
+  # Real-time Metrics
+  real_time_metrics:
+    - "trade_success_rate"
+    - "profit_loss_ratio"
+    - "drawdown_percentage"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "win_rate"
+    - "average_trade_duration"
+    - "vector_validation_accuracy"
+    - "matrix_allocation_efficiency"
+    - "reinforcement_learning_progress"
+
+  # Historical Analysis
+  historical_analysis:
+    - "strategy_performance_comparison"
+    - "market_condition_analysis"
+    - "parameter_optimization_history"
+    - "failure_pattern_analysis"
+    - "success_pattern_analysis"
+    - "learning_curve_analysis"
+
+  # Alert Thresholds
+  alert_thresholds:
+    max_drawdown: 0.15
+    min_success_rate: 0.6
+    max_loss_per_trade: 0.05
+    min_profit_per_trade: 0.02
+    max_trade_duration: 7200
+    min_vector_validation_accuracy: 0.7
+    min_matrix_allocation_efficiency: 0.8
+
+# Configuration Validation
+validation:
+  enabled: true
+  validate_on_startup: true
+  validate_parameters: true
+  validate_integrations: true
+  auto_correct: true
+  validation_timeout: 30
+  
+  # Validation Rules
+  validation_rules:
+    - "overlay_conditions_valid"
+    - "trade_sequences_complete"
+    - "logic_flow_connected"
+    - "integration_points_active"
+    - "performance_metrics_available"
+    - "alert_thresholds_reasonable"
+
+# Last updated timestamp
+last_updated: "2024-01-01T00:00:00Z"
+version: "1.0.0"
+description: "Comprehensive demo backtest matrix configuration for Schwabot" 

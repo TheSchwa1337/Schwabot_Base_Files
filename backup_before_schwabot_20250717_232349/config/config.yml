@@ -1,0 +1,41 @@
+# Schwabot Secure Configuration
+# -----------------------------
+# DO NOT COMMIT THIS FILE TO VERSION CONTROL (e.g., git)
+# Add 'config.yml' to your .gitignore file
+
+# Exchange API Credentials
+# Replace with your actual API keys for live trading
+# You can add multiple exchanges here
+exchanges:
+  binance:
+    apiKey: YOUR_BINANCE_API_KEY
+    secret: YOUR_BINANCE_SECRET_KEY
+    # password: YOUR_API_PASSPHRASE  # Uncomment if your API key requires a passphrase
+    # options:
+    #   defaultType: 'spot'  # or 'future', 'margin'
+
+  coinbasepro:
+    apiKey: YOUR_COINBASEPRO_API_KEY
+    secret: YOUR_COINBASEPRO_SECRET_KEY
+    password: YOUR_COINBASEPRO_PASSPHRASE
+
+# Trading Parameters
+trading:
+  # The default trading pair to use if not specified on the command line
+  default_pair: 'BTC/USDT'
+  # The amount of capital to allocate per trade (e.g., in USDT)
+  trade_amount: 100.0
+  # Maximum number of open positions at any time
+  max_open_positions: 5
+  # Set to 'live', 'paper', or 'backtest'
+  default_mode: 'paper'
+
+# System Settings
+system:
+  # Set to true to enable GPU acceleration, false to force CPU mode
+  # The system will automatically fall back to CPU if GPU is not available
+  enable_gpu: true
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  log_level: 'INFO'
+  # Path to the log file
+  log_file: 'schwabot_trading.log' 

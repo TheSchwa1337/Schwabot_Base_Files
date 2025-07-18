@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-28T16:59:02.222529",
+  "total_errors": 600,
+  "status": "NEEDS_FIXES",
+  "results": {
+    "core": {
+      "errors": 600,
+      "status": "has_errors"
+    },
+    "schwabot": {
+      "errors": 0,
+      "status": "has_errors"
+    }
+  },
+  "config": {
+    "max_line_length": 120,
+    "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
+    "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files"
+  }
+}

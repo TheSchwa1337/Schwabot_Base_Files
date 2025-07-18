@@ -1,0 +1,19 @@
+BTC_hash_v3:
+  meta_tag: "echo_branch_A"
+  fallback_matrix: "matrix_drift_guard"
+  active: true
+  scoring:
+    hash_weight: 0.4
+    volume_weight: 0.1
+    drift_weight: 0.3
+    error_weight: 0.2
+
+ETH_voltrap_4h:
+  meta_tag: "echo_branch_B"
+  fallback_matrix: "matrix_shadow_net"
+  active: false
+  scoring:
+    hash_weight: 0.25
+    volume_weight: 0.3
+    drift_weight: 0.25
+    error_weight: 0.2 

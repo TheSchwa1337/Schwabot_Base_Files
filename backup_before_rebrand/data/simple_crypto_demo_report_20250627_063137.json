@@ -1,0 +1,417 @@
+{
+  "demo_metadata": {
+    "start_time": 1751020276.0091066,
+    "end_time": 1751020297.8709435,
+    "total_ticks": 200,
+    "total_decisions": 200
+  },
+  "final_metrics": {
+    "average_mathematical_confidence": 0.8229091347108378,
+    "average_thermal_efficiency": 1.0,
+    "current_pnl": 2057.1055568541196,
+    "decisions_per_minute": 548.9582764360837
+  },
+  "performance_score": 0.9114545673554189,
+  "performance_history": [
+    {
+      "timestamp": 1751020292.4162083,
+      "mathematical_confidence": 0.8518282389064501,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 105166.0580473833,
+      "pnl": 5166.058047383296,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020292.52569,
+      "mathematical_confidence": 0.8467647906856406,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104365.71164652161,
+      "pnl": 4365.7116465216095,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020292.6327815,
+      "mathematical_confidence": 0.8522732949676393,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104865.13645462628,
+      "pnl": 4865.136454626278,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020292.741718,
+      "mathematical_confidence": 0.8576652224008716,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104274.11841383002,
+      "pnl": 4274.118413830016,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020292.8521318,
+      "mathematical_confidence": 0.8547956563132465,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104962.19835576144,
+      "pnl": 4962.198355761444,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020292.963011,
+      "mathematical_confidence": 0.8587154707738012,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104168.63905217376,
+      "pnl": 4168.639052173763,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.073098,
+      "mathematical_confidence": 0.8543299006832967,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103809.32712306903,
+      "pnl": 3809.3271230690298,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.1786013,
+      "mathematical_confidence": 0.8571015444807815,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104511.5087825357,
+      "pnl": 4511.508782535704,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.2880075,
+      "mathematical_confidence": 0.85628342192771,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104125.15393185524,
+      "pnl": 4125.153931855239,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.3966622,
+      "mathematical_confidence": 0.8554716501274715,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103689.08709425414,
+      "pnl": 3689.087094254137,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.5049503,
+      "mathematical_confidence": 0.8442615173574572,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104036.06985589874,
+      "pnl": 4036.069855898735,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.6120248,
+      "mathematical_confidence": 0.8321937669034791,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103959.50666706065,
+      "pnl": 3959.5066670606466,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.7221253,
+      "mathematical_confidence": 0.853045392744997,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104258.33141614079,
+      "pnl": 4258.331416140791,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.830133,
+      "mathematical_confidence": 0.8522422923566666,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104478.00995257925,
+      "pnl": 4478.009952579247,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020293.9378028,
+      "mathematical_confidence": 0.8436318593380276,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103485.573978335,
+      "pnl": 3485.573978335,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.0475054,
+      "mathematical_confidence": 0.8254242695404679,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104750.71447016721,
+      "pnl": 4750.714470167208,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.156524,
+      "mathematical_confidence": 0.8498230068364028,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104446.71334994346,
+      "pnl": 4446.713349943457,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.2650683,
+      "mathematical_confidence": 0.8413125568158559,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103341.57703209436,
+      "pnl": 3341.5770320943557,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.3729746,
+      "mathematical_confidence": 0.8482258822082616,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102886.34688955545,
+      "pnl": 2886.3468895554543,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.4805112,
+      "mathematical_confidence": 0.8474348330719212,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 104517.71446382016,
+      "pnl": 4517.714463820157,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.5896962,
+      "mathematical_confidence": 0.8255911817558971,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102897.10226192702,
+      "pnl": 2897.1022619270225,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.6972697,
+      "mathematical_confidence": 0.8458457086533211,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103464.81231632133,
+      "pnl": 3464.8123163213313,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.8093388,
+      "mathematical_confidence": 0.8450271064393118,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103793.05240057733,
+      "pnl": 3793.052400577333,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020294.9183474,
+      "mathematical_confidence": 0.8442329593752247,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103500.87501848294,
+      "pnl": 3500.8750184829405,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.0303993,
+      "mathematical_confidence": 0.8390058114916958,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103682.89809488102,
+      "pnl": 3682.8980948810204,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.1494606,
+      "mathematical_confidence": 0.8343826196188115,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103761.93155591087,
+      "pnl": 3761.9315559108654,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.2516842,
+      "mathematical_confidence": 0.8418183724264088,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103001.65533879893,
+      "pnl": 3001.655338798926,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.360837,
+      "mathematical_confidence": 0.826339393842211,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103569.5706937176,
+      "pnl": 3569.5706937176,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.4721534,
+      "mathematical_confidence": 0.840233790423953,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103421.68554657788,
+      "pnl": 3421.685546577879,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.5810635,
+      "mathematical_confidence": 0.8321285270817871,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102146.94873970257,
+      "pnl": 2146.948739702566,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.68987,
+      "mathematical_confidence": 0.8328541692632441,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102412.52651253587,
+      "pnl": 2412.526512535871,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.801856,
+      "mathematical_confidence": 0.8378844968304309,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103390.90416639547,
+      "pnl": 3390.9041663954704,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020295.912214,
+      "mathematical_confidence": 0.8371039809334002,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103724.05385088664,
+      "pnl": 3724.053850886645,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.0240586,
+      "mathematical_confidence": 0.8363161012792613,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102126.17270132367,
+      "pnl": 2126.172701323667,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.1328301,
+      "mathematical_confidence": 0.8262338136535841,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102860.56577446935,
+      "pnl": 2860.5657744693453,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.241669,
+      "mathematical_confidence": 0.8347926200543512,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103322.78410690687,
+      "pnl": 3322.7841069068672,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.3518808,
+      "mathematical_confidence": 0.8317748203251241,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 101867.50823535623,
+      "pnl": 1867.508235356232,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.4601755,
+      "mathematical_confidence": 0.8296406301155496,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102739.05670544783,
+      "pnl": 2739.0567054478306,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.5690403,
+      "mathematical_confidence": 0.8213499966207212,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102729.04430146734,
+      "pnl": 2729.0443014673365,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.6775365,
+      "mathematical_confidence": 0.8317812337097643,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102779.84169537586,
+      "pnl": 2779.841695375857,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.7869961,
+      "mathematical_confidence": 0.831033913937975,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102351.23222447335,
+      "pnl": 2351.2322244733514,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020296.895293,
+      "mathematical_confidence": 0.8169521941837105,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102412.02769087827,
+      "pnl": 2412.027690878269,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.0016537,
+      "mathematical_confidence": 0.8051980930121773,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 101785.89539474776,
+      "pnl": 1785.8953947477567,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.111185,
+      "mathematical_confidence": 0.8243936629326817,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102359.94359298616,
+      "pnl": 2359.9435929861647,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.2197137,
+      "mathematical_confidence": 0.8281172998992818,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 103913.94353737755,
+      "pnl": 3913.9435373775486,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.3281112,
+      "mathematical_confidence": 0.8273965343265377,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102100.87848501312,
+      "pnl": 2100.8784850131196,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.4364138,
+      "mathematical_confidence": 0.8202157007346897,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 101605.53382439759,
+      "pnl": 1605.5338243975857,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.5452452,
+      "mathematical_confidence": 0.8259652192423874,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 101787.9524817461,
+      "pnl": 1787.952481746106,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.6529965,
+      "mathematical_confidence": 0.8252612817106482,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 101262.20988990898,
+      "pnl": 1262.209889908976,
+      "decision": "BUY"
+    },
+    {
+      "timestamp": 1751020297.7613993,
+      "mathematical_confidence": 0.8245574471282882,
+      "thermal_efficiency": 1.0,
+      "portfolio_value": 102057.10555685412,
+      "pnl": 2057.1055568541196,
+      "decision": "BUY"
+    }
+  ]
+}

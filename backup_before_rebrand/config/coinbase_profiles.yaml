@@ -1,0 +1,216 @@
+# Multi-Profile Coinbase API Configuration
+# ======================================
+# Configuration for multiple Coinbase API profiles with independent strategy logic
+# Each profile operates independently with unique sequencing, asset-based strategies,
+# and non-redundant hash-based trade execution.
+
+version: "2.0.0"
+created_at: "2025-01-02"
+description: "Multi-profile Coinbase API configuration with independent strategy logic"
+
+# =============================================================================
+# PROFILE CONFIGURATION
+# =============================================================================
+
+profiles:
+  # Profile A - Primary Trading Profile
+  profile_a:
+    name: "Primary Trading Profile"
+    enabled: true
+    priority: 1
+    
+    # API Credentials (REPLACE WITH ACTUAL VALUES)
+    api_credentials:
+      api_key: "YOUR_COINBASE_API_KEY_PROFILE_A"
+      secret: "YOUR_COINBASE_SECRET_PROFILE_A"
+      passphrase: "YOUR_COINBASE_PASSPHRASE_PROFILE_A"
+      sandbox: true  # Set to false for live trading
+    
+    # Profile-specific strategy configuration
+    strategy_config:
+      base_assets: ["BTC", "ETH", "SOL", "USDC", "XRP"]
+      random_asset_pool: ["ADA", "DOT", "LINK", "MATIC", "AVAX", "UNI", "ATOM", "LTC"]
+      strategy_weights:
+        volume_weighted_hash_oscillator: 0.30
+        zygot_zalgo_entropy_dual_key_gate: 0.25
+        multi_phase_strategy_weight_tensor: 0.20
+        quantum_strategy_calculator: 0.15
+        entropy_enhanced_trading_executor: 0.10
+      
+      # Profile-specific parameters
+      confidence_threshold: 0.75
+      signal_strength_threshold: 0.65
+      max_position_size_pct: 8.0
+      risk_adjustment_factor: 1.2
+      
+      # Entropy and hash configuration
+      entropy_threshold: 0.003
+      hash_trajectory_weight: 0.85
+      drift_delta_range: [0.001, 0.005]
+      
+    # Trading parameters
+    trading_params:
+      trading_pairs: ["BTC/USDC", "ETH/USDC", "SOL/USDC", "XRP/USDC"]
+      max_open_positions: 4
+      order_timeout: 45
+      retry_attempts: 3
+      slippage_tolerance: 0.0015
+      
+    # Risk management
+    risk_management:
+      stop_loss_pct: 2.5
+      take_profit_pct: 6.0
+      max_daily_loss_pct: 4.0
+      max_drawdown_pct: 12.0
+      volatility_threshold: 0.75
+      
+    # Profile hash configuration
+    profile_hash:
+      base_hash: "profile_a_primary_trading"
+      entropy_seed: 0.42
+      hash_rotation_interval: 3600  # 1 hour
+      hash_complexity_factor: 1.1
+
+  # Profile B - Secondary Trading Profile
+  profile_b:
+    name: "Secondary Trading Profile"
+    enabled: true
+    priority: 2
+    
+    # API Credentials (REPLACE WITH ACTUAL VALUES)
+    api_credentials:
+      api_key: "YOUR_COINBASE_API_KEY_PROFILE_B"
+      secret: "YOUR_COINBASE_SECRET_PROFILE_B"
+      passphrase: "YOUR_COINBASE_PASSPHRASE_PROFILE_B"
+      sandbox: true  # Set to false for live trading
+    
+    # Profile-specific strategy configuration
+    strategy_config:
+      base_assets: ["BTC", "ETH", "SOL", "USDC", "XRP"]
+      random_asset_pool: ["DOGE", "SHIB", "TRX", "XLM", "VET", "ALGO", "NEAR", "FTM"]
+      strategy_weights:
+        volume_weighted_hash_oscillator: 0.20
+        zygot_zalgo_entropy_dual_key_gate: 0.30
+        multi_phase_strategy_weight_tensor: 0.25
+        quantum_strategy_calculator: 0.15
+        entropy_enhanced_trading_executor: 0.10
+      
+      # Profile-specific parameters
+      confidence_threshold: 0.70
+      signal_strength_threshold: 0.60
+      max_position_size_pct: 6.0
+      risk_adjustment_factor: 0.9
+      
+      # Entropy and hash configuration
+      entropy_threshold: 0.004
+      hash_trajectory_weight: 0.90
+      drift_delta_range: [0.002, 0.008]
+      
+    # Trading parameters
+    trading_params:
+      trading_pairs: ["BTC/USDC", "ETH/USDC", "SOL/USDC", "XRP/USDC"]
+      max_open_positions: 3
+      order_timeout: 60
+      retry_attempts: 4
+      slippage_tolerance: 0.0020
+      
+    # Risk management
+    risk_management:
+      stop_loss_pct: 3.0
+      take_profit_pct: 7.0
+      max_daily_loss_pct: 5.0
+      max_drawdown_pct: 15.0
+      volatility_threshold: 0.80
+      
+    # Profile hash configuration
+    profile_hash:
+      base_hash: "profile_b_secondary_trading"
+      entropy_seed: 0.73
+      hash_rotation_interval: 7200  # 2 hours
+      hash_complexity_factor: 0.95
+
+# =============================================================================
+# PROFILE SYNCHRONIZATION CONFIGURATION
+# =============================================================================
+
+synchronization:
+  # Cross-profile communication
+  enable_cross_profile_arbitration: true
+  arbitration_threshold: 0.85
+  hash_echo_enabled: true
+  echo_validation_interval: 300  # 5 minutes
+  
+  # De-sync mechanisms
+  enable_trade_de_sync: true
+  de_sync_delay_range: [1, 15]  # Random delay in seconds
+  divergent_tick_deltas: true
+  separate_profit_triggers: true
+  
+  # Independent execution
+  independent_strategy_paths: true
+  unique_hash_trajectories: true
+  separate_entropy_streams: true
+
+# =============================================================================
+# MATHEMATICAL SEPARATION LOGIC
+# =============================================================================
+
+mathematical_separation:
+  # Profile separation formula
+  # ∀ t: H₁(t) ≠ H₂(t) ∨ A₁ ≠ A₂
+  enforce_hash_uniqueness: true
+  enforce_asset_uniqueness: true
+  
+  # Strategy path encoding
+  # Strategy_Profile(t, Pᵢ) = ƒ(Hashₜᵢ, Assetsᵢ, Holdingsᵢ, Profit_Zonesᵢ)
+  enable_path_encoding: true
+  path_complexity_factor: 1.5
+  
+  # Entropy-guided asset selection
+  enable_entropy_asset_append: true
+  memory_weighted_entropy: true
+  volume_score_threshold: 0.6
+  
+  # Pipeline parallelization
+  enable_parallel_execution: true
+  max_concurrent_profiles: 2
+  thread_safety_enabled: true
+
+# =============================================================================
+# PERFORMANCE MONITORING
+# =============================================================================
+
+monitoring:
+  # Profile-specific metrics
+  enable_profile_metrics: true
+  metrics_collection_interval: 60  # seconds
+  
+  # Performance thresholds
+  profile_performance_threshold: 0.6
+  cross_profile_correlation_limit: 0.3
+  hash_uniqueness_threshold: 0.95
+  
+  # Alerting
+  enable_profile_alerts: true
+  alert_on_hash_collision: true
+  alert_on_strategy_duplication: true
+  alert_on_performance_degradation: true
+
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+
+security:
+  # API key encryption
+  enable_key_encryption: true
+  encryption_algorithm: "AES-256"
+  
+  # Profile isolation
+  enable_profile_isolation: true
+  separate_memory_spaces: true
+  isolated_error_handling: true
+  
+  # Audit logging
+  enable_audit_logging: true
+  log_profile_actions: true
+  log_cross_profile_communication: true 

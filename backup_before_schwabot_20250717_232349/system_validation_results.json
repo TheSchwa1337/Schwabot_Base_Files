@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-07-17T11:18:40.295355",
+  "duration_seconds": 3.9587879180908203,
+  "total_tests_passed": 9,
+  "total_tests_failed": 14,
+  "success_rate": 0.391304347826087,
+  "all_errors": [
+    "core.tcell_survival_engine: name 'TCellSurvivalEngine' is not defined",
+    "core.symbolic_registry: unexpected indent (symbolic_registry.py, line 15)",
+    "core.phantom_registry: unexpected indent (phantom_registry.py, line 31)",
+    "core.risk_manager: unexpected indent (risk_manager.py, line 41)",
+    "core.unified_btc_trading_pipeline: unexpected indent (unified_btc_trading_pipeline.py, line 25)",
+    "core.enhanced_gpu_auto_detector: unexpected indent (enhanced_gpu_auto_detector.py, line 29)",
+    "strategies.phantom_band_navigator: unexpected indent (multi_phase_strategy_weight_tensor.py, line 28)",
+    "Symbolic Registry: unexpected indent (symbolic_registry.py, line 15)",
+    "MathLib: cannot import name 'MathLibV2' from 'mathlib' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\mathlib\\__init__.py)",
+    "Risk Manager: unexpected indent (risk_manager.py, line 41)",
+    "Profit Calculator: PureProfitCalculator.calculate_profit() missing 1 required positional argument: 'history_state'",
+    "Quantum Strategy: 'QuantumStrategyEngine' object has no attribute 'create_superposition_strategy'",
+    "Persistent Homology: 'PersistentHomology' object has no attribute 'build_simplicial_complex'",
+    "GPU Auto-Detection: unexpected indent (enhanced_gpu_auto_detector.py, line 29)"
+  ],
+  "test_details": {
+    "core_imports": {
+      "passed": 8,
+      "failed": 7,
+      "errors": [
+        "core.tcell_survival_engine: name 'TCellSurvivalEngine' is not defined",
+        "core.symbolic_registry: unexpected indent (symbolic_registry.py, line 15)",
+        "core.phantom_registry: unexpected indent (phantom_registry.py, line 31)",
+        "core.risk_manager: unexpected indent (risk_manager.py, line 41)",
+        "core.unified_btc_trading_pipeline: unexpected indent (unified_btc_trading_pipeline.py, line 25)",
+        "core.enhanced_gpu_auto_detector: unexpected indent (enhanced_gpu_auto_detector.py, line 29)",
+        "strategies.phantom_band_navigator: unexpected indent (multi_phase_strategy_weight_tensor.py, line 28)"
+      ]
+    },
+    "mathematical_systems": {
+      "passed": 1,
+      "failed": 2,
+      "errors": [
+        "Symbolic Registry: unexpected indent (symbolic_registry.py, line 15)",
+        "MathLib: cannot import name 'MathLibV2' from 'mathlib' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\mathlib\\__init__.py)"
+      ]
+    },
+    "trading_systems": {
+      "passed": 0,
+      "failed": 2,
+      "errors": [
+        "Risk Manager: unexpected indent (risk_manager.py, line 41)",
+        "Profit Calculator: PureProfitCalculator.calculate_profit() missing 1 required positional argument: 'history_state'"
+      ]
+    },
+    "advanced_systems": {
+      "passed": 0,
+      "failed": 2,
+      "errors": [
+        "Quantum Strategy: 'QuantumStrategyEngine' object has no attribute 'create_superposition_strategy'",
+        "Persistent Homology: 'PersistentHomology' object has no attribute 'build_simplicial_complex'"
+      ]
+    },
+    "gpu_system": {
+      "passed": 0,
+      "failed": 1,
+      "errors": [
+        "GPU Auto-Detection: unexpected indent (enhanced_gpu_auto_detector.py, line 29)"
+      ]
+    }
+  }
+}

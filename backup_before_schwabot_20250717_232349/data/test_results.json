@@ -1,0 +1,709 @@
+{
+  "timestamp": "2025-07-10T13:42:44.742047",
+  "test_suite_version": "1.0.0",
+  "results": {
+    "mathematical_integration": {
+      "test_name": "mathematical_integration",
+      "passed": 2,
+      "failed": 1,
+      "details": [
+        {
+          "case": 1,
+          "status": "PASS",
+          "entropy": 2.321922369977826,
+          "drift": 5
+        },
+        {
+          "case": 2,
+          "status": "FAIL",
+          "expected": false,
+          "actual": true
+        },
+        {
+          "case": 3,
+          "status": "PASS",
+          "entropy": 2.3219241139712827,
+          "drift": 5
+        }
+      ]
+    },
+    "signal_generation": {
+      "test_name": "signal_generation",
+      "passed": 4,
+      "failed": 0,
+      "signals": [
+        {
+          "scenario": "bullish",
+          "price": 55200.0,
+          "volume": 1.7,
+          "entropy": 2.3219233601286393,
+          "confidence": 1.0,
+          "order_side": "BUY"
+        },
+        {
+          "scenario": "bearish",
+          "price": 44800.0,
+          "volume": 0.6,
+          "entropy": 2.3219209066870174,
+          "confidence": 1.0,
+          "order_side": "BUY"
+        },
+        {
+          "scenario": "sideways",
+          "price": 50020.0,
+          "volume": 1.0,
+          "entropy": 2.3219279219066795,
+          "confidence": 1.0,
+          "order_side": "BUY"
+        },
+        {
+          "scenario": "high_volatility",
+          "price": 52000.0,
+          "volume": 2.5,
+          "entropy": 2.32179470262455,
+          "confidence": 1.0,
+          "order_side": "BUY"
+        }
+      ]
+    },
+    "execution_pipeline": {
+      "test_name": "execution_pipeline",
+      "passed": 5,
+      "failed": 0,
+      "executions": [
+        {
+          "signal_id": "signal_0",
+          "execution_price": 50250.0,
+          "execution_latency": 0.03,
+          "slippage": 50.0,
+          "success": true,
+          "performance_score": 1.0
+        },
+        {
+          "signal_id": "signal_1",
+          "execution_price": 51250.0,
+          "execution_latency": 0.03,
+          "slippage": 50.0,
+          "success": true,
+          "performance_score": 1.0
+        },
+        {
+          "signal_id": "signal_2",
+          "execution_price": 52250.0,
+          "execution_latency": 0.03,
+          "slippage": 50.0,
+          "success": true,
+          "performance_score": 1.0
+        },
+        {
+          "signal_id": "signal_3",
+          "execution_price": 53250.0,
+          "execution_latency": 0.03,
+          "slippage": 50.0,
+          "success": true,
+          "performance_score": 1.0
+        },
+        {
+          "signal_id": "signal_4",
+          "execution_price": 54250.0,
+          "execution_latency": 0.03,
+          "slippage": 50.0,
+          "success": true,
+          "performance_score": 1.0
+        }
+      ]
+    },
+    "error_handling": {
+      "test_name": "error_handling",
+      "passed": 4,
+      "failed": 0,
+      "errors": [
+        {
+          "case": "empty_data",
+          "status": "PASS",
+          "message": "Handled empty data gracefully"
+        },
+        {
+          "case": "negative_price",
+          "status": "PASS",
+          "message": "Handled invalid data gracefully"
+        },
+        {
+          "case": "zero_volume",
+          "status": "PASS",
+          "message": "Handled invalid data gracefully"
+        },
+        {
+          "case": "mismatched_lengths",
+          "status": "PASS",
+          "message": "Handled mismatched data gracefully"
+        }
+      ]
+    },
+    "performance_metrics": {
+      "test_name": "performance_metrics",
+      "metrics": {
+        "total_signals": 10,
+        "total_executions": 10,
+        "success_count": 10,
+        "error_count": 0,
+        "success_rate_percent": 100.0
+      },
+      "validation": {
+        "total_signals": "PASS",
+        "total_executions": "PASS",
+        "success_count": "PASS",
+        "error_count": "PASS",
+        "success_rate_percent": "PASS"
+      }
+    },
+    "live_simulation": {
+      "test_name": "live_simulation",
+      "duration_seconds": 10,
+      "signals_generated": 89,
+      "executions_completed": 89,
+      "errors": 0,
+      "performance_data": [
+        {
+          "timestamp": 1752154964.9594119,
+          "price": 50020.0,
+          "entropy": 2.3219280372184845,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.0670943,
+          "price": 50021.07696533203,
+          "entropy": 2.3219280372209674,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.1756406,
+          "price": 50022.16070652008,
+          "entropy": 2.321928037223466,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.2837365,
+          "price": 50023.24303865433,
+          "entropy": 2.3219280372259608,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.3928673,
+          "price": 50024.33467388153,
+          "entropy": 2.321928037228477,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.5045784,
+          "price": 50025.44166326523,
+          "entropy": 2.3219280372310287,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.6118581,
+          "price": 50026.52213096619,
+          "entropy": 2.3219280372335187,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.7205317,
+          "price": 50027.60099887848,
+          "entropy": 2.321928037236005,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.8442206,
+          "price": 50028.83531332016,
+          "entropy": 2.321928037238849,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154965.9526908,
+          "price": 50029.930419921875,
+          "entropy": 2.321928037241373,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.0608501,
+          "price": 50031.01414680481,
+          "entropy": 2.3219280372438695,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.169984,
+          "price": 50032.102172374725,
+          "entropy": 2.3219280372463764,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.2773852,
+          "price": 50033.179631233215,
+          "entropy": 2.321928037248859,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.3855665,
+          "price": 50034.261350631714,
+          "entropy": 2.3219280372513507,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.4940608,
+          "price": 50035.34448862076,
+          "entropy": 2.3219280372538456,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.6033623,
+          "price": 50036.43942832947,
+          "entropy": 2.3219280372563675,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.7113976,
+          "price": 50037.52867460251,
+          "entropy": 2.321928037258876,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.821525,
+          "price": 50038.619554042816,
+          "entropy": 2.3219280372613884,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154966.9305253,
+          "price": 50039.707617759705,
+          "entropy": 2.3219280372638944,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.039872,
+          "price": 50040.79441308975,
+          "entropy": 2.321928037266397,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.148607,
+          "price": 50041.89208507538,
+          "entropy": 2.3219280372689246,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.2599053,
+          "price": 50042.98439025879,
+          "entropy": 2.3219280372714395,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.3832488,
+          "price": 50044.21663284302,
+          "entropy": 2.3219280372742763,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.5072963,
+          "price": 50045.449035167694,
+          "entropy": 2.3219280372771136,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.6276803,
+          "price": 50046.68266534805,
+          "entropy": 2.321928037279953,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.7371283,
+          "price": 50047.77698993683,
+          "entropy": 2.3219280372824724,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.8464215,
+          "price": 50048.87021780014,
+          "entropy": 2.3219280372849886,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154967.9535127,
+          "price": 50049.948229789734,
+          "entropy": 2.3219280372874698,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.0642657,
+          "price": 50051.04908943176,
+          "entropy": 2.321928037290003,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.1720295,
+          "price": 50052.12454319,
+          "entropy": 2.3219280372924773,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.2803166,
+          "price": 50053.216371536255,
+          "entropy": 2.32192803729499,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.389887,
+          "price": 50054.30455684662,
+          "entropy": 2.3219280372974938,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.5104148,
+          "price": 50055.50741434097,
+          "entropy": 2.3219280373002613,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.6252787,
+          "price": 50056.65706157684,
+          "entropy": 2.3219280373029063,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.7340684,
+          "price": 50057.736496925354,
+          "entropy": 2.3219280373053897,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.8568785,
+          "price": 50058.964648246765,
+          "entropy": 2.3219280373082145,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154968.9644237,
+          "price": 50060.05014181137,
+          "entropy": 2.321928037310711,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.073875,
+          "price": 50061.144762039185,
+          "entropy": 2.3219280373132287,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.1836112,
+          "price": 50062.24007844925,
+          "entropy": 2.3219280373157476,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.2939603,
+          "price": 50063.335473537445,
+          "entropy": 2.3219280373182665,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.403179,
+          "price": 50064.43748474121,
+          "entropy": 2.321928037320801,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.5122752,
+          "price": 50065.52863359451,
+          "entropy": 2.3219280373233095,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.620246,
+          "price": 50066.60573005676,
+          "entropy": 2.3219280373257862,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.728522,
+          "price": 50067.68095254898,
+          "entropy": 2.321928037328258,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.8529973,
+          "price": 50068.88333559036,
+          "entropy": 2.321928037331022,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154969.960893,
+          "price": 50070.01227378845,
+          "entropy": 2.3219280373336173,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.0698223,
+          "price": 50071.093871593475,
+          "entropy": 2.3219280373361033,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.1908903,
+          "price": 50072.31517314911,
+          "entropy": 2.3219280373389104,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.2986414,
+          "price": 50073.39247226715,
+          "entropy": 2.3219280373413866,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.4074526,
+          "price": 50074.49016094208,
+          "entropy": 2.321928037343909,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.5175283,
+          "price": 50075.5816078186,
+          "entropy": 2.321928037346417,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.6249673,
+          "price": 50076.655304431915,
+          "entropy": 2.321928037348884,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.7342641,
+          "price": 50077.745826244354,
+          "entropy": 2.3219280373513898,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.842641,
+          "price": 50078.83224725723,
+          "entropy": 2.321928037353886,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154970.9513535,
+          "price": 50079.917335510254,
+          "entropy": 2.3219280373563786,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.0583725,
+          "price": 50080.98975896835,
+          "entropy": 2.3219280373588425,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.1994703,
+          "price": 50082.070767879486,
+          "entropy": 2.321928037361326,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.342489,
+          "price": 50083.491349220276,
+          "entropy": 2.3219280373645885,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.473389,
+          "price": 50085.05556821823,
+          "entropy": 2.3219280373681808,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.5933573,
+          "price": 50086.25625371933,
+          "entropy": 2.321928037370938,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.723308,
+          "price": 50087.57896900177,
+          "entropy": 2.3219280373739757,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.8449202,
+          "price": 50088.77512931824,
+          "entropy": 2.321928037376722,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154971.9772284,
+          "price": 50090.12817144394,
+          "entropy": 2.321928037379829,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.0898712,
+          "price": 50091.254608631134,
+          "entropy": 2.321928037382415,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.2097867,
+          "price": 50092.503736019135,
+          "entropy": 2.321928037385282,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.3219938,
+          "price": 50093.59600067139,
+          "entropy": 2.3219280373877895,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.4466977,
+          "price": 50094.83949422836,
+          "entropy": 2.3219280373906437,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.5738018,
+          "price": 50096.083891391754,
+          "entropy": 2.3219280373934996,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.6924782,
+          "price": 50097.33065843582,
+          "entropy": 2.3219280373963613,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.8020637,
+          "price": 50098.4263253212,
+          "entropy": 2.3219280373988758,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154972.9107046,
+          "price": 50099.51272249222,
+          "entropy": 2.3219280374013684,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.0201347,
+          "price": 50100.60537338257,
+          "entropy": 2.3219280374038753,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.1284332,
+          "price": 50101.69019699097,
+          "entropy": 2.3219280374063644,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.250175,
+          "price": 50102.90773153305,
+          "entropy": 2.3219280374091578,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.3597202,
+          "price": 50104.00169849396,
+          "entropy": 2.3219280374116673,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.4670656,
+          "price": 50105.07666826248,
+          "entropy": 2.3219280374141333,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.57499,
+          "price": 50106.1514043808,
+          "entropy": 2.3219280374165985,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.6883621,
+          "price": 50107.28945016861,
+          "entropy": 2.321928037419209,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.7952652,
+          "price": 50108.36832523346,
+          "entropy": 2.321928037421683,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154973.9050004,
+          "price": 50109.453189373016,
+          "entropy": 2.321928037424171,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.0131123,
+          "price": 50110.534880161285,
+          "entropy": 2.3219280374266513,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.1207972,
+          "price": 50111.61159276962,
+          "entropy": 2.32192803742912,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.2295895,
+          "price": 50112.70071268082,
+          "entropy": 2.3219280374316176,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.3397174,
+          "price": 50113.80020856857,
+          "entropy": 2.3219280374341382,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.447888,
+          "price": 50114.88511323929,
+          "entropy": 2.3219280374366256,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.557345,
+          "price": 50115.979685783386,
+          "entropy": 2.3219280374391347,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.6673393,
+          "price": 50117.0666885376,
+          "entropy": 2.3219280374416265,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.7828627,
+          "price": 50118.23241472244,
+          "entropy": 2.321928037444298,
+          "performance_score": 1.0
+        },
+        {
+          "timestamp": 1752154974.891346,
+          "price": 50119.31946516037,
+          "entropy": 2.3219280374467894,
+          "performance_score": 1.0
+        }
+      ]
+    }
+  },
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 3,
+    "success_rate": 50.0
+  }
+}

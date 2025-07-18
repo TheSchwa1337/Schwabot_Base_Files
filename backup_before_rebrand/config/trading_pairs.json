@@ -1,0 +1,17 @@
+{
+  "default_pairs": [
+    "BTC/USD",
+    "ETH/USD",
+    "BTC/USDT"
+  ],
+  "exchanges": {
+    "coinbase": [
+      "BTC-USD",
+      "ETH-USD"
+    ],
+    "binance": [
+      "BTCUSDT",
+      "ETHUSDT"
+    ]
+  }
+}

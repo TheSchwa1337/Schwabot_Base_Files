@@ -1,0 +1,4 @@
+# Requirements for darwin
+# Install with: pip install -r requirements-darwin.txt
+
+psutil>=5.9.0

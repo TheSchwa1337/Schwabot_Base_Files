@@ -1,0 +1,550 @@
+{
+  "hash_memory_lattice": {
+    "version": "1.0.0",
+    "description": "Hash Memory Lattice for deterministic strategy basket tracking",
+    "mathematical_formula": "H_k = SHA256(tick, price, layer_id) → strategy_basket",
+    "initialization_timestamp": "2024-01-01T00:00:00Z",
+    "lattice_configuration": {
+      "max_layers": 10,
+      "hash_length": 64,
+      "strategy_basket_size": 8,
+      "profitability_tracking_window": 86400
+    },
+    "hash_layers": {
+      "layer_0": {
+        "layer_id": "genesis_layer",
+        "hash_function": "SHA256",
+        "tick_range": [0, 1000],
+        "price_range": [30000, 70000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": []
+      },
+      "layer_1": {
+        "layer_id": "momentum_layer",
+        "hash_function": "SHA256",
+        "tick_range": [1001, 2000],
+        "price_range": [35000, 65000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": []
+      },
+      "layer_2": {
+        "layer_id": "volatility_layer",
+        "hash_function": "SHA256",
+        "tick_range": [2001, 3000],
+        "price_range": [40000, 60000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": []
+      },
+      "layer_3": {
+        "layer_id": "arbitrage_layer",
+        "hash_function": "SHA256",
+        "tick_range": [3001, 4000],
+        "price_range": [45000, 55000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": []
+      },
+      "layer_4": {
+        "layer_id": "scalping_layer",
+        "hash_function": "SHA256",
+        "tick_range": [4001, 5000],
+        "price_range": [48000, 52000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": []
+      },
+      "layer_5": {
+        "layer_id": "two_gram_pattern_layer",
+        "hash_function": "SHA256",
+        "tick_range": [5001, 6000],
+        "price_range": [45000, 55000],
+        "strategy_baskets": {},
+        "profitability_scores": {},
+        "evolution_history": [],
+        "pattern_detection": {
+          "window_size": 100,
+          "burst_threshold": 2.0,
+          "entropy_threshold": 0.5,
+          "similarity_threshold": 0.85
+        }
+      }
+    },
+    "strategy_definitions": {
+      "momentum_strategy": {
+        "strategy_id": "momentum_001",
+        "description": "Momentum-based trading using price trends",
+        "parameters": {
+          "lookback_period": 20,
+          "momentum_threshold": 0.02,
+          "position_size": 0.1
+        },
+        "hash_signature": "a1b2c3d4e5f6",
+        "profitability_weight": 0.15
+      },
+      "mean_reversion_strategy": {
+        "strategy_id": "reversion_001",
+        "description": "Mean reversion using statistical analysis",
+        "parameters": {
+          "mean_period": 50,
+          "deviation_threshold": 2.0,
+          "position_size": 0.08
+        },
+        "hash_signature": "f6e5d4c3b2a1",
+        "profitability_weight": 0.12
+      },
+      "arbitrage_strategy": {
+        "strategy_id": "arbitrage_001",
+        "description": "Cross-exchange arbitrage opportunities",
+        "parameters": {
+          "min_spread": 0.001,
+          "max_exposure": 0.05,
+          "execution_speed": "fast"
+        },
+        "hash_signature": "1a2b3c4d5e6f",
+        "profitability_weight": 0.20
+      },
+      "scalping_strategy": {
+        "strategy_id": "scalping_001",
+        "description": "High-frequency scalping operations",
+        "parameters": {
+          "tick_size": 0.01,
+          "hold_time": 30,
+          "profit_target": 0.0005
+        },
+        "hash_signature": "6f5e4d3c2b1a",
+        "profitability_weight": 0.18
+      },
+      "swing_strategy": {
+        "strategy_id": "swing_001",
+        "description": "Swing trading on daily patterns",
+        "parameters": {
+          "swing_period": 5,
+          "entry_threshold": 0.03,
+          "exit_threshold": 0.02
+        },
+        "hash_signature": "abc123def456",
+        "profitability_weight": 0.14
+      },
+      "grid_strategy": {
+        "strategy_id": "grid_001",
+        "description": "Grid trading with dynamic spacing",
+        "parameters": {
+          "grid_spacing": 0.005,
+          "grid_levels": 10,
+          "rebalance_frequency": 3600
+        },
+        "hash_signature": "456def123abc",
+        "profitability_weight": 0.11
+      },
+      "breakout_strategy": {
+        "strategy_id": "breakout_001",
+        "description": "Breakout detection and momentum capture",
+        "parameters": {
+          "breakout_threshold": 0.025,
+          "confirmation_period": 5,
+          "stop_loss": 0.015
+        },
+        "hash_signature": "789ghi456def",
+        "profitability_weight": 0.10
+      },
+      "2gram_volatility_reversal": {
+        "strategy_id": "2gram_UD_001",
+        "description": "Volatility reversal detection via 2-gram UD pattern",
+        "pattern": "UD",
+        "emoji_symbol": "⚡",
+        "parameters": {
+          "pattern_frequency_threshold": 3,
+          "burst_score_minimum": 2.0,
+          "entropy_range": [0.3, 0.8],
+          "position_size": 0.12,
+          "stop_loss": 0.02,
+          "take_profit": 0.05
+        },
+        "hash_signature": "UD2gram001xyz",
+        "profitability_weight": 0.16,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": true
+      },
+      "2gram_swap_arbitrage": {
+        "strategy_id": "2gram_BE_001", 
+        "description": "BTC-ETH swap pattern arbitrage via 2-gram BE pattern",
+        "pattern": "BE",
+        "emoji_symbol": "🔁",
+        "parameters": {
+          "pattern_frequency_threshold": 4,
+          "burst_score_minimum": 1.8,
+          "entropy_range": [0.4, 0.9],
+          "position_size": 0.08,
+          "swap_threshold": 0.001,
+          "max_exposure": 0.15
+        },
+        "hash_signature": "BE2gram001abc",
+        "profitability_weight": 0.19,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": false
+      },
+      "2gram_flatline_protection": {
+        "strategy_id": "2gram_AA_001",
+        "description": "Flatline anomaly protection via 2-gram AA pattern",
+        "pattern": "AA",
+        "emoji_symbol": "🧊",
+        "parameters": {
+          "pattern_frequency_threshold": 2,
+          "burst_score_minimum": 1.0,
+          "entropy_range": [0.0, 0.2],
+          "position_size": 0.02,
+          "protection_mode": true,
+          "reduce_exposure": 0.5
+        },
+        "hash_signature": "AA2gram001ice",
+        "profitability_weight": 0.05,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": true,
+        "protection_strategy": true
+      },
+      "2gram_trend_momentum": {
+        "strategy_id": "2gram_UU_001",
+        "description": "Sustained trend momentum via 2-gram UU pattern",
+        "pattern": "UU",
+        "emoji_symbol": "📈",
+        "parameters": {
+          "pattern_frequency_threshold": 5,
+          "burst_score_minimum": 2.5,
+          "entropy_range": [0.5, 1.0],
+          "position_size": 0.15,
+          "momentum_confirmation": 3,
+          "trailing_stop": 0.03
+        },
+        "hash_signature": "UU2gram001mom",
+        "profitability_weight": 0.21,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": false
+      },
+      "2gram_reversal_signal": {
+        "strategy_id": "2gram_DU_001",
+        "description": "Reversal signal detection via 2-gram DU pattern",
+        "pattern": "DU",
+        "emoji_symbol": "🔄",
+        "parameters": {
+          "pattern_frequency_threshold": 3,
+          "burst_score_minimum": 2.2,
+          "entropy_range": [0.3, 0.7],
+          "position_size": 0.10,
+          "reversal_confirmation": 2,
+          "quick_exit": true
+        },
+        "hash_signature": "DU2gram001rev",
+        "profitability_weight": 0.17,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": false
+      },
+      "2gram_entropy_spike": {
+        "strategy_id": "2gram_EE_001",
+        "description": "Entropy spike response via 2-gram EE pattern",
+        "pattern": "EE",
+        "emoji_symbol": "🌪️",
+        "parameters": {
+          "pattern_frequency_threshold": 1,
+          "burst_score_minimum": 3.0,
+          "entropy_range": [0.8, 1.0],
+          "position_size": 0.05,
+          "emergency_mode": true,
+          "immediate_exit": true
+        },
+        "hash_signature": "EE2gram001spi",
+        "profitability_weight": 0.08,
+        "fractal_memory_enabled": true,
+        "t_cell_monitoring": true,
+        "emergency_strategy": true
+      }
+    },
+    "two_gram_pattern_registry": {
+      "pattern_definitions": {
+        "UD": {
+          "pattern_name": "volatility_burst",
+          "description": "Up-Down rapid reversal indicating volatility spike",
+          "emoji_symbol": "⚡",
+          "asic_encoding": "0x5544",
+          "strategy_trigger": "volatility_reversal_entry",
+          "risk_level": "medium",
+          "expected_frequency": 15,
+          "market_conditions": ["volatile", "trending"],
+          "fractal_resonance_threshold": 0.85
+        },
+        "DU": {
+          "pattern_name": "reversal_signal",
+          "description": "Down-Up reversal momentum pattern",
+          "emoji_symbol": "🔄",
+          "asic_encoding": "0x4455",
+          "strategy_trigger": "reversal_momentum_entry",
+          "risk_level": "medium",
+          "expected_frequency": 12,
+          "market_conditions": ["oversold", "reversal"],
+          "fractal_resonance_threshold": 0.80
+        },
+        "BE": {
+          "pattern_name": "swap_pattern",
+          "description": "BTC-ETH repetitive swap indication",
+          "emoji_symbol": "🔁",
+          "asic_encoding": "0x4245",
+          "strategy_trigger": "swap_arbitrage_trigger",
+          "risk_level": "low",
+          "expected_frequency": 8,
+          "market_conditions": ["sideways", "arbitrage"],
+          "fractal_resonance_threshold": 0.90
+        },
+        "EB": {
+          "pattern_name": "swap_reversal",
+          "description": "ETH-BTC swap reversal pattern",
+          "emoji_symbol": "🔀",
+          "asic_encoding": "0x4542",
+          "strategy_trigger": "swap_reversal_trigger",
+          "risk_level": "low",
+          "expected_frequency": 7,
+          "market_conditions": ["rebalancing", "arbitrage"],
+          "fractal_resonance_threshold": 0.88
+        },
+        "UU": {
+          "pattern_name": "trend_momentum",
+          "description": "Sustained upward momentum",
+          "emoji_symbol": "📈",
+          "asic_encoding": "0x5555",
+          "strategy_trigger": "trend_momentum_entry",
+          "risk_level": "low",
+          "expected_frequency": 20,
+          "market_conditions": ["bullish", "trending"],
+          "fractal_resonance_threshold": 0.75
+        },
+        "DD": {
+          "pattern_name": "downtrend_signal",
+          "description": "Sustained downward momentum",
+          "emoji_symbol": "📉",
+          "asic_encoding": "0x4444",
+          "strategy_trigger": "downtrend_reversal_watch",
+          "risk_level": "medium",
+          "expected_frequency": 18,
+          "market_conditions": ["bearish", "declining"],
+          "fractal_resonance_threshold": 0.77
+        },
+        "AA": {
+          "pattern_name": "flatline_anomaly",
+          "description": "Low entropy repetition indicating dead market",
+          "emoji_symbol": "🧊",
+          "asic_encoding": "0x4141",
+          "strategy_trigger": "flatline_caution_mode",
+          "risk_level": "high",
+          "expected_frequency": 3,
+          "market_conditions": ["stagnant", "low_volume"],
+          "fractal_resonance_threshold": 0.95,
+          "t_cell_trigger": true
+        },
+        "ZZ": {
+          "pattern_name": "dead_market",
+          "description": "Extreme flatline indicating market death",
+          "emoji_symbol": "😴",
+          "asic_encoding": "0x5A5A",
+          "strategy_trigger": "system_protection_mode",
+          "risk_level": "high",
+          "expected_frequency": 1,
+          "market_conditions": ["dead", "no_volume"],
+          "fractal_resonance_threshold": 0.99,
+          "t_cell_trigger": true
+        },
+        "EE": {
+          "pattern_name": "entropy_spike",
+          "description": "High entropy event indicating chaos",
+          "emoji_symbol": "🌪️",
+          "asic_encoding": "0x4545",
+          "strategy_trigger": "entropy_spike_response",
+          "risk_level": "high",
+          "expected_frequency": 2,
+          "market_conditions": ["chaotic", "high_volatility"],
+          "fractal_resonance_threshold": 0.70,
+          "t_cell_trigger": true
+        },
+        "XX": {
+          "pattern_name": "unknown_anomaly",
+          "description": "Unknown pattern requiring investigation",
+          "emoji_symbol": "⚠️",
+          "asic_encoding": "0x5858",
+          "strategy_trigger": "anomaly_investigation",
+          "risk_level": "high",
+          "expected_frequency": 1,
+          "market_conditions": ["anomalous", "unknown"],
+          "fractal_resonance_threshold": 0.60,
+          "t_cell_trigger": true
+        }
+      },
+      "pattern_math": {
+        "entropy_calculation": "H = -∑(p_i * log2(p_i))",
+        "burst_score": "Δf = (f_current - f_mean) / f_std",
+        "similarity_vector": "[ascii_normalized, freq_log, entropy_norm, pattern_encoding, temporal]",
+        "cosine_similarity": "cos(θ) = (A·B) / (||A|| * ||B||)",
+        "fractal_resonance": "R = cosine_similarity(current_vector, historical_vector)",
+        "t_cell_activation": "T = health_score < sensitivity_threshold"
+      },
+      "integration_points": {
+        "fractal_memory": {
+          "enabled": true,
+          "snapshot_storage": true,
+          "pattern_matching": true,
+          "similarity_threshold": 0.85
+        },
+        "phantom_math": {
+          "phantom_zone_correlation": true,
+          "entropy_sync": true,
+          "potential_scoring": true
+        },
+        "portfolio_balancing": {
+          "rebalance_triggers": true,
+          "asset_allocation_adjustment": true,
+          "risk_management": true
+        },
+        "visual_execution": {
+          "emoji_rendering": true,
+          "pattern_visualization": true,
+          "gui_integration": true
+        },
+        "t_cell_protection": {
+          "health_monitoring": true,
+          "anomaly_detection": true,
+          "system_protection": true,
+          "immune_response": true
+        }
+      }
+    },
+    "hash_evolution_rules": {
+      "tick_increment": 1,
+      "price_sensitivity": 0.001,
+      "layer_transition_threshold": 1000,
+      "profitability_decay_rate": 0.99,
+      "hash_collision_resolution": "append_timestamp",
+      "strategy_basket_rebalancing": {
+        "frequency": "hourly",
+        "profitability_threshold": 0.05,
+        "diversification_factor": 0.3
+      },
+      "two_gram_evolution": {
+        "pattern_frequency_tracking": true,
+        "burst_score_evolution": true,
+        "entropy_drift_compensation": true,
+        "fractal_memory_integration": true
+      }
+    },
+    "current_state": {
+      "active_layer": 0,
+      "current_tick": 0,
+      "last_price": 50000.0,
+      "total_hashes_generated": 0,
+      "active_strategy_baskets": 0,
+      "cumulative_profitability": 0.0,
+      "last_evolution_timestamp": "2024-01-01T00:00:00Z",
+      "active_2gram_patterns": 0,
+      "t_cell_status": "inactive",
+      "system_health_score": 1.0
+    },
+    "profitability_metrics": {
+      "total_profit": 0.0,
+      "profit_per_hash": 0.0,
+      "best_performing_layer": null,
+      "worst_performing_layer": null,
+      "strategy_performance_ranking": [],
+      "hash_collision_rate": 0.0,
+      "evolution_efficiency": 0.0,
+      "two_gram_performance": {
+        "total_pattern_triggers": 0,
+        "successful_pattern_trades": 0,
+        "pattern_success_rate": 0.0,
+        "best_performing_pattern": null,
+        "pattern_profit_contribution": 0.0
+      }
+    },
+    "sample_hash_entries": {
+      "example_hash_1": {
+        "hash_value": "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890",
+        "tick": 100,
+        "price": 45000.0,
+        "layer_id": "layer_0",
+        "strategy_basket": [
+          "momentum_001",
+          "arbitrage_001",
+          "scalping_001"
+        ],
+        "profitability_score": 0.125,
+        "creation_timestamp": "2024-01-01T01:00:00Z",
+        "last_update": "2024-01-01T01:00:00Z"
+      },
+      "example_hash_2": {
+        "hash_value": "b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890a1",
+        "tick": 250,
+        "price": 46500.0,
+        "layer_id": "layer_0",
+        "strategy_basket": [
+          "reversion_001",
+          "swing_001",
+          "grid_001"
+        ],
+        "profitability_score": 0.089,
+        "creation_timestamp": "2024-01-01T02:30:00Z",
+        "last_update": "2024-01-01T02:30:00Z"
+      },
+      "2gram_pattern_hash_1": {
+        "hash_value": "UD2gram5544ef1234567890abcdef1234567890abcdef1234567890abcdef12345",
+        "tick": 5150,
+        "price": 49850.0,
+        "layer_id": "two_gram_pattern_layer",
+        "pattern": "UD",
+        "emoji_symbol": "⚡",
+        "strategy_basket": [
+          "2gram_UD_001",
+          "momentum_001",
+          "volatility_management"
+        ],
+        "burst_score": 2.8,
+        "entropy": 0.65,
+        "frequency": 4,
+        "fractal_resonance": 0.87,
+        "t_cell_status": "inactive",
+        "profitability_score": 0.156,
+        "creation_timestamp": "2024-01-01T05:15:00Z",
+        "last_update": "2024-01-01T05:15:00Z"
+      },
+      "2gram_pattern_hash_2": {
+        "hash_value": "BE2gram4245abc1234567890abcdef1234567890abcdef1234567890abcdef12345",
+        "tick": 5275,
+        "price": 50125.0,
+        "layer_id": "two_gram_pattern_layer",
+        "pattern": "BE",
+        "emoji_symbol": "🔁",
+        "strategy_basket": [
+          "2gram_BE_001",
+          "arbitrage_001",
+          "swap_optimization"
+        ],
+        "burst_score": 1.9,
+        "entropy": 0.58,
+        "frequency": 6,
+        "fractal_resonance": 0.91,
+        "t_cell_status": "inactive",
+        "profitability_score": 0.201,
+        "creation_timestamp": "2024-01-01T05:45:00Z",
+        "last_update": "2024-01-01T05:45:00Z"
+      }
+    },
+    "api_endpoints": {
+      "generate_hash": "/api/hash/generate",
+      "get_strategy_basket": "/api/strategy/basket",
+      "update_profitability": "/api/profitability/update",
+      "evolution_step": "/api/evolution/step",
+      "get_layer_status": "/api/layer/status",
+      "two_gram_analysis": "/api/2gram/analyze",
+      "pattern_trigger": "/api/2gram/trigger",
+      "fractal_resonance": "/api/fractal/resonance",
+      "t_cell_status": "/api/tcell/status",
+      "system_health": "/api/health/check"
+    }
+  }
+} 

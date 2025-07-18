@@ -1,0 +1,81 @@
+{
+    "news_sources": {
+        "reuters": {
+            "base_url": "https://www.reuters.com",
+            "api_key": "",
+            "categories": [
+                "business",
+                "technology",
+                "markets"
+            ]
+        },
+        "bloomberg": {
+            "base_url": "https://www.bloomberg.com",
+            "api_key": "",
+            "categories": [
+                "markets",
+                "technology",
+                "politics"
+            ]
+        },
+        "coindesk": {
+            "base_url": "https://www.coindesk.com",
+            "api_key": "",
+            "categories": [
+                "crypto",
+                "markets",
+                "technology"
+            ]
+        }
+    },
+    "sentiment_keywords": {
+        "positive": [
+            "bullish",
+            "surge",
+            "rally",
+            "gain",
+            "profit",
+            "growth",
+            "positive",
+            "adoption",
+            "innovation",
+            "breakthrough",
+            "success",
+            "upgrade"
+        ],
+        "negative": [
+            "bearish",
+            "crash",
+            "decline",
+            "loss",
+            "drop",
+            "negative",
+            "risk",
+            "regulation",
+            "ban",
+            "hack",
+            "scam",
+            "failure",
+            "downgrade"
+        ],
+        "neutral": [
+            "announce",
+            "release",
+            "update",
+            "launch",
+            "partnership",
+            "integration",
+            "development",
+            "research",
+            "study",
+            "analysis",
+            "report"
+        ]
+    },
+    "entity_patterns": [
+        "\\b[A-Z]{2,}\\b",
+        "\\$[A-Z]+\\b",
+        "\\b\\d+\\.\\d+\\b",
+        "\\b[A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*\\b"
+    ]
+}

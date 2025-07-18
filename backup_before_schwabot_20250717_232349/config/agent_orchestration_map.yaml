@@ -1,0 +1,91 @@
+# Agent Orchestration Map Configuration
+# This file defines how different AI agents are orchestrated in Schwabot UROS v1.0
+
+agents:
+  gpt:
+    name: "GPT-4"
+    type: "gpt"
+    priority: 1
+    domains: ["strategy", "analysis", "prediction"]
+    consciousness_profile: "analytical"
+    trust_score: 0.85
+    max_recursive_depth: 3
+    timeout_seconds: 30
+    
+  claude:
+    name: "Claude-3"
+    type: "claude"
+    priority: 2
+    domains: ["reasoning", "ethics", "validation"]
+    consciousness_profile: "reasoning"
+    trust_score: 0.90
+    max_recursive_depth: 4
+    timeout_seconds: 45
+    
+  r1:
+    name: "R1"
+    type: "r1"
+    priority: 3
+    domains: ["execution", "optimization", "real_time"]
+    consciousness_profile: "executive"
+    trust_score: 0.75
+    max_recursive_depth: 2
+    timeout_seconds: 15
+    
+  gemini:
+    name: "Gemini"
+    type: "gemini"
+    priority: 4
+    domains: ["multimodal", "pattern_recognition", "synthesis"]
+    consciousness_profile: "synthetic"
+    trust_score: 0.80
+    max_recursive_depth: 3
+    timeout_seconds: 25
+    
+  schwabot:
+    name: "Schwabot Core"
+    type: "schwabot"
+    priority: 0
+    domains: ["all"]
+    consciousness_profile: "unified"
+    trust_score: 1.0
+    max_recursive_depth: 5
+    timeout_seconds: 60
+
+orchestration_rules:
+  consensus_threshold: 0.7
+  max_agents_per_command: 3
+  fallback_agent: "schwabot"
+  conflict_resolution: "weighted_voting"
+  
+  domain_mapping:
+    strategy:
+      primary: ["gpt", "claude"]
+      secondary: ["schwabot"]
+    execution:
+      primary: ["r1", "schwabot"]
+      secondary: ["gpt"]
+    validation:
+      primary: ["claude", "schwabot"]
+      secondary: ["gpt"]
+    analysis:
+      primary: ["gpt", "gemini"]
+      secondary: ["claude"]
+    prediction:
+      primary: ["gpt", "gemini"]
+      secondary: ["claude", "schwabot"]
+
+performance_tracking:
+  enabled: true
+  metrics_retention_days: 30
+  alert_thresholds:
+    success_rate: 0.8
+    response_time: 10.0
+    trust_score: 0.7
+
+recursive_execution:
+  enabled: true
+  max_depth: 5
+  depth_timeout_multiplier: 1.5
+  memory_key_generation: true
+  drift_detection: true 

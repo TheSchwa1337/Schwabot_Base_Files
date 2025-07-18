@@ -1,0 +1,145 @@
+# Math Core Configuration
+# ======================
+# Core mathematical framework settings for Schwabot
+# Defines symbolic aliases, drift ranges, and entropy parameters
+
+math_core:
+  # Symbolic Operator Aliases (Cursor-friendly)
+  symbolic_aliases:
+    gradient: "∇"
+    phase: "Ω"
+    lambda: "λ"
+    psi: "ψ"
+    drift: "D"
+    noise: "Σ"
+    entropy: "H"
+    time: "t"
+  
+  # Drift Configuration
+  drift_range:
+    min: 0.001
+    max: 0.25
+    default: 0.1
+    phantom_boost: 1.5
+    normal_multiplier: 1.0
+  
+  # Entropy Settings
+  entropy:
+    enable_cycling: true
+    window_size: 16
+    threshold_phantom: 0.002
+    threshold_normal: 0.001
+    max_entropy: 10.0
+    min_entropy: 0.0
+  
+  # Signal Processing
+  signal:
+    window_size: 8
+    smoothing_factor: 0.1
+    normalization_enabled: true
+    noise_reduction: true
+  
+  # Phantom Layer Detection
+  phantom_activation:
+    threshold_entropy: 0.002
+    threshold_flatness: 0.1
+    detection_window: 32
+    confirmation_cycles: 3
+    boost_multiplier: 1.2
+  
+  # Vector Field Processing
+  vector_field:
+    flatten_enabled: false
+    max_dimensions: 4
+    compression_ratio: 0.8
+    preserve_entropy: true
+  
+  # Hardware Optimization
+  hardware:
+    gpu_preference: true
+    cpu_fallback: true
+    memory_efficient: true
+    batch_processing: true
+    parallel_computation: true
+  
+  # Convergence Settings
+  convergence:
+    max_iterations: 100
+    threshold: 1e-6
+    tolerance: 1e-8
+    adaptive_step: true
+  
+  # Context Awareness
+  context:
+    enable_phantom_layer: true
+    enable_vault_state: true
+    enable_entropy_index: true
+    enable_cycle_id: true
+    enable_timestamp: true
+  
+  # Performance Tuning
+  performance:
+    cache_enabled: true
+    cache_size: 1024
+    cache_ttl: 3600
+    profiling_enabled: false
+    optimization_level: 2
+  
+  # Validation Settings
+  validation:
+    enable_scalar_validation: true
+    enable_vector_validation: true
+    enable_matrix_validation: true
+    enable_tensor_validation: true
+    enable_quantum_state_validation: true
+    enable_operation_validation: true
+  
+  # Error Handling
+  error_handling:
+    enable_exception_logging: true
+    enable_error_recovery: true
+    max_retry_attempts: 3
+    retry_delay: 1.0
+    enable_graceful_degradation: true
+    log_error_details: true
+  
+  # Debug Settings
+  debug:
+    enable_debug_mode: false
+    enable_profiling: false
+    enable_trace_logging: false
+    enable_performance_monitoring: false
+    enable_memory_tracking: false
+  
+  # Mathematical Constants
+  constants:
+    golden_ratio: 1.618033988749
+    pi: 3.14159265359
+    e: 2.71828182846
+    planck_constant: 1.054571817e-34
+    boltzmann_constant: 1.380649e-23
+    speed_of_light: 299792458.0
+  
+  # Quantum Settings
+  quantum:
+    energy_scale: 1.0
+    enable_phase_harmonization: true
+    enable_quantum_entropy: true
+    enable_wave_functions: true
+    superposition_enabled: false
+  
+  # Thermal Settings
+  thermal:
+    thermal_conductivity: 0.024
+    heat_capacity: 1005.0
+    enable_thermal_pressure: true
+    enable_thermal_gradients: true
+    enable_entropy_mapping: true
+  
+  # Recursion Settings
+  recursion:
+    max_depth: 50
+    enable_depth_guards: true
+    enable_convergence_checking: true
+    enable_memoization: true
+    memoization_cache_size: 128 

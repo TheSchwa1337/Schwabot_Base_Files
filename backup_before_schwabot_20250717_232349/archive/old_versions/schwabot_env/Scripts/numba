@@ -1,0 +1,8 @@
+#!C:\Users\maxde\Downloads\clonerepo\AOI_Base_Files_Schwabot\schwabot_env\Scripts\python.exe
+# -*- coding: UTF-8 -*-
+from __future__ import absolute_import, division, print_function
+
+from numba.misc.numba_entry import main
+
+if __name__ == "__main__":
+    main()

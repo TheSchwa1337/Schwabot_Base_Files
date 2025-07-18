@@ -1,0 +1,414 @@
+{
+  "Linguistic Glyph Engine": {
+    "success": true,
+    "result": [
+      {
+        "command": "Capture the next BTC/USDC dip \ud83e\uddff vectorize profit",
+        "decision": "Lock current vector, preserve state",
+        "bit_state": 2,
+        "profit_delta": 169.00564930189427,
+        "entropy_overlay": 3.7556810955976503,
+        "zygot_expansion_length": 16,
+        "memory_summary": {
+          "memory_stack_size": 1,
+          "trade_vectors_count": 1,
+          "containment_sum": 5.460156310081715,
+          "fractal_energy": 6093.231165253297,
+          "recent_bit_states": [
+            2
+          ],
+          "recent_glyphs": [
+            "\ud83e\uddff"
+          ],
+          "total_profit_delta": 169.00564930189427
+        }
+      },
+      {
+        "command": "Hold current position \ud83d\udc8e maintain memory lock",
+        "decision": "Enter position, activate ghost logic",
+        "bit_state": 1,
+        "profit_delta": 127.42499319213339,
+        "entropy_overlay": 2.831666515380742,
+        "zygot_expansion_length": 16,
+        "memory_summary": {
+          "memory_stack_size": 2,
+          "trade_vectors_count": 2,
+          "containment_sum": 107.47136154559851,
+          "fractal_energy": 12210.348765023145,
+          "recent_bit_states": [
+            2,
+            1
+          ],
+          "recent_glyphs": [
+            "\ud83e\uddff",
+            "\ud83d\udc8e"
+          ],
+          "total_profit_delta": 296.43064249402767
+        }
+      },
+      {
+        "command": "Execute profit vector \ud83d\ude80 upward extrapolation",
+        "decision": "Execute profit vector, begin extraction",
+        "bit_state": 3,
+        "profit_delta": 190.87677978414052,
+        "entropy_overlay": 4.241706217425345,
+        "zygot_expansion_length": 16,
+        "memory_summary": {
+          "memory_stack_size": 3,
+          "trade_vectors_count": 3,
+          "containment_sum": 110.63101414659067,
+          "fractal_energy": 16210.348765023145,
+          "recent_bit_states": [
+            2,
+            1,
+            3
+          ],
+          "recent_glyphs": [
+            "\ud83e\uddff",
+            "\ud83d\udc8e",
+            "\ud83d\ude80"
+          ],
+          "total_profit_delta": 487.3074222781682
+        }
+      },
+      {
+        "command": "Schwa recursive state \ud83d\udd04 neutral recursion",
+        "decision": "Hold position, maintain recursive state",
+        "bit_state": 0,
+        "profit_delta": 142.08326368705008,
+        "entropy_overlay": 3.157405859712224,
+        "zygot_expansion_length": 16,
+        "memory_summary": {
+          "memory_stack_size": 4,
+          "trade_vectors_count": 4,
+          "containment_sum": 181.18612020097177,
+          "fractal_energy": 20468.56232739624,
+          "recent_bit_states": [
+            2,
+            1,
+            3,
+            0
+          ],
+          "recent_glyphs": [
+            "\ud83e\uddff",
+            "\ud83d\udc8e",
+            "\ud83d\ude80",
+            "\ud83d\udd04"
+          ],
+          "total_profit_delta": 629.3906859652183
+        }
+      },
+      {
+        "command": "Ghost entry activation \ud83d\udc7b containment protocol",
+        "decision": "Enter position, activate ghost logic",
+        "bit_state": 1,
+        "profit_delta": 174.54525248493238,
+        "entropy_overlay": 3.878783388554053,
+        "zygot_expansion_length": 16,
+        "memory_summary": {
+          "memory_stack_size": 5,
+          "trade_vectors_count": 5,
+          "containment_sum": 329.23967886301523,
+          "fractal_energy": 19215.444727626393,
+          "recent_bit_states": [
+            2,
+            1,
+            3,
+            0,
+            1
+          ],
+          "recent_glyphs": [
+            "\ud83e\uddff",
+            "\ud83d\udc8e",
+            "\ud83d\ude80",
+            "\ud83d\udd04",
+            "\ud83d\udc7b"
+          ],
+          "total_profit_delta": 803.9359384501506
+        }
+      }
+    ],
+    "timestamp": 1751215468.2147694
+  },
+  "Fractal Mathematical Functions": {
+    "success": true,
+    "result": {
+      "forever_fractal": {
+        "mean": 0.002996635372409687,
+        "std": 0.06539940617082439,
+        "max": 1.0,
+        "min": -0.2975084528994246,
+        "energy": 1.4455068688068666
+      },
+      "paradox_fractal": {
+        "mean": 0.03680922657249514,
+        "std": 0.16609506122055231,
+        "max": 0.6374792859543467,
+        "min": -0.2344627059889326,
+        "energy": 20.401275930731092
+      },
+      "echo_fractal": {
+        "mean": 0.004648450671770684,
+        "std": 0.22238719145143782,
+        "max": 0.7257410270582711,
+        "min": -0.6572631097779684,
+        "energy": 39.743713627812255
+      }
+    },
+    "timestamp": 1751215468.2167687
+  },
+  "Dualistic Thought Integration": {
+    "success": true,
+    "result": [
+      {
+        "error": "'DualisticThoughtEngines' object has no attribute 'process_decision'",
+        "command": "\ud83d\ude80 Execute BTC profit vector with memory lock \ud83e\uddff",
+        "success": false
+      },
+      {
+        "error": "'DualisticThoughtEngines' object has no attribute 'process_decision'",
+        "command": "\ud83d\udc7b Ghost entry on next dip - capture containment",
+        "success": false
+      },
+      {
+        "error": "'DualisticThoughtEngines' object has no attribute 'process_decision'",
+        "command": "\ud83d\udd04 Schwa recursive state - neutral hold position",
+        "success": false
+      },
+      {
+        "error": "'DualisticThoughtEngines' object has no attribute 'process_decision'",
+        "command": "\ud83d\udc8e Diamond hands - maintain current vector lock",
+        "success": false
+      }
+    ],
+    "timestamp": 1751215468.2277632
+  },
+  "ASIC Bit Logic States": {
+    "success": true,
+    "result": {
+      "capture": {
+        "expected": 1,
+        "actual": 1,
+        "success": true,
+        "sha_hash": "6516af62",
+        "weight": 0.25898973907004913
+      },
+      "memory": {
+        "expected": 2,
+        "actual": 2,
+        "success": true,
+        "sha_hash": "b656fafe",
+        "weight": 0.8930849549675829
+      },
+      "profit": {
+        "expected": 3,
+        "actual": 3,
+        "success": true,
+        "sha_hash": "7945948d",
+        "weight": 0.4346705203770672
+      },
+      "schwa": {
+        "expected": 0,
+        "actual": 0,
+        "success": true,
+        "sha_hash": "9cfcf3ec",
+        "weight": 0.7562718687968994
+      },
+      "\ud83e\uddff": {
+        "expected": 2,
+        "actual": 2,
+        "success": true,
+        "sha_hash": "dde96f38",
+        "weight": 0.9751184351087234
+      },
+      "\ud83d\ude80": {
+        "expected": 3,
+        "actual": 3,
+        "success": true,
+        "sha_hash": "d1971904",
+        "weight": 0.9603466235194362
+      },
+      "\ud83d\udc7b": {
+        "expected": 1,
+        "actual": 1,
+        "success": true,
+        "sha_hash": "9a6be34e",
+        "weight": 0.7373203797171622
+      },
+      "\ud83d\udd04": {
+        "expected": 0,
+        "actual": 0,
+        "success": true,
+        "sha_hash": "0b34f3ba",
+        "weight": 0.010330885516281465
+      }
+    },
+    "timestamp": 1751215468.2307625
+  },
+  "Profit Vectorization Synthesis": {
+    "success": true,
+    "result": {
+      "sequence_results": [
+        {
+          "step": 1,
+          "command": "\ud83d\ude80 Execute BTC entry at 47000",
+          "btc_price": 47000.0,
+          "profit_delta": 199.36019221899124,
+          "containment_sum": 189.21959340928024,
+          "fractal_energy": 4000.0,
+          "bit_sequence_length": 16,
+          "glyph_signature": "\ud83d\ude80"
+        },
+        {
+          "step": 2,
+          "command": "\ud83d\udc8e Hold position - diamond hands",
+          "btc_price": 47200.0,
+          "profit_delta": 133.65465952597103,
+          "containment_sum": 201.14880772284465,
+          "fractal_energy": 10117.117599769848,
+          "bit_sequence_length": 16,
+          "glyph_signature": "\ud83d\udc8e"
+        },
+        {
+          "step": 3,
+          "command": "\ud83e\uddff Memory lock current vector",
+          "btc_price": 47150.0,
+          "profit_delta": 177.08036365742922,
+          "containment_sum": 326.0244703724163,
+          "fractal_energy": 16210.348765023145,
+          "bit_sequence_length": 16,
+          "glyph_signature": "\ud83e\uddff"
+        },
+        {
+          "step": 4,
+          "command": "\ud83d\udcc8 Profit vector - upward extrapolation",
+          "btc_price": 47800.0,
+          "profit_delta": 175.40394580696332,
+          "containment_sum": 335.9501396057751,
+          "fractal_energy": 17878.253544619583,
+          "bit_sequence_length": 16,
+          "glyph_signature": "\ud83d\udcc8"
+        },
+        {
+          "step": 5,
+          "command": "\ud83d\udc7b Ghost exit - capture gains",
+          "btc_price": 47650.0,
+          "profit_delta": 184.82402846460062,
+          "containment_sum": 351.5452698598388,
+          "fractal_energy": 16625.135944849735,
+          "bit_sequence_length": 16,
+          "glyph_signature": "\ud83d\udc7b"
+        }
+      ],
+      "total_profit": 870.3231896739553,
+      "final_memory_state": {
+        "memory_stack_size": 5,
+        "trade_vectors_count": 5,
+        "containment_sum": 351.5452698598388,
+        "fractal_energy": 16625.135944849735,
+        "recent_bit_states": [
+          3,
+          1,
+          2,
+          3,
+          1
+        ],
+        "recent_glyphs": [
+          "\ud83d\ude80",
+          "\ud83d\udc8e",
+          "\ud83e\uddff",
+          "\ud83d\udcc8",
+          "\ud83d\udc7b"
+        ],
+        "total_profit_delta": 870.3231896739554
+      }
+    },
+    "timestamp": 1751215468.2397566
+  },
+  "Zalgo & Zygot Processing": {
+    "success": true,
+    "result": {
+      "zalgo_test_results": [
+        1.1940001576056392,
+        3.341333173967445,
+        1.2943383826791197,
+        3.459635281299898
+      ],
+      "zygot_test_results": [
+        [
+          378.0,
+          19.53196256846452,
+          44.0,
+          152.4680374315355,
+          190.0,
+          152.4680374315355,
+          44.0,
+          19.53196256846452
+        ],
+        [
+          952.0,
+          0.0,
+          340.0,
+          0.0,
+          272.0,
+          0.0,
+          340.0,
+          0.0
+        ],
+        [
+          272.0,
+          68.0,
+          0.0,
+          68.0,
+          0.0,
+          68.0,
+          0.0,
+          68.0
+        ],
+        [
+          920.0,
+          0.0,
+          340.0,
+          0.0,
+          400.0,
+          0.0,
+          340.0,
+          0.0
+        ]
+      ],
+      "glyph_processing": {
+        "\ud83e\uddff": {
+          "bit_mask_length": 16,
+          "zalgo_entropy": 3.7556810955976503,
+          "zygot_length": 8,
+          "zygot_energy": 1652.0
+        },
+        "\ud83d\ude80": {
+          "bit_mask_length": 16,
+          "zalgo_entropy": 4.241706217425345,
+          "zygot_length": 8,
+          "zygot_energy": 2144.0
+        },
+        "\ud83d\udc7b": {
+          "bit_mask_length": 16,
+          "zalgo_entropy": 3.878783388554053,
+          "zygot_length": 8,
+          "zygot_energy": 1128.0
+        },
+        "\ud83d\udc8e": {
+          "bit_mask_length": 16,
+          "zalgo_entropy": 2.831666515380742,
+          "zygot_length": 8,
+          "zygot_energy": 1184.0
+        },
+        "\ud83d\udd04": {
+          "bit_mask_length": 16,
+          "zalgo_entropy": 3.157405859712224,
+          "zygot_length": 8,
+          "zygot_energy": 1416.0
+        }
+      }
+    },
+    "timestamp": 1751215468.246751
+  }
+}

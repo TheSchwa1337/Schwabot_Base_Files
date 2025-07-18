@@ -1,0 +1,13 @@
+processing:
+  alignment_threshold: 0.8
+  fft_harmonics: 8
+  volatility_window: 100
+profile:
+  name: default
+  parameters:
+    decay_power: 1.5
+    dimension: 8
+    epsilon_q: 0.003
+    precision: 0.001
+    terms: 12
+  type: quantization

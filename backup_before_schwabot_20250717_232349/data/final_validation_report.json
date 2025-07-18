@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-06-28T16:44:31.776367",
+  "flake8_compliance": false,
+  "import_validation": false,
+  "math_operations": true,
+  "gpu_handling": true,
+  "requirements_validation": true,
+  "overall_status": "MOSTLY_READY",
+  "issues": [
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\__init__.py:151:78: W292 no newline at end of file",
+    "logger.info(f\"Core module initialized - {len(__all__)} components available\")                                                                             ^",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\advanced_drift_shell_integration.py:52:15: E999 SyntaxError: unterminated string literal (detected at line 52)",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\advanced_mathematical_core.py:29:2: E999 SyntaxError: invalid syntax",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\advanced_test_harness.py:5:8: E999 SyntaxError: invalid syntax. Perhaps you forgot a comma?",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\ai_integration_bridge.py:4:13: E999 SyntaxError: invalid syntax. Perhaps you forgot a comma?",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\altitude_adjustment_math.py:25:2: E999 SyntaxError: invalid syntax",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\altitude_generator.py:9:21: E999 SyntaxError: invalid decimal literal",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\analysis_engine.py:5:14: E999 SyntaxError: invalid syntax. Perhaps you forgot a comma?",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core\\anomaly_filter_comprehensive.py:4:8: E999 SyntaxError: invalid syntax. Perhaps you forgot a comma?",
+    "Import failed: core - unexpected indent (mathematical_relay_system.py, line 75)",
+    "Import failed: core.unified_math_system - unexpected indent (mathematical_relay_system.py, line 75)",
+    "Import failed: core.schwafit_core - unexpected indent (mathematical_relay_system.py, line 75)",
+    "Import failed: schwabot - unexpected indent (__init__.py, line 5)",
+    "Import failed: schwabot.talib_fallback - unexpected indent (__init__.py, line 5)"
+  ],
+  "recommendations": [
+    "Fix flake8 compliance issues before deployment",
+    "Resolve import issues to ensure system stability",
+    "Address the issues listed in the report"
+  ]
+}

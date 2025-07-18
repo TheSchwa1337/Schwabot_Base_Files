@@ -1,0 +1,65 @@
+# GPU Flash Engine Configuration
+# ============================
+# Quantum-coherent flash orchestrator settings
+
+# Timing Configuration
+cooldown_period: 0.1  # seconds between flash operations
+max_cascade_memory: 100  # maximum entries in phase/entropy memory
+max_history_size: 1000  # maximum flash states to retain
+
+# Energy & Stability Parameters
+binding_energy_default: 7.5  # default binding energy baseline
+enable_fractal_corrections: true  # enable quantum fractal corrections
+
+# Risk Thresholds
+# Values are normalized [0, 1] where 1 = maximum risk
+risk_thresholds:
+  critical: 0.9   # Above this = immediate block
+  high: 0.7       # Above this = enhanced scrutiny
+  medium: 0.5     # Above this = caution mode
+  low: 0.3        # Below this = normal operation
+
+# Phase Analysis Settings
+phase_resonance:
+  variance_threshold: 0.01  # Phase lock detection sensitivity
+  coherence_minimum: 0.7    # Minimum coherence for resonance
+
+# Memory & Performance
+memory_limits:
+  flash_history: 1000      # Maximum flash states in memory
+  phase_memory: 100        # Maximum phase angles tracked
+  entropy_cascade: 100     # Maximum entropy values tracked
+  coherence_history: 100   # Maximum coherence scores tracked
+
+# Context Multipliers
+# These adjust binding energy based on market conditions
+context_multipliers:
+  high_volatility: 1.2     # Multiply binding energy by this during high vol
+  news_event: 1.1          # Multiply during news events
+  market_stress: 1.15      # Multiply during market stress
+  weekend: 0.9             # Reduce sensitivity on weekends
+  after_hours: 0.95        # Slight reduction after hours
+
+# Entropy Shell Classification
+entropy_shells:
+  critical_bloom: 2.5      # Z-score threshold for critical classification
+  unstable: 1.0            # Z-score threshold for unstable classification
+  # Below unstable threshold = stable
+
+# Fractal Integration Settings
+fractal:
+  max_depth: 10            # Maximum fractal recursion depth
+  depth_penalty: 0.3       # Binding energy penalty per depth level
+  correction_threshold: 0.9 # Coherence threshold for fractal corrections
+
+# Logging & Debugging
+logging:
+  level: "INFO"            # DEBUG, INFO, WARNING, ERROR
+  save_state_frequency: 10 # Save state every N flash operations
+  enable_quantum_stats: true # Calculate and expose quantum statistics
+
+# Safety Features
+safety:
+  emergency_shutoff: true  # Enable emergency shutoff on critical anomalies
+  max_consecutive_blocks: 5 # Max consecutive blocks before forcing cooldown
+  anomaly_notification: true # Publish anomaly events to event bus 

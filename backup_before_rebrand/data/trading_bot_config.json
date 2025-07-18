@@ -1,0 +1,60 @@
+{
+  "symbol": "BTCUSDT",
+  "initial_capital": 10000.0,
+  "trading_interval": 60,
+  "registry_file": "data/soulprint_registry.db",
+  
+  "exchange_config": {
+    "exchange": "binance",
+    "apiKey": "YOUR_BINANCE_API_KEY",
+    "secret": "YOUR_BINANCE_SECRET_KEY",
+    "sandbox": true,
+    "enableRateLimit": true,
+    "timeout": 30000
+  },
+  
+  "risk_parameters": {
+    "max_position_size": 0.1,
+    "stop_loss_pct": 0.02,
+    "take_profit_pct": 0.04,
+    "max_daily_loss": 0.05,
+    "volatility_threshold": 0.8
+  },
+  
+  "market_data_config": {
+    "cache_ttl": 60,
+    "max_price_history": 2000,
+    "api_timeout": 15,
+    "quality_threshold": 0.5,
+    "coingecko_api_key": "YOUR_COINGECKO_API_KEY",
+    "glassnode_api_key": "YOUR_GLASSNODE_API_KEY",
+    "whale_alert_api_key": "YOUR_WHALE_ALERT_API_KEY",
+    "apis": {
+      "coingecko": {"enabled": true, "weight": 0.5},
+      "glassnode": {"enabled": true, "weight": 0.3},
+      "fear_greed": {"enabled": true, "weight": 0.2}
+    }
+  },
+  
+  "strategy_config": {
+    "active_strategies": ["momentum", "mean_reversion", "scalping"],
+    "strategy_weights": {
+      "momentum": 0.4,
+      "mean_reversion": 0.3,
+      "scalping": 0.3
+    },
+    "confidence_threshold": 0.6,
+    "signal_strength_threshold": 0.5
+  },
+  
+  "automated_trading": {
+    "enabled": false,
+    "max_concurrent_trades": 3,
+    "position_sizing_mode": "dynamic",
+    "circuit_breakers": {
+      "daily_loss_limit": 0.05,
+      "max_drawdown": 0.15,
+      "consecutive_losses": 5
+    }
+  }
+} 

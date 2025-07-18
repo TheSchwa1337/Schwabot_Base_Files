@@ -1,0 +1,69 @@
+{
+  "system_info": {
+    "platform": "Windows",
+    "cpu_model": "",
+    "cpu_cores": 4,
+    "cpu_frequency_mhz": 2000.0,
+    "ram_gb": 23.95028305053711,
+    "ram_tier": "high",
+    "storage_gb": 94.84753036499023,
+    "gpu": {
+      "name": "NVIDIA GeForce GTX 980M",
+      "memory_gb": 4.0,
+      "tier": "integrated",
+      "cuda_cores": 0,
+      "memory_bandwidth_gbps": 0.0,
+      "boost_clock_mhz": 0.0
+    },
+    "optimization_mode": "balanced"
+  },
+  "memory_config": {
+    "tic_map_sizes": {
+      "4bit": 1000,
+      "8bit": 500,
+      "16bit": 250,
+      "42bit": 50,
+      "81bit": 10
+    },
+    "cache_sizes": {
+      "pattern_cache": 1000,
+      "signal_cache": 500,
+      "hash_cache": 250
+    },
+    "bit_depth_limits": {
+      "max_42bit_operations": 50,
+      "max_81bit_operations": 10,
+      "preferred_bit_depth": "16bit"
+    },
+    "memory_pools": {
+      "high_frequency": {
+        "size_mb": 256,
+        "priority": "high",
+        "bit_depth": "16bit"
+      },
+      "pattern_recognition": {
+        "size_mb": 512,
+        "priority": "medium",
+        "bit_depth": "42bit"
+      },
+      "deep_analysis": {
+        "size_mb": 1024,
+        "priority": "low",
+        "bit_depth": "81bit"
+      }
+    },
+    "optimization_settings": {
+      "enable_predictive_caching": true,
+      "enable_thermal_scaling": true,
+      "enable_profit_based_allocation": true,
+      "memory_cleanup_threshold": 0.8,
+      "cache_compression_enabled": true,
+      "gpu_memory_fraction": 0.5,
+      "max_concurrent_operations": 5,
+      "batch_size_optimization": true,
+      "adaptive_precision_scaling": true
+    }
+  },
+  "detection_timestamp": "2025-07-14T05:14:26",
+  "version": "1.0.0"
+}

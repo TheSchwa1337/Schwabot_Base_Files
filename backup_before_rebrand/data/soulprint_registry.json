@@ -1,0 +1,18 @@
+{
+  "ec12cfaa80af0dcd15ac4a12e0576e77509f68da16f74708b16df1e190441f2e": {
+    "soulprint": "ec12cfaa80af0dcd15ac4a12e0576e77509f68da16f74708b16df1e190441f2e",
+    "timestamp": "2025-07-03T14:39:32.954184+00:00",
+    "vector": {
+      "pair": "BTC/USDC",
+      "entropy": 0.88,
+      "momentum": 0.04,
+      "volatility": 0.19,
+      "temporal_variance": 0.92
+    },
+    "strategy_id": "momentum_breakout",
+    "confidence": 0.85,
+    "is_executed": true,
+    "profit_result": 0.023,
+    "replayable": true
+  }
+}

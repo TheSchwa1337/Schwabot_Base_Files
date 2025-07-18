@@ -1,0 +1,117 @@
+# Unified Logic Integration Configuration for API and System-wide Settings
+
+unified_logic:
+  # Tick processing settings
+  tick_interval_seconds: 16.0  # 3.75 per minute
+  tick_interval_hourly: 16     # 16 per hour
+  backlog_enabled: true
+  real_time_processing: true
+  
+  # Phase settings
+  phases:
+    - "low"
+    - "mid" 
+    - "high"
+  default_phase: "mid"
+  phase_rotation_enabled: true
+  phase_rotation_interval: 3  # ticks
+  
+  # BTC data settings
+  btc:
+    base_price: 50000.0
+    base_hash_rate: 200.0  # EH/s
+    price_variation_range: 0.02  # ±2%
+    hash_rate_variation_range: 0.01  # ±1%
+    
+  # Ghost conditional settings
+  ghost_conditional:
+    enabled: true
+    thresholds:
+      low: 0.3
+      mid: 0.5
+      high: 0.7
+    coefficients:
+      psi_range: [0.0, 1.0]
+      xi_sent_range: [0.0, 1.0]
+      phi_drift_range: [0.0, 1.0]
+      
+  # Entry logic settings
+  entry_logic:
+    enabled: true
+    weights:
+      btc: 1.2
+      usdc: 0.8
+    phase_weights:
+      low: 0.8
+      mid: 1.0
+      high: 1.2
+      
+  # Unicode/emoji/ASIC settings
+  unicode_labels:
+    enabled: true
+    tier_emojis:
+      low: "🟢"
+      mid: "🟡"
+      high: "🔴"
+    asic_codes:
+      - "ASIC001"
+      - "ASIC002"
+      - "ASIC003"
+      
+  # Float valuation settings
+  float_valuation:
+    enabled: true
+    law_factors:
+      low: 0.9
+      mid: 1.0
+      high: 1.1
+      
+  # Phase math settings
+  phase_math:
+    enabled: true
+    phase_factors:
+      low: 0.9
+      mid: 1.0
+      high: 1.1
+      
+  # Integration settings
+  integration:
+    # Core modules to integrate with
+    core_modules:
+      - "profit_routing_engine"
+      - "ghost_router"
+      - "backchannel_memory_system"
+      - "unified_schwabot_integration"
+      
+    # Demo modules
+    demo_modules:
+      - "demo_unified_logic_integration"
+      - "demo_logic_flow"
+      - "demo_launcher"
+      
+    # API endpoints (for future integration)
+    api_endpoints:
+      btc_tick: "/api/v1/btc/tick"
+      ghost_conditional: "/api/v1/ghost/conditional"
+      entry_logic: "/api/v1/entry/logic"
+      phase_math: "/api/v1/phase/math"
+      
+  # Backlog and storage settings
+  storage:
+    backlog_format: "json"
+    compression_enabled: true
+    encryption_enabled: false
+    retention_days: 30
+    
+  # Performance settings
+  performance:
+    max_concurrent_ticks: 100
+    memory_limit_mb: 512
+    cpu_utilization_limit: 0.8
+    
+  # Logging settings
+  logging:
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file_enabled: true
+    console_enabled: true 

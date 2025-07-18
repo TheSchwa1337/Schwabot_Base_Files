@@ -1,0 +1,577 @@
+# Mathematical Functions Registry - Schwabot UROS v1.0
+# ===================================================
+# This registry maps all mathematical functions across the trading system
+# to their implementations, test cases, and integration points.
+
+mathematical_functions:
+  # DLT Waveform Engine Functions
+  dlt_waveform_engine:
+    dlt_waveform:
+      function_name: "dlt_waveform"
+      module: "core.dlt_waveform_engine"
+      class: "DLTWaveformEngine"
+      mathematical_formula: "f(t) = sin(2πt) * e^(-decay * t)"
+      purpose: "Simulates decaying waveform over time for tick phase analysis"
+      parameters:
+        - name: "t"
+          type: "float"
+          description: "Time parameter"
+        - name: "decay"
+          type: "float"
+          description: "Decay factor"
+          default: 0.006
+      return_type: "float"
+      test_cases:
+        - input: {"t": 0.0, "decay": 0.006}
+          expected: 0.0
+        - input: {"t": 1.0, "decay": 0.006}
+          expected_range: [-1.0, 1.0]
+      integration_points:
+        - "tick_phase_analysis"
+        - "waveform_processing"
+        - "quantum_state_creation"
+
+    wave_entropy:
+      function_name: "wave_entropy"
+      module: "core.dlt_waveform_engine"
+      class: "DLTWaveformEngine"
+      mathematical_formula: "H = -Σ(p_i * log2(p_i)), where p_i = |FFT|^2 / total_power"
+      purpose: "Calculates entropy of a waveform via power spectral density"
+      parameters:
+        - name: "seq"
+          type: "List[float]"
+          description: "Wave sequence data"
+      return_type: "float"
+      test_cases:
+        - input: {"seq": [1.0, 0.0, 1.0, 0.0]}
+          expected_range: [0.0, 10.0]
+        - input: {"seq": [0.5, 0.5, 0.5, 0.5]}
+          expected: 0.0
+      integration_points:
+        - "bit_phase_determination"
+        - "complexity_analysis"
+        - "quantum_state_creation"
+
+    resolve_bit_phase:
+      function_name: "resolve_bit_phase"
+      module: "core.dlt_waveform_engine"
+      class: "DLTWaveformEngine"
+      mathematical_formula: "bit_val = int(hash[n:m], 16) % 2^k"
+      purpose: "Resolve bit phase from hash string with SHA-256 decoding"
+      parameters:
+        - name: "hash_str"
+          type: "str"
+          description: "Hash string to decode"
+        - name: "mode"
+          type: "str"
+          description: "Bit resolution mode"
+          default: "16bit"
+      return_type: "int"
+      test_cases:
+        - input: {"hash_str": "a1b2c3d4", "mode": "4bit"}
+          expected_range: [0, 15]
+        - input: {"hash_str": "a1b2c3d4", "mode": "8bit"}
+          expected_range: [0, 255]
+        - input: {"hash_str": "a1b2c3d4", "mode": "42bit"}
+          expected_range: [0, 4398046511103]
+      integration_points:
+        - "hash_basket_matching"
+        - "tensor_scoring"
+        - "profit_allocation"
+
+    tensor_score:
+      function_name: "tensor_score"
+      module: "core.dlt_waveform_engine"
+      class: "DLTWaveformEngine"
+      mathematical_formula: "T = ((current - entry) / entry) * (phase + 1)"
+      purpose: "Calculate tensor score for profit allocation"
+      parameters:
+        - name: "entry_price"
+          type: "float"
+          description: "Entry price"
+        - name: "current_price"
+          type: "float"
+          description: "Current price"
+        - name: "phase"
+          type: "int"
+          description: "Bit phase value"
+      return_type: "float"
+      test_cases:
+        - input: {"entry_price": 100.0, "current_price": 110.0, "phase": 8}
+          expected: 0.88
+        - input: {"entry_price": 100.0, "current_price": 90.0, "phase": 4}
+          expected: -0.45
+      integration_points:
+        - "profit_cycle_allocation"
+        - "matrix_basket_scoring"
+        - "trading_signals"
+
+  # Matrix Mapper Functions
+  matrix_mapper:
+    decode_hash_to_basket:
+      function_name: "decode_hash_to_basket"
+      module: "core.matrix_mapper"
+      class: "MatrixMapper"
+      mathematical_formula: "basket_id = int(hash[4:8], 16) % 1024"
+      purpose: "Decode SHA-256 hash to matrix basket ID"
+      parameters:
+        - name: "hash_value"
+          type: "str"
+          description: "SHA-256 hash string"
+        - name: "tick"
+          type: "int"
+          description: "Current tick number"
+        - name: "price"
+          type: "float"
+          description: "Current price"
+      return_type: "Optional[str]"
+      test_cases:
+        - input: {"hash_value": "a1b2c3d4e5f6", "tick": 100, "price": 50000.0}
+          expected_type: "str"
+        - input: {"hash_value": "invalid", "tick": 100, "price": 50000.0}
+          expected: null
+      integration_points:
+        - "hash_registry"
+        - "basket_creation"
+        - "profit_routing"
+
+    calculate_tensor_score:
+      function_name: "calculate_tensor_score"
+      module: "core.matrix_mapper"
+      class: "MatrixMapper"
+      mathematical_formula: "T = (current_price - entry_price) / entry_price * (phase + 1)"
+      purpose: "Calculate tensor score for profit allocation"
+      parameters:
+        - name: "entry_price"
+          type: "float"
+          description: "Entry price for the trade"
+        - name: "current_price"
+          type: "float"
+          description: "Current market price"
+        - name: "phase"
+          type: "int"
+          description: "Bit phase value"
+      return_type: "float"
+      test_cases:
+        - input: {"entry_price": 44000.0, "current_price": 45000.0, "phase": 8}
+          expected_range: [0.0, 1.0]
+        - input: {"entry_price": 45000.0, "current_price": 44000.0, "phase": 4}
+          expected_range: [-1.0, 0.0]
+      integration_points:
+        - "profit_cycle_allocation"
+        - "matrix_basket_scoring"
+        - "trading_signals"
+
+  # Profit Cycle Allocator Functions
+  profit_cycle_allocator:
+    allocate:
+      function_name: "allocate"
+      module: "core.profit_cycle_allocator"
+      class: "ProfitCycleAllocator"
+      mathematical_formula: "alloc = f(profit, volatility, tensor_score, zpe_efficiency)"
+      purpose: "Enhanced profit allocation with matrix mapper and tensor scoring integration"
+      parameters:
+        - name: "execution_packet"
+          type: "Dict[str, Any]"
+          description: "Execution packet from GhostStrategyIntegrator"
+        - name: "cycles"
+          type: "Sequence[str]"
+          description: "Optional list of cycle names"
+        - name: "market_data"
+          type: "Optional[Dict[str, Any]]"
+          description: "Market data for calculations"
+      return_type: "ProfitAllocationResult"
+      test_cases:
+        - input: {"execution_packet": {"volume": 1000.0, "actual_profit": 500.0}, "cycles": ["cycle1", "cycle2"]}
+          expected_type: "ProfitAllocationResult"
+      integration_points:
+        - "matrix_mapper"
+        - "dlt_waveform_engine"
+        - "zpe_core"
+
+  # Multi-Bit BTC Processor Functions
+  multi_bit_btc_processor:
+    encode_price:
+      function_name: "encode_price"
+      module: "core.multi_bit_btc_processor"
+      mathematical_formula: "price_encoded = int(price * 10^5); bits = [(price_encoded >> i) & 1 for i in range(bit_depth)]"
+      purpose: "Encodes float price into bit array for phase-based processing"
+      parameters:
+        - name: "price"
+          type: "float"
+          description: "Price to encode"
+        - name: "bit_depth"
+          type: "int"
+          description: "Bit depth for encoding"
+      return_type: "List[int]"
+      test_cases:
+        - input: {"price": 50000.0, "bit_depth": 8}
+          expected_length: 8
+        - input: {"price": 50000.0, "bit_depth": 16}
+          expected_length: 16
+      integration_points:
+        - "bit_phase_processing"
+        - "price_analysis"
+        - "tensor_calculations"
+
+    bit_to_float:
+      function_name: "bit_to_float"
+      module: "core.multi_bit_btc_processor"
+      mathematical_formula: "price = sum(b_i * 2^i) / 10^5"
+      purpose: "Converts bit-encoded price back to float"
+      parameters:
+        - name: "bits"
+          type: "List[int]"
+          description: "Bit array"
+      return_type: "float"
+      test_cases:
+        - input: {"bits": [1, 0, 1, 0, 1, 0, 1, 0]}
+          expected_range: [0.0, 100000.0]
+      integration_points:
+        - "price_reconstruction"
+        - "bit_phase_analysis"
+        - "tensor_scoring"
+
+  # Profit Routing Engine Functions
+  profit_routing_engine:
+    calculate_profit:
+      function_name: "calculate_profit"
+      module: "core.profit_routing_engine"
+      mathematical_formula: "profit = (exit - entry) * quantity"
+      purpose: "Basic trade profit calculation"
+      parameters:
+        - name: "entry_price"
+          type: "float"
+          description: "Entry price"
+        - name: "exit_price"
+          type: "float"
+          description: "Exit price"
+        - name: "quantity"
+          type: "float"
+          description: "Trade quantity"
+      return_type: "float"
+      test_cases:
+        - input: {"entry_price": 100.0, "exit_price": 110.0, "quantity": 1.0}
+          expected: 10.0
+        - input: {"entry_price": 100.0, "exit_price": 90.0, "quantity": 1.0}
+          expected: -10.0
+      integration_points:
+        - "trade_analysis"
+        - "profit_allocation"
+        - "performance_tracking"
+
+    route_efficiency:
+      function_name: "route_efficiency"
+      module: "core.profit_routing_engine"
+      mathematical_formula: "efficiency = (actual / potential) * weight"
+      purpose: "Calculates route efficiency given expected vs. actual profit"
+      parameters:
+        - name: "actual_profit"
+          type: "float"
+          description: "Actual profit achieved"
+        - name: "potential_profit"
+          type: "float"
+          description: "Potential maximum profit"
+        - name: "weight"
+          type: "float"
+          description: "Weighting factor"
+      return_type: "float"
+      test_cases:
+        - input: {"actual_profit": 8.0, "potential_profit": 10.0, "weight": 1.0}
+          expected: 0.8
+        - input: {"actual_profit": 12.0, "potential_profit": 10.0, "weight": 0.5}
+          expected: 0.6
+      integration_points:
+        - "route_optimization"
+        - "performance_analysis"
+        - "strategy_adjustment"
+
+    sharpe_proxy:
+      function_name: "sharpe_proxy"
+      module: "core.profit_routing_engine"
+      mathematical_formula: "Sharpe = mean(excess_return) / std(excess_return)"
+      purpose: "Risk-adjusted return approximation ignoring covariance"
+      parameters:
+        - name: "returns"
+          type: "List[float]"
+          description: "List of returns"
+      return_type: "float"
+      test_cases:
+        - input: {"returns": [0.1, 0.2, 0.15, 0.05]}
+          expected_range: [0.0, 10.0]
+      integration_points:
+        - "risk_analysis"
+        - "performance_evaluation"
+        - "strategy_ranking"
+
+  # Temporal Execution Correction Layer Functions
+  temporal_execution_correction_layer:
+    correct_execution_tick:
+      function_name: "correct_execution_tick"
+      module: "core.temporal_execution_correction_layer"
+      mathematical_formula: "correction = actual - expected if actual > expected else 0"
+      purpose: "Measures execution delay"
+      parameters:
+        - name: "actual_tick"
+          type: "int"
+          description: "Actual execution tick"
+        - name: "expected_tick"
+          type: "int"
+          description: "Expected execution tick"
+      return_type: "int"
+      test_cases:
+        - input: {"actual_tick": 105, "expected_tick": 100}
+          expected: 5
+        - input: {"actual_tick": 95, "expected_tick": 100}
+          expected: 0
+      integration_points:
+        - "execution_timing"
+        - "latency_analysis"
+        - "performance_optimization"
+
+    delay_adjustment_vector:
+      function_name: "delay_adjustment_vector"
+      module: "core.temporal_execution_correction_layer"
+      mathematical_formula: "mean_diff = mean(tick[i+1] - tick[i])"
+      purpose: "Averages tick latency differentials"
+      parameters:
+        - name: "tick_sequence"
+          type: "List[int]"
+          description: "Sequence of tick times"
+      return_type: "float"
+      test_cases:
+        - input: {"tick_sequence": [100, 105, 110, 115]}
+          expected: 5.0
+      integration_points:
+        - "latency_analysis"
+        - "timing_optimization"
+        - "execution_correction"
+
+  # Basket Awareness and Phase Integration Functions
+  basket_awareness_phase_integration:
+    phase_weight_matrix:
+      function_name: "phase_weight_matrix"
+      module: "core.basket_awareness_phase_integration"
+      mathematical_formula: "score = (sum(bits) * entropy) / (len(bits) + ε)"
+      purpose: "Weights basket relevance by entropy vector and bit score"
+      parameters:
+        - name: "bits"
+          type: "List[int]"
+          description: "Bit sequence"
+        - name: "entropy"
+          type: "float"
+          description: "Entropy value"
+      return_type: "float"
+      test_cases:
+        - input: {"bits": [1, 0, 1, 1], "entropy": 2.0}
+          expected_range: [0.0, 10.0]
+      integration_points:
+        - "basket_scoring"
+        - "phase_analysis"
+        - "weight_calculation"
+
+  # Tensor Scoring & Phase Matching Functions
+  tensor_scoring_phase_matching:
+    tensor_score:
+      function_name: "tensor_score"
+      module: "core.tensor_scoring_phase_matching"
+      mathematical_formula: "score = ((current - entry) / entry) * (phase + 1)"
+      purpose: "Maps profit shift to tensor phase resolution"
+      parameters:
+        - name: "entry_price"
+          type: "float"
+          description: "Entry price"
+        - name: "current_price"
+          type: "float"
+          description: "Current price"
+        - name: "phase"
+          type: "int"
+          description: "Phase value"
+      return_type: "float"
+      test_cases:
+        - input: {"entry_price": 100.0, "current_price": 110.0, "phase": 8}
+          expected: 0.88
+      integration_points:
+        - "profit_analysis"
+        - "phase_matching"
+        - "tensor_calculations"
+
+  # Bit Resolution Engine Functions
+  bit_resolution_engine:
+    resolve_bit_phase:
+      function_name: "resolve_bit_phase"
+      module: "core.bit_resolution_engine"
+      mathematical_formula: "bit_val = int(hash[n:m], 16) % 2^k"
+      purpose: "Derives phase resolution tier from hash input"
+      parameters:
+        - name: "hash_input"
+          type: "str"
+          description: "Hash input string"
+        - name: "bit_depth"
+          type: "int"
+          description: "Bit depth for resolution"
+      return_type: "int"
+      test_cases:
+        - input: {"hash_input": "a1b2c3d4", "bit_depth": 8}
+          expected_range: [0, 255]
+      integration_points:
+        - "hash_processing"
+        - "phase_resolution"
+        - "bit_analysis"
+
+  # Profit Cycle Allocator Functions
+  profit_cycle_allocator_legacy:
+    rebalance:
+      function_name: "rebalance"
+      module: "core.profit_cycle_allocator"
+      mathematical_formula: "alloc = f(profit, volatility)"
+      purpose: "Routes profit to asset buckets based on thresholds"
+      parameters:
+        - name: "profit"
+          type: "float"
+          description: "Profit amount"
+        - name: "volatility"
+          type: "float"
+          description: "Market volatility"
+      return_type: "Dict[str, float]"
+      test_cases:
+        - input: {"profit": 1000.0, "volatility": 0.1}
+          expected_type: "Dict[str, float]"
+      integration_points:
+        - "profit_distribution"
+        - "volatility_analysis"
+        - "asset_allocation"
+
+  # Basket Mapping Functions
+  basket_mapping:
+    basket_id_from_hash:
+      function_name: "basket_id_from_hash"
+      module: "core.basket_mapping"
+      mathematical_formula: "basket_id = int(hash[4:8], 16) % 1024"
+      purpose: "Maps hash to deterministic basket ID"
+      parameters:
+        - name: "hash_value"
+          type: "str"
+          description: "Hash value"
+      return_type: "int"
+      test_cases:
+        - input: {"hash_value": "a1b2c3d4e5f6"}
+          expected_range: [0, 1023]
+      integration_points:
+        - "hash_processing"
+        - "basket_creation"
+        - "id_mapping"
+
+# Integration Test Configuration
+integration_tests:
+  test_environments:
+    - name: "unit_tests"
+      description: "Individual function unit tests"
+      framework: "pytest"
+      coverage_threshold: 0.95
+      
+    - name: "integration_tests"
+      description: "Cross-module integration tests"
+      framework: "pytest"
+      coverage_threshold: 0.90
+      
+    - name: "mathematical_validation"
+      description: "Mathematical formula validation"
+      framework: "custom"
+      coverage_threshold: 1.0
+      
+    - name: "performance_tests"
+      description: "Performance and stress tests"
+      framework: "pytest"
+      coverage_threshold: 0.85
+
+  demo_configuration:
+    demo_mode: true
+    live_data_simulation: true
+    ccxt_integration: false
+    trading_enabled: false
+    profit_tracking: true
+    performance_metrics: true
+    
+  live_configuration:
+    demo_mode: false
+    live_data_simulation: false
+    ccxt_integration: true
+    trading_enabled: true
+    profit_tracking: true
+    performance_metrics: true
+    risk_management: true
+    
+  test_configuration:
+    demo_mode: false
+    live_data_simulation: false
+    ccxt_integration: false
+    trading_enabled: false
+    profit_tracking: false
+    performance_metrics: true
+    mathematical_validation: true
+
+# Mathematical Pipeline Configuration
+mathematical_pipeline:
+  validation_rules:
+    - rule: "tensor_score_normalization"
+      description: "Tensor scores must be normalized to [-1, 1] range"
+      validation_function: "validate_tensor_score_range"
+      
+    - rule: "bit_phase_consistency"
+      description: "Bit phases must be consistent across modules"
+      validation_function: "validate_bit_phase_consistency"
+      
+    - rule: "hash_integrity"
+      description: "Hash values must maintain integrity across operations"
+      validation_function: "validate_hash_integrity"
+      
+    - rule: "profit_allocation_sum"
+      description: "Profit allocations must sum to total profit"
+      validation_function: "validate_profit_allocation_sum"
+      
+    - rule: "entropy_bounds"
+      description: "Entropy values must be within valid bounds"
+      validation_function: "validate_entropy_bounds"
+
+  performance_metrics:
+    - metric: "tensor_score_accuracy"
+      description: "Accuracy of tensor score calculations"
+      target: 0.95
+      
+    - metric: "bit_phase_resolution_speed"
+      description: "Speed of bit phase resolution"
+      target: "< 1ms"
+      
+    - metric: "hash_matching_accuracy"
+      description: "Accuracy of hash-basket matching"
+      target: 0.90
+      
+    - metric: "profit_allocation_efficiency"
+      description: "Efficiency of profit allocation"
+      target: 0.85
+      
+    - metric: "waveform_processing_speed"
+      description: "Speed of waveform processing"
+      target: "< 10ms"
+
+# Export Configuration
+export_configuration:
+  formats:
+    - yaml
+    - json
+    - csv
+    
+  destinations:
+    - local_filesystem
+    - database
+    - api_endpoints
+    
+  scheduling:
+    frequency: "daily"
+    time: "00:00 UTC"
+    
+  validation:
+    schema_validation: true
+    mathematical_validation: true
+    integration_validation: true 

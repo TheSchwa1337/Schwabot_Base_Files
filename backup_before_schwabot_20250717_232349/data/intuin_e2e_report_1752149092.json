@@ -1,0 +1,276 @@
+{
+  "intuin_test_suite": {
+    "version": "1.0.0",
+    "timestamp": "2025-07-10T08:03:23.802392",
+    "platform": "Windows",
+    "platform_version": "10",
+    "python_version": "3.12.10",
+    "total_duration_seconds": 88.82661533355713,
+    "production_ready": false
+  },
+  "test_summary": {
+    "total_tests": 16,
+    "passed_tests": 8,
+    "failed_tests": 7,
+    "skipped_tests": 1,
+    "error_tests": 0,
+    "success_rate": 0.5
+  },
+  "detailed_results": [
+    {
+      "name": "System Environment",
+      "status": "PASS",
+      "duration": 1.5575611591339111,
+      "details": {
+        "platform": "Windows",
+        "platform_version": "10",
+        "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+        "architecture": "AMD64",
+        "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+        "working_directory": "C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot",
+        "numpy_available": true,
+        "pandas_available": true,
+        "requests_available": true,
+        "yaml_available": true,
+        "gpu_available": false,
+        "core_exists": true,
+        "config_exists": true,
+        "test_exists": true,
+        "utils_exists": true,
+        "docs_exists": true
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Configuration System",
+      "status": "PASS",
+      "duration": 0.03612995147705078,
+      "details": {
+        "config/schwabot_config.yaml_exists": true,
+        "config/schwabot_config.yaml_valid": true,
+        "config/mathematical_framework_config.py_exists": true,
+        "config/mathematical_framework_config.py_valid": true,
+        "config/config_loader.py_exists": true,
+        "config/config_loader.py_valid": true,
+        "config/integrations.yaml_exists": true,
+        "config/integrations.yaml_valid": true,
+        "config/api_keys.json_exists": true,
+        "config/api_keys.json_valid": true
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Core Module Imports",
+      "status": "PASS",
+      "duration": 12.673159122467041,
+      "details": {
+        "core.matrix_mapper_import": true,
+        "core.zpe_core_import": true,
+        "core.zbe_core_import": true,
+        "core.visual_decision_engine_import": true,
+        "core.unified_market_data_pipeline_import": true,
+        "core.trading_strategy_executor_import": true,
+        "core.strategy_router_import": true,
+        "core.ghost_core_import": true,
+        "core.fractal_core_import": true,
+        "core.phantom_detector_import": true,
+        "core.orbital_xi_ring_system_import": true,
+        "core.entropy.galileo_tensor_field_import": true,
+        "core.math.tensor_algebra.unified_tensor_algebra_import": true,
+        "core.strategy.volume_weighted_hash_oscillator_import": true,
+        "core.strategy.zygot_zalgo_entropy_dual_key_gate_import": true,
+        "utils.gpu_fallback_manager_import": true,
+        "utils.cuda_helper_import": true,
+        "utils.cpu_fallback_import": true
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "GPU Fallback System",
+      "status": "PASS",
+      "duration": 0.0069963932037353516,
+      "details": {
+        "gpu_manager_initialized": true,
+        "cpu_manager_initialized": true,
+        "gpu_available": false,
+        "cuda_available": false,
+        "safe_operation_test": "True"
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Mathematical Modules",
+      "status": "PASS",
+      "duration": 0.014992475509643555,
+      "details": {
+        "galileo_tensor_field": true,
+        "tensor_drift_calculation": true,
+        "entropy_field_calculation": true
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Visualizer System",
+      "status": "PASS",
+      "duration": 0.021288156509399414,
+      "details": {
+        "core.visual_decision_engine_import": true,
+        "core.orbital_xi_ring_system_import": true,
+        "core.orbital_shell_brain_system_import": true,
+        "tkinter_available": true,
+        "flask_components": true
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Platform Compatibility",
+      "status": "PASS",
+      "duration": 0.0,
+      "details": {
+        "platform": "Windows",
+        "platform_version": "10",
+        "architecture": "AMD64",
+        "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+        "windows_api": true,
+        "config/schwabot_config.yaml_accessible": true,
+        "core/matrix_mapper.py_accessible": true,
+        "test/integrated_trading_test_suite.py_accessible": true
+      },
+      "error_message": null,
+      "platform_specific": true
+    },
+    {
+      "name": "GUI Launch Test",
+      "status": "SKIP",
+      "duration": 0.0,
+      "details": {
+        "reason": "GUI testing disabled"
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Core Integration",
+      "status": "PASS",
+      "duration": 25.301424980163574,
+      "details": {
+        "return_code": 0,
+        "stdout_lines": 18,
+        "stderr_lines": 118,
+        "execution_time": 25.301424980163574
+      },
+      "error_message": null,
+      "platform_specific": false
+    },
+    {
+      "name": "Recursive Ecosystem",
+      "status": "FAIL",
+      "duration": 0.204848051071167,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 3,
+        "execution_time": 0.204848051071167
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Entropy Integration",
+      "status": "FAIL",
+      "duration": 0.2886803150177002,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 15,
+        "execution_time": 0.2886803150177002
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Missing Modules",
+      "status": "FAIL",
+      "duration": 0.29303860664367676,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 16,
+        "execution_time": 0.29303860664367676
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Visualization",
+      "status": "FAIL",
+      "duration": 16.357360124588013,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 8,
+        "execution_time": 16.357360124588013
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Adaptive Config",
+      "status": "FAIL",
+      "duration": 0.5235629081726074,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 5,
+        "execution_time": 0.5235629081726074
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Simple Trading",
+      "status": "FAIL",
+      "duration": 15.281955242156982,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 8,
+        "execution_time": 15.281955242156982
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    },
+    {
+      "name": "Demo Pipeline",
+      "status": "FAIL",
+      "duration": 16.196940898895264,
+      "details": {
+        "return_code": 1,
+        "stdout_lines": 1,
+        "stderr_lines": 8,
+        "execution_time": 16.196940898895264
+      },
+      "error_message": "Script failed with return code 1",
+      "platform_specific": false
+    }
+  ],
+  "issues": {
+    "critical_issues": [
+      "Recursive Ecosystem: Script failed with return code 1",
+      "Entropy Integration: Script failed with return code 1",
+      "Missing Modules: Script failed with return code 1",
+      "Visualization: Script failed with return code 1",
+      "Adaptive Config: Script failed with return code 1",
+      "Simple Trading: Script failed with return code 1",
+      "Demo Pipeline: Script failed with return code 1",
+      "Success rate too low: 50.0%"
+    ],
+    "warnings": []
+  }
+}

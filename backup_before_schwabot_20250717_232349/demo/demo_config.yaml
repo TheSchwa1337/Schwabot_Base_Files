@@ -1,0 +1,328 @@
+# Demo Configuration for Schwabot Trading System
+# =============================================
+# Configuration for all demo components and logic flow integration
+
+# Demo System Overview
+demo_system:
+  name: "Schwabot Demo System"
+  version: "1.0.0"
+  description: "Comprehensive demo system for Schwabot trading platform"
+  enabled: true
+
+# Demo Logic Flow Configuration
+demo_logic_flow:
+  enabled: true
+  flow_mode: "sequential"  # sequential, parallel, adaptive
+  max_iterations: 1000
+  timeout_seconds: 300
+  
+  # Flow Components
+  components:
+    - "demo_backtest_runner"
+    - "demo_entry_simulator"
+    - "demo_integration_system"
+    - "demo_launcher"
+  
+  # Flow Sequence
+  flow_sequence:
+    1: "initialize_system"
+    2: "load_configurations"
+    3: "setup_demo_environment"
+    4: "run_backtest_matrix"
+    5: "execute_trade_sequence"
+    6: "validate_results"
+    7: "generate_reports"
+    8: "cleanup_resources"
+
+# Demo Backtest Configuration
+demo_backtest:
+  enabled: true
+  backtest_mode: "comprehensive"
+  
+  # Backtest Parameters
+  parameters:
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    initial_balance: 10000.0
+    commission_rate: 0.001
+    slippage_tolerance: 0.0005
+  
+  # Backtest Matrix Configuration
+  matrix_config:
+    file_path: "demo/demo_backtest_matrix.yaml"
+    matrix_size: [10, 10]
+    parameter_ranges:
+      volatility_threshold: [0.01, 0.05, 0.1]
+      profit_target: [0.02, 0.05, 0.1]
+      stop_loss: [0.01, 0.02, 0.05]
+      position_size: [0.01, 0.05, 0.1]
+  
+  # Performance Metrics
+  performance_metrics:
+    - "total_return"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "win_rate"
+    - "profit_factor"
+    - "calmar_ratio"
+
+# Demo Entry Simulator Configuration
+demo_entry_simulator:
+  enabled: true
+  simulation_mode: "realistic"
+  
+  # Entry Simulation Parameters
+  parameters:
+    market_data_source: "synthetic"
+    price_volatility: 0.02
+    volume_volatility: 0.1
+    tick_interval: 1.0  # seconds
+    
+  # Entry Strategies
+  entry_strategies:
+    - "momentum_breakout"
+    - "mean_reversion"
+    - "volatility_expansion"
+    - "volume_spike"
+    - "pattern_recognition"
+  
+  # Entry Conditions
+  entry_conditions:
+    min_confidence: 0.7
+    min_volume: 1000.0
+    max_spread: 0.001
+    min_volatility: 0.005
+
+# Demo Integration System Configuration
+demo_integration_system:
+  enabled: true
+  integration_mode: "full"
+  
+  # Integration Components
+  components:
+    core_integration:
+      - "fault_bus"
+      - "dlt_waveform_engine"
+      - "multi_bit_btc_processor"
+      - "ghost_strategy_handler"
+      - "profit_routing_engine"
+    
+    demo_integration:
+      - "demo_logic_flow"
+      - "demo_backtest_runner"
+      - "demo_entry_simulator"
+      - "demo_launcher"
+    
+    mathematical_integration:
+      - "unified_mathematics_framework"
+      - "advanced_mathematical_core"
+      - "btc_vector_aggregator"
+      - "quantum_btc_intelligence"
+  
+  # Integration Validation
+  validation:
+    validate_connections: true
+    validate_data_flow: true
+    validate_math_consistency: true
+    validate_performance: true
+
+# Demo Launcher Configuration
+demo_launcher:
+  enabled: true
+  launch_mode: "interactive"
+  
+  # Launch Options
+  options:
+    auto_start: false
+    show_progress: true
+    save_logs: true
+    generate_reports: true
+    cleanup_after: true
+  
+  # Launch Sequence
+  sequence:
+    1: "validate_environment"
+    2: "load_configurations"
+    3: "initialize_components"
+    4: "run_demo_logic_flow"
+    5: "collect_results"
+    6: "generate_summary"
+
+# Demo Trade Sequence Configuration
+demo_trade_sequence:
+  enabled: true
+  sequence_mode: "automated"
+  
+  # Trade Sequence Parameters
+  parameters:
+    max_trades: 100
+    min_trade_interval: 5.0  # seconds
+    max_trade_interval: 300.0  # seconds
+    trade_timeout: 60.0  # seconds
+  
+  # Trade Types
+  trade_types:
+    - "long_entry"
+    - "short_entry"
+    - "long_exit"
+    - "short_exit"
+    - "stop_loss"
+    - "take_profit"
+  
+  # Trade Validation
+  validation:
+    validate_entry_signals: true
+    validate_exit_signals: true
+    validate_position_sizing: true
+    validate_risk_management: true
+
+# Demo Data Configuration
+demo_data:
+  enabled: true
+  data_source: "synthetic"
+  
+  # Synthetic Data Generation
+  synthetic_data:
+    price_model: "geometric_brownian_motion"
+    volume_model: "log_normal"
+    volatility_model: "garch"
+    
+    # Model Parameters
+    parameters:
+      initial_price: 50000.0
+      drift: 0.0001
+      volatility: 0.02
+      volume_mean: 1000.0
+      volume_std: 500.0
+  
+  # Historical Data (if available)
+  historical_data:
+    source: "yahoo_finance"
+    symbol: "BTC-USD"
+    timeframe: "1m"
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+
+# Demo Reporting Configuration
+demo_reporting:
+  enabled: true
+  report_format: "comprehensive"
+  
+  # Report Types
+  report_types:
+    - "performance_summary"
+    - "trade_analysis"
+    - "risk_metrics"
+    - "system_health"
+    - "integration_status"
+  
+  # Report Output
+  output:
+    save_to_file: true
+    output_directory: "demo/reports"
+    file_format: "json"  # json, csv, yaml
+    include_charts: true
+    include_logs: true
+
+# Demo Validation Configuration
+demo_validation:
+  enabled: true
+  validation_mode: "comprehensive"
+  
+  # Validation Checks
+  checks:
+    - "configuration_validity"
+    - "component_connectivity"
+    - "data_integrity"
+    - "math_consistency"
+    - "performance_benchmarks"
+    - "error_handling"
+  
+  # Validation Thresholds
+  thresholds:
+    min_performance_score: 0.7
+    max_error_rate: 0.05
+    min_connectivity_score: 0.9
+    max_response_time: 5.0  # seconds
+
+# Demo Error Handling Configuration
+demo_error_handling:
+  enabled: true
+  error_mode: "graceful"
+  
+  # Error Recovery
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 1.0  # seconds
+    fallback_mode: "safe"
+  
+  # Error Logging
+  logging:
+    log_errors: true
+    log_warnings: true
+    log_debug: true
+    error_file: "demo/error_log.txt"
+
+# Demo Performance Configuration
+demo_performance:
+  enabled: true
+  performance_mode: "optimized"
+  
+  # Performance Targets
+  targets:
+    max_execution_time: 300.0  # seconds
+    max_memory_usage: 1024  # MB
+    max_cpu_usage: 0.8
+    min_throughput: 100  # operations/second
+  
+  # Performance Monitoring
+  monitoring:
+    monitor_cpu: true
+    monitor_memory: true
+    monitor_disk: true
+    monitor_network: true
+    alert_threshold: 0.8
+
+# Demo Security Configuration
+demo_security:
+  enabled: true
+  security_mode: "standard"
+  
+  # Security Measures
+  measures:
+    - "input_validation"
+    - "output_sanitization"
+    - "access_control"
+    - "data_encryption"
+    - "audit_logging"
+  
+  # Security Validation
+  validation:
+    validate_inputs: true
+    validate_outputs: true
+    check_permissions: true
+    audit_operations: true
+
+# Integration with Unified Settings
+unified_integration:
+  enabled: true
+  settings_file: "config/unified_settings.yaml"
+  
+  # Integration Points
+  integration_points:
+    - "core_system"
+    - "demo_system"
+    - "matrix_fault_resolver"
+    - "fractal_core_engine"
+    - "dlt_waveform_engine"
+    - "multi_bit_btc_processor"
+    - "ghost_strategy_handler"
+    - "profit_routing_engine"
+    - "fault_bus"
+    - "temporal_execution_correction_layer"
+
+# Last updated timestamp
+last_updated: "2024-01-01T00:00:00Z"
+version: "1.0.0"
+description: "Demo configuration for Schwabot trading system" 

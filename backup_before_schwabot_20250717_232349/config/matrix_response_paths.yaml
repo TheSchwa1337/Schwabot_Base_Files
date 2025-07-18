@@ -1,0 +1,209 @@
+# Matrix Response Paths Configuration
+# =================================
+
+# ZPE Risk Response
+zpe_risk:
+  fallback_strategy: cooldown_abort
+  max_retries: 2
+  cooldown_period: 0.5  # seconds
+  severity_threshold: 0.9
+  actions:
+    - type: block_flash
+      duration: 1.0
+    - type: clear_memory
+      scope: all
+    - type: reset_matrix
+      target: matrix_safe
+
+# Drift Loop Response
+drift_loop:
+  fallback_strategy: entropy_realign
+  max_retries: 3
+  severity_threshold: 0.6
+  actions:
+    - type: phase_correction
+      target_angle: 3.14159  # π
+    - type: memory_rebalance
+      scope: recent
+    - type: update_matrix
+      target: entropy_realign
+
+# Phase Correction Response
+phase_correction:
+  fallback_strategy: matrix_safe
+  max_retries: 1
+  actions:
+    - type: adjust_phase
+      tolerance: 0.1
+    - type: verify_stability
+      threshold: 0.8
+
+# Matrix States
+matrix_states:
+  matrix_safe:
+    description: "Normal operation state"
+    allowed_actions:
+      - flash
+      - memory_access
+      - phase_adjustment
+    stability_threshold: 0.7
+
+  cooldown_abort:
+    description: "Emergency cooldown state"
+    allowed_actions:
+      - memory_clear
+      - phase_reset
+    stability_threshold: 0.9
+
+  entropy_realign:
+    description: "Entropy correction state"
+    allowed_actions:
+      - phase_correction
+      - memory_rebalance
+    stability_threshold: 0.8
+
+# Stability Thresholds
+stability_thresholds:
+  binding_energy:
+    critical: 5.0
+    warning: 6.0
+    safe: 7.0
+
+  phase_drift:
+    critical: 0.3
+    warning: 0.2
+    safe: 0.1
+
+  entropy_zscore:
+    critical: 2.5
+    warning: 1.5
+    safe: 1.0
+
+# Memory Management
+memory_management:
+  decay_rate: 0.015
+  base_value: 100.0
+  refresh_threshold: 0.5
+  max_history_size: 1000
+
+# Phase Shell Configuration
+phase_shells:
+  symmetry:
+    angle_range: [3.04159, 3.24159]  # π ± 0.1
+    stability_factor: 0.5
+
+  drift_positive:
+    angle_range: [3.24159, 6.28319]  # π + 0.1 to 2π
+    stability_factor: 0.8
+
+  drift_negative:
+    angle_range: [0.0, 3.04159]  # 0 to π - 0.1
+    stability_factor: 0.8
+
+# GAN Configuration
+gan_config:
+  threshold: 0.85
+  window_size: 50
+  min_confidence: 0.7
+  anomaly_weight: 0.3
+  reconstruction_weight: 0.4
+  latent_weight: 0.3
+  training:
+    batch_size: 32
+    epochs: 100
+    learning_rate: 0.001
+    early_stopping_patience: 10
+
+# Matrix Overlay Configuration
+matrix_overlay:
+  min_pattern_length: 10
+  max_pattern_length: 100
+  confidence_threshold: 0.7
+  fft_window: 50
+  freq_threshold: 0.1
+  pattern_types:
+    long_term:
+      freq_range: [0.0, 0.1]
+      min_amplitude: 0.3
+    medium_term:
+      freq_range: [0.1, 0.3]
+      min_amplitude: 0.2
+    short_term:
+      freq_range: [0.3, 0.5]
+      min_amplitude: 0.1
+  export:
+    max_history: 1000
+    format: "json"
+    compression: true
+
+# Symbolic Anchor Configuration
+symbolic_anchor:
+  sync_interval: 100
+  max_history: 1000
+  hash_algorithm: "sha256"
+  compression: true
+  validation:
+    min_confidence: 0.8
+    max_age: 3600  # seconds
+  storage:
+    type: "coldbase"
+    path: "data/symbolic_anchors"
+    backup: true
+
+GAN Configuration:
+  enabled: true
+  model_path: "models/gan_filter"
+  online_training: true
+  save_interval: 1000
+  config:
+    latent_dim: 32
+    hidden_dim: 64
+    num_layers: 3
+    learning_rate: 0.001
+    batch_size: 32
+    num_epochs: 100
+    entropy_weight: 0.1
+    gradient_weight: 0.1
+    anomaly_threshold: 0.85
+    use_gpu: true
+
+default_paths:
+  hold: "/data/matrix/hold"
+  active: "/data/matrix/active"
+  data_directory: "data"
+  log_directory: "logs"
+
+render_settings:
+  resolution: "1080p"
+  background_color: "#121212"
+  line_thickness: 2
+
+matrix_response_paths:
+  data_directory: "data/matrix"
+  log_directory: "logs/matrix"
+  backup_directory: "backups/matrix"
+  temp_directory: "temp/matrix"
+
+# Matrix overlay settings
+overlay_settings:
+  fft_window: 50
+  freq_threshold: 0.1
+  confidence_threshold: 0.7
+  min_pattern_length: 10
+  max_pattern_length: 100
+
+# Fault resolution settings
+fault_resolution:
+  retry_attempts: 3
+  retry_delay_seconds: 5
+  fallback_enabled: true
+  error_logging: true
+
+# Performance monitoring
+monitoring:
+  enable_metrics: true
+  metrics_interval: 300
+  log_performance: true
+  alert_thresholds:
+    response_time_ms: 1000
+    error_rate_percent: 5 

@@ -1,0 +1,230 @@
+{
+  "timestamp": "2025-07-01T11:48:02.934499",
+  "platform": "win32",
+  "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "tests": {
+    "mathematical_framework": {
+      "status": "passed",
+      "details": {
+        "unified_math": {
+          "abs_test": 42.0,
+          "sin_test": -0.9165215479156338,
+          "cos_test": -0.39998531498835127,
+          "operational": true
+        },
+        "entropy_calculation": 36.59375990701893,
+        "drift_calculation": {
+          "price_series": [
+            50000.0,
+            50100.0,
+            49950.0,
+            50075.0,
+            50025.0
+          ],
+          "drift_values": [
+            100.0,
+            -150.0,
+            125.0,
+            -50.0
+          ],
+          "drift_magnitude": 112.32625472257143
+        }
+      },
+      "errors": []
+    },
+    "entry_exit_logic": {
+      "status": "passed",
+      "details": {
+        "signals_generated": 1,
+        "signal_types": [
+          "sell"
+        ],
+        "harmonic_matrix": {
+          "buy_wall_total": 7031.978743089156,
+          "sell_wall_total": 6707.115197290494,
+          "harmonic_ratio": 1.0484356591832356,
+          "harmonic_balance": 0.9538019727209884
+        }
+      },
+      "errors": []
+    },
+    "profit_formalization": {
+      "status": "passed",
+      "details": {
+        "portfolio_summary": {
+          "cash": 97512.5,
+          "total_assets_value": 2550.0,
+          "total_value": 100062.5,
+          "realized_pnl": 50.0,
+          "unrealized_pnl": 50.0,
+          "total_pnl": 100.0,
+          "positions": {
+            "BTC/USD": {
+              "quantity": 0.05,
+              "avg_price": 50000.0,
+              "current_price": 51000.0,
+              "value": 2550.0,
+              "unrealized_pnl": 50.0
+            }
+          },
+          "last_update_time": 1751384883.5341458
+        },
+        "tensor_calculations": {
+          "price_tensor_shape": [
+            2,
+            2
+          ],
+          "volume_tensor_shape": [
+            2,
+            2
+          ],
+          "tensor_profit_score": 4218.75
+        }
+      },
+      "errors": []
+    },
+    "tick_mapping": {
+      "status": "passed",
+      "details": {
+        "tick_automation": {
+          "total_ticks": 16,
+          "price_volatility": 9.383937007527036,
+          "trend_direction": 1,
+          "triggers_generated": 10,
+          "final_price": 50006.049433489585
+        }
+      },
+      "errors": []
+    },
+    "api_integration": {
+      "status": "passed",
+      "details": {
+        "api_integration": {
+          "triggers_generated": 5,
+          "backtrace_entries": 5,
+          "high_confidence_triggers": 2
+        }
+      },
+      "errors": []
+    },
+    "drift_detection": {
+      "status": "passed",
+      "details": {
+        "drift_analysis": {
+          "total_price_points": 101,
+          "drift_magnitude": 12.393464476106196,
+          "drift_trend": -0.0026296724837249486,
+          "phantom_detections": 5,
+          "sequence_patterns": 10,
+          "final_price": 49974.42828691014
+        }
+      },
+      "errors": []
+    },
+    "portfolio_rebalancing": {
+      "status": "passed",
+      "details": {
+        "rebalancing": {
+          "risk_metrics": {
+            "drawdown": 0.09601486409526128,
+            "exposure_btc": 0.3,
+            "volatility": 0.0456360880051692
+          },
+          "current_allocation": {
+            "BTC": 0.3,
+            "ETH": 0.2,
+            "USDC": 0.5
+          },
+          "target_allocation": {
+            "BTC": 0.4,
+            "ETH": 0.3,
+            "USDC": 0.3
+          },
+          "rebalance_actions": {
+            "BTC": {
+              "action": "buy",
+              "amount": 10000.000000000004
+            },
+            "ETH": {
+              "action": "buy",
+              "amount": 9999.999999999998
+            },
+            "USDC": {
+              "action": "sell",
+              "amount": 20000.0
+            }
+          },
+          "profit_navigation": {
+            "current_profit": 0.08,
+            "recommended_tier": "moderate",
+            "tier_details": {
+              "target": 0.15,
+              "risk": 0.2
+            }
+          }
+        }
+      },
+      "errors": []
+    },
+    "cross_platform": {
+      "status": "passed",
+      "details": {
+        "platform_compatibility": {
+          "platform_info": {
+            "platform": "win32",
+            "python_version": [
+              3,
+              12,
+              10,
+              "final",
+              0
+            ],
+            "executable": "C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "path": "C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA app\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\dotnet\\;c:\\Users\\maxde\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Python312;C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Python312\\Scripts;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA app\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\dotnet\\;c:\\Users\\maxde\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Launcher\\;C:\\Users\\maxde\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\maxde\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Users\\maxde\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\maxde\\AppData\\Local\\Programs\\Ollama;C:\\Users\\maxde\\AppData\\Roaming\\npm;c:\\Users\\maxde\\.cursor\\extensions\\ms-python.debugpy-2025.8.0-win32-x64\\bundled\\scripts\\noConfigScripts",
+            "pythonpath": ""
+          },
+          "available_modules": {
+            "argparse": true,
+            "subprocess": true,
+            "pathlib": true,
+            "json": true,
+            "yaml": true,
+            "csv": true
+          },
+          "file_system": {
+            "create_directory": true,
+            "write_file": true,
+            "read_file": true,
+            "cleanup": true
+          },
+          "cli_parsing": {
+            "mode": "demo",
+            "config": "config/default.yaml",
+            "verbose": true
+          }
+        }
+      },
+      "errors": []
+    },
+    "flake8_compliance": {
+      "status": "failed",
+      "details": {},
+      "errors": [
+        "Flake8 compliance test failed: unsupported operand type(s) for +: 'NoneType' and 'str'"
+      ]
+    }
+  },
+  "overall_status": "MOSTLY_OPERATIONAL",
+  "errors": [],
+  "warnings": [
+    "\u26a0\ufe0f  Error importing Lantern Core: name 'Tuple' is not defined"
+  ],
+  "summary": {
+    "total_tests": 9,
+    "passed_tests": 8,
+    "failed_tests": 1,
+    "success_rate": 88.88888888888889,
+    "total_errors": 0,
+    "total_warnings": 1
+  }
+}

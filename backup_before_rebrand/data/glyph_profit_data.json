@@ -1,0 +1,92 @@
+{
+  "glyph_registry": {
+    "💰": {
+      "state_bits": "00",
+      "entropy_vector": 0.765625,
+      "trust_score": 0.5,
+      "profit_bias": 0.78,
+      "tier_classification": "T4",
+      "sha_hash": "d50cec9dd11ce4a72a68a6ff8e0d2548ce72a212d2cb3365ff009eaacb8f9168",
+      "vault_key": "d50cec9dd11ce4a7"
+    },
+    "📈": {
+      "state_bits": "00",
+      "entropy_vector": 0.828125,
+      "trust_score": 0.5,
+      "profit_bias": 20.04,
+      "tier_classification": "T3",
+      "sha_hash": "b5ad1dfd999453bb2a807378b7f817c3a62f5305d24dccdfc991d6a052841c74",
+      "vault_key": "b5ad1dfd999453bb"
+    },
+    "⚠️": {
+      "state_bits": "00",
+      "entropy_vector": 0.734375,
+      "trust_score": 0.5,
+      "profit_bias": 4.83,
+      "tier_classification": "T1",
+      "sha_hash": "f07ac0638d44dcaa5d24d65ea8205bd487968cdb28c4b8f55a9f35abf86e9b8e",
+      "vault_key": "f07ac0638d44dcaa"
+    },
+    "🧠": {
+      "state_bits": "00",
+      "entropy_vector": 0.75,
+      "trust_score": 0.5,
+      "profit_bias": 6.000000000000001,
+      "tier_classification": "T4",
+      "sha_hash": "bf0e823c81b87c5de79676155debf20a29b52d6d7eb7e77deda73a56d0afbaaa",
+      "vault_key": "bf0e823c81b87c5d"
+    },
+    "🔥": {
+      "state_bits": "01",
+      "entropy_vector": 0.734375,
+      "trust_score": 0.5,
+      "profit_bias": 12.36,
+      "tier_classification": "T3",
+      "sha_hash": "ed8d830565bfcc5cb5b15e7deef7b6d07645d06597c8d17c7bdd49ad6f0e310a",
+      "vault_key": "ed8d830565bfcc5c"
+    },
+    "🔄": {
+      "state_bits": "00",
+      "entropy_vector": 0.75,
+      "trust_score": 0.5,
+      "profit_bias": 5.739999999999999,
+      "tier_classification": "T2",
+      "sha_hash": "284eda1f6155a859b02c86fd5ef5c9e5a575fa68cf6b24c1b79799d9da73f909",
+      "vault_key": "284eda1f6155a859"
+    }
+  },
+  "profit_vault": {
+    "d50cec9dd11ce4a7": {
+      "symbol": "💰",
+      "profit": 0.15,
+      "cycle_index": 1,
+      "trigger_map": "00",
+      "time_delta": 1750988041.6700313,
+      "volume_burst": 1000.0,
+      "execution_side": "buy"
+    },
+    "b5ad1dfd999453bb": {
+      "symbol": "📈",
+      "profit": 0.08,
+      "cycle_index": 2,
+      "trigger_map": "00",
+      "time_delta": 1750988041.6700313,
+      "volume_burst": 500.0,
+      "execution_side": "buy"
+    },
+    "bf0e823c81b87c5d": {
+      "symbol": "🧠",
+      "profit": 0.2,
+      "cycle_index": 3,
+      "trigger_map": "00",
+      "time_delta": 1750988041.6710305,
+      "volume_burst": 2000.0,
+      "execution_side": "buy"
+    }
+  },
+  "statistics": {
+    "total_glyphs": 6,
+    "total_profit_sequences": 3,
+    "cycle_index": 3
+  }
+}

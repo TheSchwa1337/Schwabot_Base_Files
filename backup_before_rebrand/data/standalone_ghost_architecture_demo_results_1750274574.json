@@ -1,0 +1,162 @@
+{
+  "demo_start_time": 1750274573.4791524,
+  "phases_completed": [
+    "initialization",
+    "foundation_integration",
+    "ghost_state_management",
+    "profit_handoff_strategies",
+    "spectral_analysis",
+    "phantom_profit_tracking",
+    "advanced_features",
+    "performance_analytics"
+  ],
+  "handoff_transactions": [
+    {
+      "transaction_id": "186df2cfeff2c3ad",
+      "strategy": "sequential_cascade",
+      "timing": "millisecond",
+      "amount": 1000.0,
+      "status": "completed",
+      "execution_time": 0.025834321975708008,
+      "timestamp": 1750274573.534354
+    },
+    {
+      "transaction_id": "91c332510f7705a6",
+      "strategy": "parallel_distribution",
+      "timing": "microsecond",
+      "amount": 2000.0,
+      "status": "completed",
+      "execution_time": 0.015174150466918945,
+      "timestamp": 1750274573.6561494
+    },
+    {
+      "transaction_id": "a82ef78df10dad13",
+      "strategy": "quantum_tunneling",
+      "timing": "nanosecond",
+      "amount": 1500.0,
+      "status": "completed",
+      "execution_time": 0.015850067138671875,
+      "timestamp": 1750274573.7809792
+    },
+    {
+      "transaction_id": "99b3b9bafa281739",
+      "strategy": "spectral_bridging",
+      "timing": "synchronized",
+      "amount": 2500.0,
+      "status": "completed",
+      "execution_time": 0.01401662826538086,
+      "timestamp": 1750274573.9034855
+    },
+    {
+      "transaction_id": "699e6701025ba271",
+      "strategy": "phantom_relay",
+      "timing": "quantum_entangled",
+      "amount": 3000.0,
+      "status": "failed",
+      "execution_time": 0.015295267105102539,
+      "timestamp": 1750274574.0275044
+    }
+  ],
+  "phantom_states_created": [
+    {
+      "ghost_id": "ghost_thermal_system_503029",
+      "profit_amount": 1500.0,
+      "final_state": "materialized",
+      "materialization_level": 0.95,
+      "source_system": "thermal"
+    },
+    {
+      "ghost_id": "ghost_multi_bit_system_503029",
+      "profit_amount": 2500.0,
+      "final_state": "materialized",
+      "materialization_level": 0.95,
+      "source_system": "multi"
+    },
+    {
+      "ghost_id": "ghost_hf_trading_system_504012",
+      "profit_amount": 3500.0,
+      "final_state": "materialized",
+      "materialization_level": 0.95,
+      "source_system": "hf"
+    }
+  ],
+  "spectral_analyses": [
+    {
+      "pattern_name": "Sinusoidal",
+      "frequency": 0.05,
+      "amplitude": 24768.041795903486,
+      "phase": -1.4137166941154078,
+      "spectral_power": 11237500000.000004,
+      "harmonic_count": 5,
+      "timestamp": 1750274574.1454163
+    },
+    {
+      "pattern_name": "Trending",
+      "frequency": 0.01,
+      "amplitude": 15947.92598394196,
+      "phase": 1.6022122533307945,
+      "spectral_power": 10733464786.630838,
+      "harmonic_count": 5,
+      "timestamp": 1750274574.147411
+    },
+    {
+      "pattern_name": "Volatile",
+      "frequency": 0.15,
+      "amplitude": 11155.26616174151,
+      "phase": -0.6974627569740541,
+      "spectral_power": 23616985859.019424,
+      "harmonic_count": 5,
+      "timestamp": 1750274574.1484113
+    }
+  ],
+  "performance_metrics": {
+    "initialization_time": 0.003009796142578125,
+    "handoff_success_rate": 80.0,
+    "phantom_tracking": {
+      "initial_phantoms": 5,
+      "final_active_phantoms": 8,
+      "materialization_events": 5,
+      "value_preservation_rate": 195.26072967814582
+    },
+    "advanced_features": {
+      "quantum_tunneling_tested": true,
+      "spectral_bridging_tested": true,
+      "phantom_relay_tested": true,
+      "cross_system_coordination": 0.6618728245290626
+    },
+    "demo_duration": 1.2236433029174805,
+    "phases_completion_rate": 87.5,
+    "final_phantom_count": 8,
+    "final_success_rate": 80.0,
+    "total_handoffs": 5,
+    "successful_handoffs": 4,
+    "total_profit_handled": 10000.0,
+    "ghost_state_transitions": 8,
+    "materialization_events": 5
+  },
+  "integration_validations": [
+    {
+      "system": "thermal",
+      "success": true,
+      "timestamp": 1750274573.4975328
+    },
+    {
+      "system": "multi_bit",
+      "success": true,
+      "timestamp": 1750274573.4990005
+    },
+    {
+      "system": "hf_trading",
+      "success": true,
+      "timestamp": 1750274573.499883
+    },
+    {
+      "system": "coordination",
+      "success": true,
+      "timestamp": 1750274573.5008788
+    }
+  ],
+  "errors": [],
+  "demo_end_time": 1750274574.7067933,
+  "total_duration": 1.2276408672332764
+}

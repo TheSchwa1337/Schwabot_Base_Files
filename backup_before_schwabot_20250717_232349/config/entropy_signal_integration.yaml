@@ -1,0 +1,244 @@
+# Entropy Signal Integration Configuration
+# This file defines how entropy signals from order book analysis flow through
+# the Schwabot trading pipeline and influence timing cycles and routing decisions
+
+entropy_signal_flow:
+  # Order Book Analysis Phase
+  order_book_analysis:
+    enabled: true
+    scan_interval_ms: 100  # How often to scan order book for entropy
+    entropy_calculation:
+      method: "spread_volatility"  # Options: spread_volatility, volume_imbalance, price_momentum
+      lookback_periods: 5  # Number of periods to analyze for entropy
+      threshold_high: 0.022  # High entropy threshold
+      threshold_medium: 0.015  # Medium entropy threshold
+      threshold_low: 0.008  # Low entropy threshold
+    
+    # Entropy signal buffering
+    buffer_settings:
+      max_buffer_size: 100  # Maximum number of entropy values to store
+      decay_factor: 0.8  # How quickly old entropy values decay
+      aggregation_method: "exponential_moving_average"  # How to aggregate entropy
+
+  # Dual State Router Integration
+  dual_state_router:
+    enabled: true
+    entropy_routing:
+      # Entropy-based routing decisions
+      aggressive_threshold: 0.018  # Entropy level that triggers aggressive mode
+      passive_threshold: 0.012  # Entropy level that triggers passive mode
+      buffer_size: 100  # Number of entropy values to consider for routing
+      decision_window: 3  # Number of recent entropy values to average
+      
+      # Routing state transitions
+      state_transitions:
+        NEUTRAL:
+          to_AGGRESSIVE: 0.018  # Entropy threshold to switch to aggressive
+          to_PASSIVE: 0.012  # Entropy threshold to switch to passive
+        AGGRESSIVE:
+          to_NEUTRAL: 0.015  # Entropy threshold to return to neutral
+          to_PASSIVE: 0.010  # Entropy threshold to switch to passive
+        PASSIVE:
+          to_NEUTRAL: 0.014  # Entropy threshold to return to neutral
+          to_AGGRESSIVE: 0.020  # Entropy threshold to switch to aggressive
+
+  # Neural Processing Engine Integration
+  neural_processing:
+    enabled: true
+    phase_entropy:
+      # Phase entropy accumulation
+      accumulation_rate: 0.2  # How much new entropy affects phase entropy
+      decay_rate: 0.8  # How much old phase entropy persists
+      activation_threshold: 0.019  # Threshold for quantum state activation
+      
+      # Quantum state triggers
+      quantum_states:
+        INERT: 0.0  # No quantum state
+        ENTROPIC_INVERSION_ACTIVATED: 0.019  # Quantum state activated
+        ENTROPIC_SURGE: 0.025  # High entropy surge
+        ENTROPIC_CALM: 0.010  # Low entropy calm period
+
+# Timing Cycle Integration
+timing_cycles:
+  # Tick Cycle Configuration
+  tick_cycle:
+    base_interval_ms: 50  # Base tick interval
+    entropy_adaptive: true  # Whether tick rate adapts to entropy
+    
+    # Entropy-based tick rate adjustment
+    tick_rate_adjustment:
+      high_entropy_multiplier: 0.5  # Faster ticks during high entropy (0.5 = 2x faster)
+      low_entropy_multiplier: 2.0  # Slower ticks during low entropy (2.0 = 2x slower)
+      max_tick_rate_ms: 10  # Minimum tick interval
+      min_tick_rate_ms: 200  # Maximum tick interval
+    
+    # Tick processing phases
+    processing_phases:
+      - name: "order_book_scan"
+        priority: 1
+        enabled: true
+        entropy_required: true  # This phase requires entropy analysis
+        
+      - name: "entropy_calculation"
+        priority: 2
+        enabled: true
+        entropy_required: true
+        
+      - name: "signal_routing"
+        priority: 3
+        enabled: true
+        entropy_required: true
+        
+      - name: "neural_processing"
+        priority: 4
+        enabled: true
+        entropy_required: true
+        
+      - name: "trade_execution"
+        priority: 5
+        enabled: true
+        entropy_required: false
+
+  # Routing Cycle Configuration
+  routing_cycle:
+    base_interval_ms: 500  # Base routing interval
+    entropy_adaptive: true  # Whether routing adapts to entropy
+    
+    # Entropy-based routing frequency
+    routing_frequency:
+      aggressive_mode_interval_ms: 200  # Faster routing in aggressive mode
+      passive_mode_interval_ms: 1000  # Slower routing in passive mode
+      neutral_mode_interval_ms: 500  # Normal routing in neutral mode
+    
+    # Routing decision matrix
+    routing_decisions:
+      AGGRESSIVE:
+        cpu_strategy_weight: 0.3  # Weight for CPU-based strategies
+        gpu_strategy_weight: 0.7  # Weight for GPU-based strategies
+        risk_tolerance: 0.8  # High risk tolerance
+        position_sizing: 1.2  # Larger position sizes
+        
+      NEUTRAL:
+        cpu_strategy_weight: 0.5  # Balanced CPU/GPU usage
+        gpu_strategy_weight: 0.5
+        risk_tolerance: 0.5  # Medium risk tolerance
+        position_sizing: 1.0  # Normal position sizes
+        
+      PASSIVE:
+        cpu_strategy_weight: 0.7  # Prefer CPU for stability
+        gpu_strategy_weight: 0.3
+        risk_tolerance: 0.2  # Low risk tolerance
+        position_sizing: 0.8  # Smaller position sizes
+
+# Signal Processing Pipeline
+signal_pipeline:
+  # Entropy signal processing stages
+  stages:
+    - name: "entropy_detection"
+      enabled: true
+      processor: "order_book_analyzer.scan_entropy"
+      output: "entropy_value"
+      
+    - name: "entropy_buffering"
+      enabled: true
+      processor: "dual_state_router.route_entropy"
+      input: "entropy_value"
+      output: "routing_state"
+      
+    - name: "phase_entropy_injection"
+      enabled: true
+      processor: "neural_processing_engine.inject_phase_entropy"
+      input: "entropy_value"
+      output: "quantum_state"
+      
+    - name: "signal_aggregation"
+      enabled: true
+      processor: "entropy_signal_aggregator"
+      inputs: ["entropy_value", "routing_state", "quantum_state"]
+      output: "aggregated_signal"
+
+# Performance Monitoring
+performance_monitoring:
+  # Entropy signal performance metrics
+  metrics:
+    - name: "entropy_detection_rate"
+      description: "Rate of successful entropy detections"
+      threshold: 0.95  # 95% detection rate required
+      
+    - name: "signal_latency_ms"
+      description: "Average latency of entropy signal processing"
+      threshold: 50  # Maximum 50ms latency
+      
+    - name: "routing_accuracy"
+      description: "Accuracy of entropy-based routing decisions"
+      threshold: 0.85  # 85% accuracy required
+      
+    - name: "quantum_state_activation_rate"
+      description: "Rate of quantum state activations"
+      threshold: 0.1  # Maximum 10% activation rate
+
+  # Alerting configuration
+  alerts:
+    - name: "high_entropy_alert"
+      condition: "entropy_value > 0.025"
+      action: "log_warning"
+      
+    - name: "low_signal_quality"
+      condition: "entropy_detection_rate < 0.9"
+      action: "log_error"
+      
+    - name: "routing_failure"
+      condition: "routing_accuracy < 0.8"
+      action: "fallback_to_cpu"
+
+# Integration Hooks
+integration_hooks:
+  # Hook points for entropy signal integration
+  hooks:
+    - name: "pre_tick_processing"
+      enabled: true
+      action: "scan_order_book_entropy"
+      
+    - name: "post_entropy_calculation"
+      enabled: true
+      action: "update_routing_state"
+      
+    - name: "pre_neural_processing"
+      enabled: true
+      action: "inject_phase_entropy"
+      
+    - name: "post_signal_aggregation"
+      enabled: true
+      action: "update_trading_decisions"
+
+# Fallback Configuration
+fallback_config:
+  # Fallback behavior when entropy signals fail
+  fallback_modes:
+    - name: "cpu_only_mode"
+      trigger: "gpu_unavailable"
+      action: "route_all_to_cpu"
+      
+    - name: "conservative_mode"
+      trigger: "entropy_signal_failure"
+      action: "use_conservative_trading_params"
+      
+    - name: "emergency_mode"
+      trigger: "system_overload"
+      action: "pause_trading_operations"
+
+# Logging Configuration
+logging:
+  entropy_signals:
+    level: "DEBUG"
+    format: "timestamp|entropy_value|routing_state|quantum_state"
+    output_file: "logs/entropy_signals.log"
+    max_file_size_mb: 100
+    backup_count: 5
+    
+  performance_metrics:
+    level: "INFO"
+    format: "timestamp|metric_name|value|threshold"
+    output_file: "logs/entropy_performance.log"
+    max_file_size_mb: 50
+    backup_count: 3 

@@ -1,0 +1,265 @@
+api_credentials:
+  alpha_vantage:
+    api_key: YOUR_ALPHA_VANTAGE_API_KEY_HERE
+    base_url: https://www.alphavantage.co/query
+    enabled: true
+    priority: 3
+    rate_limit: 5
+    timeout: 30
+  coingecko:
+    api_key: ''
+    base_url: https://api.coingecko.com/api/v3
+    enabled: true
+    priority: 2
+    rate_limit: 50
+    timeout: 30
+  coinmarketcap:
+    api_key: YOUR_COINMARKETCAP_API_KEY_HERE
+    base_url: https://pro-api.coinmarketcap.com/v1
+    enabled: true
+    priority: 1
+    rate_limit: 30
+    timeout: 30
+  fear_greed:
+    api_key: ''
+    base_url: https://api.alternative.me/fng/
+    enabled: true
+    priority: 5
+    rate_limit: 60
+    timeout: 30
+  glassnode:
+    api_key: YOUR_GLASSNODE_API_KEY_HERE
+    base_url: https://api.glassnode.com/v1/metrics
+    enabled: true
+    priority: 4
+    rate_limit: 10
+    timeout: 30
+backtesting:
+  default_period_days: 30
+  enable_forward_testing: true
+  enable_max_drawdown: true
+  enable_monte_carlo: true
+  enable_profit_factor: true
+  enable_sharpe_ratio: true
+  enable_stress_testing: true
+  enable_walk_forward_analysis: true
+  enable_win_rate: true
+  enabled: true
+  monte_carlo_iterations: 1000
+created_at: '2025-01-02'
+deployment:
+  backup:
+    backup_interval_hours: 24
+    backup_retention_days: 30
+    enable_automated_backup: true
+    enable_point_in_time_recovery: true
+  container:
+    container_name: schwabot-trading
+    enable_health_checks: true
+    image_name: schwabot-enhanced
+    restart_policy: unless-stopped
+  monitoring:
+    enable_grafana: true
+    enable_jaeger: true
+    enable_prometheus: true
+  scaling:
+    enable_auto_scaling: false
+    max_instances: 3
+    min_instances: 1
+    target_cpu_utilization: 70
+description: Enhanced trading configuration with real API integrations
+environment:
+  development:
+    debug_mode: true
+    enable_detailed_logging: true
+    enable_mock_data: false
+    enable_slow_execution: false
+  production:
+    debug_mode: false
+    enable_detailed_logging: false
+    enable_high_performance: true
+    enable_mock_data: false
+    enable_slow_execution: false
+  testing:
+    debug_mode: true
+    enable_detailed_logging: true
+    enable_high_performance: false
+    enable_mock_data: true
+    enable_slow_execution: true
+exchanges:
+  binance:
+    api_key: YOUR_BINANCE_API_KEY_HERE
+    enabled: true
+    rate_limit: 1200
+    sandbox: true
+    secret_key: YOUR_BINANCE_SECRET_KEY_HERE
+    testnet: true
+    timeout: 30000
+    trading_pairs:
+    - BTC/USDT
+    - ETH/USDT
+    - SOL/USDT
+    - ADA/USDT
+    websocket_enabled: true
+  coinbase_pro:
+    api_key: YOUR_COINBASE_API_KEY_HERE
+    enabled: true
+    passphrase: YOUR_COINBASE_PASSPHRASE_HERE
+    rate_limit: 100
+    sandbox: true
+    secret: YOUR_COINBASE_SECRET_KEY_HERE
+    timeout: 30000
+    trading_pairs:
+    - BTC/USDC
+    - ETH/USDC
+    - SOL/USDC
+    websocket_enabled: true
+  kraken:
+    api_key: YOUR_KRAKEN_API_KEY_HERE
+    enabled: true
+    rate_limit: 15
+    sandbox: true
+    secret: YOUR_KRAKEN_SECRET_KEY_HERE
+    timeout: 30000
+    trading_pairs:
+    - BTC/USD
+    - ETH/USD
+    - SOL/USD
+    websocket_enabled: true
+gpu_acceleration:
+  batch_size: 1024
+  compute_capability: '7.5'
+  device_id: 0
+  enable_async_operations: true
+  enable_gpu_backtesting: true
+  enable_gpu_indicators: true
+  enable_gpu_optimization: true
+  enable_memory_pool: true
+  enable_mixed_precision: true
+  enable_tensor_cores: true
+  enabled: true
+  max_concurrent_kernels: 4
+  memory_limit_gb: 4.0
+  memory_pool_size_gb: 2.0
+market_data:
+  cache_duration: 60
+  enable_cross_reference: true
+  enable_data_compression: true
+  enable_data_validation: true
+  enable_historical_data: true
+  enable_intelligent_caching: true
+  enable_real_time_processing: true
+  enable_websocket_feeds: true
+  fallback_sources:
+  - coingecko
+  - alpha_vantage
+  max_cache_size_mb: 256
+  max_history_days: 365
+  min_data_quality: good
+  primary_source: coinmarketcap
+  update_interval_ms: 100
+mathematical_framework:
+  cache_size_mb: 512
+  computation_precision: double
+  enable_entropy_analysis: true
+  enable_flow_order_booking: true
+  enable_fractal_analysis: true
+  enable_memory_key_management: true
+  enable_memory_optimization: true
+  enable_parallel_processing: true
+  enable_persistent_homology: true
+  enable_quantum_simulation: true
+  enable_result_caching: true
+  enable_tensor_algebra: true
+  enable_waveform_analysis: true
+  max_threads: 8
+monitoring:
+  alert_channels:
+  - console
+  - file
+  alert_thresholds:
+    drawdown_critical: 0.2
+    drawdown_warning: 0.1
+    loss_limit: 0.15
+    profit_target: 0.05
+  backup_count: 10
+  enable_alerts: true
+  enable_health_checks: true
+  enable_performance_tracking: true
+  enable_real_time_dashboard: true
+  enable_structured_logging: true
+  enable_system_metrics: true
+  health_check_interval: 300
+  log_file: logs/schwabot_enhanced.log
+  log_level: INFO
+  max_log_file_size_mb: 100
+  metrics_collection_interval: 60
+optimization:
+  enable_connection_pooling: true
+  enable_cpu_optimization: true
+  enable_database_optimization: true
+  enable_indexing: true
+  enable_memory_optimization: true
+  enable_multi_level_caching: true
+  enable_network_optimization: true
+  l1_cache_size_mb: 256
+  l2_cache_size_mb: 512
+  max_cpu_usage_percent: 80
+  max_disk_usage_gb: 50.0
+  max_memory_usage_gb: 19.16022644042969
+security:
+  allowed_ips: []
+  audit_log_file: logs/audit.log
+  enable_api_key_encryption: true
+  enable_audit_logging: true
+  enable_ip_whitelist: false
+  enable_key_rotation: true
+  enable_rate_limiting: true
+  enable_session_encryption: true
+  key_rotation_interval_days: 90
+  log_sensitive_operations: true
+  max_requests_per_minute: 1000
+  session_timeout_seconds: 3600
+strategies:
+  active_strategies:
+  - volume_weighted_hash_oscillator
+  - zygot_zalgo_entropy_dual_key_gate
+  - multi_phase_strategy_weight_tensor
+  - quantum_strategy_calculator
+  - entropy_enhanced_trading_executor
+  confidence_threshold: 0.7
+  enable_dynamic_weighting: true
+  enable_risk_adjusted_selection: true
+  enable_strategy_optimization: true
+  max_strategy_correlation: 0.8
+  optimization_interval_hours: 24
+  signal_strength_threshold: 0.6
+  strategy_weights:
+    entropy_enhanced_trading_executor: 0.15
+    multi_phase_strategy_weight_tensor: 0.2
+    quantum_strategy_calculator: 0.15
+    volume_weighted_hash_oscillator: 0.25
+    zygot_zalgo_entropy_dual_key_gate: 0.25
+trading_parameters:
+  consecutive_losses_limit: 5
+  daily_loss_limit_usd: 1000.0
+  enable_circuit_breakers: true
+  enable_dynamic_risk: true
+  execution_timeout: 30.0
+  high_volatility_threshold: 0.05
+  max_daily_loss_pct: 5.0
+  max_drawdown_pct: 15.0
+  max_open_positions: 5
+  max_order_size_usd: 1000.0
+  max_position_size_pct: 10.0
+  max_total_exposure_pct: 30.0
+  min_order_size_usd: 10.0
+  order_timeout: 60.0
+  retry_attempts: 3
+  slippage_tolerance: 0.001
+  stop_loss_pct: 2.0
+  take_profit_pct: 5.0
+  volatility_adjustment: true
+  volatility_position_reduction: 0.5
+  volatility_threshold: 0.8
+version: 2.0.0

@@ -1,0 +1,37 @@
+{
+  "0x8845": {
+    "name": "BTC Long Spike",
+    "route": "rde->sfs->cooldown_zpe",
+    "last_triggered": "2025-06-04T23:22:00",
+    "cooldown": 5,
+    "success_rate": 0.82
+  },
+  "0x7A3B": {
+    "name": "ETH Volume Echo",
+    "route": "rde->ufs->cooldown_zbe",
+    "last_triggered": "2025-06-04T22:15:00",
+    "cooldown": 3,
+    "success_rate": 0.75
+  },
+  "0x9F2C": {
+    "name": "Smart Money Re-entry",
+    "route": "rde->sfs->cooldown_zpe",
+    "last_triggered": "2025-06-04T21:45:00",
+    "cooldown": 8,
+    "success_rate": 0.91
+  },
+  "0xB4E1": {
+    "name": "Fractal Bloom Lock",
+    "route": "rde->ufs->cooldown_zbe",
+    "last_triggered": "2025-06-04T20:30:00",
+    "cooldown": 12,
+    "success_rate": 0.88
+  },
+  "0xC5D8": {
+    "name": "Ghost Echo Validator",
+    "route": "rde->sfs->cooldown_zpe",
+    "last_triggered": "2025-06-04T19:15:00",
+    "cooldown": 6,
+    "success_rate": 0.79
+  }
+} 

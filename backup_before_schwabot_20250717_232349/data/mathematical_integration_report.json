@@ -1,0 +1,86 @@
+{
+  "overall_score": 0.7465277777777778,
+  "production_ready": false,
+  "test_results": {
+    "imports": {
+      "successful": [
+        "sustainment_principles.SustainmentCalculator",
+        "sustainment_principles.SustainmentState",
+        "sustainment_principles.PrincipleMetrics",
+        "sustainment_integration_hooks.SustainmentIntegrationManager",
+        "mathlib.CoreMathLib",
+        "fractal_core.FractalCore",
+        "unitizer.Unitizer",
+        "pattern_matcher.PatternMatcher",
+        "ncco.NCCO"
+      ],
+      "failed": [
+        "mathlib.GradedProfitVector - not found",
+        "mathlib_v2: cannot import name 'add' from 'mathlib' (C:\\Users\\maxde\\OneDrive\\Documents\\mathlib\\__init__.py)",
+        "strategy_sustainment_validator: attempted relative import with no known parent package",
+        "strategy_execution_mapper: attempted relative import with no known parent package",
+        "profit_navigator: cannot import name 'AntiPoleState' from 'core.antipole' (C:\\Users\\maxde\\OneDrive\\Documents\\core\\antipole\\__init__.py)",
+        "thermal_zone_manager: No module named 'GPUtil'",
+        "ferris_rde: Unexpected error - non-default argument 'node_id' follows default argument"
+      ],
+      "success_rate": 0.5625
+    },
+    "sustainment_principles": {
+      "all_calculated": true,
+      "calculation_time_ms": 0.0,
+      "composite_score": 0.1783358667887302,
+      "values_in_range": true,
+      "weights_valid": "True"
+    },
+    "mathematical_libraries": {
+      "error": "cannot import name 'GradedProfitVector' from 'mathlib' (C:\\Users\\maxde\\OneDrive\\Documents\\mathlib\\__init__.py)"
+    },
+    "aleph_core": {
+      "available": true
+    },
+    "ncco_core": {
+      "error": "NCCO.__init__() missing 4 required positional arguments: 'id', 'price_delta', 'base_price', and 'bit_mode'"
+    },
+    "cross_module_integration": {
+      "mathlib_sustainment": true,
+      "integration_score": 0.6651162018812654,
+      "economy_score": 0.9994331009100463
+    },
+    "performance_stability": {
+      "avg_calculation_time_ms": 0.8154797554016113,
+      "performance_acceptable": true,
+      "numerical_stability_rate": 1.0,
+      "stability_acceptable": "True"
+    },
+    "edge_cases": {
+      "sustainment_handles": 9,
+      "mathlib_handles": 2,
+      "total_rate": 0.9166666666666666
+    }
+  },
+  "performance_metrics": {
+    "avg_calculation_time_ms": 0.8154797554016113,
+    "performance_acceptable": true,
+    "numerical_stability_rate": 1.0,
+    "stability_acceptable": "True"
+  },
+  "failed_imports": [
+    "mathlib.GradedProfitVector - not found",
+    "mathlib_v2: cannot import name 'add' from 'mathlib' (C:\\Users\\maxde\\OneDrive\\Documents\\mathlib\\__init__.py)",
+    "strategy_sustainment_validator: attempted relative import with no known parent package",
+    "strategy_execution_mapper: attempted relative import with no known parent package",
+    "profit_navigator: cannot import name 'AntiPoleState' from 'core.antipole' (C:\\Users\\maxde\\OneDrive\\Documents\\core\\antipole\\__init__.py)",
+    "thermal_zone_manager: No module named 'GPUtil'",
+    "ferris_rde: Unexpected error - non-default argument 'node_id' follows default argument"
+  ],
+  "mathematical_errors": [
+    "Mathematical libraries: cannot import name 'GradedProfitVector' from 'mathlib' (C:\\Users\\maxde\\OneDrive\\Documents\\mathlib\\__init__.py)"
+  ],
+  "integration_gaps": [],
+  "recommendations": [
+    "Fix module import paths and dependencies",
+    "Ensure all required packages are installed",
+    "Debug mathematical calculation errors",
+    "Validate numerical stability of algorithms"
+  ]
+}

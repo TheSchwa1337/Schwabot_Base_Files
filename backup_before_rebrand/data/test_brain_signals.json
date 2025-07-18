@@ -1,0 +1,73 @@
+{
+  "metrics": {
+    "total_signals": 5,
+    "profitable_signals": 0,
+    "win_rate": 0.0,
+    "total_profit": 0.0,
+    "avg_profit_per_signal": 0.0,
+    "sharpe_ratio": 0.0,
+    "max_drawdown": 0.0,
+    "signals_in_history": 5
+  },
+  "signals": [
+    {
+      "timestamp": 1751396434.374665,
+      "price": 50000,
+      "volume": 1000,
+      "signal_strength": 0.0,
+      "enhancement_factor": 1.0049999583337499,
+      "profit_score": 110549.9954167125,
+      "confidence": 0.44850001249987503,
+      "symbol": "BTC"
+    },
+    {
+      "timestamp": 1751396434.3756647,
+      "price": 45000,
+      "volume": 800,
+      "signal_strength": 0.0,
+      "enhancement_factor": 1.005624940674579,
+      "profit_score": 79645.49530142666,
+      "confidence": 0.44831251779762626,
+      "symbol": "BTC"
+    },
+    {
+      "timestamp": 1751396434.3766634,
+      "price": 52000,
+      "volume": 2000,
+      "signal_strength": 0.0,
+      "enhancement_factor": 1.0025999941413493,
+      "profit_score": 229394.87865954073,
+      "confidence": 0.44922000175759524,
+      "symbol": "BTC"
+    },
+    {
+      "timestamp": 1751396434.3776622,
+      "price": 49000,
+      "volume": 200,
+      "signal_strength": -0.32000000000000006,
+      "enhancement_factor": 1.0244950991350277,
+      "profit_score": 25622.212631327395,
+      "confidence": 0.5706514702594917,
+      "symbol": "BTC"
+    },
+    {
+      "timestamp": 1751396434.3776622,
+      "price": 51000,
+      "volume": 1500,
+      "signal_strength": 0.35000000000000003,
+      "enhancement_factor": 1.0033999868987273,
+      "profit_score": 198424.85590919058,
+      "confidence": 0.5889800039303817,
+      "symbol": "BTC"
+    }
+  ],
+  "config": {
+    "base_profit_rate": 0.002,
+    "confidence_threshold": 0.6,
+    "enhancement_range": [
+      0.8,
+      2.0
+    ],
+    "max_history_size": 100
+  }
+}

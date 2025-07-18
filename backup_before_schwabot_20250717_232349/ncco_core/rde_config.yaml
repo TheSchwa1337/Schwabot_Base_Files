@@ -1,0 +1,40 @@
+axes:
+  price_metrics:
+    - "{asset}_price_delta"
+    - "{asset}_volatility"
+    - "{asset}_volume_ema"
+    - "{asset}_spread_bp"
+    - "{asset}_slippage"
+    - "{asset}_price_momentum"
+  market_state:
+    - "{asset}_sentiment_bull"
+    - "{asset}_sentiment_bear"
+    - "{asset}_exec_latency"
+    - "{asset}_cognitive_score"
+    - "{asset}_market_depth"
+    - "{asset}_order_flow"
+  profit_metrics:
+    - "{asset}_hold_roi"
+    - "{asset}_swap_roi"
+    - "{asset}_hedge_roi"
+    - "{asset}_total_pnl"
+    - "{asset}_risk_adjusted_return"
+    - "{asset}_sharpe_ratio"
+
+assets: [BTC, ETH, XRP]
+
+scales:
+  lookback_hours: 24
+  decay: 0.85
+  bit_modes: [4, 8, 42]  # Prime value checking modes
+
+paths:
+  history_dir: "~/Schwabot/init/spin_history"
+  fig_dpi: 150
+  cache_dir: "~/Schwabot/init/rde_cache"
+
+visualization:
+  color_scheme: "dark"
+  show_grid: true
+  show_legend: true
+  animation_fps: 30 

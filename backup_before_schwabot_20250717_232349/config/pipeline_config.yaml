@@ -1,0 +1,148 @@
+btc_pipeline:
+  enable_drift_field_computation: true
+  enable_hash_generation: true
+  enable_mathematical_analysis: true
+  enable_price_processing: true
+  hash_history_size: 1000
+  price_history_size: 1000
+  price_normalization_factor: 100000.0
+  time_normalization_factor: 3600.0
+cursor_integration:
+  enable_context_awareness: true
+  enable_docstrings: true
+  enable_modular_calls: true
+  enable_symbolic_aliases: true
+  enable_type_hints: true
+  symbol_mapping:
+    drift_operator: DriftField.compute_drift
+    entropy_operator: SignalPsi.compute_entropy_weight
+    gradient_operator: EntropicGradient.derive
+    noise_operator: NoiseField.sum_noise
+    phase_operator: PhaseOmega.compute
+    signal_operator: SignalPsi.extract_field
+development:
+  enable_debug_mode: false
+  enable_mock_data: false
+  enable_profiling: false
+  enable_testing: false
+  testing:
+    enable_integration_tests: true
+    enable_performance_tests: true
+    enable_unit_tests: true
+    test_timeout: 60.0
+error_handling:
+  enable_error_recovery: true
+  enable_exception_logging: true
+  enable_graceful_degradation: true
+  log_error_details: true
+  max_retry_attempts: 3
+  retry_delay: 1.0
+ferris_wheel:
+  enable_data_export: true
+  enable_drift_field_visualization: true
+  enable_entropy_stabilization: true
+  enable_recursive_visualization: true
+  export_format: json
+  time_points_count: 100
+  visualization_cache_size: 50
+logging:
+  backup_count: 5
+  enable_console_logging: true
+  enable_file_logging: true
+  log_file_path: logs/schwabot_pipeline.log
+  log_format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  log_level: INFO
+  max_log_file_size: 10485760
+mathematical_framework:
+  drift_shell:
+    cycle_duration: 3.75
+    drift_coefficient: 0.1
+    enable_depth_mapping: true
+    enable_ring_allocation: true
+    psi_infinity: 1.618033988749
+    ring_count: 12
+    shell_radius: 144.44
+  quantum:
+    enable_phase_harmonization: true
+    enable_quantum_entropy: true
+    enable_wave_functions: true
+    energy_scale: 1.0
+    planck_constant: 1.054571817e-34
+  recursion:
+    convergence_threshold: 1e-6
+    enable_convergence_checking: true
+    enable_depth_guards: true
+    enable_memoization: true
+    max_depth: 50
+    memoization_cache_size: 128
+  thermal:
+    boltzmann_constant: 1.380649e-23
+    enable_entropy_mapping: true
+    enable_thermal_gradients: true
+    enable_thermal_pressure: true
+    heat_capacity: 1005.0
+    thermal_conductivity: 0.024
+pipeline:
+  debug: false
+  enabled: true
+  hardware:
+    batch_size: 100
+    enable_cpu_optimization: true
+    enable_gpu_acceleration: false
+    memory_limit_gb: 19.16022644042969
+    preference: auto
+  log_level: INFO
+  mode: production
+  performance:
+    cache_enabled: true
+    cache_ttl_seconds: 3600
+    max_cache_size: 1000
+    max_retries: 3
+    parallel_processing: true
+    timeout_seconds: 30.0
+symbolic_math:
+  context:
+    enable_entropy_index: true
+    enable_phantom_layer: true
+    enable_vault_state: true
+  convergence_threshold: 1.0e-06
+  enable_context_awareness: true
+  enable_phantom_boost: true
+  enabled: true
+  hardware_preference: auto
+  max_iterations: 100
+  symbols:
+    drift: D
+    entropy: "\xCE\xBB"
+    gradient: "\xE2\u02C6\u2021"
+    noise: "\xCE\xA3"
+    phase: "\xCE\xA9"
+    signal: "\xCF\u02C6"
+system_integration:
+  dependencies:
+    cupy: '>=9.0.0'
+    numpy: '>=1.21.0'
+    scipy: '>=1.7.0'
+    torch: '>=1.9.0'
+  enable_advanced_integration: true
+  enable_all_components: true
+  enable_performance_tracking: true
+  enable_system_monitoring: true
+two_gram:
+  batch_processing: true
+  burst_threshold: 0.5
+  enable_hardware_optimization: true
+  enable_similarity_cache: true
+  enabled: true
+  entropy_window: 16
+  max_patterns: 250
+  pattern_history_size: 1000
+  pattern_threshold: 0.1
+  similarity_threshold: 0.8
+validation:
+  enable_matrix_validation: true
+  enable_operation_validation: true
+  enable_quantum_state_validation: true
+  enable_scalar_validation: true
+  enable_tensor_validation: true
+  enable_vector_validation: true

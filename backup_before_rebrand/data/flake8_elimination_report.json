@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-28T16:53:30.409602",
+  "base_path": "C:\\Users\\maxde\\OneDrive\\Documents",
+  "initial_errors": 0,
+  "final_errors": 0,
+  "errors_eliminated": 0,
+  "success": true,
+  "fixes_applied": [
+    "isort applied to C:\\Users\\maxde\\OneDrive\\Documents\\core",
+    "isort applied to C:\\Users\\maxde\\OneDrive\\Documents\\schwabot"
+  ],
+  "manual_fixes_needed": [],
+  "target_directories": [
+    "C:\\Users\\maxde\\OneDrive\\Documents\\core",
+    "C:\\Users\\maxde\\OneDrive\\Documents\\schwabot"
+  ],
+  "flake8_config": {
+    "max_line_length": 120,
+    "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
+    "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs"
+  }
+}

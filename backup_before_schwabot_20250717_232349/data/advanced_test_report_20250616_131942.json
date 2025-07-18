@@ -1,0 +1,104 @@
+{
+  "simulation_summary": {
+    "total_ticks": 60,
+    "successful_ticks": 60,
+    "failed_ticks": 0,
+    "total_duration_seconds": 180.52651929855347,
+    "throughput_tps": 0.3323611413610231,
+    "avg_processing_time_ms": 0.19162333313336907
+  },
+  "regime_analysis": {
+    "regime_distribution": {
+      "NEUTRAL": 49,
+      "DISTRIBUTION": 11
+    },
+    "regime_transitions": 1,
+    "regime_history": [
+      {
+        "regime": "NEUTRAL",
+        "duration": 50,
+        "final_price": 44887.32439347716,
+        "tick_count": 50
+      }
+    ]
+  },
+  "backend_analysis": {
+    "backend_distribution": {
+      "HYBRID_AUTO": 48,
+      "CPU_AVX512": 1,
+      "GPU_CUDA": 11
+    },
+    "error_by_backend": {},
+    "thermal_state": {
+      "GPU_CUDA": 0.34153087423956097,
+      "GPU_OPENCL": 0.0,
+      "CPU_AVX512": 0.005959349468705747,
+      "CPU_STANDARD": 0.0,
+      "HYBRID_AUTO": 0.2176867532275179
+    },
+    "backend_switches": 0
+  },
+  "profit_analysis": {
+    "profit_tier_distribution": {
+      "SILVER": 1,
+      "PLATINUM": 59
+    },
+    "tier_accuracy": 1.0
+  },
+  "hash_correlation": {
+    "prediction_cache_size": 60,
+    "hash_accuracy": 0.0
+  },
+  "vault_statistics": {
+    "total_ticks": 60,
+    "backend_performance": {
+      "HYBRID_AUTO": {
+        "total_ticks": 48,
+        "error_count": 0,
+        "avg_signal_strength": 0.983301130742125,
+        "avg_processing_time": 0.0,
+        "profit_correlation": 3.9583333333333335
+      },
+      "CPU_AVX512": {
+        "total_ticks": 1,
+        "error_count": 0,
+        "avg_signal_strength": 0.9932249114509578,
+        "avg_processing_time": 0.0,
+        "profit_correlation": 4.0
+      },
+      "GPU_CUDA": {
+        "total_ticks": 11,
+        "error_count": 0,
+        "avg_signal_strength": 0.9899935166044453,
+        "avg_processing_time": 0.0,
+        "profit_correlation": 4.0
+      }
+    },
+    "profit_analysis": {
+      "total_transitions": 1,
+      "successful_transitions": 0,
+      "success_rate": 0.0,
+      "transition_patterns": {
+        "SILVER\u2192PLATINUM": 1
+      },
+      "backend_profit_correlation": {
+        "HYBRID_AUTO": 3.9583333333333335,
+        "CPU_AVX512": 4.0,
+        "GPU_CUDA": 4.0
+      },
+      "most_profitable_backend": "CPU_AVX512"
+    },
+    "recent_anomalies": [],
+    "hash_correlation_count": 60,
+    "error_patterns_summary": {},
+    "vault_utilization": 0.012
+  },
+  "performance_metrics": {
+    "total_ticks_processed": 60,
+    "total_processing_time": 11.497399988002144,
+    "backend_switch_count": 0,
+    "profit_tier_accuracy": 60.0,
+    "hash_prediction_accuracy": 0.0,
+    "error_recovery_rate": 0.0
+  }
+}

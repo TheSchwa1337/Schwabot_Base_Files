@@ -1,0 +1,29 @@
+SCHWABOT CLEANUP ANALYSIS REPORT
+==================================================
+
+DELETE:
+--------------------
+  schwabot\init\core\strategy_bit_mapper.py
+
+REFACTOR:
+--------------------
+  schwabot\init\core\hash_drift_sync.py
+  schwabot\init\core\registry_vote_matrix.py
+  schwabot\init\core\strategy_registry.py
+  schwabot\init\core\symbol_router.py
+  schwabot\init\core\vector_band_gatekeeper.py
+  schwabot\init\tests\test_backtester.py
+
+IMPLEMENT:
+--------------------
+  schwabot\init\core\agent_memory.py
+  schwabot\init\core\data_feed.py
+  schwabot\init\core\profit_bucket_registry.py
+  schwabot\init\core\risk_manager.py
+  schwabot\init\core\schwa_engine.py
+  schwabot\init\core\strategy_layered_gatekeeper.py
+  schwabot\init\core\trade_executor.py
+
+MATH_DIFFERENCES:
+--------------------
+

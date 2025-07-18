@@ -1,0 +1,106 @@
+# Schwabot Pre-Commit Configuration
+# Enforces Flake8 compliance, type checking, and code quality standards
+# Based on systematic elimination of 257+ flake8 issues
+
+repos:
+  # Code formatting with Black
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        name: "Code Formatter (Black)"
+        language_version: python3.10
+        args: ["--line-length=120", "--target-version=py310"]
+
+  # Import sorting with isort
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.12.0
+    hooks:
+      - id: isort
+        name: "Import Sorter"
+        args: ["--profile", "black", "--line-length=120"]
+
+  # Flake8 static analysis
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        name: "Flake8 Static Analyzer"
+        args:
+          - "--max-line-length=120"
+          - "--ignore=E203,W503,F403,E501,E722"
+          - "--exclude=.venv,__pycache__,build,dist,.git"
+        additional_dependencies:
+          - flake8-annotations
+          - flake8-docstrings
+          - flake8-bugbear
+
+  # Type checking with mypy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        name: "Type Checker (mypy)"
+        args:
+          - "--ignore-missing-imports"
+          - "--strict"
+          - "--config-file=mypy.ini"
+        additional_dependencies:
+          - types-requests
+          - types-PyYAML
+
+  # Python syntax upgrades
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.10.1
+    hooks:
+      - id: pyupgrade
+        name: "Python Syntax Upgrader"
+        args: ["--py38-plus"]
+
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: end-of-file-fixer
+        name: "End of File Fixer"
+      - id: trailing-whitespace
+        name: "Trailing Whitespace Remover"
+      - id: check-yaml
+        name: "YAML Validator"
+      - id: check-json
+        name: "JSON Validator"
+      - id: check-merge-conflict
+        name: "Merge Conflict Checker"
+      - id: check-case-conflict
+        name: "Case Conflict Checker"
+
+  # Custom Schwabot-specific hooks
+  - repo: local
+    hooks:
+      # Remove markdown code fences from Python files
+      - id: strip-markdown-fences
+        name: "Strip Markdown Fences"
+        entry: bash -c 'sed -i "/^```/d" "$@"'
+        language: system
+        types: [python]
+        description: "Remove markdown code fences that break Python parsing"
+
+      # Check for stub functions (pass statements)
+      - id: check-stubs
+        name: "Check for Stub Functions"
+        entry: python -c "import sys; import re; [print(f'❌ Stub function found in {f}') or sys.exit(1) for f in sys.argv[1:] if any('def ' in l and i+1 < len(lines) and lines[i].strip() == 'pass' for i, l in enumerate(open(f).readlines()))]"
+        language: system
+        types: [python]
+        description: "Prevent stub functions with just 'pass'"
+
+      # Validate Schwabot math types
+      - id: validate-math-types
+        name: "Validate Math Types"
+        entry: python -c "import sys; import ast; [print(f'⚠️ Function {n.name} missing return type') for f in sys.argv[1:] for n in ast.walk(ast.parse(open(f).read())) if isinstance(n, ast.FunctionDef) and n.returns is None]"
+        language: system
+        types: [python]
+        description: "Ensure functions have proper type annotations"
+
+# Default settings
+default_language_version:
+  python: python3.10 

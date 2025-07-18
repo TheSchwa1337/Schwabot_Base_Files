@@ -1,0 +1,293 @@
+# Schwabot Unified Settings Configuration
+# =====================================
+# Centralized configuration for all Schwabot components
+# Aligns with unified interface, demo logic flow, matrix fault resolver, and fractal core
+
+# Core System Configuration
+core_system:
+  # Allocator Modes
+  allocator_mode: "dynamic"  # static, dynamic, adaptive
+  matrix_fault_resolver_enabled: true
+  fractal_core_engine_enabled: true
+  dlt_waveform_engine_enabled: true
+  
+  # Pipeline Connectivity
+  enable_centralized_pipelines: true
+  enable_internalized_mathematical_systems: true
+  enable_mathlib_integration: true
+  enable_ncco_core_integration: true
+  enable_aleph_core_integration: true
+
+# Demo System Configuration
+demo_system:
+  # Demo Logic Flow
+  demo_logic_flow_enabled: true
+  demo_backtest_enabled: true
+  demo_integration_enabled: true
+  demo_entry_simulator_enabled: true
+  
+  # Demo Configuration Files
+  demo_config_files:
+    - "settings/demo_backtest_mode.yaml"
+    - "demo/demo_backtest_matrix.yaml"
+    - "demo/demo_trade_sequence.py"
+    - "demo/demo_logic_flow.py"
+
+# Matrix Fault Resolver Configuration
+matrix_fault_resolver:
+  enabled: true
+  max_retry_attempts: 3
+  fault_threshold: 0.8
+  recovery_timeout: 30
+  enable_automatic_recovery: true
+  
+  # Recovery Profiles
+  recovery_profiles:
+    critical:
+      timeout: 10
+      retry_attempts: 5
+      fallback_mode: "safe"
+    high:
+      timeout: 20
+      retry_attempts: 3
+      fallback_mode: "degraded"
+    medium:
+      timeout: 30
+      retry_attempts: 2
+      fallback_mode: "normal"
+    low:
+      timeout: 60
+      retry_attempts: 1
+      fallback_mode: "normal"
+
+# Fractal Core Engine Configuration
+fractal_core_engine:
+  enabled: true
+  fractal_dimension_limit: 2.5
+  self_similarity_threshold: 0.8
+  pattern_recognition_confidence: 0.85
+  ghost_vector_alignment_threshold: 0.7
+  
+  # Fractal Processing
+  processing_modes:
+    - "4_bit"
+    - "8_bit"
+    - "16_bit"
+    - "42_bit"
+  
+  # Integration Points
+  integration_points:
+    - "dlt_waveform_engine"
+    - "multi_bit_btc_processor"
+    - "ghost_strategy_handler"
+    - "profit_routing_engine"
+
+# DLT Waveform Engine Configuration
+dlt_waveform_engine:
+  enabled: true
+  history_size: 1000
+  analysis_window: 100
+  waveform_types:
+    - "price_waveform"
+    - "volume_waveform"
+    - "volatility_waveform"
+    - "momentum_waveform"
+    - "fractal_waveform"
+  
+  # Real-time Analysis
+  real_time_analysis_enabled: true
+  background_analysis_interval: 60  # seconds
+  pattern_detection_enabled: true
+
+# Multi-Bit BTC Processor Configuration
+multi_bit_btc_processor:
+  enabled: true
+  timeframes:
+    "1m": 60
+    "5m": 300
+    "15m": 900
+    "1h": 3600
+    "4h": 14400
+    "1d": 86400
+  
+  bit_levels:
+    - "4_bit"
+    - "8_bit"
+    - "16_bit"
+    - "32_bit"
+    - "42_bit"
+  
+  # Processing Parameters
+  entropy_weighting_enabled: true
+  bit_pattern_analysis_enabled: true
+  confidence_scoring_enabled: true
+
+# Ghost Strategy Handler Configuration
+ghost_strategy_handler:
+  enabled: true
+  ghost_signal_threshold: 0.6
+  memory_router_enabled: true
+  profit_tracker_enabled: true
+  strategy_matrix_enabled: true
+  
+  # Ghost Components
+  ghost_components:
+    - "ghost_memory"
+    - "ghost_pipeline"
+    - "ghost_trigger"
+    - "ghost_swap_vector"
+    - "ghost_conditionals"
+
+# Profit Routing Engine Configuration
+profit_routing_engine:
+  enabled: true
+  routing_modes:
+    - "conservative"
+    - "moderate"
+    - "aggressive"
+  
+  # Allocator Rules
+  allocator_rules:
+    max_position_size: 0.05
+    max_drawdown: 0.15
+    target_profit: 0.25
+    risk_tolerance: 0.5
+  
+  # Sustainment Principles
+  sustainment_principles_enabled: true
+  profit_crystallization_threshold: 0.15
+
+# Fault Bus Configuration
+fault_bus:
+  enabled: true
+  max_queue_size: 50
+  severity_threshold: 0.5
+  async_threshold: 0.5
+  
+  # Recovery Profiles
+  recovery_profiles:
+    thermal:
+      timeout: 5
+      retry_attempts: 3
+    profit:
+      timeout: 10
+      retry_attempts: 2
+    bitmap:
+      timeout: 15
+      retry_attempts: 3
+    gpu:
+      timeout: 20
+      retry_attempts: 2
+    recursive:
+      timeout: 5
+      retry_attempts: 1
+
+# Temporal Execution Correction Layer Configuration
+temporal_execution_correction_layer:
+  enabled: true
+  correction_window: 100
+  max_drift_threshold: 0.1
+  
+  # Timing Profiles
+  timing_profiles:
+    fast_execution:
+      max_delay: 0.1
+      correction_strength: 1.0
+    normal_execution:
+      max_delay: 0.5
+      correction_strength: 0.8
+    slow_execution:
+      max_delay: 1.0
+      correction_strength: 0.6
+
+# Windows CLI Compatibility Configuration
+windows_cli_compatibility:
+  enabled: true
+  emoji_handling: "asic_plain_text"
+  unicode_handling: "safe_ascii"
+  error_formatting: "windows_friendly"
+  
+  # CLI Flags
+  cli_flags:
+    enable_emoji: false
+    enable_unicode: false
+    enable_color: false
+    enable_progress_bars: false
+
+# Mathematical Framework Configuration
+mathematical_framework:
+  enabled: true
+  precision: 18
+  epsilon: 1e-12
+  
+  # Core Constants
+  constants:
+    psi_infinity: 1.618033988749895
+    planck_constant: 6.62607015e-34
+    thermal_conductivity_btc: 0.024
+    kelly_safety_factor: 0.25
+  
+  # Integration Points
+  integration_points:
+    - "unified_mathematics_framework"
+    - "btc256sha_pipeline"
+    - "quantum_btc_intelligence"
+    - "advanced_mathematical_core"
+
+# Integration Orchestrator Configuration
+integration_orchestrator:
+  enabled: true
+  orchestration_mode: "unified"
+  
+  # Component Integration
+  component_integration:
+    core_components:
+      - "fault_bus"
+      - "dlt_waveform_engine"
+      - "multi_bit_btc_processor"
+      - "ghost_strategy_handler"
+      - "profit_routing_engine"
+    
+    demo_components:
+      - "demo_logic_flow"
+      - "demo_backtest_runner"
+      - "demo_entry_simulator"
+      - "demo_integration_system"
+    
+    mathematical_components:
+      - "unified_mathematics_framework"
+      - "advanced_mathematical_core"
+      - "btc_vector_aggregator"
+      - "quantum_btc_intelligence"
+
+# Validation Configuration
+validation:
+  enabled: true
+  validate_on_startup: true
+  validate_parameters: true
+  validate_integrations: true
+  auto_correct: true
+  validation_timeout: 30
+  
+  # Validation Rules
+  validation_rules:
+    - "yaml_schema_valid"
+    - "component_connectivity_valid"
+    - "mathematical_framework_valid"
+    - "pipeline_integration_valid"
+
+# Performance Monitoring Configuration
+performance_monitoring:
+  enabled: true
+  monitoring_interval: 1  # seconds
+  metrics_collection: true
+  alert_thresholds:
+    cpu_usage: 0.8
+    memory_usage: 0.8
+    gpu_usage: 0.9
+    thermal_state: 0.7
+
+# Last updated timestamp
+last_updated: "2024-01-01T00:00:00Z"
+version: "1.0.0"
+description: "Unified settings configuration for Schwabot trading system" 

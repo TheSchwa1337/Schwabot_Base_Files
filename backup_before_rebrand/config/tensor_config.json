@@ -1,0 +1,93 @@
+{
+  "tensor_bridge": {
+    "enable_real_time_streaming": true,
+    "tensor_analysis_interval": 0.1,
+    "max_history_size": 1000,
+    "warp_lambda": 0.01,
+    "warp_sigma_sq": 0.005,
+    "enable_gut_bridge": true,
+    "enable_sp_integration": true
+  },
+  "websocket_server": {
+    "host": "localhost",
+    "port": 8765,
+    "stream_interval": 1.0,
+    "btc_price_simulator": true,
+    "btc_price_range": [40000, 70000],
+    "enable_cors": true,
+    "max_clients": 100
+  },
+  "trading_integration": {
+    "enable_strategy_integration": true,
+    "enable_profit_allocation": true,
+    "risk_management": true,
+    "tensor_strategy_config": {
+      "max_position_size": 0.05,
+      "risk_tolerance": 0.3,
+      "quantum_threshold": 0.91,
+      "phi_resonance_threshold": 27.0,
+      "gut_stability_threshold": 0.995,
+      "min_signal_confidence": 0.8
+    }
+  },
+  "visualization": {
+    "enable_react_server": true,
+    "react_port": 3000,
+    "auto_open_browser": false,
+    "update_interval": 1000,
+    "chart_history_length": 50
+  },
+  "btc_feed": {
+    "enable_live_feed": false,
+    "exchange": "coinbase_pro",
+    "update_interval": 1.0,
+    "api_key": "",
+    "api_secret": "",
+    "sandbox_mode": true
+  },
+  "sp_constants": {
+    "PSI_OMEGA_LAMBDA": 0.9997,
+    "EXP_LAMBDA_T": 0.9951,
+    "ENTROPY_SUM": 0.002,
+    "TENSOR_CONVERGENCE": 0.998,
+    "CHRONOMANCY_LOCK": 1.000,
+    "QSS_BASELINE": 0.42,
+    "ENTROPY_THRESHOLD": 0.87,
+    "COUPLING_COEFFICIENT": 0.7,
+    "DECAY_RATE": 0.05,
+    "SCALING_FACTOR": 1.1,
+    "TIME_RESOLUTION": 0.001,
+    "BETA": 0.02,
+    "QUANTUM_THRESHOLD": 0.91
+  },
+  "tensor_constants": {
+    "PSI": 44.8,
+    "XI": 3721.8,
+    "TAU": 64713.97,
+    "EPSILON": 0.28082,
+    "PHI": 1.618033988749895,
+    "UNISON": 1.0000,
+    "FIFTH": 1.4999,
+    "OCTAVE": 1.9998
+  },
+  "qss2_constants": {
+    "QUANTUM_THRESHOLD": 0.91,
+    "ENTROPY_BASE": 0.65,
+    "RESONANCE_THRESHOLD": 0.87,
+    "QUANTUM_BASELINE": 0.42,
+    "TIME_RESOLUTION": 0.001,
+    "BETA": 0.02
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_logging": true,
+    "log_file": "logs/tensor_system.log"
+  },
+  "performance": {
+    "enable_metrics_collection": true,
+    "metrics_interval": 30,
+    "enable_profiling": false,
+    "max_memory_usage_mb": 1024
+  }
+} 

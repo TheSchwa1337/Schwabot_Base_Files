@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "export_time": 1751704510.9534264,
+    "total_memories": 1,
+    "max_memory_size": 100,
+    "memory_ttl": 3600
+  },
+  "memories": [
+    {
+      "strategy_id": "test_strategy_789",
+      "q_matrix": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ],
+      "profit_vector": [
+        0.1,
+        0.2,
+        0.1
+      ],
+      "hash_key": "d2b0daae3817adcb",
+      "timestamp": 1751704510.9504366,
+      "access_count": 2,
+      "last_accessed": 1751704510.9504366,
+      "confidence": 0.8,
+      "state": 

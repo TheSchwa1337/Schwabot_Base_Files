@@ -1,0 +1,41 @@
+{
+  "symbol": "BTCUSDT",
+  "initial_capital": 10000.0,
+  "trading_interval": 60,
+  "registry_file": "data/soulprint_registry.db",
+  "exchange_config": {
+    "exchange": "binance",
+    "apiKey": "YOUR_BINANCE_API_KEY",
+    "secret": "YOUR_BINANCE_SECRET_KEY",
+    "sandbox": true,
+    "enableRateLimit": true,
+    "timeout": 30000
+  },
+  "risk_parameters": {
+    "max_position_size": 0.1,
+    "stop_loss_pct": 0.02,
+    "take_profit_pct": 0.04,
+    "max_daily_loss": 0.05,
+    "volatility_threshold": 0.8
+  },
+  "market_data_config": {
+    "cache_ttl": 60,
+    "max_price_history": 2000,
+    "api_timeout": 15,
+    "quality_threshold": 0.5,
+    "apis": {
+      "coingecko": {
+        "enabled": true,
+        "weight": 0.5
+      },
+      "glassnode": {
+        "enabled": true,
+        "weight": 0.3
+      },
+      "fear_greed": {
+        "enabled": true,
+        "weight": 0.2
+      }
+    }
+  }
+}

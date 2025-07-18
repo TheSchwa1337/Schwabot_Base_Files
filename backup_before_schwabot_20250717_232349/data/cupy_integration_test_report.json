@@ -1,0 +1,68 @@
+{
+  "summary": {
+    "total_tests": 11,
+    "passed_tests": 4,
+    "failed_tests": 7,
+    "success_rate": 36.36363636363637
+  },
+  "test_results": {
+    "quantum_mathematical_bridge": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706638.117539
+    },
+    "distributed_mathematical_processor": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706638.1325328
+    },
+    "mathematical_optimization_bridge": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706638.313881
+    },
+    "strategy_bit_mapper": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706638.3178773
+    },
+    "advanced_tensor_algebra": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706638.3198767
+    },
+    "fractal_core": {
+      "passed": true,
+      "message": "All operations successful",
+      "timestamp": 1751706638.3208754
+    },
+    "gpu_handlers": {
+      "passed": true,
+      "message": "All operations successful",
+      "timestamp": 1751706638.3298714
+    },
+    "enhanced_error_recovery_system": {
+      "passed": false,
+      "message": "'EnhancedErrorRecoverySystem' object has no attribute 'get_current_health'",
+      "timestamp": 1751706638.3328695
+    },
+    "cuda_helper": {
+      "passed": false,
+      "message": "name 'np' is not defined",
+      "timestamp": 1751706643.3525317
+    },
+    "performance_fallback": {
+      "passed": true,
+      "message": "Fallback functionality working",
+      "timestamp": 1751706643.3546302
+    },
+    "cross_platform_compatibility": {
+      "passed": true,
+      "message": "Platform: Windows-10-10.0.19045-SP0, Python: 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+      "timestamp": 1751706643.3955398
+    }
+  },
+  "recommendations": [
+    "\ud83d\udd27 Fix failed tests before deployment"
+  ]
+}

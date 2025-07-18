@@ -1,0 +1,17 @@
+# config/default.yaml
+# Default configuration for hash_recollection backend and frontend
+
+api_url: "http://localhost:8000"
+frontend:
+  theme: "light"
+  refresh_interval: 10  # seconds
+backend:
+  entropy:
+    max_history_size: 1000
+    signal_confidence_threshold: 0.7
+  bit_operations:
+    max_history_size: 1000
+    max_patterns: 500
+  pattern_utils:
+    max_patterns: 500
+    trend_confidence_threshold: 0.6 

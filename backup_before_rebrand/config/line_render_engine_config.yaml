@@ -1,0 +1,46 @@
+render_settings:
+  resolution: "1080p"
+  background_color: "#000000"
+  line_thickness: 2
+  line_decay_half_life_seconds: 3600
+
+performance_settings:
+  max_workers: 4
+  memory_check_interval: 60
+
+# Mathematical enhancement settings
+math_settings:
+  profit_weight: 0.7
+  entropy_weight: 0.3
+  entropy_threshold: 0.5
+  smoothing_factor: 0.2
+  min_opacity: 0.1
+  volatility_window: 20
+
+# Visual styling settings
+visual_settings:
+  color_scheme:
+    high_profit: "#00FF00"
+    moderate_profit: "#FFFF00"
+    moderate_loss: "#FFA500"
+    high_loss: "#FF0000"
+    high_entropy: "#808080"
+    default: "#FFFFFF"
+  
+  line_styles:
+    solid_threshold: 0.5
+    dashed_threshold: 0.75
+    
+# System resource thresholds
+resource_thresholds:
+  memory_warning: 70
+  memory_critical: 80
+  memory_emergency: 90
+  cpu_warning: 80
+  cpu_critical: 90
+
+# Cleanup settings
+cleanup_settings:
+  max_line_age_hours: 24
+  cleanup_interval_minutes: 60
+  max_lines_in_memory: 1000 

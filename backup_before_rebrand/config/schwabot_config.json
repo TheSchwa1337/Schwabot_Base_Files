@@ -1,0 +1,38 @@
+{
+  "system": {
+    "name": "Schwabot Advanced Strategy System",
+    "version": "2.0.0",
+    "environment": "production"
+  },
+  "trading": {
+    "exchange_name": "coinbase",
+    "sandbox_mode": true,
+    "symbols": [
+      "BTC/USDC",
+      "ETH/USDC",
+      "SOL/USDC"
+    ],
+    "portfolio_value": 10000.0,
+    "demo_mode": true,
+    "enable_learning": true,
+    "enable_automation": true
+  },
+  "mathematical": {
+    "tensor_precision": 64,
+    "fractal_depth": 8,
+    "quantum_layers": 4,
+    "entropy_threshold": 0.85,
+    "spectral_norm_limit": 1.0
+  },
+  "api": {
+    "fear_greed_cache_duration": 300,
+    "whale_alert_rate_limit": 60,
+    "glassnode_api_version": "v1",
+    "coingecko_rate_limit": 50
+  },
+  "logging": {
+    "level": "INFO",
+    "file_rotation": "daily",
+    "max_file_size": "10MB"
+  }
+}

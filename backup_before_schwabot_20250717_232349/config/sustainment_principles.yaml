@@ -1,0 +1,286 @@
+# Sustainment Principles Configuration
+# =====================================
+# Mathematical framework configuration for the 8 principles of sustainment
+
+# Global Settings
+global:
+  enabled: true
+  calculation_interval_ms: 1000
+  history_retention_count: 100
+  logging_level: "INFO"
+  
+# Principle-specific configurations
+principles:
+  
+  # Principle 1: Integration
+  # Mathematical Model: ∑ᵢ wᵢ(x) = 1, wᵢ ≥ 0
+  # wᵢ(x) = exp(α·hᵢ(x)) / ∑ⱼ exp(α·hⱼ(x))
+  integration:
+    integration_softmax_alpha: 1.0
+    integration_threshold: 0.6
+    min_subsystems_for_confidence: 5
+    weight_balance_importance: 0.7
+    score_importance: 0.3
+    history_size: 50
+    
+  # Principle 2: Anticipation  
+  # Mathematical Model: A(x,t) = τ · ∂/∂t[E[ψ(x,t)]]
+  # p̂ₜ₊₁ = pₜ + Kₜ(pₜ - p̂ₜ⁻)
+  anticipation:
+    anticipation_tau: 0.1
+    kalman_gain: 0.3
+    anticipation_threshold: 0.5
+    prediction_buffer_size: 20
+    error_buffer_size: 10
+    min_prediction_history: 10
+    entropy_derivative_weight: 1.0
+    history_size: 50
+    
+  # Principle 3: Responsiveness
+  # Mathematical Model: R = e^(-ℓ/λ) where λ = desired max latency
+  responsiveness:
+    max_latency_ms: 100.0
+    responsiveness_threshold: 0.7
+    latency_buffer_size: 20
+    consistency_weight: 0.5
+    event_response_weight: 0.3
+    latency_std_penalty_factor: 1.0
+    history_size: 50
+    
+  # Principle 4: Simplicity
+  # Mathematical Model: S = 1 - ops/ops_max
+  simplicity:
+    max_operations: 1000
+    simplicity_threshold: 0.6
+    complexity_buffer_size: 20
+    operation_weight: 1.0
+    ncco_weight: 1.0
+    strategy_weight: 10.0
+    trend_penalty_factor: 1.0
+    history_size: 50
+    
+  # Principle 5: Economy
+  # Mathematical Model: E = ΔProfit / (ΔCPU_cycles + ΔGPU_cycles)
+  economy:
+    min_efficiency: 0.001
+    economy_threshold: 0.5
+    efficiency_buffer_size: 20
+    cpu_cost_factor: 1.0
+    gpu_cost_factor: 2.0
+    memory_cost_factor: 0.001
+    consistency_importance: 0.3
+    sigmoid_normalization: true
+    history_size: 50
+    
+  # Principle 6: Survivability
+  # Mathematical Model: ∂²U/∂ψ² > 0 (utility increases with entropy shocks)
+  survivability:
+    survivability_threshold: 0.6
+    shock_buffer_size: 10
+    utility_buffer_size: 10
+    curvature_weight: 0.7
+    shock_response_weight: 0.3
+    min_history_for_curvature: 3
+    recovery_normalization_factor: 1.0
+    history_size: 50
+    
+  # Principle 7: Continuity
+  # Mathematical Model: C = (1/T) ∫[t-T to t] ψ(τ) dτ
+  continuity:
+    continuity_window: 50
+    continuity_threshold: 0.6
+    integral_memory_weight: 0.6
+    stability_weight: 0.2
+    uptime_weight: 0.2
+    fluctuation_penalty_max: 0.3
+    min_buffer_for_penalty: 10
+    history_size: 100
+    
+  # Principle 8: Transcendence
+  # Mathematical Model: lim[n→∞] Φ^(n)(ψ₀) = ψ*
+  # ||Φ^(n+1) - Φ^(n)|| < δ
+  transcendence:
+    convergence_threshold: 0.01
+    transcendence_threshold: 0.7
+    fixed_point_target: 0.8
+    iteration_buffer_size: 20
+    convergence_weight: 0.4
+    proximity_weight: 0.4
+    improvement_weight: 0.2
+    min_iterations_for_rate: 5
+    history_size: 50
+
+# Composite Score Weights
+composite_weights:
+  integration: 0.15
+  anticipation: 0.15
+  responsiveness: 0.12
+  simplicity: 0.10
+  economy: 0.15
+  survivability: 0.13
+  continuity: 0.10
+  transcendence: 0.10
+
+# Health Thresholds
+health_thresholds:
+  healthy_composite_score: 0.7
+  degraded_composite_score: 0.4
+  minimum_confidence: 0.7
+  failing_principle_threshold: 0.5
+
+# Integration Hooks Configuration
+integration_hooks:
+  update_interval_seconds: 1.0
+  
+  # Module-specific settings
+  modules:
+    strategy_mapper:
+      enabled: true
+      weight_update_threshold: 0.1
+      complexity_prune_threshold: 0.5
+      performance_weight: 0.6
+      
+    fractal_core:
+      enabled: true
+      coherence_window_adjustment_threshold: 0.6
+      frequency_boost_threshold: 0.7
+      prediction_update_enabled: true
+      
+    profit_navigator:
+      enabled: true
+      risk_adjustment_threshold: 0.5
+      shock_protection_threshold: 0.6
+      utility_tracking_window: 20
+      
+    bus_core:
+      enabled: true
+      handler_weight_adjustment_threshold: 0.1
+      priority_rebalancing_enabled: true
+      
+    thermal_zone:
+      enabled: true
+      cooling_boost_threshold: 0.6
+      efficiency_optimization_threshold: 0.5
+      temperature_monitoring_interval: 5.0
+
+# Advanced Mathematical Parameters
+mathematical_parameters:
+  
+  # Numerical stability
+  epsilon: 1e-8
+  max_iterations: 1000
+  convergence_tolerance: 1e-6
+  
+  # Sigmoid parameters
+  sigmoid_steepness: 1.0
+  sigmoid_midpoint: 0.5
+  
+  # Exponential decay parameters
+  decay_constant: 0.1
+  time_constant: 10.0
+  
+  # Kalman filter parameters
+  process_noise: 0.01
+  measurement_noise: 0.1
+  initial_estimate_error: 1.0
+  
+  # Optimization parameters
+  learning_rate: 0.1
+  momentum: 0.9
+  adaptive_learning_rate: true
+  
+  # Statistical parameters
+  confidence_alpha: 0.05
+  outlier_threshold_sigma: 3.0
+  smoothing_window: 5
+  
+# Performance Monitoring
+monitoring:
+  enable_performance_tracking: true
+  calculation_time_threshold_ms: 10.0
+  memory_usage_threshold_mb: 100.0
+  
+  # Alerts
+  alerts:
+    composite_score_critical: 0.3
+    principle_failure_consecutive: 3
+    calculation_failure_rate: 0.1
+    
+  # Metrics export
+  export_metrics: true
+  export_interval_seconds: 60
+  export_format: "json"
+  
+# Development and Debug Settings
+debug:
+  enabled: false
+  verbose_calculations: false
+  trace_principle_execution: false
+  save_intermediate_results: false
+  validation_mode: false
+  
+  # Testing overrides
+  mock_data_enabled: false
+  deterministic_random_seed: 42
+  simulation_mode: false
+  
+# Schwabot Integration Mapping
+schwabot_integration:
+  
+  # Module to principle mapping
+  module_principle_mapping:
+    strategy_execution_mapper:
+      primary_principles: ["integration", "simplicity"]
+      secondary_principles: ["economy"]
+      
+    fractal_core:
+      primary_principles: ["anticipation", "continuity"]
+      secondary_principles: ["integration", "responsiveness"]
+      
+    profit_navigator:
+      primary_principles: ["economy", "survivability"]
+      secondary_principles: ["anticipation"]
+      
+    bus_core:
+      primary_principles: ["responsiveness"]
+      secondary_principles: ["simplicity"]
+      
+    thermal_zone_manager:
+      primary_principles: ["survivability", "economy"]
+      secondary_principles: ["continuity"]
+      
+    gpu_metrics:
+      primary_principles: ["responsiveness", "economy"]
+      secondary_principles: ["survivability"]
+      
+    cooldown_manager:
+      primary_principles: ["responsiveness", "continuity"]
+      secondary_principles: ["simplicity"]
+      
+  # Configuration injection points
+  config_injection:
+    strategy_weights: "integration"
+    prediction_parameters: "anticipation"
+    latency_targets: "responsiveness"
+    complexity_limits: "simplicity"
+    efficiency_targets: "economy"
+    shock_protection: "survivability"
+    coherence_windows: "continuity"
+    optimization_targets: "transcendence"
+
+# Unit Test Configuration
+unit_tests:
+  # Test data generation
+  generate_test_data: true
+  test_data_samples: 1000
+  noise_level: 0.1
+  
+  # Test thresholds
+  acceptable_calculation_error: 0.001
+  performance_test_iterations: 100
+  stress_test_duration_seconds: 60
+  
+  # Validation criteria
+  principle_correlation_threshold: 0.8
+  convergence_test_tolerance: 0.01
+  integration_sum_tolerance: 0.001 

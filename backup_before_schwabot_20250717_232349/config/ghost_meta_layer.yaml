@@ -1,0 +1,249 @@
+debugging:
+  development:
+    detailed_metrics: true
+    profiling_enabled: false
+    simulation_mode: false
+    test_signal_injection: false
+  logging:
+    component_specific_levels:
+      hash_decoder: DEBUG
+      meta_weighting: INFO
+      shadow_tracker: INFO
+    level: INFO
+    log_rotation: true
+    max_log_size_mb: 100
+  visualization:
+    hash_heatmap_generation: true
+    pattern_cluster_visualization: true
+    shadow_profit_charts: true
+    weight_history_plotting: true
+hash_decoder:
+  registry:
+    cleanup_threshold: 12000
+    max_entries: 10000
+    min_trade_count: 3
+    profit_correlation_weight: 0.6
+  segment_mapping:
+    depth:
+      description: Market depth dynamics, synthetic curve parameters
+      end_bit: 192
+      start_bit: 128
+    geometric:
+      description: "Collapse geometry patterns, \xCE\u201D-reversal sequences"
+      end_bit: 64
+      start_bit: 0
+    smart_money:
+      description: Smart money velocity, wall positions, spoof scores
+      end_bit: 128
+      start_bit: 64
+    timeband:
+      description: Time-based profit correlation, slot density
+      end_bit: 256
+      start_bit: 192
+  similarity_thresholds:
+    high_similarity: 0.85
+    low_similarity: 0.45
+    medium_similarity: 0.65
+    noise_threshold: 0.25
+  vectorization:
+    depth:
+      method: log_normalize
+      precision: 8
+    geometric:
+      method: minmax
+      precision: 8
+    smart_money:
+      method: sigmoid
+      precision: 8
+    timeband:
+      method: circular
+      precision: 8
+integration:
+  event_bus:
+    ghost_signal_topic: ghost.signal.generated
+    registry_update_topic: ghost.registry.updated
+    shadow_analysis_topic: ghost.shadow.analysis
+    weight_update_topic: ghost.weights.updated
+  foundation_systems:
+    hf_trading_processor:
+      enabled: true
+      execution_signal: trade_execution_complete
+      latency_weight_factor: 0.8
+      profit_data_endpoint: get_hf_trading_profit_data
+    multi_bit_processor:
+      bit_level_signal: bit_level_change
+      enabled: true
+      phaser_correlation_boost: 1.5
+      profit_data_endpoint: get_multi_bit_profit_data
+    thermal_processor:
+      adaptation_signal: thermal_mode_change
+      enabled: true
+      profit_data_endpoint: get_thermal_profit_data
+      weight_adjustment_factor: 1.2
+  synchronization:
+    cross_system_sync_timeout_ms: 2000
+    registry_sync_frequency_ms: 5000
+    shadow_update_frequency_ms: 60000
+    weight_update_frequency_ms: 1000
+mathematics:
+  confidence:
+    base_confidence_method: weighted_average
+    historical_performance_weight: 0.4
+    layer_interaction_bonus: 0.1
+    pattern_novelty_penalty: 0.2
+    volatility_confidence_scaling: true
+  hash_generation:
+    deterministic_seed: 42
+    salt_length: 16
+    timestamp_quantization: 60
+    vector_compression_ratio: 0.8
+  profit_correlation:
+    correlation_method: pearson
+    minimum_samples: 5
+    outlier_removal: true
+    outlier_threshold: 2.5
+    temporal_decay_factor: 0.95
+  similarity:
+    distance_normalization: minmax
+    hamming_distance_method: bitwise
+    segment_weights:
+      depth: 0.8
+      geometric: 1.0
+      smart_money: 1.2
+      timeband: 0.9
+meta_weighting:
+  adaptation_speed: 0.1
+  entropy:
+    bin_count: 20
+    calculation_method: shannon
+    min_samples: 10
+    renyi_alpha: 2.0
+  entropy_window_size: 50
+  min_history_length: 100
+  performance:
+    confidence_boost: 1.2
+    decay_factor: 0.95
+    penalty_factor: 0.8
+    tracking_window: 200
+  regime_mappings:
+    bear_trending:
+      depth: 0.15
+      geometric: 0.3
+      smart_money: 0.4
+      timeband: 0.15
+    breakout_pending:
+      depth: 0.25
+      geometric: 0.3
+      smart_money: 0.35
+      timeband: 0.1
+    bull_trending:
+      depth: 0.2
+      geometric: 0.35
+      smart_money: 0.25
+      timeband: 0.2
+    high_volatility:
+      depth: 0.25
+      geometric: 0.15
+      smart_money: 0.5
+      timeband: 0.1
+    low_volatility:
+      depth: 0.15
+      geometric: 0.35
+      smart_money: 0.25
+      timeband: 0.25
+    news_driven:
+      depth: 0.2
+      geometric: 0.1
+      smart_money: 0.6
+      timeband: 0.1
+    sideways_ranging:
+      depth: 0.3
+      geometric: 0.2
+      smart_money: 0.3
+      timeband: 0.2
+    thin_liquidity:
+      depth: 0.4
+      geometric: 0.25
+      smart_money: 0.25
+      timeband: 0.1
+  strategy: hybrid_dynamic
+  volatility:
+    annualization_factor: 8760
+    calculation_window: 24
+    outlier_threshold: 3.0
+    percentile_history: 1000
+  volatility_lookback_hours: 24
+  weight_bounds:
+    depth:
+      max: 0.4
+      min: 0.05
+    geometric:
+      max: 0.5
+      min: 0.1
+    smart_money:
+      max: 0.6
+      min: 0.15
+    timeband:
+      max: 0.4
+      min: 0.05
+optimization:
+  caching:
+    analysis_cache_ttl_minutes: 30
+    registry_cache_sync_frequency: 300
+    similarity_cache_size: 250
+  memory:
+    ghost_state_compression: true
+    history_cleanup_frequency: 3600
+    max_active_signals: 250
+  monitoring:
+    error_rate_monitoring: true
+    latency_tracking: true
+    memory_usage_tracking: true
+    performance_alerting_threshold: 100
+security:
+  integrity:
+    backup_verification: true
+    database_consistency_check: true
+    hash_verification: true
+    registry_checksum: true
+  validation:
+    confidence_range_check: true
+    hash_format_validation: true
+    max_vector_size: 1000
+    timestamp_sanity_check: true
+shadow_tracker:
+  analysis:
+    batch_size: 1000
+    confidence_threshold_suggestions: true
+    market_regime_analysis: true
+    pattern_similarity_threshold: 0.75
+    significant_pattern_min_count: 3
+  database:
+    backup_enabled: true
+    backup_interval_hours: 168
+    cleanup_interval_hours: 24
+    max_records: 100000
+    path: ghost_shadow_tracker.db
+  profit_calculation:
+    direction_inference:
+      depth_neutral_weight: 0.0
+      geometric_momentum_weight: 1.0
+      smart_money_reversal_weight: -1.0
+      timeband_momentum_weight: 0.5
+    risk_adjustments:
+      confidence_scaling: true
+      liquidity_adjustment: true
+      time_decay: true
+      volatility_penalty: true
+    time_horizons:
+      long_term_hours: 24
+      max_tracking_hours: 48
+      medium_term_hours: 4
+      short_term_hours: 1
+  tracking:
+    horizon_hours: 24
+    min_confidence_for_analysis: 0.3
+    opportunity_cost_threshold: 0.01
+    risk_free_rate: 0.02
+    transaction_cost_estimate: 0.001
+    volatility_adjustment_factor: 1.5

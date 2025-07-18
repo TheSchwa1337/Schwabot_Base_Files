@@ -1,0 +1,13 @@
+{
+  "coinbase": {
+    "api_key": "YOUR_COINBASE_API_KEY",
+    "secret": "YOUR_COINBASE_SECRET",
+    "passphrase": "YOUR_COINBASE_PASSPHRASE",
+    "sandbox": true
+  },
+  "binance": {
+    "api_key": "YOUR_BINANCE_API_KEY",
+    "secret": "YOUR_BINANCE_SECRET",
+    "testnet": true
+  }
+}

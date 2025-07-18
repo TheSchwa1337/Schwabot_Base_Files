@@ -1,0 +1,185 @@
+# Schwabot Integration Configuration
+# =================================
+# This file configures external integrations for the Schwabot trading system
+
+# Ngrok Integration - For exposing API server
+ngrok:
+  enabled: false  # Set to true to enable ngrok tunnel
+  authtoken: ""   # Your ngrok authtoken
+  port: 8000      # Port to expose
+  region: "us"    # Ngrok region (us, eu, au, ap, sa, jp, in)
+  subdomain: ""   # Custom subdomain (optional)
+  protocol: "http" # Protocol to use
+  
+# Glassnode Integration - For on-chain analytics
+glassnode:
+  enabled: false  # Set to true to enable Glassnode
+  api_key: ""     # Your Glassnode API key
+  base_url: "https://api.glassnode.com"
+  metrics:
+    - "market/price_usd_close"
+    - "indicators/sopr"
+    - "indicators/nupl"
+    - "indicators/puell_multiple"
+    - "indicators/mvrv"
+  update_interval: 300  # Update interval in seconds
+  
+# Whale Watcher Integration - For large transaction monitoring
+whale_watcher:
+  enabled: false  # Set to true to enable Whale Watcher
+  api_key: ""     # Your Whale Watcher API key
+  webhook_url: "" # Webhook URL for notifications
+  min_amount: 1000000  # Minimum amount to track (in USD)
+  currencies:
+    - "BTC"
+    - "ETH"
+    - "USDT"
+    - "USDC"
+  alert_types:
+    - "large_transfer"
+    - "exchange_deposit"
+    - "exchange_withdrawal"
+    - "whale_movement"
+    
+# Telegram Integration - For notifications
+telegram:
+  enabled: false
+  bot_token: ""
+  chat_id: ""
+  notifications:
+    - "trades"
+    - "alerts"
+    - "system_status"
+    - "portfolio_updates"
+    
+# Discord Integration - For notifications
+discord:
+  enabled: false
+  webhook_url: ""
+  notifications:
+    - "trades"
+    - "alerts"
+    - "system_status"
+    - "portfolio_updates"
+    
+# Email Integration - For notifications
+email:
+  enabled: false
+  smtp_server: ""
+  smtp_port: 587
+  username: ""
+  password: ""
+  recipients: []
+  notifications:
+    - "daily_summary"
+    - "error_alerts"
+    - "portfolio_reports"
+    
+# TradingView Integration - For alerts
+tradingview:
+  enabled: false
+  webhook_secret: ""
+  alerts:
+    - "price_breakout"
+    - "volume_spike"
+    - "technical_signal"
+    
+# CoinGecko Integration - For market data
+coingecko:
+  enabled: true  # Free API, enabled by default
+  base_url: "https://api.coingecko.com/api/v3"
+  rate_limit: 50  # Requests per minute
+  update_interval: 60  # Update interval in seconds
+  
+# Binance Integration - For market data and trading
+binance:
+  enabled: false
+  api_key: ""
+  secret_key: ""
+  testnet: false
+  websocket_enabled: true
+  rate_limit: 1200  # Requests per minute
+  
+# Coinbase Pro Integration
+coinbase_pro:
+  enabled: false
+  api_key: ""
+  secret: ""
+  passphrase: ""
+  sandbox: false
+  
+# Kraken Integration
+kraken:
+  enabled: false
+  api_key: ""
+  secret: ""
+  
+# FTX Integration
+ftx:
+  enabled: false
+  api_key: ""
+  secret: ""
+  subaccount: ""
+  
+# Data Storage Configuration
+storage:
+  database:
+    type: "sqlite"  # sqlite, postgresql, mysql
+    path: "data/schwabot.db"
+    backup_interval: 86400  # 24 hours
+    
+  cache:
+    type: "redis"  # redis, memory
+    host: "localhost"
+    port: 6379
+    ttl: 3600  # Time to live in seconds
+    
+  logs:
+    level: "INFO"
+    max_size: "100MB"
+    backup_count: 5
+    format: "json"
+    
+# Performance Configuration
+performance:
+  max_concurrent_orders: 10
+  order_timeout: 30  # seconds
+  retry_attempts: 3
+  rate_limiting: true
+  
+# Security Configuration
+security:
+  api_rate_limit: 100  # requests per minute
+  max_order_size: 10000  # USD
+  require_2fa: false
+  ip_whitelist: []
+  session_timeout: 3600  # seconds
+  
+# Monitoring Configuration
+monitoring:
+  health_check_interval: 60  # seconds
+  alert_thresholds:
+    cpu_usage: 80  # percent
+    memory_usage: 80  # percent
+    disk_usage: 90  # percent
+    api_latency: 1000  # milliseconds
+    
+  metrics:
+    enabled: true
+    backend: "prometheus"  # prometheus, influxdb, graphite
+    port: 9090
+    
+# Backup Configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  compression: true
+  encryption: false
+  
+# Development Configuration
+development:
+  debug_mode: false
+  mock_trading: false
+  test_networks: true
+  hot_reload: true 

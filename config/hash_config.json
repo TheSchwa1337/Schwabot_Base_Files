@@ -1,0 +1,6 @@
+{
+  "hash_algorithm": "sha256",
+  "salt_length": 32,
+  "iterations": 100000,
+  "key_length": 64
+}

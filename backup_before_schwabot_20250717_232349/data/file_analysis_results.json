@@ -1,0 +1,5210 @@
+{
+  "acceleration_enhancement.py": {
+    "file_path": "core\\acceleration_enhancement.py",
+    "file_name": "acceleration_enhancement.py",
+    "line_count": 852,
+    "file_size": 147233,
+    "stub_indicators": {
+      "pass_statements": 3,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 14,
+      "class_count": 9,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 31,
+      "tensor_ops": 4,
+      "quantum_terms": 0,
+      "entropy_terms": 23
+    },
+    "total_stub_score": 3,
+    "complexity_score": 628.6,
+    "math_richness": 60,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "advanced_dualistic_trading_execution_system.py": {
+    "file_path": "core\\advanced_dualistic_trading_execution_system.py",
+    "file_name": "advanced_dualistic_trading_execution_system.py",
+    "line_count": 652,
+    "file_size": 75879,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 35,
+      "function_count": 14,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 10,
+      "tensor_ops": 2,
+      "quantum_terms": 27,
+      "entropy_terms": 7
+    },
+    "total_stub_score": 0,
+    "complexity_score": 373.7,
+    "math_richness": 47,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "advanced_risk_manager.py": {
+    "file_path": "core\\advanced_risk_manager.py",
+    "file_name": "advanced_risk_manager.py",
+    "line_count": 1135,
+    "file_size": 130083,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 30,
+      "class_count": 6,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 57,
+      "tensor_ops": 10,
+      "quantum_terms": 2,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 628.8,
+    "math_richness": 70,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "advanced_settings_engine.py": {
+    "file_path": "core\\advanced_settings_engine.py",
+    "file_name": "advanced_settings_engine.py",
+    "line_count": 793,
+    "file_size": 177191,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 103,
+      "function_count": 38,
+      "class_count": 5,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1061.7,
+    "math_richness": 1,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "advanced_tensor_algebra.py": {
+    "file_path": "core\\advanced_tensor_algebra.py",
+    "file_name": "advanced_tensor_algebra.py",
+    "line_count": 1486,
+    "file_size": 428686,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 113,
+      "function_count": 55,
+      "class_count": 7,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 3,
+      "math_functions": 105,
+      "tensor_ops": 159,
+      "quantum_terms": 72,
+      "entropy_terms": 57
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1175.1,
+    "math_richness": 396,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "ai_matrix_consensus.py": {
+    "file_path": "core\\ai_matrix_consensus.py",
+    "file_name": "ai_matrix_consensus.py",
+    "line_count": 566,
+    "file_size": 64572,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 46,
+      "function_count": 14,
+      "class_count": 4,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 11,
+      "tensor_ops": 31,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 477.7,
+    "math_richness": 44,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "algorithmic_portfolio_balancer.py": {
+    "file_path": "core\\algorithmic_portfolio_balancer.py",
+    "file_name": "algorithmic_portfolio_balancer.py",
+    "line_count": 520,
+    "file_size": 52590,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 45,
+      "function_count": 5,
+      "class_count": 4,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 18,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 463.8,
+    "math_richness": 19,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "antipole_router.py": {
+    "file_path": "core\\antipole_router.py",
+    "file_name": "antipole_router.py",
+    "line_count": 1129,
+    "file_size": 222718,
+    "stub_indicators": {
+      "pass_statements": 3,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 1
+    },
+    "complexity_indicators": {
+      "nested_levels": 87,
+      "function_count": 51,
+      "class_count": 12,
+      "import_count": 17
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 30,
+      "tensor_ops": 41,
+      "quantum_terms": 4,
+      "entropy_terms": 11
+    },
+    "total_stub_score": 4,
+    "complexity_score": 924.6,
+    "math_richness": 88,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "api_integration_manager.py": {
+    "file_path": "core\\api_integration_manager.py",
+    "file_name": "api_integration_manager.py",
+    "line_count": 642,
+    "file_size": 89642,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 73,
+      "function_count": 7,
+      "class_count": 6,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 5,
+      "tensor_ops": 5,
+      "quantum_terms": 0,
+      "entropy_terms": 22
+    },
+    "total_stub_score": 1,
+    "complexity_score": 749.7,
+    "math_richness": 32,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "automated_strategy_engine.py": {
+    "file_path": "core\\automated_strategy_engine.py",
+    "file_name": "automated_strategy_engine.py",
+    "line_count": 670,
+    "file_size": 67643,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 1,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 25,
+      "class_count": 3,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 22,
+      "tensor_ops": 9,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 1,
+    "complexity_score": 622.4,
+    "math_richness": 33,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "automated_trading_engine.py": {
+    "file_path": "core\\automated_trading_engine.py",
+    "file_name": "automated_trading_engine.py",
+    "line_count": 564,
+    "file_size": 83020,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 75,
+      "function_count": 44,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 11,
+      "tensor_ops": 7,
+      "quantum_terms": 0,
+      "entropy_terms": 36
+    },
+    "total_stub_score": 0,
+    "complexity_score": 788.7,
+    "math_richness": 55,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "automated_trading_pipeline.py": {
+    "file_path": "core\\automated_trading_pipeline.py",
+    "file_name": "automated_trading_pipeline.py",
+    "line_count": 588,
+    "file_size": 56657,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 40,
+      "function_count": 12,
+      "class_count": 3,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 5,
+      "tensor_ops": 7,
+      "quantum_terms": 3,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 415.6,
+    "math_richness": 18,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "backend_math.py": {
+    "file_path": "core\\backend_math.py",
+    "file_name": "backend_math.py",
+    "line_count": 34,
+    "file_size": 673,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 3,
+      "function_count": 3,
+      "class_count": 0,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 32.4,
+    "math_richness": 1,
+    "risk_level": "LOW_VALUE"
+  },
+  "backtesting_integration.py": {
+    "file_path": "core\\backtesting_integration.py",
+    "file_name": "backtesting_integration.py",
+    "line_count": 342,
+    "file_size": 30130,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 38,
+      "function_count": 4,
+      "class_count": 2,
+      "import_count": 17
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 391.1,
+    "math_richness": 10,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "backtest_visualization.py": {
+    "file_path": "core\\backtest_visualization.py",
+    "file_name": "backtest_visualization.py",
+    "line_count": 256,
+    "file_size": 15828,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 12,
+      "class_count": 1,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 8,
+      "tensor_ops": 3,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 200.1,
+    "math_richness": 12,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "bio_cellular_integration.py": {
+    "file_path": "core\\bio_cellular_integration.py",
+    "file_name": "bio_cellular_integration.py",
+    "line_count": 442,
+    "file_size": 38935,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 32,
+      "function_count": 14,
+      "class_count": 3,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 4,
+      "quantum_terms": 1,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 337.2,
+    "math_richness": 6,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "bio_cellular_signaling.py": {
+    "file_path": "core\\bio_cellular_signaling.py",
+    "file_name": "bio_cellular_signaling.py",
+    "line_count": 726,
+    "file_size": 84604,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 63,
+      "function_count": 24,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 7,
+      "tensor_ops": 2,
+      "quantum_terms": 2,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 655.6,
+    "math_richness": 12,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "bio_profit_vectorization.py": {
+    "file_path": "core\\bio_profit_vectorization.py",
+    "file_name": "bio_profit_vectorization.py",
+    "line_count": 458,
+    "file_size": 36397,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 29,
+      "function_count": 13,
+      "class_count": 4,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 19,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 307.2,
+    "math_richness": 21,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "btc_usdc_trading_integration.py": {
+    "file_path": "core\\btc_usdc_trading_integration.py",
+    "file_name": "btc_usdc_trading_integration.py",
+    "line_count": 632,
+    "file_size": 63235,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 45,
+      "function_count": 9,
+      "class_count": 2,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 23,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 461.2,
+    "math_richness": 27,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "ccxt_integration.py": {
+    "file_path": "core\\ccxt_integration.py",
+    "file_name": "ccxt_integration.py",
+    "line_count": 139,
+    "file_size": 6251,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 4,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 11,
+      "function_count": 6,
+      "class_count": 2,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 3,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 5
+    },
+    "total_stub_score": 4,
+    "complexity_score": 117.9,
+    "math_richness": 8,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "ccxt_trading_executor.py": {
+    "file_path": "core\\ccxt_trading_executor.py",
+    "file_name": "ccxt_trading_executor.py",
+    "line_count": 522,
+    "file_size": 49875,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 43,
+      "function_count": 8,
+      "class_count": 7,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 5,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 60
+    },
+    "total_stub_score": 0,
+    "complexity_score": 449.8,
+    "math_richness": 65,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cellular_trade_executor.py": {
+    "file_path": "core\\cellular_trade_executor.py",
+    "file_name": "cellular_trade_executor.py",
+    "line_count": 667,
+    "file_size": 64728,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 47,
+      "function_count": 21,
+      "class_count": 5,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 20,
+      "tensor_ops": 1,
+      "quantum_terms": 6,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 494.7,
+    "math_richness": 28,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "chrono_recursive_logic_function.py": {
+    "file_path": "core\\chrono_recursive_logic_function.py",
+    "file_name": "chrono_recursive_logic_function.py",
+    "line_count": 648,
+    "file_size": 72492,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 55,
+      "function_count": 26,
+      "class_count": 4,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 40,
+      "tensor_ops": 15,
+      "quantum_terms": 3,
+      "entropy_terms": 33
+    },
+    "total_stub_score": 0,
+    "complexity_score": 573.4,
+    "math_richness": 92,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "chrono_resonance_weather_mapper.py": {
+    "file_path": "core\\chrono_resonance_weather_mapper.py",
+    "file_name": "chrono_resonance_weather_mapper.py",
+    "line_count": 839,
+    "file_size": 92247,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 49,
+      "function_count": 23,
+      "class_count": 8,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 45,
+      "tensor_ops": 4,
+      "quantum_terms": 6,
+      "entropy_terms": 19
+    },
+    "total_stub_score": 0,
+    "complexity_score": 520.5,
+    "math_richness": 76,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_math_foundation.py": {
+    "file_path": "core\\clean_math_foundation.py",
+    "file_name": "clean_math_foundation.py",
+    "line_count": 526,
+    "file_size": 47092,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 43,
+      "function_count": 16,
+      "class_count": 3,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 43,
+      "tensor_ops": 77,
+      "quantum_terms": 4,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 445.8,
+    "math_richness": 129,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_profit_memory_echo.py": {
+    "file_path": "core\\clean_profit_memory_echo.py",
+    "file_name": "clean_profit_memory_echo.py",
+    "line_count": 310,
+    "file_size": 24972,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 30,
+      "function_count": 11,
+      "class_count": 3,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 6,
+      "tensor_ops": 4,
+      "quantum_terms": 0,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 312.7,
+    "math_richness": 12,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_profit_vectorization.py": {
+    "file_path": "core\\clean_profit_vectorization.py",
+    "file_name": "clean_profit_vectorization.py",
+    "line_count": 545,
+    "file_size": 52092,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 43,
+      "function_count": 21,
+      "class_count": 9,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 6,
+      "tensor_ops": 18,
+      "quantum_terms": 1,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 461.5,
+    "math_richness": 27,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_risk_manager.py": {
+    "file_path": "core\\clean_risk_manager.py",
+    "file_name": "clean_risk_manager.py",
+    "line_count": 353,
+    "file_size": 28987,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 34,
+      "function_count": 19,
+      "class_count": 4,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 7,
+      "tensor_ops": 3,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 359.6,
+    "math_richness": 11,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_strategy_integration_bridge.py": {
+    "file_path": "core\\clean_strategy_integration_bridge.py",
+    "file_name": "clean_strategy_integration_bridge.py",
+    "line_count": 573,
+    "file_size": 83796,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 62,
+      "function_count": 11,
+      "class_count": 3,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 9,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 636.3,
+    "math_richness": 11,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_trading_pipeline.py": {
+    "file_path": "core\\clean_trading_pipeline.py",
+    "file_name": "clean_trading_pipeline.py",
+    "line_count": 588,
+    "file_size": 59278,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 5,
+      "function_count": 2,
+      "class_count": 14,
+      "import_count": 26
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 6,
+      "tensor_ops": 3,
+      "quantum_terms": 16,
+      "entropy_terms": 15
+    },
+    "total_stub_score": 0,
+    "complexity_score": 86.8,
+    "math_richness": 41,
+    "risk_level": "NORMAL"
+  },
+  "clean_unified_math.py": {
+    "file_path": "core\\clean_unified_math.py",
+    "file_name": "clean_unified_math.py",
+    "line_count": 501,
+    "file_size": 29363,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 18,
+      "function_count": 29,
+      "class_count": 2,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 46,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 200.3,
+    "math_richness": 48,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "clean_zbe_core.py": {
+    "file_path": "core\\clean_zbe_core.py",
+    "file_name": "clean_zbe_core.py",
+    "line_count": 569,
+    "file_size": 44582,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 11,
+      "class_count": 4,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 10,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 325.3,
+    "math_richness": 11,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_dual_state_router.py": {
+    "file_path": "core\\cli_dual_state_router.py",
+    "file_name": "cli_dual_state_router.py",
+    "line_count": 409,
+    "file_size": 36481,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 32,
+      "function_count": 2,
+      "class_count": 1,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 4,
+      "tensor_ops": 3,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 326.3,
+    "math_richness": 8,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_entropy_manager.py": {
+    "file_path": "core\\cli_entropy_manager.py",
+    "file_name": "cli_entropy_manager.py",
+    "line_count": 105,
+    "file_size": 4634,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 10,
+      "function_count": 6,
+      "class_count": 0,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 9
+    },
+    "total_stub_score": 0,
+    "complexity_score": 104.8,
+    "math_richness": 9,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_live_entry.py": {
+    "file_path": "core\\cli_live_entry.py",
+    "file_name": "cli_live_entry.py",
+    "line_count": 805,
+    "file_size": 155753,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 105,
+      "function_count": 6,
+      "class_count": 1,
+      "import_count": 24
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 9,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1062.2,
+    "math_richness": 13,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_orbital_profit_control.py": {
+    "file_path": "core\\cli_orbital_profit_control.py",
+    "file_name": "cli_orbital_profit_control.py",
+    "line_count": 132,
+    "file_size": 6530,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 12,
+      "function_count": 6,
+      "class_count": 0,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 4,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 124.8,
+    "math_richness": 4,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_system_monitor.py": {
+    "file_path": "core\\cli_system_monitor.py",
+    "file_name": "cli_system_monitor.py",
+    "line_count": 704,
+    "file_size": 86078,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 55,
+      "function_count": 7,
+      "class_count": 1,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 4,
+      "tensor_ops": 5,
+      "quantum_terms": 0,
+      "entropy_terms": 16
+    },
+    "total_stub_score": 0,
+    "complexity_score": 559.7,
+    "math_richness": 25,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cli_tensor_state_manager.py": {
+    "file_path": "core\\cli_tensor_state_manager.py",
+    "file_name": "cli_tensor_state_manager.py",
+    "line_count": 614,
+    "file_size": 57296,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 36,
+      "function_count": 4,
+      "class_count": 1,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 5,
+      "tensor_ops": 81,
+      "quantum_terms": 0,
+      "entropy_terms": 18
+    },
+    "total_stub_score": 0,
+    "complexity_score": 367.6,
+    "math_richness": 105,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "comprehensive_integration_system.py": {
+    "file_path": "core\\comprehensive_integration_system.py",
+    "file_name": "comprehensive_integration_system.py",
+    "line_count": 278,
+    "file_size": 20919,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 24,
+      "function_count": 4,
+      "class_count": 1,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 3,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 246.1,
+    "math_richness": 4,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "cpu_handlers.py": {
+    "file_path": "core\\cpu_handlers.py",
+    "file_name": "cpu_handlers.py",
+    "line_count": 571,
+    "file_size": 61094,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 45,
+      "function_count": 17,
+      "class_count": 1,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 38,
+      "tensor_ops": 24,
+      "quantum_terms": 1,
+      "entropy_terms": 27
+    },
+    "total_stub_score": 1,
+    "complexity_score": 462.6,
+    "math_richness": 91,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "crwf_crlf_integration.py": {
+    "file_path": "core\\crwf_crlf_integration.py",
+    "file_name": "crwf_crlf_integration.py",
+    "line_count": 819,
+    "file_size": 76246,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 32,
+      "function_count": 29,
+      "class_count": 4,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 15,
+      "tensor_ops": 23,
+      "quantum_terms": 6,
+      "entropy_terms": 17
+    },
+    "total_stub_score": 0,
+    "complexity_score": 344.6,
+    "math_richness": 62,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "digest_time_mapper.py": {
+    "file_path": "core\\digest_time_mapper.py",
+    "file_name": "digest_time_mapper.py",
+    "line_count": 684,
+    "file_size": 91268,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 64,
+      "function_count": 18,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 15,
+      "tensor_ops": 0,
+      "quantum_terms": 24,
+      "entropy_terms": 14
+    },
+    "total_stub_score": 0,
+    "complexity_score": 662.6,
+    "math_richness": 54,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "distributed_mathematical_processor.py": {
+    "file_path": "core\\distributed_mathematical_processor.py",
+    "file_name": "distributed_mathematical_processor.py",
+    "line_count": 921,
+    "file_size": 167693,
+    "stub_indicators": {
+      "pass_statements": 3,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 90,
+      "function_count": 37,
+      "class_count": 8,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 51,
+      "tensor_ops": 29,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 3,
+    "complexity_score": 938.7,
+    "math_richness": 82,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "dlt_waveform_engine.py": {
+    "file_path": "core\\dlt_waveform_engine.py",
+    "file_name": "dlt_waveform_engine.py",
+    "line_count": 626,
+    "file_size": 22395,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 7,
+      "function_count": 19,
+      "class_count": 2,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 61,
+      "tensor_ops": 43,
+      "quantum_terms": 27,
+      "entropy_terms": 26
+    },
+    "total_stub_score": 0,
+    "complexity_score": 85.6,
+    "math_richness": 158,
+    "risk_level": "MATH_RICH"
+  },
+  "dna_strategy_encoder.py": {
+    "file_path": "core\\dna_strategy_encoder.py",
+    "file_name": "dna_strategy_encoder.py",
+    "line_count": 828,
+    "file_size": 123405,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 82,
+      "function_count": 24,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 4,
+      "tensor_ops": 25,
+      "quantum_terms": 4,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 0,
+    "complexity_score": 848.7,
+    "math_richness": 42,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "dualistic_thought_engines.py": {
+    "file_path": "core\\dualistic_thought_engines.py",
+    "file_name": "dualistic_thought_engines.py",
+    "line_count": 552,
+    "file_size": 56623,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 30,
+      "function_count": 17,
+      "class_count": 6,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 7,
+      "tensor_ops": 57,
+      "quantum_terms": 2,
+      "entropy_terms": 5
+    },
+    "total_stub_score": 0,
+    "complexity_score": 322.9,
+    "math_richness": 72,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "enhanced_ccxt_trading_engine.py": {
+    "file_path": "core\\enhanced_ccxt_trading_engine.py",
+    "file_name": "enhanced_ccxt_trading_engine.py",
+    "line_count": 801,
+    "file_size": 117432,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 75,
+      "function_count": 32,
+      "class_count": 5,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 17,
+      "tensor_ops": 6,
+      "quantum_terms": 0,
+      "entropy_terms": 55
+    },
+    "total_stub_score": 0,
+    "complexity_score": 778.1,
+    "math_richness": 78,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "enhanced_error_recovery_system.py": {
+    "file_path": "core\\enhanced_error_recovery_system.py",
+    "file_name": "enhanced_error_recovery_system.py",
+    "line_count": 934,
+    "file_size": 168877,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 1,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 107,
+      "function_count": 41,
+      "class_count": 11,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 13,
+      "tensor_ops": 28,
+      "quantum_terms": 1,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 2,
+    "complexity_score": 1116.1,
+    "math_richness": 45,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "enhanced_live_execution_mapper.py": {
+    "file_path": "core\\enhanced_live_execution_mapper.py",
+    "file_name": "enhanced_live_execution_mapper.py",
+    "line_count": 166,
+    "file_size": 7442,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 9,
+      "function_count": 7,
+      "class_count": 3,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 2,
+      "tensor_ops": 0,
+      "quantum_terms": 1,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 101.0,
+    "math_richness": 5,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "enhanced_master_cycle_engine.py": {
+    "file_path": "core\\enhanced_master_cycle_engine.py",
+    "file_name": "enhanced_master_cycle_engine.py",
+    "line_count": 219,
+    "file_size": 9033,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 7,
+      "function_count": 2,
+      "class_count": 3,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 2,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 78.8,
+    "math_richness": 2,
+    "risk_level": "NORMAL"
+  },
+  "enhanced_master_cycle_profit_engine.py": {
+    "file_path": "core\\enhanced_master_cycle_profit_engine.py",
+    "file_name": "enhanced_master_cycle_profit_engine.py",
+    "line_count": 29,
+    "file_size": 377,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 0.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "enhanced_profit_trading_strategy.py": {
+    "file_path": "core\\enhanced_profit_trading_strategy.py",
+    "file_name": "enhanced_profit_trading_strategy.py",
+    "line_count": 265,
+    "file_size": 12582,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 10,
+      "function_count": 12,
+      "class_count": 3,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 19,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 0,
+    "complexity_score": 113.5,
+    "math_richness": 27,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "enhanced_tcell_system.py": {
+    "file_path": "core\\enhanced_tcell_system.py",
+    "file_name": "enhanced_tcell_system.py",
+    "line_count": 9,
+    "file_size": 167,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 0.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "entropy_drift_tracker.py": {
+    "file_path": "core\\entropy_drift_tracker.py",
+    "file_name": "entropy_drift_tracker.py",
+    "line_count": 650,
+    "file_size": 105391,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 83,
+      "function_count": 17,
+      "class_count": 5,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 11,
+      "tensor_ops": 55,
+      "quantum_terms": 0,
+      "entropy_terms": 19
+    },
+    "total_stub_score": 0,
+    "complexity_score": 851.2,
+    "math_richness": 87,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "entropy_driven_risk_management.py": {
+    "file_path": "core\\entropy_driven_risk_management.py",
+    "file_name": "entropy_driven_risk_management.py",
+    "line_count": 887,
+    "file_size": 126226,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 71,
+      "function_count": 20,
+      "class_count": 7,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 34,
+      "tensor_ops": 7,
+      "quantum_terms": 2,
+      "entropy_terms": 87
+    },
+    "total_stub_score": 0,
+    "complexity_score": 738.8,
+    "math_richness": 132,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "entropy_enhanced_trading_executor.py": {
+    "file_path": "core\\entropy_enhanced_trading_executor.py",
+    "file_name": "entropy_enhanced_trading_executor.py",
+    "line_count": 708,
+    "file_size": 62496,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 41,
+      "function_count": 14,
+      "class_count": 5,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 19,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 41
+    },
+    "total_stub_score": 0,
+    "complexity_score": 430.9,
+    "math_richness": 62,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "entropy_math.py": {
+    "file_path": "core\\entropy_math.py",
+    "file_name": "entropy_math.py",
+    "line_count": 632,
+    "file_size": 64836,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 50,
+      "function_count": 18,
+      "class_count": 2,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 3,
+      "math_functions": 42,
+      "tensor_ops": 9,
+      "quantum_terms": 15,
+      "entropy_terms": 117
+    },
+    "total_stub_score": 0,
+    "complexity_score": 515.7,
+    "math_richness": 186,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "entropy_signal_integration.py": {
+    "file_path": "core\\entropy_signal_integration.py",
+    "file_name": "entropy_signal_integration.py",
+    "line_count": 663,
+    "file_size": 80969,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 1,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 62,
+      "function_count": 21,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 14,
+      "tensor_ops": 0,
+      "quantum_terms": 8,
+      "entropy_terms": 49
+    },
+    "total_stub_score": 1,
+    "complexity_score": 644.1,
+    "math_richness": 72,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "error_handling_and_flake_gate_prevention.py": {
+    "file_path": "core\\error_handling_and_flake_gate_prevention.py",
+    "file_name": "error_handling_and_flake_gate_prevention.py",
+    "line_count": 915,
+    "file_size": 124341,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 63,
+      "function_count": 46,
+      "class_count": 15,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 13,
+      "tensor_ops": 1,
+      "quantum_terms": 17,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 684.2,
+    "math_richness": 32,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "fill_handler.py": {
+    "file_path": "core\\fill_handler.py",
+    "file_name": "fill_handler.py",
+    "line_count": 553,
+    "file_size": 46836,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 34,
+      "function_count": 15,
+      "class_count": 6,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 4,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 41
+    },
+    "total_stub_score": 1,
+    "complexity_score": 361.9,
+    "math_richness": 45,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "final_integration_launcher.py": {
+    "file_path": "core\\final_integration_launcher.py",
+    "file_name": "final_integration_launcher.py",
+    "line_count": 822,
+    "file_size": 100125,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 44,
+      "function_count": 13,
+      "class_count": 12,
+      "import_count": 2
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 8,
+      "tensor_ops": 0,
+      "quantum_terms": 6,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 471.1,
+    "math_richness": 14,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "flask_ai_agent_handler.py": {
+    "file_path": "core\\flask_ai_agent_handler.py",
+    "file_name": "flask_ai_agent_handler.py",
+    "line_count": 807,
+    "file_size": 97724,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 51,
+      "function_count": 18,
+      "class_count": 6,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 4,
+      "tensor_ops": 3,
+      "quantum_terms": 0,
+      "entropy_terms": 18
+    },
+    "total_stub_score": 0,
+    "complexity_score": 535.2,
+    "math_richness": 26,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "flask_communication_relay.py": {
+    "file_path": "core\\flask_communication_relay.py",
+    "file_name": "flask_communication_relay.py",
+    "line_count": 608,
+    "file_size": 52380,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 22,
+      "class_count": 1,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 5,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 6
+    },
+    "total_stub_score": 0,
+    "complexity_score": 325.4,
+    "math_richness": 14,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "fractal_core.py": {
+    "file_path": "core\\fractal_core.py",
+    "file_name": "fractal_core.py",
+    "line_count": 451,
+    "file_size": 52753,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 54,
+      "function_count": 10,
+      "class_count": 1,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 27,
+      "tensor_ops": 93,
+      "quantum_terms": 3,
+      "entropy_terms": 25
+    },
+    "total_stub_score": 0,
+    "complexity_score": 549.4,
+    "math_richness": 150,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "fractal_memory_tracker.py": {
+    "file_path": "core\\fractal_memory_tracker.py",
+    "file_name": "fractal_memory_tracker.py",
+    "line_count": 481,
+    "file_size": 43122,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 38,
+      "function_count": 14,
+      "class_count": 4,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 12,
+      "tensor_ops": 15,
+      "quantum_terms": 6,
+      "entropy_terms": 18
+    },
+    "total_stub_score": 0,
+    "complexity_score": 397.1,
+    "math_richness": 52,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "galileo_tensor_bridge.py": {
+    "file_path": "core\\galileo_tensor_bridge.py",
+    "file_name": "galileo_tensor_bridge.py",
+    "line_count": 170,
+    "file_size": 8307,
+    "stub_indicators": {
+      "pass_statements": 2,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 2
+    },
+    "complexity_indicators": {
+      "nested_levels": 9,
+      "function_count": 11,
+      "class_count": 4,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 8,
+      "tensor_ops": 4,
+      "quantum_terms": 7,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 4,
+    "complexity_score": 104.4,
+    "math_richness": 27,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "ghost_core.py": {
+    "file_path": "core\\ghost_core.py",
+    "file_name": "ghost_core.py",
+    "line_count": 480,
+    "file_size": 43693,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 37,
+      "function_count": 12,
+      "class_count": 3,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 19,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 384.4,
+    "math_richness": 23,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "glyph_phase_resolver.py": {
+    "file_path": "core\\glyph_phase_resolver.py",
+    "file_name": "glyph_phase_resolver.py",
+    "line_count": 317,
+    "file_size": 26266,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 8,
+      "class_count": 3,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 12,
+      "tensor_ops": 0,
+      "quantum_terms": 35,
+      "entropy_terms": 25
+    },
+    "total_stub_score": 0,
+    "complexity_score": 321.2,
+    "math_richness": 72,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "glyph_router.py": {
+    "file_path": "core\\glyph_router.py",
+    "file_name": "glyph_router.py",
+    "line_count": 30,
+    "file_size": 910,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 4,
+      "function_count": 3,
+      "class_count": 1,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 43.5,
+    "math_richness": 1,
+    "risk_level": "LOW_VALUE"
+  },
+  "gpu_dna_autodetect.py": {
+    "file_path": "core\\gpu_dna_autodetect.py",
+    "file_name": "gpu_dna_autodetect.py",
+    "line_count": 374,
+    "file_size": 22950,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 12,
+      "class_count": 2,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 1,
+      "tensor_ops": 8,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 203.3,
+    "math_richness": 10,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "gpu_handlers.py": {
+    "file_path": "core\\gpu_handlers.py",
+    "file_name": "gpu_handlers.py",
+    "line_count": 791,
+    "file_size": 108221,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 19,
+      "class_count": 1,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 67,
+      "tensor_ops": 54,
+      "quantum_terms": 6,
+      "entropy_terms": 37
+    },
+    "total_stub_score": 0,
+    "complexity_score": 613.9,
+    "math_richness": 165,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "gpu_shader_integration.py": {
+    "file_path": "core\\gpu_shader_integration.py",
+    "file_name": "gpu_shader_integration.py",
+    "line_count": 587,
+    "file_size": 47552,
+    "stub_indicators": {
+      "pass_statements": 2,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 29,
+      "function_count": 17,
+      "class_count": 2,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 3,
+      "tensor_ops": 20,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 2,
+    "complexity_score": 306.1,
+    "math_richness": 24,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "hash_glyph_compression.py": {
+    "file_path": "core\\hash_glyph_compression.py",
+    "file_name": "hash_glyph_compression.py",
+    "line_count": 469,
+    "file_size": 42159,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 39,
+      "function_count": 11,
+      "class_count": 2,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 29,
+      "quantum_terms": 5,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 401.9,
+    "math_richness": 44,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "hash_match_command_injector.py": {
+    "file_path": "core\\hash_match_command_injector.py",
+    "file_name": "hash_match_command_injector.py",
+    "line_count": 831,
+    "file_size": 114385,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 69,
+      "function_count": 13,
+      "class_count": 6,
+      "import_count": 15
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 13,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 15
+    },
+    "total_stub_score": 0,
+    "complexity_score": 713.0,
+    "math_richness": 29,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "integrated_advanced_trading_system.py": {
+    "file_path": "core\\integrated_advanced_trading_system.py",
+    "file_name": "integrated_advanced_trading_system.py",
+    "line_count": 693,
+    "file_size": 86246,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 65,
+      "function_count": 21,
+      "class_count": 4,
+      "import_count": 18
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 29,
+      "tensor_ops": 3,
+      "quantum_terms": 15,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 1,
+    "complexity_score": 673.9,
+    "math_richness": 48,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "integration_orchestrator.py": {
+    "file_path": "core\\integration_orchestrator.py",
+    "file_name": "integration_orchestrator.py",
+    "line_count": 37,
+    "file_size": 1217,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 2,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 0,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 22.0,
+    "math_richness": 2,
+    "risk_level": "LOW_VALUE"
+  },
+  "integration_test.py": {
+    "file_path": "core\\integration_test.py",
+    "file_name": "integration_test.py",
+    "line_count": 34,
+    "file_size": 1147,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 4,
+      "function_count": 3,
+      "class_count": 1,
+      "import_count": 1
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 43.8,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "internal_ai_agent_system.py": {
+    "file_path": "core\\internal_ai_agent_system.py",
+    "file_name": "internal_ai_agent_system.py",
+    "line_count": 580,
+    "file_size": 61014,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 51,
+      "function_count": 17,
+      "class_count": 10,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 17,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 540.9,
+    "math_richness": 23,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "lantern_core_integration.py": {
+    "file_path": "core\\lantern_core_integration.py",
+    "file_name": "lantern_core_integration.py",
+    "line_count": 603,
+    "file_size": 49115,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 36,
+      "function_count": 20,
+      "class_count": 6,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 29,
+      "tensor_ops": 19,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 386.8,
+    "math_richness": 49,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "live_api_backtesting.py": {
+    "file_path": "core\\live_api_backtesting.py",
+    "file_name": "live_api_backtesting.py",
+    "line_count": 561,
+    "file_size": 65720,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 7,
+      "class_count": 5,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 1,
+    "complexity_score": 617.4,
+    "math_richness": 0,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "live_execution_mapper.py": {
+    "file_path": "core\\live_execution_mapper.py",
+    "file_name": "live_execution_mapper.py",
+    "line_count": 554,
+    "file_size": 38330,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 30,
+      "function_count": 17,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 14,
+      "tensor_ops": 8,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 325.2,
+    "math_richness": 23,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "live_vector_simulator.py": {
+    "file_path": "core\\live_vector_simulator.py",
+    "file_name": "live_vector_simulator.py",
+    "line_count": 764,
+    "file_size": 77992,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 48,
+      "function_count": 11,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 44,
+      "tensor_ops": 12,
+      "quantum_terms": 3,
+      "entropy_terms": 27
+    },
+    "total_stub_score": 0,
+    "complexity_score": 499.1,
+    "math_richness": 87,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "loop_strategy_switcher.py": {
+    "file_path": "core\\loop_strategy_switcher.py",
+    "file_name": "loop_strategy_switcher.py",
+    "line_count": 638,
+    "file_size": 73307,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 51,
+      "function_count": 13,
+      "class_count": 3,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 12,
+      "tensor_ops": 24,
+      "quantum_terms": 3,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 0,
+    "complexity_score": 526.7,
+    "math_richness": 48,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "master_cycle_engine.py": {
+    "file_path": "core\\master_cycle_engine.py",
+    "file_name": "master_cycle_engine.py",
+    "line_count": 9,
+    "file_size": 174,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 0.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "master_cycle_engine_enhanced.py": {
+    "file_path": "core\\master_cycle_engine_enhanced.py",
+    "file_name": "master_cycle_engine_enhanced.py",
+    "line_count": 9,
+    "file_size": 150,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 0.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "master_profit_coordination_system.py": {
+    "file_path": "core\\master_profit_coordination_system.py",
+    "file_name": "master_profit_coordination_system.py",
+    "line_count": 1085,
+    "file_size": 144405,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 69,
+      "function_count": 11,
+      "class_count": 3,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 27,
+      "tensor_ops": 3,
+      "quantum_terms": 2,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 706.3,
+    "math_richness": 34,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "mathematical_optimization_bridge.py": {
+    "file_path": "core\\mathematical_optimization_bridge.py",
+    "file_name": "mathematical_optimization_bridge.py",
+    "line_count": 410,
+    "file_size": 33404,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 30,
+      "function_count": 17,
+      "class_count": 5,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 23,
+      "tensor_ops": 17,
+      "quantum_terms": 0,
+      "entropy_terms": 20
+    },
+    "total_stub_score": 0,
+    "complexity_score": 321.8,
+    "math_richness": 62,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "mathlib_v3_visualizer.py": {
+    "file_path": "core\\mathlib_v3_visualizer.py",
+    "file_name": "mathlib_v3_visualizer.py",
+    "line_count": 29,
+    "file_size": 634,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 1,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 11.4,
+    "math_richness": 2,
+    "risk_level": "LOW_VALUE"
+  },
+  "mathlib_v4.py": {
+    "file_path": "core\\mathlib_v4.py",
+    "file_name": "mathlib_v4.py",
+    "line_count": 403,
+    "file_size": 26698,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 20,
+      "function_count": 27,
+      "class_count": 6,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 37,
+      "tensor_ops": 0,
+      "quantum_terms": 8,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 228.2,
+    "math_richness": 48,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "matrix_mapper.py": {
+    "file_path": "core\\matrix_mapper.py",
+    "file_name": "matrix_mapper.py",
+    "line_count": 1071,
+    "file_size": 176789,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 87,
+      "function_count": 36,
+      "class_count": 6,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 19,
+      "tensor_ops": 151,
+      "quantum_terms": 3,
+      "entropy_terms": 11
+    },
+    "total_stub_score": 0,
+    "complexity_score": 903.0,
+    "math_richness": 185,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "matrix_math_utils.py": {
+    "file_path": "core\\matrix_math_utils.py",
+    "file_name": "matrix_math_utils.py",
+    "line_count": 620,
+    "file_size": 92831,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 78,
+      "function_count": 24,
+      "class_count": 2,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 25,
+      "tensor_ops": 209,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 798.1,
+    "math_richness": 235,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "multi_frequency_resonance_engine.py": {
+    "file_path": "core\\multi_frequency_resonance_engine.py",
+    "file_name": "multi_frequency_resonance_engine.py",
+    "line_count": 679,
+    "file_size": 76720,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 50,
+      "function_count": 5,
+      "class_count": 4,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 26,
+      "tensor_ops": 3,
+      "quantum_terms": 59,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 513.2,
+    "math_richness": 89,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "neural_processing_engine.py": {
+    "file_path": "core\\neural_processing_engine.py",
+    "file_name": "neural_processing_engine.py",
+    "line_count": 909,
+    "file_size": 147086,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 88,
+      "function_count": 30,
+      "class_count": 11,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 5,
+      "math_functions": 23,
+      "tensor_ops": 26,
+      "quantum_terms": 1,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 1,
+    "complexity_score": 920.3,
+    "math_richness": 58,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "orbital_profit_control_system.py": {
+    "file_path": "core\\orbital_profit_control_system.py",
+    "file_name": "orbital_profit_control_system.py",
+    "line_count": 955,
+    "file_size": 114645,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 71,
+      "function_count": 18,
+      "class_count": 7,
+      "import_count": 15
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 46,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 10
+    },
+    "total_stub_score": 0,
+    "complexity_score": 737.5,
+    "math_richness": 60,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "orbital_shell_brain_system.py": {
+    "file_path": "core\\orbital_shell_brain_system.py",
+    "file_name": "orbital_shell_brain_system.py",
+    "line_count": 560,
+    "file_size": 56151,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 46,
+      "function_count": 21,
+      "class_count": 7,
+      "import_count": 15
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 18,
+      "tensor_ops": 15,
+      "quantum_terms": 2,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 489.0,
+    "math_richness": 37,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "orbital_xi_ring_system.py": {
+    "file_path": "core\\orbital_xi_ring_system.py",
+    "file_name": "orbital_xi_ring_system.py",
+    "line_count": 797,
+    "file_size": 126581,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 76,
+      "function_count": 22,
+      "class_count": 4,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 16,
+      "tensor_ops": 6,
+      "quantum_terms": 8,
+      "entropy_terms": 31
+    },
+    "total_stub_score": 0,
+    "complexity_score": 782.9,
+    "math_richness": 63,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "order_book_analyzer.py": {
+    "file_path": "core\\order_book_analyzer.py",
+    "file_name": "order_book_analyzer.py",
+    "line_count": 719,
+    "file_size": 69198,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 46,
+      "function_count": 24,
+      "class_count": 5,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 30,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 22
+    },
+    "total_stub_score": 0,
+    "complexity_score": 483.8,
+    "math_richness": 53,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "order_book_manager.py": {
+    "file_path": "core\\order_book_manager.py",
+    "file_name": "order_book_manager.py",
+    "line_count": 447,
+    "file_size": 47129,
+    "stub_indicators": {
+      "pass_statements": 2,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 49,
+      "function_count": 22,
+      "class_count": 4,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 6,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 37
+    },
+    "total_stub_score": 2,
+    "complexity_score": 510.8,
+    "math_richness": 43,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "order_wall_analyzer.py": {
+    "file_path": "core\\order_wall_analyzer.py",
+    "file_name": "order_wall_analyzer.py",
+    "line_count": 32,
+    "file_size": 1001,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 2,
+      "function_count": 1,
+      "class_count": 1,
+      "import_count": 2
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 2,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 23.1,
+    "math_richness": 4,
+    "risk_level": "LOW_VALUE"
+  },
+  "phantom_detector.py": {
+    "file_path": "core\\phantom_detector.py",
+    "file_name": "phantom_detector.py",
+    "line_count": 450,
+    "file_size": 23364,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 18,
+      "function_count": 16,
+      "class_count": 2,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 37,
+      "tensor_ops": 9,
+      "quantum_terms": 2,
+      "entropy_terms": 6
+    },
+    "total_stub_score": 0,
+    "complexity_score": 193.8,
+    "math_richness": 55,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "phantom_logger.py": {
+    "file_path": "core\\phantom_logger.py",
+    "file_name": "phantom_logger.py",
+    "line_count": 476,
+    "file_size": 49493,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 51,
+      "function_count": 12,
+      "class_count": 2,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 26,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 522.7,
+    "math_richness": 26,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "phantom_registry.py": {
+    "file_path": "core\\phantom_registry.py",
+    "file_name": "phantom_registry.py",
+    "line_count": 749,
+    "file_size": 89715,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 60,
+      "function_count": 23,
+      "class_count": 2,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 18,
+      "tensor_ops": 4,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 618.2,
+    "math_richness": 23,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "phase_bit_integration.py": {
+    "file_path": "core\\phase_bit_integration.py",
+    "file_name": "phase_bit_integration.py",
+    "line_count": 239,
+    "file_size": 13307,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 17,
+      "function_count": 8,
+      "class_count": 4,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 3,
+      "tensor_ops": 0,
+      "quantum_terms": 10,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 1,
+    "complexity_score": 183.2,
+    "math_richness": 13,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "portfolio_tracker.py": {
+    "file_path": "core\\portfolio_tracker.py",
+    "file_name": "portfolio_tracker.py",
+    "line_count": 539,
+    "file_size": 63209,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 49,
+      "function_count": 15,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 4,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 514.2,
+    "math_richness": 7,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "production_deployment_manager.py": {
+    "file_path": "core\\production_deployment_manager.py",
+    "file_name": "production_deployment_manager.py",
+    "line_count": 616,
+    "file_size": 87574,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 81,
+      "function_count": 19,
+      "class_count": 6,
+      "import_count": 18
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 5,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 836.9,
+    "math_richness": 15,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_allocator.py": {
+    "file_path": "core\\profit_allocator.py",
+    "file_name": "profit_allocator.py",
+    "line_count": 239,
+    "file_size": 14855,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 6,
+      "class_count": 2,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 30,
+      "tensor_ops": 5,
+      "quantum_terms": 12,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 198.5,
+    "math_richness": 48,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_backend_dispatcher.py": {
+    "file_path": "core\\profit_backend_dispatcher.py",
+    "file_name": "profit_backend_dispatcher.py",
+    "line_count": 301,
+    "file_size": 17165,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 18,
+      "function_count": 19,
+      "class_count": 2,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 18,
+      "tensor_ops": 11,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 195.3,
+    "math_richness": 30,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_decorators.py": {
+    "file_path": "core\\profit_decorators.py",
+    "file_name": "profit_decorators.py",
+    "line_count": 194,
+    "file_size": 13814,
+    "stub_indicators": {
+      "pass_statements": 3,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 27,
+      "function_count": 12,
+      "class_count": 0,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 3,
+    "complexity_score": 277.2,
+    "math_richness": 2,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_matrix_feedback_loop.py": {
+    "file_path": "core\\profit_matrix_feedback_loop.py",
+    "file_name": "profit_matrix_feedback_loop.py",
+    "line_count": 551,
+    "file_size": 67587,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 53,
+      "function_count": 14,
+      "class_count": 7,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 17,
+      "tensor_ops": 56,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 553.7,
+    "math_richness": 75,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_optimization_engine.py": {
+    "file_path": "core\\profit_optimization_engine.py",
+    "file_name": "profit_optimization_engine.py",
+    "line_count": 506,
+    "file_size": 30609,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 24,
+      "function_count": 19,
+      "class_count": 5,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 57,
+      "tensor_ops": 7,
+      "quantum_terms": 6,
+      "entropy_terms": 4
+    },
+    "total_stub_score": 0,
+    "complexity_score": 260.7,
+    "math_richness": 75,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "profit_tier_adjuster.py": {
+    "file_path": "core\\profit_tier_adjuster.py",
+    "file_name": "profit_tier_adjuster.py",
+    "line_count": 47,
+    "file_size": 1720,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 4,
+      "function_count": 2,
+      "class_count": 1,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 43.9,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "pure_profit_calculator.py": {
+    "file_path": "core\\pure_profit_calculator.py",
+    "file_name": "pure_profit_calculator.py",
+    "line_count": 887,
+    "file_size": 156772,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 80,
+      "function_count": 36,
+      "class_count": 8,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 33,
+      "tensor_ops": 31,
+      "quantum_terms": 1,
+      "entropy_terms": 25
+    },
+    "total_stub_score": 0,
+    "complexity_score": 837.3,
+    "math_richness": 92,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "qsc_enhanced_profit_allocator.py": {
+    "file_path": "core\\qsc_enhanced_profit_allocator.py",
+    "file_name": "qsc_enhanced_profit_allocator.py",
+    "line_count": 436,
+    "file_size": 25611,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 15,
+      "function_count": 27,
+      "class_count": 7,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 16,
+      "tensor_ops": 5,
+      "quantum_terms": 4,
+      "entropy_terms": 5
+    },
+    "total_stub_score": 0,
+    "complexity_score": 179.3,
+    "math_richness": 30,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "quad_bit_strategy_array.py": {
+    "file_path": "core\\quad_bit_strategy_array.py",
+    "file_name": "quad_bit_strategy_array.py",
+    "line_count": 586,
+    "file_size": 50387,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 29,
+      "function_count": 19,
+      "class_count": 7,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 6,
+      "tensor_ops": 23,
+      "quantum_terms": 1,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 316.5,
+    "math_richness": 31,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "quantum_mathematical_bridge.py": {
+    "file_path": "core\\quantum_mathematical_bridge.py",
+    "file_name": "quantum_mathematical_bridge.py",
+    "line_count": 619,
+    "file_size": 48148,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 42,
+      "function_count": 19,
+      "class_count": 3,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 34,
+      "tensor_ops": 59,
+      "quantum_terms": 154,
+      "entropy_terms": 9
+    },
+    "total_stub_score": 1,
+    "complexity_score": 437.3,
+    "math_richness": 256,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "qutrit_signal_matrix.py": {
+    "file_path": "core\\qutrit_signal_matrix.py",
+    "file_name": "qutrit_signal_matrix.py",
+    "line_count": 298,
+    "file_size": 20199,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 12,
+      "class_count": 3,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 11,
+      "tensor_ops": 45,
+      "quantum_terms": 19,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 203.8,
+    "math_richness": 76,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "real_multi_exchange_trader.py": {
+    "file_path": "core\\real_multi_exchange_trader.py",
+    "file_name": "real_multi_exchange_trader.py",
+    "line_count": 721,
+    "file_size": 77861,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 55,
+      "function_count": 8,
+      "class_count": 5,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 2,
+      "quantum_terms": 0,
+      "entropy_terms": 15
+    },
+    "total_stub_score": 0,
+    "complexity_score": 566.7,
+    "math_richness": 27,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "real_time_execution_engine.py": {
+    "file_path": "core\\real_time_execution_engine.py",
+    "file_name": "real_time_execution_engine.py",
+    "line_count": 1323,
+    "file_size": 309244,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 130,
+      "function_count": 16,
+      "class_count": 6,
+      "import_count": 19
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 22,
+      "tensor_ops": 13,
+      "quantum_terms": 29,
+      "entropy_terms": 52
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1325.7,
+    "math_richness": 117,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "real_time_market_data.py": {
+    "file_path": "core\\real_time_market_data.py",
+    "file_name": "real_time_market_data.py",
+    "line_count": 765,
+    "file_size": 124736,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 97,
+      "function_count": 12,
+      "class_count": 4,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 4,
+      "tensor_ops": 11,
+      "quantum_terms": 15,
+      "entropy_terms": 10
+    },
+    "total_stub_score": 0,
+    "complexity_score": 987.9,
+    "math_richness": 41,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "recursive_hash_echo.py": {
+    "file_path": "core\\recursive_hash_echo.py",
+    "file_name": "recursive_hash_echo.py",
+    "line_count": 325,
+    "file_size": 24947,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 8,
+      "class_count": 1,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 15,
+      "tensor_ops": 12,
+      "quantum_terms": 3,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 0,
+    "complexity_score": 317.2,
+    "math_richness": 38,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "reentry_logic.py": {
+    "file_path": "core\\reentry_logic.py",
+    "file_name": "reentry_logic.py",
+    "line_count": 53,
+    "file_size": 1833,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 4,
+      "function_count": 2,
+      "class_count": 1,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 43.9,
+    "math_richness": 1,
+    "risk_level": "NORMAL"
+  },
+  "risk_manager.py": {
+    "file_path": "core\\risk_manager.py",
+    "file_name": "risk_manager.py",
+    "line_count": 654,
+    "file_size": 92744,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 69,
+      "function_count": 27,
+      "class_count": 6,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 17,
+      "tensor_ops": 6,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 717.9,
+    "math_richness": 25,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "schwabot_mathematical_trading_engine.py": {
+    "file_path": "core\\schwabot_mathematical_trading_engine.py",
+    "file_name": "schwabot_mathematical_trading_engine.py",
+    "line_count": 382,
+    "file_size": 27555,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 22,
+      "function_count": 7,
+      "class_count": 2,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 6,
+      "tensor_ops": 2,
+      "quantum_terms": 11,
+      "entropy_terms": 6
+    },
+    "total_stub_score": 0,
+    "complexity_score": 230.2,
+    "math_richness": 26,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "schwabot_rheology_integration.py": {
+    "file_path": "core\\schwabot_rheology_integration.py",
+    "file_name": "schwabot_rheology_integration.py",
+    "line_count": 305,
+    "file_size": 17931,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 14,
+      "function_count": 11,
+      "class_count": 5,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 15,
+      "tensor_ops": 4,
+      "quantum_terms": 4,
+      "entropy_terms": 10
+    },
+    "total_stub_score": 0,
+    "complexity_score": 158.8,
+    "math_richness": 35,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "schwafit_core.py": {
+    "file_path": "core\\schwafit_core.py",
+    "file_name": "schwafit_core.py",
+    "line_count": 123,
+    "file_size": 4557,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 5,
+      "function_count": 8,
+      "class_count": 1,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 4,
+      "quantum_terms": 0,
+      "entropy_terms": 10
+    },
+    "total_stub_score": 0,
+    "complexity_score": 57.2,
+    "math_richness": 24,
+    "risk_level": "NORMAL"
+  },
+  "secure_exchange_manager.py": {
+    "file_path": "core\\secure_exchange_manager.py",
+    "file_name": "secure_exchange_manager.py",
+    "line_count": 774,
+    "file_size": 107449,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 68,
+      "function_count": 16,
+      "class_count": 5,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 7,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 31
+    },
+    "total_stub_score": 0,
+    "complexity_score": 700.4,
+    "math_richness": 38,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "shell_memory_engine.py": {
+    "file_path": "core\\shell_memory_engine.py",
+    "file_name": "shell_memory_engine.py",
+    "line_count": 501,
+    "file_size": 48744,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 43,
+      "function_count": 13,
+      "class_count": 3,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 24,
+      "quantum_terms": 7,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 444.9,
+    "math_richness": 41,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "slot_state_mapper.py": {
+    "file_path": "core\\slot_state_mapper.py",
+    "file_name": "slot_state_mapper.py",
+    "line_count": 230,
+    "file_size": 12551,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 15,
+      "function_count": 6,
+      "class_count": 4,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 4,
+      "quantum_terms": 0,
+      "entropy_terms": 6
+    },
+    "total_stub_score": 0,
+    "complexity_score": 163.1,
+    "math_richness": 20,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "smart_money_integration.py": {
+    "file_path": "core\\smart_money_integration.py",
+    "file_name": "smart_money_integration.py",
+    "line_count": 9,
+    "file_size": 145,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 0.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "smart_order_executor.py": {
+    "file_path": "core\\smart_order_executor.py",
+    "file_name": "smart_order_executor.py",
+    "line_count": 964,
+    "file_size": 135458,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 76,
+      "function_count": 19,
+      "class_count": 6,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 42,
+      "tensor_ops": 5,
+      "quantum_terms": 0,
+      "entropy_terms": 78
+    },
+    "total_stub_score": 0,
+    "complexity_score": 784.5,
+    "math_richness": 126,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "soulprint_registry.py": {
+    "file_path": "core\\soulprint_registry.py",
+    "file_name": "soulprint_registry.py",
+    "line_count": 158,
+    "file_size": 9491,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 10,
+      "class_count": 2,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 6,
+      "tensor_ops": 5,
+      "quantum_terms": 12,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 200.2,
+    "math_richness": 24,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "speed_lattice_trading_integration.py": {
+    "file_path": "core\\speed_lattice_trading_integration.py",
+    "file_name": "speed_lattice_trading_integration.py",
+    "line_count": 51,
+    "file_size": 1940,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 4,
+      "function_count": 4,
+      "class_count": 1,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 44.9,
+    "math_richness": 1,
+    "risk_level": "NORMAL"
+  },
+  "strategy_bit_mapper.py": {
+    "file_path": "core\\strategy_bit_mapper.py",
+    "file_name": "strategy_bit_mapper.py",
+    "line_count": 417,
+    "file_size": 54605,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 50,
+      "function_count": 14,
+      "class_count": 2,
+      "import_count": 19
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 3,
+      "tensor_ops": 17,
+      "quantum_terms": 8,
+      "entropy_terms": 21
+    },
+    "total_stub_score": 1,
+    "complexity_score": 516.7,
+    "math_richness": 50,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "strategy_consensus_router.py": {
+    "file_path": "core\\strategy_consensus_router.py",
+    "file_name": "strategy_consensus_router.py",
+    "line_count": 993,
+    "file_size": 169605,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 87,
+      "function_count": 33,
+      "class_count": 8,
+      "import_count": 9
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 3,
+      "tensor_ops": 11,
+      "quantum_terms": 0,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 905.2,
+    "math_richness": 16,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "strategy_integration_bridge.py": {
+    "file_path": "core\\strategy_integration_bridge.py",
+    "file_name": "strategy_integration_bridge.py",
+    "line_count": 699,
+    "file_size": 104891,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 66,
+      "function_count": 11,
+      "class_count": 3,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 13,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 673.6,
+    "math_richness": 14,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "strategy_loader.py": {
+    "file_path": "core\\strategy_loader.py",
+    "file_name": "strategy_loader.py",
+    "line_count": 81,
+    "file_size": 3216,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 9,
+      "function_count": 4,
+      "class_count": 0,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 1
+    },
+    "total_stub_score": 0,
+    "complexity_score": 93.2,
+    "math_richness": 2,
+    "risk_level": "NORMAL"
+  },
+  "strategy_logic.py": {
+    "file_path": "core\\strategy_logic.py",
+    "file_name": "strategy_logic.py",
+    "line_count": 750,
+    "file_size": 72154,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 54,
+      "function_count": 29,
+      "class_count": 7,
+      "import_count": 3
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 33,
+      "tensor_ops": 8,
+      "quantum_terms": 13,
+      "entropy_terms": 4
+    },
+    "total_stub_score": 0,
+    "complexity_score": 569.4,
+    "math_richness": 59,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "strategy_router.py": {
+    "file_path": "core\\strategy_router.py",
+    "file_name": "strategy_router.py",
+    "line_count": 296,
+    "file_size": 23765,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 8,
+      "class_count": 1,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 28,
+      "tensor_ops": 17,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 317.2,
+    "math_richness": 45,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "strategy_trigger_router.py": {
+    "file_path": "core\\strategy_trigger_router.py",
+    "file_name": "strategy_trigger_router.py",
+    "line_count": 883,
+    "file_size": 142433,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 78,
+      "function_count": 4,
+      "class_count": 5,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 5,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 4
+    },
+    "total_stub_score": 0,
+    "complexity_score": 796.8,
+    "math_richness": 10,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "swing_pattern_recognition.py": {
+    "file_path": "core\\swing_pattern_recognition.py",
+    "file_name": "swing_pattern_recognition.py",
+    "line_count": 48,
+    "file_size": 1649,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 6,
+      "function_count": 1,
+      "class_count": 1,
+      "import_count": 2
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 63.1,
+    "math_richness": 1,
+    "risk_level": "LOW_VALUE"
+  },
+  "symbolic_interpreter.py": {
+    "file_path": "core\\symbolic_interpreter.py",
+    "file_name": "symbolic_interpreter.py",
+    "line_count": 673,
+    "file_size": 81801,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 1,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 57,
+      "function_count": 20,
+      "class_count": 7,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 3,
+      "tensor_ops": 27,
+      "quantum_terms": 4,
+      "entropy_terms": 12
+    },
+    "total_stub_score": 1,
+    "complexity_score": 597.3,
+    "math_richness": 47,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "system_integration.py": {
+    "file_path": "core\\system_integration.py",
+    "file_name": "system_integration.py",
+    "line_count": 215,
+    "file_size": 10048,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 16,
+      "function_count": 3,
+      "class_count": 1,
+      "import_count": 18
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 168.9,
+    "math_richness": 0,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "system_integration_test.py": {
+    "file_path": "core\\system_integration_test.py",
+    "file_name": "system_integration_test.py",
+    "line_count": 302,
+    "file_size": 23317,
+    "stub_indicators": {
+      "pass_statements": 1,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 4,
+      "class_count": 0,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 0,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 1,
+    "complexity_score": 314.1,
+    "math_richness": 2,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "system_state_profiler.py": {
+    "file_path": "core\\system_state_profiler.py",
+    "file_name": "system_state_profiler.py",
+    "line_count": 171,
+    "file_size": 7153,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 10,
+      "function_count": 9,
+      "class_count": 8,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 121.7,
+    "math_richness": 2,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "temporal_warp_engine.py": {
+    "file_path": "core\\temporal_warp_engine.py",
+    "file_name": "temporal_warp_engine.py",
+    "line_count": 416,
+    "file_size": 37979,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 41,
+      "function_count": 13,
+      "class_count": 2,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 8,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 422.3,
+    "math_richness": 12,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "tensor_recursion_solver.py": {
+    "file_path": "core\\tensor_recursion_solver.py",
+    "file_name": "tensor_recursion_solver.py",
+    "line_count": 290,
+    "file_size": 20611,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 28,
+      "function_count": 9,
+      "class_count": 1,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 12,
+      "tensor_ops": 79,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 288.0,
+    "math_richness": 91,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "tensor_score_utils.py": {
+    "file_path": "core\\tensor_score_utils.py",
+    "file_name": "tensor_score_utils.py",
+    "line_count": 555,
+    "file_size": 47986,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 31,
+      "function_count": 17,
+      "class_count": 2,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 41,
+      "tensor_ops": 95,
+      "quantum_terms": 9,
+      "entropy_terms": 26
+    },
+    "total_stub_score": 0,
+    "complexity_score": 324.0,
+    "math_richness": 172,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "tensor_weight_memory.py": {
+    "file_path": "core\\tensor_weight_memory.py",
+    "file_name": "tensor_weight_memory.py",
+    "line_count": 589,
+    "file_size": 63066,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 47,
+      "function_count": 21,
+      "class_count": 6,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 23,
+      "tensor_ops": 22,
+      "quantum_terms": 0,
+      "entropy_terms": 9
+    },
+    "total_stub_score": 0,
+    "complexity_score": 495.5,
+    "math_richness": 54,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "trading_engine_integration.py": {
+    "file_path": "core\\trading_engine_integration.py",
+    "file_name": "trading_engine_integration.py",
+    "line_count": 364,
+    "file_size": 29754,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 29,
+      "function_count": 9,
+      "class_count": 7,
+      "import_count": 10
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 5,
+      "tensor_ops": 1,
+      "quantum_terms": 0,
+      "entropy_terms": 8
+    },
+    "total_stub_score": 0,
+    "complexity_score": 311.5,
+    "math_richness": 15,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "trading_strategy_executor.py": {
+    "file_path": "core\\trading_strategy_executor.py",
+    "file_name": "trading_strategy_executor.py",
+    "line_count": 744,
+    "file_size": 100961,
+    "stub_indicators": {
+      "pass_statements": 4,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 58,
+      "function_count": 12,
+      "class_count": 12,
+      "import_count": 16
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 10,
+      "tensor_ops": 7,
+      "quantum_terms": 6,
+      "entropy_terms": 18
+    },
+    "total_stub_score": 4,
+    "complexity_score": 614.8,
+    "math_richness": 42,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "two_gram_detector.py": {
+    "file_path": "core\\two_gram_detector.py",
+    "file_name": "two_gram_detector.py",
+    "line_count": 1476,
+    "file_size": 462457,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 103,
+      "function_count": 14,
+      "class_count": 5,
+      "import_count": 15
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 67,
+      "tensor_ops": 34,
+      "quantum_terms": 4,
+      "entropy_terms": 122
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1051.5,
+    "math_richness": 229,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "type_defs.py": {
+    "file_path": "core\\type_defs.py",
+    "file_name": "type_defs.py",
+    "line_count": 753,
+    "file_size": 93559,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 43,
+      "function_count": 25,
+      "class_count": 27,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 22,
+      "tensor_ops": 74,
+      "quantum_terms": 51,
+      "entropy_terms": 19
+    },
+    "total_stub_score": 0,
+    "complexity_score": 498.3,
+    "math_richness": 167,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_api_coordinator.py": {
+    "file_path": "core\\unified_api_coordinator.py",
+    "file_name": "unified_api_coordinator.py",
+    "line_count": 44,
+    "file_size": 781,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 3,
+      "function_count": 2,
+      "class_count": 1,
+      "import_count": 0
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 33.0,
+    "math_richness": 0,
+    "risk_level": "LOW_VALUE"
+  },
+  "unified_component_bridge.py": {
+    "file_path": "core\\unified_component_bridge.py",
+    "file_name": "unified_component_bridge.py",
+    "line_count": 483,
+    "file_size": 49047,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 32,
+      "function_count": 8,
+      "class_count": 6,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 5,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 339.6,
+    "math_richness": 6,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_market_data_pipeline.py": {
+    "file_path": "core\\unified_market_data_pipeline.py",
+    "file_name": "unified_market_data_pipeline.py",
+    "line_count": 968,
+    "file_size": 188730,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 105,
+      "function_count": 25,
+      "class_count": 8,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 2,
+      "math_functions": 41,
+      "tensor_ops": 3,
+      "quantum_terms": 1,
+      "entropy_terms": 2
+    },
+    "total_stub_score": 0,
+    "complexity_score": 1082.4,
+    "math_richness": 49,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_mathematical_core.py": {
+    "file_path": "core\\unified_mathematical_core.py",
+    "file_name": "unified_mathematical_core.py",
+    "line_count": 829,
+    "file_size": 160447,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 58,
+      "function_count": 17,
+      "class_count": 4,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 47,
+      "tensor_ops": 51,
+      "quantum_terms": 132,
+      "entropy_terms": 96
+    },
+    "total_stub_score": 0,
+    "complexity_score": 598.3,
+    "math_richness": 327,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_math_system.py": {
+    "file_path": "core\\unified_math_system.py",
+    "file_name": "unified_math_system.py",
+    "line_count": 393,
+    "file_size": 37707,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 21,
+      "function_count": 12,
+      "class_count": 1,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 24,
+      "tensor_ops": 6,
+      "quantum_terms": 33,
+      "entropy_terms": 4
+    },
+    "total_stub_score": 0,
+    "complexity_score": 219.5,
+    "math_richness": 68,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_profit_vectorization_system.py": {
+    "file_path": "core\\unified_profit_vectorization_system.py",
+    "file_name": "unified_profit_vectorization_system.py",
+    "line_count": 671,
+    "file_size": 84253,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 34,
+      "function_count": 14,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 40,
+      "tensor_ops": 23,
+      "quantum_terms": 32,
+      "entropy_terms": 43
+    },
+    "total_stub_score": 0,
+    "complexity_score": 360.6,
+    "math_richness": 139,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_trade_router.py": {
+    "file_path": "core\\unified_trade_router.py",
+    "file_name": "unified_trade_router.py",
+    "line_count": 404,
+    "file_size": 34687,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 34,
+      "function_count": 15,
+      "class_count": 8,
+      "import_count": 4
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 10,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 3
+    },
+    "total_stub_score": 0,
+    "complexity_score": 364.7,
+    "math_richness": 13,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "unified_trading_pipeline.py": {
+    "file_path": "core\\unified_trading_pipeline.py",
+    "file_name": "unified_trading_pipeline.py",
+    "line_count": 57,
+    "file_size": 1860,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 3,
+      "function_count": 3,
+      "class_count": 1,
+      "import_count": 5
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 0,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 35.0,
+    "math_richness": 0,
+    "risk_level": "NORMAL"
+  },
+  "vectorized_profit_orchestrator.py": {
+    "file_path": "core\\vectorized_profit_orchestrator.py",
+    "file_name": "vectorized_profit_orchestrator.py",
+    "line_count": 990,
+    "file_size": 101492,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 53,
+      "function_count": 18,
+      "class_count": 5,
+      "import_count": 12
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 34,
+      "tensor_ops": 33,
+      "quantum_terms": 3,
+      "entropy_terms": 7
+    },
+    "total_stub_score": 0,
+    "complexity_score": 552.6,
+    "math_richness": 78,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "vector_registry.py": {
+    "file_path": "core\\vector_registry.py",
+    "file_name": "vector_registry.py",
+    "line_count": 530,
+    "file_size": 53211,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 42,
+      "function_count": 12,
+      "class_count": 3,
+      "import_count": 11
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 9,
+      "tensor_ops": 61,
+      "quantum_terms": 0,
+      "entropy_terms": 4
+    },
+    "total_stub_score": 0,
+    "complexity_score": 435.3,
+    "math_richness": 75,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "visual_decision_engine.py": {
+    "file_path": "core\\visual_decision_engine.py",
+    "file_name": "visual_decision_engine.py",
+    "line_count": 289,
+    "file_size": 19517,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 26,
+      "function_count": 9,
+      "class_count": 1,
+      "import_count": 6
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 0,
+      "tensor_ops": 24,
+      "quantum_terms": 3,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 268.3,
+    "math_richness": 28,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "visual_execution_node.py": {
+    "file_path": "core\\visual_execution_node.py",
+    "file_name": "visual_execution_node.py",
+    "line_count": 1209,
+    "file_size": 243806,
+    "stub_indicators": {
+      "pass_statements": 32,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 3
+    },
+    "complexity_indicators": {
+      "nested_levels": 120,
+      "function_count": 53,
+      "class_count": 14,
+      "import_count": 14
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 22,
+      "tensor_ops": 7,
+      "quantum_terms": 0,
+      "entropy_terms": 12
+    },
+    "total_stub_score": 35,
+    "complexity_score": 1258.7,
+    "math_richness": 41,
+    "risk_level": "HIGH_STUB"
+  },
+  "zbe_core.py": {
+    "file_path": "core\\zbe_core.py",
+    "file_name": "zbe_core.py",
+    "line_count": 667,
+    "file_size": 73044,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 33,
+      "function_count": 11,
+      "class_count": 4,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 1,
+      "math_functions": 10,
+      "tensor_ops": 3,
+      "quantum_terms": 4,
+      "entropy_terms": 10
+    },
+    "total_stub_score": 0,
+    "complexity_score": 345.6,
+    "math_richness": 28,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "zpe_core.py": {
+    "file_path": "core\\zpe_core.py",
+    "file_name": "zpe_core.py",
+    "line_count": 820,
+    "file_size": 106456,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 47,
+      "function_count": 15,
+      "class_count": 5,
+      "import_count": 8
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 24,
+      "tensor_ops": 2,
+      "quantum_terms": 28,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 489.9,
+    "math_richness": 54,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "zpe_zbe_core.py": {
+    "file_path": "core\\zpe_zbe_core.py",
+    "file_name": "zpe_zbe_core.py",
+    "line_count": 407,
+    "file_size": 36677,
+    "stub_indicators": {
+      "pass_statements": 0,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 26,
+      "function_count": 13,
+      "class_count": 6,
+      "import_count": 7
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 7,
+      "tensor_ops": 6,
+      "quantum_terms": 19,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 0,
+    "complexity_score": 280.6,
+    "math_richness": 32,
+    "risk_level": "HIGH_COMPLEXITY"
+  },
+  "__init__.py": {
+    "file_path": "core\\__init__.py",
+    "file_name": "__init__.py",
+    "line_count": 359,
+    "file_size": 28035,
+    "stub_indicators": {
+      "pass_statements": 3,
+      "not_implemented": 0,
+      "todo_comments": 0,
+      "fixme_comments": 0,
+      "stub_comments": 0,
+      "empty_functions": 0
+    },
+    "complexity_indicators": {
+      "nested_levels": 19,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 13
+    },
+    "math_indicators": {
+      "math_imports": 0,
+      "math_functions": 1,
+      "tensor_ops": 0,
+      "quantum_terms": 0,
+      "entropy_terms": 0
+    },
+    "total_stub_score": 3,
+    "complexity_score": 196.4,
+    "math_richness": 1,
+    "risk_level": "HIGH_COMPLEXITY"
+  }
+}

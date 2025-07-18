@@ -1,0 +1,31 @@
+exchange_testnets:
+  binance:
+    api_key_env: BINANCE_TESTNET_API_KEY
+    api_secret_env: BINANCE_TESTNET_API_SECRET
+    base_url: https://testnet.binance.vision
+    enabled: true
+    features:
+    - spot_trading
+    - futures_trading
+    - websocket
+    name: Binance Testnet
+  coinbase:
+    api_key_env: COINBASE_SANDBOX_API_KEY
+    api_secret_env: COINBASE_SANDBOX_API_SECRET
+    base_url: https://api-public.sandbox.exchange.coinbase.com
+    enabled: true
+    features:
+    - spot_trading
+    - websocket
+    name: Coinbase Sandbox
+  kraken:
+    api_key_env: KRAKEN_TESTNET_API_KEY
+    api_secret_env: KRAKEN_TESTNET_API_SECRET
+    base_url: https://testnet.kraken.com
+    enabled: true
+    features:
+    - spot_trading
+    - futures_trading
+    name: Kraken Testnet
+feature_flags: {}
+last_updated: '2025-06-25T13:27:33.113110'

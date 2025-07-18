@@ -1,0 +1,33 @@
+{
+  "orderId": "123456789",
+  "symbol": "BTCUSDT",
+  "side": "BUY",
+  "type": "market",
+  "status": "filled",
+  "amount": "0.01",
+  "filled": "0.01",
+  "remaining": "0",
+  "cost": "500.00",
+  "fee": "0.00001",
+  "fee_currency": "BTC",
+  "fills": [
+    {
+      "tradeId": "987654321",
+      "qty": "0.006",
+      "price": "50000.00",
+      "commission": "0.000006",
+      "commissionAsset": "BTC",
+      "takerOrMaker": "taker"
+    },
+    {
+      "tradeId": "987654322",
+      "qty": "0.004",
+      "price": "50001.00",
+      "commission": "0.000004",
+      "commissionAsset": "BTC",
+      "takerOrMaker": "taker"
+    }
+  ],
+  "timestamp": 1640995200000,
+  "datetime": "2022-01-01T00:00:00.000Z"
+} 

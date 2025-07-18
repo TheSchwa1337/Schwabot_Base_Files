@@ -1,0 +1,15 @@
+bucket_handling:
+  incremental_locking_pct: 0.03
+  recursive_unlock_dip_trigger_pct: 10
+  unlock_pct_on_dip: 0.25
+  volatility_thresholds:
+    high_volatility:
+      btc_weight: 0.2
+      usdc_weight: 0.8
+    low_volatility:
+      btc_weight: 0.4
+      usdc_weight: 0.6
+  entropy_weighting_enabled: true
+  micro_bucket_echo_enabled: true
+  rebalance_interval_days: 14
+  bucket_max_allocation_pct: 50 

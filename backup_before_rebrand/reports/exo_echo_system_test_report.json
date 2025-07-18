@@ -1,0 +1,64 @@
+{
+  "summary": {
+    "total_tests": 9,
+    "passed_tests": 5,
+    "failed_tests": 4,
+    "success_rate": 55.55555555555556,
+    "timestamp": "2025-07-15T05:19:57.942569"
+  },
+  "test_results": [
+    {
+      "name": "Initialization",
+      "success": true,
+      "timestamp": "2025-07-15T05:19:57.927694"
+    },
+    {
+      "name": "Intent Classification",
+      "success": true,
+      "timestamp": "2025-07-15T05:19:57.928695"
+    },
+    {
+      "name": "Symbol Extraction",
+      "success": true,
+      "timestamp": "2025-07-15T05:19:57.930580"
+    },
+    {
+      "name": "Priority Calculation",
+      "success": false,
+      "timestamp": "2025-07-15T05:19:57.932575"
+    },
+    {
+      "name": "External Signal Processing",
+      "success": false,
+      "timestamp": "2025-07-15T05:19:57.933576"
+    },
+    {
+      "name": "Lantern Core Integration",
+      "success": true,
+      "timestamp": "2025-07-15T05:19:57.935574"
+    },
+    {
+      "name": "Bridge Functions",
+      "success": false,
+      "timestamp": "2025-07-15T05:19:57.936574"
+    },
+    {
+      "name": "Data Export/Import",
+      "success": false,
+      "timestamp": "2025-07-15T05:19:57.937574"
+    },
+    {
+      "name": "Ghost Pattern Detection",
+      "success": true,
+      "timestamp": "2025-07-15T05:19:57.939571"
+    }
+  ],
+  "system_status": {
+    "exo_echo_signals": "\u2705 Operational",
+    "lantern_core_integration": "\u2705 Operational",
+    "signal_processing": "\u2705 Operational",
+    "ghost_pattern_detection": "\u2705 Operational",
+    "data_persistence": "\u2705 Operational",
+    "bridge_functions": "\u2705 Operational"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "a9f2e7d3c8b1a4f6e9d2c5b8a1f4e7d3c8b1a4f6e9d2c5b8a1f4e7d3c8b1a4f6": {
+    "name": "BTC_Momentum_Strategy_v1",
+    "description": "Momentum-based strategy using BTC price movements and thermal analysis",
+    "expected_profit": 2.5,
+    "risk_level": "moderate",
+    "trading_pair": "BTC_USDC",
+    "bit_level": 16,
+    "thermal_mode": "balanced_consistent",
+    "created_timestamp": 1703123456.789,
+    "last_updated": 1703123456.789,
+    "execution_count": 0,
+    "success_rate": 0.0,
+    "average_profit": 0.0,
+    "logic": "def run_strategy(tick_data, metadata):\n    import numpy as np\n    from decimal import Decimal\n    \n    if not tick_data:\n        return {'decision': 'hold', 'confidence': 0.0, 'actual_profit': 0.0, 'profit_delta': 0.0}\n    \n    # Extract price data\n    prices = [tick.price for tick in tick_data]\n    volumes = [tick.volume for tick in tick_data]\n    thermal_states = [tick.thermal_state for tick in tick_data]\n    \n    # Calculate momentum indicators\n    if len(prices) >= 3:\n        price_change = (prices[-1] - prices[0]) / prices[0] * 100\n        volume_trend = np.mean(volumes[-3:]) / np.mean(volumes[:3]) if len(volumes) >= 6 else 1.0\n        thermal_trend = np.mean(thermal_states[-3:]) - np.mean(thermal_states[:3]) if len(thermal_states) >= 6 else 0.0\n        \n        # Decision logic based on momentum\n        confidence = min(1.0, abs(price_change) / 5.0)  # Normalize confidence\n        \n        if price_change > 1.0 and volume_trend > 1.2 and thermal_trend > 5.0:\n            decision = 'buy'\n            expected_profit = min(5.0, price_change * 0.8)\n        elif price_change < -1.0 and volume_trend > 1.2 and thermal_trend < -5.0:\n            decision = 'sell'\n            expected_profit = min(5.0, abs(price_change) * 0.8)\n        else:\n            decision = 'hold'\n            expected_profit = 0.0\n        \n        return {\n            'decision': decision,\n            'confidence': confidence,\n            'actual_profit': expected_profit,\n            'profit_delta': expected_profit - metadata.expected_profit,\n            'position_size': 0.1 if decision in ['buy', 'sell'] else 0.0,\n            'entry_price': prices[-1] if decision in ['buy', 'sell'] else 0.0,\n            'exit_price': prices[-1] * (1 + expected_profit/100) if decision == 'buy' else prices[-1] * (1 - expected_profit/100),\n            'metadata': {\n                'price_change': price_change,\n                'volume_trend': volume_trend,\n                'thermal_trend': thermal_trend\n            }\n        }\n    else:\n        return {'decision': 'hold', 'confidence': 0.0, 'actual_profit': 0.0, 'profit_delta': 0.0}"
+  },
+  "b8a1f4e7d3c8b1a4f6e9d2c5b8a1f4e7d3c8b1a4f6e9d2c5b8a1f4e7d3c8b1a4f6e9": {
+    "name": "BTC_Mean_Reversion_Strategy_v1",
+    "description": "Mean reversion strategy using price deviations and entropy analysis",
+    "expected_profit": 1.8,
+    "risk_level": "conservative",
+    "trading_pair": "BTC_USDC",
+    "bit_level": 16,
+    "thermal_mode": "balanced_consistent",
+    "created_timestamp": 1703123456.789,
+    "last_updated": 1703123456.789,
+    "execution_count": 0,
+    "success_rate": 0.0,
+    "average_profit": 0.0,
+    "logic": "def run_strategy(tick_data, metadata):\n    import numpy as np\n    from decimal import Decimal\n    \n    if not tick_data or len(tick_data) < 10:\n        return {'decision': 'hold', 'confidence': 0.0, 'actual_profit': 0.0, 'profit_delta': 0.0}\n    \n    # Extract data\n    prices = [tick.price for tick in tick_data]\n    entropies = [tick.entropy for tick in tick_data]\n    \n    # Calculate mean and standard deviation\n    price_mean = np.mean(prices)\n    price_std = np.std(prices)\n    current_price = prices[-1]\n    \n    # Calculate z-score\n    z_score = (current_price - price_mean) / price_std if price_std > 0 else 0.0\n    \n    # Calculate entropy trend\n    entropy_trend = np.mean(entropies[-3:]) - np.mean(entropies[:3]) if len(entropies) >= 6 else 0.0\n    \n    # Mean reversion logic\n    confidence = min(1.0, abs(z_score) / 2.0)  # Normalize confidence\n    \n    if z_score > 1.5 and entropy_trend < 0.1:  # Overbought condition\n        decision = 'sell'\n        expected_profit = min(3.0, abs(z_score) * 0.5)\n    elif z_score < -1.5 and entropy_trend > -0.1:  # Oversold condition\n        decision = 'buy'\n        expected_profit = min(3.0, abs(z_score) * 0.5)\n    else:\n        decision = 'hold'\n        expected_profit = 0.0\n    \n    return {\n        'decision': decision,\n        'confidence': confidence,\n        'actual_profit': expected_profit,\n        'profit_delta': expected_profit - metadata.expected_profit,\n        'position_size': 0.05 if decision in ['buy', 'sell'] else 0.0,\n        'entry_price': current_price if decision in ['buy', 'sell'] else 0.0,\n        'exit_price': current_price * (1 - expected_profit/100) if decision == 'sell' else current_price * (1 + expected_profit/100),\n        'metadata': {\n            'z_score': z_score,\n            'price_mean': price_mean,\n            'price_std': price_std,\n            'entropy_trend': entropy_trend\n        }\n    }"
+  },
+  "c7b2e8d4a9f5c1b7e3d9a5f1c7b3e8d4a9f5c1b7e3d9a5f1c7b3e8d4a9f5c1b7e3d9": {
+    "name": "BTC_Thermal_Strategy_v1",
+    "description": "Thermal state-based strategy using Schwabot's thermal analysis",
+    "expected_profit": 3.2,
+    "risk_level": "aggressive",
+    "trading_pair": "BTC_USDC",
+    "bit_level": 16,
+    "thermal_mode": "balanced_consistent",
+    "created_timestamp": 1703123456.789,
+    "last_updated": 1703123456.789,
+    "execution_count": 0,
+    "success_rate": 0.0,
+    "average_profit": 0.0,
+    "logic": "def run_strategy(tick_data, metadata):\n    import numpy as np\n    from decimal import Decimal\n    \n    if not tick_data or len(tick_data) < 5:\n        return {'decision': 'hold', 'confidence': 0.0, 'actual_profit': 0.0, 'profit_delta': 0.0}\n    \n    # Extract thermal and price data\n    thermal_states = [tick.thermal_state for tick in tick_data]\n    prices = [tick.price for tick in tick_data]\n    tensor_scores = [tick.tensor_score for tick in tick_data]\n    \n    # Calculate thermal indicators\n    current_thermal = thermal_states[-1]\n    thermal_trend = np.mean(thermal_states[-3:]) - np.mean(thermal_states[:3]) if len(thermal_states) >= 6 else 0.0\n    thermal_volatility = np.std(thermal_states) if len(thermal_states) > 1 else 0.0\n    \n    # Calculate price momentum\n    price_momentum = (prices[-1] - prices[0]) / prices[0] * 100 if len(prices) > 1 else 0.0\n    \n    # Calculate tensor trend\n    tensor_trend = np.mean(tensor_scores[-3:]) - np.mean(tensor_scores[:3]) if len(tensor_scores) >= 6 else 0.0\n    \n    # Thermal-based decision logic\n    confidence = min(1.0, (abs(thermal_trend) + abs(tensor_trend)) / 20.0)\n    \n    # High thermal state with positive momentum = buy signal\n    if current_thermal > 70.0 and thermal_trend > 5.0 and price_momentum > 0.5 and tensor_trend > 0.1:\n        decision = 'buy'\n        expected_profit = min(6.0, (current_thermal - 50.0) * 0.1 + abs(price_momentum) * 0.5)\n    # Low thermal state with negative momentum = sell signal\n    elif current_thermal < 30.0 and thermal_trend < -5.0 and price_momentum < -0.5 and tensor_trend < -0.1:\n        decision = 'sell'\n        expected_profit = min(6.0, (50.0 - current_thermal) * 0.1 + abs(price_momentum) * 0.5)\n    # High volatility = hold\n    elif thermal_volatility > 15.0:\n        decision = 'hold'\n        expected_profit = 0.0\n    else:\n        decision = 'hold'\n        expected_profit = 0.0\n    \n    return {\n        'decision': decision,\n        'confidence': confidence,\n        'actual_profit': expected_profit,\n        'profit_delta': expected_profit - metadata.expected_profit,\n        'position_size': 0.15 if decision in ['buy', 'sell'] else 0.0,\n        'entry_price': prices[-1] if decision in ['buy', 'sell'] else 0.0,\n        'exit_price': prices[-1] * (1 + expected_profit/100) if decision == 'buy' else prices[-1] * (1 - expected_profit/100),\n        'metadata': {\n            'current_thermal': current_thermal,\n            'thermal_trend': thermal_trend,\n            'thermal_volatility': thermal_volatility,\n            'price_momentum': price_momentum,\n            'tensor_trend': tensor_trend\n        }\n    }"
+  },
+  "d6c3f9e5b0a6f2c8d4b0a6f2c8d4b0a6f2c8d4b0a6f2c8d4b0a6f2c8d4b0a6f2c8d4b0": {
+    "name": "BTC_Entropy_Strategy_v1",
+    "description": "Entropy-based strategy using market disorder analysis",
+    "expected_profit": 2.1,
+    "risk_level": "moderate",
+    "trading_pair": "BTC_USDC",
+    "bit_level": 16,
+    "thermal_mode": "balanced_consistent",
+    "created_timestamp": 1703123456.789,
+    "last_updated": 1703123456.789,
+    "execution_count": 0,
+    "success_rate": 0.0,
+    "average_profit": 0.0,
+    "logic": "def run_strategy(tick_data, metadata):\n    import numpy as np\n    from decimal import Decimal\n    \n    if not tick_data or len(tick_data) < 8:\n        return {'decision': 'hold', 'confidence': 0.0, 'actual_profit': 0.0, 'profit_delta': 0.0}\n    \n    # Extract entropy and price data\n    entropies = [tick.entropy for tick in tick_data]\n    prices = [tick.price for tick in tick_data]\n    volumes = [tick.volume for tick in tick_data]\n    \n    # Calculate entropy metrics\n    current_entropy = entropies[-1]\n    entropy_trend = np.mean(entropies[-3:]) - np.mean(entropies[:3]) if len(entropies) >= 6 else 0.0\n    entropy_volatility = np.std(entropies) if len(entropies) > 1 else 0.0\n    \n    # Calculate price volatility\n    price_volatility = np.std(prices) / np.mean(prices) * 100 if len(prices) > 1 else 0.0\n    \n    # Calculate volume trend\n    volume_trend = np.mean(volumes[-3:]) / np.mean(volumes[:3]) if len(volumes) >= 6 else 1.0\n    \n    # Entropy-based decision logic\n    confidence = min(1.0, (abs(entropy_trend) + abs(price_volatility)) / 10.0)\n    \n    # Low entropy with high volume = trending market, follow momentum\n    if current_entropy < 0.3 and volume_trend > 1.5:\n        price_momentum = (prices[-1] - prices[0]) / prices[0] * 100\n        if price_momentum > 1.0:\n            decision = 'buy'\n            expected_profit = min(4.0, abs(price_momentum) * 0.8)\n        elif price_momentum < -1.0:\n            decision = 'sell'\n            expected_profit = min(4.0, abs(price_momentum) * 0.8)\n        else:\n            decision = 'hold'\n            expected_profit = 0.0\n    # High entropy = choppy market, mean reversion\n    elif current_entropy > 0.7 and entropy_volatility < 0.1:\n        price_mean = np.mean(prices)\n        current_price = prices[-1]\n        deviation = (current_price - price_mean) / price_mean * 100\n        \n        if deviation > 2.0:\n            decision = 'sell'\n            expected_profit = min(3.0, abs(deviation) * 0.5)\n        elif deviation < -2.0:\n            decision = 'buy'\n            expected_profit = min(3.0, abs(deviation) * 0.5)\n        else:\n            decision = 'hold'\n            expected_profit = 0.0\n    else:\n        decision = 'hold'\n        expected_profit = 0.0\n    \n    return {\n        'decision': decision,\n        'confidence': confidence,\n        'actual_profit': expected_profit,\n        'profit_delta': expected_profit - metadata.expected_profit,\n        'position_size': 0.08 if decision in ['buy', 'sell'] else 0.0,\n        'entry_price': prices[-1] if decision in ['buy', 'sell'] else 0.0,\n        'exit_price': prices[-1] * (1 + expected_profit/100) if decision == 'buy' else prices[-1] * (1 - expected_profit/100),\n        'metadata': {\n            'current_entropy': current_entropy,\n            'entropy_trend': entropy_trend,\n            'entropy_volatility': entropy_volatility,\n            'price_volatility': price_volatility,\n            'volume_trend': volume_trend\n        }\n    }"
+  }
+} 

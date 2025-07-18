@@ -1,0 +1,89 @@
+# Core Python Dependencies
+numpy>=1.22.0
+scipy>=1.8.0
+pandas>=1.4.0
+numba>=0.55.0
+cupy>=10.0.0  # Optional, for GPU acceleration
+
+# Machine Learning and Scientific Computing
+scikit-learn>=1.1.0
+torch>=1.11.0
+tensorflow>=2.9.0
+
+# Trading and Financial Libraries
+ccxt>=2.0.0
+ta-lib>=0.4.20
+pandas-ta>=0.3.14b0
+
+# Async and Scheduling
+asyncio>=3.4.3
+apscheduler>=3.9.1
+dask>=2022.5.0
+
+# Configuration and Logging
+pyyaml>=6.0
+python-dotenv>=0.20.0
+loguru>=0.6.0
+
+# Code Quality and Type Checking
+black>=22.3.0
+isort>=5.10.1
+mypy>=0.950
+flake8>=4.0.1
+pylint>=2.13.5
+
+# Testing
+pytest>=7.1.2
+pytest-asyncio>=0.18.3
+coverage>=6.3.2
+
+# Performance and Profiling
+memory-profiler>=0.60.0
+line-profiler>=3.5.0
+
+# Optional: Web and API
+aiohttp>=3.8.1
+requests>=2.27.1
+
+# Optional: Visualization
+matplotlib>=3.5.2
+seaborn>=0.11.2
+plotly>=5.8.0
+
+# Optional: GPU and CUDA
+nvidia-cuda-runtime-cu11>=11.7.0  # Adjust version as needed
+nvidia-cuda-nvcc-cu11>=11.7.0     # Adjust version as needed
+
+# Quantum and Advanced Computation
+qiskit>=0.36.0
+pennylane>=0.26.0
+
+# Encryption and Security
+cryptography>=37.0.2
+
+# Web Framework and API
+flask>=2.2.0
+flask_socketio>=5.3.0
+flask_cors>=3.0.10
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+starlette>=0.36.0
+websockets>=10.4
+
+# System Utilities
+psutil>=5.9.0
+
+# Database and Storage (Optional)
+sqlalchemy>=1.4.0
+redis>=4.0.0
+pymongo>=4.0.0
+
+# Visualization Dashboards (Optional)
+dash>=2.12.0
+streamlit>=1.34.0
+bokeh>=3.2.0
+
+# Platform-specific dependencies for windows
+pywin32>=228
+wmi>=1.5.1
+

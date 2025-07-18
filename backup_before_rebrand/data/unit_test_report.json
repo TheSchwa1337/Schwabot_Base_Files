@@ -1,0 +1,162 @@
+{
+  "summary": {
+    "total_modules": 6,
+    "deployment_ready_modules": 4,
+    "total_tests": 12,
+    "passed_tests": 10,
+    "failed_tests": 0,
+    "error_tests": 2,
+    "overall_success_rate": 83.33333333333334,
+    "overall_duration": 0.22390174865722656,
+    "deployment_ready": false
+  },
+  "module_reports": {
+    "profit_optimization_engine": {
+      "total_tests": 1,
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "error_tests": 1,
+      "success_rate": 0.0,
+      "duration": 0.0,
+      "deployment_ready": false
+    },
+    "tensor_score_utils": {
+      "total_tests": 1,
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "error_tests": 1,
+      "success_rate": 0.0,
+      "duration": 0.0,
+      "deployment_ready": false
+    },
+    "unified_trading_pipeline": {
+      "total_tests": 3,
+      "passed_tests": 3,
+      "failed_tests": 0,
+      "error_tests": 0,
+      "success_rate": 100.0,
+      "duration": 0.0009992122650146484,
+      "deployment_ready": true
+    },
+    "schwabot_mathematical_trading_engine": {
+      "total_tests": 3,
+      "passed_tests": 3,
+      "failed_tests": 0,
+      "error_tests": 0,
+      "success_rate": 100.0,
+      "duration": 0.0009999275207519531,
+      "deployment_ready": true
+    },
+    "integration_orchestrator": {
+      "total_tests": 2,
+      "passed_tests": 2,
+      "failed_tests": 0,
+      "error_tests": 0,
+      "success_rate": 100.0,
+      "duration": 0.0009989738464355469,
+      "deployment_ready": true
+    },
+    "system_integration": {
+      "total_tests": 2,
+      "passed_tests": 2,
+      "failed_tests": 0,
+      "error_tests": 0,
+      "success_rate": 100.0,
+      "duration": 0.0010004043579101562,
+      "deployment_ready": true
+    }
+  },
+  "detailed_results": [
+    {
+      "module_name": "math_infrastructure",
+      "test_name": "core_functionality",
+      "status": "FAIL",
+      "duration": 0.0,
+      "error_message": "'MathOrchestrator' object has no attribute 'get_hardware_info'"
+    },
+    {
+      "module_name": "profit_optimization_engine",
+      "test_name": "module_import",
+      "status": "ERROR",
+      "duration": 0.0,
+      "error_message": "Import error: cannot import name 'ProfitOptimizationEngine' from 'core.profit_optimization_engine' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\core\\profit_optimization_engine.py)"
+    },
+    {
+      "module_name": "tensor_score_utils",
+      "test_name": "module_import",
+      "status": "ERROR",
+      "duration": 0.0,
+      "error_message": "Import error: cannot import name 'TensorScoreUtils' from 'core.tensor_score_utils' (C:\\Users\\maxde\\Downloads\\clonerepo\\AOI_Base_Files_Schwabot\\core\\tensor_score_utils.py)"
+    },
+    {
+      "module_name": "unified_trading_pipeline",
+      "test_name": "creation",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    },
+    {
+      "module_name": "unified_trading_pipeline",
+      "test_name": "activation",
+      "status": "PASS",
+      "duration": 0.0009992122650146484,
+      "error_message": null
+    },
+    {
+      "module_name": "unified_trading_pipeline",
+      "test_name": "status_check",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    },
+    {
+      "module_name": "schwabot_mathematical_trading_engine",
+      "test_name": "creation",
+      "status": "PASS",
+      "duration": 0.0009999275207519531,
+      "error_message": null
+    },
+    {
+      "module_name": "schwabot_mathematical_trading_engine",
+      "test_name": "activation",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    },
+    {
+      "module_name": "schwabot_mathematical_trading_engine",
+      "test_name": "trading_logic",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    },
+    {
+      "module_name": "integration_orchestrator",
+      "test_name": "creation",
+      "status": "PASS",
+      "duration": 0.0009989738464355469,
+      "error_message": null
+    },
+    {
+      "module_name": "integration_orchestrator",
+      "test_name": "activation",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    },
+    {
+      "module_name": "system_integration",
+      "test_name": "creation",
+      "status": "PASS",
+      "duration": 0.0010004043579101562,
+      "error_message": null
+    },
+    {
+      "module_name": "system_integration",
+      "test_name": "activation",
+      "status": "PASS",
+      "duration": 0.0,
+      "error_message": null
+    }
+  ]
+}

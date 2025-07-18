@@ -1,0 +1,83 @@
+{
+  "symbol_registry": {
+    "3426576acc632c6693e3da67c768c84d63d8f2d2f0074c6eb3d910808b04f8": {
+      "symbol": "\ud83d\udcb0",
+      "hash_final": "3426576acc632c6693e3da67c768c84d63d8f2d2f0074c6eb3d910808b04f8",
+      "asic_code": "PT",
+      "profit_vector": 1.5,
+      "weight": 1.0,
+      "execution_path": "GHOST_DEFERRED",
+      "timestamp": 1750986832.2159128
+    },
+    "38b549cfde6f4bd7f94a1b58073dfb50f554aa8597f3e555ea6e0e17240aa49a": {
+      "symbol": "\ud83d\udd25",
+      "hash_final": "38b549cfde6f4bd7f94a1b58073dfb50f554aa8597f3e555ea6e0e17240aa49a",
+      "asic_code": "VH",
+      "profit_vector": 2.0,
+      "weight": 1.0,
+      "execution_path": "COLD_STORAGE",
+      "timestamp": 1750986832.2159128
+    },
+    "6095d7372244d430667b365d5e325a43253e29e5d276f8f65822911a198089e4": {
+      "symbol": "\ud83d\udcc8",
+      "hash_final": "6095d7372244d430667b365d5e325a43253e29e5d276f8f65822911a198089e4",
+      "asic_code": "UC",
+      "profit_vector": 1.6,
+      "weight": 1.0,
+      "execution_path": "COLD_STORAGE",
+      "timestamp": 1750986832.2169118
+    },
+    "6a3648f63a68fbd6ab6d3330b421bf8aaaa4578d7e8cd3547c147dec9bab2f3a": {
+      "symbol": "\ud83e\udde0",
+      "hash_final": "6a3648f63a68fbd6ab6d3330b421bf8aaaa4578d7e8cd3547c147dec9bab2f3a",
+      "asic_code": "ALT",
+      "profit_vector": 2.2,
+      "weight": 1.0,
+      "execution_path": "GHOST_DEFERRED",
+      "timestamp": 1750986832.2169118
+    },
+    "7a349761ba080fbc9b428991dcc1d65d19ecd6b18d83744fcfcc41bc47a09976": {
+      "symbol": "\u26a1",
+      "hash_final": "7a349761ba080fbc9b428991dcc1d65d19ecd6b18d83744fcfcc41bc47a09976",
+      "asic_code": "FE",
+      "profit_vector": 1.2,
+      "weight": 1.0,
+      "execution_path": "GPU_PARALLEL",
+      "timestamp": 1750986832.2179117
+    },
+    "7fe2a89beae503aed2b462d9974b9a503df7b0c1db96edd45f0673280f231556": {
+      "symbol": "\ud83c\udfaf",
+      "hash_final": "7fe2a89beae503aed2b462d9974b9a503df7b0c1db96edd45f0673280f231556",
+      "asic_code": "TH",
+      "profit_vector": 2.5,
+      "weight": 1.0,
+      "execution_path": "COLD_STORAGE",
+      "timestamp": 1750986832.2179117
+    }
+  },
+  "active_triggers": {
+    "3426576acc632c6693e3da67c768c84d63d8f2d2f0074c6eb3d910808b04f8": 7.142857142857142,
+    "38b549cfde6f4bd7f94a1b58073dfb50f554aa8597f3e555ea6e0e17240aa49a": 36.36363636363636,
+    "6095d7372244d430667b365d5e325a43253e29e5d276f8f65822911a198089e4": 20.0,
+    "6a3648f63a68fbd6ab6d3330b421bf8aaaa4578d7e8cd3547c147dec9bab2f3a": 21.56862745098039
+  },
+  "analytics": {
+    "total_symbols": 6,
+    "total_profit_events": 4,
+    "aggregated_profit": 85.0751209574739,
+    "asic_distribution": {
+      "PT": 1,
+      "VH": 1,
+      "UC": 1,
+      "ALT": 1,
+      "FE": 1,
+      "TH": 1
+    },
+    "execution_path_distribution": {
+      "GHOST_DEFERRED": 2,
+      "COLD_STORAGE": 3,
+      "GPU_PARALLEL": 1
+    },
+    "active_triggers": 4
+  }
+}

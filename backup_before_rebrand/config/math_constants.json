@@ -1,0 +1,102 @@
+{
+  "zpe_resonance_frequency": {
+    "value": "137.035999084",
+    "description": "ZPE resonance frequency (fine structure constant)",
+    "category": "zpe_core",
+    "version_hash": "7c51117dc5430e2b",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.117110",
+    "metadata": {}
+  },
+  "zpe_rotational_velocity": {
+    "value": "299792458",
+    "description": "ZPE rotational velocity (speed of light)",
+    "category": "zpe_core",
+    "version_hash": "d8acc7f28db94e83",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.118748",
+    "metadata": {}
+  },
+  "vecu_timing_phase": {
+    "value": "0.25",
+    "description": "VECU timing phase for profit synchronization",
+    "category": "vecu_core",
+    "version_hash": "543935c4e251c69a",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.120740",
+    "metadata": {}
+  },
+  "vecu_pwm_frequency": {
+    "value": "1000",
+    "description": "VECU PWM frequency for profit burst modulation",
+    "category": "vecu_core",
+    "version_hash": "6b5560491612233d",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.122740",
+    "metadata": {}
+  },
+  "ferris_wheel_radius": {
+    "value": "1.0",
+    "description": "Ferris wheel radius for cyclical measurements",
+    "category": "ferris_rde",
+    "version_hash": "11e8d8db0e665fcd",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.124738",
+    "metadata": {}
+  },
+  "ferris_btc_mapping_bits": {
+    "value": "16",
+    "description": "Ferris RDE 16-bit BTC price mapping",
+    "category": "ferris_rde",
+    "version_hash": "845d782bf9f401a4",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.125737",
+    "metadata": {}
+  },
+  "circuit_breaker_threshold": {
+    "value": "0.05",
+    "description": "Circuit breaker threshold for volatility spikes",
+    "category": "risk_management",
+    "version_hash": "6634b456feb30d8c",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.126737",
+    "metadata": {}
+  },
+  "daily_loss_limit": {
+    "value": "0.02",
+    "description": "Daily loss limit for risk controls",
+    "category": "risk_management",
+    "version_hash": "43ae43f7408f7fa6",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.129736",
+    "metadata": {}
+  },
+  "btc_hashing_interval": {
+    "value": "3.75",
+    "description": "BTC hashing interval in minutes",
+    "category": "memory_allocation",
+    "version_hash": "75068b885c59a231",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.134732",
+    "metadata": {}
+  },
+  "memory_compression_ratio": {
+    "value": "0.7",
+    "description": "Memory compression ratio estimation",
+    "category": "memory_allocation",
+    "version_hash": "1a9a0b56a53c57a6",
+    "precision": 16,
+    "rounding_mode": "ROUND_HALF_UP",
+    "last_updated": "2025-06-25T13:27:33.135732",
+    "metadata": {}
+  }
+}

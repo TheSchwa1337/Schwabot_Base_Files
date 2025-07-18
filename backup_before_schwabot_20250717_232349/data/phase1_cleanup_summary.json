@@ -1,0 +1,28 @@
+{
+  "backup_path": "backups\\core_backup_20250709_144628",
+  "deleted_files": [
+    "visual_execution_node.py",
+    "enhanced_master_cycle_profit_engine.py",
+    "enhanced_tcell_system.py",
+    "master_cycle_engine.py",
+    "master_cycle_engine_enhanced.py",
+    "mathlib_v3_visualizer.py",
+    "smart_money_integration.py"
+  ],
+  "consolidated_files": {
+    "backend_math.py": "core_utilities.py",
+    "glyph_router.py": "core_utilities.py",
+    "integration_orchestrator.py": "core_utilities.py",
+    "integration_test.py": "core_utilities.py",
+    "order_wall_analyzer.py": "core_utilities.py",
+    "profit_tier_adjuster.py": "core_utilities.py",
+    "swing_pattern_recognition.py": "core_utilities.py",
+    "unified_api_coordinator.py": "core_utilities.py"
+  },
+  "new_files_created": [
+    "math_config_manager.py",
+    "math_cache.py",
+    "math_orchestrator.py",
+    "core_utilities.py"
+  ]
+}

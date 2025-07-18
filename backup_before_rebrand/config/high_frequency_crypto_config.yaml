@@ -1,0 +1,388 @@
+# High-Frequency Crypto Trading Configuration
+# ==========================================
+# Configuration for the Zero-Hangup Mathematical Trading Engine
+# Supports live, demo, test, and backlog trading modes with full
+# ZPE/ZBE switching, thermal management, and crypto exchange integration
+
+# =============================================================================
+# SYSTEM OPERATION MODES
+# =============================================================================
+system:
+  default_mode: "demo"  # live, demo, test, backlog
+  enable_zpe_switching: true
+  enable_thermal_management: true
+  enable_gpu_acceleration: true
+  max_memory_usage_mb: 8192
+  emergency_stop_enabled: true
+  
+  # System state persistence
+  save_state_interval: 300  # seconds
+  backup_state_interval: 1800  # seconds
+  state_compression: true
+
+# =============================================================================
+# FREQUENCY AND TIMING CONFIGURATION
+# =============================================================================
+frequency:
+  # Market data sampling rates
+  target_market_hz: 1000.0      # 1kHz market tick sampling
+  gpu_sync_hz: 2000.0           # 2kHz GPU processing frequency
+  decision_hz: 500.0            # 500Hz trading decision rate
+  
+  # Synchronization parameters
+  sync_tolerance: 0.05          # 5% frequency sync tolerance
+  phase_lock_threshold: 0.95    # 95% phase lock quality required
+  frequency_drift_max: 0.02     # 2% max frequency drift
+  
+  # Timing precision
+  max_latency_ms: 1.0           # Maximum 1ms latency
+  target_throughput: 10000      # Ticks per second target
+  jitter_tolerance_us: 100      # 100 microsecond jitter tolerance
+
+# =============================================================================
+# THERMAL AND PERFORMANCE MANAGEMENT
+# =============================================================================
+thermal:
+  # Temperature thresholds (Celsius)
+  cpu_temperature:
+    normal: 65.0
+    warm: 75.0
+    hot: 80.0
+    critical: 85.0
+    emergency: 95.0
+  
+  gpu_temperature:
+    normal: 60.0
+    warm: 70.0
+    hot: 80.0
+    critical: 85.0
+    emergency: 90.0
+  
+  # ZPE/ZBE switching thresholds
+  zpe_switch_threshold: 75.0    # Switch to ZPE mode above this temp
+  zbe_switch_threshold: 65.0    # Switch to ZBE mode below this temp
+  emergency_throttle: 90.0      # Emergency thermal throttle
+  
+  # Performance scaling
+  thermal_scaling_factors:
+    normal: 1.0                 # No scaling at normal temps
+    warm: 0.9                   # 10% reduction at warm temps
+    hot: 0.7                    # 30% reduction at hot temps
+    critical: 0.5               # 50% reduction at critical temps
+    emergency: 0.2              # 80% reduction in emergency
+  
+  # Monitoring intervals
+  thermal_monitor_hz: 10.0      # 10Hz thermal monitoring
+  performance_monitor_hz: 5.0   # 5Hz performance monitoring
+
+# =============================================================================
+# GPU/CPU CO-PROCESSING CONFIGURATION
+# =============================================================================
+processing:
+  # Processing mode preferences
+  gpu_preferred_operations:
+    - "tensor_calculations"
+    - "matrix_operations"
+    - "fft_analysis"
+    - "correlation_computations"
+  
+  cpu_preferred_operations:
+    - "decision_logic"
+    - "api_communications"
+    - "state_management"
+    - "error_handling"
+  
+  # Hang-up protection
+  gpu_timeout_ms: 500           # 500ms GPU operation timeout
+  cpu_timeout_ms: 100           # 100ms CPU operation timeout
+  hang_detection_enabled: true
+  auto_fallback_enabled: true
+  
+  # Memory management
+  gpu_memory_limit_mb: 4096     # 4GB GPU memory limit
+  cpu_memory_limit_mb: 8192     # 8GB CPU memory limit
+  memory_cleanup_interval: 60   # seconds
+
+# =============================================================================
+# CRYPTOCURRENCY TRADING CONFIGURATION
+# =============================================================================
+trading:
+  # Supported trading pairs (prioritized order)
+  primary_symbols:
+    - "BTC/USDC"
+    - "BTC/USDT"
+    - "ETH/USDC"
+    - "ETH/USDT"
+    - "XRP/USDC"
+    - "XRP/USDT"
+  
+  # Trading parameters
+  min_order_size_usd: 10.0      # Minimum $10 orders
+  max_order_size_usd: 50000.0   # Maximum $50k orders
+  max_position_size: 0.2        # 20% max position size
+  min_position_size: 0.01       # 1% min position size
+  
+  # Risk management
+  stop_loss_pct: 0.02           # 2% stop loss
+  take_profit_pct: 0.05         # 5% take profit
+  max_drawdown_pct: 0.15        # 15% max drawdown
+  
+  # Order book and execution
+  order_book_depth: 100         # Order book levels to analyze
+  slippage_tolerance: 0.005     # 0.5% slippage tolerance
+  execution_timeout: 30         # seconds
+  
+  # Portfolio allocation targets
+  target_allocation:
+    BTC: 0.5                    # 50% Bitcoin
+    ETH: 0.3                    # 30% Ethereum
+    XRP: 0.1                    # 10% Ripple
+    CASH: 0.1                   # 10% Cash (USDC/USDT)
+
+# =============================================================================
+# EXCHANGE INTEGRATION
+# =============================================================================
+exchanges:
+  # Exchange priority order
+  priority_order:
+    - "binance"
+    - "coinbase"
+    - "kraken"
+  
+  # Binance configuration
+  binance:
+    enabled: true
+    sandbox_mode: true
+    api_endpoint: "https://api.binance.com"
+    testnet_endpoint: "https://testnet.binance.vision"
+    rate_limit_requests_per_minute: 1200
+    websocket_enabled: true
+    
+    # Binance-specific features
+    enable_smart_order_routing: true
+    enable_order_book_streaming: true
+    enable_trade_streaming: true
+    
+    # Rate limiting
+    api_calls_per_second: 20
+    orders_per_second: 10
+    
+  # Coinbase Pro configuration
+  coinbase:
+    enabled: true
+    sandbox_mode: true
+    api_endpoint: "https://api.exchange.coinbase.com"
+    sandbox_endpoint: "https://api-public.sandbox.exchange.coinbase.com"
+    rate_limit_requests_per_minute: 100
+    websocket_enabled: true
+    
+    # Coinbase-specific features
+    enable_advanced_trade: true
+    enable_portfolio_margin: false
+    
+  # Kraken configuration
+  kraken:
+    enabled: false
+    sandbox_mode: true
+    api_endpoint: "https://api.kraken.com"
+    rate_limit_requests_per_minute: 15
+    websocket_enabled: true
+
+# =============================================================================
+# MATHEMATICAL ENGINE CONFIGURATION
+# =============================================================================
+mathematical:
+  # RUTC (Real-time UTC Transform Correlation)
+  rutc:
+    enabled: true
+    correlation_window: 100     # samples
+    integration_method: "trapezoidal"
+    precision_mode: "high"
+    
+  # 2-bit navigation system
+  bit_navigation:
+    enabled: true
+    state_memory_depth: 256
+    transition_threshold: 0.1
+    freedom_degree_target: 0.8
+    
+  # Differential sequencing
+  differential:
+    enabled: true
+    sequence_length: 50
+    derivative_order: 2
+    smoothing_factor: 0.1
+    
+  # Gap logic bridging
+  gap_logic:
+    enabled: true
+    bridge_all_bit_strategies: true
+    pattern_matching_enabled: true
+    mathematical_definitions: true
+    
+  # Interlinked mathematical cores
+  interlinked_cores:
+    enabled: true
+    max_states: 256
+    hang_threshold_ms: 1000
+    memory_protection: true
+
+# =============================================================================
+# BACKTESTING AND SIMULATION
+# =============================================================================
+simulation:
+  # Historical data configuration
+  backtest_start_date: "2024-01-01"
+  backtest_end_date: "2024-12-31"
+  historical_data_source: "ccxt"
+  timeframes:
+    - "1m"
+    - "5m"
+    - "15m"
+    - "1h"
+    
+  # Simulation parameters
+  initial_balance_usd: 100000.0
+  commission_rate: 0.001        # 0.1% commission
+  slippage_model: "linear"
+  market_impact_enabled: true
+  
+  # Performance metrics
+  calculate_sharpe_ratio: true
+  calculate_sortino_ratio: true
+  calculate_max_drawdown: true
+  calculate_calmar_ratio: true
+
+# =============================================================================
+# LOGGING AND MONITORING
+# =============================================================================
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  enable_file_logging: true
+  log_rotation_size_mb: 100
+  max_log_files: 10
+  
+  # Component-specific logging
+  trading_decisions: true
+  thermal_events: true
+  frequency_sync_events: true
+  api_communications: false
+  mathematical_computations: false
+  
+  # Performance logging
+  log_performance_metrics: true
+  performance_log_interval: 60  # seconds
+  
+  # Alert thresholds
+  alert_on_thermal_critical: true
+  alert_on_frequency_sync_loss: true
+  alert_on_api_failures: true
+  alert_on_emergency_stop: true
+
+# =============================================================================
+# SECURITY AND ENCRYPTION
+# =============================================================================
+security:
+  # API key encryption
+  encrypt_api_keys: true
+  encryption_algorithm: "AES-256"
+  key_rotation_enabled: false
+  
+  # Trading security
+  enable_trading_limits: true
+  daily_loss_limit_usd: 10000.0
+  position_size_limits: true
+  
+  # System security
+  enable_ssl_verification: true
+  certificate_validation: true
+  secure_websockets: true
+
+# =============================================================================
+# USER INTERFACE AND DASHBOARD
+# =============================================================================
+dashboard:
+  enabled: true
+  update_interval_ms: 1000      # 1 second dashboard updates
+  
+  # Dashboard components
+  show_real_time_pnl: true
+  show_thermal_status: true
+  show_frequency_sync: true
+  show_position_summary: true
+  show_order_book: true
+  show_trade_history: true
+  
+  # Alerts and notifications
+  visual_alerts: true
+  audio_alerts: false
+  desktop_notifications: true
+  
+  # Export features
+  enable_csv_export: true
+  enable_json_export: true
+  auto_export_interval: 3600    # seconds
+
+# =============================================================================
+# ADVANCED FEATURES
+# =============================================================================
+advanced:
+  # Machine learning integration
+  enable_ml_predictions: false
+  ml_model_path: "models/crypto_predictor.pkl"
+  
+  # Arbitrage detection
+  enable_cross_exchange_arbitrage: false
+  arbitrage_min_profit_pct: 0.5
+  
+  # News integration
+  enable_news_sentiment: false
+  news_impact_weight: 0.1
+  
+  # Social media sentiment
+  enable_social_sentiment: false
+  social_sentiment_weight: 0.05 
+
+trading_system:
+  name: Schwabot High-Frequency Crypto Trader
+
+adaptive_settings:
+  low_complexity_settings:
+    strategy_mode: aggressive
+    risk_tolerance: 0.8
+    leverage: 3.0
+    trade_frequency: high
+    position_sizing: 0.05  # 5% of total capital per trade
+    stop_loss_multiplier: 1.5
+
+  high_complexity_settings:
+    strategy_mode: conservative
+    risk_tolerance: 0.3
+    leverage: 1.0
+    trade_frequency: low
+    position_sizing: 0.02  # 2% of total capital per trade
+    stop_loss_multiplier: 0.5
+
+market_conditions:
+  entropy_threshold:
+    low: 0.3
+    high: 0.7
+
+performance_tracking:
+  metrics:
+    - profit_factor
+    - sharpe_ratio
+    - max_drawdown
+    - win_rate
+
+error_recovery:
+  retry_attempts: 3
+  fallback_strategies:
+    - hold_position
+    - reduce_position
+    - exit_market
+
+computational_resources:
+  gpu_threshold: 0.8
+  cpu_fallback_enabled: true
+  adaptive_computation: true 

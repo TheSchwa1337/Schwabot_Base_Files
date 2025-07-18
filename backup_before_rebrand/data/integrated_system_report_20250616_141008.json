@@ -1,0 +1,65 @@
+{
+  "demo_configuration": {
+    "duration_minutes": 1,
+    "live_mode": false,
+    "total_runtime_seconds": 60.041564
+  },
+  "system_performance": {
+    "avg_cycle_time_ms": 0.330564986672925,
+    "total_cycles": 60,
+    "final_health_score": 1.0,
+    "avg_health_score": 1.0,
+    "min_health_score": 1.0,
+    "active_tasks": 8,
+    "total_tasks": 12
+  },
+  "vault_performance": {
+    "total_ticks": 12,
+    "backend_performance": {
+      "HYBRID_AUTO": {
+        "total_ticks": 12,
+        "error_count": 0,
+        "avg_signal_strength": 0.9519509795550821,
+        "avg_processing_time": 0.0,
+        "profit_correlation": 3.9166666666666665
+      }
+    },
+    "profit_analysis": {
+      "total_transitions": 1,
+      "successful_transitions": 0,
+      "success_rate": 0.0,
+      "transition_patterns": {
+        "GOLD\u2192PLATINUM": 1
+      },
+      "backend_profit_correlation": {
+        "HYBRID_AUTO": 3.9166666666666665
+      },
+      "most_profitable_backend": "HYBRID_AUTO"
+    },
+    "recent_anomalies": [],
+    "hash_correlation_count": 12,
+    "error_patterns_summary": {},
+    "vault_utilization": 0.0024
+  },
+  "trading_performance": {
+    "error": "No execution history available"
+  },
+  "market_simulation": {
+    "start_price": 45016.09268757402,
+    "end_price": 45072.12281420181,
+    "price_change_percent": 0.0012446688124768217,
+    "total_price_updates": 12,
+    "thermal_events": 0
+  },
+  "signal_analysis": {
+    "total_signals_generated": 0,
+    "total_trades_executed": 0,
+    "signals_per_minute": 0.0,
+    "trades_per_minute": 0.0,
+    "execution_rate": 0.0,
+    "strategy_performance": {}
+  },
+  "recommendations": [
+    "Low signal generation rate - consider adjusting confidence thresholds"
+  ]
+}

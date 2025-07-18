@@ -1,0 +1,56 @@
+{
+  "UnifiedMathSystem": [
+    "core/unified_math_system.py::add",
+    "core/unified_math_system.py::subtract",
+    "core/unified_math_system.py::multiply",
+    "core/unified_math_system.py::divide",
+    "core/unified_math_system.py::power",
+    "core/unified_math_system.py::sqrt",
+    "core/unified_math_system.py::log",
+    "core/unified_math_system.py::exp",
+    "core/unified_math_system.py::sin",
+    "core/unified_math_system.py::cos",
+    "core/unified_math_system.py::tan",
+    "core/unified_math_system.py::mean",
+    "core/unified_math_system.py::std",
+    "core/unified_math_system.py::var",
+    "core/unified_math_system.py::dot_product",
+    "core/unified_math_system.py::matrix_multiply",
+    "core/unified_math_system.py::eigenvalues",
+    "core/unified_math_system.py::svd",
+    "core/unified_math_system.py::dlt_analysis"
+  ],
+  "UnifiedProfitVectorizationSystem": [
+    "core/unified_profit_vectorization_system.py::calculate_sharpe_ratio",
+    "core/unified_profit_vectorization_system.py::calculate_sortino_ratio",
+    "core/unified_profit_vectorization_system.py::calculate_kelly_criterion",
+    "core/unified_profit_vectorization_system.py::calculate_trade_profit",
+    "core/unified_profit_vectorization_system.py::calculate_returns_from_profits",
+    "core/unified_profit_vectorization_system.py::update_performance_metrics",
+    "core/unified_profit_vectorization_system.py::calculate_profit_factor",
+    "core/unified_profit_vectorization_system.py::get_performance_summary",
+    "core/unified_profit_vectorization_system.py::vectorize_profit_patterns"
+  ],
+  "DualisticStateMachine": [
+    "core/dualistic_state_machine.py::resolve_bit_phase",
+    "core/dualistic_state_machine.py::calculate_coherence_score",
+    "core/dualistic_state_machine.py::calculate_profit_differential",
+    "core/dualistic_state_machine.py::force_transition",
+    "core/dualistic_state_machine.py::get_current_snapshot"
+  ],
+  "UnifiedTensorAlgebra": [
+    "core/advanced_tensor_algebra.py::resolve_bit_phases",
+    "core/advanced_tensor_algebra.py::perform_tensor_contraction",
+    "core/advanced_tensor_algebra.py::calculate_profit_routing",
+    "core/advanced_tensor_algebra.py::calculate_entropy_compensation",
+    "core/advanced_tensor_algebra.py::encode_hash_memory"
+  ],
+  "PhaseBitIntegration": [
+    "core/phase_bit_integration.py::resolve_bit_phase"
+  ],
+  "CCXTIntegration": [
+    "core/ccxt_integration.py::fetch_order_book",
+    "core/ccxt_integration.py::detect_arbitrage_opportunities",
+    "core/ccxt_integration.py::optimize_order_size"
+  ]
+} 

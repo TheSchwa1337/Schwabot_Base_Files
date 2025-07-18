@@ -1,0 +1,79 @@
+{
+  "package_name": "unified_mathematical_trading_system",
+  "version": "1.0.0",
+  "timestamp": "2025-06-27T15:23:43.994079",
+  "platform_support": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "components": {
+    "btc_profit_scaffolding_engine": "core/unified_btc_profit_scaffolding_engine.py",
+    "mathematical_capitulation_engine": "core/unified_mathematical_capitulation_engine.py",
+    "english_mathematical_bridge": "core/comprehensive_english_mathematical_bridge.py",
+    "flake8_compliance_orchestrator": "core/flake8_compliance_orchestrator.py",
+    "integration_system": "core/unified_mathematical_trading_integration_system.py"
+  },
+  "requirements": [
+    "numpy>=1.21.0",
+    "pandas>=1.3.0",
+    "scipy>=1.7.0",
+    "asyncio-mqtt>=0.11.0",
+    "aiohttp>=3.8.0",
+    "requests>=2.28.0",
+    "cryptography>=3.4.8",
+    "click>=8.0.0",
+    "rich>=12.0.0",
+    "psutil>=5.8.0"
+  ],
+  "installation_scripts": [
+    "install_windows.bat",
+    "install_linux.sh",
+    "install_macos.sh"
+  ],
+  "configuration": {
+    "trading": {
+      "supported_assets": [
+        "BTC",
+        "ETH",
+        "XRP",
+        "USDC"
+      ],
+      "default_trading_pairs": [
+        "BTC-USDC",
+        "ETH-USDC",
+        "XRP-USDC"
+      ],
+      "enable_live_trading": false,
+      "risk_management": true
+    },
+    "mathematical": {
+      "phase_shells": [
+        "2-bit",
+        "4-bit",
+        "8-bit",
+        "16-bit",
+        "42-bit",
+        "256-bit"
+      ],
+      "english_blocks": true,
+      "thermal_optimization": true,
+      "memory_optimization": true
+    },
+    "compliance": {
+      "flake8_enforcement": true,
+      "auto_fix_enabled": true,
+      "continuous_monitoring": true
+    }
+  },
+  "performance_metrics": {
+    "total_integrations": 0,
+    "successful_integrations": 0,
+    "flake8_fixes_applied": 0,
+    "mathematical_optimizations": 3,
+    "trading_optimizations": 1,
+    "cross_platform_tests": 1,
+    "production_validations": 1
+  },
+  "export_status": "success"
+}

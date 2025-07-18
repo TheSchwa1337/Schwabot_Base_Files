@@ -1,0 +1,2290 @@
+{
+  "test_summary": {
+    "total_tests": 6,
+    "successful_tests": 2,
+    "success_rate": 0.3333333333333333,
+    "test_duration": 30.087111711502075
+  },
+  "component_results": {
+    "hash_injector": {
+      "success": true,
+      "total_ticks": 3,
+      "injections": 0,
+      "performance": {
+        "total_ticks_processed": 3,
+        "successful_matches": 0,
+        "commands_injected": 0,
+        "match_rate": 0.0,
+        "injection_rate": 0.0,
+        "total_patterns": 3,
+        "pattern_history_size": 3,
+        "config": {
+          "min_similarity_threshold": 0.7,
+          "min_confidence_threshold": 0.6
+        }
+      }
+    },
+    "live_simulator": {
+      "success": true,
+      "total_ticks": 274,
+      "hash_triggers": 0,
+      "command_injections": 0,
+      "summary": {
+        "total_ticks": 274,
+        "simulation_duration": 30.0,
+        "hash_triggers": 0,
+        "command_injections": 0,
+        "price_statistics": {
+          "initial_price": 50000.0,
+          "final_price": 57757.88054021412,
+          "total_return": 0.15515761080428245,
+          "volatility": 0.024151531066538067,
+          "min_price": 44936.28258736494,
+          "max_price": 61641.0779103984
+        },
+        "volume_statistics": {
+          "average_volume": 883.1307787569027,
+          "volume_volatility": 254.86888354996,
+          "min_volume": 100.0,
+          "max_volume": 1672.1138433534409
+        },
+        "entropy_statistics": {
+          "average_entropy": 0.14382889640885638,
+          "entropy_volatility": 0.15803273661825326,
+          "min_entropy": 0.001,
+          "max_entropy": 1.0
+        },
+        "regime_analysis": {
+          "sideways": 275
+        },
+        "performance_metrics": {
+          "hash_trigger_rate": 0.0,
+          "command_injection_rate": 0.0
+        }
+      },
+      "simulation_data": {
+        "ticks": [
+          {
+            "tick_number": 1,
+            "price": 50150.16159189712,
+            "volume": 1038.335593901109,
+            "entropy": 0.0239331409557373,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 2,
+            "price": 50741.65761514997,
+            "volume": 746.9539377548259,
+            "entropy": 0.10108982557160621,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 3,
+            "price": 49830.37071206981,
+            "volume": 419.50724522855523,
+            "entropy": 0.14836320377882953,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 4,
+            "price": 48501.77778000245,
+            "volume": 1251.6686220161287,
+            "entropy": 0.6686035611902291,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 5,
+            "price": 48709.02537383006,
+            "volume": 569.1957098239513,
+            "entropy": 0.7378309403371645,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 6,
+            "price": 51941.69227552255,
+            "volume": 945.3017897860514,
+            "entropy": 0.23814109910482092,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 7,
+            "price": 51739.3756984568,
+            "volume": 809.5480236787712,
+            "entropy": 0.0517636553503961,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 8,
+            "price": 52950.20307098183,
+            "volume": 926.4154752320279,
+            "entropy": 0.06179967102210828,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 9,
+            "price": 52062.92907574567,
+            "volume": 1071.1828256352007,
+            "entropy": 0.05408668269186052,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 10,
+            "price": 51707.04015943077,
+            "volume": 1021.2138830518312,
+            "entropy": 0.023746364504378146,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 11,
+            "price": 51545.08479988235,
+            "volume": 476.03521227021145,
+            "entropy": 0.2557305734365728,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 12,
+            "price": 53581.78839403655,
+            "volume": 850.6016627871916,
+            "entropy": 0.28214327004010936,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 13,
+            "price": 55991.038612014956,
+            "volume": 860.0370674569458,
+            "entropy": 0.029116490954048276,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 14,
+            "price": 55906.02863839481,
+            "volume": 893.3115158087603,
+            "entropy": 0.001,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 15,
+            "price": 56359.64958978364,
+            "volume": 658.5113398702566,
+            "entropy": 0.0869737620534139,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 16,
+            "price": 56775.4064678053,
+            "volume": 731.2070168367347,
+            "entropy": 0.04267872196074015,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 17,
+            "price": 56366.98264064291,
+            "volume": 767.1066642407064,
+            "entropy": 0.009006598981504787,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 18,
+            "price": 56285.11865019763,
+            "volume": 500.22642662598435,
+            "entropy": 0.1136481415345571,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 19,
+            "price": 56415.41187588704,
+            "volume": 1361.3068205556076,
+            "entropy": 0.575729229925726,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 20,
+            "price": 55572.287021557204,
+            "volume": 885.075914783945,
+            "entropy": 0.18309357339407434,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 21,
+            "price": 54879.489597350366,
+            "volume": 957.9938652324927,
+            "entropy": 0.031568364477819695,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 22,
+            "price": 54690.76590461782,
+            "volume": 660.239416630732,
+            "entropy": 0.11397652698870535,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 23,
+            "price": 54382.7807172636,
+            "volume": 740.670029307635,
+            "entropy": 0.04863833967464675,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 24,
+            "price": 55153.16475089343,
+            "volume": 871.7443240434991,
+            "entropy": 0.06127412016373399,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 25,
+            "price": 54974.29011816681,
+            "volume": 1031.200906336485,
+            "entropy": 0.06098039071177616,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 26,
+            "price": 54981.99425814277,
+            "volume": 1141.601261796148,
+            "entropy": 0.039243030282025006,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 27,
+            "price": 54769.953819498056,
+            "volume": 493.7819869187588,
+            "entropy": 0.19837884645341466,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 28,
+            "price": 56254.02365628368,
+            "volume": 928.3687688968421,
+            "entropy": 0.3410152645532597,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 29,
+            "price": 57756.445728156614,
+            "volume": 558.6518263619408,
+            "entropy": 0.1460275036701752,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 30,
+            "price": 57397.89912267103,
+            "volume": 1120.6002482292652,
+            "entropy": 0.34012150296866467,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 31,
+            "price": 55752.43117478308,
+            "volume": 637.3570071436174,
+            "entropy": 0.14786253239676705,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 32,
+            "price": 56467.75722503591,
+            "volume": 872.734629681666,
+            "entropy": 0.13706790604748773,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 33,
+            "price": 55954.72716227985,
+            "volume": 590.0502702717058,
+            "entropy": 0.11421374749374735,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 34,
+            "price": 56265.31053590788,
+            "volume": 992.7610541497831,
+            "entropy": 0.22886551319362658,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 35,
+            "price": 53942.77503614304,
+            "volume": 752.8861058446179,
+            "entropy": 0.10001010406300564,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 36,
+            "price": 54167.19318810901,
+            "volume": 638.8251562594314,
+            "entropy": 0.05291102731210277,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 37,
+            "price": 53814.40942832387,
+            "volume": 962.6448784146546,
+            "entropy": 0.17487579494655073,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 38,
+            "price": 52421.890659447854,
+            "volume": 1003.65289086891,
+            "entropy": 0.026250450673193506,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 39,
+            "price": 53097.43391120034,
+            "volume": 1018.217614385327,
+            "entropy": 0.016703229953725102,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 40,
+            "price": 53025.980650899306,
+            "volume": 667.7764090593197,
+            "entropy": 0.11359351844027171,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 41,
+            "price": 52645.416778352264,
+            "volume": 1048.301173432365,
+            "entropy": 0.18849890597622476,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 42,
+            "price": 51987.931304950835,
+            "volume": 1276.2668559756107,
+            "entropy": 0.07750732419901445,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 43,
+            "price": 53495.57146595371,
+            "volume": 1224.9014721942501,
+            "entropy": 0.028607238716157366,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 44,
+            "price": 53716.560605669634,
+            "volume": 753.396617959591,
+            "entropy": 0.12160475285463913,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 45,
+            "price": 54413.72112193278,
+            "volume": 556.2863246053798,
+            "entropy": 0.0893057770805827,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 46,
+            "price": 55170.054945924916,
+            "volume": 540.4841470045708,
+            "entropy": 0.020221160837125718,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 47,
+            "price": 55968.66620118734,
+            "volume": 473.07125495479033,
+            "entropy": 0.04317254307684824,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 48,
+            "price": 56246.131954673256,
+            "volume": 627.574663617802,
+            "entropy": 0.11012116553588126,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 49,
+            "price": 55313.15815757554,
+            "volume": 1295.0319042607928,
+            "entropy": 0.35051161466488107,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 50,
+            "price": 52974.74709886272,
+            "volume": 1172.6527347159265,
+            "entropy": 0.0456598258029211,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 51,
+            "price": 52864.74158422325,
+            "volume": 887.5102027440172,
+            "entropy": 0.07917684769693421,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 52,
+            "price": 52846.62324357422,
+            "volume": 1425.5810214904868,
+            "entropy": 0.18919032777187264,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 53,
+            "price": 52287.87332437193,
+            "volume": 815.0261008337228,
+            "entropy": 0.14299933230249917,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 54,
+            "price": 52704.3048540276,
+            "volume": 962.4066133957685,
+            "entropy": 0.05831173675414845,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 55,
+            "price": 53140.25407698643,
+            "volume": 653.1052854688319,
+            "entropy": 0.10615039867565619,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 56,
+            "price": 53166.03723664672,
+            "volume": 1202.4974760631183,
+            "entropy": 0.2766179334735323,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 57,
+            "price": 54675.11234940043,
+            "volume": 1084.553593653625,
+            "entropy": 0.047578941078392445,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 58,
+            "price": 55080.882849322086,
+            "volume": 1047.1376463015818,
+            "entropy": 0.011905029180623104,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 59,
+            "price": 55129.30422063284,
+            "volume": 894.5859798570027,
+            "entropy": 0.052822226968172646,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 60,
+            "price": 54368.404708248214,
+            "volume": 1171.308521966116,
+            "entropy": 0.11298854455496238,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 61,
+            "price": 53765.50896200494,
+            "volume": 889.0555154770173,
+            "entropy": 0.07950607742458841,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 62,
+            "price": 53306.93125598103,
+            "volume": 976.9712912993564,
+            "entropy": 0.03204714572854658,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 63,
+            "price": 53267.66058333247,
+            "volume": 746.4431669828198,
+            "entropy": 0.42761041568286634,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 64,
+            "price": 52534.37294624255,
+            "volume": 696.0607951624943,
+            "entropy": 0.09043235416220186,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 65,
+            "price": 52716.72392413621,
+            "volume": 864.319775043065,
+            "entropy": 0.12250862254686755,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 66,
+            "price": 53609.73346728208,
+            "volume": 997.7612257355468,
+            "entropy": 0.05770207320695119,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 67,
+            "price": 53596.242370241525,
+            "volume": 887.4391594210937,
+            "entropy": 0.04349711556807534,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 68,
+            "price": 53730.91061906983,
+            "volume": 1462.750356046242,
+            "entropy": 0.21963986225294305,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 69,
+            "price": 56241.99325827705,
+            "volume": 840.3420613024944,
+            "entropy": 0.16392202616093748,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 70,
+            "price": 54866.40875202153,
+            "volume": 1138.5513521766413,
+            "entropy": 0.5335505283125461,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 71,
+            "price": 60423.90230080527,
+            "volume": 1117.118764511007,
+            "entropy": 0.03619257682947165,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 72,
+            "price": 60193.92003398476,
+            "volume": 1176.8390027091498,
+            "entropy": 0.015960600270259886,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 73,
+            "price": 59549.0784280063,
+            "volume": 839.3936013409618,
+            "entropy": 0.10740262033885768,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 74,
+            "price": 59467.37305919702,
+            "volume": 751.893880773388,
+            "entropy": 0.03935688423874464,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 75,
+            "price": 59520.41871296847,
+            "volume": 1054.8326009675702,
+            "entropy": 0.12710002315489505,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 76,
+            "price": 58965.949645511566,
+            "volume": 1273.7623412682965,
+            "entropy": 0.07305945915953514,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 77,
+            "price": 60384.93866440789,
+            "volume": 804.331304345549,
+            "entropy": 0.13734497316070896,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 78,
+            "price": 61641.0779103984,
+            "volume": 617.6244751570488,
+            "entropy": 0.08888333189408996,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 79,
+            "price": 60946.60401272122,
+            "volume": 560.6866650283052,
+            "entropy": 0.020890055686086862,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 80,
+            "price": 61401.70473148458,
+            "volume": 1293.9513814681222,
+            "entropy": 0.42922094961970164,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 81,
+            "price": 60453.80357155898,
+            "volume": 969.4018502745431,
+            "entropy": 0.08853476835668156,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 82,
+            "price": 60187.08019107606,
+            "volume": 964.8446742004063,
+            "entropy": 0.001,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 83,
+            "price": 60046.3435844109,
+            "volume": 612.1927454003898,
+            "entropy": 0.12597349788392176,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 84,
+            "price": 59124.57163779861,
+            "volume": 841.3310114194318,
+            "entropy": 0.1229790710663131,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 85,
+            "price": 59776.997471437935,
+            "volume": 686.7708794113106,
+            "entropy": 0.06634114261207084,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 86,
+            "price": 59530.01314300972,
+            "volume": 1029.3947031175721,
+            "entropy": 0.1727243116743982,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 87,
+            "price": 56946.09165996694,
+            "volume": 474.11824696680964,
+            "entropy": 0.2033877324946514,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 88,
+            "price": 57435.12729203559,
+            "volume": 1672.1138433534409,
+            "entropy": 0.8525885716226611,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 89,
+            "price": 57762.507114870335,
+            "volume": 671.9985375962087,
+            "entropy": 0.2663431893538671,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 90,
+            "price": 56850.67752591386,
+            "volume": 926.1355130602445,
+            "entropy": 0.13739265553792504,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 91,
+            "price": 56455.968007681695,
+            "volume": 1488.377803577116,
+            "entropy": 0.21143927609837918,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 92,
+            "price": 55446.63683618025,
+            "volume": 1233.1877694293157,
+            "entropy": 0.054380120683341145,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 93,
+            "price": 55434.35099650637,
+            "volume": 774.9766995548545,
+            "entropy": 0.12233935176907418,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 94,
+            "price": 54959.80977029622,
+            "volume": 653.1549884371439,
+            "entropy": 0.05161702163890688,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 95,
+            "price": 54229.56516041303,
+            "volume": 970.9847671181803,
+            "entropy": 0.16606523023953898,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 96,
+            "price": 53455.752134172246,
+            "volume": 1006.9847169415233,
+            "entropy": 0.018498329796522557,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 97,
+            "price": 53658.91895772868,
+            "volume": 721.9994541805054,
+            "entropy": 0.0889227493089902,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 98,
+            "price": 53317.661469303435,
+            "volume": 471.7336499072097,
+            "entropy": 0.12298109314657292,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 99,
+            "price": 53164.65571874825,
+            "volume": 830.4753262045458,
+            "entropy": 0.2517318531847789,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 100,
+            "price": 53946.060595890645,
+            "volume": 1157.6999198417457,
+            "entropy": 0.14138381298885236,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 101,
+            "price": 52511.90907336979,
+            "volume": 913.4672303352426,
+            "entropy": 0.07977884056989737,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 102,
+            "price": 53309.58632191526,
+            "volume": 837.9536908480402,
+            "entropy": 0.03337731147383918,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 103,
+            "price": 53110.15095973795,
+            "volume": 1010.9236419871802,
+            "entropy": 0.07695298687558653,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 104,
+            "price": 53373.643661560825,
+            "volume": 803.9801710875884,
+            "entropy": 0.0785632064732167,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 105,
+            "price": 53338.89581427484,
+            "volume": 457.1336894751068,
+            "entropy": 0.14412794493816855,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 106,
+            "price": 53677.8367754326,
+            "volume": 638.4742104685878,
+            "entropy": 0.13626121683527534,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 107,
+            "price": 53048.525315907114,
+            "volume": 1002.0213152339688,
+            "entropy": 0.20202340935344765,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 108,
+            "price": 53285.432536774264,
+            "volume": 584.6053039380577,
+            "entropy": 0.13489993797305364,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 109,
+            "price": 54048.21288124369,
+            "volume": 778.5722084656782,
+            "entropy": 0.12089632592112994,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 110,
+            "price": 54153.84454974094,
+            "volume": 757.7408526851193,
+            "entropy": 0.005885774868104037,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 111,
+            "price": 54615.67364296403,
+            "volume": 443.5769808236739,
+            "entropy": 0.14291777945002312,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 112,
+            "price": 55276.38745836578,
+            "volume": 636.8938765852789,
+            "entropy": 0.13380558439292048,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 113,
+            "price": 57236.43088381033,
+            "volume": 816.2913982360205,
+            "entropy": 0.1060243205963678,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 114,
+            "price": 58156.93307986151,
+            "volume": 925.7302379243232,
+            "entropy": 0.05299771153640539,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 115,
+            "price": 58150.205862399656,
+            "volume": 917.1290764898565,
+            "entropy": 0.003802933453416082,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 116,
+            "price": 59000.670466776835,
+            "volume": 715.8329815736242,
+            "entropy": 0.07714743700899572,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 117,
+            "price": 58156.13793395883,
+            "volume": 809.2349943167327,
+            "entropy": 0.05245230779500586,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 118,
+            "price": 57429.00219292058,
+            "volume": 575.719065907484,
+            "entropy": 0.09936207833309241,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 119,
+            "price": 57546.14640547677,
+            "volume": 1150.9047838879528,
+            "entropy": 0.3214051004637078,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 120,
+            "price": 58044.69731078578,
+            "volume": 660.8018044814557,
+            "entropy": 0.1437380832160949,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 121,
+            "price": 57827.12094158671,
+            "volume": 665.1201333611822,
+            "entropy": 0.00792300695675118,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 122,
+            "price": 58625.77481606559,
+            "volume": 1231.2399292152033,
+            "entropy": 0.27059274492317775,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 123,
+            "price": 58411.176610703755,
+            "volume": 944.7412375485743,
+            "entropy": 0.07708508199738522,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 124,
+            "price": 58023.43728012877,
+            "volume": 774.8003700042766,
+            "entropy": 0.0617090555228977,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 125,
+            "price": 57908.321940519534,
+            "volume": 685.4716848638392,
+            "entropy": 0.03423671998044107,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 126,
+            "price": 57827.0533852253,
+            "volume": 999.657501706845,
+            "entropy": 0.14622934544760888,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 127,
+            "price": 57238.97003773703,
+            "volume": 930.3419991477965,
+            "entropy": 0.028188017907452734,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 128,
+            "price": 56766.936143550905,
+            "volume": 433.7660223971753,
+            "entropy": 0.1924322800350422,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 129,
+            "price": 55352.66277384167,
+            "volume": 1212.234045581554,
+            "entropy": 0.594841401703537,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 130,
+            "price": 48585.298740916965,
+            "volume": 411.94221828315705,
+            "entropy": 0.2571799698421437,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 131,
+            "price": 48858.984704872855,
+            "volume": 781.6133485965883,
+            "entropy": 0.40697285367224023,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 132,
+            "price": 49931.45704319134,
+            "volume": 913.6995145385928,
+            "entropy": 0.06242079689484967,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 133,
+            "price": 49519.10951528175,
+            "volume": 920.2107784638584,
+            "entropy": 0.001,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 134,
+            "price": 49848.52992475363,
+            "volume": 935.9013830909823,
+            "entropy": 0.014452435929537785,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 135,
+            "price": 49177.483106504966,
+            "volume": 706.2247347085995,
+            "entropy": 0.08646347632302266,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 136,
+            "price": 48922.469170585,
+            "volume": 709.6912080886565,
+            "entropy": 0.001,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 137,
+            "price": 48636.21920335915,
+            "volume": 621.5900657469255,
+            "entropy": 0.06087961402982788,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 138,
+            "price": 48592.81061947663,
+            "volume": 719.0433712178996,
+            "entropy": 0.05337112648878184,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 139,
+            "price": 48777.32475266275,
+            "volume": 860.0106981336945,
+            "entropy": 0.07842053184689672,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 140,
+            "price": 48792.438745600615,
+            "volume": 1034.0253088166426,
+            "entropy": 0.07403366648454653,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 141,
+            "price": 48490.42436927342,
+            "volume": 849.7219830886801,
+            "entropy": 0.06561397305281139,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 142,
+            "price": 48815.93055691107,
+            "volume": 1015.0865276647694,
+            "entropy": 0.0743128611733697,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 143,
+            "price": 48203.2892146261,
+            "volume": 981.1434241706481,
+            "entropy": 0.01671413779083873,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 144,
+            "price": 47975.885110062474,
+            "volume": 858.8102868123406,
+            "entropy": 0.04767729165682821,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 145,
+            "price": 48161.9686629465,
+            "volume": 894.18402062328,
+            "entropy": 0.011940804272914857,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 146,
+            "price": 48219.80344459524,
+            "volume": 1196.5406338162227,
+            "entropy": 0.147732149778852,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 147,
+            "price": 48781.94545509962,
+            "volume": 1095.3749283744814,
+            "entropy": 0.033955681005513695,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 148,
+            "price": 49021.718289580385,
+            "volume": 1188.0391401283687,
+            "entropy": 0.02528081522864872,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 149,
+            "price": 49355.39074017423,
+            "volume": 430.6059075536107,
+            "entropy": 0.20306123373135698,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 150,
+            "price": 48461.42508174869,
+            "volume": 606.7837852203108,
+            "entropy": 0.1354113564153314,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 151,
+            "price": 47091.35027072493,
+            "volume": 589.9749945542133,
+            "entropy": 0.023208455275776477,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 152,
+            "price": 46979.157503890034,
+            "volume": 1471.3276922231034,
+            "entropy": 0.49432865226114237,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 153,
+            "price": 51119.03679553515,
+            "volume": 459.7674769264922,
+            "entropy": 0.25903870606806517,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 154,
+            "price": 50462.35895479826,
+            "volume": 739.7895261133838,
+            "entropy": 0.20617840210533767,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 155,
+            "price": 49117.50988316391,
+            "volume": 1076.6194165879936,
+            "entropy": 0.16764206177265575,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 156,
+            "price": 48327.73578234958,
+            "volume": 1483.7391280642198,
+            "entropy": 0.13766080075302253,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 157,
+            "price": 48621.48252533581,
+            "volume": 1010.8045025843014,
+            "entropy": 0.11549851622316372,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 158,
+            "price": 47391.10752037831,
+            "volume": 1099.6069316285614,
+            "entropy": 0.03138157181261746,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 159,
+            "price": 47466.30734319897,
+            "volume": 100.0,
+            "entropy": 0.2977469131630001,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 160,
+            "price": 46288.20221986813,
+            "volume": 441.65633648677215,
+            "entropy": 1.0,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 161,
+            "price": 48547.60532116967,
+            "volume": 974.8459208679943,
+            "entropy": 0.4234539060208202,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 162,
+            "price": 52020.16141150386,
+            "volume": 699.8270448889817,
+            "entropy": 0.12108511735531831,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 163,
+            "price": 51352.25782461266,
+            "volume": 689.3054340171366,
+            "entropy": 0.01259100648173112,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 164,
+            "price": 51265.28299337603,
+            "volume": 1082.2933871461207,
+            "entropy": 0.18067582727383014,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 165,
+            "price": 50245.90016744063,
+            "volume": 1258.900959742566,
+            "entropy": 0.062445364635398216,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 166,
+            "price": 50429.44959281891,
+            "volume": 1184.2914227441158,
+            "entropy": 0.011362916966068113,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 167,
+            "price": 50504.516278564675,
+            "volume": 820.4869548403111,
+            "entropy": 0.10019563628633532,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 168,
+            "price": 50409.615280006845,
+            "volume": 743.8952500365108,
+            "entropy": 0.032594732180415906,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 169,
+            "price": 50436.13008033663,
+            "volume": 834.9100591444114,
+            "entropy": 0.02739004689743447,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 170,
+            "price": 49832.98257130735,
+            "volume": 548.4189585634309,
+            "entropy": 0.11718130287386613,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 171,
+            "price": 50953.51452570416,
+            "volume": 811.0830486568719,
+            "entropy": 0.15949814771566537,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 172,
+            "price": 51897.49470445395,
+            "volume": 1103.1668998475914,
+            "entropy": 0.12483693185233602,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 173,
+            "price": 51753.5326450626,
+            "volume": 1116.8819897308658,
+            "entropy": 0.0027823077428246455,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 174,
+            "price": 51820.33731913046,
+            "volume": 1053.5801137616668,
+            "entropy": 0.02413964776875573,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 175,
+            "price": 51532.39885051104,
+            "volume": 1194.7534162183226,
+            "entropy": 0.04979282061615309,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 176,
+            "price": 51444.47340156386,
+            "volume": 514.9348239191335,
+            "entropy": 0.18812917416883615,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 177,
+            "price": 51458.3558493224,
+            "volume": 703.6062392443594,
+            "entropy": 0.12886117676876926,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 178,
+            "price": 50930.71490903819,
+            "volume": 1513.6226060330707,
+            "entropy": 0.3838572537363283,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 179,
+            "price": 51977.30432647478,
+            "volume": 862.751742327504,
+            "entropy": 0.1463792889280387,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 180,
+            "price": 52729.178114505,
+            "volume": 1005.8999856287868,
+            "entropy": 0.10046370095474173,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 181,
+            "price": 52256.69363127625,
+            "volume": 607.913446385239,
+            "entropy": 0.13299692663899362,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 182,
+            "price": 52442.27717364845,
+            "volume": 1233.8818042928851,
+            "entropy": 1.0,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 183,
+            "price": 54894.69233180125,
+            "volume": 971.5765038621743,
+            "entropy": 0.09099280761355512,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 184,
+            "price": 55355.317787504144,
+            "volume": 817.4361972797249,
+            "entropy": 0.06446210812783426,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 185,
+            "price": 55239.649809969436,
+            "volume": 600.0979741180174,
+            "entropy": 0.08579383154814997,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 186,
+            "price": 56171.842411561796,
+            "volume": 625.7410308144015,
+            "entropy": 0.024891130342342267,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 187,
+            "price": 55780.72776309977,
+            "volume": 738.0953786312913,
+            "entropy": 0.08252929293235563,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 188,
+            "price": 56155.017868837254,
+            "volume": 743.0652801021315,
+            "entropy": 0.014974391460133884,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 189,
+            "price": 56253.65530090082,
+            "volume": 1308.0533099005866,
+            "entropy": 0.25097553553058866,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 190,
+            "price": 57369.45671519054,
+            "volume": 1039.1006166711848,
+            "entropy": 0.06464009415596865,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 191,
+            "price": 58332.43134588301,
+            "volume": 705.9414131552093,
+            "entropy": 0.1151080745856433,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 192,
+            "price": 57581.23510724762,
+            "volume": 862.3673901349904,
+            "entropy": 0.08597245233172607,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 193,
+            "price": 56364.81911825064,
+            "volume": 1168.5203302795662,
+            "entropy": 0.11378181800404402,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 194,
+            "price": 56576.00962873053,
+            "volume": 747.0923371463697,
+            "entropy": 0.12377596653535583,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 195,
+            "price": 55630.641600207826,
+            "volume": 1128.757510531928,
+            "entropy": 0.17256734596603054,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 196,
+            "price": 56912.235896775586,
+            "volume": 778.1258296063061,
+            "entropy": 0.2540899186522089,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 197,
+            "price": 57141.25669313818,
+            "volume": 963.5662186627463,
+            "entropy": 0.08943852885256841,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 198,
+            "price": 56659.94298574155,
+            "volume": 881.6320450653311,
+            "entropy": 0.02656819187849036,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 199,
+            "price": 56381.761825134025,
+            "volume": 819.4833851464776,
+            "entropy": 0.028123403100426502,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 200,
+            "price": 56431.243005920536,
+            "volume": 834.1890409945244,
+            "entropy": 0.013513322957175514,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 201,
+            "price": 56078.51002317879,
+            "volume": 624.34996431081,
+            "entropy": 0.09022820702042511,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 202,
+            "price": 55779.17433883771,
+            "volume": 1148.7670051627588,
+            "entropy": 0.280666476964955,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 203,
+            "price": 58840.209395346326,
+            "volume": 1120.055389706122,
+            "entropy": 0.028674524986051927,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 204,
+            "price": 58885.49378273141,
+            "volume": 588.3186744777371,
+            "entropy": 0.16295974050002082,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 205,
+            "price": 58778.11859519719,
+            "volume": 1131.0459369444081,
+            "entropy": 0.3064271468837592,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 206,
+            "price": 59525.13033353977,
+            "volume": 429.7774786833381,
+            "entropy": 0.20468407612512352,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 207,
+            "price": 60457.50165881149,
+            "volume": 1205.2396964516304,
+            "entropy": 0.604923242049007,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 208,
+            "price": 53830.868493322254,
+            "volume": 638.2365240881386,
+            "entropy": 0.20370260947670885,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 209,
+            "price": 52690.3679170996,
+            "volume": 913.23517494155,
+            "entropy": 0.14601901787797317,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 210,
+            "price": 51387.04053373118,
+            "volume": 884.4124832063566,
+            "entropy": 0.02627300500721244,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 211,
+            "price": 50789.90173237414,
+            "volume": 1245.800708994929,
+            "entropy": 0.1279195209999843,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 212,
+            "price": 51374.18442523855,
+            "volume": 803.115884716456,
+            "entropy": 0.12489573695971241,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 213,
+            "price": 51653.56366235821,
+            "volume": 860.2063865131465,
+            "entropy": 0.019172472622377354,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 214,
+            "price": 51892.51329734117,
+            "volume": 370.5089003274066,
+            "entropy": 0.1939472805701962,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 215,
+            "price": 50077.830154854746,
+            "volume": 833.9813540400536,
+            "entropy": 0.4275644356524259,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 216,
+            "price": 51137.85482277717,
+            "volume": 910.8177611094377,
+            "entropy": 0.03151834241122873,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 217,
+            "price": 51566.06346309989,
+            "volume": 718.048162867636,
+            "entropy": 0.07376397098218569,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 218,
+            "price": 52089.32998014775,
+            "volume": 794.9567317356185,
+            "entropy": 0.04175971862408867,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 219,
+            "price": 52380.77686259365,
+            "volume": 797.2017414724544,
+            "entropy": 0.007815573668280208,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 220,
+            "price": 52598.88088135672,
+            "volume": 1343.3234405891621,
+            "entropy": 0.4434527848022437,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 221,
+            "price": 52899.12989478166,
+            "volume": 1034.1930773430697,
+            "entropy": 0.08136927091595487,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 222,
+            "price": 52819.84031628673,
+            "volume": 1120.2454912198273,
+            "entropy": 0.0429722142422744,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 223,
+            "price": 53346.098618836484,
+            "volume": 659.4583020747004,
+            "entropy": 0.15135752685568485,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 224,
+            "price": 54817.18950812261,
+            "volume": 770.1319366256325,
+            "entropy": 0.20702641798206325,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 225,
+            "price": 53575.517783178155,
+            "volume": 716.0537346494508,
+            "entropy": 0.029639944267797674,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 226,
+            "price": 53437.88431696437,
+            "volume": 1137.7494378193792,
+            "entropy": 0.19788536584321836,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 227,
+            "price": 51700.49580789321,
+            "volume": 1050.138664339777,
+            "entropy": 0.04948224360823451,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 228,
+            "price": 51540.25623170696,
+            "volume": 610.6976148780755,
+            "entropy": 0.14471589211435956,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 229,
+            "price": 51811.72190939745,
+            "volume": 1211.5022427779943,
+            "entropy": 0.32159223535975034,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 230,
+            "price": 49273.375432499226,
+            "volume": 887.9842510299219,
+            "entropy": 0.11054400377984734,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 231,
+            "price": 49169.80912319647,
+            "volume": 731.449201550293,
+            "entropy": 0.061872246202048446,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 232,
+            "price": 48574.36008302831,
+            "volume": 685.3535929126591,
+            "entropy": 0.023450667141306048,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 233,
+            "price": 48145.292257598616,
+            "volume": 1430.9184163441046,
+            "entropy": 0.3580194708540021,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 234,
+            "price": 48237.00070290438,
+            "volume": 768.6249576435099,
+            "entropy": 0.15800976316007634,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 235,
+            "price": 49009.15221955041,
+            "volume": 1017.128390170332,
+            "entropy": 0.1171028070517544,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 236,
+            "price": 48448.05781396949,
+            "volume": 598.7255271184366,
+            "entropy": 0.14968903944772674,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 237,
+            "price": 48537.394902551656,
+            "volume": 1511.4913977885549,
+            "entropy": 0.5067852921735856,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 238,
+            "price": 47933.575619159164,
+            "volume": 772.0404996358292,
+            "entropy": 0.16480441959217904,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 239,
+            "price": 48388.99928715512,
+            "volume": 850.5596144632374,
+            "entropy": 0.04031151218920038,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 240,
+            "price": 48089.010851564184,
+            "volume": 553.5913975417053,
+            "entropy": 0.12244753281364845,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 241,
+            "price": 48920.26981528013,
+            "volume": 907.6880308721895,
+            "entropy": 0.21672649392300028,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 242,
+            "price": 48420.35981491631,
+            "volume": 767.7417211795513,
+            "entropy": 0.05593535373540573,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 243,
+            "price": 48891.93972742953,
+            "volume": 1116.458142139513,
+            "entropy": 0.14475064047053024,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 244,
+            "price": 48321.039231208415,
+            "volume": 563.9044893104544,
+            "entropy": 0.1568512531205417,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 245,
+            "price": 46197.27143599117,
+            "volume": 726.5318190906553,
+            "entropy": 0.11339415021692574,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 246,
+            "price": 46531.395255456846,
+            "volume": 900.0954439285838,
+            "entropy": 0.07555484070005264,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 247,
+            "price": 46227.5331779386,
+            "volume": 753.3683612047777,
+            "entropy": 0.05061566988015894,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 248,
+            "price": 45483.763584749104,
+            "volume": 1252.4183040325545,
+            "entropy": 0.22477590743490836,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 249,
+            "price": 46395.54073891807,
+            "volume": 711.0486782390511,
+            "entropy": 0.16294194627722522,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 250,
+            "price": 46604.10122809527,
+            "volume": 1062.3612371089775,
+            "entropy": 0.16818592857709316,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 251,
+            "price": 46054.64648751494,
+            "volume": 988.8166101718809,
+            "entropy": 0.02248768093417895,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 252,
+            "price": 46003.7044077646,
+            "volume": 517.751626630845,
+            "entropy": 0.15268883672422887,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 253,
+            "price": 46112.82984761076,
+            "volume": 1177.990851170783,
+            "entropy": 0.43065190223856836,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 254,
+            "price": 44936.28258736494,
+            "volume": 498.28113478917413,
+            "entropy": 0.210849613622631,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 255,
+            "price": 45886.28364109317,
+            "volume": 987.7429973966584,
+            "entropy": 1.0,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 256,
+            "price": 54602.660450081305,
+            "volume": 1063.312857626055,
+            "entropy": 0.09277741314160058,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 257,
+            "price": 54638.11680829642,
+            "volume": 713.8613146100807,
+            "entropy": 0.10122251396997411,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 258,
+            "price": 54869.35312895726,
+            "volume": 742.7849822099265,
+            "entropy": 0.012706741772633692,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 259,
+            "price": 54414.36835580511,
+            "volume": 948.1744656835966,
+            "entropy": 0.09670760685408891,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 260,
+            "price": 54226.40852835954,
+            "volume": 1185.2780678787851,
+            "entropy": 0.08357221299740847,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 261,
+            "price": 54052.212082219834,
+            "volume": 953.9435936579513,
+            "entropy": 0.06633059715170804,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 262,
+            "price": 53945.34886847528,
+            "volume": 1080.7340331279725,
+            "entropy": 0.04881571008983159,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 263,
+            "price": 54262.03159818648,
+            "volume": 1468.5313733715996,
+            "entropy": 0.128735609283712,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 264,
+            "price": 55272.98910724394,
+            "volume": 954.5568623969108,
+            "entropy": 0.1288759307702626,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 265,
+            "price": 55113.16193700934,
+            "volume": 1084.83613225732,
+            "entropy": 0.040279582585033696,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 266,
+            "price": 55411.88712896123,
+            "volume": 936.8300924694717,
+            "entropy": 0.037947252588886975,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 267,
+            "price": 54938.101690809825,
+            "volume": 941.3427499481609,
+            "entropy": 0.03441309482507766,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 268,
+            "price": 54733.68692878007,
+            "volume": 837.3535689368042,
+            "entropy": 0.04086015216043962,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 269,
+            "price": 54848.55112855245,
+            "volume": 1319.034952055364,
+            "entropy": 0.1897828016619092,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 270,
+            "price": 52470.46243800569,
+            "volume": 471.19441764058047,
+            "entropy": 0.23712747086149563,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 271,
+            "price": 55444.361417219174,
+            "volume": 721.7964160367012,
+            "entropy": 0.19740425568514527,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 272,
+            "price": 57429.42949988646,
+            "volume": 1135.806512645741,
+            "entropy": 0.2070787815511824,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 273,
+            "price": 57042.900273579544,
+            "volume": 824.5100763643252,
+            "entropy": 0.09058039378373661,
+            "regime": "sideways",
+            "hash_triggered": false
+          },
+          {
+            "tick_number": 274,
+            "price": 57757.88054021412,
+            "volume": 571.2752787923688,
+            "entropy": 0.10526485026488758,
+            "regime": "sideways",
+            "hash_triggered": false
+          }
+        ],
+        "hash_triggers": 0,
+        "command_injections": 0,
+        "regime_transitions": []
+      }
+    },
+    "flask_ai_handler": {
+      "success": false,
+      "error": "'AgentMemory' object has no attribute 'initialize_agent'"
+    },
+    "agent_memory": {
+      "success": false,
+      "error": "'AgentMemory' object has no attribute 'initialize_agent'"
+    },
+    "profit_registry": {
+      "success": false,
+      "error": "'ProfitBucketRegistry' object has no attribute 'register_profit_pattern'"
+    },
+    "integrated_ecosystem": {
+      "success": false,
+      "error": "'ProfitBucketRegistry' object has no attribute 'register_profit_pattern'"
+    }
+  },
+  "ecosystem_health": {
+    "hash_injector_ready": true,
+    "simulator_ready": true,
+    "ai_handler_ready": false,
+    "memory_ready": false,
+    "registry_ready": false,
+    "integrated_ready": false
+  }
+}

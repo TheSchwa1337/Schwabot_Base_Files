@@ -1,0 +1,58 @@
+basket_swap:
+  min_valid_signal_strength: 0.25
+  signal_weights:
+    trust_score: 0.4
+    entropy_component: 0.3
+    phase_depth: 0.3
+  thresholds:
+    min_profit: 0.02
+    min_stability: 0.7
+    max_paradox: 0.3
+    min_memory_coherence: 0.8
+    min_tff_alignment: 0.5
+    min_tef_coherence: 0.6
+    max_tpf_instability: 0.4
+  cooldown:
+    default_duration: 300
+    scope: BASKET
+    rules:
+      - id: "basket_swap"
+        trigger_events: ["basket_swap"]
+        cooldown_seconds: 300
+        scope: BASKET
+        actions: ["block_new_entries", "reset_position_sizes"]
+        priority: 100
+      - id: "basket_stability"
+        trigger_events: ["stability_breach"]
+        conditions: "stability_score < 0.7"
+        cooldown_seconds: 600
+        scope: BASKET
+        actions: ["reduce_position_sizes", "block_new_entries"]
+        priority: 90
+      - id: "basket_paradox"
+        trigger_events: ["paradox_detected"]
+        conditions: "paradox_score > 0.3"
+        cooldown_seconds: 180
+        scope: BASKET
+        actions: ["monitor_only"]
+        priority: 85
+  basket_triggers:
+    core_stability:
+      swap_conditions:
+        - metric: "drawdown"
+          threshold: 0.10
+          action: "reduce_exposure"
+        - metric: "entropy"
+          threshold: 0.7
+          action: "freeze_allocation"
+    
+    volatility_hedge:
+      swap_conditions:
+        - metric: "iv_rv_spread"
+          threshold: 0.05
+          action: "increase_exposure"
+        - metric: "skew"
+          threshold: 0.1
+          action: "adjust_position"
+    
+    # ... other baskets 

@@ -1,0 +1,95 @@
+{
+  "Ghost Signal Creation": {
+    "status": "PASS",
+    "signal_count": 10,
+    "execution_time": 0.0
+  },
+  "Ghost Array Construction": {
+    "status": "PASS",
+    "shape": [
+      8,
+      4
+    ],
+    "volatility": 141.4213562373095,
+    "execution_time": 0.0010008811950683594
+  },
+  "BTC Vector Processing": {
+    "status": "PASS",
+    "strategy_hash": "f2bb7178189dcd42d67f5b804cd9ce08274bb3417e5a203e3c9a01fd4215b117",
+    "signal_data": {
+      "volatility": 282.842712474619,
+      "momentum": 200.0,
+      "mean_price": 50900.0,
+      "confidence": 0.8949999999999999,
+      "signal_count": 10.0
+    },
+    "stats": {
+      "price_mean": 50900.0,
+      "price_std": 574.4562646538029,
+      "price_min": 50000.0,
+      "price_max": 51800.0,
+      "volatility_mean": 0.034499999999999996,
+      "volatility_std": 0.002872281323269014,
+      "confidence_mean": 0.8949999999999999,
+      "confidence_std": 0.028722813232690124,
+      "signal_count": 10.0,
+      "price_range": 1800.0,
+      "price_change_rate": 200.0
+    },
+    "execution_time": 0.0009975433349609375
+  },
+  "Ghost Strategy Engine": {
+    "status": "PASS",
+    "result": {
+      "strategy_hash": "8514689a7397c4899367e50a074087c6ed39a4a171e7ceb4e0bd724c08b94b13",
+      "action": "MOMENTUM_LONG",
+      "confidence": 1.0,
+      "conditions": {
+        "high_volatility": true,
+        "positive_momentum": true,
+        "high_confidence": true,
+        "sufficient_signals": true
+      },
+      "signal_data": {
+        "volatility": 247.79023386727735,
+        "momentum": 92.85714285714286,
+        "mean_price": 50350.0,
+        "confidence": 0.8400000000000001,
+        "signal_count": 15.0
+      },
+      "execution_ready": true,
+      "volatility_threshold": 0.05,
+      "momentum_threshold": 0.0
+    },
+    "stats": {
+      "price_mean": 50350.0,
+      "price_std": 355.9026084010437,
+      "price_min": 49700.0,
+      "price_max": 51000.0,
+      "volatility_mean": 0.04000000000000001,
+      "volatility_std": 0.01414213562373095,
+      "confidence_mean": 0.8400000000000001,
+      "confidence_std": 0.10832051206181283,
+      "signal_count": 15.0,
+      "price_range": 1300.0,
+      "price_change_rate": 92.85714285714286
+    },
+    "execution_time": 0.0009996891021728516
+  },
+  "Volatility Scenarios": {
+    "status": "PASS",
+    "scenarios": {
+      "low_volatility": {
+        "action": "MOMENTUM_LONG",
+        "confidence": 1.0,
+        "volatility": 14.142135623730951
+      },
+      "high_volatility": {
+        "action": "VOLATILITY_SHORT",
+        "confidence": 0.9999999999999999,
+        "volatility": 894.4271909999159
+      }
+    },
+    "execution_time": 0.0009992122650146484
+  }
+}

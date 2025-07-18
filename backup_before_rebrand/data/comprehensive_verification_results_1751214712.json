@@ -1,0 +1,807 @@
+{
+  "verification_timestamp": 1751214712.3246994,
+  "total_duration_seconds": 10.379448413848877,
+  "test_results": {
+    "Bit Logic Systems": {
+      "bit_flip_operations": {
+        "4_bit": [
+          {
+            "original": "1010",
+            "flipped": "0101",
+            "value_original": 10,
+            "value_flipped": 5
+          }
+        ],
+        "8_bit": [
+          {
+            "original": "00001010",
+            "flipped": "11110101",
+            "value_original": 10,
+            "value_flipped": 245
+          },
+          {
+            "original": "11001100",
+            "flipped": "00110011",
+            "value_original": 204,
+            "value_flipped": 51
+          }
+        ],
+        "16_bit": [
+          {
+            "original": "0000000000001010",
+            "flipped": "1111111111110101",
+            "value_original": 10,
+            "value_flipped": 65525
+          },
+          {
+            "original": "0000000011001100",
+            "flipped": "1111111100110011",
+            "value_original": 204,
+            "value_flipped": 65331
+          },
+          {
+            "original": "1111000011110000",
+            "flipped": "0000111100001111",
+            "value_original": 61680,
+            "value_flipped": 3855
+          }
+        ],
+        "32_bit": [
+          {
+            "original": "00000000000000000000000000001010",
+            "flipped": "11111111111111111111111111110101",
+            "value_original": 10,
+            "value_flipped": 4294967285
+          },
+          {
+            "original": "00000000000000000000000011001100",
+            "flipped": "11111111111111111111111100110011",
+            "value_original": 204,
+            "value_flipped": 4294967091
+          },
+          {
+            "original": "00000000000000001111000011110000",
+            "flipped": "11111111111111110000111100001111",
+            "value_original": 61680,
+            "value_flipped": 4294905615
+          }
+        ],
+        "64_bit": [
+          {
+            "original": "0000000000000000000000000000000000000000000000000000000000001010",
+            "flipped": "1111111111111111111111111111111111111111111111111111111111110101",
+            "value_original": 10,
+            "value_flipped": 18446744073709551605
+          },
+          {
+            "original": "0000000000000000000000000000000000000000000000000000000011001100",
+            "flipped": "1111111111111111111111111111111111111111111111111111111100110011",
+            "value_original": 204,
+            "value_flipped": 18446744073709551411
+          },
+          {
+            "original": "0000000000000000000000000000000000000000000000001111000011110000",
+            "flipped": "1111111111111111111111111111111111111111111111110000111100001111",
+            "value_original": 61680,
+            "value_flipped": 18446744073709489935
+          }
+        ]
+      },
+      "rbm_initialized": true,
+      "strategy_mapping": {
+        "strategy_0": {
+          "base_4bit": 0,
+          "expanded_8bit": [
+            8,
+            0
+          ],
+          "expanded_16bit": [
+            0,
+            0,
+            15,
+            15
+          ]
+        },
+        "strategy_1": {
+          "base_4bit": 1,
+          "expanded_8bit": [
+            4,
+            4
+          ],
+          "expanded_16bit": [
+            1,
+            1,
+            14,
+            14
+          ]
+        },
+        "strategy_2": {
+          "base_4bit": 2,
+          "expanded_8bit": [
+            10,
+            7
+          ],
+          "expanded_16bit": [
+            2,
+            2,
+            13,
+            13
+          ]
+        },
+        "strategy_3": {
+          "base_4bit": 3,
+          "expanded_8bit": [
+            1,
+            3
+          ],
+          "expanded_16bit": [
+            3,
+            3,
+            12,
+            12
+          ]
+        },
+        "strategy_4": {
+          "base_4bit": 4,
+          "expanded_8bit": [
+            11,
+            15
+          ],
+          "expanded_16bit": [
+            4,
+            4,
+            11,
+            11
+          ]
+        },
+        "strategy_5": {
+          "base_4bit": 5,
+          "expanded_8bit": [
+            5,
+            0
+          ],
+          "expanded_16bit": [
+            5,
+            5,
+            10,
+            10
+          ]
+        },
+        "strategy_6": {
+          "base_4bit": 6,
+          "expanded_8bit": [
+            3,
+            3
+          ],
+          "expanded_16bit": [
+            6,
+            6,
+            9,
+            9
+          ]
+        },
+        "strategy_7": {
+          "base_4bit": 7,
+          "expanded_8bit": [
+            0,
+            8
+          ],
+          "expanded_16bit": [
+            7,
+            7,
+            8,
+            8
+          ]
+        },
+        "strategy_8": {
+          "base_4bit": 8,
+          "expanded_8bit": [
+            7,
+            3
+          ],
+          "expanded_16bit": [
+            8,
+            8,
+            7,
+            7
+          ]
+        },
+        "strategy_9": {
+          "base_4bit": 9,
+          "expanded_8bit": [
+            6,
+            9
+          ],
+          "expanded_16bit": [
+            9,
+            9,
+            6,
+            6
+          ]
+        },
+        "strategy_10": {
+          "base_4bit": 10,
+          "expanded_8bit": [
+            3,
+            3
+          ],
+          "expanded_16bit": [
+            10,
+            10,
+            5,
+            5
+          ]
+        },
+        "strategy_11": {
+          "base_4bit": 11,
+          "expanded_8bit": [
+            11,
+            11
+          ],
+          "expanded_16bit": [
+            11,
+            11,
+            4,
+            4
+          ]
+        },
+        "strategy_12": {
+          "base_4bit": 12,
+          "expanded_8bit": [
+            12,
+            14
+          ],
+          "expanded_16bit": [
+            12,
+            12,
+            3,
+            3
+          ]
+        },
+        "strategy_13": {
+          "base_4bit": 13,
+          "expanded_8bit": [
+            8,
+            13
+          ],
+          "expanded_16bit": [
+            13,
+            13,
+            2,
+            2
+          ]
+        },
+        "strategy_14": {
+          "base_4bit": 14,
+          "expanded_8bit": [
+            0,
+            5
+          ],
+          "expanded_16bit": [
+            14,
+            14,
+            1,
+            1
+          ]
+        },
+        "strategy_15": {
+          "base_4bit": 15,
+          "expanded_8bit": [
+            15,
+            10
+          ],
+          "expanded_16bit": [
+            15,
+            15,
+            0,
+            0
+          ]
+        }
+      },
+      "strategy_mapper_initialized": true
+    },
+    "Mathematical Relay": {
+      "error": "string indices must be integers, not 'str'"
+    },
+    "Visualization Systems": {
+      "error": "Shape of array too small to calculate a numerical gradient, at least (edge_order + 1) elements are required."
+    },
+    "Trading Logic": {
+      "error": "'EntryExitLogic' object has no attribute 'generate_signal'"
+    },
+    "ASIC Dualistic": {
+      "error": "'str' object has no attribute 'value'"
+    },
+    "Weather Mapping": {
+      "error": "cannot import name 'cwt' from 'scipy.signal' (C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\scipy\\signal\\__init__.py)"
+    },
+    "Portfolio Management": {
+      "portfolio_randomization": {
+        "allocation_0": {
+          "BTC": 44.75987589205186,
+          "ETH": 0.9671180557735435,
+          "XRP": 54.273006052174594
+        },
+        "allocation_1": {
+          "BTC": 19.25205228583835,
+          "ETH": 12.616666309296395,
+          "XRP": 68.13128140486526
+        },
+        "allocation_2": {
+          "BTC": 51.55298499148087,
+          "ETH": 22.94884915640449,
+          "XRP": 25.498165852114642
+        },
+        "allocation_3": {
+          "BTC": 62.45256973933918,
+          "ETH": 2.285030828567386,
+          "XRP": 35.26239943209343
+        },
+        "allocation_4": {
+          "BTC": 29.53452737796893,
+          "ETH": 1.4697726053681985,
+          "XRP": 68.99570001666288
+        },
+        "allocation_5": {
+          "BTC": 15.304658236252235,
+          "ETH": 29.960867186622043,
+          "XRP": 54.734474577125724
+        },
+        "allocation_6": {
+          "BTC": 1.8575178778704537,
+          "ETH": 13.660094404404449,
+          "XRP": 84.4823877177251
+        },
+        "allocation_7": {
+          "BTC": 45.49191064456662,
+          "ETH": 20.79260324274161,
+          "XRP": 33.715486112691764
+        },
+        "allocation_8": {
+          "BTC": 15.43084354284877,
+          "ETH": 34.88359127017235,
+          "XRP": 49.68556518697887
+        },
+        "allocation_9": {
+          "BTC": 56.66013196744787,
+          "ETH": 0.19715877077570482,
+          "XRP": 43.142709261776425
+        }
+      },
+      "portfolio_valuation": {
+        "total_value_usd": 16200.0,
+        "btc_value": 6200.0,
+        "usdc_value": 10000.0
+      }
+    },
+    "Platform Compatibility": {
+      "platform_info": {
+        "system": "Windows",
+        "release": "10",
+        "version": "10.0.19045",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+        "python_version": "3.12.10"
+      },
+      "path_compatibility": {
+        "os_sep": "\\",
+        "current_working_dir": "C:\\Users\\maxde\\OneDrive\\Documents",
+        "home_dir": "C:\\Users\\maxde",
+        "temp_dir_accessible": true
+      },
+      "module_availability": {
+        "numpy": true,
+        "pandas": true,
+        "asyncio": true,
+        "hashlib": true,
+        "json": true,
+        "logging": true,
+        "time": true,
+        "decimal": true,
+        "pathlib": true
+      }
+    }
+  },
+  "verification_summary": {
+    "bit_logic_systems": {
+      "bit_flip_operations": {
+        "4_bit": [
+          {
+            "original": "1010",
+            "flipped": "0101",
+            "value_original": 10,
+            "value_flipped": 5
+          }
+        ],
+        "8_bit": [
+          {
+            "original": "00001010",
+            "flipped": "11110101",
+            "value_original": 10,
+            "value_flipped": 245
+          },
+          {
+            "original": "11001100",
+            "flipped": "00110011",
+            "value_original": 204,
+            "value_flipped": 51
+          }
+        ],
+        "16_bit": [
+          {
+            "original": "0000000000001010",
+            "flipped": "1111111111110101",
+            "value_original": 10,
+            "value_flipped": 65525
+          },
+          {
+            "original": "0000000011001100",
+            "flipped": "1111111100110011",
+            "value_original": 204,
+            "value_flipped": 65331
+          },
+          {
+            "original": "1111000011110000",
+            "flipped": "0000111100001111",
+            "value_original": 61680,
+            "value_flipped": 3855
+          }
+        ],
+        "32_bit": [
+          {
+            "original": "00000000000000000000000000001010",
+            "flipped": "11111111111111111111111111110101",
+            "value_original": 10,
+            "value_flipped": 4294967285
+          },
+          {
+            "original": "00000000000000000000000011001100",
+            "flipped": "11111111111111111111111100110011",
+            "value_original": 204,
+            "value_flipped": 4294967091
+          },
+          {
+            "original": "00000000000000001111000011110000",
+            "flipped": "11111111111111110000111100001111",
+            "value_original": 61680,
+            "value_flipped": 4294905615
+          }
+        ],
+        "64_bit": [
+          {
+            "original": "0000000000000000000000000000000000000000000000000000000000001010",
+            "flipped": "1111111111111111111111111111111111111111111111111111111111110101",
+            "value_original": 10,
+            "value_flipped": 18446744073709551605
+          },
+          {
+            "original": "0000000000000000000000000000000000000000000000000000000011001100",
+            "flipped": "1111111111111111111111111111111111111111111111111111111100110011",
+            "value_original": 204,
+            "value_flipped": 18446744073709551411
+          },
+          {
+            "original": "0000000000000000000000000000000000000000000000001111000011110000",
+            "flipped": "1111111111111111111111111111111111111111111111110000111100001111",
+            "value_original": 61680,
+            "value_flipped": 18446744073709489935
+          }
+        ]
+      },
+      "rbm_initialized": true,
+      "strategy_mapping": {
+        "strategy_0": {
+          "base_4bit": 0,
+          "expanded_8bit": [
+            8,
+            0
+          ],
+          "expanded_16bit": [
+            0,
+            0,
+            15,
+            15
+          ]
+        },
+        "strategy_1": {
+          "base_4bit": 1,
+          "expanded_8bit": [
+            4,
+            4
+          ],
+          "expanded_16bit": [
+            1,
+            1,
+            14,
+            14
+          ]
+        },
+        "strategy_2": {
+          "base_4bit": 2,
+          "expanded_8bit": [
+            10,
+            7
+          ],
+          "expanded_16bit": [
+            2,
+            2,
+            13,
+            13
+          ]
+        },
+        "strategy_3": {
+          "base_4bit": 3,
+          "expanded_8bit": [
+            1,
+            3
+          ],
+          "expanded_16bit": [
+            3,
+            3,
+            12,
+            12
+          ]
+        },
+        "strategy_4": {
+          "base_4bit": 4,
+          "expanded_8bit": [
+            11,
+            15
+          ],
+          "expanded_16bit": [
+            4,
+            4,
+            11,
+            11
+          ]
+        },
+        "strategy_5": {
+          "base_4bit": 5,
+          "expanded_8bit": [
+            5,
+            0
+          ],
+          "expanded_16bit": [
+            5,
+            5,
+            10,
+            10
+          ]
+        },
+        "strategy_6": {
+          "base_4bit": 6,
+          "expanded_8bit": [
+            3,
+            3
+          ],
+          "expanded_16bit": [
+            6,
+            6,
+            9,
+            9
+          ]
+        },
+        "strategy_7": {
+          "base_4bit": 7,
+          "expanded_8bit": [
+            0,
+            8
+          ],
+          "expanded_16bit": [
+            7,
+            7,
+            8,
+            8
+          ]
+        },
+        "strategy_8": {
+          "base_4bit": 8,
+          "expanded_8bit": [
+            7,
+            3
+          ],
+          "expanded_16bit": [
+            8,
+            8,
+            7,
+            7
+          ]
+        },
+        "strategy_9": {
+          "base_4bit": 9,
+          "expanded_8bit": [
+            6,
+            9
+          ],
+          "expanded_16bit": [
+            9,
+            9,
+            6,
+            6
+          ]
+        },
+        "strategy_10": {
+          "base_4bit": 10,
+          "expanded_8bit": [
+            3,
+            3
+          ],
+          "expanded_16bit": [
+            10,
+            10,
+            5,
+            5
+          ]
+        },
+        "strategy_11": {
+          "base_4bit": 11,
+          "expanded_8bit": [
+            11,
+            11
+          ],
+          "expanded_16bit": [
+            11,
+            11,
+            4,
+            4
+          ]
+        },
+        "strategy_12": {
+          "base_4bit": 12,
+          "expanded_8bit": [
+            12,
+            14
+          ],
+          "expanded_16bit": [
+            12,
+            12,
+            3,
+            3
+          ]
+        },
+        "strategy_13": {
+          "base_4bit": 13,
+          "expanded_8bit": [
+            8,
+            13
+          ],
+          "expanded_16bit": [
+            13,
+            13,
+            2,
+            2
+          ]
+        },
+        "strategy_14": {
+          "base_4bit": 14,
+          "expanded_8bit": [
+            0,
+            5
+          ],
+          "expanded_16bit": [
+            14,
+            14,
+            1,
+            1
+          ]
+        },
+        "strategy_15": {
+          "base_4bit": 15,
+          "expanded_8bit": [
+            15,
+            10
+          ],
+          "expanded_16bit": [
+            15,
+            15,
+            0,
+            0
+          ]
+        }
+      },
+      "strategy_mapper_initialized": true
+    },
+    "mathematical_relay": {
+      "error": "string indices must be integers, not 'str'"
+    },
+    "visualization_systems": {
+      "error": "Shape of array too small to calculate a numerical gradient, at least (edge_order + 1) elements are required."
+    },
+    "trading_logic": {
+      "error": "'EntryExitLogic' object has no attribute 'generate_signal'"
+    },
+    "asic_dualistic": {
+      "error": "'str' object has no attribute 'value'"
+    },
+    "weather_mapping": {
+      "error": "cannot import name 'cwt' from 'scipy.signal' (C:\\Users\\maxde\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\scipy\\signal\\__init__.py)"
+    },
+    "portfolio_management": {
+      "portfolio_randomization": {
+        "allocation_0": {
+          "BTC": 44.75987589205186,
+          "ETH": 0.9671180557735435,
+          "XRP": 54.273006052174594
+        },
+        "allocation_1": {
+          "BTC": 19.25205228583835,
+          "ETH": 12.616666309296395,
+          "XRP": 68.13128140486526
+        },
+        "allocation_2": {
+          "BTC": 51.55298499148087,
+          "ETH": 22.94884915640449,
+          "XRP": 25.498165852114642
+        },
+        "allocation_3": {
+          "BTC": 62.45256973933918,
+          "ETH": 2.285030828567386,
+          "XRP": 35.26239943209343
+        },
+        "allocation_4": {
+          "BTC": 29.53452737796893,
+          "ETH": 1.4697726053681985,
+          "XRP": 68.99570001666288
+        },
+        "allocation_5": {
+          "BTC": 15.304658236252235,
+          "ETH": 29.960867186622043,
+          "XRP": 54.734474577125724
+        },
+        "allocation_6": {
+          "BTC": 1.8575178778704537,
+          "ETH": 13.660094404404449,
+          "XRP": 84.4823877177251
+        },
+        "allocation_7": {
+          "BTC": 45.49191064456662,
+          "ETH": 20.79260324274161,
+          "XRP": 33.715486112691764
+        },
+        "allocation_8": {
+          "BTC": 15.43084354284877,
+          "ETH": 34.88359127017235,
+          "XRP": 49.68556518697887
+        },
+        "allocation_9": {
+          "BTC": 56.66013196744787,
+          "ETH": 0.19715877077570482,
+          "XRP": 43.142709261776425
+        }
+      },
+      "portfolio_valuation": {
+        "total_value_usd": 16200.0,
+        "btc_value": 6200.0,
+        "usdc_value": 10000.0
+      }
+    },
+    "platform_compatibility": {
+      "platform_info": {
+        "system": "Windows",
+        "release": "10",
+        "version": "10.0.19045",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+        "python_version": "3.12.10"
+      },
+      "path_compatibility": {
+        "os_sep": "\\",
+        "current_working_dir": "C:\\Users\\maxde\\OneDrive\\Documents",
+        "home_dir": "C:\\Users\\maxde",
+        "temp_dir_accessible": true
+      },
+      "module_availability": {
+        "numpy": true,
+        "pandas": true,
+        "asyncio": true,
+        "hashlib": true,
+        "json": true,
+        "logging": true,
+        "time": true,
+        "decimal": true,
+        "pathlib": true
+      }
+    }
+  },
+  "overall_status": "NEEDS_ATTENTION"
+}

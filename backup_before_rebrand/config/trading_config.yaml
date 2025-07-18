@@ -1,0 +1,209 @@
+# Trading Configuration for Schwabot CCXT Integration
+# ===================================================
+
+# Supported trading symbols (prioritized for BTC/USDC)
+supported_symbols:
+  - "BTC/USDT"
+  - "BTC/USDC"
+  - "ETH/USDT"
+  - "ETH/USDC"
+  - "BNB/USDT"
+  - "SOL/USDT"
+
+# Primary trading pairs for main strategy
+primary_pairs:
+  btc_usdc: "BTC/USDC"
+  btc_usdt: "BTC/USDT"
+  fallback: "BTC/USDT"  # Fallback if USDC pair unavailable
+
+# Exchange Configuration
+exchange:
+  default_exchange: "binance"
+  sandbox_mode: true
+  enable_rate_limit: true
+  rate_limit_delay: 0.1  # seconds between requests
+  request_timeout: 30    # seconds
+  retry_attempts: 3
+  retry_delay: 1.0       # seconds
+
+# API Credentials (empty by default for security)
+api_credentials:
+  api_key: ""
+  secret: ""
+  password: ""           # For exchanges that require it (e.g., OKX)
+  sandbox: true
+  testnet: true
+
+# Risk Management
+risk_management:
+  max_position_size_pct: 10.0      # Max 10% of portfolio per position
+  max_total_exposure_pct: 30.0     # Max 30% total exposure
+  stop_loss_pct: 2.0               # 2% stop loss
+  take_profit_pct: 5.0             # 5% take profit
+  max_drawdown_pct: 15.0           # Max 15% drawdown before halt
+  
+  # Position sizing
+  min_order_size_usd: 10.0         # Minimum $10 orders
+  max_order_size_usd: 1000.0       # Maximum $1000 orders per trade
+  
+  # Volatility-based adjustments
+  volatility_adjustment: true
+  high_volatility_threshold: 0.05   # 5% volatility threshold
+  volatility_position_reduction: 0.5 # Reduce position size by 50% in high vol
+
+# Trading Strategy Parameters
+strategy:
+  # Entry conditions
+  entry_conditions:
+    min_volume_24h: 1000000        # Min $1M 24h volume
+    max_spread_pct: 0.5            # Max 0.5% spread
+    min_liquidity_depth: 50000     # Min $50k order book depth
+    
+  # Exit conditions
+  exit_conditions:
+    profit_target_pct: 3.0         # 3% profit target
+    stop_loss_pct: 1.5             # 1.5% stop loss
+    time_based_exit_hours: 24      # Exit after 24 hours max
+    
+  # Technical indicators
+  technical_indicators:
+    rsi_period: 14
+    rsi_oversold: 30
+    rsi_overbought: 70
+    ma_short_period: 10
+    ma_long_period: 50
+    bollinger_period: 20
+    bollinger_std: 2.0
+
+# Market Data Settings
+market_data:
+  update_interval: 1.0             # seconds
+  historical_lookback_days: 30     # days of historical data
+  ohlcv_timeframes:
+    - "1m"
+    - "5m" 
+    - "15m"
+    - "1h"
+    - "4h"
+    - "1d"
+  
+  # Order book settings
+  order_book_depth: 100            # Number of levels to fetch
+  order_book_update_interval: 0.5  # seconds
+  
+  # Trade data
+  recent_trades_limit: 100         # Number of recent trades to fetch
+
+# Portfolio Management
+portfolio:
+  initial_balance_usd: 10000.0     # Starting portfolio value
+  base_currency: "USDT"            # Base currency for calculations
+  rebalance_threshold_pct: 5.0     # Rebalance when allocation drifts 5%
+  
+  # Asset allocation (percentages)
+  target_allocation:
+    BTC: 60.0                      # 60% Bitcoin
+    ETH: 25.0                      # 25% Ethereum  
+    CASH: 15.0                     # 15% Cash (USDT/USDC)
+  
+  # Diversification limits
+  max_single_asset_pct: 70.0       # Max 70% in any single asset
+  min_cash_reserve_pct: 10.0       # Min 10% cash reserve
+
+# Backtesting Configuration
+backtesting:
+  enabled: true
+  start_date: "2024-01-01"
+  end_date: "2024-12-31"
+  initial_capital: 10000.0
+  commission_rate: 0.001           # 0.1% commission
+  slippage_rate: 0.0005           # 0.05% slippage
+  
+  # Data sources for backtesting
+  data_sources:
+    historical_data_dir: "data/historical"
+    supported_formats: ["csv", "parquet"]
+    required_columns: ["timestamp", "open", "high", "low", "close", "volume"]
+
+# Monitoring and Alerts
+monitoring:
+  enable_logging: true
+  log_level: "INFO"
+  log_file: "logs/trading.log"
+  
+  # Performance monitoring
+  performance_metrics:
+    - "total_return"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "win_rate"
+    - "profit_factor"
+    - "average_trade_duration"
+  
+  # Alert thresholds
+  alerts:
+    max_drawdown_alert: 10.0       # Alert at 10% drawdown
+    low_balance_alert: 1000.0      # Alert when balance < $1000
+    high_volatility_alert: 0.1     # Alert at 10% volatility
+    connection_loss_alert: true    # Alert on connection issues
+    
+  # Notification settings
+  notifications:
+    email_enabled: false
+    webhook_enabled: false
+    webhook_url: ""
+
+# System Configuration
+system:
+  # Threading and async settings
+  max_concurrent_requests: 5       # Max concurrent API requests
+  worker_threads: 4                # Number of worker threads
+  
+  # Memory management
+  max_memory_usage_mb: 512         # Max memory usage
+  cleanup_interval_minutes: 30     # Cleanup old data every 30 min
+  
+  # Error handling
+  max_consecutive_errors: 5        # Halt after 5 consecutive errors
+  error_cooldown_minutes: 5        # Wait 5 min after error threshold
+  
+  # Data persistence
+  save_trade_history: true
+  save_market_data: false          # Don't save market data by default
+  data_retention_days: 90          # Keep data for 90 days
+
+# Validation Rules
+validation:
+  # Price validation
+  max_price_change_pct: 20.0       # Reject prices that change >20%
+  min_price_usd: 0.01              # Minimum price $0.01
+  max_price_usd: 1000000.0         # Maximum price $1M
+  
+  # Volume validation  
+  min_volume_24h_usd: 100000.0     # Min $100k 24h volume
+  max_volume_spike: 10.0           # Max 10x volume spike
+  
+  # Order validation
+  min_order_size_usd: 10.0         # Min $10 order
+  max_order_size_usd: 10000.0      # Max $10k order
+  max_orders_per_minute: 10        # Max 10 orders per minute
+  
+  # Connection validation
+  max_latency_ms: 1000             # Max 1s latency
+  min_uptime_pct: 99.0             # Min 99% uptime required
+
+# Development and Testing
+development:
+  debug_mode: false
+  verbose_logging: false
+  dry_run_mode: false              # Set to true for paper trading
+  
+  # Testing parameters
+  test_symbols: ["BTC/USDT"]       # Symbols for testing
+  test_duration_minutes: 60        # Test duration
+  test_initial_balance: 1000.0     # Test balance
+  
+  # Mock data settings
+  use_mock_data: false
+  mock_data_file: "data/mock/btc_usdt_1h.csv"
+  mock_latency_ms: 100             # Simulate 100ms latency 

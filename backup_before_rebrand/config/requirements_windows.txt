@@ -1,0 +1,10 @@
+# Schwabot Requirements for Windows
+# =============================
+# This file includes Windows-specific packages
+
+# Include base requirements
+-r requirements.txt
+
+# Windows-specific packages
+pywin32
+wmi 

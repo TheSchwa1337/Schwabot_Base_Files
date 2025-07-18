@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Trading Dashboard - Practical Visual Controller</title>
+    
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../static/css/enhanced_dashboard.css">
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- WebGL Shaders for Tesseract Visualization -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec3 position;
+        attribute vec3 color;
+        uniform mat4 projectionMatrix;
+        uniform mat4 modelViewMatrix;
+        uniform float time;
+        uniform float intensity;
+        varying vec3 vColor;
+        
+        void main() {
+            vColor = color;
+            vec3 pos = position;
+            
+            // Dynamic position based on bit level intensity
+            pos.x += sin(time + position.y) * intensity * 0.1;
+            pos.y += cos(time + position.x) * intensity * 0.1;
+            
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            gl_PointSize = 3.0 + intensity * 2.0;
+        }
+    </script>
+    
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec3 vColor;
+        uniform float opacity;
+        
+        void main() {
+            gl_FragColor = vec4(vColor, opacity);
+        }
+    </script>
+</head>
+<body>
+    <!-- Main Dashboard Container -->
+    <div id="dashboard-container" class="dashboard-glass">
+        
+        <!-- Header Control Panel -->
+        <header id="main-header" class="control-panel-glass">
+            <div class="header-content">
+                <div class="system-logo">
+                    <h1>🚀 Enhanced Trading Dashboard</h1>
+                    <div class="system-status" id="system-status">
+                        <span class="status-indicator" id="status-indicator"></span>
+                        <span id="status-text">Initializing...</span>
+                    </div>
+                </div>
+                
+                <div class="mode-controls">
+                    <select id="control-mode" class="glass-select">
+                        <option value="development">Development</option>
+                        <option value="testing">Testing</option>
+                        <option value="live_trading">Live Trading</option>
+                        <option value="simulation">Simulation</option>
+                        <option value="analysis">Analysis</option>
+                        <option value="backtest">Backtest</option>
+                    </select>
+                    
+                    <select id="visualization-mode" class="glass-select">
+                        <option value="overview">Overview</option>
+                        <option value="bit_mapping">Bit Mapping</option>
+                        <option value="profit_orbital">Profit Orbital</option>
+                        <option value="storage_pipeline">Storage Pipeline</option>
+                        <option value="performance_drift">Performance Drift</option>
+                        <option value="high_frequency">High Frequency</option>
+                        <option value="tesseract">Tesseract</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Grid -->
+        <main id="main-content" class="content-grid">
+            
+            <!-- Left Panel: Controls -->
+            <aside id="control-panel" class="panel-glass">
+                <div class="panel-header">
+                    <h2>🎛️ System Controls</h2>
+                    <div class="panel-minimize" onclick="togglePanel('control-panel')">−</div>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- Toggle Controls -->
+                    <div class="control-section">
+                        <h3>Core Features</h3>
+                        <div class="toggle-grid">
+                            <div class="toggle-control">
+                                <label for="btc-processing">BTC Processing</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="btc-processing" data-feature="btc_processing">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-control">
+                                <label for="thermal-monitoring">Thermal Monitoring</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="thermal-monitoring" data-feature="thermal_monitoring">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-control">
+                                <label for="entropy-generation">Entropy Generation</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="entropy-generation" data-feature="entropy_generation">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-control">
+                                <label for="ghost-architecture">Ghost Architecture</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="ghost-architecture" data-feature="ghost_architecture">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-control">
+                                <label for="orbital-navigation">Orbital Navigation</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="orbital-navigation" data-feature="orbital_navigation">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-control">
+                                <label for="tesseract-visualizer">Tesseract Visualizer</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="tesseract-visualizer" data-feature="tesseract_visualizer">
+                                    <span class="slider"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slider Controls -->
+                    <div class="control-section">
+                        <h3>Resource Management</h3>
+                        <div class="slider-grid">
+                            <div class="slider-control">
+                                <label for="max-memory">Memory Usage (GB)</label>
+                                <input type="range" id="max-memory" min="1" max="64" value="16" 
+                                       data-parameter="max_memory_usage" class="glass-slider">
+                                <span class="slider-value" id="max-memory-value">16 GB</span>
+                            </div>
+                            
+                            <div class="slider-control">
+                                <label for="thermal-threshold">Thermal Threshold (°C)</label>
+                                <input type="range" id="thermal-threshold" min="50" max="90" value="75" 
+                                       data-parameter="thermal_threshold" class="glass-slider">
+                                <span class="slider-value" id="thermal-threshold-value">75°C</span>
+                            </div>
+                            
+                            <div class="slider-control">
+                                <label for="entropy-confidence">Entropy Confidence</label>
+                                <input type="range" id="entropy-confidence" min="0" max="100" value="70" 
+                                       data-parameter="entropy_confidence" class="glass-slider">
+                                <span class="slider-value" id="entropy-confidence-value">70%</span>
+                            </div>
+                            
+                            <div class="slider-control">
+                                <label for="bit-mapping-intensity">Bit Mapping Intensity</label>
+                                <input type="range" id="bit-mapping-intensity" min="0" max="100" value="50" 
+                                       data-parameter="bit_mapping_intensity" class="glass-slider">
+                                <span class="slider-value" id="bit-mapping-intensity-value">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Center Panel: Main Visualization -->
+            <section id="main-visualization" class="panel-glass">
+                <div class="panel-header">
+                    <h2 id="viz-title">🌌 Multi-Bit Mapping Visualization</h2>
+                    <div class="visualization-controls">
+                        <button id="fullscreen-btn" class="glass-btn">⛶</button>
+                        <div class="quality-indicator" id="quality-indicator">
+                            <span id="render-quality">Adaptive</span>
+                            <span id="frame-rate">60 FPS</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- 3D Visualization Canvas -->
+                    <canvas id="main-canvas" class="visualization-canvas"></canvas>
+                    
+                    <!-- Bit Level Display -->
+                    <div id="bit-level-display" class="overlay-display">
+                        <div class="bit-level-indicator">
+                            <span class="current-level" id="current-bit-level">16</span>
+                            <span class="level-label">BIT</span>
+                            <div class="transition-progress" id="transition-progress">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <span class="target-level" id="target-bit-level">→ 42</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Processing Intensity Meter -->
+                    <div id="processing-meter" class="overlay-display">
+                        <div class="meter-container">
+                            <div class="meter-label">Processing Intensity</div>
+                            <div class="intensity-meter">
+                                <div class="meter-fill" id="intensity-fill"></div>
+                                <div class="meter-value" id="intensity-value">50%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Right Panel: Performance & Metrics -->
+            <aside id="metrics-panel" class="panel-glass">
+                <div class="panel-header">
+                    <h2>📊 Performance Metrics</h2>
+                    <div class="panel-minimize" onclick="togglePanel('metrics-panel')">−</div>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- System Performance -->
+                    <div class="metrics-section">
+                        <h3>System Performance</h3>
+                        <div class="metric-grid">
+                            <div class="metric-item">
+                                <span class="metric-label">CPU Usage</span>
+                                <span class="metric-value" id="cpu-usage">0%</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="cpu-fill"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <span class="metric-label">Memory Usage</span>
+                                <span class="metric-value" id="memory-usage">0%</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="memory-fill"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <span class="metric-label">Thermal Health</span>
+                                <span class="metric-value" id="thermal-health">100%</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill thermal-fill" id="thermal-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Trading Metrics -->
+                    <div class="metrics-section">
+                        <h3>Trading Performance</h3>
+                        <div class="trading-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="total-profit">$0.00</span>
+                                <span class="stat-label">Total Profit</span>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <span class="stat-value" id="success-rate">0%</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <span class="stat-value" id="orbital-efficiency">0%</span>
+                                <span class="stat-label">Orbital Efficiency</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- High-Frequency Allocation Monitor -->
+                    <div class="metrics-section">
+                        <h3>High-Frequency Monitor</h3>
+                        <div class="hf-monitor">
+                            <div class="hf-counter">
+                                <span class="hf-value" id="hf-count">0</span>
+                                <span class="hf-label">Allocations/Hour</span>
+                            </div>
+                            
+                            <div class="drift-indicator">
+                                <span class="drift-label">Drift Compensation</span>
+                                <div class="drift-meter">
+                                    <div class="drift-fill" id="drift-fill"></div>
+                                    <span class="drift-value" id="drift-value">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+        
+        <!-- Bottom Panel: Storage Pipeline Visualization -->
+        <section id="storage-pipeline" class="panel-glass">
+            <div class="panel-header">
+                <h2>💾 Storage Pipeline Visualization</h2>
+                <div class="pipeline-controls">
+                    <button id="pipeline-play" class="glass-btn">⏵</button>
+                    <button id="pipeline-reset" class="glass-btn">↻</button>
+                </div>
+            </div>
+            
+            <div class="panel-content">
+                <div class="pipeline-container">
+                    <!-- RAM Cache -->
+                    <div class="storage-tier ram-tier">
+                        <div class="tier-header">
+                            <h3>RAM Cache</h3>
+                            <span class="tier-count" id="ram-count">0</span>
+                        </div>
+                        <div class="tier-visualization" id="ram-viz">
+                            <div class="particle-container" id="ram-particles"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flow Arrows -->
+                    <div class="flow-arrow" id="ram-to-mid">
+                        <div class="arrow-line">
+                            <div class="flow-particles" id="flow-particles-1"></div>
+                        </div>
+                        <span class="flow-rate" id="flow-rate-1">0 MB/s</span>
+                    </div>
+                    
+                    <!-- Mid-term Storage -->
+                    <div class="storage-tier mid-tier">
+                        <div class="tier-header">
+                            <h3>Mid-term</h3>
+                            <span class="tier-count" id="mid-count">0</span>
+                        </div>
+                        <div class="tier-visualization" id="mid-viz">
+                            <div class="compression-indicator" id="mid-compression">1:1</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flow Arrows -->
+                    <div class="flow-arrow" id="mid-to-long">
+                        <div class="arrow-line">
+                            <div class="flow-particles" id="flow-particles-2"></div>
+                        </div>
+                        <span class="flow-rate" id="flow-rate-2">0 MB/s</span>
+                    </div>
+                    
+                    <!-- Long-term Storage -->
+                    <div class="storage-tier long-tier">
+                        <div class="tier-header">
+                            <h3>Long-term</h3>
+                            <span class="tier-count" id="long-count">0</span>
+                        </div>
+                        <div class="tier-visualization" id="long-viz">
+                            <div class="compression-indicator" id="long-compression">2:1</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Flow Arrows -->
+                    <div class="flow-arrow" id="long-to-archive">
+                        <div class="arrow-line">
+                            <div class="flow-particles" id="flow-particles-3"></div>
+                        </div>
+                        <span class="flow-rate" id="flow-rate-3">0 MB/s</span>
+                    </div>
+                    
+                    <!-- Archive Storage -->
+                    <div class="storage-tier archive-tier">
+                        <div class="tier-header">
+                            <h3>Archive</h3>
+                            <span class="tier-count" id="archive-count">0</span>
+                        </div>
+                        <div class="tier-visualization" id="archive-viz">
+                            <div class="compression-indicator" id="archive-compression">5:1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>⚠️ System Alert</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="error-message">An error occurred.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="dismiss-error" class="glass-btn">Dismiss</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Core JavaScript -->
+    <script src="../static/js/websocket_client.js"></script>
+    <script src="../static/js/bit_visualization.js"></script>
+    <script src="../static/js/profit_vector_renderer.js"></script>
+    <script src="../static/js/storage_pipeline_renderer.js"></script>
+    <script src="../static/js/performance_monitor.js"></script>
+    <script src="../static/js/tesseract_visualizer.js"></script>
+    <script src="../static/js/main_dashboard.js"></script>
+</body>
+</html> 
