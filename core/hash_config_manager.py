@@ -64,6 +64,13 @@ class HashConfigManager:
         required_keys = ["hash_algorithm", "salt_length", "iterations", "key_length"]
         return all(key in self.config for key in required_keys)
 
+# Global instance for main.py import
+hash_config_manager = HashConfigManager()
+
+def get_hash_settings() -> Dict[str, Any]:
+    """Get hash settings for use in other modules."""
+    return hash_config_manager.config
+
 # Test function
 def test_hash_config_manager():
     """Test the hash config manager."""

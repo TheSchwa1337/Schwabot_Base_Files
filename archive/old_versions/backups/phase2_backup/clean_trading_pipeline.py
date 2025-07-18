@@ -1,578 +1,639 @@
-"""Module for Schwabot trading system."""
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-🧬 CLEAN TRADING PIPELINE - SCHWABOT UNIFIED TRADING ENGINE
-==========================================================
+Clean Trading Pipeline - Schwabot's Unified Trading Execution Layer
+==================================================================
 
-    Advanced unified trading pipeline that integrates all Schwabot components:
-    - 2-gram pattern detection and strategy routing
-    - Entropy signal integration for market timing
-    - ZPE-ZBE quantum performance optimization
-    - CRLF chrono-recursive logic for temporal analysis
-    - Fractal memory and phantom math integration
-    - Multi-strategy vectorization and profit optimization
+This is Schwabot's unified trading execution layer.
+"""
 
-        Mathematical Foundation:
-        - Market Regime Detection: R = f(volatility, trend_strength, entropy_level)
-        - Strategy Selection: S = argmax(profit_potential_i * confidence_i * (1 - risk_i))
-        - Position Sizing: P = capital * Kelly_Criterion * risk_adjustment
-        - Risk Management: R_total = Σ(w_i * σ_i) + correlation_penalty
-        - Profit Vectorization: V = [momentum, mean_reversion, arbitrage, scalping] * weights
-        - Thermal State: T = sigmoid(volatility * trend_strength * entropy)
-        - Bit Phase: B = (price_position, volume_flow, momentum_alignment)
+import json
+import logging
+import os
+import time
+import uuid
+from dataclasses import dataclass, field
+from decimal import Decimal
+from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-        This is Schwabot's unified trading execution layer.
+import numpy as np
+
+from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
+from .chrono_recursive_logic_function import (
+    ChronoRecursiveLogicFunction,
+    CRLFResponse,
+    CRLFTriggerState,
+    create_crlf,
+)
+from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
+from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
+from .phase_bit_integration import phase_bit_integration
+from .portfolio_tracker import PortfolioTracker
+from .soulprint_registry import SoulprintRegistry
+from .strategy_bit_mapper import StrategyBitMapper
+from .unified_market_data_pipeline import MarketDataPacket, create_unified_pipeline
+from .unified_math_system import create_unified_math_system
+from .zpe_zbe_core import create_zpe_zbe_core  # noqa: F401 - Used in core system initialization
+from .zpe_zbe_core import (  # noqa: F401 - Used in performance monitoring and optimization
+    QuantumPerformanceRegistry,
+    QuantumSyncStatus,
+    ZBEBalance,
+    ZPEVector,
+    ZPEZBEPerformanceTracker,
+)
+
+# Entropy Signal Integration
+try:
+    from .entropy_signal_integration import (
+        EntropySignal,
+        get_entropy_integrator,
+        process_entropy_signal,
+        should_execute_routing,
+        should_execute_tick,
+    )
+    from .fractal_core import FractalCore
+
+    ENTROPY_INTEGRATION_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("🧠 Entropy signal integration modules loaded successfully")
+except ImportError as e:
+    ENTROPY_INTEGRATION_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning(f"⚠️ Entropy integration modules not available: {e}")
+
+logger = logging.getLogger(__name__)
+
+
+class TradingAction(Enum):
+    """Trading actions for market execution."""
+    BUY = "BUY"
+    SELL = "SELL"
+    HOLD = "HOLD"
+
+
+class StrategyBranch(Enum):
+    """
+    Strategy branches for different market conditions.
+
+    Mathematical Strategy Mapping:
+    - MEAN_REVERSION: R < 0.3 (low volatility, mean-reverting markets)
+    - MOMENTUM: R > 0.7 (high volatility, trending markets)
+    - ARBITRAGE: |correlation| > 0.9 (high correlation opportunities)
+    - SCALPING: volatility > 0.8 (high frequency opportunities)
+    - SWING: 0.3 < R < 0.7 (moderate volatility, swing opportunities)
+    - GRID: volatility < 0.3 (low volatility, range-bound markets)
+    - FERRIS_WHEEL: cyclic patterns detected (rotational opportunities)
+    """
+    MEAN_REVERSION = "mean_reversion"
+    MOMENTUM = "momentum"
+    ARBITRAGE = "arbitrage"
+    SCALPING = "scalping"
+    SWING = "swing"
+    GRID = "grid"
+    FERRIS_WHEEL = "ferris_wheel"  # Add Ferris Wheel as a strategy branch
+
+
+class MarketRegime(Enum):
+    """
+    Market regimes for adaptive strategy selection.
+
+    Regime Classification:
+    - TRENDING_UP: trend_strength > 0.7, volatility > 0.5
+    - TRENDING_DOWN: trend_strength < -0.7, volatility > 0.5
+    - SIDEWAYS: |trend_strength| < 0.3, volatility < 0.5
+    - VOLATILE: volatility > 0.8 (high uncertainty)
+    - CALM: volatility < 0.3 (low uncertainty)
+    """
+    TRENDING_UP = "trending_up"
+    TRENDING_DOWN = "trending_down"
+    SIDEWAYS = "sideways"
+    VOLATILE = "volatile"
+    CALM = "calm"
+
+
+@dataclass
+class MarketData:
+    """
+    Market data snapshot with mathematical properties.
+
+    Mathematical Components:
+    - price: Current market price (float)
+    - volume: Trading volume (float)
+    - volatility: Price volatility σ = std(returns) (0-1)
+    - trend_strength: Trend strength T = correlation(price, time) (-1 to 1)
+    - entropy_level: Market entropy H = -Σ p(x) * log2(p(x)) (bits)
+    - bid/ask: Order book spread for liquidity analysis
+    """
+    symbol: str
+    price: float
+    volume: float
+    timestamp: float
+    bid: Optional[float] = None
+    ask: Optional[float] = None
+    volatility: float = 0.5
+    trend_strength: float = 0.5
+    entropy_level: float = 4.0
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class TradingDecision:
+    """
+    Trading decision output with mathematical confidence.
+
+    Mathematical Properties:
+    - confidence: Decision confidence C = f(signal_strength, market_regime, risk_score)
+    - profit_potential: Expected profit P = Kelly_Criterion * position_size * price_movement
+    - risk_score: Risk assessment R = volatility * position_size * leverage
+    - thermal_state: Market thermal state T = sigmoid(volatility * trend_strength)
+    - bit_phase: Bit phase B = (price_position, volume_flow, momentum_alignment)
+    - profit_vector: Multi-dimensional profit vector V = [momentum, mean_rev, arbitrage, scalping]
+    """
+    timestamp: float
+    symbol: str
+    action: TradingAction
+    quantity: float
+    price: float
+    confidence: float
+    strategy_branch: StrategyBranch
+    profit_potential: float
+    risk_score: float
+    thermal_state: ThermalState
+    bit_phase: BitPhase
+    profit_vector: ProfitVector
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class PipelineState:
+    """
+    Current state of the trading pipeline with performance metrics.
+
+    Mathematical Metrics:
+    - win_rate: W = winning_trades / total_trades
+    - profit_factor: PF = total_profit / abs(total_loss)
+    - sharpe_ratio: SR = (return - risk_free_rate) / volatility
+    - max_drawdown: MD = max(peak - current) / peak
+    - current_risk_level: CR = portfolio_risk / max_allowed_risk
+    """
+    timestamp: float
+    active_strategy: StrategyBranch
+    current_capital: float
+    total_trades: int
+    winning_trades: int
+    losing_trades: int
+    total_profit: float
+    total_loss: float
+    win_rate: float
+    profit_factor: float
+    sharpe_ratio: float
+    max_drawdown: float
+    current_risk_level: float
+    thermal_state: ThermalState
+    bit_phase: BitPhase
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ZPEZBEPipelineState:
+    """Enhanced pipeline state with ZPE/ZBE integration."""
+    base_state: PipelineState
+    zpe_vector: ZPEVector
+    zbe_balance: ZBEBalance
+    quantum_sync_status: QuantumSyncStatus
+    performance_tracker: ZPEZBEPerformanceTracker
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class CRLFEnhancedPipelineState:
+    """Enhanced pipeline state with CRLF integration."""
+    base_state: PipelineState
+    crlf_response: CRLFResponse
+    trigger_state: CRLFTriggerState
+    logic_function: ChronoRecursiveLogicFunction
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ZPEZBEMarketData:
+    """Enhanced market data with ZPE/ZBE integration."""
+    base_data: MarketData
+    zpe_vector: ZPEVector
+    zbe_balance: ZBEBalance
+    quantum_sync_status: QuantumSyncStatus
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class CRLFEnhancedMarketData:
+    """Enhanced market data with CRLF integration."""
+    base_data: MarketData
+    crlf_response: CRLFResponse
+    trigger_state: CRLFTriggerState
+    logic_function: ChronoRecursiveLogicFunction
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class CRLFEnhancedTradingDecision:
+    """Enhanced trading decision with CRLF integration."""
+    base_decision: TradingDecision
+    crlf_response: CRLFResponse
+    trigger_state: CRLFTriggerState
+    logic_function: ChronoRecursiveLogicFunction
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ZPEZBETradingDecision:
+    """Enhanced trading decision with ZPE/ZBE integration."""
+    base_decision: TradingDecision
+    zpe_vector: ZPEVector
+    zbe_balance: ZBEBalance
+    quantum_sync_status: QuantumSyncStatus
+    performance_tracker: ZPEZBEPerformanceTracker
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RiskParameters:
+    """Risk management parameters for the trading pipeline."""
+    max_position_size: float = 0.1
+    max_daily_loss: float = 0.05
+    stop_loss_pct: float = 0.02
+    take_profit_pct: float = 0.04
+    max_drawdown: float = 0.15
+    risk_free_rate: float = 0.02
+    volatility_threshold: float = 0.8
+    correlation_threshold: float = 0.9
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class CleanTradingPipeline:
+    """
+    Clean trading pipeline with mathematical integration.
+
+    This pipeline integrates:
+    - Clean mathematical foundation
+    - Profit vectorization
+    - Phase bit integration
+    - Portfolio tracking
+    - Strategy bit mapping
+    - ZPE/ZBE core systems
+    - CRLF systems
+    - Entropy signal integration
+    """
+
+    def __init__(
+        self,
+        symbol: str = "BTCUSDT",
+        initial_capital: float = 10000.0,
+        risk_params: Optional[RiskParameters] = None,
+        matrix_dir: Union[str, Path] = "data/matrices",
+        registry_file: Optional[str] = None,
+        pipeline_config: Optional[Dict[str, Any]] = None,
+        safe_mode: bool = False,
+    ) -> None:
+        """Initialize the clean trading pipeline."""
+        self.symbol = symbol
+        self.initial_capital = initial_capital
+        self.risk_params = risk_params or RiskParameters()
+        self.matrix_dir = Path(matrix_dir)
+        self.registry_file = registry_file
+        self.pipeline_config = pipeline_config or self._default_pipeline_config()
+        self.safe_mode = safe_mode
+
+        # Initialize core components
+        self.math_foundation = CleanMathFoundation()
+        self.profit_vectorization = CleanProfitVectorization()
+        self.portfolio_tracker = PortfolioTracker(initial_capital)
+        self.strategy_mapper = StrategyBitMapper()
+        self.soulprint_registry = SoulprintRegistry(registry_file)
+
+        # Initialize ZPE/ZBE core
+        self.zpe_zbe_core = create_zpe_zbe_core()
+        self.quantum_performance_registry = QuantumPerformanceRegistry()
+
+        # Initialize CRLF system
+        self.crlf_system = create_crlf()
+
+        # Initialize unified systems
+        self.unified_pipeline = create_unified_pipeline()
+        self.unified_math_system = create_unified_math_system()
+
+        # Initialize trading executor
+        self.trading_executor = CCXTTradingExecutor()
+
+        # Initialize entropy integration if available
+        if ENTROPY_INTEGRATION_AVAILABLE:
+            self.entropy_integrator = get_entropy_integrator()
+            self.fractal_core = FractalCore()
+        else:
+            self.entropy_integrator = None
+            self.fractal_core = None
+
+        # Pipeline state
+        self.current_state = PipelineState(
+            timestamp=time.time(),
+            active_strategy=StrategyBranch.SWING,
+            current_capital=initial_capital,
+            total_trades=0,
+            winning_trades=0,
+            losing_trades=0,
+            total_profit=0.0,
+            total_loss=0.0,
+            win_rate=0.0,
+            profit_factor=0.0,
+            sharpe_ratio=0.0,
+            max_drawdown=0.0,
+            current_risk_level=0.0,
+            thermal_state=ThermalState.COOL,
+            bit_phase=BitPhase.EIGHT_BIT,
+        )
+
+        # Performance tracking
+        self.performance_history = []
+        self.error_count = 0
+        self.success_count = 0
+
+        logger.info(f"Clean Trading Pipeline initialized for {symbol}")
+
+    def _default_pipeline_config(self) -> Dict[str, Any]:
+        """Get default pipeline configuration."""
+        return {
+            "enable_mathematical_integration": True,
+            "enable_zpe_zbe_integration": True,
+            "enable_crlf_integration": True,
+            "enable_entropy_integration": ENTROPY_INTEGRATION_AVAILABLE,
+            "update_interval": 1.0,
+            "max_concurrent_trades": 5,
+            "enable_circuit_breakers": True,
+            "enable_performance_tracking": True,
+        }
+
+    def process_market_data(self, market_data: MarketData) -> TradingDecision:
         """
+        Process market data through the complete mathematical pipeline.
 
-        import json
-        import logging
-        import os
-        import time
-        import uuid
-        from dataclasses import dataclass, field
-        from decimal import Decimal
-        from enum import Enum
-        from pathlib import Path
-        from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+        Mathematical Pipeline:
+        1. Market data validation and preprocessing
+        2. Thermal state calculation
+        3. Bit phase determination
+        4. Strategy branch selection
+        5. Profit vectorization
+        6. Risk assessment
+        7. Decision generation
+        """
+        try:
+            # Step 1: Validate and preprocess market data
+            validated_data = self._validate_market_data(market_data)
 
-        import numpy as np
+            # Step 2: Calculate thermal state
+            thermal_state = self._calculate_thermal_state(validated_data)
 
-        from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
-        from .chrono_recursive_logic_function import (
-            ChronoRecursiveLogicFunction,
-            CRLFResponse,
-            CRLFTriggerState,
-            create_crlf,
-        )
-        from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-        from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
-        from .phase_bit_integration import phase_bit_integration
-        from .portfolio_tracker import PortfolioTracker
-        from .soulprint_registry import SoulprintRegistry
-        from .strategy_bit_mapper import StrategyBitMapper
-        from .unified_market_data_pipeline import MarketDataPacket, create_unified_pipeline
-        from .unified_math_system import create_unified_math_system
-        from .zpe_zbe_core import create_zpe_zbe_core  # noqa: F401 - Used in core system initialization
-        from .zpe_zbe_core import (  # noqa: F401 - Used in performance monitoring and optimization; noqa: F401 - Used in performance tracking (_update_zpe_zbe_performance_metrics); noqa: F401 - Used in quantum sync analysis (_enhance_market_data_with_zpe_zbe); noqa: F401 - Used in equilibrium calculations (_enhance_risk_management_with_zpe_zbe); noqa: F401 - Used in zero point energy analysis (_enhance_strategy_selection_with_zpe_zbe)
-            QuantumPerformanceRegistry,
-            QuantumSyncStatus,
-            ZBEBalance,
-            ZPEVector,
-            ZPEZBEPerformanceTracker,
-        )
+            # Step 3: Determine bit phase
+            bit_phase = self._determine_bit_phase(validated_data)
 
-        # Entropy Signal Integration
-            try:
-            from .entropy_signal_integration import (
-                EntropySignal,
-                get_entropy_integrator,
-                process_entropy_signal,
-                should_execute_routing,
-                should_execute_tick,
+            # Step 4: Select strategy branch
+            strategy_branch = self._select_strategy_branch(validated_data, thermal_state)
+
+            # Step 5: Calculate profit vector
+            profit_vector = self._calculate_profit_vector(validated_data, strategy_branch)
+
+            # Step 6: Assess risk
+            risk_score = self._assess_risk(validated_data, profit_vector)
+
+            # Step 7: Generate trading decision
+            decision = self._generate_trading_decision(
+                validated_data, strategy_branch, profit_vector, risk_score, thermal_state, bit_phase
             )
-            from .fractal_core import FractalCore
-
-            ENTROPY_INTEGRATION_AVAILABLE = True
-            logger = logging.getLogger(__name__)
-            logger.info("🧠 Entropy signal integration modules loaded successfully")
-                except ImportError as e:
-                ENTROPY_INTEGRATION_AVAILABLE = False
-                logger = logging.getLogger(__name__)
-                logger.warning(f"⚠️ Entropy integration modules not available: {e}")
-
-                logger = logging.getLogger(__name__)
-
-
-                    class TradingAction(Enum):
-    """Class for Schwabot trading functionality."""
-                    """Class for Schwabot trading functionality."""
-                    """Trading actions for market execution."""
-
-                    BUY = "BUY"
-                    SELL = "SELL"
-                    HOLD = "HOLD"
-
-
-                        class StrategyBranch(Enum):
-    """Class for Schwabot trading functionality."""
-                        """Class for Schwabot trading functionality."""
-                        """
-                        Strategy branches for different market conditions.
-
-                            Mathematical Strategy Mapping:
-                            - MEAN_REVERSION: R < 0.3 (low volatility, mean-reverting markets)
-                            - MOMENTUM: R > 0.7 (high volatility, trending markets)
-                            - ARBITRAGE: |correlation| > 0.9 (high correlation opportunities)
-                            - SCALPING: volatility > 0.8 (high frequency opportunities)
-                            - SWING: 0.3 < R < 0.7 (moderate volatility, swing opportunities)
-                            - GRID: volatility < 0.3 (low volatility, range-bound markets)
-                            - FERRIS_WHEEL: cyclic patterns detected (rotational opportunities)
-                            """
-
-                            MEAN_REVERSION = "mean_reversion"
-                            MOMENTUM = "momentum"
-                            ARBITRAGE = "arbitrage"
-                            SCALPING = "scalping"
-                            SWING = "swing"
-                            GRID = "grid"
-                            FERRIS_WHEEL = "ferris_wheel"  # Add Ferris Wheel as a strategy branch
-
-
-                                class MarketRegime(Enum):
-    """Class for Schwabot trading functionality."""
-                                """Class for Schwabot trading functionality."""
-                                """
-                                Market regimes for adaptive strategy selection.
-
-                                    Regime Classification:
-                                    - TRENDING_UP: trend_strength > 0.7, volatility > 0.5
-                                    - TRENDING_DOWN: trend_strength < -0.7, volatility > 0.5
-                                    - SIDEWAYS: |trend_strength| < 0.3, volatility < 0.5
-                                    - VOLATILE: volatility > 0.8 (high uncertainty)
-                                    - CALM: volatility < 0.3 (low uncertainty)
-                                    """
-
-                                    TRENDING_UP = "trending_up"
-                                    TRENDING_DOWN = "trending_down"
-                                    SIDEWAYS = "sideways"
-                                    VOLATILE = "volatile"
-                                    CALM = "calm"
-
-
-                                    @dataclass
-                                        class MarketData:
-    """Class for Schwabot trading functionality."""
-                                        """Class for Schwabot trading functionality."""
-                                        """
-                                        Market data snapshot with mathematical properties.
-
-                                            Mathematical Components:
-                                            - price: Current market price (float)
-                                            - volume: Trading volume (float)
-                                            - volatility: Price volatility σ = std(returns) (0-1)
-                                            - trend_strength: Trend strength T = correlation(price, time) (-1 to 1)
-                                            - entropy_level: Market entropy H = -Σ p(x) * log2(p(x)) (bits)
-                                            - bid/ask: Order book spread for liquidity analysis
-                                            """
-
-                                            symbol: str
-                                            price: float
-                                            volume: float
-                                            timestamp: float
-                                            bid: Optional[float] = None
-                                            ask: Optional[float] = None
-                                            volatility: float = 0.5
-                                            trend_strength: float = 0.5
-                                            entropy_level: float = 4.0
-                                            metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                            @dataclass
-                                                class TradingDecision:
-    """Class for Schwabot trading functionality."""
-                                                """Class for Schwabot trading functionality."""
-                                                """
-                                                Trading decision output with mathematical confidence.
-
-                                                    Mathematical Properties:
-                                                    - confidence: Decision confidence C = f(signal_strength, market_regime, risk_score)
-                                                    - profit_potential: Expected profit P = Kelly_Criterion * position_size * price_movement
-                                                    - risk_score: Risk assessment R = volatility * position_size * leverage
-                                                    - thermal_state: Market thermal state T = sigmoid(volatility * trend_strength)
-                                                    - bit_phase: Bit phase B = (price_position, volume_flow, momentum_alignment)
-                                                    - profit_vector: Multi-dimensional profit vector V = [momentum, mean_rev, arbitrage, scalping]
-                                                    """
-
-                                                    timestamp: float
-                                                    symbol: str
-                                                    action: TradingAction
-                                                    quantity: float
-                                                    price: float
-                                                    confidence: float
-                                                    strategy_branch: StrategyBranch
-                                                    profit_potential: float
-                                                    risk_score: float
-                                                    thermal_state: ThermalState
-                                                    bit_phase: BitPhase
-                                                    profit_vector: ProfitVector
-                                                    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                                    @dataclass
-                                                        class PipelineState:
-    """Class for Schwabot trading functionality."""
-                                                        """Class for Schwabot trading functionality."""
-                                                        """
-                                                        Current state of the trading pipeline with performance metrics.
-
-                                                            Mathematical Metrics:
-                                                            - win_rate: W = winning_trades / total_trades
-                                                            - profit_factor: PF = total_profit / abs(total_loss)
-                                                            - sharpe_ratio: SR = (return - risk_free_rate) / volatility
-                                                            - max_drawdown: MD = max(peak - current) / peak
-                                                            - current_risk_level: CR = portfolio_risk / max_allowed_risk
-                                                            """
-
-                                                            timestamp: float
-                                                            active_strategy: StrategyBranch
-                                                            current_capital: float
-                                                            total_trades: int
-                                                            winning_trades: int
-                                                            losing_trades: int
-                                                            total_profit: float
-                                                            current_risk_level: float
-                                                            market_regime: MarketRegime
-                                                            thermal_state: ThermalState
-                                                            bit_phase: BitPhase
-                                                            last_market_data: Optional[MarketData] = None
-
-
-                                                            @dataclass
-                                                                class ZPEZBEPipelineState:
-    """Class for Schwabot trading functionality."""
-                                                                """Class for Schwabot trading functionality."""
-                                                                """
-                                                                Enhanced pipeline state with ZPE-ZBE quantum tracking.
-
-                                                                    Quantum Components:
-                                                                    - current_zpe_energy: Zero Point Energy level E = hν/2
-                                                                    - current_zbe_status: Zero Bit Energy status B = quantum_state_measurement
-                                                                    - quantum_sync_status: Quantum synchronization S = coherence_measurement
-                                                                    - quantum_potential: Quantum potential V = -ℏ²/(2m) * ∇²ψ/ψ
-                                                                    - system_entropy: System entropy H = -k_B * Σ p_i * ln(p_i)
-                                                                    """
-
-                                                                    base_state: PipelineState
-                                                                    current_zpe_energy: float
-                                                                    current_zbe_status: float
-                                                                    quantum_sync_status: QuantumSyncStatus
-                                                                    quantum_potential: float
-                                                                    system_entropy: float
-                                                                    performance_registry: QuantumPerformanceRegistry
-                                                                    last_zpe_analysis: Optional[Dict[str, Any]] = None
-                                                                    last_zbe_analysis: Optional[Dict[str, Any]] = None
-
-
-                                                                    @dataclass
-                                                                        class CRLFEnhancedPipelineState:
-    """Class for Schwabot trading functionality."""
-                                                                        """Class for Schwabot trading functionality."""
-                                                                        """
-                                                                        Pipeline state enhanced with CRLF chrono-recursive tracking.
-
-                                                                            CRLF Components:
-                                                                            - current_crlf_output: CRLF output O = f(temporal_input, recursion_depth)
-                                                                            - current_trigger_state: Trigger state T = threshold_comparison(O)
-                                                                            - strategy_alignment_trend: Alignment trend A = correlation(strategy, crlf_output)
-                                                                            - temporal_resonance_history: Resonance history R = f(time_series, frequency)
-                                                                            - recursion_depth_history: Recursion depth D = max_recursion_level
-                                                                            """
-
-                                                                            base_state: PipelineState
-                                                                            crlf_instance: ChronoRecursiveLogicFunction
-                                                                            current_crlf_output: float
-                                                                            current_trigger_state: CRLFTriggerState
-                                                                            strategy_alignment_trend: List[float]
-                                                                            temporal_resonance_history: List[float]
-                                                                            recursion_depth_history: List[int]
-                                                                            last_crlf_analysis: Optional[Dict[str, Any]] = None
-
-
-                                                                            @dataclass
-                                                                                class ZPEZBEMarketData:
-    """Class for Schwabot trading functionality."""
-                                                                                """Class for Schwabot trading functionality."""
-                                                                                """
-                                                                                Enhanced market data with ZPE-ZBE quantum analysis.
-
-                                                                                    Quantum Market Analysis:
-                                                                                    - zpe_vector: ZPE vector V = [energy_level, coherence, entanglement]
-                                                                                    - zbe_balance: ZBE balance B = [bit_energy, quantum_state, equilibrium]
-                                                                                    - quantum_sync_status: Sync status S = coherence_measurement
-                                                                                    - quantum_potential: Potential V = quantum_field_strength
-                                                                                    - strategy_confidence: Confidence C = quantum_state_confidence
-                                                                                    - soulprint_vector: Soulprint V = [pattern_signature, resonance, alignment]
-                                                                                    """
-
-                                                                                    base_market_data: MarketData
-                                                                                    zpe_vector: ZPEVector
-                                                                                    zbe_balance: ZBEBalance
-                                                                                    quantum_sync_status: QuantumSyncStatus
-                                                                                    quantum_potential: float
-                                                                                    strategy_confidence: float
-                                                                                    soulprint_vector: Dict[str, float]
-                                                                                    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                                                                    @dataclass
-                                                                                        class CRLFEnhancedMarketData:
-    """Class for Schwabot trading functionality."""
-                                                                                        """Class for Schwabot trading functionality."""
-                                                                                        """
-                                                                                        Market data enhanced with CRLF chrono-recursive analysis.
-
-                                                                                            CRLF Analysis:
-                                                                                            - crlf_response: CRLF response R = f(temporal_input, recursion_params)
-                                                                                            - strategy_alignment_score: Alignment A = correlation(strategy, crlf_output)
-                                                                                            - temporal_resonance: Resonance R = frequency_matching_score
-                                                                                            - recursion_depth: Depth D = current_recursion_level
-                                                                                            - trigger_state: Trigger T = threshold_comparison(crlf_output)
-                                                                                            """
-
-                                                                                            base_market_data: MarketData
-                                                                                            crlf_response: CRLFResponse
-                                                                                            strategy_alignment_score: float
-                                                                                            temporal_resonance: float
-                                                                                            recursion_depth: int
-                                                                                            trigger_state: CRLFTriggerState
-                                                                                            metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                                                                            @dataclass
-                                                                                                class CRLFEnhancedTradingDecision:
-    """Class for Schwabot trading functionality."""
-                                                                                                """Class for Schwabot trading functionality."""
-                                                                                                """
-                                                                                                Trading decision enhanced with CRLF chrono-recursive analysis.
-
-                                                                                                    CRLF Decision Enhancement:
-                                                                                                    - crlf_output: CRLF output O = temporal_analysis_result
-                                                                                                    - trigger_state: Trigger T = threshold_comparison(O)
-                                                                                                    - strategy_alignment: Alignment A = correlation(strategy, crlf_output)
-                                                                                                    - temporal_urgency: Urgency U = time_sensitivity_score
-                                                                                                    - recursion_depth: Depth D = recursion_level_used
-                                                                                                    - risk_adjustment: Risk R = crlf_based_risk_modification
-                                                                                                    - strategy_weights: Weights W = [w1, w2, w3, w4] for strategy combination
-                                                                                                    """
-
-                                                                                                    base_decision: TradingDecision
-                                                                                                    crlf_output: float
-                                                                                                    trigger_state: CRLFTriggerState
-                                                                                                    strategy_alignment: float
-                                                                                                    temporal_urgency: str
-                                                                                                    recursion_depth: int
-                                                                                                    risk_adjustment: float
-                                                                                                    strategy_weights: Dict[str, float]
-                                                                                                    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                                                                                    @dataclass
-                                                                                                        class ZPEZBETradingDecision:
-    """Class for Schwabot trading functionality."""
-                                                                                                        """Class for Schwabot trading functionality."""
-                                                                                                        """
-                                                                                                        Enhanced trading decision with ZPE-ZBE quantum analysis.
-
-                                                                                                            Quantum Decision Enhancement:
-                                                                                                            - zpe_energy: ZPE energy E = quantum_energy_level
-                                                                                                            - zbe_status: ZBE status S = quantum_state_measurement
-                                                                                                            - quantum_sync_status: Sync S = coherence_measurement
-                                                                                                            - quantum_potential: Potential V = quantum_field_strength
-                                                                                                            - strategy_confidence: Confidence C = quantum_state_confidence
-                                                                                                            - recommended_action: Action A = quantum_optimized_decision
-                                                                                                            - risk_adjustment: Risk R = quantum_risk_modification
-                                                                                                            - system_entropy: Entropy H = system_complexity_measure
-                                                                                                            """
-
-                                                                                                            base_decision: TradingDecision
-                                                                                                            zpe_energy: float
-                                                                                                            zbe_status: float
-                                                                                                            quantum_sync_status: QuantumSyncStatus
-                                                                                                            quantum_potential: float
-                                                                                                            strategy_confidence: float
-                                                                                                            recommended_action: str
-                                                                                                            risk_adjustment: float
-                                                                                                            system_entropy: float
-                                                                                                            metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-                                                                                                            @dataclass
-                                                                                                                class RiskParameters:
-    """Class for Schwabot trading functionality."""
-                                                                                                                """Class for Schwabot trading functionality."""
-                                                                                                                """
-                                                                                                                Risk management parameters with mathematical constraints.
-
-                                                                                                                    Risk Mathematical Model:
-                                                                                                                    - max_position_size: Maximum position size P_max = capital * risk_factor
-                                                                                                                    - stop_loss_pct: Stop loss percentage SL = price * (1 - stop_loss_pct)
-                                                                                                                    - take_profit_pct: Take profit percentage TP = price * (1 + take_profit_pct)
-                                                                                                                    - max_daily_loss: Maximum daily loss DL_max = capital * max_daily_loss_pct
-                                                                                                                    - volatility_threshold: Volatility threshold V_thresh for position sizing
-                                                                                                                    - correlation_threshold: Correlation threshold C_thresh for diversification
-                                                                                                                    """
-
-                                                                                                                    max_position_size: float = 0.1  # 10% max position
-                                                                                                                    stop_loss_pct: float = 0.2  # 2% stop loss
-                                                                                                                    take_profit_pct: float = 0.4  # 4% take profit
-                                                                                                                    max_daily_loss: float = 0.5  # 5% max daily loss
-                                                                                                                    volatility_threshold: float = 0.8  # High volatility threshold
-                                                                                                                    correlation_threshold: float = 0.9  # High correlation threshold
-
-
-                                                                                                                        class CleanTradingPipeline:
-    """Class for Schwabot trading functionality."""
-                                                                                                                        """Class for Schwabot trading functionality."""
-                                                                                                                        """
-                                                                                                                        Advanced unified trading pipeline with full Schwabot integration.
-
-                                                                                                                        This pipeline serves as Schwabot's unified trading execution layer,
-                                                                                                                        integrating all mathematical components for optimal trading performance.
-
-                                                                                                                            Mathematical Architecture:
-                                                                                                                            1. Market Data Processing: Real-time data ingestion and analysis
-                                                                                                                            2. Pattern Detection: 2-gram pattern recognition and signal generation
-                                                                                                                            3. Strategy Selection: Multi-strategy vectorization and optimization
-                                                                                                                            4. Risk Management: Dynamic risk assessment and position sizing
-                                                                                                                            5. Execution: Order execution with market impact minimization
-                                                                                                                            6. Performance Tracking: Real-time performance monitoring and optimization
-
-                                                                                                                                Key Mathematical Formulas:
-                                                                                                                                - Market Regime: R = f(volatility, trend_strength, entropy_level)
-                                                                                                                                - Strategy Selection: S = argmax(profit_potential_i * confidence_i * (1 - risk_i))
-                                                                                                                                - Position Sizing: P = capital * Kelly_Criterion * risk_adjustment
-                                                                                                                                - Risk Management: R_total = Σ(w_i * σ_i) + correlation_penalty
-                                                                                                                                - Profit Vectorization: V = [momentum, mean_reversion, arbitrage, scalping] * weights
-                                                                                                                                - Thermal State: T = sigmoid(volatility * trend_strength * entropy)
-                                                                                                                                - Bit Phase: B = (price_position, volume_flow, momentum_alignment)
-                                                                                                                                """
-
-                                                                                                                                def __init__(
-                                                                                                                                self,
-                                                                                                                                symbol: str = "BTCUSDT",
-                                                                                                                                initial_capital: float = 10000.0,
-                                                                                                                                risk_params: Optional[RiskParameters] = None,
-                                                                                                                                matrix_dir: Union[str, Path] = "data/matrices",
-                                                                                                                                registry_file: Optional[str] = None,
-                                                                                                                                pipeline_config: Optional[Dict[str, Any]] = None,
-                                                                                                                                safe_mode: bool = False,
-                                                                                                                                    ) -> None:
-                                                                                                                                    """
-                                                                                                                                    Initialize the clean trading pipeline with full integration capabilities.
-
-                                                                                                                                        Args:
-                                                                                                                                        symbol: Trading symbol (e.g., "BTCUSDT")
-                                                                                                                                        initial_capital: Initial capital for trading (float)
-                                                                                                                                        risk_params: Risk management parameters (RiskParameters)
-                                                                                                                                        matrix_dir: Directory for matrix data storage (str/Path)
-                                                                                                                                        registry_file: Registry file path for trade logging (str)
-                                                                                                                                        pipeline_config: Pipeline configuration dictionary (Dict)
-                                                                                                                                        safe_mode: Enable safe mode for testing (bool)
-
-                                                                                                                                            Mathematical Parameters:
-                                                                                                                                            - symbol: Determines the trading pair and market characteristics
-                                                                                                                                            - initial_capital: Sets the base capital for position sizing calculations
-                                                                                                                                            - risk_params: Defines risk constraints and position limits
-                                                                                                                                            - matrix_dir: Stores mathematical matrices for pattern analysis
-                                                                                                                                            - safe_mode: Enables additional safety checks and validation
-                                                                                                                                            """
-                                                                                                                                            self.symbol: str = symbol
-                                                                                                                                            self.initial_capital: float = initial_capital
-                                                                                                                                            self.current_capital: float = initial_capital
-                                                                                                                                            self.risk_params: RiskParameters = risk_params or RiskParameters()
-                                                                                                                                            self.matrix_dir: Path = Path(matrix_dir)
-                                                                                                                                            self.registry_file: Optional[str] = registry_file
-                                                                                                                                            self.pipeline_config: Dict[str, Any] = pipeline_config or self._default_pipeline_config()
-                                                                                                                                            self.safe_mode: bool = safe_mode
-
-                                                                                                                                            # Core mathematical components
-                                                                                                                                            self.unified_math: CleanMathFoundation = create_unified_math_system()
-                                                                                                                                            self.profit_vectorization: CleanProfitVectorization = CleanProfitVectorization()
-                                                                                                                                            self.strategy_bit_mapper: StrategyBitMapper = StrategyBitMapper()
-                                                                                                                                            self.portfolio_tracker: PortfolioTracker = PortfolioTracker()
-                                                                                                                                            self.soulprint_registry: SoulprintRegistry = SoulprintRegistry()
-
-                                                                                                                                            # Market data pipeline
-                                                                                                                                            self.market_data_pipeline = create_unified_pipeline()
-
-                                                                                                                                            # ZPE-ZBE quantum components
-                                                                                                                                            self.zpe_zbe_core = create_zpe_zbe_core()
-                                                                                                                                            self.zpe_zbe_performance_tracker: ZPEZBEPerformanceTracker = ZPEZBEPerformanceTracker()
-
-                                                                                                                                            # CRLF chrono-recursive components
-                                                                                                                                            self.crlf_instance: ChronoRecursiveLogicFunction = create_crlf()
-                                                                                                                                            self.crlf_pipeline_state: CRLFEnhancedPipelineState = CRLFEnhancedPipelineState(
-                                                                                                                                            base_state=PipelineState(
-                                                                                                                                            timestamp=time.time(),
-                                                                                                                                            active_strategy=StrategyBranch.MOMENTUM,
-                                                                                                                                            current_capital=initial_capital,
-                                                                                                                                            total_trades=0,
-                                                                                                                                            winning_trades=0,
-                                                                                                                                            losing_trades=0,
-                                                                                                                                            total_profit=0.0,
-                                                                                                                                            current_risk_level=0.0,
-                                                                                                                                            market_regime=MarketRegime.CALM,
-                                                                                                                                            thermal_state=ThermalState.NEUTRAL,
-                                                                                                                                            bit_phase=BitPhase.NEUTRAL,
-                                                                                                                                            ),
-                                                                                                                                            crlf_instance=self.crlf_instance,
-                                                                                                                                            current_crlf_output=0.0,
-                                                                                                                                            current_trigger_state=CRLFTriggerState.IDLE,
-                                                                                                                                            strategy_alignment_trend=[],
-                                                                                                                                            temporal_resonance_history=[],
-                                                                                                                                            recursion_depth_history=[],
-                                                                                                                                            )
-
-                                                                                                                                            # ZPE-ZBE pipeline state
-                                                                                                                                            self.zpe_zbe_pipeline_state: ZPEZBEPipelineState = ZPEZBEPipelineState(
-                                                                                                                                            base_state=PipelineState(
-                                                                                                                                            timestamp=time.time(),
-                                                                                                                                            active_strategy=StrategyBranch.MOMENTUM,
-                                                                                                                                            current_capital=initial_capital,
-                                                                                                                                            total_trades=0,
-                                                                                                                                            winning_trades=0,
-                                                                                                                                            losing_trades=0,
-                                                                                                                                            total_profit=0.0,
-                                                                                                                                            current_risk_level=0.0,
-                                                                                                                                            market_regime=MarketRegime.CALM,
-                                                                                                                                            thermal_state=ThermalState.NEUTRAL,
-                                                                                                                                            bit_phase=BitPhase.NEUTRAL,
-                                                                                                                                            ),
-                                                                                                                                            current_zpe_energy=0.0,
-                                                                                                                                            current_zbe_status=0.0,
-                                                                                                                                            quantum_sync_status=QuantumSyncStatus.UNSYNCED,
-                                                                                                                                            quantum_potential=0.0,
-                                                                                                                                            system_entropy=0.0,
-                                                                                                                                            performance_registry=QuantumPerformanceRegistry(),
-                                                                                                                                            )
-
-                                                                                                                                            # Trading executor
-                                                                                                                                            self.trading_executor: CCXTTradingExecutor = CCXTTradingExecutor()
-
-                                                                                                                                            # Entropy integration (if available)
-                                                                                                                                            self.entropy_integrator = None
-                                                                                                                                                if ENTROPY_INTEGRATION_AVAILABLE:
-                                                                                                                                                self.entropy_integrator = get_entropy_integrator()
-
-                                                                                                                                                # Performance tracking
-                                                                                                                                                self.trades_history: List[Dict[str, Any]] = []
-                                                                                                                                                self.performance_metrics: Dict[str, Any] = {}
-
-                                                                                                                                                logger.info(f"🧬 Clean Trading Pipeline initialized for {symbol} with {initial_capital} capital")
-
-                                                                                                                                                    def _default_pipeline_config(self) -> Dict[str, Any]:
-                                                                                                                                                    """
-                                                                                                                                                    Get default pipeline configuration with mathematical parameters.
-
-                                                                                                                                                        Returns:
-                                                                                                                                                        Default configuration dictionary with mathematical parameters
-
-                                                                                                                                                            Configuration Parameters:
-                                                                                                                                                            - update_interval: Data update interval in seconds
-                                                                                                                                                            - max_position_size: Maximum position size as fraction of capital
-                                                                                                                                                            - risk_free_rate: Risk-free rate for Sharpe ratio calculations
-                                                                                                                                                            - volatility_window: Window size for volatility calculations
-                                                                                                                                                            - correlation_window: Window size for correlation calculations
-                                                                                                                                                            """
-                                                                                                                                                        return {
-                                                                                                                                                        "update_interval": 1.0,
-                                                                                                                                                        "max_position_size": 0.1,
-                                                                                                                                                        "risk_free_rate": 0.02,
-                                                                                                                                                        "volatility_window": 20,
-                                                                                                                                                        "correlation_window": 50,
-                                                                                                                                                        "entropy_threshold": 0.5,
-                                                                                                                                                        "thermal_threshold": 0.7,
-                                                                                                                                                        "bit_phase_threshold": 0.6,
-                                                                                                                                                        }
+
+            # Update pipeline state
+            self._update_pipeline_state(decision)
+
+            return decision
+
+        except Exception as e:
+            logger.error(f"Error processing market data: {e}")
+            return self._create_fallback_decision(market_data)
+
+    def _validate_market_data(self, market_data: MarketData) -> MarketData:
+        """Validate and preprocess market data."""
+        # Basic validation
+        if market_data.price <= 0:
+            raise ValueError("Invalid price")
+        if market_data.volume < 0:
+            raise ValueError("Invalid volume")
+        if market_data.timestamp <= 0:
+            raise ValueError("Invalid timestamp")
+
+        # Normalize volatility and trend strength
+        validated_data = MarketData(
+            symbol=market_data.symbol,
+            price=market_data.price,
+            volume=market_data.volume,
+            timestamp=market_data.timestamp,
+            bid=market_data.bid,
+            ask=market_data.ask,
+            volatility=max(0.0, min(1.0, market_data.volatility)),
+            trend_strength=max(-1.0, min(1.0, market_data.trend_strength)),
+            entropy_level=max(0.0, market_data.entropy_level),
+            metadata=market_data.metadata.copy(),
+        )
+
+        return validated_data
+
+    def _calculate_thermal_state(self, market_data: MarketData) -> ThermalState:
+        """Calculate thermal state based on market conditions."""
+        # Thermal state calculation: T = sigmoid(volatility * trend_strength)
+        thermal_score = market_data.volatility * abs(market_data.trend_strength)
+        
+        if thermal_score < 0.3:
+            return ThermalState.COOL
+        elif thermal_score < 0.7:
+            return ThermalState.WARM
+        else:
+            return ThermalState.HOT
+
+    def _determine_bit_phase(self, market_data: MarketData) -> BitPhase:
+        """Determine bit phase based on market conditions."""
+        # Bit phase determination based on volatility and entropy
+        volatility_factor = market_data.volatility
+        entropy_factor = market_data.entropy_level / 8.0  # Normalize to 0-1
+        
+        combined_factor = (volatility_factor + entropy_factor) / 2.0
+        
+        if combined_factor < 0.2:
+            return BitPhase.FOUR_BIT
+        elif combined_factor < 0.4:
+            return BitPhase.EIGHT_BIT
+        elif combined_factor < 0.6:
+            return BitPhase.SIXTEEN_BIT
+        elif combined_factor < 0.8:
+            return BitPhase.THIRTY_TWO_BIT
+        else:
+            return BitPhase.FORTY_TWO_BIT
+
+    def _select_strategy_branch(self, market_data: MarketData, thermal_state: ThermalState) -> StrategyBranch:
+        """Select strategy branch based on market conditions."""
+        # Strategy selection logic
+        volatility = market_data.volatility
+        trend_strength = abs(market_data.trend_strength)
+        
+        if volatility < 0.3:
+            if trend_strength < 0.3:
+                return StrategyBranch.GRID
+            else:
+                return StrategyBranch.MEAN_REVERSION
+        elif volatility > 0.8:
+            return StrategyBranch.SCALPING
+        elif trend_strength > 0.7:
+            return StrategyBranch.MOMENTUM
+        elif trend_strength < 0.3:
+            return StrategyBranch.SWING
+        else:
+            return StrategyBranch.FERRIS_WHEEL
+
+    def _calculate_profit_vector(self, market_data: MarketData, strategy_branch: StrategyBranch) -> ProfitVector:
+        """Calculate profit vector using the profit vectorization system."""
+        vector_input = {
+            "price": market_data.price,
+            "volume": market_data.volume,
+            "volatility": market_data.volatility,
+            "trend_strength": market_data.trend_strength,
+            "entropy_level": market_data.entropy_level,
+            "strategy_branch": strategy_branch.value,
+        }
+        
+        return self.profit_vectorization.calculate_profit_vector(vector_input)
+
+    def _assess_risk(self, market_data: MarketData, profit_vector: ProfitVector) -> float:
+        """Assess risk based on market data and profit vector."""
+        # Risk assessment: R = volatility * position_size * leverage
+        base_risk = market_data.volatility * profit_vector.confidence_score
+        risk_score = min(1.0, base_risk)
+        
+        return risk_score
+
+    def _generate_trading_decision(
+        self,
+        market_data: MarketData,
+        strategy_branch: StrategyBranch,
+        profit_vector: ProfitVector,
+        risk_score: float,
+        thermal_state: ThermalState,
+        bit_phase: BitPhase,
+    ) -> TradingDecision:
+        """Generate trading decision based on all calculated factors."""
+        # Decision logic based on profit vector and risk
+        if profit_vector.profit_score > 0.7 and risk_score < 0.5:
+            action = TradingAction.BUY
+        elif profit_vector.profit_score < 0.3 and risk_score < 0.5:
+            action = TradingAction.SELL
+        else:
+            action = TradingAction.HOLD
+
+        # Calculate position size based on confidence and risk
+        position_size = self._calculate_position_size(profit_vector.confidence_score, risk_score)
+
+        # Calculate profit potential
+        profit_potential = profit_vector.profit_score * position_size * market_data.price
+
+        decision = TradingDecision(
+            timestamp=time.time(),
+            symbol=market_data.symbol,
+            action=action,
+            quantity=position_size,
+            price=market_data.price,
+            confidence=profit_vector.confidence_score,
+            strategy_branch=strategy_branch,
+            profit_potential=profit_potential,
+            risk_score=risk_score,
+            thermal_state=thermal_state,
+            bit_phase=bit_phase,
+            profit_vector=profit_vector,
+        )
+
+        return decision
+
+    def _calculate_position_size(self, confidence: float, risk_score: float) -> float:
+        """Calculate position size based on confidence and risk."""
+        # Kelly Criterion inspired position sizing
+        base_size = confidence * (1 - risk_score)
+        max_size = self.risk_params.max_position_size
+        
+        return min(base_size, max_size)
+
+    def _update_pipeline_state(self, decision: TradingDecision) -> None:
+        """Update pipeline state based on decision."""
+        self.current_state.timestamp = time.time()
+        self.current_state.active_strategy = decision.strategy_branch
+        self.current_state.thermal_state = decision.thermal_state
+        self.current_state.bit_phase = decision.bit_phase
+
+    def _create_fallback_decision(self, market_data: MarketData) -> TradingDecision:
+        """Create fallback decision when processing fails."""
+        fallback_vector = ProfitVector(
+            vector_id=f"fallback_{int(time.time())}",
+            btc_price=market_data.price,
+            volume=market_data.volume,
+            profit_score=0.0,
+            confidence_score=0.1,
+            mode="fallback",
+            method="error_recovery",
+            timestamp=time.time(),
+        )
+
+        return TradingDecision(
+            timestamp=time.time(),
+            symbol=market_data.symbol,
+            action=TradingAction.HOLD,
+            quantity=0.0,
+            price=market_data.price,
+            confidence=0.1,
+            strategy_branch=StrategyBranch.SWING,
+            profit_potential=0.0,
+            risk_score=1.0,
+            thermal_state=ThermalState.COOL,
+            bit_phase=BitPhase.EIGHT_BIT,
+            profit_vector=fallback_vector,
+        )
+
+    def get_pipeline_status(self) -> Dict[str, Any]:
+        """Get current pipeline status."""
+        return {
+            "symbol": self.symbol,
+            "current_state": self.current_state,
+            "performance_metrics": {
+                "total_trades": self.current_state.total_trades,
+                "win_rate": self.current_state.win_rate,
+                "profit_factor": self.current_state.profit_factor,
+                "sharpe_ratio": self.current_state.sharpe_ratio,
+                "max_drawdown": self.current_state.max_drawdown,
+            },
+            "system_status": {
+                "entropy_integration_available": ENTROPY_INTEGRATION_AVAILABLE,
+                "safe_mode": self.safe_mode,
+                "error_count": self.error_count,
+                "success_count": self.success_count,
+            },
+        }
+
+    def cleanup(self) -> None:
+        """Clean up pipeline resources."""
+        try:
+            if self.entropy_integrator:
+                self.entropy_integrator.cleanup()
+            if self.fractal_core:
+                self.fractal_core.cleanup()
+            
+            logger.info("Clean Trading Pipeline resources cleaned up")
+        except Exception as e:
+            logger.error(f"Error cleaning up pipeline: {e}")
+
+
+# Global instance for easy access
+clean_trading_pipeline = CleanTradingPipeline()

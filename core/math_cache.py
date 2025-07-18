@@ -12,6 +12,6 @@ This module is a simplified interface to the mathematical framework integrator.
 
 
 # Re-export for backward compatibility
-from core.math.mathematical_framework_integrator import MathResultCache, MathConfig
+from .math.mathematical_framework_integrator import MathResultCache, MathConfig
 
 __all__ = ["MathResultCache", "MathConfig"]
