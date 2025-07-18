@@ -1,0 +1,108 @@
+{
+  "test_summary": {
+    "total_tests": 10,
+    "passed_tests": 5,
+    "failed_tests": 5,
+    "success_rate": 50.0,
+    "test_duration_seconds": 15.389119148254395
+  },
+  "system_status": {
+    "schwabot_ready": false,
+    "guff_integration_working": false,
+    "sol_trading_ready": true,
+    "rebrand_complete": false,
+    "mathematical_system_working": true
+  },
+  "detailed_results": {
+    "System Import Test": {
+      "success": false,
+      "error": "expected an indented block after 'try' statement on line 27 (matrix_fault_resolver.py, line 28)",
+      "details": {}
+    },
+    "MathLib V4 Test": {
+      "success": true,
+      "details": {
+        "zpe_calculated": true,
+        "zbe_calculated": true,
+        "hash_generated": true,
+        "entropy_band": "red",
+        "asset_class": "SOL",
+        "zpe_value": 4.75,
+        "zbe_value": 1.8073549220576042
+      }
+    },
+    "KoboldCPP Connection Test": {
+      "success": false,
+      "error": "KoboldCPP connection failed: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /api/v1/model (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000238CF3B01A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "details": {}
+    },
+    "GUFF AI Model Test": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /api/v1/generate (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000238CF3B0620>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "details": {}
+    },
+    "Bridge Integration Test": {
+      "success": false,
+      "error": "Bridge connection failed: HTTPConnectionPool(host='localhost', port=5005): Max retries exceeded with url: /bridge/status (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000238CF31A5A0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+      "details": {}
+    },
+    "SOL Trading Test": {
+      "success": true,
+      "details": {
+        "sol_products_available": false,
+        "sol_product_count": 0,
+        "sol_product_ids": [],
+        "trading_pairs_available": true
+      }
+    },
+    "Rebrand Verification Test": {
+      "success": false,
+      "details": {
+        "rebrand_checks": {
+          "main.py": true,
+          "core/schwabot_unified_interface.py": false,
+          "config/schwabot_config.yaml": false
+        },
+        "old_branding_removed": true,
+        "rebrand_complete": false
+      }
+    },
+    "Mathematical Functions Test": {
+      "success": true,
+      "details": {
+        "gradient_calculated": true,
+        "curvature_calculated": true,
+        "homology_features": 2,
+        "quantum_matrix_shape": [
+          3
+        ],
+        "phantom_bands_detected": 0,
+        "all_functions_working": true
+      }
+    },
+    "Memory Architecture Test": {
+      "success": true,
+      "details": {
+        "hash_generation_working": true,
+        "similarity_calculation": true,
+        "vault_matching": true,
+        "consensus_validation": true,
+        "memory_architecture_functional": true
+      }
+    },
+    "Performance Test": {
+      "success": true,
+      "details": {
+        "execution_time_seconds": 0.0019996166229248047,
+        "hash_generation_time": 0.0009987354278564453,
+        "performance_acceptable": true,
+        "operations_per_second": 100126.61733110527
+      }
+    }
+  },
+  "recommendations": [
+    "Start KoboldCPP server with GUFF model",
+    "Complete system rebranding from KoboldCPP to Schwabot"
+  ],
+  "timestamp": "2025-07-18T07:31:16.214475"
+}

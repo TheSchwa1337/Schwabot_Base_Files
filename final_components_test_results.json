@@ -1,0 +1,116 @@
+{
+  "test_summary": {
+    "total_tests": 15,
+    "passed_tests": 14,
+    "failed_tests": 1,
+    "success_rate": 93.33333333333333,
+    "test_duration_seconds": 0.3771052360534668,
+    "all_suites_passed": true
+  },
+  "suite_results": {
+    "Lantern Core Risk Profiles": true,
+    "Trade Gating System": true,
+    "Component Integration": true,
+    "Mathematical Functions": true
+  },
+  "detailed_results": [
+    {
+      "test_name": "Lantern Profiles Initialization",
+      "success": true,
+      "details": "System initialized successfully",
+      "timestamp": "2025-07-18T07:47:43.169244"
+    },
+    {
+      "test_name": "Kelly Criterion Calculation",
+      "success": true,
+      "details": "Kelly size: 0.1000",
+      "timestamp": "2025-07-18T07:47:43.169244"
+    },
+    {
+      "test_name": "Integrated Risk Score",
+      "success": true,
+      "details": "Risk score: 0.0320",
+      "timestamp": "2025-07-18T07:47:43.170242"
+    },
+    {
+      "test_name": "Multi-Target Profit Logic",
+      "success": true,
+      "details": "Generated 3 targets",
+      "timestamp": "2025-07-18T07:47:43.170242"
+    },
+    {
+      "test_name": "Fee-Aware P&L",
+      "success": true,
+      "details": "Net P&L: 394000.00, Fees: 606000.00",
+      "timestamp": "2025-07-18T07:47:43.170242"
+    },
+    {
+      "test_name": "Profile Recommendation",
+      "success": true,
+      "details": "Recommended: blue",
+      "timestamp": "2025-07-18T07:47:43.171242"
+    },
+    {
+      "test_name": "Trade Gating Initialization",
+      "success": true,
+      "details": "System initialized successfully",
+      "timestamp": "2025-07-18T07:47:43.209222"
+    },
+    {
+      "test_name": "Trade Request Processing",
+      "success": false,
+      "details": "Rejected at stage: profile_validation",
+      "timestamp": "2025-07-18T07:47:43.210220"
+    },
+    {
+      "test_name": "Risk Metrics Update",
+      "success": true,
+      "details": "Risk score: 0.3010",
+      "timestamp": "2025-07-18T07:47:43.211220"
+    },
+    {
+      "test_name": "System Status",
+      "success": true,
+      "details": "Status: normal",
+      "timestamp": "2025-07-18T07:47:43.218216"
+    },
+    {
+      "test_name": "Performance Analytics",
+      "success": true,
+      "details": "Total trades: 0",
+      "timestamp": "2025-07-18T07:47:43.219215"
+    },
+    {
+      "test_name": "End-to-End Integration",
+      "success": true,
+      "details": "Trade approved and recorded for blue",
+      "timestamp": "2025-07-18T07:47:43.222347"
+    },
+    {
+      "test_name": "Kelly Formula",
+      "success": true,
+      "details": "Mathematical formula correct",
+      "timestamp": "2025-07-18T07:47:43.224346"
+    },
+    {
+      "test_name": "Risk Score Calculation",
+      "success": true,
+      "details": "Risk calculation correct",
+      "timestamp": "2025-07-18T07:47:43.224346"
+    },
+    {
+      "test_name": "Fee-Aware P&L",
+      "success": true,
+      "details": "P&L calculation correct",
+      "timestamp": "2025-07-18T07:47:43.226346"
+    }
+  ],
+  "system_status": {
+    "lantern_core_risk_profiles": true,
+    "trade_gating_system": true,
+    "component_integration": true,
+    "mathematical_functions": true,
+    "overall_operational": true
+  },
+  "timestamp": "2025-07-18T07:47:43.227345"
+}

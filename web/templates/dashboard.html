@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schwabot - Real Trading Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .price-up {
+            color: #00ff88;
+        }
+        
+        .price-down {
+            color: #ff4444;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background-color: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+        
+        .status-offline {
+            background-color: #ff4444;
+            box-shadow: 0 0 10px #ff4444;
+        }
+        
+        .cascade-indicator {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .real-time-data {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .trading-button {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .trading-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+        
+        .risk-indicator {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #00ff88, #ffff00, #ff4444);
+        }
+        
+        .phantom-patience {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4ecdc4;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <span class="cascade-indicator px-3 py-2 rounded">🌊 SCHWABOT</span>
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/trading">Trading</a>
+                <a class="nav-link" href="/portfolio">Portfolio</a>
+                <a class="nav-link" href="/analytics">Analytics</a>
+                <a class="nav-link" href="/cascade">Cascade</a>
+                <a class="nav-link" href="/settings">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- System Status Row -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <span class="status-indicator" id="systemStatus"></span>
+                            System Status
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Trading Engine:</strong> <span id="tradingEngineStatus">Loading...</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Cascade Memory:</strong> <span id="cascadeMemoryStatus">Loading...</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Data Collection:</strong> <span id="dataCollectionStatus">Loading...</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Market Data:</strong> <span id="marketDataStatus">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Market Data -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">🌊 Real-Time Market Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="marketDataContainer">
+                            <!-- Market data will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Overview -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">💰 Portfolio Overview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="real-time-data">
+                            <div><strong>Total Value:</strong> <span id="totalValue">$0.00</span></div>
+                            <div><strong>Cash:</strong> <span id="cash">$0.00</span></div>
+                            <div><strong>Unrealized P&L:</strong> <span id="unrealizedPnl">$0.00</span></div>
+                            <div><strong>Realized P&L:</strong> <span id="realizedPnl">$0.00</span></div>
+                            <div><strong>Total Fees:</strong> <span id="totalFees">$0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📊 Trading Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="real-time-data">
+                            <div><strong>Total Trades:</strong> <span id="totalTrades">0</span></div>
+                            <div><strong>Successful Trades:</strong> <span id="successfulTrades">0</span></div>
+                            <div><strong>Success Rate:</strong> <span id="successRate">0%</span></div>
+                            <div><strong>Total Volume:</strong> <span id="totalVolume">$0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cascade Memory Analytics -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">🌊 Cascade Memory Analytics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h3 id="totalCascades">0</h3>
+                                    <p>Total Cascades</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h3 id="successfulCascades">0</h3>
+                                    <p>Successful Cascades</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h3 id="cascadeSuccessRate">0%</h3>
+                                    <p>Success Rate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h3 id="phantomWaitDecisions">0</h3>
+                                    <p>Phantom Waits</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Phantom Patience Status -->
+                        <div class="phantom-patience mt-3">
+                            <h6>🌊 Phantom Patience Protocol</h6>
+                            <div id="phantomPatienceStatus">Observing market patterns...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Charts -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📈 BTC-USD Price Chart</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="btcChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📈 ETH-USD Price Chart</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="ethChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Trading Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">⚡ Quick Trading Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button class="btn trading-button w-100 mb-2" onclick="executeTrade('BTC-USD', 'buy', 0.001)">
+                                    Buy BTC
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn trading-button w-100 mb-2" onclick="executeTrade('ETH-USD', 'buy', 0.01)">
+                                    Buy ETH
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn trading-button w-100 mb-2" onclick="executeTrade('SOL-USD', 'buy', 1)">
+                                    Buy SOL
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn trading-button w-100 mb-2" onclick="executeTrade('XRP-USD', 'buy', 100)">
+                                    Buy XRP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+        
+        // Chart instances
+        let btcChart = null;
+        let ethChart = null;
+        
+        // Initialize charts
+        function initializeCharts() {
+            const btcCtx = document.getElementById('btcChart').getContext('2d');
+            const ethCtx = document.getElementById('ethChart').getContext('2d');
+            
+            btcChart = new Chart(btcCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'BTC-USD',
+                        data: [],
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            ethChart = new Chart(ethCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'ETH-USD',
+                        data: [],
+                        borderColor: '#4ecdc4',
+                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update market data display
+        function updateMarketData(data) {
+            const container = document.getElementById('marketDataContainer');
+            container.innerHTML = '';
+            
+            Object.entries(data).forEach(([symbol, marketData]) => {
+                const priceChange = marketData.price_change || 0;
+                const priceClass = priceChange >= 0 ? 'price-up' : 'price-down';
+                const priceIcon = priceChange >= 0 ? '↗' : '↘';
+                
+                const card = document.createElement('div');
+                card.className = 'col-md-3 mb-3';
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>${symbol}</h6>
+                            <h4 class="${priceClass}">$${marketData.price.toFixed(2)} ${priceIcon}</h4>
+                            <small>Volume: $${(marketData.volume / 1000000).toFixed(1)}M</small><br>
+                            <small>Spread: $${marketData.spread.toFixed(4)}</small>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // Update portfolio data
+        function updatePortfolio(data) {
+            document.getElementById('totalValue').textContent = `$${data.total_value.toFixed(2)}`;
+            document.getElementById('cash').textContent = `$${data.cash.toFixed(2)}`;
+            document.getElementById('unrealizedPnl').textContent = `$${data.unrealized_pnl.toFixed(2)}`;
+            document.getElementById('realizedPnl').textContent = `$${data.realized_pnl.toFixed(2)}`;
+            document.getElementById('totalFees').textContent = `$${data.total_fees.toFixed(2)}`;
+            document.getElementById('totalTrades').textContent = data.total_trades;
+            document.getElementById('successfulTrades').textContent = data.successful_trades;
+            document.getElementById('successRate').textContent = `${((data.successful_trades / data.total_trades) * 100).toFixed(1)}%`;
+            document.getElementById('totalVolume').textContent = `$${data.total_volume.toFixed(2)}`;
+        }
+        
+        // Update cascade analytics
+        function updateCascadeAnalytics(data) {
+            document.getElementById('totalCascades').textContent = data.total_cascades;
+            document.getElementById('successfulCascades').textContent = data.successful_cascades;
+            document.getElementById('cascadeSuccessRate').textContent = `${(data.success_rate * 100).toFixed(1)}%`;
+            document.getElementById('phantomWaitDecisions').textContent = data.phantom_wait_decisions;
+        }
+        
+        // Update system status
+        function updateSystemStatus(data) {
+            const statusIndicator = document.getElementById('systemStatus');
+            const tradingEngineStatus = document.getElementById('tradingEngineStatus');
+            const cascadeMemoryStatus = document.getElementById('cascadeMemoryStatus');
+            const dataCollectionStatus = document.getElementById('dataCollectionStatus');
+            const marketDataStatus = document.getElementById('marketDataStatus');
+            
+            if (data.trading_engine && data.cascade_memory && data.data_collection) {
+                statusIndicator.className = 'status-indicator status-online';
+                tradingEngineStatus.textContent = 'Online';
+                cascadeMemoryStatus.textContent = 'Online';
+                dataCollectionStatus.textContent = 'Active';
+                marketDataStatus.textContent = `${data.market_data_count} symbols`;
+            } else {
+                statusIndicator.className = 'status-indicator status-offline';
+                tradingEngineStatus.textContent = 'Offline';
+                cascadeMemoryStatus.textContent = 'Offline';
+                dataCollectionStatus.textContent = 'Inactive';
+                marketDataStatus.textContent = 'No data';
+            }
+        }
+        
+        // Execute trade function
+        function executeTrade(symbol, side, quantity) {
+            fetch('/api/execute_trade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    symbol: symbol,
+                    side: side,
+                    quantity: quantity,
+                    exchange: 'coinbase'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Trade executed: ${data.message}`);
+                } else {
+                    alert(`Trade failed: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                alert(`Error executing trade: ${error}`);
+            });
+        }
+        
+        // Socket.IO event handlers
+        socket.on('connect', function() {
+            console.log('Connected to server');
+            socket.emit('subscribe_market_data', {symbols: ['BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD']});
+            socket.emit('subscribe_portfolio');
+            socket.emit('subscribe_cascade');
+        });
+        
+        socket.on('market_data_update', function(data) {
+            updateMarketData(data.data);
+            
+            // Update charts
+            if (data.data['BTC-USD']) {
+                const btcData = data.data['BTC-USD'];
+                const timestamp = new Date(btcData.timestamp).toLocaleTimeString();
+                
+                btcChart.data.labels.push(timestamp);
+                btcChart.data.datasets[0].data.push(btcData.price);
+                
+                if (btcChart.data.labels.length > 50) {
+                    btcChart.data.labels.shift();
+                    btcChart.data.datasets[0].data.shift();
+                }
+                
+                btcChart.update('none');
+            }
+            
+            if (data.data['ETH-USD']) {
+                const ethData = data.data['ETH-USD'];
+                const timestamp = new Date(ethData.timestamp).toLocaleTimeString();
+                
+                ethChart.data.labels.push(timestamp);
+                ethChart.data.datasets[0].data.push(ethData.price);
+                
+                if (ethChart.data.labels.length > 50) {
+                    ethChart.data.labels.shift();
+                    ethChart.data.datasets[0].data.shift();
+                }
+                
+                ethChart.update('none');
+            }
+        });
+        
+        socket.on('portfolio_update', function(data) {
+            updatePortfolio(data.data);
+        });
+        
+        socket.on('cascade_analytics_update', function(data) {
+            updateCascadeAnalytics(data.data);
+        });
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            
+            // Load initial data
+            fetch('/api/system_status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateSystemStatus(data.data);
+                    }
+                });
+        });
+    </script>
+</body>
+</html> 
