@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 Schwabot Unified Trading Terminal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #00ff00;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #00cc00;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-ready { background-color: #00ff00; }
+        .status-trading { background-color: #ffff00; }
+        .status-error { background-color: #ff0000; }
+        .status-initializing { background-color: #ff8800; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel h3 {
+            color: #00ff00;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00cc00;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            color: #00ff00;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #003300, #006600);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #004400, #008800);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #440000, #880000);
+            border-color: #ff0000;
+            color: #ff6666;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            color: #fff;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #884400, #cc6600);
+            border-color: #ff8800;
+            color: #ffcc00;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(45deg, #ff8800, #cc6600);
+            color: #fff;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #00cc00;
+        }
+        
+        .visualization-panel {
+            grid-column: 1 / -1;
+            min-height: 400px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 350px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .strategy-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .strategy-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .strategy-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-pending { background-color: #ff8800; }
+        .status-executing { background-color: #ffff00; }
+        .status-completed { background-color: #00ff00; }
+        .status-failed { background-color: #ff0000; }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .profile-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .profile-active {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+        
+        .log-panel {
+            grid-column: 1 / -1;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            background: rgba(0, 0, 0, 0.8);
+            border-left: 3px solid #00ff00;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry.error {
+            border-left-color: #ff0000;
+            color: #ff6666;
+        }
+        
+        .log-entry.warning {
+            border-left-color: #ff8800;
+            color: #ffcc00;
+        }
+        
+        .log-entry.info {
+            border-left-color: #0088ff;
+            color: #66ccff;
+        }
+        
+        .ai-command-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .ai-command-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            color: #00ffff;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .hardware-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .hardware-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .hardware-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .hardware-label {
+            font-size: 0.8rem;
+            color: #00cc00;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌀 Schwabot Unified Trading Terminal</h1>
+            <p>Advanced AI-Powered Multi-Profile Trading System</p>
+            <div>
+                <span class="status-indicator status-{{ state }}" id="systemStatus"></span>
+                <span id="systemStatusText">System Status: {{ state.title() }}</span>
+            </div>
+        </div>
+        
+        <!-- Metrics Dashboard -->
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card">
+                <div class="metric-value" id="portfolioValue">${{ "%.2f"|format(session.portfolio_value if session else 0.0) }}</div>
+                <div class="metric-label">Portfolio Value</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="totalProfit">${{ "%.2f"|format(session.total_profit if session else 0.0) }}</div>
+                <div class="metric-label">Total Profit</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="winRate">0%</div>
+                <div class="metric-label">Win Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeStrategies">0</div>
+                <div class="metric-label">Active Strategies</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="currentPrice">${{ "%.2f"|format(session.current_price if session else 0.0) }}</div>
+                <div class="metric-label">{{ session.current_asset if session else "BTC/USDC" }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="apiStatus">{{ "Connected" if session and session.api_connected else "Disconnected" }}</div>
+                <div class="metric-label">API Status</div>
+            </div>
+        </div>
+        
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Strategy Control Panel -->
+            <div class="panel">
+                <h3>🎯 Strategy Execution</h3>
+                <div class="form-group">
+                    <label for="strategyId">Strategy ID:</label>
+                    <input type="text" id="strategyId" placeholder="Enter strategy identifier">
+                </div>
+                <div class="form-group">
+                    <label for="profileSelect">Profile:</label>
+                    <select id="profileSelect">
+                        <option value="">Select Profile</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assetSelect">Asset:</label>
+                    <select id="assetSelect">
+                        <option value="BTC/USDC">BTC/USDC</option>
+                        <option value="ETH/USDC">ETH/USDC</option>
+                        <option value="SOL/USDC">SOL/USDC</option>
+                        <option value="ADA/USDC">ADA/USDC</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="confidenceSlider">Confidence: <span id="confidenceValue">0.7</span></label>
+                    <input type="range" id="confidenceSlider" min="0.1" max="1.0" step="0.1" value="0.7">
+                </div>
+                <div class="form-group">
+                    <label for="signalStrengthSlider">Signal Strength: <span id="signalStrengthValue">0.5</span></label>
+                    <input type="range" id="signalStrengthSlider" min="0.1" max="1.0" step="0.1" value="0.5">
+                </div>
+                <button class="btn btn-primary" onclick="executeStrategy()">🚀 Execute Strategy</button>
+                <button class="btn btn-secondary" onclick="stopAllStrategies()">⏹️ Stop All</button>
+            </div>
+            
+            <!-- Profile Management Panel -->
+            <div class="panel">
+                <h3>👥 Profile Management</h3>
+                <div id="profileGrid" class="profile-grid">
+                    <!-- Profiles will be populated here -->
+                </div>
+                <button class="btn btn-primary" onclick="refreshProfiles()">🔄 Refresh Profiles</button>
+                <button class="btn btn-warning" onclick="initializeProfiles()">⚡ Initialize All</button>
+            </div>
+            
+            <!-- Session Control Panel -->
+            <div class="panel">
+                <h3>🎮 Session Control</h3>
+                <div class="form-group">
+                    <label for="sessionMode">Trading Mode:</label>
+                    <select id="sessionMode" onchange="switchSessionMode()">
+                        <option value="demo" {{ "selected" if session and session.mode == "demo" else "" }}>Demo Mode</option>
+                        <option value="live" {{ "selected" if session and session.mode == "live" else "" }}>Live Trading</option>
+                        <option value="backtest" {{ "selected" if session and session.mode == "backtest" else "" }}>Backtest Mode</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gpuToggle">GPU Acceleration:</label>
+                    <select id="gpuToggle" onchange="toggleGPU()">
+                        <option value="true">Enabled</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                </div>
+                <div class="hardware-info" id="hardwareInfo">
+                    <!-- Hardware info will be populated here -->
+                </div>
+                <button class="btn btn-primary" onclick="refreshSystemStatus()">🔄 Refresh Status</button>
+            </div>
+            
+            <!-- Visualization Control Panel -->
+            <div class="panel">
+                <h3>📊 Visualization</h3>
+                <div class="form-group">
+                    <label for="vizType">Chart Type:</label>
+                    <select id="vizType">
+                        <option value="price_chart">Price Chart</option>
+                        <option value="volume_analysis">Volume Analysis</option>
+                        <option value="technical_indicators">Technical Indicators</option>
+                        <option value="pattern_recognition">Pattern Recognition</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vizSymbol">Symbol:</label>
+                    <select id="vizSymbol">
+                        <option value="BTC/USDC">BTC/USDC</option>
+                        <option value="ETH/USDC">ETH/USDC</option>
+                        <option value="SOL/USDC">SOL/USDC</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="generateVisualization()">📈 Generate Chart</button>
+                <button class="btn btn-secondary" onclick="clearVisualization()">🗑️ Clear</button>
+            </div>
+        </div>
+        
+        <!-- Visualization Panel -->
+        <div class="panel visualization-panel">
+            <h3>📊 Live Trading Visualization</h3>
+            <div class="chart-container">
+                <canvas id="tradingChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Strategy Status Panel -->
+        <div class="panel">
+            <h3>📋 Active Strategies</h3>
+            <div id="strategyList" class="strategy-list">
+                <!-- Active strategies will be listed here -->
+            </div>
+        </div>
+        
+        <!-- AI Command Panel -->
+        <div class="panel ai-command-panel">
+            <h3>🤖 AI Command Interface</h3>
+            <div class="form-group">
+                <label for="aiCommandInput">AI Command Hash:</label>
+                <input type="text" id="aiCommandInput" class="ai-command-input" 
+                       placeholder="Enter AI command hash from Claude/GPT-4o/R1...">
+            </div>
+            <div class="form-group">
+                <label for="aiSource">AI Source:</label>
+                <select id="aiSource">
+                    <option value="claude">Claude</option>
+                    <option value="gpt4o">GPT-4o</option>
+                    <option value="r1">R1</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="processAICommand()">🤖 Process AI Command</button>
+        </div>
+        
+        <!-- System Log Panel -->
+        <div class="panel log-panel">
+            <h3>📝 System Log</h3>
+            <div id="systemLog">
+                <!-- System logs will be populated here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        
+        // Global variables
+        let tradingChart = null;
+        let systemStatus = '{{ state }}';
+        
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            setupSocketIO();
+            setupEventListeners();
+            refreshSystemStatus();
+            refreshProfiles();
+        });
+        
+        function initializeDashboard() {
+            // Initialize chart
+            const ctx = document.getElementById('tradingChart').getContext('2d');
+            tradingChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Price',
+                        data: [],
+                        borderColor: '#00ff00',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: '#333333'
+                            },
+                            ticks: {
+                                color: '#00ff00'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: '#333333'
+                            },
+                            ticks: {
+                                color: '#00ff00'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#00ff00'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Setup sliders
+            document.getElementById('confidenceSlider').addEventListener('input', function() {
+                document.getElementById('confidenceValue').textContent = this.value;
+            });
+            
+            document.getElementById('signalStrengthSlider').addEventListener('input', function() {
+                document.getElementById('signalStrengthValue').textContent = this.value;
+            });
+        }
+        
+        function setupSocketIO() {
+            socket.on('connect', function() {
+                addLogEntry('Connected to Schwabot server', 'info');
+            });
+            
+            socket.on('disconnect', function() {
+                addLogEntry('Disconnected from Schwabot server', 'warning');
+            });
+            
+            socket.on('system_status', function(data) {
+                updateSystemStatus(data.state);
+            });
+            
+            socket.on('strategy_completed', function(data) {
+                addLogEntry(`Strategy ${data.strategy_id} completed`, 'info');
+                refreshSystemStatus();
+            });
+            
+            socket.on('visualization_ready', function(data) {
+                addLogEntry(`Visualization ready for ${data.symbol}`, 'info');
+                updateChart(data);
+            });
+            
+            socket.on('ai_command_processed', function(data) {
+                addLogEntry(`AI command processed: ${data.strategy_id}`, 'info');
+            });
+        }
+        
+        function setupEventListeners() {
+            // Auto-refresh system status every 5 seconds
+            setInterval(refreshSystemStatus, 5000);
+            
+            // Auto-refresh profiles every 10 seconds
+            setInterval(refreshProfiles, 10000);
+        }
+        
+        // Strategy execution
+        async function executeStrategy() {
+            const strategyId = document.getElementById('strategyId').value;
+            const profileId = document.getElementById('profileSelect').value;
+            const asset = document.getElementById('assetSelect').value;
+            const confidence = parseFloat(document.getElementById('confidenceSlider').value);
+            const signalStrength = parseFloat(document.getElementById('signalStrengthSlider').value);
+            
+            if (!strategyId || !profileId) {
+                addLogEntry('Please provide strategy ID and profile', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/strategy/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        strategy_id: strategyId,
+                        profile_id: profileId,
+                        asset: asset,
+                        confidence: confidence,
+                        signal_strength: signalStrength
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`Strategy ${strategyId} execution started`, 'info');
+                    refreshSystemStatus();
+                } else {
+                    addLogEntry(`Strategy execution failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error executing strategy: ${error.message}`, 'error');
+            }
+        }
+        
+        function stopAllStrategies() {
+            addLogEntry('Stopping all active strategies...', 'warning');
+            // Implementation for stopping strategies
+        }
+        
+        // Profile management
+        async function refreshProfiles() {
+            try {
+                const response = await fetch('/api/profile/list');
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateProfileGrid(result.profiles);
+                } else {
+                    addLogEntry(`Failed to load profiles: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error loading profiles: ${error.message}`, 'error');
+            }
+        }
+        
+        function updateProfileGrid(profiles) {
+            const profileGrid = document.getElementById('profileGrid');
+            profileGrid.innerHTML = '';
+            
+            Object.entries(profiles).forEach(([profileId, profile]) => {
+                const profileCard = document.createElement('div');
+                profileCard.className = `profile-card ${profile.enabled ? 'profile-active' : ''}`;
+                profileCard.innerHTML = `
+                    <h4>${profile.name || profileId}</h4>
+                    <p>Status: ${profile.enabled ? 'Active' : 'Inactive'}</p>
+                    <p>Trading Pairs: ${profile.trading_pairs.join(', ')}</p>
+                    <p>Max Positions: ${profile.max_positions}</p>
+                    <button class="btn btn-primary" onclick="activateProfile('${profileId}')" 
+                            ${profile.enabled ? 'disabled' : ''}>
+                        ${profile.enabled ? 'Active' : 'Activate'}
+                    </button>
+                `;
+                profileGrid.appendChild(profileCard);
+            });
+        }
+        
+        async function activateProfile(profileId) {
+            try {
+                const response = await fetch('/api/profile/activate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ profile_id: profileId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`Profile ${profileId} activated`, 'info');
+                    refreshProfiles();
+                } else {
+                    addLogEntry(`Failed to activate profile: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error activating profile: ${error.message}`, 'error');
+            }
+        }
+        
+        function initializeProfiles() {
+            addLogEntry('Initializing all profiles...', 'info');
+            // Implementation for profile initialization
+        }
+        
+        // Session control
+        async function switchSessionMode() {
+            const newMode = document.getElementById('sessionMode').value;
+            
+            try {
+                const response = await fetch('/api/session/switch_mode', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mode: newMode })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`Switched to ${newMode} mode`, 'info');
+                } else {
+                    addLogEntry(`Failed to switch mode: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error switching mode: ${error.message}`, 'error');
+            }
+        }
+        
+        async function toggleGPU() {
+            const enableGPU = document.getElementById('gpuToggle').value === 'true';
+            
+            try {
+                const response = await fetch('/api/hardware/gpu_toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ enable_gpu: enableGPU })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`GPU acceleration ${enableGPU ? 'enabled' : 'disabled'}`, 'info');
+                    refreshSystemStatus();
+                } else {
+                    addLogEntry(`Failed to toggle GPU: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error toggling GPU: ${error.message}`, 'error');
+            }
+        }
+        
+        // Visualization
+        async function generateVisualization() {
+            const vizType = document.getElementById('vizType').value;
+            const symbol = document.getElementById('vizSymbol').value;
+            
+            try {
+                const response = await fetch('/api/visualization/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: vizType,
+                        symbol: symbol
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`Visualization generation started for ${symbol}`, 'info');
+                } else {
+                    addLogEntry(`Failed to generate visualization: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error generating visualization: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearVisualization() {
+            if (tradingChart) {
+                tradingChart.data.labels = [];
+                tradingChart.data.datasets[0].data = [];
+                tradingChart.update();
+            }
+            addLogEntry('Visualization cleared', 'info');
+        }
+        
+        function updateChart(data) {
+            if (tradingChart && data.chart_data) {
+                // Update chart with new data
+                // This is a simplified implementation
+                const timestamp = new Date().toLocaleTimeString();
+                tradingChart.data.labels.push(timestamp);
+                tradingChart.data.datasets[0].data.push(Math.random() * 1000 + 50000);
+                
+                if (tradingChart.data.labels.length > 50) {
+                    tradingChart.data.labels.shift();
+                    tradingChart.data.datasets[0].data.shift();
+                }
+                
+                tradingChart.update();
+            }
+        }
+        
+        // AI Command processing
+        async function processAICommand() {
+            const commandHash = document.getElementById('aiCommandInput').value;
+            const source = document.getElementById('aiSource').value;
+            
+            if (!commandHash) {
+                addLogEntry('Please enter an AI command hash', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/ai/command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        command_hash: commandHash,
+                        source: source
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLogEntry(`AI command processing started: ${commandHash}`, 'info');
+                    document.getElementById('aiCommandInput').value = '';
+                } else {
+                    addLogEntry(`Failed to process AI command: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLogEntry(`Error processing AI command: ${error.message}`, 'error');
+            }
+        }
+        
+        // System status
+        async function refreshSystemStatus() {
+            try {
+                const response = await fetch('/api/system/status');
+                const data = await response.json();
+                
+                updateSystemStatus(data.system_state);
+                updateMetrics(data);
+                updateHardwareInfo(data.hardware);
+            } catch (error) {
+                addLogEntry(`Error refreshing system status: ${error.message}`, 'error');
+            }
+        }
+        
+        function updateSystemStatus(state) {
+            systemStatus = state;
+            const statusElement = document.getElementById('systemStatus');
+            const statusText = document.getElementById('systemStatusText');
+            
+            statusElement.className = `status-indicator status-${state}`;
+            statusText.textContent = `System Status: ${state.charAt(0).toUpperCase() + state.slice(1)}`;
+        }
+        
+        function updateMetrics(data) {
+            if (data.session) {
+                document.getElementById('portfolioValue').textContent = `$${data.session.portfolio_value.toFixed(2)}`;
+                document.getElementById('totalProfit').textContent = `$${data.session.total_profit.toFixed(2)}`;
+                document.getElementById('currentPrice').textContent = `$${data.session.current_price.toFixed(2)}`;
+                document.getElementById('apiStatus').textContent = data.session.api_connected ? 'Connected' : 'Disconnected';
+            }
+            
+            if (data.metrics) {
+                document.getElementById('winRate').textContent = `${data.metrics.win_rate.toFixed(1)}%`;
+                document.getElementById('activeStrategies').textContent = data.active_strategies;
+            }
+        }
+        
+        function updateHardwareInfo(hardware) {
+            const hardwareInfo = document.getElementById('hardwareInfo');
+            hardwareInfo.innerHTML = `
+                <div class="hardware-item">
+                    <div class="hardware-value">${hardware.gpu_available ? 'Yes' : 'No'}</div>
+                    <div class="hardware-label">GPU Available</div>
+                </div>
+                <div class="hardware-item">
+                    <div class="hardware-value">${hardware.gpu_enabled ? 'Yes' : 'No'}</div>
+                    <div class="hardware-label">GPU Enabled</div>
+                </div>
+                <div class="hardware-item">
+                    <div class="hardware-value">${hardware.cpu_cores || 0}</div>
+                    <div class="hardware-label">CPU Cores</div>
+                </div>
+                <div class="hardware-item">
+                    <div class="hardware-value">${hardware.memory_gb || 0}GB</div>
+                    <div class="hardware-label">Memory</div>
+                </div>
+            `;
+        }
+        
+        // Logging
+        function addLogEntry(message, type = 'info') {
+            const logContainer = document.getElementById('systemLog');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Keep only last 100 log entries
+            while (logContainer.children.length > 100) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }
+    </script>
+</body>
+</html> 

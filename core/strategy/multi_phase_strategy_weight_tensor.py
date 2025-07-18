@@ -35,290 +35,211 @@ import numpy as np
 
 # Check for mathematical infrastructure availability
 try:
-from core.math_config_manager import MathConfigManager
-from core.math_cache import MathResultCache
-from core.math_orchestrator import MathOrchestrator
-MATH_INFRASTRUCTURE_AVAILABLE = True
+    from core.math_config_manager import MathConfigManager
+    from core.math_cache import MathResultCache
+    from core.math_orchestrator import MathOrchestrator
+    MATH_INFRASTRUCTURE_AVAILABLE = True
 except ImportError:
-MATH_INFRASTRUCTURE_AVAILABLE = False
-MathConfigManager = None
-MathResultCache = None
-MathOrchestrator = None
+    MATH_INFRASTRUCTURE_AVAILABLE = False
+    MathConfigManager = None
+    MathResultCache = None
+    MathOrchestrator = None
 
 class MarketPhase(Enum):
-"""Market phase enumeration."""
-BULL = "bull"
-BEAR = "bear"
-SIDEWAYS = "sideways"
-VOLATILE = "volatile"
-TRENDING = "trending"
+    """Market phase enumeration."""
+    BULL = "bull"
+    BEAR = "bear"
+    SIDEWAYS = "sideways"
+    VOLATILE = "volatile"
+    TRENDING = "trending"
 
 class Status(Enum):
-"""System status enumeration."""
-ACTIVE = "active"
-INACTIVE = "inactive"
-ERROR = "error"
-PROCESSING = "processing"
+    """System status enumeration."""
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    ERROR = "error"
+    PROCESSING = "processing"
 
 @dataclass
 class PhaseTensorConfig:
-"""Configuration data class for phase tensor operations."""
-enabled: bool = True
-timeout: float = 30.0
-retries: int = 3
-debug: bool = False
-decay_factor: float = 0.95
-learning_rate: float = 0.01
-momentum_drift_coefficient: float = 0.1  # α for momentum drift correction
-entropy_correction_factor: float = 0.05  # For entropy-corrected time states
-ferris_tick_window: int = 100  # Window for Ferris tick mapping
+    """Configuration data class for phase tensor operations."""
+    enabled: bool = True
+    timeout: float = 30.0
+    retries: int = 3
+    debug: bool = False
+    decay_factor: float = 0.95
+    learning_rate: float = 0.01
+    momentum_drift_coefficient: float = 0.1  # α for momentum drift correction
+    entropy_correction_factor: float = 0.05  # For entropy-corrected time states
+    ferris_tick_window: int = 100  # Window for Ferris tick mapping
 
 @dataclass
 class PhaseTensorResult:
-"""Result data class for phase tensor operations."""
-success: bool = False
-phase_tensor: Optional[np.ndarray] = None
-composite_signal: Optional[float] = None
-momentum_drift: Optional[float] = None
-weight_updates: Optional[np.ndarray] = None
-data: Optional[Dict[str, Any]] = None
-error: Optional[str] = None
-timestamp: float = field(default_factory=time.time)
+    """Result data class for phase tensor operations."""
+    success: bool = False
+    phase_tensor: Optional[np.ndarray] = None
+    composite_signal: Optional[float] = None
+    momentum_drift: Optional[float] = None
+    weight_updates: Optional[np.ndarray] = None
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+    timestamp: float = field(default_factory=time.time)
 
 class PhaseTensorCalculator:
-"""Phase Tensor Calculator implementing the mathematical framework."""
+    """Phase Tensor Calculator implementing the mathematical framework."""
 
-def __init__(self, config: Optional[PhaseTensorConfig] = None) -> None:
-self.config = config or PhaseTensorConfig()
-self.logger = logging.getLogger(f"{__name__}.PhaseTensorCalculator")
-self.previous_phase_signals = None
-self.ferris_tick_history = []
+    def __init__(self, config: Optional[PhaseTensorConfig] = None) -> None:
+        self.config = config or PhaseTensorConfig()
+        self.logger = logging.getLogger(f"{__name__}.PhaseTensorCalculator")
+        self.previous_phase_signals = None
+        self.ferris_tick_history = []
 
-def calculate_momentum_drift_correction(self, current_time: float,
-phase_signals: np.ndarray) -> float:
-"""
-Calculate momentum drift correction ΔΨ(t) from Ferris tick mapping.
+    def calculate_momentum_drift_correction(self, current_time: float,
+                                           phase_signals: np.ndarray) -> float:
+        """
+        Calculate momentum drift correction ΔΨ(t) from Ferris tick mapping.
 
-Args:
-current_time: Current time t
-phase_signals: Current phase signals Φᵢ(t)
+        Args:
+        current_time: Current time t
+        phase_signals: Current phase signals Φᵢ(t)
 
-Returns:
-Momentum drift correction value
-"""
-try:
-# Store Ferris tick data
-tick_data = {
-'time': current_time,
-'signals': phase_signals.copy(),
-'timestamp': time.time()
-}
-self.ferris_tick_history.append(tick_data)
+        Returns:
+        Momentum drift correction value
+        """
+        try:
+            # Store Ferris tick data
+            tick_data = {
+                'time': current_time,
+                'signals': phase_signals.copy(),
+                'timestamp': time.time()
+            }
+            self.ferris_tick_history.append(tick_data)
 
-# Keep only recent history
-if len(self.ferris_tick_history) > self.config.ferris_tick_window:
-self.ferris_tick_history.pop(0)
+            # Keep only recent history
+            if len(self.ferris_tick_history) > self.config.ferris_tick_window:
+                self.ferris_tick_history.pop(0)
 
-# Calculate momentum drift from recent history
-if len(self.ferris_tick_history) < 2:
-return 0.0
+            # Calculate momentum drift from recent history
+            if len(self.ferris_tick_history) < 2:
+                return 0.0
 
-# Calculate signal velocity over recent ticks
-recent_signals = np.array([tick['signals'] for tick in self.ferris_tick_history[-5:]])
-signal_velocity = np.mean(np.diff(recent_signals, axis=0), axis=0)
+            # Calculate signal velocity over recent ticks
+            recent_signals = np.array([tick['signals'] for tick in self.ferris_tick_history[-5:]])
+            signal_velocity = np.mean(np.diff(recent_signals, axis=0), axis=0)
 
-# Momentum drift correction based on signal velocity variance
-momentum_drift = np.var(signal_velocity) * self.config.momentum_drift_coefficient
+            # Momentum drift correction based on signal velocity variance
+            momentum_drift = np.var(signal_velocity) * self.config.momentum_drift_coefficient
 
-self.logger.debug(f"Momentum drift correction: {momentum_drift:.6f}")
-return float(momentum_drift)
+            self.logger.debug(f"Momentum drift correction: {momentum_drift:.6f}")
+            return float(momentum_drift)
 
-except Exception as e:
-self.logger.error(f"Error calculating momentum drift: {e}")
-return 0.0
+        except Exception as e:
+            self.logger.error(f"Error calculating momentum drift: {e}")
+            return 0.0
 
-def calculate_phase_tensor(self, phase_signals: np.ndarray,
-weight_matrix: np.ndarray,
-current_time: float) -> np.ndarray:
-"""
-Calculate phase tensor Tᵢⱼ(t) = Φᵢ(t) ⋅ ωᵢⱼ(t) + ΔΨ(t)
+    def calculate_phase_tensor(self, phase_signals: np.ndarray,
+                              weight_matrix: np.ndarray,
+                              current_time: float) -> np.ndarray:
+        """
+        Calculate phase tensor Tᵢⱼ(t) = Φᵢ(t) ⋅ ωᵢⱼ(t) + ΔΨ(t)
 
-Args:
-phase_signals: Strategy phase signals Φᵢ(t)
-weight_matrix: Weight matrix ωᵢⱼ(t)
-current_time: Current time t
+        Args:
+        phase_signals: Strategy phase signals Φᵢ(t)
+        weight_matrix: Weight matrix ωᵢⱼ(t)
+        current_time: Current time t
 
-Returns:
-Phase tensor Tᵢⱼ(t)
-"""
-try:
-# Calculate momentum drift correction
-momentum_drift = self.calculate_momentum_drift_correction(current_time, phase_signals)
+        Returns:
+        Phase tensor Tᵢⱼ(t)
+        """
+        try:
+            # Calculate momentum drift correction
+            momentum_drift = self.calculate_momentum_drift_correction(current_time, phase_signals)
 
-# Phase tensor calculation: Tᵢⱼ(t) = Φᵢ(t) ⋅ ωᵢⱼ(t) + ΔΨ(t)
-# Outer product of phase signals with weight matrix
-phase_tensor = np.outer(phase_signals, phase_signals) * weight_matrix
+            # Phase tensor calculation: Tᵢⱼ(t) = Φᵢ(t) ⋅ ωᵢⱼ(t) + ΔΨ(t)
+            # Outer product of phase signals with weight matrix
+            phase_tensor = np.outer(phase_signals, phase_signals) * weight_matrix
 
-# Add momentum drift correction
-phase_tensor += momentum_drift
+            # Add momentum drift correction
+            phase_tensor += momentum_drift
 
-self.logger.debug(f"Phase tensor calculated: shape {phase_tensor.shape}")
-return phase_tensor
+            self.logger.debug(f"Phase tensor calculated: shape {phase_tensor.shape}")
+            return phase_tensor
 
-except Exception as e:
-self.logger.error(f"Error calculating phase tensor: {e}")
-return np.zeros((len(phase_signals), len(phase_signals)))
+        except Exception as e:
+            self.logger.error(f"Error calculating phase tensor: {e}")
+            return np.zeros((len(phase_signals), len(phase_signals)))
 
-def update_weights_recursively(self, current_weights: np.ndarray,
-phase_signals: np.ndarray,
-learning_rate: float = None) -> np.ndarray:
-"""
-Recursively update weights: ωᵢⱼ(t+1) = ωᵢⱼ(t) + α ⋅ (dΦⱼ/dt - dΦᵢ/dt)
+    def update_weights_recursively(self, current_weights: np.ndarray,
+                                  phase_signals: np.ndarray,
+                                  learning_rate: float = None) -> np.ndarray:
+        """
+        Recursively update weights: ωᵢⱼ(t+1) = ωᵢⱼ(t) + α ⋅ (dΦⱼ/dt - dΦᵢ/dt)
 
-Args:
-current_weights: Current weight matrix ωᵢⱼ(t)
-phase_signals: Current phase signals Φᵢ(t)
-learning_rate: Learning rate α
+        Args:
+        current_weights: Current weight matrix ωᵢⱼ(t)
+        phase_signals: Current phase signals Φᵢ(t)
+        learning_rate: Learning rate α
 
-Returns:
-Updated weight matrix ωᵢⱼ(t+1)
-"""
-try:
-if learning_rate is None:
-learning_rate = self.config.learning_rate
+        Returns:
+        Updated weight matrix ωᵢⱼ(t+1)
+        """
+        try:
+            if learning_rate is None:
+                learning_rate = self.config.learning_rate
 
-# Calculate phase signal derivatives if we have previous signals
-if self.previous_phase_signals is not None:
-# Simple finite difference for derivatives
-dt = 1.0  # Assuming unit time step
-d_phase_dt = (phase_signals - self.previous_phase_signals) / dt
+            # Calculate phase signal derivatives if we have previous signals
+            if self.previous_phase_signals is not None:
+                # Simple finite difference for derivatives
+                dt = 1.0  # Assuming unit time step
+                d_phase_dt = (phase_signals - self.previous_phase_signals) / dt
 
-# Calculate weight updates: α ⋅ (dΦⱼ/dt - dΦᵢ/dt)
-# Outer product of derivatives
-derivative_matrix = np.outer(d_phase_dt, d_phase_dt)
-weight_updates = learning_rate * derivative_matrix
+                # Calculate weight updates: α ⋅ (dΦⱼ/dt - dΦᵢ/dt)
+                # Outer product of derivatives
+                derivative_matrix = np.outer(d_phase_dt, d_phase_dt)
+                weight_updates = learning_rate * derivative_matrix
 
-# Apply updates
-updated_weights = current_weights + weight_updates
+                # Apply updates
+                updated_weights = current_weights + weight_updates
 
-# Ensure weights remain positive
-updated_weights = np.maximum(updated_weights, 0.0)
+                # Ensure weights remain positive
+                updated_weights = np.maximum(updated_weights, 0.0)
 
-self.logger.debug(f"Weights updated with learning rate {learning_rate}")
-else:
-updated_weights = current_weights
+                self.logger.debug(f"Weights updated with learning rate {learning_rate}")
+            else:
+                updated_weights = current_weights
 
-# Store current signals for next iteration
-self.previous_phase_signals = phase_signals.copy()
+            # Store current signals for next iteration
+            self.previous_phase_signals = phase_signals.copy()
 
-return updated_weights
+            return updated_weights
 
-except Exception as e:
-self.logger.error(f"Error updating weights recursively: {e}")
-return current_weights
+        except Exception as e:
+            self.logger.error(f"Error updating weights recursively: {e}")
+            return current_weights
 
-def calculate_composite_signal(self, phase_tensor: np.ndarray,
-profit_vectors: np.ndarray) -> float:
-"""
-Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
+    def calculate_composite_signal(self, phase_tensor: np.ndarray,
+                                  profit_vectors: np.ndarray) -> float:
+        """
+        Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
 
-Args:
-phase_tensor: Phase tensor Tᵢⱼ(t)
-profit_vectors: Positional profit vectors Pᵢ(t)
+        Args:
+        phase_tensor: Phase tensor Tᵢⱼ(t)
+        profit_vectors: Positional profit vectors Pᵢ(t)
 
-Returns:
-Composite signal S(t)
-"""
-try:
-# Apply entropy correction to profit vectors
-entropy_correction = 1.0 + self.config.entropy_correction_factor * np.random.normal(0, 1)
-corrected_profits = profit_vectors * entropy_correction
+        Returns:
+        Composite signal S(t)
+        """
+        try:
+            # Apply entropy correction to profit vectors
+            entropy_correction = 1.0 + self.config.entropy_correction_factor * np.random.normal(0, 1)
+            corrected_profit_vectors = profit_vectors * entropy_correction
 
-# Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
-# This is equivalent to: phase_tensor * corrected_profits (element-wise) then sum
-composite_signal = np.sum(phase_tensor * corrected_profits)
+            # Calculate composite signal: S(t) = Σᵢⱼ Tᵢⱼ(t) ⋅ Pᵢ(t)
+            composite_signal = np.sum(phase_tensor * corrected_profit_vectors)
 
-self.logger.debug(f"Composite signal calculated: {composite_signal:.6f}")
-return float(composite_signal)
+            self.logger.debug(f"Composite signal calculated: {composite_signal:.6f}")
+            return float(composite_signal)
 
-except Exception as e:
-self.logger.error(f"Error calculating composite signal: {e}")
-return 0.0
-
-def process_phase_tensor_operation(self, phase_signals: np.ndarray,
-weight_matrix: np.ndarray,
-profit_vectors: np.ndarray,
-current_time: float = None) -> PhaseTensorResult:
-"""
-Process complete phase tensor operation.
-
-Args:
-phase_signals: Strategy phase signals Φᵢ(t)
-weight_matrix: Weight matrix ωᵢⱼ(t)
-profit_vectors: Positional profit vectors Pᵢ(t)
-current_time: Current time t
-
-Returns:
-PhaseTensorResult with all calculations
-"""
-try:
-if current_time is None:
-current_time = time.time()
-
-# Calculate phase tensor
-phase_tensor = self.calculate_phase_tensor(phase_signals, weight_matrix, current_time)
-
-# Calculate momentum drift
-momentum_drift = self.calculate_momentum_drift_correction(current_time, phase_signals)
-
-# Update weights recursively
-updated_weights = self.update_weights_recursively(weight_matrix, phase_signals)
-
-# Calculate composite signal
-composite_signal = self.calculate_composite_signal(phase_tensor, profit_vectors)
-
-# Prepare result
-result = PhaseTensorResult(
-success=True,
-phase_tensor=phase_tensor,
-composite_signal=composite_signal,
-momentum_drift=momentum_drift,
-weight_updates=updated_weights - weight_matrix,
-data={
-'phase_signals': phase_signals.tolist(),
-'original_weights': weight_matrix.tolist(),
-'updated_weights': updated_weights.tolist(),
-'profit_vectors': profit_vectors.tolist()
-}
-)
-
-self.logger.info(f"Phase tensor operation completed successfully")
-return result
-
-except Exception as e:
-self.logger.error(f"Error processing phase tensor operation: {e}")
-return PhaseTensorResult(success=False, error=str(e))
-
-def get_phase_tensor_status(self) -> Dict[str, Any]:
-"""Get phase tensor calculator status."""
-try:
-return {
-'enabled': self.config.enabled,
-'ferris_tick_history_size': len(self.ferris_tick_history),
-'has_previous_signals': self.previous_phase_signals is not None,
-'config': {
-'learning_rate': self.config.learning_rate,
-'momentum_drift_coefficient': self.config.momentum_drift_coefficient,
-'entropy_correction_factor': self.config.entropy_correction_factor,
-'ferris_tick_window': self.config.ferris_tick_window
-}
-}
-
-except Exception as e:
-self.logger.error(f"Error getting phase tensor status: {e}")
-return {'error': str(e)}
-
-# Factory function
-def create_phase_tensor_calculator(config: Optional[PhaseTensorConfig] = None) -> PhaseTensorCalculator:
-"""Create a Phase Tensor Calculator instance."""
-return PhaseTensorCalculator(config)
+        except Exception as e:
+            self.logger.error(f"Error calculating composite signal: {e}")
+            return 0.0
