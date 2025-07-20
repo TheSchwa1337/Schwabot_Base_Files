@@ -38,6 +38,14 @@ except ImportError as e:
     logging.warning(f"Lantern Core not available: {e}")
     LANTERN_AVAILABLE = False
 
+# Import Kaprekar analyzer for enhanced entropy scoring
+try:
+    from core.mathlib.kaprekar_analyzer import KaprekarAnalyzer
+    KAPREKAR_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Kaprekar analyzer not available: {e}")
+    KAPREKAR_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 class StrategyType(Enum):
@@ -176,6 +184,10 @@ class StrategyMapper:
         self.ghost_reentry_queue: List['EchoSignal'] = []
         self.echo_activation_history: List[Dict[str, Any]] = []
 
+        # Kaprekar integration for enhanced entropy scoring
+        self.kaprekar_analyzer = KaprekarAnalyzer() if KAPREKAR_AVAILABLE else None
+        self.kaprekar_entropy_weight = self.config.get('kaprekar_entropy_weight', 0.3)
+
         self.logger.info("Strategy Mapper initialized")
 
     def _default_config(self) -> Dict[str, Any]:
@@ -190,7 +202,12 @@ class StrategyMapper:
             'cache_size': 1024,
             'enable_4bit': True,
             'enable_8bit': True,
-            'enable_drift': True
+            'enable_drift': True,
+            # Kaprekar integration settings
+            'kaprekar_enabled': True,
+            'kaprekar_entropy_weight': 0.3,
+            'kaprekar_confidence_threshold': 0.7,
+            'kaprekar_strategy_boost': True
         }
 
     def register_profile(self, profile_id: str, profile_config: Dict[str, Any]) -> bool:
@@ -461,7 +478,7 @@ strategy_type: StrategyType) -> Tuple[float, float]:
             return [0.02, 0.05, 0.08, 0.12, 0.15]
 
     def _calculate_entropy_score(self, current_hash: str, assets: List[str]) -> float:
-        """Calculate entropy score based on hash and assets."""
+        """Calculate entropy score based on hash and assets with Kaprekar enhancement."""
         try:
             hash_int = int(current_hash[:8], 16)
 
@@ -471,8 +488,35 @@ strategy_type: StrategyType) -> Tuple[float, float]:
             # Asset diversity factor
             asset_diversity = len(set(assets)) / len(assets) if assets else 1.0
 
-            # Calculate final entropy score
+            # Calculate base entropy score
             entropy_score = base_entropy * asset_diversity
+
+            # Kaprekar enhancement if available
+            if (self.kaprekar_analyzer and 
+                self.config.get('kaprekar_enabled', True)):
+                
+                # Analyze hash fragment with Kaprekar
+                kaprekar_result = self.kaprekar_analyzer.analyze_hash_fragment(current_hash[:4])
+                
+                if kaprekar_result.is_convergent:
+                    # Apply Kaprekar entropy boost based on convergence speed
+                    kaprekar_entropy_boost = 1.0 - (kaprekar_result.steps_to_converge / 7.0)
+                    
+                    # Weight the Kaprekar contribution
+                    kaprekar_weight = self.config.get('kaprekar_entropy_weight', 0.3)
+                    base_weight = 1.0 - kaprekar_weight
+                    
+                    # Combine base entropy with Kaprekar enhancement
+                    entropy_score = (
+                        base_weight * entropy_score + 
+                        kaprekar_weight * kaprekar_entropy_boost
+                    )
+                    
+                    self.logger.debug(f"Kaprekar enhancement applied: {kaprekar_result.steps_to_converge} steps, boost: {kaprekar_entropy_boost:.3f}")
+                else:
+                    # Penalty for chaotic signals
+                    entropy_score *= 0.8
+                    self.logger.debug("Kaprekar chaotic signal - entropy penalty applied")
 
             return min(entropy_score, 1.0)
 

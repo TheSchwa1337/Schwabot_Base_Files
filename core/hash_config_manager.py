@@ -19,6 +19,25 @@ class HashConfigManager:
         self.config = {}
         self.load_config()
     
+    def initialize(self, cli_truncated_hash: bool = False, cli_hash_length: int = None):
+        """Initialize the hash configuration manager with CLI options."""
+        try:
+            # Update config with CLI options if provided
+            if cli_truncated_hash is not None:
+                self.config['truncated_hash'] = cli_truncated_hash
+            
+            if cli_hash_length is not None:
+                self.config['hash_length'] = cli_hash_length
+            
+            # Save updated config
+            self.save_config()
+            
+            logger.info("Hash configuration manager initialized successfully")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize hash configuration manager: {e}")
+            return False
+    
     def load_config(self):
         """Load configuration from file."""
         try:
@@ -47,7 +66,16 @@ class HashConfigManager:
             "hash_algorithm": "sha256",
             "salt_length": 32,
             "iterations": 100000,
-            "key_length": 64
+            "key_length": 64,
+            "truncated_hash": False,
+            "hash_length": 32,
+            # Kaprekar integration settings
+            "kaprekar_enabled": True,
+            "kaprekar_confidence_threshold": 0.7,
+            "kaprekar_entropy_weight": 0.3,
+            "kaprekar_strategy_boost": True,
+            "kaprekar_max_steps": 7,
+            "kaprekar_reject_threshold": 99
         }
     
     def get_config(self, key: str, default=None):

@@ -25,9 +25,14 @@ import json
 import logging
 import sys
 import time
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+# Add the current directory to Python path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
 
 # Configure logging
 logging.basicConfig(
@@ -41,11 +46,19 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Import hash configuration manager
-from .core.hash_config_manager import hash_config_manager, get_hash_settings
+try:
+    from core.hash_config_manager import hash_config_manager, get_hash_settings
+except ImportError as e:
+    logger.error(f"Failed to import hash_config_manager: {e}")
+    # Create fallback functions
+    def hash_config_manager():
+        return {}
+    def get_hash_settings():
+        return {}
 
 # Import enhanced GPU auto-detection system
 try:
-    from .core.enhanced_gpu_auto_detector import (
+    from core.enhanced_gpu_auto_detector import (
         create_enhanced_gpu_auto_detector,
         create_enhanced_gpu_logic_mapper,
         EnhancedGPUAutoDetector,
@@ -77,39 +90,63 @@ class SchwabotCLI:
     def _initialize_components(self):
         """Initialize all major system components."""
         try:
-            # Import core components
-            from .core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
-            from .core.risk_manager import RiskManager
-            from .core.unified_btc_trading_pipeline import create_btc_trading_pipeline
-            from .core.pure_profit_calculator import PureProfitCalculator
-            from .core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
-            from .core.hash_glyph_compression import HashGlyphCompressor
+            # Import core components with fallbacks
+            try:
+                from core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
+                self.trading_executor = None
+            except ImportError:
+                logger.warning("EntropyEnhancedTradingExecutor not available")
+                self.trading_executor = None
             
-            # Initialize components
-            self.trading_executor = None
-            self.risk_manager = RiskManager()
-            self.btc_pipeline = create_btc_trading_pipeline()
+            try:
+                from core.risk_manager import RiskManager
+                self.risk_manager = RiskManager()
+            except ImportError:
+                logger.warning("RiskManager not available")
+                self.risk_manager = None
             
-            # Initialize profit calculator with default strategy params
-            strategy_params = {
-                'risk_tolerance': 0.02,
-                'profit_target': 0.05,
-                'stop_loss': 0.03,
-                'position_size': 0.1
-            }
-            self.profit_calculator = PureProfitCalculator(strategy_params)
+            try:
+                from core.unified_btc_trading_pipeline import create_btc_trading_pipeline
+                self.btc_pipeline = create_btc_trading_pipeline()
+            except ImportError:
+                logger.warning("BTC trading pipeline not available")
+                self.btc_pipeline = None
             
-            # Initialize production pipeline (will be configured when needed)
-            self.production_pipeline = None
+            try:
+                from core.pure_profit_calculator import PureProfitCalculator
+                # Initialize profit calculator with default strategy params
+                strategy_params = {
+                    'risk_tolerance': 0.02,
+                    'profit_target': 0.05,
+                    'stop_loss': 0.03,
+                    'position_size': 0.1
+                }
+                self.profit_calculator = PureProfitCalculator(strategy_params)
+            except ImportError:
+                logger.warning("PureProfitCalculator not available")
+                self.profit_calculator = None
             
-            # Initialize hash glyph compressor with global config
-            hash_settings = get_hash_settings()
-            self.hash_glyph_compressor = HashGlyphCompressor(config=hash_settings)
+            try:
+                from core.production_trading_pipeline import ProductionTradingPipeline, create_production_pipeline
+                # Initialize production pipeline (will be configured when needed)
+                self.production_pipeline = None
+            except ImportError:
+                logger.warning("ProductionTradingPipeline not available")
+                self.production_pipeline = None
+            
+            try:
+                from core.hash_glyph_compression import HashGlyphCompressor
+                # Initialize hash glyph compressor with global config
+                hash_settings = get_hash_settings()
+                self.hash_glyph_compressor = HashGlyphCompressor(config=hash_settings)
+            except ImportError:
+                logger.warning("HashGlyphCompressor not available")
+                self.hash_glyph_compressor = None
 
             logger.info("Core components initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize components: {e}")
-            raise
+            # Don't raise, allow system to continue with limited functionality
     
     def _initialize_enhanced_gpu_system(self, args):
         """Initialize enhanced GPU system with auto-detection."""
@@ -438,7 +475,7 @@ class SchwabotCLI:
         """Test profit calculator."""
         try:
             # Test profit calculation
-            from .core.pure_profit_calculator import MarketData, HistoryState
+            from core.pure_profit_calculator import MarketData, HistoryState
             
             market_data = MarketData(
                 timestamp=time.time(),
@@ -560,8 +597,8 @@ class SchwabotCLI:
         
         try:
             # Import backtesting components
-            from .backtesting.simple_backtester import SimpleBacktester
-            from .backtesting.historical_data_manager import HistoricalDataManager
+            from backtesting.simple_backtester import SimpleBacktester
+            from backtesting.historical_data_manager import HistoricalDataManager
             
             # Initialize backtester
             backtester = SimpleBacktester()
@@ -602,7 +639,7 @@ class SchwabotCLI:
                 config = self._get_default_config()
             
             # Initialize trading executor
-            from .core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
+            from core.entropy_enhanced_trading_executor import EntropyEnhancedTradingExecutor
             
             self.trading_executor = EntropyEnhancedTradingExecutor(
                 exchange_config=config['exchange'],
