@@ -18,8 +18,9 @@ from flask import Blueprint, jsonify, request
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from core.automated_strategy_engine import AutomatedStrategyEngine
-from core.automated_trading_engine import AutomatedTradingEngine
+# Temporarily comment out problematic imports to focus on Enhanced Forever Fractal System
+# from core.automated_strategy_engine import AutomatedStrategyEngine
+# from core.automated_trading_engine import AutomatedTradingEngine
 
 logger = logging.getLogger(__name__)
 
@@ -30,22 +31,25 @@ trading_engine = None
 strategy_engine = None
 
 
-def get_trading_engine() -> AutomatedTradingEngine:
+def get_trading_engine():
     """Get or create trading engine instance."""
     global trading_engine
     if trading_engine is None:
+        # Temporarily return None to avoid import errors
         # Initialize with Coinbase configuration
-        exchange_config = {'name': 'coinbase', 'sandbox': True}  # Use sandbox for testing
-        trading_engine = AutomatedTradingEngine(exchange_config)
+        # exchange_config = {'name': 'coinbase', 'sandbox': True}  # Use sandbox for testing
+        # trading_engine = AutomatedTradingEngine(exchange_config)
+        trading_engine = None
     return trading_engine
 
 
-def get_strategy_engine() -> AutomatedStrategyEngine:
+def get_strategy_engine():
     """Get or create strategy engine instance."""
     global strategy_engine
     if strategy_engine is None:
-        trading_engine = get_trading_engine()
-        strategy_engine = AutomatedStrategyEngine(trading_engine)
+        # trading_engine = get_trading_engine()
+        # strategy_engine = AutomatedStrategyEngine(trading_engine)
+        strategy_engine = None
     return strategy_engine
 
 

@@ -1,0 +1,12 @@
+active_orbital_shells:
+- 2
+- 4
+- 6
+- 8
+current_shell: 2
+ferris_rde_state:
+  gravity_center: 0.5
+  momentum_factor: 1.0
+  orbital_velocity: 1.0
+  spiral_radius: 1.0
+ferris_ride_mode: true

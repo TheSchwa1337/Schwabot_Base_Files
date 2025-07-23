@@ -99,6 +99,48 @@ def get_hash_settings() -> Dict[str, Any]:
     """Get hash settings for use in other modules."""
     return hash_config_manager.config
 
+def generate_hash_from_string(input_string: str) -> str:
+    """
+    Generate a hash from a string input.
+    
+    Args:
+        input_string: String to hash
+        
+    Returns:
+        Generated hash string
+    """
+    try:
+        import hashlib
+        
+        # Get hash settings
+        settings = get_hash_settings()
+        algorithm = settings.get('hash_algorithm', 'sha256')
+        
+        # Generate hash
+        if algorithm == 'sha256':
+            hash_object = hashlib.sha256(input_string.encode('utf-8'))
+        elif algorithm == 'sha512':
+            hash_object = hashlib.sha512(input_string.encode('utf-8'))
+        elif algorithm == 'md5':
+            hash_object = hashlib.md5(input_string.encode('utf-8'))
+        else:
+            # Default to sha256
+            hash_object = hashlib.sha256(input_string.encode('utf-8'))
+        
+        hash_hex = hash_object.hexdigest()
+        
+        # Truncate if configured
+        if settings.get('truncated_hash', False):
+            hash_length = settings.get('hash_length', 32)
+            hash_hex = hash_hex[:hash_length]
+        
+        return hash_hex
+        
+    except Exception as e:
+        logger.error(f"Error generating hash from string: {e}")
+        # Return a fallback hash
+        return "00000000000000000000000000000000"
+
 # Test function
 def test_hash_config_manager():
     """Test the hash config manager."""

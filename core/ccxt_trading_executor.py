@@ -45,9 +45,9 @@ class TradingPair(Enum):
     XRP_USDC = "XRP/USDC"
     SOL_USDC = "SOL/USDC"
     USDC_USD = "USDC/USD"
-    USDT_USD = "USDT/USD"
-    BTC_USDT = "BTC/USDT"
-    ETH_USDT = "ETH/USDT"
+    # USDT_USD = "USDT/USD"  # REMOVED - USDC only
+    # BTC_USDT = "BTC/USDT"  # REMOVED - USDC only
+    # ETH_USDT = "ETH/USDT"  # REMOVED - USDC only
 
 class OrderType(Enum):
     """Order type enumeration."""

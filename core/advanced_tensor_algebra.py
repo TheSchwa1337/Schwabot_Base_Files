@@ -755,7 +755,7 @@ class GroupTheoryOperations:
             elif group_type == "U(1)":
                 # Unitary group in 1D
                 generator = np.array([[1j]])
-                else:
+            else:
                 # Default identity
                 generator = np.eye(dimension)
 
@@ -1226,7 +1226,7 @@ class AdvancedTensorAlgebra:
                 entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
                 return float(entropy)
             else:
-            return 0.0
+                return 0.0
 
         except Exception as e:
             logger.error(f"Market entropy calculation failed: {e}")
@@ -1257,7 +1257,7 @@ class AdvancedTensorAlgebra:
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
         try:
-        return {
+            return {
                 'operation_count': self.operation_count,
                 'cache_hits': self.cache_hits,
                 'cache_misses': self.cache_misses,

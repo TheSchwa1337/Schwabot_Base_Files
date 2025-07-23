@@ -214,63 +214,125 @@ class RealBacktestingSystem:
             raise
     
     async def _get_historical_data(self, symbol: str) -> Optional[pd.DataFrame]:
-        """Get historical market data for a symbol."""
+        """Get historical market data for a symbol from REAL exchange APIs."""
         try:
-            # This would connect to real exchange APIs
-            # For now, we'll simulate with realistic data
+            logger.info(f"📊 Fetching REAL historical data for {symbol} from exchange APIs...")
             
-            # Generate realistic historical data
-            start_date = self.config.start_date
-            end_date = self.config.end_date
+            # Initialize exchange connections if not already done
+            if not hasattr(self, 'exchange_manager'):
+                await self._initialize_exchange_connections()
             
-            # Create date range
-            date_range = pd.date_range(start=start_date, end=end_date, freq='1H')
+            # Try to get data from multiple exchanges
+            exchanges_to_try = ['coinbase', 'binance', 'kraken']
             
-            # Generate realistic price data
-            np.random.seed(hash(symbol) % 2**32)  # Consistent seed per symbol
+            for exchange_name in exchanges_to_try:
+                try:
+                    if exchange_name in self.exchange_manager.connections:
+                        connection = self.exchange_manager.connections[exchange_name]
+                        
+                        if connection.status == "CONNECTED":
+                            logger.info(f"📊 Fetching data from {exchange_name} for {symbol}")
+                            
+                            # Convert symbol format for exchange
+                            exchange_symbol = self._convert_symbol_for_exchange(symbol, exchange_name)
+                            
+                            # Get historical OHLCV data
+                            ohlcv_data = await connection.async_exchange.fetch_ohlcv(
+                                symbol=exchange_symbol,
+                                timeframe='1h',  # 1-hour candles
+                                since=int(self.config.start_date.timestamp() * 1000),
+                                limit=1000  # Get up to 1000 candles
+                            )
+                            
+                            if ohlcv_data and len(ohlcv_data) > 0:
+                                # Convert to DataFrame
+                                df = pd.DataFrame(ohlcv_data, columns=[
+                                    'timestamp', 'open', 'high', 'low', 'close', 'volume'
+                                ])
+                                
+                                # Convert timestamp to datetime
+                                df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+                                
+                                # Add technical indicators
+                                df['sma_20'] = df['close'].rolling(window=20).mean()
+                                df['sma_50'] = df['close'].rolling(window=50).mean()
+                                df['rsi'] = self._calculate_rsi(df['close'])
+                                df['volatility'] = df['close'].rolling(window=20).std()
+                                
+                                logger.info(f"✅ Successfully loaded {len(df)} data points from {exchange_name} for {symbol}")
+                                return df
+                            
+                except Exception as e:
+                    logger.warning(f"⚠️ Failed to get data from {exchange_name} for {symbol}: {e}")
+                    continue
             
-            # Base price depends on symbol
-            base_prices = {
-                'BTC-USD': 45000,
-                'ETH-USD': 2800,
-                'SOL-USD': 100,
-                'XRP-USD': 0.5
-            }
-            
-            base_price = base_prices.get(symbol, 100)
-            
-            # Generate price series with realistic volatility
-            returns = np.random.normal(0, 0.02, len(date_range))  # 2% daily volatility
-            prices = [base_price]
-            
-            for ret in returns[1:]:
-                new_price = prices[-1] * (1 + ret)
-                prices.append(max(new_price, base_price * 0.1))  # Prevent negative prices
-            
-            # Create volume data
-            volumes = np.random.lognormal(10, 1, len(date_range))
-            
-            # Create DataFrame
-            df = pd.DataFrame({
-                'timestamp': date_range,
-                'open': prices,
-                'high': [p * (1 + abs(np.random.normal(0, 0.01))) for p in prices],
-                'low': [p * (1 - abs(np.random.normal(0, 0.01))) for p in prices],
-                'close': prices,
-                'volume': volumes
-            })
-            
-            # Add technical indicators
-            df['sma_20'] = df['close'].rolling(window=20).mean()
-            df['sma_50'] = df['close'].rolling(window=50).mean()
-            df['rsi'] = self._calculate_rsi(df['close'])
-            df['volatility'] = df['close'].rolling(window=20).std()
-            
-            return df
+            # If all exchanges fail, log error and return None
+            logger.error(f"❌ Failed to get historical data for {symbol} from any exchange")
+            return None
             
         except Exception as e:
             logger.error(f"Error getting historical data for {symbol}: {e}")
             return None
+    
+    async def _initialize_exchange_connections(self):
+        """Initialize connections to real exchanges for live data."""
+        try:
+            logger.info("🔌 Initializing real exchange connections for backtesting...")
+            
+            # Import exchange manager
+            from core.api.exchange_connection import ExchangeManager
+            
+            # Load configuration
+            config = {
+                'exchanges': {
+                    'coinbase': {
+                        'enabled': True,
+                        'sandbox': False,  # Use live data for backtesting
+                        'rate_limit_delay': 1.0
+                    },
+                    'binance': {
+                        'enabled': True,
+                        'sandbox': False,  # Use live data for backtesting
+                        'rate_limit_delay': 1.0
+                    },
+                    'kraken': {
+                        'enabled': True,
+                        'sandbox': False,  # Use live data for backtesting
+                        'rate_limit_delay': 1.0
+                    }
+                }
+            }
+            
+            # Initialize exchange manager
+            self.exchange_manager = ExchangeManager(config)
+            self.exchange_manager.initialize_connections()
+            
+            # Connect to all exchanges
+            await self.exchange_manager.connect_all()
+            
+            connected_count = sum(1 for conn in self.exchange_manager.connections.values() 
+                                if conn.status == "CONNECTED")
+            
+            logger.info(f"✅ Connected to {connected_count} exchanges for real market data")
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to initialize exchange connections: {e}")
+            raise
+    
+    def _convert_symbol_for_exchange(self, symbol: str, exchange_name: str) -> str:
+        """Convert symbol format for different exchanges."""
+        # Remove any existing exchange-specific formatting
+        clean_symbol = symbol.replace('-USD', '').replace('-USDC', '')
+        
+        # Convert to exchange-specific format
+        if exchange_name == 'coinbase':
+            return f"{clean_symbol}-USD"
+        elif exchange_name == 'binance':
+            return f"{clean_symbol}USD"
+        elif exchange_name == 'kraken':
+            return f"{clean_symbol}USD"
+        else:
+            return symbol
     
     def _calculate_rsi(self, prices: pd.Series, period: int = 14) -> pd.Series:
         """Calculate RSI indicator."""

@@ -26,6 +26,10 @@ from api.automated_trading_routes import automated_trading
 
 # Import live trading routes
 from api.live_trading_routes import live_trading
+
+# Import upstream timing protocol
+from api.upstream_timing_routes import upstream_timing, init_upstream_timing_protocol
+
 from core.soulprint_registry import SoulprintRegistry
 from core.strategy_logic import activate_strategy_for_hash
 from core.unified_math_system import generate_unified_hash
@@ -41,9 +45,13 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 # Register blueprints
 app.register_blueprint(live_trading, url_prefix='/api/live')
 app.register_blueprint(automated_trading, url_prefix='/api/automated')
+app.register_blueprint(upstream_timing, url_prefix='/api/upstream')
 
 # Initialize Schwabot components
 soulprint_registry = SoulprintRegistry("data/web_soulprint_registry.json")
+
+# Initialize Upstream Timing Protocol
+upstream_protocol = init_upstream_timing_protocol(app, socketio)
 
 # HTML Dashboard Template
 DASHBOARD_TEMPLATE = '''

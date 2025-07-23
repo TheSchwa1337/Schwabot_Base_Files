@@ -1067,7 +1067,7 @@ async def main():
     parser.add_argument('--live', action='store_true', help='Start live trading')
     parser.add_argument('--config', type=str, help='Configuration file for live trading')
     parser.add_argument('--hash-log', action='store_true', help='Log hash decisions')
-    parser.add_argument('--symbol', type=str, default='BTC/USDT', help='Trading symbol')
+    parser.add_argument('--symbol', type=str, default='BTC/USDC', help='Trading symbol')
     parser.add_argument('--fetch-hash-decision', action='store_true', help='Fetch hash-based decisions')
     parser.add_argument('--system-status', action='store_true', help='Get system status')
     parser.add_argument('--error-log', action='store_true', help='Get error log')

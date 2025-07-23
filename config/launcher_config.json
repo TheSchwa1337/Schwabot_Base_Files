@@ -1,0 +1,10 @@
+{
+  "last_mode": "demo",
+  "auto_start": false,
+  "check_updates": true,
+  "system_health_check": true,
+  "api_keys_configured": false,
+  "trading_enabled": false,
+  "notification_enabled": false,
+  "show_advanced_options_prompt": false
+}

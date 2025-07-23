@@ -1,0 +1,201 @@
+# 🎯 GHOST MODE CONFIGURATION
+# ===========================
+# Optimized for BTC/USDC and USDC/BTC trading with medium-risk orbitals
+# Focus: "Few dollars per trade" instead of "few cents per trade"
+# AI Cluster: Optimized for Ghost logic with active backup systems
+
+# System Mode Configuration
+system_mode: "ghost_mode"
+safe_mode: false
+debug_mode: false
+ghost_mode_enabled: true
+
+# GHOST MODE TRADING PARAMETERS
+# Focus: BTC/USDC and USDC/BTC ONLY
+supported_symbols:
+  - "BTC/USDC"
+  - "USDC/BTC"
+
+# Primary trading pairs for Ghost Mode
+primary_pairs:
+  btc_usdc: "BTC/USDC"
+  usdc_btc: "USDC/BTC"
+  fallback: "BTC/USDC"
+
+# GHOST MODE RISK MANAGEMENT
+# Optimized for "few dollars per trade" (3-5% profit)
+risk_management:
+  max_position_size_pct: 15.0      # Increased to 15% for medium risk
+  max_total_exposure_pct: 40.0     # Increased to 40% total exposure
+  stop_loss_pct: 2.5               # 2.5% stop loss (slightly higher)
+  take_profit_pct: 4.0             # 4% take profit (few dollars per trade)
+  max_drawdown_pct: 12.0           # 12% max drawdown before halt
+  
+  # Position sizing for Ghost Mode
+  min_order_size_usd: 25.0         # Minimum $25 orders
+  max_order_size_usd: 2000.0       # Maximum $2000 orders per trade
+  
+  # Volatility-based adjustments
+  volatility_adjustment: true
+  high_volatility_threshold: 0.04   # 4% volatility threshold
+  volatility_position_reduction: 0.6 # Reduce position size by 40% in high vol
+
+# GHOST MODE STRATEGY PARAMETERS
+strategy:
+  # Entry conditions optimized for Ghost Mode
+  entry_conditions:
+    min_volume_24h: 5000000        # Min $5M 24h volume (higher for BTC)
+    max_spread_pct: 0.3            # Max 0.3% spread (tighter for BTC)
+    min_liquidity_depth: 100000    # Min $100k order book depth
+    
+  # Exit conditions for "few dollars per trade"
+  exit_conditions:
+    profit_target_pct: 4.0         # 4% profit target (few dollars)
+    stop_loss_pct: 2.0             # 2% stop loss
+    time_based_exit_hours: 12      # Exit after 12 hours max (faster)
+    
+  # Technical indicators optimized for Ghost Mode
+  technical_indicators:
+    rsi_period: 14
+    rsi_oversold: 25               # More aggressive oversold
+    rsi_overbought: 75             # More aggressive overbought
+    ma_short_period: 8             # Faster short MA
+    ma_long_period: 40             # Faster long MA
+    bollinger_period: 20
+    bollinger_std: 2.2             # Slightly wider bands
+
+# GHOST MODE ORBITAL SHELL CONFIGURATION
+# Focus on medium-risk orbitals (2, 6, 8) for higher profit
+orbital_shells:
+  enabled_shells: [2, 6, 8]        # Only medium-risk orbitals
+  shell_2_config:
+    name: "SCOUT"
+    risk_tolerance: 0.6
+    allocation_limit: 0.25         # Increased allocation
+    profit_target: 0.04            # 4% profit target
+    stop_loss: 0.025               # 2.5% stop loss
+    assets: {"BTC": 0.7, "USDC": 0.3}
+    
+  shell_6_config:
+    name: "RELAY"
+    risk_tolerance: 0.8
+    allocation_limit: 0.15         # Increased allocation
+    profit_target: 0.045           # 4.5% profit target
+    stop_loss: 0.03                # 3% stop loss
+    assets: {"BTC": 0.6, "USDC": 0.4}
+    
+  shell_8_config:
+    name: "GHOST"
+    risk_tolerance: 1.0
+    allocation_limit: 0.10         # Increased allocation
+    profit_target: 0.05            # 5% profit target
+    stop_loss: 0.035               # 3.5% stop loss
+    assets: {"BTC": 0.5, "USDC": 0.5}
+
+# GHOST MODE AI CLUSTER OPTIMIZATION
+ai_cluster:
+  ghost_logic_priority: 0.8        # 80% priority for Ghost logic
+  worker_load_focus: "ghost_trades"
+  backup_systems_required: true    # Must be active
+  
+  # AI processing allocation
+  cpu_allocation: 60.0             # 60% CPU for Ghost logic
+  gpu_allocation: 40.0             # 40% GPU for Ghost logic
+  
+  # Ghost-specific AI parameters
+  ghost_confidence_threshold: 0.65 # Lower threshold for more trades
+  ghost_signal_strength: 0.55      # Lower signal strength requirement
+  ghost_processing_interval: 0.5   # 0.5 seconds (faster processing)
+
+# GHOST MODE MATHEMATICAL INTEGRATION
+mathematical_integration:
+  dlt_waveform_enabled: true
+  dualistic_engines_enabled: true
+  bit_phases_enabled: true
+  ferris_rde_enabled: true
+  
+  # Ghost-specific mathematical parameters
+  ghost_tensor_score_threshold: 0.6
+  ghost_entropy_threshold: 0.4
+  ghost_quantum_threshold: 0.65
+
+# GHOST MODE EXECUTION ENGINE
+execution_engine:
+  market_monitoring_interval: 0.5  # 0.5 seconds (faster monitoring)
+  signal_processing_interval: 0.3  # 0.3 seconds (faster processing)
+  risk_monitoring_interval: 2.0    # 2 seconds
+  performance_tracking_interval: 15.0 # 15 seconds
+  position_management_interval: 5.0 # 5 seconds
+  max_signals_per_minute: 120      # Increased signal capacity
+  signal_cooldown: 1.0             # 1 second cooldown
+  
+  # Ghost Mode risk limits
+  risk_limits:
+    max_open_positions: 8          # Increased to 8 positions
+    max_daily_trades: 150          # Increased to 150 trades
+    max_position_value: 8000.0     # Increased to $8000 per position
+
+# GHOST MODE PORTFOLIO MANAGEMENT
+portfolio:
+  initial_balance_usd: 10000.0
+  base_currency: "USDC"
+  rebalance_threshold_pct: 3.0     # 3% rebalance threshold
+  
+  # Ghost Mode asset allocation
+  target_allocation:
+    BTC: 70.0                      # 70% Bitcoin (higher focus)
+    USDC: 30.0                     # 30% USDC (lower cash reserve)
+  
+  # Ghost Mode diversification limits
+  max_single_asset_pct: 80.0       # Max 80% in BTC
+  min_cash_reserve_pct: 20.0       # Min 20% cash reserve
+
+# GHOST MODE BACKUP SYSTEMS
+backup_systems:
+  ghost_core_enabled: true         # Must be active
+  ghost_basket_enabled: true       # Must be active
+  ghost_echo_enabled: true         # Must be active
+  ghost_logic_backup: true         # Must be active
+  
+  # Backup system parameters
+  backup_processing_interval: 1.0  # 1 second backup processing
+  backup_consensus_threshold: 0.7  # 70% consensus required
+  backup_fallback_enabled: true    # Enable fallback systems
+
+# GHOST MODE PERFORMANCE TARGETS
+performance_targets:
+  target_daily_profit_pct: 2.0     # 2% daily profit target
+  target_trade_profit_usd: 50.0    # $50 per trade target
+  max_daily_loss_pct: 1.5          # 1.5% max daily loss
+  target_win_rate: 0.65            # 65% win rate target
+  target_profit_factor: 1.8        # 1.8 profit factor target
+
+# GHOST MODE MONITORING AND ALERTS
+monitoring:
+  ghost_mode_health_check: true
+  orbital_shell_monitoring: true
+  ai_cluster_monitoring: true
+  backup_system_monitoring: true
+  
+  # Alert thresholds
+  profit_alert_threshold: 100.0    # Alert at $100 profit
+  loss_alert_threshold: 50.0       # Alert at $50 loss
+  orbital_alert_threshold: 0.8     # Alert at 80% orbital efficiency
+
+# GHOST MODE VISUAL CONTROLS
+visual_controls:
+  chart_type: "ghost_mode_dashboard"
+  update_interval: 0.5             # 0.5 second updates
+  enable_ghost_indicators: true
+  show_orbital_shells: true
+  show_ai_cluster_status: true
+  show_backup_systems: true
+  
+  # Ghost Mode specific visualizations
+  ghost_indicators:
+    - "BTC_USDC_ratio"
+    - "orbital_shell_activity"
+    - "ai_cluster_load"
+    - "backup_system_status"
+    - "profit_target_progress"
+    - "risk_metrics" 

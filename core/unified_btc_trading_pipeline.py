@@ -30,26 +30,26 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
-import cupy as cp
-import numpy as np
-USING_CUDA = True
-xp = cp
-_backend = 'cupy (GPU)'
+    import cupy as cp
+    import numpy as np
+    USING_CUDA = True
+    xp = cp
+    _backend = 'cupy (GPU)'
 except ImportError:
-try:
-import numpy as np
-USING_CUDA = False
-xp = np
-_backend = 'numpy (CPU)'
-except ImportError:
-xp = None
-_backend = 'none'
+    try:
+        import numpy as np
+        USING_CUDA = False
+        xp = np
+        _backend = 'numpy (CPU)'
+    except ImportError:
+        xp = None
+        _backend = 'none'
 
 logger = logging.getLogger(__name__)
 if xp is None:
-logger.warning("❌ NumPy not available for tensor operations")
+    logger.warning("❌ NumPy not available for tensor operations")
 else:
-logger.info(f"⚡ UnifiedBTCTradingPipeline using {_backend} for tensor operations")
+    logger.info(f"⚡ UnifiedBTCTradingPipeline using {_backend} for tensor operations")
 
 
 @dataclass

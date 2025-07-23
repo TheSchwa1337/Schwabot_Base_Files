@@ -282,17 +282,13 @@ class QuantumMathematicalBridge:
 
     def quantum_coherence_monitoring(self, quantum_state: QuantumState) -> float:
         """
-        Monitor quantum coherence for system stability.
-
-        Mathematical Implementation:
-        C = |⟨ψ|ψ⟩|² for pure states
+        Monitor quantum coherence of a state.
         """
         try:
             # Calculate coherence as overlap with itself
             coherence = xp.abs(quantum_state.amplitude) ** 2
             return float(coherence)
-
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error monitoring quantum coherence: {e}")
             return 0.0
 
@@ -307,8 +303,7 @@ except Exception as e:
             # Calculate fidelity as overlap between states
             fidelity = xp.abs(xp.conj(state1.amplitude) * state2.amplitude) ** 2
             return float(fidelity)
-
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error calculating quantum fidelity: {e}")
             return 0.0
 
@@ -333,8 +328,7 @@ except Exception as e:
 
             logger.debug("Applied quantum error correction")
             return corrected_state
-
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error in quantum error correction: {e}")
             return quantum_state
 

@@ -40,7 +40,11 @@ import psutil
 import numpy as np
 
 # Core system imports
-from .hardware_auto_detector import HardwareAutoDetector
+import sys
+import os
+sys.path.append('.')
+from unified_hardware_detector import UnifiedHardwareDetector
+HardwareAutoDetector = UnifiedHardwareDetector
 from .soulprint_registry import SoulprintRegistry
 from .cascade_memory_architecture import CascadeMemoryArchitecture
 from .strategy_mapper import StrategyMapper

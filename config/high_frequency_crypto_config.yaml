@@ -110,11 +110,13 @@ trading:
   # Supported trading pairs (prioritized order)
   primary_symbols:
     - "BTC/USDC"
-    - "BTC/USDT"
+    - "USDC/BTC"
     - "ETH/USDC"
-    - "ETH/USDT"
+    - "USDC/ETH"
     - "XRP/USDC"
-    - "XRP/USDT"
+    - "USDC/XRP"
+    - "SOL/USDC"
+    - "USDC/SOL"
   
   # Trading parameters
   min_order_size_usd: 10.0      # Minimum $10 orders
@@ -137,7 +139,7 @@ trading:
     BTC: 0.5                    # 50% Bitcoin
     ETH: 0.3                    # 30% Ethereum
     XRP: 0.1                    # 10% Ripple
-    CASH: 0.1                   # 10% Cash (USDC/USDT)
+    CASH: 0.1                   # 10% Cash (USDC only)
 
 # =============================================================================
 # EXCHANGE INTEGRATION

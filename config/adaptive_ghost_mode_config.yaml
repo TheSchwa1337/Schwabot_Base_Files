@@ -1,0 +1,302 @@
+# 🚀 ADAPTIVE GHOST MODE CONFIGURATION
+# ====================================
+# Intelligent hybrid system that adapts between Default and Ghost modes
+# based on market conditions, volatility, and performance metrics
+# Combines the safety of Default with the focus of Ghost Mode
+
+# System Mode Configuration
+system_mode: "adaptive_ghost_mode"
+safe_mode: false
+debug_mode: false
+adaptive_mode_enabled: true
+auto_switch_enabled: true
+
+# ADAPTIVE MODE PARAMETERS
+adaptive_parameters:
+  # Market condition thresholds
+  volatility_threshold_low: 0.02    # 2% - Switch to Ghost Mode
+  volatility_threshold_high: 0.08   # 8% - Switch to Default Mode
+  trend_strength_threshold: 0.6     # 60% - Strong trend for Ghost Mode
+  
+  # Performance-based switching
+  consecutive_losses_threshold: 3   # Switch to Default after 3 losses
+  profit_target_achieved: 0.8       # 80% of daily target - switch to Default
+  drawdown_threshold: 0.05          # 5% drawdown - switch to Default
+  
+  # Time-based switching
+  ghost_mode_max_hours: 6           # Max 6 hours in Ghost Mode
+  default_mode_min_hours: 2         # Min 2 hours in Default Mode
+  switch_cooldown_minutes: 30       # 30 min cooldown between switches
+
+# ADAPTIVE TRADING PARAMETERS
+trading_parameters:
+  # Dynamic symbol selection
+  primary_symbols: ["BTC/USDC", "USDC/BTC"]
+  secondary_symbols: ["ETH/USDC", "USDC/ETH"]
+  tertiary_symbols: ["XRP/USDC", "USDC/XRP", "SOL/USDC", "USDC/SOL"]
+  
+  # Dynamic position sizing
+  ghost_mode_position_size: 15.0    # 15% in Ghost Mode
+  default_mode_position_size: 10.0  # 10% in Default Mode
+  adaptive_position_size: 12.5      # 12.5% in Adaptive Mode
+  
+  # Dynamic risk management
+  ghost_mode_stop_loss: 2.5         # 2.5% in Ghost Mode
+  default_mode_stop_loss: 2.0       # 2.0% in Default Mode
+  adaptive_stop_loss: 2.25          # 2.25% in Adaptive Mode
+
+# ADAPTIVE RISK MANAGEMENT
+risk_management:
+  # Dynamic exposure limits
+  ghost_mode_exposure: 40.0         # 40% total exposure in Ghost Mode
+  default_mode_exposure: 30.0       # 30% total exposure in Default Mode
+  adaptive_exposure: 35.0           # 35% total exposure in Adaptive Mode
+  
+  # Volatility-based adjustments
+  volatility_adjustment: true
+  high_volatility_reduction: 0.6    # Reduce position size by 40% in high vol
+  low_volatility_increase: 1.2      # Increase position size by 20% in low vol
+  
+  # Market condition responses
+  bear_market_strategy: "default"   # Use Default Mode in bear markets
+  bull_market_strategy: "ghost"     # Use Ghost Mode in bull markets
+  sideways_market_strategy: "adaptive" # Use Adaptive Mode in sideways markets
+
+# ADAPTIVE STRATEGY PARAMETERS
+strategy:
+  # Entry conditions
+  entry_conditions:
+    ghost_mode:
+      min_volume_24h: 5000000       # $5M for Ghost Mode
+      max_spread_pct: 0.3           # 0.3% for Ghost Mode
+      min_liquidity_depth: 100000   # $100k for Ghost Mode
+    default_mode:
+      min_volume_24h: 1000000       # $1M for Default Mode
+      max_spread_pct: 0.5           # 0.5% for Default Mode
+      min_liquidity_depth: 50000    # $50k for Default Mode
+    adaptive_mode:
+      min_volume_24h: 3000000       # $3M for Adaptive Mode
+      max_spread_pct: 0.4           # 0.4% for Adaptive Mode
+      min_liquidity_depth: 75000    # $75k for Adaptive Mode
+  
+  # Exit conditions
+  exit_conditions:
+    ghost_mode:
+      profit_target_pct: 4.0        # 4% in Ghost Mode
+      stop_loss_pct: 2.0            # 2% in Ghost Mode
+      time_based_exit_hours: 12     # 12 hours in Ghost Mode
+    default_mode:
+      profit_target_pct: 3.0        # 3% in Default Mode
+      stop_loss_pct: 1.5            # 1.5% in Default Mode
+      time_based_exit_hours: 24     # 24 hours in Default Mode
+    adaptive_mode:
+      profit_target_pct: 3.5        # 3.5% in Adaptive Mode
+      stop_loss_pct: 1.75           # 1.75% in Adaptive Mode
+      time_based_exit_hours: 18     # 18 hours in Adaptive Mode
+
+# ADAPTIVE ORBITAL SHELL CONFIGURATION
+orbital_shells:
+  # Dynamic shell selection
+  ghost_mode_shells: [2, 6, 8]     # Medium-risk orbitals for Ghost Mode
+  default_mode_shells: [1, 2, 3, 4, 5, 6, 7, 8] # All shells for Default Mode
+  adaptive_mode_shells: [2, 4, 6, 8] # Balanced shells for Adaptive Mode
+  
+  # Shell-specific configurations
+  shell_2_config:
+    name: "SCOUT"
+    risk_tolerance: 0.6
+    allocation_limit: 0.25
+    profit_target: 0.04
+    stop_loss: 0.025
+    assets: {"BTC": 0.7, "USDC": 0.3}
+    
+  shell_4_config:
+    name: "HOLD"
+    risk_tolerance: 0.4
+    allocation_limit: 0.20
+    profit_target: 0.03
+    stop_loss: 0.02
+    assets: {"BTC": 0.5, "ETH": 0.3, "USDC": 0.2}
+    
+  shell_6_config:
+    name: "RELAY"
+    risk_tolerance: 0.8
+    allocation_limit: 0.15
+    profit_target: 0.045
+    stop_loss: 0.03
+    assets: {"BTC": 0.6, "USDC": 0.4}
+    
+  shell_8_config:
+    name: "GHOST"
+    risk_tolerance: 1.0
+    allocation_limit: 0.10
+    profit_target: 0.05
+    stop_loss: 0.035
+    assets: {"BTC": 0.5, "USDC": 0.5}
+
+# ADAPTIVE AI CLUSTER OPTIMIZATION
+ai_cluster:
+  # Dynamic AI allocation
+  ghost_mode_priority: 0.8          # 80% for Ghost logic
+  default_mode_priority: 0.5        # 50% balanced
+  adaptive_mode_priority: 0.65      # 65% adaptive
+  
+  # AI processing allocation
+  cpu_allocation: 60.0              # 60% CPU for adaptive logic
+  gpu_allocation: 40.0              # 40% GPU for adaptive logic
+  
+  # Adaptive AI parameters
+  confidence_threshold: 0.65        # Lower threshold for more trades
+  signal_strength: 0.55             # Lower signal strength requirement
+  processing_interval: 0.5          # 0.5 seconds (faster processing)
+  
+  # Market analysis AI
+  market_condition_ai: true         # AI for market condition analysis
+  volatility_prediction_ai: true    # AI for volatility prediction
+  trend_analysis_ai: true           # AI for trend analysis
+
+# ADAPTIVE MATHEMATICAL INTEGRATION
+mathematical_integration:
+  dlt_waveform_enabled: true
+  dualistic_engines_enabled: true
+  bit_phases_enabled: true
+  ferris_rde_enabled: true
+  
+  # Adaptive mathematical parameters
+  tensor_score_threshold: 0.6
+  entropy_threshold: 0.4
+  quantum_threshold: 0.65
+  
+  # Market condition mathematical models
+  volatility_model: "adaptive_garch"
+  trend_model: "adaptive_ewma"
+  momentum_model: "adaptive_rsi"
+
+# ADAPTIVE EXECUTION ENGINE
+execution_engine:
+  # Dynamic intervals
+  ghost_mode_intervals:
+    market_monitoring: 0.5          # 0.5 seconds
+    signal_processing: 0.3          # 0.3 seconds
+    risk_monitoring: 2.0            # 2 seconds
+  default_mode_intervals:
+    market_monitoring: 1.0          # 1.0 seconds
+    signal_processing: 0.5          # 0.5 seconds
+    risk_monitoring: 5.0            # 5 seconds
+  adaptive_mode_intervals:
+    market_monitoring: 0.75         # 0.75 seconds
+    signal_processing: 0.4          # 0.4 seconds
+    risk_monitoring: 3.0            # 3 seconds
+  
+  # Performance tracking
+  performance_tracking_interval: 15.0
+  position_management_interval: 5.0
+  max_signals_per_minute: 120
+  signal_cooldown: 1.0
+  
+  # Adaptive risk limits
+  risk_limits:
+    max_open_positions: 8
+    max_daily_trades: 150
+    max_position_value: 8000.0
+
+# ADAPTIVE PORTFOLIO MANAGEMENT
+portfolio:
+  initial_balance_usd: 10000.0
+  base_currency: "USDC"
+  rebalance_threshold_pct: 3.0
+  
+  # Dynamic asset allocation
+  ghost_mode_allocation:
+    BTC: 70.0                       # 70% Bitcoin in Ghost Mode
+    USDC: 30.0                      # 30% USDC in Ghost Mode
+  default_mode_allocation:
+    BTC: 60.0                       # 60% Bitcoin in Default Mode
+    ETH: 25.0                       # 25% Ethereum in Default Mode
+    USDC: 15.0                      # 15% USDC in Default Mode
+  adaptive_mode_allocation:
+    BTC: 65.0                       # 65% Bitcoin in Adaptive Mode
+    ETH: 15.0                       # 15% Ethereum in Adaptive Mode
+    USDC: 20.0                      # 20% USDC in Adaptive Mode
+  
+  # Diversification limits
+  max_single_asset_pct: 80.0
+  min_cash_reserve_pct: 20.0
+
+# ADAPTIVE BACKUP SYSTEMS
+backup_systems:
+  ghost_core_enabled: true
+  ghost_basket_enabled: true
+  ghost_echo_enabled: true
+  ghost_logic_backup: true
+  
+  # Adaptive backup parameters
+  backup_processing_interval: 1.0
+  backup_consensus_threshold: 0.7
+  backup_fallback_enabled: true
+  
+  # Mode-specific backup strategies
+  ghost_mode_backup: "aggressive"
+  default_mode_backup: "conservative"
+  adaptive_mode_backup: "balanced"
+
+# ADAPTIVE PERFORMANCE TARGETS
+performance_targets:
+  ghost_mode_targets:
+    target_daily_profit_pct: 2.5    # 2.5% daily profit target
+    target_trade_profit_usd: 75.0   # $75 per trade target
+    max_daily_loss_pct: 2.0         # 2% max daily loss
+    target_win_rate: 0.70           # 70% win rate target
+  default_mode_targets:
+    target_daily_profit_pct: 1.5    # 1.5% daily profit target
+    target_trade_profit_usd: 30.0   # $30 per trade target
+    max_daily_loss_pct: 1.0         # 1% max daily loss
+    target_win_rate: 0.75           # 75% win rate target
+  adaptive_mode_targets:
+    target_daily_profit_pct: 2.0    # 2% daily profit target
+    target_trade_profit_usd: 50.0   # $50 per trade target
+    max_daily_loss_pct: 1.5         # 1.5% max daily loss
+    target_win_rate: 0.72           # 72% win rate target
+
+# ADAPTIVE MONITORING AND ALERTS
+monitoring:
+  adaptive_mode_health_check: true
+  orbital_shell_monitoring: true
+  ai_cluster_monitoring: true
+  backup_system_monitoring: true
+  market_condition_monitoring: true
+  
+  # Mode switching alerts
+  mode_switch_alerts: true
+  performance_degradation_alerts: true
+  volatility_spike_alerts: true
+  
+  # Alert thresholds
+  profit_alert_threshold: 100.0
+  loss_alert_threshold: 50.0
+  orbital_alert_threshold: 0.8
+  mode_switch_alert_threshold: 0.7
+
+# ADAPTIVE VISUAL CONTROLS
+visual_controls:
+  chart_type: "adaptive_dashboard"
+  update_interval: 0.5
+  enable_adaptive_indicators: true
+  show_mode_status: true
+  show_orbital_shells: true
+  show_ai_cluster_status: true
+  show_backup_systems: true
+  show_market_conditions: true
+  
+  # Adaptive visualizations
+  adaptive_indicators:
+    - "current_mode_display"
+    - "mode_switch_history"
+    - "market_condition_analysis"
+    - "volatility_prediction"
+    - "performance_comparison"
+    - "risk_metrics"
+    - "BTC_USDC_ratio"
+    - "orbital_shell_activity"
+    - "ai_cluster_load"
+    - "backup_system_status" 

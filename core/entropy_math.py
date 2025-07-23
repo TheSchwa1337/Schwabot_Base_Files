@@ -91,8 +91,8 @@ class EntropyMathSystem:
 
         logger.info("📊 Entropy Math System initialized")
 
-def calculate_shannon_entropy(self, probabilities: List[float]) -> float:
-"""
+    def calculate_shannon_entropy(self, probabilities: List[float]) -> float:
+        """
         Calculate Shannon entropy for a probability distribution.
 
         Mathematical Formula:
@@ -102,15 +102,15 @@ def calculate_shannon_entropy(self, probabilities: List[float]) -> float:
         - p_i are probability values (must sum to 1)
         - log2 is the binary logarithm
 
-Args:
+        Args:
             probabilities: List of probabilities (must sum to 1)
 
-Returns:
-Shannon entropy value
-"""
-try:
+        Returns:
+            Shannon entropy value
+        """
+        try:
             if not probabilities:
-return 0.0
+                return 0.0
 
             # Validate probabilities
             prob_array = xp.array(probabilities)
@@ -122,9 +122,9 @@ return 0.0
             entropy = -xp.sum(prob_array * xp.log2(prob_array + 1e-10))
 
             self._log_calculation("shannon_entropy", entropy, {"probabilities": probabilities})
-return float(entropy)
+            return float(entropy)
 
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error calculating Shannon entropy: {e}")
             return 0.0
 
@@ -203,22 +203,22 @@ except Exception as e:
 
         except Exception as e:
             logger.error(f"Error calculating mutual information: {e}")
-return 0.0
+            return 0.0
 
     def calculate_market_entropy(self, price_changes: List[float], window_size: int = 20) -> float:
-"""
-Calculate market entropy from price changes.
+        """
+        Calculate market entropy from price changes.
 
-Args:
-price_changes: List of price changes
+        Args:
+            price_changes: List of price changes
             window_size: Window size for calculation
 
-Returns:
-Market entropy value
-"""
-try:
+        Returns:
+            Market entropy value
+        """
+        try:
             if len(price_changes) < window_size:
-return 0.0
+                return 0.0
 
             # Use recent price changes
             recent_changes = price_changes[-window_size:]
@@ -228,7 +228,7 @@ return 0.0
             total_change = xp.sum(abs_changes)
 
             if total_change > 0:
-probabilities = abs_changes / total_change
+                probabilities = abs_changes / total_change
                 market_entropy = self.calculate_shannon_entropy(probabilities.tolist())
             else:
                 market_entropy = 0.0
@@ -240,22 +240,22 @@ probabilities = abs_changes / total_change
             )
             return market_entropy
 
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error calculating market entropy: {e}")
-return 0.0
+            return 0.0
 
     def calculate_zbe_entropy(self, energy_levels: List[float], temperature: float = 1.0) -> float:
-"""
+        """
         Calculate Zero-Point Energy (ZBE) entropy.
 
-Args:
+        Args:
             energy_levels: List of energy levels
             temperature: System temperature
 
-Returns:
-ZBE entropy value
-"""
-try:
+        Returns:
+            ZBE entropy value
+        """
+        try:
             if not energy_levels:
                 return 0.0
 
@@ -335,7 +335,7 @@ try:
 
         except Exception as e:
             logger.error(f"Error calculating transition entropy: {e}")
-return 0.0
+            return 0.0
 
     def calculate_hamming_weight(self, bits: bytes) -> int:
         """
@@ -374,7 +374,7 @@ return 0.0
             for byte in digest:
                 bit_sequence.extend([int(b) for b in format(byte, '08b')])
 
-# Calculate probabilities
+            # Calculate probabilities
             total_bits = len(bit_sequence)
             if total_bits == 0:
                 return 0.0
@@ -434,7 +434,7 @@ return 0.0
             )
             return float(normalized_entropy)
 
-except Exception as e:
+        except Exception as e:
             logger.error(f"Error calculating normalized entropy: {e}")
             return 0.0
 
@@ -561,7 +561,7 @@ except Exception as e:
 
         except Exception as e:
             logger.error(f"Error calculating entropy volatility: {e}")
-return 0.0
+            return 0.0
 
     def _log_calculation(self, calculation_type: str, entropy_value: float, metadata: Dict[str, Any]) -> None:
         """Log entropy calculation result."""

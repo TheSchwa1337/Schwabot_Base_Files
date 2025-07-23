@@ -1,0 +1,46 @@
+# 🎡 Ferris Ride Looping Strategy Configuration
+# =============================================
+# Revolutionary Auto-Trading System Configuration
+# 
+# Features:
+# - Auto-detection of capital and tickers
+# - Pattern studying before entry (3+ days)
+# - Hash pattern matching for precise entry
+# - Confidence zone building through profits
+# - Ferris RDE mathematical framework
+# - USB backup system
+# - Focus: Everything to USDC / USDC to Everything
+
+# Auto-detection settings
+auto_detect_capital: true
+auto_detect_tickers: true
+usb_backup_enabled: true
+
+# Pattern studying settings
+study_duration_hours: 72  # 3 days minimum
+confidence_threshold: 0.6
+risk_threshold: 0.3
+
+# Trading parameters
+base_position_size_pct: 0.12  # 12% base position size
+ferris_multiplier: 1.5  # Ferris RDE multiplier
+profit_target_pct: 0.05  # 5% profit target
+stop_loss_pct: 0.025  # 2.5% stop loss
+
+# Orbital shell settings (medium risk)
+orbital_shells: [2, 4, 6, 8]
+current_shell: 2
+
+# Ferris RDE mathematical framework
+momentum_factor: 1.0
+gravity_center: 0.5
+orbital_velocity: 1.0
+spiral_radius: 1.0
+
+# USDC focus settings
+usdc_pairs_only: true
+usdc_correlation_threshold: 0.7
+
+# Performance tracking
+max_daily_loss_pct: 0.05  # 5% max daily loss
+win_rate_target: 0.65  # 65% win rate target 

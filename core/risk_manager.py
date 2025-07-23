@@ -203,6 +203,7 @@ class RiskManager:
         self.error_log: List[ErrorLogEntry] = []
         self.circuit_breaker_states: Dict[str, CircuitBreakerState] = {}
         self.safe_mode = SafeMode.NORMAL
+        self.last_error_time: Optional[datetime] = None
         self.error_thresholds = {
             'max_errors_per_symbol': 3,
             'max_errors_per_timeframe': 10,
@@ -558,6 +559,7 @@ class RiskManager:
             )
             
             self.error_log.append(error_entry)
+            self.last_error_time = error_entry.timestamp # Update last_error_time
             
             # Update circuit breaker state
             if symbol:
@@ -618,21 +620,85 @@ class RiskManager:
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
-        try:
+        return {
+            'risk_tolerance': self.risk_tolerance,
+            'max_portfolio_risk': self.max_portfolio_risk,
+            'safe_mode': self.safe_mode.value,
+            'processing_mode': self.processing_mode.value,
+            'total_errors': len(self.error_log),
+            'circuit_breakers_active': sum(1 for cb in self.circuit_breaker_states.values() if cb.triggered),
+            'last_error_time': self.last_error_time.isoformat() if self.last_error_time else None,
+            'system_health': 'healthy' if len(self.error_log) < 10 else 'degraded' if len(self.error_log) < 50 else 'critical'
+        }
+
+    def get_error_statistics(self) -> Dict[str, Any]:
+        """Get error statistics for system monitoring."""
+        if not self.error_log:
             return {
-                "safe_mode": self.safe_mode.value,
-                "processing_mode": self.processing_mode.value,
-                "risk_tolerance": self.risk_tolerance,
-                "max_portfolio_risk": self.max_portfolio_risk,
-                "positions_count": len(self.positions),
-                "error_count": len(self.error_log),
-                "circuit_breakers_triggered": sum(1 for state in self.circuit_breaker_states.values() if state.triggered),
-                "backend": _backend,
-                "risk_history_length": len(self.risk_history)
+                'total_errors': 0,
+                'error_types': {},
+                'symbols_with_errors': {},
+                'recent_errors': [],
+                'recovery_rate': 1.0
             }
-        except Exception as e:
-            logger.error(f"Error getting system status: {e}")
-            return {"error": str(e)}
+        
+        # Count error types
+        error_types = {}
+        symbols_with_errors = {}
+        recovered_count = 0
+        
+        for entry in self.error_log:
+            # Count error types
+            error_type = entry.error_type.value
+            error_types[error_type] = error_types.get(error_type, 0) + 1
+            
+            # Count symbols with errors
+            if entry.symbol:
+                symbols_with_errors[entry.symbol] = symbols_with_errors.get(entry.symbol, 0) + 1
+            
+            # Count recovered errors
+            if entry.recovered:
+                recovered_count += 1
+        
+        # Get recent errors (last 10)
+        recent_errors = []
+        for entry in self.error_log[-10:]:
+            recent_errors.append({
+                'timestamp': entry.timestamp.isoformat(),
+                'error_type': entry.error_type.value,
+                'symbol': entry.symbol,
+                'message': entry.error_message,
+                'severity': entry.severity,
+                'recovered': entry.recovered
+            })
+        
+        return {
+            'total_errors': len(self.error_log),
+            'error_types': error_types,
+            'symbols_with_errors': symbols_with_errors,
+            'recent_errors': recent_errors,
+            'recovery_rate': recovered_count / len(self.error_log) if self.error_log else 1.0
+        }
+
+    def get_error_log(self, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get error log entries."""
+        if not self.error_log:
+            return []
+        
+        entries = []
+        for entry in self.error_log[-limit:]:
+            entries.append({
+                'timestamp': entry.timestamp.isoformat(),
+                'error_type': entry.error_type.value,
+                'symbol': entry.symbol,
+                'trade_id': entry.trade_id,
+                'error_message': entry.error_message,
+                'severity': entry.severity,
+                'recovered': entry.recovered,
+                'recovery_time': entry.recovery_time
+            })
+        
+        return entries
 
     def cleanup(self) -> None:
         """Clean up resources."""
